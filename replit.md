@@ -8,6 +8,12 @@ The app lets users enter marital assets, liabilities, incomes, and expenses for 
 
 The core financial engine must be **deterministic, pure-function based, and fully testable** — no financial logic in UI components. All tax bands, NI thresholds, and CMS rates must come from configuration (no hardcoded values).
 
+## Recent Changes
+
+- **Feb 2026**: Converted app from multi-page navigation to a **guided 8-step wizard** (/) with a dedicated **Results page** (/results). The wizard walks users through: Welcome, Situation, Home, Assets, Pensions, Income, Costs, and Assumptions. The Results page shows a comparison summary table, scenario tabs with stability indicators, and live split/pension sliders with preset buttons (50/50, 60/40, 70/30).
+- **Feb 2026**: Refactored engine to always compute S1 (Sell & Split), S2 (A Keeps Home), S3 (B Keeps Home) using a shared `calcKeepsHome()` helper with role-swap pattern. S4 (Deferred Sale) is optional.
+- **Feb 2026**: Fixed tax aggregation to handle multiple income streams per party with mixed tax treatment.
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.

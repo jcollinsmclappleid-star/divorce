@@ -171,7 +171,41 @@ function runEngine(state: StoreState): EngineResult {
 
   const scenarioResults: ScenarioResult[] = [];
 
-  if (scenarios.S1_Sell_Split.enabled) {
+  function calcKeepsHome(
+    keeperLabel: 'A' | 'B',
+    splitToKeeper: number,
+    keeperGross: number
+  ): ScenarioResult {
+    const buyoutToOther = round(netHomeEquity * (1 - splitToKeeper));
+    const liquidShareKeeper = totalLiquid * (keeperLabel === 'A' ? assumptions.splitRatio : (1 - assumptions.splitRatio));
+    const fundingGap = Math.max(0, round(buyoutToOther - liquidShareKeeper));
+    const capacity = round(keeperGross * (config.affordability.incomeMultipleRule.multiple));
+    const liqKeeper = round(Math.max(0, liquidShareKeeper - buyoutToOther));
+    const liqOther = round(totalLiquid * (keeperLabel === 'A' ? (1 - assumptions.splitRatio) : assumptions.splitRatio) + buyoutToOther);
+
+    const liqA = keeperLabel === 'A' ? liqKeeper : liqOther;
+    const liqB = keeperLabel === 'A' ? liqOther : liqKeeper;
+
+    return {
+      id: keeperLabel === 'A' ? 'S2' : 'S3',
+      name: keeperLabel === 'A' ? 'Party A Keeps Home' : 'Party B Keeps Home',
+      enabled: true,
+      liquidStartA: liqA,
+      liquidStartB: liqB,
+      pensionA: round(pensionToA),
+      pensionB: round(pensionToB),
+      totalA: round(liqA + (keeperLabel === 'A' ? homeValue - totalHomeMortgage : 0) + pensionToA),
+      totalB: round(liqB + (keeperLabel === 'B' ? homeValue - totalHomeMortgage : 0) + pensionToB),
+      buyoutAmount: buyoutToOther,
+      fundingGap,
+      mortgageCapacity: capacity,
+      affordable: capacity >= totalHomeMortgage,
+    };
+  }
+
+  const shouldComputeAll = true;
+
+  if (shouldComputeAll || scenarios.S1_Sell_Split.enabled) {
     const pool = totalLiquid + netHomeEquity + otherPropEquity;
     const liqA = round(pool * assumptions.splitRatio);
     const liqB = round(pool * (1 - assumptions.splitRatio));
@@ -188,52 +222,12 @@ function runEngine(state: StoreState): EngineResult {
     });
   }
 
-  if (scenarios.S2_A_Keeps_Home.enabled) {
-    const buyoutToB = round(netHomeEquity * (1 - assumptions.splitPropertyToA));
-    const liquidShareA = totalLiquid * assumptions.splitRatio;
-    const fundingGap = Math.max(0, round(buyoutToB - liquidShareA));
-    const capacity = round(grossA * (config.affordability.incomeMultipleRule.multiple));
-    const liqA = round(Math.max(0, liquidShareA - buyoutToB));
-    const liqB = round(totalLiquid * (1 - assumptions.splitRatio) + buyoutToB);
-    scenarioResults.push({
-      id: 'S2',
-      name: 'Party A Keeps Home',
-      enabled: true,
-      liquidStartA: liqA,
-      liquidStartB: liqB,
-      pensionA: round(pensionToA),
-      pensionB: round(pensionToB),
-      totalA: round(liqA + homeValue - totalHomeMortgage + pensionToA),
-      totalB: round(liqB + pensionToB),
-      buyoutAmount: buyoutToB,
-      fundingGap,
-      mortgageCapacity: capacity,
-      affordable: capacity >= totalHomeMortgage,
-    });
+  if (shouldComputeAll || scenarios.S2_A_Keeps_Home.enabled) {
+    scenarioResults.push(calcKeepsHome('A', assumptions.splitPropertyToA, grossA));
   }
 
-  if (scenarios.S3_B_Keeps_Home.enabled) {
-    const buyoutToA = round(netHomeEquity * assumptions.splitPropertyToA);
-    const liquidShareB = totalLiquid * (1 - assumptions.splitRatio);
-    const fundingGap = Math.max(0, round(buyoutToA - liquidShareB));
-    const capacity = round(grossB * (config.affordability.incomeMultipleRule.multiple));
-    const liqA = round(totalLiquid * assumptions.splitRatio + buyoutToA);
-    const liqB = round(Math.max(0, liquidShareB - buyoutToA));
-    scenarioResults.push({
-      id: 'S3',
-      name: 'Party B Keeps Home',
-      enabled: true,
-      liquidStartA: liqA,
-      liquidStartB: liqB,
-      pensionA: round(pensionToA),
-      pensionB: round(pensionToB),
-      totalA: round(liqA + pensionToA),
-      totalB: round(liqB + homeValue - totalHomeMortgage + pensionToB),
-      buyoutAmount: buyoutToA,
-      fundingGap,
-      mortgageCapacity: capacity,
-      affordable: capacity >= totalHomeMortgage,
-    });
+  if (shouldComputeAll || scenarios.S3_B_Keeps_Home.enabled) {
+    scenarioResults.push(calcKeepsHome('B', 1 - assumptions.splitPropertyToA, grossB));
   }
 
   if (scenarios.S4_Joint_Then_Sell.enabled) {

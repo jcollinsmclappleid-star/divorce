@@ -1,0 +1,162 @@
+IMPLEMENTATION REQUEST — “Premium v1+” Guided Wizard + Upgraded Scenarios + Sliders (NO NEW LEGAL CLAIMS)
+
+You are to implement the following in the existing Replit Next.js app. Keep the existing calculation engine logic intact where possible, but extend it to support additional scenarios by reusing the same core functions (do NOT rewrite everything). Deliver a guided multi-step wizard UI with reassuring, structured copy, plus upgraded scenario coverage and split/pension sliders. This is modelling only (no legal entitlement language).
+
+========================
+A) PRODUCT UX GOAL
+========================
+Turn the current simplistic single-page calculator into a guided “financial clarity” wizard:
+- Calm, structured, reassuring language
+- Users are guided step-by-step
+- Advanced options exist but are hidden behind a toggle
+- Results are shown in a clean comparison view with scenario tabs + summary table
+
+========================
+B) WHAT TO ADD (FEATURES)
+========================
+1) GUIDED MULTI-STEP WIZARD (CORE + ADVANCED)
+Steps (with titles + prompt + reassurance text):
+0 Welcome
+1 Your situation
+2 Home
+3 Assets & Debts
+4 Pensions
+5 Income & monthly reality
+6 Support & one-off costs
+7 Assumptions & results
+
+- Must include a progress indicator and back/continue buttons
+- Must validate only fields visible on each step (don’t block on hidden advanced fields)
+- Must persist state across steps
+- Must allow users to return and edit without losing progress
+
+Copy style: acknowledge uncertainty, reduce overwhelm, encourage “best estimate” numbers, highlight transparency. Do NOT use fear-mongering language.
+
+2) ADVANCED TOGGLE (DEFAULT OFF)
+Add a toggle “Advanced modelling (optional)”:
+- When OFF: show only core fields
+- When ON: reveal advanced fields (existing ones in the app), including:
+  - tax/NI toggle (if present)
+  - CMS estimate toggle (if present)
+  - itemised assets/liabilities lists (if present)
+  - multi-property (if present)
+  - scenario-specific extras (if present)
+If the project does not yet include these advanced capabilities, create placeholders but do not block completion.
+
+3) UPGRADED SCENARIOS
+You must support these outcomes in Results:
+
+Scenario A: Sell & split
+Scenario B1: A keeps home (buyout B)
+Scenario B2: B keeps home (buyout A)
+Scenario C (optional but recommended): Pension offset mode (simple, not actuarial)
+- Allow user to offset pension imbalance against property/lump sum in the model.
+
+Important:
+- Scenario B2 must not be a separate hardcoded formula; it should reuse B1 logic by swapping roles.
+
+4) SLIDERS + PRESETS (NOT ONLY 50:50)
+Add controls in the Assumptions step AND on Results page (sticky controls):
+- Overall split slider: 30/70 to 70/30 (default 50/50)
+- Pension split slider: 0/100 to 100/0 (default 50/50)
+- Preset buttons:
+  - Equal split (50/50)
+  - Needs tilt (60/40)
+  - Strong tilt (70/30)
+- Live recalculation: changing sliders updates scenario outputs without leaving results.
+
+5) RESULTS PRESENTATION (MAKE IT FEEL PREMIUM)
+Results must include:
+
+A) Comparison summary table at top
+Columns: Sell & split | A keeps | B keeps
+Rows:
+- Your starting liquid (£)
+- Partner starting liquid (£)
+- Buyout payment (£) (only for keep scenarios)
+- Funding gap (£) (only for keep scenarios)
+- Mortgage affordability pass/fail (keep scenarios)
+- 5-year runway outcome (e.g. “Liquid hits £0 in year X” or “Runway ok”)
+- Pension after split (A/B)
+- Net worth snapshot (A/B)
+
+B) Scenario tabs below table for detail
+Each tab shows:
+- Key numbers with short explanation
+- Projection table and/or simple chart for 5-year liquid runway (bar or line)
+- Clear callout if funding gap exists
+
+C) “Edit inputs” button returns to wizard without losing answers.
+
+6) “STABILITY CHECK” INDICATORS (NON-LEGAL)
+For each scenario, show a small indicator set:
+- ✔ Affordability passed (or ✖ failed)
+- ✔ No funding gap (or ⚠ gap)
+- ✔ Runway >= 5 years (or ⚠ hits 0 in year X)
+These are not legal advice; just modelling flags.
+
+7) DISCLAIMERS (ALWAYS VISIBLE)
+Show a persistent disclaimer line:
+“Illustrative modelling only. Not legal, tax or financial advice.”
+
+========================
+C) ENGINE REQUIREMENTS (MINIMAL CHANGES, REUSE)
+========================
+1) Keep engine as source of truth. UI must only collect inputs and display outputs.
+2) Implement Scenario B2 by role-swapping:
+- Create a helper function swapAB(inputs) (swap incomes, expenses, pensions, transfers direction if needed).
+- Run existing Scenario B logic on swapped inputs.
+- Then map outputs back to original A/B labels for display.
+
+3) Split slider:
+- Use splitToA (0.30..0.70) to allocate liquid + property equity pools.
+- If your engine currently uses fixed 50/50, refactor to accept splitToA everywhere.
+
+4) Pension split slider:
+- Use pensionSplitToA (0..1) to split pension pool and return deltas.
+
+5) Pension offset mode (if implemented):
+- Provide a toggle “Offset pensions (optional)”
+- Compute pension imbalance = (pensionAfterSplitA - originalPensionA) (or similar)
+- Convert to offset amount (same £ value)
+- Apply offset to buyout/lump sum on keep scenarios OR to sell pool distribution
+- Do not attempt actuarial conversions: use simple CETV value equivalence only.
+- Must be clearly labelled “simple offset estimate”.
+
+6) Keep tax/CMS if already present; if not present, ignore. The wizard must still work.
+
+========================
+D) FILE/COMPONENT STRUCTURE (IMPLEMENT)
+========================
+Create/Refactor into:
+- /components/Wizard.tsx (wizard container, step routing, validation gating)
+- /components/ui/Stepper.tsx (progress and navigation)
+- /components/steps/* (StepWelcome, StepSituation, StepHome, StepAssets, StepPensions, StepIncome, StepSupport, StepAssumptions)
+- /components/Results.tsx (comparison table + scenario tabs + charts)
+- /lib/ui/stepsCopy.ts (text copy: title, prompt, reassurance per step)
+- /lib/ui/mapWizardToEngineInputs.ts (mapping to existing engine input shape)
+- /lib/ui/validateStep.ts (step-level validation)
+
+Use existing styling approach (Tailwind if present; otherwise simple CSS classes).
+
+========================
+E) ACCEPTANCE CRITERIA
+========================
+1) Wizard runs end-to-end with core fields only.
+2) Advanced fields do not block completion when hidden.
+3) Results show Sell & split, A keeps, B keeps.
+4) Sliders update results live.
+5) Comparison table present.
+6) Affordability + funding gap + runway indicators present.
+7) No entitlement language; disclaimers present.
+8) No major refactor to engine; role swap used for B keeps.
+
+========================
+F) STARTING INSTRUCTION
+========================
+Before coding:
+- Identify the existing engine function name and its input/output shape.
+- Implement mapWizardToEngineInputs accordingly (do not invent new keys unless needed).
+- Ensure Scenario B2 uses role-swapping and reuses B1 logic.
+
+Proceed to implement all of the above in one pass.
