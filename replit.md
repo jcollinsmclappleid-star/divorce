@@ -47,6 +47,8 @@ The core financial engine must be **deterministic, pure-function based, and full
 - **Feb 2026**: Updated routing: landing page at `/`, wizard moved to `/wizard`, results remain at `/results`
 - **Feb 2026**: Added video walkthrough section to landing page between Hero and Emotional sections, with generated scenario walkthrough video
 - **Feb 2026**: Enhanced Source of Funds in scenario analysis with expandable sub-bullets showing full calculation breakdown (property value, mortgage, sale costs, net equity, share percentage) for each fund row. Added `FundSubItem` type and `FundRowItem` component with click-to-expand chevron animation
+- **Feb 2026**: Added clickable example scenarios on landing page under USP section: 3 realistic UK scenarios (Dual Income Family Home, One Earner with Children, High Equity Near Retirement) that load pre-populated data into the Zustand store and navigate directly to results
+- **Feb 2026**: Built downloadable Structured Financial Brief report page at `/report` with print-optimized layout (CSS @media print, A4 sizing, break-inside-avoid). Report includes: Starting Position (assets/liabilities), Income & Tax Summary, Monthly Living Costs, Scenario Comparison table, per-scenario detail sections (narrative, source of funds with sub-items, stability scores for both parties, monthly budget snapshot, housing feasibility, comparison deltas, risk flags), and Key Assumptions appendix. Accessible via "Download Report" button on results page header.
 
 ## User Preferences
 

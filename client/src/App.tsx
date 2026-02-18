@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import LandingPage from "@/pages/landing";
 import WizardPage from "@/pages/wizard";
 import ResultsPage from "@/pages/results";
+import ReportPage from "@/pages/report";
 
 function Router() {
   return (
@@ -13,6 +14,7 @@ function Router() {
       <Route path="/" component={LandingPage} />
       <Route path="/wizard" component={WizardPage} />
       <Route path="/results" component={ResultsPage} />
+      <Route path="/report" component={ReportPage} />
       <Route path="/dashboard"><Redirect to="/" /></Route>
       <Route path="/assets"><Redirect to="/" /></Route>
       <Route path="/budget"><Redirect to="/" /></Route>

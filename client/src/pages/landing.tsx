@@ -5,9 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import {
   Calculator, Shield, TrendingUp, Eye, FileText,
   ArrowRight, ChevronRight, CheckCircle2, BarChart3,
-  AlertTriangle, Clock, Lock, Landmark, Play
+  AlertTriangle, Clock, Lock, Landmark, Play,
+  Users, Baby, Home
 } from "lucide-react";
 import walkthroughVideo from "../assets/videos/walkthrough.mp4";
+import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
+import { useAppStore } from "@/hooks/use-store";
+
+const EXAMPLE_ICONS = [Users, Baby, Home] as const;
 
 const USP_ITEMS = [
   {
@@ -66,9 +71,16 @@ const HOW_IT_WORKS = [
 
 export default function LandingPage() {
   const [, setLocation] = useLocation();
+  const loadState = useAppStore((s) => s.loadState);
 
   const scrollToHowItWorks = () => {
     document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const loadExample = (index: number) => {
+    const example = EXAMPLE_SCENARIOS[index];
+    loadState(example.data);
+    setLocation("/results");
   };
 
   return (
@@ -213,7 +225,57 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-muted/30" data-testid="section-reassurance">
+      <section className="py-12 md:py-16 bg-muted/30" data-testid="section-examples">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <Badge variant="secondary" className="text-xs px-3 py-1 mb-3">
+              Interactive Examples
+            </Badge>
+            <h2 className="text-xl md:text-2xl font-display font-bold" data-testid="text-examples-headline">
+              See it in action with a real scenario
+            </h2>
+            <p className="text-sm text-muted-foreground mt-2 max-w-lg mx-auto">
+              Click any example below to load sample numbers and explore the full results. No sign-up needed.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
+            {EXAMPLE_SCENARIOS.map((example, i) => {
+              const Icon = EXAMPLE_ICONS[i];
+              return (
+                <Card
+                  key={example.id}
+                  className="hover-elevate active-elevate-2 cursor-pointer transition-all"
+                  onClick={() => loadExample(i)}
+                  data-testid={`card-example-${example.id}`}
+                >
+                  <CardContent className="pt-5 pb-4 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Icon className="w-4.5 h-4.5 text-primary" />
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-muted-foreground/50 mt-2.5 flex-shrink-0" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-semibold text-foreground">{example.title}</h3>
+                      <p className="text-xs text-muted-foreground mt-0.5">{example.subtitle}</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground/80 leading-relaxed">{example.description}</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {example.highlights.map((h, hi) => (
+                        <Badge key={hi} variant="outline" className="text-[10px] px-1.5 py-0">
+                          {h}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-20" data-testid="section-reassurance">
         <div className="container mx-auto px-4 max-w-xl text-center space-y-6">
           <div className="flex justify-center gap-3">
             <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">

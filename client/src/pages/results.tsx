@@ -18,7 +18,7 @@ import {
   Calculator, ChevronLeft, ChevronRight, Check, X, AlertTriangle,
   TrendingUp, Edit, Shield, ArrowDown, ArrowUp, Minus,
   DollarSign, Home, Info, Lightbulb, BarChart3, Eye,
-  Target, Activity, Building2
+  Target, Activity, Building2, FileText
 } from "lucide-react";
 import {
   generateScenarioNarrative,
@@ -87,11 +87,18 @@ export default function ResultsPage() {
               DivorceModeller<span className="text-primary">.UK</span>
             </span>
           </div>
-          <Link href="/wizard">
-            <Button variant="outline" size="sm" data-testid="button-edit-inputs">
-              <Edit className="w-4 h-4 mr-1" /> Edit Inputs
-            </Button>
-          </Link>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Link href="/report">
+              <Button variant="outline" size="sm" data-testid="button-download-report">
+                <FileText className="w-4 h-4 mr-1" /> Download Report
+              </Button>
+            </Link>
+            <Link href="/wizard">
+              <Button variant="outline" size="sm" data-testid="button-edit-inputs">
+                <Edit className="w-4 h-4 mr-1" /> Edit Inputs
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
 
