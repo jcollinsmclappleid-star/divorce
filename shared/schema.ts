@@ -13,7 +13,14 @@ export const sessions = pgTable("sessions", {
 });
 
 export const insertSessionSchema = createInsertSchema(sessions);
+export const AppStateSchema = z.object({
+  inputs: DivorceModelInputsSchema,
+  activeScenario: z.string(),
+  metadata: z.record(z.any()).optional()
+});
+
 export type Session = typeof sessions.$inferSelect;
+export type AppState = z.infer<typeof AppStateSchema>;
 export type InsertSession = z.infer<typeof insertSessionSchema>;
 
 export { DivorceModelInputsSchema };
