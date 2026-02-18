@@ -1,0 +1,191 @@
+FULL SITE REVIEW – LEGAL RISK, LIABILITY, CONVERSION, AND REPORT STRUCTURE AUDIT
+
+Context:
+We have developed a UK-focused divorce financial modelling tool with:
+- Input wizard
+- Scenario modelling (Sell / Retain Property)
+- Settlement sliders
+- Stability score
+- Source-of-funds breakdown
+- Monthly snapshot
+- 5-year projection
+- Premium unlock model (£79, 6-month access)
+- Structured Financial Brief (PDF export)
+
+We now require a structured audit and enhancement review before public launch.
+
+Your task:
+Conduct a comprehensive review and report back in structured format under the following headings.
+
+=================================================
+PART 1 – LIABILITY & REGULATORY RISK REVIEW
+=================================================
+
+Review entire site copy, modelling outputs, disclaimers, PDF language, and positioning.
+
+Assess risk in the following categories:
+
+1) Financial Advice Risk
+- Does any language imply personalised financial advice?
+- Does any output cross from modelling into recommendation?
+- Does the tool present itself as advisory rather than illustrative?
+
+2) Legal Advice Risk
+- Any language implying entitlement?
+- Any language implying predicted court outcomes?
+- Any statements that could be interpreted as legal guidance?
+
+3) Tax Advice Risk
+- Any calculations that could be interpreted as tax planning advice?
+- Any wording that implies compliance or tax optimisation?
+- Any areas where UK tax references create exposure?
+
+4) Misrepresentation Risk
+- Any claims about accuracy that are too strong?
+- Any implied guarantees?
+- Any unrealistic expectations set?
+
+5) Consumer Protection / Fair Trading Risk (UK context)
+- Is pricing transparent?
+- Are access terms clear?
+- Is 6-month access clearly defined?
+- Are refund or dissatisfaction policies unclear?
+
+Deliver:
+- Risk level (Low / Medium / High) per category
+- Specific examples of risky language
+- Exact recommended rewording
+- Any sections that should be removed entirely
+
+=================================================
+PART 2 – CONVERSION & POSITIONING REVIEW
+=================================================
+
+Evaluate:
+
+1) Homepage clarity
+- Is value proposition clear within 5 seconds?
+- Is emotional framing balanced and professional?
+- Does it differentiate from a free calculator?
+
+2) Preview → Unlock flow
+- Is enough value shown before paywall?
+- Is too much shown?
+- Where could drop-off occur?
+
+3) Pricing psychology
+- Does £79 feel justified?
+- Are benefits framed as outcomes or features?
+- Is 6-month unlimited access communicated clearly?
+
+4) Unlock page structure
+- Is it too long?
+- Is it too dense?
+- Are benefits clear?
+- Is urgency subtle but present?
+
+Deliver:
+- 5 concrete conversion improvements
+- 3 elements to remove if unnecessary
+- 3 additional ideas that increase perceived premium value without adding regulatory risk
+
+=================================================
+PART 3 – CONTENT VALUE OPTIMISATION
+=================================================
+
+Review all information presented on:
+
+- Results page
+- Reports
+- Unlock page
+- Homepage
+
+Identify:
+
+1) Information that does not add meaningful decision value and can be removed.
+2) Information that is repeated unnecessarily.
+3) Missing information that would materially increase clarity.
+4) Areas where explanation is too complex or too simplified.
+5) Opportunities to improve structured qualitative summaries.
+
+Be specific.
+Do not give generic advice.
+
+=================================================
+PART 4 – PROFESSIONAL REPORT STRUCTURE REDESIGN
+=================================================
+
+Redesign the Structured Financial Brief (PDF + on-screen equivalent) into a format that resembles a professional financial planning document.
+
+Provide a clearly structured format including:
+
+1) Cover Page
+- Title
+- Date
+- Client identifier (if applicable)
+- Disclaimer
+
+2) Executive Summary
+- Scenario comparison table
+- Key financial indicators
+- Funding requirements
+- Stability overview
+- Clear qualitative summary
+
+3) Scenario Analysis Sections (Each Scenario Separate)
+For each scenario include:
+
+- Headline Summary
+- Structured Narrative Overview
+- Source of Funds Table
+- Net Worth Composition Breakdown
+- Monthly Financial Position
+- Stability Assessment
+- Sensitivity Considerations
+- Key Risks & Observations
+
+4) Assumptions & Methodology
+- Inputs
+- Settlement ratio
+- Interest rate assumptions
+- Expense assumptions
+- Limitations of modelling
+- Formal disclaimer language
+
+5) Appendix (if required)
+- Detailed calculation breakdown
+- Terminology definitions
+
+Ensure:
+- Clear hierarchy
+- Professional tone
+- No casual phrasing
+- Proper segmentation
+- Readable tables
+- Defined headings
+
+Deliver:
+- Revised report outline
+- Recommended headline phrasing
+- Suggested narrative tone
+- Formatting guidance (spacing, typography hierarchy)
+
+=================================================
+PART 5 – FINAL STRATEGIC EVALUATION
+=================================================
+
+Provide:
+
+1) Overall commercial viability assessment.
+2) Overall regulatory risk assessment.
+3) Top 3 priority fixes before public launch.
+4) What can be launched immediately vs what should wait.
+5) Whether any features increase liability without adding conversion value.
+
+Be structured.
+Be specific.
+Avoid generic advice.
+Assume UK regulatory context.
+Assume direct-to-consumer audience.
+
+END OF REVIEW REQUEST.

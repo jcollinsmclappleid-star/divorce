@@ -136,13 +136,13 @@ export function generateScenarioNarrative(
     riskFlags.push({
       label: "Mortgage affordability",
       severity: "risk",
-      detail: `Party ${keeper} may not qualify for the mortgage based on standard lending criteria (typically 4-4.5x income).`,
+      detail: `Party ${keeper} may not qualify for the mortgage based on typical market benchmarks (typically 4-4.5x income).`,
     });
   } else if (scenario.affordable === true) {
     riskFlags.push({
       label: "Mortgage affordability",
       severity: "ok",
-      detail: `Party ${keeper} should qualify for the mortgage based on standard lending criteria.`,
+      detail: `Party ${keeper} should qualify for the mortgage based on typical market benchmarks.`,
     });
   }
 

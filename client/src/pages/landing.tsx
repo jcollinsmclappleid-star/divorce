@@ -1,6 +1,6 @@
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Calculator, Shield, TrendingUp, Eye, FileText,
@@ -17,28 +17,28 @@ const EXAMPLE_ICONS = [Users, Baby, Home] as const;
 const USP_ITEMS = [
   {
     icon: Landmark,
-    title: "Your True Starting Position",
-    body: "See exactly how property equity, savings, pensions and debts combine into your real financial starting point.",
+    title: "Understand Your Options Before Committing",
+    body: "See how property equity, savings, pensions and debts combine — so you know your true starting position before any discussions.",
   },
   {
     icon: BarChart3,
-    title: "Sell vs Keep \u2014 Side-by-Side",
-    body: "Compare realistic scenarios and see how liquidity, mortgage pressure and long-term stability shift.",
+    title: "Compare What Each Path Really Means",
+    body: "Understand how selling, keeping the home, or adjusting the split changes your liquidity, mortgage burden and long-term outlook.",
   },
   {
     icon: AlertTriangle,
-    title: "Stability & Risk Signals",
-    body: "Instantly identify funding gaps, affordability pressure and how long your capital may last.",
+    title: "Assess the Long-Term Sustainability of Each Option",
+    body: "See which scenarios leave you financially resilient — and which create pressure points you need to plan for.",
   },
   {
     icon: Eye,
-    title: "Monthly Reality Check",
-    body: "Understand your likely monthly position \u2014 not just five-year projections.",
+    title: "Know Your Monthly Reality",
+    body: "Understand your likely monthly position after settlement — not just headline totals.",
   },
   {
     icon: FileText,
-    title: "Structured Financial Brief",
-    body: "Generate a clear, organised summary you can use for your own thinking or financial discussions.",
+    title: "Clarity for Productive Discussions with Your Solicitor",
+    body: "Generate a clear, organised financial overview to bring structure and focus to professional conversations.",
   },
 ];
 
@@ -51,7 +51,7 @@ const HOW_IT_WORKS = [
   },
   {
     step: 2,
-    title: "Compare Realistic Scenarios",
+    title: "Compare Illustrative Scenarios",
     body: "See selling, keeping, and adjusted splits side-by-side.",
     icon: BarChart3,
   },
@@ -148,6 +148,13 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <div className="bg-muted/50 border-y px-4 py-3 text-center">
+        <p className="text-xs text-muted-foreground max-w-3xl mx-auto" data-testid="text-disclaimer-banner">
+          This tool provides illustrative financial modelling only. It does not constitute legal, tax, or financial advice. 
+          Outputs are estimates based on the information you provide and should not be relied upon for decision-making without independent professional advice.
+        </p>
+      </div>
+
       <section className="py-12 md:py-16" data-testid="section-video">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-6">
@@ -224,6 +231,27 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      <div className="max-w-4xl mx-auto px-4 py-8" data-testid="section-who-what">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Who this tool is for</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <p className="text-sm text-muted-foreground">Individuals navigating separation or divorce who want to understand the financial implications of different settlement structures before engaging professional advisors.</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">What this tool does not do</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <p className="text-sm text-muted-foreground">This tool does not provide legal, financial, or tax advice. It does not predict court outcomes, assess entitlement, or replace the need for a qualified solicitor or financial advisor.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
       <section className="py-12 md:py-16 bg-muted/30" data-testid="section-examples">
         <div className="container mx-auto px-4">

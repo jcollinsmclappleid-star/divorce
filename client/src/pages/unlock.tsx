@@ -13,19 +13,19 @@ const VALUE_ITEMS = [
   { icon: Scale, text: "Compare Sell vs Retain scenarios side-by-side" },
   { icon: Sliders, text: "Understand how settlement ratios change your financial stability" },
   { icon: TrendingUp, text: "See how long your capital may realistically last" },
-  { icon: Calculator, text: "Identify funding requirements before committing" },
-  { icon: BarChart3, text: "Evaluate mortgage affordability with structured assessment" },
-  { icon: Search, text: "Model different proposals as discussions evolve" },
-  { icon: FileText, text: "Download a Structured Financial Brief (professional PDF)" },
+  { icon: Calculator, text: "See where your settlement capital comes from — and where it goes" },
+  { icon: BarChart3, text: "Understand which option is most financially sustainable" },
+  { icon: Search, text: "Identify which assumptions matter most to your outcome" },
+  { icon: FileText, text: "Professional report suitable for solicitor discussions (PDF)" },
 ];
 
 const INCLUDES_ITEMS = [
   "Unlimited re-runs for 6 months",
   "Adjustable settlement modelling",
-  "Financial health scoring",
+  "Understand which option is most financially sustainable",
   "Monthly sustainability snapshot",
   "5-year projection analysis",
-  "Structured Financial Brief (PDF)",
+  "Professional Financial Brief (PDF)",
 ];
 
 export default function UnlockPage() {
@@ -84,7 +84,7 @@ export default function UnlockPage() {
             Understand your position clearly and confidently — before committing to costly conversations or irreversible choices.
           </p>
           <p className="text-sm text-muted-foreground/80 max-w-lg mx-auto leading-relaxed">
-            You have already seen your core financial position. Unlock the complete structured modelling analysis to understand how your decisions affect liquidity, stability, and long-term sustainability.
+            You have already seen your core financial position. Unlock the complete analysis to understand how your decisions affect liquidity, stability, and long-term sustainability.
           </p>
         </section>
 
@@ -126,7 +126,7 @@ export default function UnlockPage() {
             <p className="pt-2">
               A single legal consultation can cost £250–£400 per hour.
               <br />
-              Structured financial clarity costs £79.
+              Financial clarity costs £79.
             </p>
             <p className="text-xs text-muted-foreground/70">
               This tool does not replace professional advice. It helps you use it more effectively.
@@ -138,8 +138,13 @@ export default function UnlockPage() {
           <Card className="max-w-sm w-full">
             <CardContent className="pt-8 pb-8 space-y-6 text-center">
               <div>
+                <div className="inline-block bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full mb-3" data-testid="badge-access-duration">
+                  6-month unlimited access — one-time payment
+                </div>
                 <div className="text-4xl font-bold tracking-tight">£79</div>
-                <div className="text-sm text-muted-foreground mt-1">One-Time Access</div>
+                <div className="text-xs text-muted-foreground mt-0.5">(no VAT applicable)</div>
+                <div className="text-sm text-muted-foreground mt-1">One-time payment — no subscription, no recurring charges</div>
+                <div className="text-xs text-muted-foreground">6-month unlimited access from date of purchase</div>
               </div>
 
               <ul className="text-sm text-left space-y-2">
@@ -171,6 +176,9 @@ export default function UnlockPage() {
               <div className="text-xs text-muted-foreground space-y-1">
                 <p>Private access. No subscription. Immediate unlock.</p>
                 <p>Access remains available for 6 months to model evolving discussions.</p>
+                <p className="text-[10px] text-muted-foreground/70 leading-relaxed mt-2">
+                  By purchasing, you agree that this tool provides illustrative modelling only and does not constitute professional advice. No refunds are available once access has been granted, as the digital content is delivered immediately.
+                </p>
               </div>
             </CardContent>
           </Card>

@@ -46,10 +46,10 @@ export function computeStabilityScore(
     const keeper = scenario.id === "S2" ? "A" : "B";
     if (keeper === "A") {
       scoreA -= 30;
-      reasonsA.push({ label: "Mortgage affordability threshold exceeded", points: -30 });
+      reasonsA.push({ label: "Indicative affordability benchmark exceeded", points: -30 });
     } else {
       scoreB -= 30;
-      reasonsB.push({ label: "Mortgage affordability threshold exceeded", points: -30 });
+      reasonsB.push({ label: "Indicative affordability benchmark exceeded", points: -30 });
     }
   }
 

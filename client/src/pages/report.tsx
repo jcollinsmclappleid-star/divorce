@@ -106,6 +106,12 @@ export default function ReportPage() {
           <p className="text-xs text-gray-400 mt-3 italic">
             Illustrative modelling only. This is not legal, tax or financial advice. All figures are estimates based on the inputs provided and current UK tax/NI rules.
           </p>
+          <div className="mt-4 p-3 border border-gray-300 rounded text-xs text-gray-600 leading-relaxed">
+            <p className="font-semibold text-gray-700 mb-1">IMPORTANT</p>
+            <p>
+              This document provides illustrative financial modelling only and does not constitute legal, tax, or financial advice. All figures are estimates based on the information entered and standard assumptions. Affordability indicators use typical market benchmarks and do not represent mortgage offers or credit assessments. Independent professional advice should be obtained before making any financial decisions.
+            </p>
+          </div>
         </header>
 
         <ReportSection title="1. Financial Position Summary">
@@ -303,7 +309,7 @@ export default function ReportPage() {
                     <p>Available Deposit: {fmt(housing.availableDeposit)} ({pct(housing.depositPercentage)})</p>
                     <p>Mortgage-to-Net-Income Ratio: {pct(housing.monthlyPaymentAsPercentOfNetIncome)}</p>
                     <p className={housing.withinLendingCriteria ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
-                      {housing.withinLendingCriteria ? "Indicatively within standard lending criteria" : "Indicatively stretched or outside standard lending criteria"}
+                      {housing.withinLendingCriteria ? "Indicatively within typical market benchmarks" : "Indicatively stretched or beyond typical market benchmarks"}
                     </p>
                     {housing.notes.map((n: string, ni: number) => (
                       <p key={ni} className="text-xs text-gray-400">{n}</p>
@@ -361,14 +367,37 @@ export default function ReportPage() {
               </>
             )}
           </div>
+          <div className="mt-4 pt-3 border-t">
+            <h4 className="font-semibold text-sm mb-2">Limitations</h4>
+            <ul className="text-xs text-gray-600 space-y-1 list-disc list-inside">
+              <li>All figures are estimates based on the information entered and may differ from actual outcomes.</li>
+              <li>Tax calculations use the {store.config.taxYear} model and may not reflect individual circumstances.</li>
+              <li>Mortgage affordability indicators use typical market benchmarks and do not constitute a lending assessment.</li>
+              <li>Property valuations, pension transfer values, and other asset values should be independently verified.</li>
+              <li>This analysis does not account for potential changes in legislation, tax rates, or personal circumstances.</li>
+            </ul>
+          </div>
         </ReportSection>
+
+        <section className="mb-6 page-break" data-testid="section-report-glossary">
+          <h3 className="text-lg font-bold mb-3 border-b pb-1">Glossary of Key Terms</h3>
+          <div className="grid grid-cols-1 gap-2 text-xs">
+            <div><span className="font-semibold">Liquid Capital:</span> <span className="text-gray-600">Cash, savings, ISAs, and investments that can be accessed or realised within a short timeframe.</span></div>
+            <div><span className="font-semibold">Net Equity:</span> <span className="text-gray-600">The value of property after deducting the outstanding mortgage balance and estimated selling costs.</span></div>
+            <div><span className="font-semibold">Equity Transfer Obligation:</span> <span className="text-gray-600">The lump sum payable by the party retaining the property to compensate the departing party for their share of net equity.</span></div>
+            <div><span className="font-semibold">Capital Runway:</span> <span className="text-gray-600">The projected period for which liquid capital can sustain expenditure, measured in months or years.</span></div>
+            <div><span className="font-semibold">Stability Assessment:</span> <span className="text-gray-600">A composite indicator of financial resilience incorporating cash reserves, monthly surplus/deficit, mortgage burden, and capital runway.</span></div>
+            <div><span className="font-semibold">CETV (Cash Equivalent Transfer Value):</span> <span className="text-gray-600">The estimated lump sum value of a pension, used for comparison and division purposes.</span></div>
+            <div><span className="font-semibold">CMS (Child Maintenance Service):</span> <span className="text-gray-600">The UK government service that calculates child maintenance obligations based on income and overnight stays.</span></div>
+            <div><span className="font-semibold">Income Multiple:</span> <span className="text-gray-600">The ratio of mortgage required to gross annual income, used as an affordability benchmark.</span></div>
+          </div>
+        </section>
 
         <footer className="mt-12 pt-6 border-t border-gray-300 text-center space-y-2 pb-10">
           <p className="text-xs text-gray-400 font-semibold">DivorceModeller.UK</p>
           <p className="text-[10px] text-gray-400 leading-relaxed max-w-lg mx-auto">
-            This document is an illustrative financial model and does not constitute legal, tax, or financial advice.
-            It is based on the inputs you provided and current UK tax/NI rules. You should seek independent professional
-            advice before making any financial decisions related to divorce or separation.
+            Illustrative modelling only — not legal, tax, or financial advice.
+            All outputs are estimates based on the information entered and standard assumptions. They should not be relied upon for decision-making without independent professional advice. Affordability indicators are benchmarked against typical market heuristics and do not represent a mortgage offer or credit assessment.
           </p>
         </footer>
       </div>

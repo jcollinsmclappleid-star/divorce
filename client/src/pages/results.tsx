@@ -352,7 +352,8 @@ export default function ResultsPage() {
 
       <footer className="border-t py-8 mt-auto bg-muted/30">
         <div className="container mx-auto px-4 text-center text-muted-foreground text-xs space-y-1.5">
-          <p className="font-medium">Illustrative modelling only. Not legal, tax or financial advice.</p>
+          <p className="font-medium">Illustrative modelling only — not legal, tax, or financial advice.</p>
+          <p>All outputs are estimates based on the information entered and standard assumptions. They should not be relied upon for decision-making without independent professional advice. Affordability indicators are benchmarked against typical market heuristics and do not represent a mortgage offer or credit assessment.</p>
           <p>All calculations are performed locally in your browser. No financial data is transmitted to any external server.</p>
         </div>
       </footer>

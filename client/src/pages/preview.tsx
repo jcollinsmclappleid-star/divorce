@@ -79,6 +79,9 @@ export default function PreviewPage() {
             Based on the information provided, the following represents a summary of the preliminary financial position.
             Unlock the full structured analysis for comprehensive scenario modelling, stability assessment, and a downloadable Structured Financial Brief.
           </p>
+          <p className="text-xs text-muted-foreground mt-2" data-testid="text-preview-disclaimer">
+            All figures are indicative estimates based on the information provided. They do not constitute financial, legal, or tax advice.
+          </p>
         </div>
 
         <div className="p-4 rounded-md border border-amber-200 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-800">

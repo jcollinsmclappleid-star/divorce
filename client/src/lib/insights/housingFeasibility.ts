@@ -51,17 +51,17 @@ export function computeHousingFeasibility(
 
   if (withinLendingCriteria) {
     notes.push(
-      `Mortgage obligation of £${Math.round(mortgageRequired)} is within standard lending criteria (${incomeMultiple.toFixed(1)}x gross income)`
+      `Mortgage obligation of £${Math.round(mortgageRequired)} is within typical market benchmarks (${incomeMultiple.toFixed(1)}x gross income)`
     );
   } else {
     notes.push(
-      `Mortgage obligation of £${Math.round(mortgageRequired)} exceeds the standard 4.5x gross income multiple — lender may require additional collateral or guarantees`
+      `Mortgage obligation of £${Math.round(mortgageRequired)} exceeds the typical 4.5x gross income benchmark — lender may require additional collateral or guarantees`
     );
   }
 
   if (monthlyPaymentAsPercentOfNetIncome > 35) {
     notes.push(
-      `Mortgage payments would represent ${Math.round(monthlyPaymentAsPercentOfNetIncome)}% of net income, exceeding the standard 35% affordability threshold`
+      `Mortgage payments would represent ${Math.round(monthlyPaymentAsPercentOfNetIncome)}% of net income, exceeding the typical 35% affordability benchmark`
     );
   }
 

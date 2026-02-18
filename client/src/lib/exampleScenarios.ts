@@ -26,7 +26,7 @@ export const EXAMPLE_SCENARIOS: ExampleScenario[] = [
     highlights: ["£425k home", "£180k mortgage", "Two salaries", "50/50 split"],
     data: {
       assets: [
-        { id: home1Id, name: "Family Home", category: "primary_home", owner: "joint", currentValue: 425000, liquidity: "illiquid", saleCostPct: 3, taxCostPct: 0, growthRate: 0.02 },
+        { id: home1Id, name: "Family Home", category: "primary_home", owner: "joint", currentValue: 425000, liquidity: "illiquid", saleCostPct: 0.03, taxCostPct: 0, growthRate: 0.02 },
         { id: uuidv4(), name: "Joint Savings", category: "cash", owner: "joint", currentValue: 28000, liquidity: "liquid", saleCostPct: 0, taxCostPct: 0 },
         { id: uuidv4(), name: "A's ISA", category: "investments", owner: "A", currentValue: 15000, liquidity: "liquid", saleCostPct: 0, taxCostPct: 0 },
         { id: uuidv4(), name: "B's ISA", category: "investments", owner: "B", currentValue: 8500, liquidity: "liquid", saleCostPct: 0, taxCostPct: 0 },
@@ -78,11 +78,11 @@ export const EXAMPLE_SCENARIOS: ExampleScenario[] = [
     highlights: ["£350k home", "2 children", "£65k vs £12k income", "CMS estimate"],
     data: {
       assets: [
-        { id: home2Id, name: "Family Home", category: "primary_home", owner: "joint", currentValue: 350000, liquidity: "illiquid", saleCostPct: 3, taxCostPct: 0, growthRate: 0.02 },
+        { id: home2Id, name: "Family Home", category: "primary_home", owner: "joint", currentValue: 350000, liquidity: "illiquid", saleCostPct: 0.03, taxCostPct: 0, growthRate: 0.02 },
         { id: uuidv4(), name: "Joint Savings", category: "cash", owner: "joint", currentValue: 12000, liquidity: "liquid", saleCostPct: 0, taxCostPct: 0 },
         { id: uuidv4(), name: "A's Pension (DB)", category: "pension", owner: "A", currentValue: 180000, liquidity: "illiquid", saleCostPct: 0, taxCostPct: 0, pensionType: "DB", cetv: 180000 },
         { id: uuidv4(), name: "B's Pension", category: "pension", owner: "B", currentValue: 18000, liquidity: "illiquid", saleCostPct: 0, taxCostPct: 0, pensionType: "DC", cetv: 18000 },
-        { id: uuidv4(), name: "A's Car", category: "vehicle", owner: "A", currentValue: 12000, liquidity: "illiquid", saleCostPct: 5, taxCostPct: 0 },
+        { id: uuidv4(), name: "A's Car", category: "vehicle", owner: "A", currentValue: 12000, liquidity: "illiquid", saleCostPct: 0.05, taxCostPct: 0 },
       ],
       liabilities: [
         { id: mortgage2Id, name: "Mortgage", category: "mortgage", owner: "joint", balance: 140000, interestAPR: 0.052, termYearsRemaining: 15, securedAgainstAssetId: home2Id },
@@ -129,12 +129,12 @@ export const EXAMPLE_SCENARIOS: ExampleScenario[] = [
     highlights: ["£650k home", "£45k mortgage", "Large pensions", "60/40 split"],
     data: {
       assets: [
-        { id: home3Id, name: "Family Home", category: "primary_home", owner: "joint", currentValue: 650000, liquidity: "illiquid", saleCostPct: 3, taxCostPct: 0, growthRate: 0.01 },
+        { id: home3Id, name: "Family Home", category: "primary_home", owner: "joint", currentValue: 650000, liquidity: "illiquid", saleCostPct: 0.03, taxCostPct: 0, growthRate: 0.01 },
         { id: uuidv4(), name: "Joint Savings", category: "cash", owner: "joint", currentValue: 45000, liquidity: "liquid", saleCostPct: 0, taxCostPct: 0 },
-        { id: uuidv4(), name: "A's Investment Portfolio", category: "investments", owner: "A", currentValue: 35000, liquidity: "liquid", saleCostPct: 0.5, taxCostPct: 0 },
+        { id: uuidv4(), name: "A's Investment Portfolio", category: "investments", owner: "A", currentValue: 35000, liquidity: "liquid", saleCostPct: 0.005, taxCostPct: 0 },
         { id: uuidv4(), name: "A's Final Salary Pension", category: "pension", owner: "A", currentValue: 420000, liquidity: "illiquid", saleCostPct: 0, taxCostPct: 0, pensionType: "DB", cetv: 420000 },
         { id: uuidv4(), name: "B's DC Pension", category: "pension", owner: "B", currentValue: 85000, liquidity: "illiquid", saleCostPct: 0, taxCostPct: 0, pensionType: "DC", cetv: 85000 },
-        { id: uuidv4(), name: "B's Car", category: "vehicle", owner: "B", currentValue: 8000, liquidity: "illiquid", saleCostPct: 5, taxCostPct: 0 },
+        { id: uuidv4(), name: "B's Car", category: "vehicle", owner: "B", currentValue: 8000, liquidity: "illiquid", saleCostPct: 0.05, taxCostPct: 0 },
       ],
       liabilities: [
         { id: mortgage3Id, name: "Mortgage", category: "mortgage", owner: "joint", balance: 45000, interestAPR: 0.039, termYearsRemaining: 5, securedAgainstAssetId: home3Id },
