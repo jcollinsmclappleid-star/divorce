@@ -1053,33 +1053,33 @@ function ExecutiveTable({
                   <span className="text-sm font-semibold">{meta?.label ?? s.name}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div>
+                  <div className="min-w-0">
                     <span className="text-muted-foreground block">Liquid Capital — A</span>
                     <span className="tabular-nums font-semibold text-blue-600">{formatCurrency(s.liquidStartA)}</span>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <span className="text-muted-foreground block">Liquid Capital — B</span>
                     <span className="tabular-nums font-semibold text-emerald-600">{formatCurrency(s.liquidStartB)}</span>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <span className="text-muted-foreground block">Runway — A</span>
                     {rw?.partyA.sustained
                       ? <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50 text-[10px]">Sustained</Badge>
                       : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]">Yr {rw?.partyA.depletionYear}</Badge>}
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <span className="text-muted-foreground block">Runway — B</span>
                     {rw?.partyB.sustained
                       ? <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50 text-[10px]">Sustained</Badge>
                       : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]">Yr {rw?.partyB.depletionYear}</Badge>}
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <span className="text-muted-foreground block">Stability — A</span>
-                    <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Stable"} />
+                    <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Stable"} compact />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <span className="text-muted-foreground block">Stability — B</span>
-                    <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Stable"} />
+                    <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Stable"} compact />
                   </div>
                   {(s.fundingGap ?? 0) > 0 && (
                     <div className="col-span-2">
@@ -1111,17 +1111,21 @@ function ExecutiveTable({
   );
 }
 
-function StabilityBadge({ score, label }: { score: number; label: string }) {
+function StabilityBadge({ score, label, compact }: { score: number; label: string; compact?: boolean }) {
   const colorClass = score >= 80
     ? "text-emerald-600 border-emerald-200 bg-emerald-50"
     : score >= 60
     ? "text-amber-600 border-amber-200 bg-amber-50"
     : "text-red-600 border-red-200 bg-red-50";
 
+  const shortLabel = compact
+    ? (score >= 80 ? "Stable" : score >= 60 ? "Moderate Risk" : "Elevated Risk")
+    : label;
+
   return (
-    <Badge variant="outline" className={colorClass} data-testid={`badge-stability-${score}`}>
-      <Shield className="w-3 h-3 mr-1" />
-      {score} {label}
+    <Badge variant="outline" className={`${colorClass} max-w-full`} data-testid={`badge-stability-${score}`}>
+      <Shield className="w-3 h-3 mr-1 shrink-0" />
+      <span className="truncate">{score} {shortLabel}</span>
     </Badge>
   );
 }
