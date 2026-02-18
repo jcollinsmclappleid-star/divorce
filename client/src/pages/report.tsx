@@ -619,10 +619,28 @@ export default function ReportPage() {
             )}
           </div>
           <div className="mt-4 pt-3 border-t">
+            <ReportCollapsible title="Tax Model Scope (2025/26)">
+            <div className="text-xs text-gray-600 space-y-2">
+              <p>The tax engine aggregates all entered income sources (salary, self-employment, rental, dividends, benefits) per party and applies a single income tax and employee Class 1 NI calculation. Personal allowance tapering above £100,000 is modelled.</p>
+              <p className="font-medium text-gray-700">The following are not separately modelled:</p>
+              <ul className="space-y-1 list-disc list-inside">
+                <li>Dividend tax rates (8.75% / 33.75% / 39.35%) and the £1,000 dividend allowance — dividends are taxed at standard income tax rates</li>
+                <li>Savings income allowance (£1,000 basic / £500 higher rate) and starting rate for savings</li>
+                <li>Capital Gains Tax on disposal of investments, second properties, or business assets</li>
+                <li>Scottish income tax rates — England, Wales, and Northern Ireland rates are applied to all parties</li>
+                <li>Self-employed National Insurance (Class 2 and Class 4) — employee Class 1 rates are used for all income</li>
+                <li>High Income Child Benefit Charge (income above £60,000)</li>
+                <li>Pension contribution tax relief (salary sacrifice or relief at source)</li>
+                <li>Student loan repayments (Plan 1, Plan 2, Plan 4, or Postgraduate)</li>
+              </ul>
+              <p className="italic">Where these factors are material to either party, actual net income may differ from the figures presented. Independent tax review may be warranted.</p>
+            </div>
+            </ReportCollapsible>
+          </div>
+          <div className="mt-3 pt-3 border-t">
             <ReportCollapsible title="Limitations & Exclusions">
             <ul className="text-xs text-gray-600 space-y-1 list-disc list-inside">
               <li>All figures are estimates based on the information entered and may differ from actual outcomes.</li>
-              <li>Tax calculations use the {store.config.taxYear} model and may not reflect individual circumstances.</li>
               <li>Mortgage affordability indicators use typical market benchmarks and do not constitute a lending assessment.</li>
               <li>Property valuations, pension transfer values, and other asset values should be independently verified.</li>
               <li>This analysis does not account for potential changes in legislation, tax rates, or personal circumstances.</li>

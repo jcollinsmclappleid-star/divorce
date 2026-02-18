@@ -379,9 +379,24 @@ export default function ResultsPage() {
                     <div className="flex justify-between gap-2"><span>Tax model</span><span>{assumptions.includeTaxModel ? "2025/26 UK rates" : "Disabled"}</span></div>
                     <div className="flex justify-between gap-2"><span>Child maintenance</span><span>{assumptions.includeCMSEstimate ? "CMS estimate" : "Not included"}</span></div>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-3 italic">Tax figures are based on a simplified 2025/26 UK model and may not reflect individual circumstances.</p>
                   <div className="mt-3 pt-2 border-t border-muted space-y-1">
-                    <p className="text-xs font-medium text-muted-foreground">Exclusions & Assumptions:</p>
+                    <p className="text-xs font-medium text-muted-foreground">Tax Model Scope (2025/26):</p>
+                    <p className="text-xs text-muted-foreground">The tax engine aggregates all entered income sources (salary, self-employment, rental, dividends, benefits) per party and applies a single income tax and employee Class 1 NI calculation. Personal allowance tapering above £100,000 is modelled.</p>
+                    <p className="text-xs font-medium text-muted-foreground mt-1">The following are not separately modelled:</p>
+                    <ul className="text-xs text-muted-foreground list-disc list-inside space-y-0.5">
+                      <li>Dividend tax rates and the £1,000 dividend allowance</li>
+                      <li>Savings income allowance and starting rate for savings</li>
+                      <li>Capital Gains Tax on asset disposals</li>
+                      <li>Scottish income tax rates (England/Wales/NI rates are applied)</li>
+                      <li>Self-employed NI (Class 2 & Class 4) — employee Class 1 rates are used</li>
+                      <li>High Income Child Benefit Charge (above £60,000)</li>
+                      <li>Pension contribution tax relief</li>
+                      <li>Student loan repayments</li>
+                    </ul>
+                    <p className="text-xs text-muted-foreground italic mt-1">Where these factors are material, actual net income may differ from the figures presented. Independent tax review may be warranted.</p>
+                  </div>
+                  <div className="mt-3 pt-2 border-t border-muted space-y-1">
+                    <p className="text-xs font-medium text-muted-foreground">Other Exclusions & Assumptions:</p>
                     <p className="text-xs text-muted-foreground">Early repayment charges, stamp duty, legal transfer fees, moving costs, and spousal maintenance are not separately modelled. Pension values are treated as nominal CETV figures without actuarial adjustment. No CGT liability is modelled — the principal private residence exemption is assumed for the family home.</p>
                   </div>
                 </div>

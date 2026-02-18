@@ -115,7 +115,17 @@
       "notes": [
         "If CMS estimate enabled, compute approx net = gross - incomeTax - employeeNI."
       ]
-    }
+    },
+    "exclusions": [
+      "Dividend tax rates (8.75%/33.75%/39.35%) and £1,000 dividend allowance",
+      "Savings income allowance and starting rate for savings",
+      "Capital Gains Tax on asset disposals",
+      "Scottish income tax rates (England/Wales/NI rates applied)",
+      "Self-employed NI Class 2 & Class 4 (employee Class 1 used)",
+      "High Income Child Benefit Charge (above £60,000)",
+      "Pension contribution tax relief",
+      "Student loan repayments (Plan 1/2/4/Postgraduate)"
+    ]
   },
   "childMaintenanceModel": {
     "enabledByDefault": false,
