@@ -33,6 +33,10 @@ export interface ScenarioResult {
   projectedHomeValue?: number;
   deferredEquity?: number;
   deferYears?: number;
+  mortgageMonthlyA?: number;
+  mortgageMonthlyB?: number;
+  homeEquityA?: number;
+  homeEquityB?: number;
 }
 
 export interface ProjectionYear {
@@ -171,6 +175,12 @@ function runEngine(state: StoreState): EngineResult {
 
   const scenarioResults: ScenarioResult[] = [];
 
+  const mortgagePayment = calcMortgagePayment(
+    totalHomeMortgage,
+    assumptions.mortgageAPR,
+    assumptions.mortgageTermYears
+  );
+
   function calcKeepsHome(
     keeperLabel: 'A' | 'B',
     splitToKeeper: number,
@@ -185,6 +195,7 @@ function runEngine(state: StoreState): EngineResult {
 
     const liqA = keeperLabel === 'A' ? liqKeeper : liqOther;
     const liqB = keeperLabel === 'A' ? liqOther : liqKeeper;
+    const homeEquity = Math.max(0, homeValue - totalHomeMortgage);
 
     return {
       id: keeperLabel === 'A' ? 'S2' : 'S3',
@@ -194,12 +205,16 @@ function runEngine(state: StoreState): EngineResult {
       liquidStartB: liqB,
       pensionA: round(pensionToA),
       pensionB: round(pensionToB),
-      totalA: round(liqA + (keeperLabel === 'A' ? homeValue - totalHomeMortgage : 0) + pensionToA),
-      totalB: round(liqB + (keeperLabel === 'B' ? homeValue - totalHomeMortgage : 0) + pensionToB),
+      totalA: round(liqA + (keeperLabel === 'A' ? homeEquity : 0) + pensionToA),
+      totalB: round(liqB + (keeperLabel === 'B' ? homeEquity : 0) + pensionToB),
       buyoutAmount: buyoutToOther,
       fundingGap,
       mortgageCapacity: capacity,
       affordable: capacity >= totalHomeMortgage,
+      mortgageMonthlyA: keeperLabel === 'A' ? mortgagePayment.monthlyPayment : 0,
+      mortgageMonthlyB: keeperLabel === 'B' ? mortgagePayment.monthlyPayment : 0,
+      homeEquityA: keeperLabel === 'A' ? homeEquity : 0,
+      homeEquityB: keeperLabel === 'B' ? homeEquity : 0,
     };
   }
 
@@ -261,8 +276,12 @@ function runEngine(state: StoreState): EngineResult {
     let capB = sc.liquidStartB;
     const currentYear = new Date().getFullYear();
     const inflRate = assumptions.inflationRate;
-    let annualSurplusA = surplusA - (assumptions.includeCMSEstimate ? cmsAnnual : 0);
-    let annualSurplusB = surplusB + (assumptions.includeCMSEstimate ? cmsAnnual : 0);
+
+    const mortgageAnnualA = (sc.mortgageMonthlyA ?? 0) * 12;
+    const mortgageAnnualB = (sc.mortgageMonthlyB ?? 0) * 12;
+
+    let annualSurplusA = surplusA - (assumptions.includeCMSEstimate ? cmsAnnual : 0) - mortgageAnnualA;
+    let annualSurplusB = surplusB + (assumptions.includeCMSEstimate ? cmsAnnual : 0) - mortgageAnnualB;
 
     for (let y = 0; y <= assumptions.projectionYears; y++) {
       years.push({ year: currentYear + y, capitalA: round(capA), capitalB: round(capB) });

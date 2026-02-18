@@ -163,7 +163,7 @@ export default function ResultsPage() {
                 </TableHeader>
                 <TableBody>
                   <TableRow>
-                    <TableCell className="font-medium text-muted-foreground">Party A starting liquid</TableCell>
+                    <TableCell className="font-medium text-muted-foreground">Party A liquid cash</TableCell>
                     {displayScenarios.map(s => (
                       <TableCell key={s.id} className="text-center tabular-nums font-semibold text-blue-600">
                         {formatCurrency(s.liquidStartA)}
@@ -171,12 +171,45 @@ export default function ResultsPage() {
                     ))}
                   </TableRow>
                   <TableRow>
-                    <TableCell className="font-medium text-muted-foreground">Party B starting liquid</TableCell>
+                    <TableCell className="font-medium text-muted-foreground">Party B liquid cash</TableCell>
                     {displayScenarios.map(s => (
                       <TableCell key={s.id} className="text-center tabular-nums font-semibold text-emerald-600">
                         {formatCurrency(s.liquidStartB)}
                       </TableCell>
                     ))}
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium text-muted-foreground">Home equity retained (A)</TableCell>
+                    {displayScenarios.map(s => (
+                      <TableCell key={s.id} className="text-center tabular-nums">
+                        {(s.homeEquityA ?? 0) > 0
+                          ? <span className="text-blue-600">{formatCurrency(s.homeEquityA!)}</span>
+                          : <span className="text-muted-foreground">--</span>}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium text-muted-foreground">Home equity retained (B)</TableCell>
+                    {displayScenarios.map(s => (
+                      <TableCell key={s.id} className="text-center tabular-nums">
+                        {(s.homeEquityB ?? 0) > 0
+                          ? <span className="text-emerald-600">{formatCurrency(s.homeEquityB!)}</span>
+                          : <span className="text-muted-foreground">--</span>}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium text-muted-foreground">Monthly mortgage cost</TableCell>
+                    {displayScenarios.map(s => {
+                      const mtg = (s.mortgageMonthlyA ?? 0) + (s.mortgageMonthlyB ?? 0);
+                      return (
+                        <TableCell key={s.id} className="text-center tabular-nums">
+                          {mtg > 0
+                            ? <span className="text-amber-600">{formatCurrency(mtg)}/mo</span>
+                            : <span className="text-muted-foreground">None</span>}
+                        </TableCell>
+                      );
+                    })}
                   </TableRow>
                   <TableRow>
                     <TableCell className="font-medium text-muted-foreground">Buyout payment</TableCell>
@@ -299,14 +332,43 @@ export default function ResultsPage() {
                         <div className="space-y-4">
                           <h3 className="text-sm font-semibold">Financial Outcome</h3>
                           <div className="grid grid-cols-2 gap-2 text-sm">
-                            <span className="text-muted-foreground">A Liquid Capital</span>
+                            <span className="text-muted-foreground">A Liquid Cash</span>
                             <span className="text-right font-semibold text-blue-600">{formatCurrency(activeScenario.liquidStartA)}</span>
-                            <span className="text-muted-foreground">B Liquid Capital</span>
+                            <span className="text-muted-foreground">B Liquid Cash</span>
                             <span className="text-right font-semibold text-emerald-600">{formatCurrency(activeScenario.liquidStartB)}</span>
+                            {(activeScenario.homeEquityA ?? 0) > 0 && (
+                              <>
+                                <span className="text-muted-foreground">A Home Equity (illiquid)</span>
+                                <span className="text-right font-medium text-blue-600">{formatCurrency(activeScenario.homeEquityA!)}</span>
+                              </>
+                            )}
+                            {(activeScenario.homeEquityB ?? 0) > 0 && (
+                              <>
+                                <span className="text-muted-foreground">B Home Equity (illiquid)</span>
+                                <span className="text-right font-medium text-emerald-600">{formatCurrency(activeScenario.homeEquityB!)}</span>
+                              </>
+                            )}
                             <span className="text-muted-foreground">A Pension</span>
                             <span className="text-right font-medium">{formatCurrency(activeScenario.pensionA)}</span>
                             <span className="text-muted-foreground">B Pension</span>
                             <span className="text-right font-medium">{formatCurrency(activeScenario.pensionB)}</span>
+                            {((activeScenario.mortgageMonthlyA ?? 0) > 0 || (activeScenario.mortgageMonthlyB ?? 0) > 0) && (
+                              <>
+                                <Separator className="col-span-2 my-1" />
+                                {(activeScenario.mortgageMonthlyA ?? 0) > 0 && (
+                                  <>
+                                    <span className="text-muted-foreground">A Mortgage Payment</span>
+                                    <span className="text-right font-medium text-amber-600">{formatCurrency(activeScenario.mortgageMonthlyA!)}/mo</span>
+                                  </>
+                                )}
+                                {(activeScenario.mortgageMonthlyB ?? 0) > 0 && (
+                                  <>
+                                    <span className="text-muted-foreground">B Mortgage Payment</span>
+                                    <span className="text-right font-medium text-amber-600">{formatCurrency(activeScenario.mortgageMonthlyB!)}/mo</span>
+                                  </>
+                                )}
+                              </>
+                            )}
                             <Separator className="col-span-2 my-1" />
                             <span className="font-semibold">A Total Position</span>
                             <span className="text-right font-bold text-blue-600 text-lg">{formatCurrency(activeScenario.totalA)}</span>
@@ -334,9 +396,13 @@ export default function ResultsPage() {
 
                         {activeProjection && activeProjection.length > 1 && (
                           <div>
-                            <h3 className="text-sm font-semibold mb-2 flex items-center gap-1">
-                              <TrendingUp className="h-3 w-3" /> Capital Projection
+                            <h3 className="text-sm font-semibold mb-1 flex items-center gap-1">
+                              <TrendingUp className="h-3 w-3" /> Liquid Cash Projection
                             </h3>
+                            <p className="text-xs text-muted-foreground mb-2">
+                              Cash position over time, after mortgage payments and living costs.
+                              {((activeScenario.homeEquityA ?? 0) > 0 || (activeScenario.homeEquityB ?? 0) > 0) && " Home equity is not included (illiquid)."}
+                            </p>
                             <div className="h-[260px]">
                               <ResponsiveContainer width="100%" height="100%">
                                 <LineChart data={activeProjection}>
