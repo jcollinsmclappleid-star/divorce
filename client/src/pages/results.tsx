@@ -46,10 +46,18 @@ const SCENARIO_META: Record<string, { label: string; shortLabel: string; color: 
 };
 
 function InfoTip({ text }: { text: string }) {
+  const [open, setOpen] = useState(false);
   return (
-    <Tooltip>
+    <Tooltip open={open} onOpenChange={setOpen}>
       <TooltipTrigger asChild>
-        <button type="button" className="inline-flex items-center ml-1 text-muted-foreground/60 hover:text-muted-foreground cursor-help" data-testid="button-info-tip">
+        <button
+          type="button"
+          className="inline-flex items-center ml-1 text-muted-foreground/60 hover:text-muted-foreground cursor-help"
+          data-testid="button-info-tip"
+          onClick={(e) => { e.preventDefault(); setOpen(o => !o); }}
+          onFocus={() => setOpen(true)}
+          onBlur={() => setOpen(false)}
+        >
           <Info className="w-3.5 h-3.5" />
         </button>
       </TooltipTrigger>
@@ -205,7 +213,7 @@ export default function ResultsPage() {
               <p className="text-sm text-blue-900 dark:text-blue-200 leading-relaxed" data-testid="text-guidance-callout">
                 <Info className="w-4 h-4 inline mr-1.5 -mt-0.5" />
                 The table below compares what each party walks away with under different settlement options. 
-                Hover over the <span className="inline-flex items-center"><Info className="w-3 h-3 mx-0.5" /></span> icons for plain-English explanations of each row. 
+                Click or tap the <span className="inline-flex items-center"><Info className="w-3 h-3 mx-0.5" /></span> icons for plain-English explanations of each row. 
                 Use the sliders above to try different splits.
               </p>
             </div>
