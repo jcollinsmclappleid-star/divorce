@@ -45,6 +45,18 @@ export interface ProjectionYear {
   capitalB: number;
 }
 
+export interface PartyRunway {
+  startingCapital: number;
+  lowestProjectedCapital: number;
+  depletionYear: number | null;
+  sustained: boolean;
+}
+
+export interface RunwayResult {
+  partyA: PartyRunway;
+  partyB: PartyRunway;
+}
+
 export interface EngineResult {
   netWorth: { total: number; partyA: number; partyB: number };
   liquidity: { partyA: number; partyB: number };
@@ -55,6 +67,7 @@ export interface EngineResult {
   cmsAnnual: number;
   scenarios: ScenarioResult[];
   projections: Record<string, ProjectionYear[]>;
+  runways: Record<string, RunwayResult>;
   intermediate: {
     netHomeEquity: number;
     totalLiquid: number;
@@ -305,6 +318,40 @@ function runEngine(state: StoreState): EngineResult {
     projections[sc.id] = years;
   }
 
+  const runways: Record<string, RunwayResult> = {};
+  for (const sc of scenarioResults) {
+    const proj = projections[sc.id];
+    let lowestA = sc.liquidStartA;
+    let lowestB = sc.liquidStartB;
+    let depletionYearA: number | null = null;
+    let depletionYearB: number | null = null;
+    const startYear = proj?.[0]?.year ?? 0;
+
+    if (proj) {
+      for (const p of proj) {
+        if (p.capitalA < lowestA) lowestA = p.capitalA;
+        if (p.capitalB < lowestB) lowestB = p.capitalB;
+        if (p.capitalA <= 0 && depletionYearA === null) depletionYearA = p.year - startYear;
+        if (p.capitalB <= 0 && depletionYearB === null) depletionYearB = p.year - startYear;
+      }
+    }
+
+    runways[sc.id] = {
+      partyA: {
+        startingCapital: round(sc.liquidStartA),
+        lowestProjectedCapital: round(lowestA),
+        depletionYear: depletionYearA,
+        sustained: depletionYearA === null,
+      },
+      partyB: {
+        startingCapital: round(sc.liquidStartB),
+        lowestProjectedCapital: round(lowestB),
+        depletionYear: depletionYearB,
+        sustained: depletionYearB === null,
+      },
+    };
+  }
+
   return {
     netWorth: { total: round(netWorthA + netWorthB), partyA: round(netWorthA), partyB: round(netWorthB) },
     liquidity: { partyA: round(liquidA), partyB: round(liquidB) },
@@ -315,6 +362,7 @@ function runEngine(state: StoreState): EngineResult {
     cmsAnnual,
     scenarios: scenarioResults,
     projections,
+    runways,
     intermediate: {
       netHomeEquity,
       totalLiquid: totalLiquid,

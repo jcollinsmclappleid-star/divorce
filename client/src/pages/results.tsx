@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
 import { useLocation, Link } from "wouter";
 import { useAppStore } from "@/hooks/use-store";
-import { useEngine, ScenarioResult, ProjectionYear } from "@/hooks/use-engine";
+import { useEngine, ScenarioResult, ProjectionYear, RunwayResult } from "@/hooks/use-engine";
+import { calcMortgagePayment } from "@/lib/engine/calc/mortgage";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -225,6 +226,7 @@ export default function ResultsPage() {
                 viewLens={viewLens}
                 engine={engine}
                 store={store}
+                runways={engine.runways}
               />
 
               <div>
@@ -318,6 +320,9 @@ export default function ResultsPage() {
                   <CollapsibleSection title="Sensitivity Analysis" subtitle="Ranked impact of assumption variations on financial outcomes" icon={<Activity className="w-4 h-4" />} testId="collapsible-sensitivity">
                     <SensitivityPanel scenarios={displayScenarios} engine={engine} store={store} />
                   </CollapsibleSection>
+                  <CollapsibleSection title="Sensitivity Snapshot" subtitle="Quick-reference impact of key assumption changes on financial outcomes" icon={<Activity className="w-4 h-4" />} testId="collapsible-sensitivity-snapshot">
+                    <SensitivitySnapshotPanel engine={engine} store={store} />
+                  </CollapsibleSection>
                   <CollapsibleSection title="Stress Test Modelling" subtitle="Model the impact of interest rate and expenditure variations on scenario viability" icon={<AlertTriangle className="w-4 h-4" />} testId="collapsible-stress-test">
                     <StressTestPanel />
                   </CollapsibleSection>
@@ -337,6 +342,7 @@ export default function ResultsPage() {
                   <div className="flex justify-between gap-2"><span>Tax model</span><span>{assumptions.includeTaxModel ? "2025/26 UK rates" : "Disabled"}</span></div>
                   <div className="flex justify-between gap-2"><span>Child maintenance</span><span>{assumptions.includeCMSEstimate ? "CMS estimate" : "Not included"}</span></div>
                 </div>
+                <p className="text-xs text-muted-foreground mt-3 italic">Tax figures are based on a simplified 2025/26 UK model and may not reflect individual circumstances.</p>
               </div>
             </>
           ) : (
@@ -711,6 +717,7 @@ function ExecutiveTable({
   viewLens,
   engine,
   store,
+  runways,
 }: {
   scenarios: ScenarioResult[];
   projections: Record<string, ProjectionYear[]>;
@@ -718,6 +725,7 @@ function ExecutiveTable({
   viewLens: ViewLens;
   engine: ReturnType<typeof useEngine>;
   store: ReturnType<typeof useAppStore>;
+  runways: Record<string, RunwayResult>;
 }) {
   return (
     <Card data-testid="card-executive-table">
@@ -787,14 +795,27 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Capital Runway Assessment<InfoTip text="Whether each party's liquid capital is projected to sustain their outgoings for at least 5 years based on current income, expenditure, and mortgage obligations." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>5-Year Runway — Party A<InfoTip text="Whether Party A's liquid capital is projected to sustain their outgoings for at least 5 years based on current income, expenditure, and mortgage obligations." /></></TableCell>
                 {scenarios.map(s => {
-                  const runway = getRunway(projections[s.id]);
+                  const rw = runways[s.id];
                   return (
                     <TableCell key={s.id} className="text-center">
-                      {runway.ok
-                        ? <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50"><Check className="w-3 h-3 mr-1" /> OK</Badge>
-                        : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50"><AlertTriangle className="w-3 h-3 mr-1" /> Yr {runway.hitYear}</Badge>}
+                      {rw?.partyA.sustained
+                        ? <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50"><Check className="w-3 h-3 mr-1" /> Sustained</Badge>
+                        : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50"><AlertTriangle className="w-3 h-3 mr-1" /> Yr {rw?.partyA.depletionYear} depletion</Badge>}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+              <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
+                <TableCell className="font-medium text-muted-foreground"><>5-Year Runway — Party B<InfoTip text="Whether Party B's liquid capital is projected to sustain their outgoings for at least 5 years based on current income, expenditure, and mortgage obligations." /></></TableCell>
+                {scenarios.map(s => {
+                  const rw = runways[s.id];
+                  return (
+                    <TableCell key={s.id} className="text-center">
+                      {rw?.partyB.sustained
+                        ? <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50"><Check className="w-3 h-3 mr-1" /> Sustained</Badge>
+                        : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50"><AlertTriangle className="w-3 h-3 mr-1" /> Yr {rw?.partyB.depletionYear} depletion</Badge>}
                     </TableCell>
                   );
                 })}
@@ -805,7 +826,7 @@ function ExecutiveTable({
                   const st = stabilityScores[s.id];
                   return (
                     <TableCell key={s.id} className="text-center">
-                      <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Stable"} />
+                      <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Financially Stable (Modelled)"} />
                     </TableCell>
                   );
                 })}
@@ -816,7 +837,7 @@ function ExecutiveTable({
                   const st = stabilityScores[s.id];
                   return (
                     <TableCell key={s.id} className="text-center">
-                      <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Stable"} />
+                      <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Financially Stable (Modelled)"} />
                     </TableCell>
                   );
                 })}
@@ -942,6 +963,8 @@ function ScenarioDetailCard({
 
         {housingFeasibility && <HousingFeasibilityPanel feasibility={housingFeasibility} scenarioId={scenario.id} />}
 
+        <CapitalRunwaySection runway={engine.runways[scenario.id]} />
+
         <div className="grid gap-6 lg:grid-cols-2">
           <StabilitySection score={stabilityScore} />
           <MonthlySnapshotSection snapshot={monthlySnapshot} />
@@ -1052,13 +1075,13 @@ function FundRowItem({ row, index }: { row: { label: string; amount: number; sub
         onClick={() => hasSubs && setExpanded(!expanded)}
         data-testid={`button-expand-fund-${index}`}
       >
-        <span className="text-muted-foreground flex items-center gap-1">
+        <span className={`text-muted-foreground flex items-center gap-1 ${row.label.toLowerCase().includes("total") ? "font-bold text-foreground" : ""}`}>
           {hasSubs && (
             <ChevronRight className={`w-3 h-3 transition-transform ${expanded ? "rotate-90" : ""}`} />
           )}
           {row.label}
         </span>
-        <span className={`tabular-nums font-medium ${row.amount < 0 ? "text-red-500" : ""}`}>
+        <span className={`tabular-nums font-medium ${row.amount < 0 ? "text-red-500" : ""} ${row.label.toLowerCase().includes("total") ? "font-bold" : ""}`}>
           {row.amount < 0 ? `(${formatCurrency(Math.abs(row.amount))})` : formatCurrency(row.amount)}
         </span>
       </button>
@@ -1119,6 +1142,62 @@ function SourceOfFundsTable({ sourceOfFunds, scenario }: { sourceOfFunds: Source
               <span className="tabular-nums">{formatCurrency(sourceOfFunds.pension.B_after)}</span>
             </div>
           )}
+        </div>
+      </div>
+      <Separator className="my-2" />
+      <div className="flex items-center justify-between text-sm font-bold gap-2">
+        <span>Total Allocated Net Position</span>
+        <span className="tabular-nums" data-testid="text-total-allocated-net">{formatCurrency(scenario.liquidStartA + scenario.liquidStartB)}</span>
+      </div>
+    </div>
+  );
+}
+
+function CapitalRunwaySection({ runway }: { runway?: RunwayResult }) {
+  if (!runway) return null;
+  return (
+    <div className="p-4 border rounded-md space-y-3" data-testid="section-capital-runway">
+      <h3 className="text-sm font-semibold flex items-center gap-1.5">
+        <TrendingUp className="w-3.5 h-3.5" /> Capital Runway (5-Year Projection)
+      </h3>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <h4 className="text-xs font-semibold text-blue-600 uppercase tracking-wider">Party A</h4>
+          <div className="space-y-0.5 text-xs">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-muted-foreground">Starting Liquid Capital</span>
+              <span className="tabular-nums font-medium">{formatCurrency(runway.partyA.startingCapital)}</span>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-muted-foreground">Lowest Projected Capital</span>
+              <span className={`tabular-nums font-medium ${runway.partyA.lowestProjectedCapital < 0 ? "text-red-600" : ""}`}>{formatCurrency(runway.partyA.lowestProjectedCapital)}</span>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-muted-foreground">Year of Depletion</span>
+              <Badge variant="outline" className={runway.partyA.sustained ? "text-emerald-600 border-emerald-200 bg-emerald-50" : "text-amber-600 border-amber-200 bg-amber-50"}>
+                {runway.partyA.sustained ? "Sustained" : `Yr ${runway.partyA.depletionYear}`}
+              </Badge>
+            </div>
+          </div>
+        </div>
+        <div className="space-y-1.5">
+          <h4 className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Party B</h4>
+          <div className="space-y-0.5 text-xs">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-muted-foreground">Starting Liquid Capital</span>
+              <span className="tabular-nums font-medium">{formatCurrency(runway.partyB.startingCapital)}</span>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-muted-foreground">Lowest Projected Capital</span>
+              <span className={`tabular-nums font-medium ${runway.partyB.lowestProjectedCapital < 0 ? "text-red-600" : ""}`}>{formatCurrency(runway.partyB.lowestProjectedCapital)}</span>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-muted-foreground">Year of Depletion</span>
+              <Badge variant="outline" className={runway.partyB.sustained ? "text-emerald-600 border-emerald-200 bg-emerald-50" : "text-amber-600 border-amber-200 bg-amber-50"}>
+                {runway.partyB.sustained ? "Sustained" : `Yr ${runway.partyB.depletionYear}`}
+              </Badge>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1182,6 +1261,15 @@ function StabilitySection({ score }: { score: StabilityResult }) {
               </li>
             ))}
           </ul>
+          <div className="mt-3 space-y-1">
+            <p className="text-xs font-semibold text-muted-foreground">Assessment Drivers:</p>
+            {score.driversA.map((d, i) => (
+              <div key={i} className="flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">{d.label}:</span>
+                <span className={d.status === "pass" ? "text-green-600" : d.status === "warn" ? "text-amber-600" : "text-red-600"}>{d.value}</span>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
@@ -1196,6 +1284,15 @@ function StabilitySection({ score }: { score: StabilityResult }) {
               </li>
             ))}
           </ul>
+          <div className="mt-3 space-y-1">
+            <p className="text-xs font-semibold text-muted-foreground">Assessment Drivers:</p>
+            {score.driversB.map((d, i) => (
+              <div key={i} className="flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">{d.label}:</span>
+                <span className={d.status === "pass" ? "text-green-600" : d.status === "warn" ? "text-amber-600" : "text-red-600"}>{d.value}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -1243,11 +1340,20 @@ function MonthlySnapshotSection({ snapshot }: { snapshot: MonthlySnapshotResult 
 
 function HousingFeasibilityPanel({ feasibility, scenarioId }: { feasibility: HousingFeasibility; scenarioId: string }) {
   const keeper = scenarioId === "S2" ? "A" : "B";
+  const ratioDisplay = feasibility.mortgageToNetIncomeRatio === null
+    ? "N/A"
+    : `${feasibility.mortgageToNetIncomeRatio.toFixed(1)}%`;
   return (
     <div className="p-4 border rounded-md space-y-3" data-testid="section-housing-feasibility">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <Building2 className="w-3.5 h-3.5" /> Affordability Assessment — Party {keeper}
+        <Building2 className="w-3.5 h-3.5" /> Affordability Benchmark Assessment (Modelled) — Party {keeper}
+        <InfoTip text="Benchmarks are illustrative modelling references only and do not represent actual credit or affordability decisions." />
       </h3>
+      <div className="flex items-center gap-2 mb-1">
+        <Badge variant="outline" className={feasibility.withinBenchmarkThresholds ? "text-emerald-600 border-emerald-200 bg-emerald-50" : "text-amber-600 border-amber-200 bg-amber-50"}>
+          {feasibility.classification}
+        </Badge>
+      </div>
       <div className="grid gap-3 sm:grid-cols-3">
         <div className="space-y-0.5">
           <span className="text-xs text-muted-foreground">Mortgage Requirement</span>
@@ -1259,9 +1365,9 @@ function HousingFeasibilityPanel({ feasibility, scenarioId }: { feasibility: Hou
         </div>
         <div className="space-y-0.5">
           <span className="text-xs text-muted-foreground">Income Multiple</span>
-          <p className={`text-sm font-semibold tabular-nums ${feasibility.withinLendingCriteria ? "text-emerald-600" : "text-red-600"}`} data-testid="text-hf-income-multiple">
+          <p className={`text-sm font-semibold tabular-nums ${feasibility.withinBenchmarkThresholds ? "text-emerald-600" : "text-red-600"}`} data-testid="text-hf-income-multiple">
             {feasibility.incomeMultiple.toFixed(1)}x
-            <span className="text-xs text-muted-foreground font-normal ml-1">(max {feasibility.typicalMaxMultiple}x)</span>
+            <span className="text-xs text-muted-foreground font-normal ml-1">(benchmark {feasibility.typicalMaxMultiple}x)</span>
           </p>
         </div>
         <div className="space-y-0.5">
@@ -1274,8 +1380,8 @@ function HousingFeasibilityPanel({ feasibility, scenarioId }: { feasibility: Hou
         </div>
         <div className="space-y-0.5">
           <span className="text-xs text-muted-foreground">Mortgage-to-Net-Income Ratio</span>
-          <p className={`text-sm font-semibold tabular-nums ${feasibility.monthlyPaymentAsPercentOfNetIncome > 35 ? "text-amber-600" : "text-emerald-600"}`} data-testid="text-hf-payment-pct">
-            {feasibility.monthlyPaymentAsPercentOfNetIncome.toFixed(0)}%
+          <p className={`text-sm font-semibold tabular-nums ${feasibility.mortgageToNetIncomeRatio !== null && feasibility.mortgageToNetIncomeRatio > 35 ? "text-amber-600" : "text-emerald-600"}`} data-testid="text-hf-payment-pct">
+            {ratioDisplay}
           </p>
         </div>
       </div>
@@ -1343,6 +1449,47 @@ function ComparisonDeltaPanel({ delta, scenarioId }: { delta: ComparisonDelta; s
         ))}
       </ul>
     </div>
+  );
+}
+
+function SensitivitySnapshotPanel({ engine, store }: { engine: ReturnType<typeof useEngine>; store: ReturnType<typeof useAppStore> }) {
+  const { assumptions } = store;
+  const { intermediate, budget } = engine;
+
+  const currentMortgagePayment = calcMortgagePayment(
+    intermediate.totalMortgage,
+    assumptions.mortgageAPR,
+    assumptions.mortgageTermYears
+  );
+  const stressedMortgagePayment = calcMortgagePayment(
+    intermediate.totalMortgage,
+    assumptions.mortgageAPR + 0.01,
+    assumptions.mortgageTermYears
+  );
+  const monthlyDiff = stressedMortgagePayment.monthlyPayment - currentMortgagePayment.monthlyPayment;
+
+  const totalExpenses = store.expenses.reduce((s, e) => s + e.amountAnnual, 0);
+  const tenPctExpenseImpact = Math.round(totalExpenses * 0.1);
+
+  return (
+    <Card data-testid="card-sensitivity-snapshot">
+      <CardContent className="pt-4 space-y-3">
+        <div className="space-y-2">
+          <div className="p-3 bg-muted/30 rounded-md space-y-1">
+            <p className="text-sm font-medium">If interest rate increases by 1%:</p>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              Monthly payment changes by <span className="tabular-nums font-semibold text-amber-600">{formatCurrency(monthlyDiff)}/mo</span>
+            </p>
+          </div>
+          <div className="p-3 bg-muted/30 rounded-md space-y-1">
+            <p className="text-sm font-medium">If expenses increase by 10%:</p>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              Annual surplus changes by <span className="tabular-nums font-semibold text-amber-600">-{formatCurrency(tenPctExpenseImpact)}/yr</span>
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -1448,13 +1595,3 @@ function computeAllScenarios(engine: ReturnType<typeof useEngine>): ScenarioResu
   return allEnabled.length > 0 ? allEnabled : engine.scenarios;
 }
 
-function getRunway(projection?: ProjectionYear[] | null): { ok: boolean; hitYear?: number } {
-  if (!projection || projection.length === 0) return { ok: true };
-  const fiveYearSlice = projection.slice(0, 6);
-  for (const p of fiveYearSlice) {
-    if (p.capitalA <= 0 || p.capitalB <= 0) {
-      return { ok: false, hitYear: p.year };
-    }
-  }
-  return { ok: true };
-}

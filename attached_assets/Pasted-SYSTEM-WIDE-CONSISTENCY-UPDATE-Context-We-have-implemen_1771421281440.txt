@@ -1,0 +1,222 @@
+SYSTEM-WIDE CONSISTENCY UPDATE
+
+Context:
+We have implemented major structural and wording refinements in the Structured Financial Brief (report view).
+
+These same refinements MUST now be replicated across the entire application UI to ensure:
+
+- Logical consistency
+- Legal defensibility
+- Terminology alignment
+- No conflicting interpretations
+- No advisory language in UI while report is compliant
+
+The modelling engine remains unchanged.
+This task affects presentation, wording, structure, and visibility only.
+
+=================================================
+PART 1 – TERMINOLOGY ALIGNMENT (GLOBAL)
+=================================================
+
+Across ALL UI screens (results, scenario tabs, executive summary, preview screen):
+
+Replace:
+
+Stable → Financially Stable (Modelled)
+Watch → Moderate Sustainability Risk (Modelled)
+High Risk → Elevated Sustainability Risk (Modelled)
+
+Replace:
+“Should qualify”
+“May qualify”
+“May not qualify”
+
+With:
+“Exceeds selected benchmark thresholds”
+“Within selected benchmark thresholds”
+
+Ensure consistency between:
+- Report labels
+- UI labels
+- Tooltips
+- Risk indicators
+
+=================================================
+PART 2 – STABILITY ASSESSMENT DISPLAY (UI)
+=================================================
+
+In main results UI, mirror report structure:
+
+Display:
+
+Financial Sustainability Score
+XX / 100
+
+Classification:
+Financially Stable (Modelled)
+
+Below, always show:
+
+Assessment Drivers:
+• Liquidity buffer: X years
+• Capital runway: Sustained / Yr X depletion
+• Mortgage benchmark: Within / Exceeds
+• Asset concentration: X%
+
+Even when score = 100, show reviewed factors.
+
+Remove:
+“No adverse risk factors” phrasing.
+
+=================================================
+PART 3 – CAPITAL RUNWAY DISPLAY (UI)
+=================================================
+
+Add explicit runway section to main UI (not only report).
+
+For each party:
+
+Capital Runway (5-Year Projection)
+• Starting Liquid Capital: £X
+• Lowest Projected Capital: £X
+• Year of Depletion: Yr X / Sustained
+
+Ensure separate Party A and Party B display.
+
+Remove any combined “either party” logic.
+
+=================================================
+PART 4 – AFFORDABILITY LANGUAGE HARDENING (UI)
+=================================================
+
+In UI affordability section:
+
+Replace predictive phrasing with mechanical wording.
+
+Use:
+
+Affordability Benchmark Assessment (Modelled)
+
+Mortgage Requirement: £X
+Income Multiple: X.x
+Mortgage-to-Net-Income Ratio: X%
+
+Classification:
+Within selected benchmark thresholds
+OR
+Exceeds selected benchmark thresholds
+
+Add small info icon tooltip:
+
+“Benchmarks are illustrative modelling references only and do not represent lending decisions.”
+
+Remove any language implying lender outcomes.
+
+=================================================
+PART 5 – RATIO CALCULATION FIX (GLOBAL)
+=================================================
+
+Ensure Mortgage-to-Net-Income Ratio is:
+
+Monthly Mortgage ÷ Monthly Net Income
+OR
+Annual Mortgage ÷ Annual Net Income
+
+Confirm ratio output:
+- Never exceeds realistic bounds unless income extremely low
+- Capped at 1 decimal precision
+- No 3000% outputs
+
+Handle zero-income edge case gracefully.
+
+=================================================
+PART 6 – EXECUTIVE SUMMARY CONSISTENCY
+=================================================
+
+Ensure UI executive comparison mirrors report version exactly:
+
+Include rows:
+• Stability – Party A
+• Stability – Party B
+• 5-Year Runway – Party A
+• 5-Year Runway – Party B
+
+Values must reconcile perfectly with report.
+
+=================================================
+PART 7 – SOURCE OF FUNDS STRUCTURE (UI)
+=================================================
+
+Improve UI breakdown readability:
+
+- Bold subtotals
+- Separate Assets and Liabilities clearly
+- Add reconciliation line:
+
+“Total Allocated Net Position: £X”
+
+Ensure wording matches report exactly.
+
+=================================================
+PART 8 – SENSITIVITY SNAPSHOT (UI ADDITION)
+=================================================
+
+Add small expandable section in UI:
+
+Sensitivity Snapshot
+
+If interest rate increases by 1%:
+• Monthly payment changes by £X
+• 5-Year capital changes by £X
+
+If expenses increase by 10%:
+• Annual surplus changes by £X
+
+Ensure identical to report calculations.
+
+=================================================
+PART 9 – ASSUMPTIONS VISIBILITY (UI)
+=================================================
+
+Ensure UI contains visible assumptions section:
+
+• Settlement ratio
+• Mortgage interest rate
+• Projection period
+• Inflation
+• Tax model year
+• CMS inclusion/exclusion
+
+These must match report exactly.
+
+=================================================
+PART 10 – TAX DISCLAIMER CONSISTENCY
+=================================================
+
+Where tax calculations appear in UI, include footnote:
+
+“Tax figures are based on a simplified 2025/26 UK model and may not reflect individual circumstances.”
+
+Ensure identical wording to report.
+
+=================================================
+PART 11 – REMOVE DUPLICATION
+=================================================
+
+Eliminate redundant explanatory lines that appear in both summary and detail views unless adding value.
+
+Prioritise clarity and professional tone over repetition.
+
+=================================================
+PART 12 – FINAL VALIDATION OUTPUT
+=================================================
+
+After implementation, provide:
+
+1) List of wording changes made globally.
+2) Confirmation that UI and Report outputs reconcile exactly.
+3) Confirmation that advisory-style language has been removed.
+4) Confirmation that ratio bug is resolved everywhere.
+5) Screens affected by update.
+
+END.

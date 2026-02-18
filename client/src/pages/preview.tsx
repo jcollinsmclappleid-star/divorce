@@ -126,8 +126,8 @@ export default function PreviewPage() {
           <CardContent className="py-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Preliminary Stability Assessment</p>
-                <p className="text-xs text-muted-foreground/70 mt-1">Detailed stability breakdown available in full analysis</p>
+                <p className="text-sm font-medium text-muted-foreground">Preliminary Financial Sustainability Assessment</p>
+                <p className="text-xs text-muted-foreground/70 mt-1">Financial Sustainability Score breakdown available in full analysis</p>
               </div>
               <div className="flex items-baseline gap-0.5">
                 <span className="text-3xl font-bold tabular-nums">{stabilityFirstDigit}</span>

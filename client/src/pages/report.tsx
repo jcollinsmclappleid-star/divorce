@@ -1,7 +1,7 @@
 import { useMemo, Fragment } from "react";
 import { Link } from "wouter";
 import { useAppStore } from "@/hooks/use-store";
-import { useEngine, ScenarioResult, ProjectionYear } from "@/hooks/use-engine";
+import { useEngine, ScenarioResult, ProjectionYear, RunwayResult } from "@/hooks/use-engine";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Printer } from "lucide-react";
@@ -16,6 +16,7 @@ import {
 import type {
   SourceOfFunds, StabilityResult, MonthlySnapshotResult, HousingFeasibility,
 } from "@/lib/insights";
+import type { StabilityDriver } from "@/lib/insights/computeStabilityScore";
 
 const SCENARIO_META: Record<string, { label: string; color: string }> = {
   S1: { label: "Sell & Split", color: "#2563EB" },
@@ -164,6 +165,7 @@ export default function ReportPage() {
               <span className="text-gray-400 text-xs ml-2">({fmt(engine.cmsWeekly)}/wk)</span>
             </div>
           )}
+          <p className="text-xs text-gray-400 italic mt-3">Tax figures are based on a simplified 2025/26 UK model and may not reflect individual circumstances.</p>
         </ReportSection>
 
         <ReportSection title="3. Projected Monthly Expenditure">
@@ -221,6 +223,37 @@ export default function ReportPage() {
               <ComparisonRow label="Total Net Asset Position — Party B" values={allScenarios.map(s => s.totalB)} bold />
               <ComparisonRow label="Monthly Mortgage Obligation — Party A" values={allScenarios.map(s => s.mortgageMonthlyA ?? 0)} />
               <ComparisonRow label="Monthly Mortgage Obligation — Party B" values={allScenarios.map(s => s.mortgageMonthlyB ?? 0)} />
+              {allScenarios.map((_, i) => i === 0 ? (
+                <tr key="runway-header" className="border-b border-gray-200">
+                  <td className="py-1 text-gray-600 text-xs font-semibold" colSpan={allScenarios.length + 1}>5-Year Capital Runway</td>
+                </tr>
+              ) : null)}
+              <tr className="border-b border-gray-100">
+                <td className="py-1 text-gray-600">5-Year Runway — Party A</td>
+                {allScenarios.map(s => {
+                  const rw = engine.runways[s.id];
+                  return (
+                    <td key={s.id} className="py-1 text-right tabular-nums text-sm">
+                      {rw?.partyA.sustained
+                        ? <span className="text-green-600 font-medium">Sustained</span>
+                        : <span className="text-amber-600 font-medium">Yr {rw?.partyA.depletionYear} depletion</span>}
+                    </td>
+                  );
+                })}
+              </tr>
+              <tr className="border-b border-gray-100">
+                <td className="py-1 text-gray-600">5-Year Runway — Party B</td>
+                {allScenarios.map(s => {
+                  const rw = engine.runways[s.id];
+                  return (
+                    <td key={s.id} className="py-1 text-right tabular-nums text-sm">
+                      {rw?.partyB.sustained
+                        ? <span className="text-green-600 font-medium">Sustained</span>
+                        : <span className="text-amber-600 font-medium">Yr {rw?.partyB.depletionYear} depletion</span>}
+                    </td>
+                  );
+                })}
+              </tr>
             </tbody>
           </table>
         </ReportSection>
@@ -248,6 +281,10 @@ export default function ReportPage() {
                   <FundsColumn label="Party A" funds={sourceOfFunds.A} color="text-blue-600" />
                   <FundsColumn label="Party B" funds={sourceOfFunds.B} color="text-emerald-600" />
                 </div>
+                <div className="mt-3 pt-2 border-t border-gray-300 flex items-center justify-between text-sm font-bold">
+                  <span>Total Allocated Net Position</span>
+                  <span className="tabular-nums">{fmt(sc.liquidStartA + sc.liquidStartB)}</span>
+                </div>
               </div>
 
               <div>
@@ -263,6 +300,15 @@ export default function ReportPage() {
                         <span key={i} className="block">{r.label}: {r.points > 0 ? "+" : ""}{r.points} pts</span>
                       ))}
                     </div>
+                    <div className="mt-2">
+                      <p className="text-xs font-semibold">Assessment Drivers:</p>
+                      {stability.driversA.map((d: StabilityDriver, i: number) => (
+                        <div key={i} className="flex justify-between text-xs">
+                          <span>{d.label}:</span>
+                          <span className={d.status === "pass" ? "text-green-600" : d.status === "warn" ? "text-amber-600" : "text-red-600"}>{d.value}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Party B</p>
@@ -274,9 +320,46 @@ export default function ReportPage() {
                         <span key={i} className="block">{r.label}: {r.points > 0 ? "+" : ""}{r.points} pts</span>
                       ))}
                     </div>
+                    <div className="mt-2">
+                      <p className="text-xs font-semibold">Assessment Drivers:</p>
+                      {stability.driversB.map((d: StabilityDriver, i: number) => (
+                        <div key={i} className="flex justify-between text-xs">
+                          <span>{d.label}:</span>
+                          <span className={d.status === "pass" ? "text-green-600" : d.status === "warn" ? "text-amber-600" : "text-red-600"}>{d.value}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
+
+              {(() => {
+                const runway = engine.runways[sc.id];
+                if (!runway) return null;
+                return (
+                  <div>
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Capital Runway (5-Year Projection)</h4>
+                    <div className="grid grid-cols-2 gap-6 text-sm">
+                      <div>
+                        <p className="font-medium text-gray-700 mb-1">Party A</p>
+                        <div className="text-xs space-y-0.5">
+                          <div className="flex justify-between"><span className="text-gray-500">Starting Liquid Capital</span><span className="tabular-nums font-medium">{fmt(runway.partyA.startingCapital)}</span></div>
+                          <div className="flex justify-between"><span className="text-gray-500">Lowest Projected Capital</span><span className={`tabular-nums font-medium ${runway.partyA.lowestProjectedCapital < 0 ? "text-red-600" : ""}`}>{fmt(runway.partyA.lowestProjectedCapital)}</span></div>
+                          <div className="flex justify-between"><span className="text-gray-500">Year of Depletion</span><span className={`font-medium ${runway.partyA.sustained ? "text-green-600" : "text-amber-600"}`}>{runway.partyA.sustained ? "Sustained" : `Yr ${runway.partyA.depletionYear}`}</span></div>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-700 mb-1">Party B</p>
+                        <div className="text-xs space-y-0.5">
+                          <div className="flex justify-between"><span className="text-gray-500">Starting Liquid Capital</span><span className="tabular-nums font-medium">{fmt(runway.partyB.startingCapital)}</span></div>
+                          <div className="flex justify-between"><span className="text-gray-500">Lowest Projected Capital</span><span className={`tabular-nums font-medium ${runway.partyB.lowestProjectedCapital < 0 ? "text-red-600" : ""}`}>{fmt(runway.partyB.lowestProjectedCapital)}</span></div>
+                          <div className="flex justify-between"><span className="text-gray-500">Year of Depletion</span><span className={`font-medium ${runway.partyB.sustained ? "text-green-600" : "text-amber-600"}`}>{runway.partyB.sustained ? "Sustained" : `Yr ${runway.partyB.depletionYear}`}</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
 
               <div>
                 <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Monthly Financial Position</h4>
@@ -302,18 +385,19 @@ export default function ReportPage() {
 
               {housing && (
                 <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Affordability Assessment</h4>
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Affordability Benchmark Assessment (Modelled)</h4>
                   <div className="text-sm text-gray-600 space-y-0.5">
-                    <p>Mortgage Requirement: {fmt(housing.mortgageRequired)}</p>
-                    <p>Income Multiple: {housing.incomeMultiple.toFixed(1)}x <span className="text-xs text-gray-400">(UK standard: {housing.typicalMaxMultiple}x max)</span></p>
-                    <p>Available Deposit: {fmt(housing.availableDeposit)} ({pct(housing.depositPercentage)})</p>
-                    <p>Mortgage-to-Net-Income Ratio: {pct(housing.monthlyPaymentAsPercentOfNetIncome)}</p>
-                    <p className={housing.withinLendingCriteria ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
-                      {housing.withinLendingCriteria ? "Indicatively within typical market benchmarks" : "Indicatively stretched or beyond typical market benchmarks"}
+                    <p className={housing.withinBenchmarkThresholds ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
+                      {housing.classification}
                     </p>
+                    <p>Mortgage Requirement: {fmt(housing.mortgageRequired)}</p>
+                    <p>Income Multiple: {housing.incomeMultiple.toFixed(1)}x <span className="text-xs text-gray-400">(benchmark: {housing.typicalMaxMultiple}x max)</span></p>
+                    <p>Available Deposit: {fmt(housing.availableDeposit)} ({pct(housing.depositPercentage)})</p>
+                    <p>Mortgage-to-Net-Income Ratio: {housing.mortgageToNetIncomeRatio === null ? "N/A" : `${housing.mortgageToNetIncomeRatio.toFixed(1)}%`}</p>
                     {housing.notes.map((n: string, ni: number) => (
                       <p key={ni} className="text-xs text-gray-400">{n}</p>
                     ))}
+                    <p className="text-xs text-gray-400 italic mt-1">Benchmarks are illustrative modelling references only and do not represent lending decisions.</p>
                   </div>
                 </div>
               )}
@@ -440,8 +524,8 @@ function FundsColumn({ label, funds, color }: { label: string; funds: { rows: { 
           {funds.rows.map((r, i) => (
             <Fragment key={i}>
               <tr className="border-b border-gray-100">
-                <td className="py-0.5 text-gray-600">{r.label}</td>
-                <td className={`py-0.5 text-right tabular-nums ${r.amount < 0 ? "text-red-500" : ""}`}>
+                <td className={`py-0.5 text-gray-600 ${r.label.toLowerCase().includes("total") ? "font-bold" : ""}`}>{r.label}</td>
+                <td className={`py-0.5 text-right tabular-nums ${r.amount < 0 ? "text-red-500" : ""} ${r.label.toLowerCase().includes("total") ? "font-bold" : ""}`}>
                   {r.amount < 0 ? `(${fmt(Math.abs(r.amount))})` : fmt(r.amount)}
                 </td>
               </tr>

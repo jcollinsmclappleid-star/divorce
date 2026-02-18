@@ -5,10 +5,11 @@ export interface HousingFeasibility {
   estimatedMonthlyPayment: number;
   incomeMultiple: number;
   typicalMaxMultiple: number;
-  withinLendingCriteria: boolean;
+  withinBenchmarkThresholds: boolean;
   availableDeposit: number;
   depositPercentage: number;
-  monthlyPaymentAsPercentOfNetIncome: number;
+  mortgageToNetIncomeRatio: number | null;
+  classification: string;
   notes: string[];
 }
 
@@ -35,7 +36,7 @@ export function computeHousingFeasibility(
     : 0;
 
   const typicalMaxMultiple = 4.5;
-  const withinLendingCriteria = incomeMultiple <= typicalMaxMultiple;
+  const withinBenchmarkThresholds = incomeMultiple <= typicalMaxMultiple;
 
   const availableDeposit = isKeeperA ? scenario.liquidStartA : scenario.liquidStartB;
 
@@ -43,31 +44,39 @@ export function computeHousingFeasibility(
     ? Math.round(((homeValue - totalMortgage) / homeValue) * 1000) / 10
     : 0;
 
-  const monthlyPaymentAsPercentOfNetIncome = keeperNetIncome > 0
-    ? Math.round(((estimatedMonthlyPayment * 12) / keeperNetIncome) * 1000) / 10
-    : 0;
+  const monthlyNetIncome = keeperNetIncome / 12;
+  const mortgageToNetIncomeRatio: number | null = monthlyNetIncome > 0
+    ? Math.round((estimatedMonthlyPayment / monthlyNetIncome) * 1000) / 10
+    : null;
+
+  const exceedsAffordability = mortgageToNetIncomeRatio !== null && mortgageToNetIncomeRatio > 35;
+  const overallWithin = withinBenchmarkThresholds && !exceedsAffordability;
+
+  const classification = overallWithin
+    ? "Within selected benchmark thresholds"
+    : "Exceeds selected benchmark thresholds";
 
   const notes: string[] = [];
 
-  if (withinLendingCriteria) {
+  if (withinBenchmarkThresholds) {
     notes.push(
-      `Mortgage obligation of £${Math.round(mortgageRequired)} is within typical market benchmarks (${incomeMultiple.toFixed(1)}x gross income)`
+      `Mortgage obligation of £${Math.round(mortgageRequired).toLocaleString()} is within the selected income multiple benchmark (${incomeMultiple.toFixed(1)}x gross income vs ${typicalMaxMultiple}x threshold)`
     );
   } else {
     notes.push(
-      `Mortgage obligation of £${Math.round(mortgageRequired)} exceeds the typical 4.5x gross income benchmark — lender may require additional collateral or guarantees`
+      `Mortgage obligation of £${Math.round(mortgageRequired).toLocaleString()} exceeds the selected ${typicalMaxMultiple}x gross income benchmark at ${incomeMultiple.toFixed(1)}x`
     );
   }
 
-  if (monthlyPaymentAsPercentOfNetIncome > 35) {
+  if (exceedsAffordability) {
     notes.push(
-      `Mortgage payments would represent ${Math.round(monthlyPaymentAsPercentOfNetIncome)}% of net income, exceeding the typical 35% affordability benchmark`
+      `Mortgage payments represent ${mortgageToNetIncomeRatio.toFixed(1)}% of net income, exceeding the selected 35% benchmark threshold`
     );
   }
 
   if (depositPercentage > 20) {
     notes.push(
-      `Strong equity position at ${Math.round(depositPercentage)}% — no mortgage indemnity requirement`
+      `Equity position at ${Math.round(depositPercentage)}% — no mortgage indemnity requirement at this level`
     );
   }
 
@@ -76,10 +85,11 @@ export function computeHousingFeasibility(
     estimatedMonthlyPayment: Math.round(estimatedMonthlyPayment),
     incomeMultiple,
     typicalMaxMultiple,
-    withinLendingCriteria,
+    withinBenchmarkThresholds: overallWithin,
     availableDeposit: Math.round(availableDeposit),
     depositPercentage,
-    monthlyPaymentAsPercentOfNetIncome,
+    mortgageToNetIncomeRatio,
+    classification,
     notes,
   };
 }
