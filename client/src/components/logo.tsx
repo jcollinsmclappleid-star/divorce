@@ -8,9 +8,9 @@ interface LogoProps {
 }
 
 const sizeMap = {
-  sm: "h-6",
-  md: "h-8",
-  lg: "h-10",
+  sm: "h-10",
+  md: "h-14",
+  lg: "h-20",
 };
 
 export function Logo({ href = "/", size = "md", className = "" }: LogoProps) {
@@ -39,7 +39,7 @@ export function LogoPrint({ className = "" }: { className?: string }) {
     <img
       src={logoImage}
       alt="DivorceCalculatorUK"
-      className={`h-8 w-auto object-contain ${className}`}
+      className={`h-12 w-auto object-contain ${className}`}
       data-testid="img-logo-print"
     />
   );
