@@ -35,6 +35,16 @@ The core financial engine must be **deterministic, pure-function based, and full
   - Housing Feasibility panel in keep-home scenario cards (mortgage required, income multiple, equity position, payment as % of net income)
   - Negotiation Levers panel in scenario detail cards with actionable suggestions and pound amounts
   - Assumptions appendix at bottom of results page
+- **Feb 2026**: Added consumer-facing landing page (`client/src/pages/landing.tsx`) with all sections from homepage content spec:
+  - Hero section with headline "Clarity Before Costly Decisions" and dual CTAs
+  - Emotional positioning section ("Will I be financially okay?")
+  - USP section with 5 feature cards (Starting Position, Sell vs Keep, Stability, Monthly Reality, Structured Brief)
+  - Soft reassurance section (Private. Structured. On Your Terms.)
+  - How It Works 4-step visual flow
+  - Value anchor section (legal consultation cost comparison)
+  - Final CTA section
+  - Footer with branding and disclaimer
+- **Feb 2026**: Updated routing: landing page at `/`, wizard moved to `/wizard`, results remain at `/results`
 
 ## User Preferences
 

@@ -87,7 +87,7 @@ export default function ResultsPage() {
               DivorceModeller<span className="text-primary">.UK</span>
             </span>
           </div>
-          <Link href="/">
+          <Link href="/wizard">
             <Button variant="outline" size="sm" data-testid="button-edit-inputs">
               <Edit className="w-4 h-4 mr-1" /> Edit Inputs
             </Button>
@@ -262,7 +262,7 @@ export default function ResultsPage() {
             <Card>
               <CardContent className="py-12 text-center">
                 <p className="text-muted-foreground">No scenario data to display. Please go back and enter your financial details.</p>
-                <Link href="/"><Button className="mt-4" data-testid="button-go-back"><ChevronLeft className="w-4 h-4 mr-1" /> Go Back to Wizard</Button></Link>
+                <Link href="/wizard"><Button className="mt-4" data-testid="button-go-back"><ChevronLeft className="w-4 h-4 mr-1" /> Go Back to Wizard</Button></Link>
               </CardContent>
             </Card>
           )}

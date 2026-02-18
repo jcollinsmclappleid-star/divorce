@@ -3,13 +3,15 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import LandingPage from "@/pages/landing";
 import WizardPage from "@/pages/wizard";
 import ResultsPage from "@/pages/results";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={WizardPage} />
+      <Route path="/" component={LandingPage} />
+      <Route path="/wizard" component={WizardPage} />
       <Route path="/results" component={ResultsPage} />
       <Route path="/dashboard"><Redirect to="/" /></Route>
       <Route path="/assets"><Redirect to="/" /></Route>
