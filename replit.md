@@ -50,6 +50,19 @@ The application uses a freemium model with a £79 one-time payment for full acce
 4.  **Zod for validation**: Consistent schema validation is applied across both client and server using Zod.
 5.  **Freemium access model**: Preview page shows limited data to demonstrate value; full analysis requires £79 one-time Stripe payment with 6-month access window.
 
+### SEO Foundation
+
+Technical SEO is implemented for target domain `divorcecalculatoruk.co.uk`:
+- **Dynamic page titles**: Each route has a unique title via `useDocumentTitle` hook (e.g., "Divorce Financial Settlement Calculator UK | DivorceCalculatorUK")
+- **Meta tags**: Homepage has description, OG tags (title, description, type, url, image), canonical link, and JSON-LD structured data (WebApplication schema)
+- **robots.txt**: Allows homepage, disallows /results, /report, /wizard, /unlock, /payment-success; references sitemap
+- **sitemap.xml**: Includes /, /privacy, /terms only (no dynamic pages)
+- **noindex**: Dynamic pages (wizard, preview, results, report, unlock, payment-success) have `<meta name="robots" content="noindex, nofollow">` via `useNoIndex` hook
+- **OG image**: Branded 1200x630 image at `/og-image.png`
+- **Privacy Policy** (`/privacy`): UK GDPR compliant, covers data collection, client-side processing, Stripe payments, user rights
+- **Terms of Use** (`/terms`): UK consumer protection compliant, includes Consumer Rights Act 2015, 14-day cooling-off period, limitation of liability
+- **Google Fonts**: Reduced from 25+ families to Inter (primary) + Playfair Display (headings) only
+
 ## External Dependencies
 
 ### Database

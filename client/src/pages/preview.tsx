@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Lock, ShieldCheck, Check, ArrowRight } from "lucide-react";
 import { useEffect, useMemo } from "react";
+import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useNoIndex } from "@/hooks/use-noindex";
 
 function BlurredSection({ title, height = "h-32" }: { title: string; height?: string }) {
   return (
@@ -48,6 +50,8 @@ function getStabilityBandColor(score: number): string {
 function fmt(v: number) { return formatCurrency(v); }
 
 export default function PreviewPage() {
+  useDocumentTitle("Your Divorce Financial Overview | DivorceCalculatorUK");
+  useNoIndex();
   const [, navigate] = useLocation();
   const store = useAppStore();
   const engine = useEngine();

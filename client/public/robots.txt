@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /results
+Disallow: /preview?*
+Disallow: /report
+Disallow: /wizard
+Disallow: /unlock
+Disallow: /payment-success
+Sitemap: https://divorcecalculatoruk.co.uk/sitemap.xml

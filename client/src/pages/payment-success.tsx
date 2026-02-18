@@ -4,8 +4,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Loader2 } from "lucide-react";
 import { useAccess } from "@/hooks/use-access";
+import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useNoIndex } from "@/hooks/use-noindex";
 
 export default function PaymentSuccessPage() {
+  useDocumentTitle("Payment Confirmed | DivorceCalculatorUK");
+  useNoIndex();
   const [, navigate] = useLocation();
   const [verifying, setVerifying] = useState(true);
   const [verified, setVerified] = useState(false);

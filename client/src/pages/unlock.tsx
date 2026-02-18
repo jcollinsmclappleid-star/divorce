@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { useAccess, useSessionToken } from "@/hooks/use-access";
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,7 +7,8 @@ import {
   ShieldCheck, ArrowLeft, CheckCircle, Loader2,
   BarChart3, TrendingUp, Calculator, FileText, Sliders, Search, Scale
 } from "lucide-react";
-import { useEffect } from "react";
+import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useNoIndex } from "@/hooks/use-noindex";
 
 const VALUE_ITEMS = [
   { icon: Scale, text: "Compare Sell vs Retain scenarios side-by-side" },
@@ -29,6 +30,8 @@ const INCLUDES_ITEMS = [
 ];
 
 export default function UnlockPage() {
+  useDocumentTitle("Unlock Full Analysis | DivorceCalculatorUK");
+  useNoIndex();
   const [, navigate] = useLocation();
   const sessionToken = useSessionToken();
   const { hasAccess, isLoading } = useAccess();

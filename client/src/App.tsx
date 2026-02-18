@@ -10,6 +10,8 @@ import ReportPage from "@/pages/report";
 import PreviewPage from "@/pages/preview";
 import UnlockPage from "@/pages/unlock";
 import PaymentSuccessPage from "@/pages/payment-success";
+import PrivacyPage from "@/pages/privacy";
+import TermsPage from "@/pages/terms";
 import { AccessGate } from "@/components/access-gate";
 
 function Router() {
@@ -20,6 +22,8 @@ function Router() {
       <Route path="/preview" component={PreviewPage} />
       <Route path="/unlock" component={UnlockPage} />
       <Route path="/payment-success" component={PaymentSuccessPage} />
+      <Route path="/privacy" component={PrivacyPage} />
+      <Route path="/terms" component={TermsPage} />
       <Route path="/results">
         <AccessGate>
           <ResultsPage />

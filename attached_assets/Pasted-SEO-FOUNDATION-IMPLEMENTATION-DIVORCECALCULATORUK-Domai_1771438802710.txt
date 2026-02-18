@@ -1,0 +1,148 @@
+SEO FOUNDATION IMPLEMENTATION – DIVORCECALCULATORUK
+
+Domain:
+divorcecalculatoruk.co.uk (or .uk if applicable)
+
+Objective:
+Implement proper technical SEO foundations without altering conversion-focused content or modelling logic.
+
+=================================================
+1) PAGE TITLES (DYNAMIC PER ROUTE)
+=================================================
+
+Homepage:
+"Divorce Financial Settlement Calculator UK | DivorceCalculatorUK"
+
+Preview Page:
+"Your Divorce Financial Overview | DivorceCalculatorUK"
+
+Results Page:
+"Divorce Financial Modelling Results | DivorceCalculatorUK"
+
+Structured Financial Brief (Report View):
+"Structured Divorce Financial Brief | DivorceCalculatorUK"
+
+Privacy Policy:
+"Privacy Policy | DivorceCalculatorUK"
+
+Terms:
+"Terms of Use | DivorceCalculatorUK"
+
+Ensure:
+• Titles update on route change.
+• No duplicate titles.
+• Title length under 60 characters where possible.
+
+=================================================
+2) META DESCRIPTION (HOMEPAGE)
+=================================================
+
+Add to homepage:
+
+"Model your divorce financial position in minutes. Compare sell vs retain scenarios, assess sustainability, and generate a structured financial brief. UK-focused."
+
+Length: 150–160 characters.
+Do not keyword stuff.
+
+=================================================
+3) OPEN GRAPH TAGS
+=================================================
+
+Add to homepage head:
+
+og:title:
+"Divorce Financial Settlement Calculator UK | DivorceCalculatorUK"
+
+og:description:
+"Structured divorce financial modelling tool. Compare scenarios, assess sustainability, and generate a professional financial brief."
+
+og:type:
+"website"
+
+og:url:
+https://divorcecalculatoruk.co.uk/
+
+og:image:
+Use branded preview image (1200x630).
+
+=================================================
+4) CANONICAL TAGS
+=================================================
+
+Add canonical tag to:
+
+Homepage → https://divorcecalculatoruk.co.uk/
+Preview → canonical to homepage OR self (decide and confirm)
+Results → self canonical (but ensure not indexable if user-specific)
+Policy pages → self canonical
+
+Do NOT allow dynamic result URLs to be indexed.
+
+=================================================
+5) ROBOTS.TXT
+=================================================
+
+Create:
+
+User-agent: *
+Allow: /
+Disallow: /results
+Disallow: /preview?*
+Sitemap: https://divorcecalculatoruk.co.uk/sitemap.xml
+
+=================================================
+6) SITEMAP.XML
+=================================================
+
+Include only:
+
+/
+(/about if exists)
+/privacy
+/terms
+
+Exclude:
+• Dynamic result pages
+• User-specific URLs
+
+=================================================
+7) STRUCTURED DATA (JSON-LD)
+=================================================
+
+Add to homepage:
+
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DivorceCalculatorUK",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "url": "https://divorcecalculatoruk.co.uk/",
+  "description": "UK divorce financial settlement modelling tool with scenario comparison and sustainability assessment.",
+  "offers": {
+    "@type": "Offer",
+    "price": "79",
+    "priceCurrency": "GBP"
+  }
+}
+
+=================================================
+8) GOOGLE FONTS CLEANUP
+=================================================
+
+Reduce Google Fonts to maximum one primary family.
+Remove unused weights.
+Target Lighthouse mobile score 85+.
+
+=================================================
+DELIVERABLES
+=================================================
+
+After implementation provide:
+• Lighthouse mobile score before/after
+• robots.txt URL
+• sitemap.xml URL
+• Structured data validation confirmation
+• Confirmation dynamic pages not indexed
+
+END.

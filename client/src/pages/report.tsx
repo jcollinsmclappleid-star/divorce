@@ -2,6 +2,8 @@ import { useState, useMemo, Fragment } from "react";
 import { Link } from "wouter";
 import { useAppStore, StoreState } from "@/hooks/use-store";
 import { useEngine, ScenarioResult, ProjectionYear, RunwayResult } from "@/hooks/use-engine";
+import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useNoIndex } from "@/hooks/use-noindex";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Printer, ChevronDown } from "lucide-react";
@@ -140,6 +142,8 @@ function computeAllScenarios(engine: ReturnType<typeof useEngine>): ScenarioResu
 }
 
 export default function ReportPage() {
+  useDocumentTitle("Structured Divorce Financial Brief | DivorceCalculatorUK");
+  useNoIndex();
   const store = useAppStore();
   const engine = useEngine();
   const allScenarios = computeAllScenarios(engine);

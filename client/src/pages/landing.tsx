@@ -1,4 +1,4 @@
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,7 @@ import {
 import walkthroughVideo from "../assets/videos/walkthrough.mp4";
 import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
 import { useAppStore } from "@/hooks/use-store";
+import { useDocumentTitle } from "@/hooks/use-document-title";
 
 const EXAMPLE_ICONS = [Users, Baby, Home] as const;
 
@@ -70,6 +71,7 @@ const HOW_IT_WORKS = [
 ];
 
 export default function LandingPage() {
+  useDocumentTitle("Divorce Financial Settlement Calculator UK | DivorceCalculatorUK");
   const [, setLocation] = useLocation();
   const loadState = useAppStore((s) => s.loadState);
 
@@ -385,7 +387,7 @@ export default function LandingPage() {
       </section>
 
       <footer className="border-t border-border/40 py-8 bg-muted/20" data-testid="section-footer">
-        <div className="container mx-auto px-4 text-center space-y-2">
+        <div className="container mx-auto px-4 text-center space-y-3">
           <div className="flex items-center justify-center gap-2">
             <div className="h-6 w-6 bg-primary rounded-md flex items-center justify-center">
               <Calculator className="h-3.5 w-3.5 text-primary-foreground" />
@@ -393,6 +395,14 @@ export default function LandingPage() {
             <span className="text-sm font-display font-bold">
               DivorceModeller<span className="text-primary">.UK</span>
             </span>
+          </div>
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-privacy">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-terms">
+              Terms of Use
+            </Link>
           </div>
           <p className="text-xs text-muted-foreground">
             Illustrative financial modelling only. This tool does not provide legal, tax, or financial advice.

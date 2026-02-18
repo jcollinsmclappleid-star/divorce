@@ -2,6 +2,8 @@ import { useState, useMemo } from "react";
 import { useLocation, Link } from "wouter";
 import { useAppStore } from "@/hooks/use-store";
 import { useEngine, ScenarioResult, ProjectionYear, RunwayResult } from "@/hooks/use-engine";
+import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useNoIndex } from "@/hooks/use-noindex";
 import { calcMortgagePayment } from "@/lib/engine/calc/mortgage";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -131,6 +133,8 @@ function DetailCollapsible({ title, summary, children, defaultOpen = false, test
 }
 
 export default function ResultsPage() {
+  useDocumentTitle("Divorce Financial Modelling Results | DivorceCalculatorUK");
+  useNoIndex();
   const store = useAppStore();
   const { assumptions, updateAssumptions } = store;
   const engine = useEngine();

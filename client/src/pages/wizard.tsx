@@ -1,6 +1,8 @@
 import { useState, useCallback } from "react";
 import { useLocation } from "wouter";
 import { useAppStore, Asset, Liability, Income, Expense } from "@/hooks/use-store";
+import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useNoIndex } from "@/hooks/use-noindex";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -73,6 +75,8 @@ const STEP_COPY = [
 ];
 
 export default function WizardPage() {
+  useDocumentTitle("Financial Data Entry | DivorceCalculatorUK");
+  useNoIndex();
   const [currentStep, setCurrentStep] = useState(0);
   const [advancedMode, setAdvancedMode] = useState(false);
   const [, setLocation] = useLocation();
