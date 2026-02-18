@@ -9,11 +9,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useAppStore } from "@/hooks/use-store";
 import { formatCurrency } from "@/lib/utils";
-import { Plus, Trash2, ArrowUpCircle, ArrowDownCircle } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { ExpenseCategory } from "@shared/schema";
+import { Income, Expense, ExpenseCategory } from "@shared/schema";
+import { Edit2, Plus, Trash2, ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 
 const incomeFormSchema = z.object({
   name: z.string().min(1, "Name required"),
@@ -29,9 +26,11 @@ const expenseFormSchema = z.object({
 });
 
 export default function BudgetPage() {
-  const { incomes, expenses, addIncome, removeIncome, addExpense, removeExpense } = useAppStore();
+  const { incomes, expenses, addIncome, updateIncome, removeIncome, addExpense, updateExpense, removeExpense } = useAppStore();
   const [isIncomeOpen, setIsIncomeOpen] = useState(false);
   const [isExpenseOpen, setIsExpenseOpen] = useState(false);
+  const [editingIncomeId, setEditingIncomeId] = useState<string | null>(null);
+  const [editingExpenseId, setEditingExpenseId] = useState<string | null>(null);
 
   const incomeForm = useForm<z.infer<typeof incomeFormSchema>>({
     resolver: zodResolver(incomeFormSchema),
@@ -44,15 +43,46 @@ export default function BudgetPage() {
   });
 
   const onIncomeSubmit = (data: any) => {
-    addIncome({ ...data, taxTreatment: "use_tax_model" }); 
+    if (editingIncomeId) {
+      updateIncome(editingIncomeId, data);
+    } else {
+      addIncome({ ...data, taxTreatment: "use_tax_model" }); 
+    }
     setIsIncomeOpen(false);
+    setEditingIncomeId(null);
     incomeForm.reset();
   };
 
   const onExpenseSubmit = (data: any) => {
-    addExpense({ ...data, inflationLinked: true }); 
+    if (editingExpenseId) {
+      updateExpense(editingExpenseId, data);
+    } else {
+      addExpense({ ...data, inflationLinked: true }); 
+    }
     setIsExpenseOpen(false);
+    setEditingExpenseId(null);
     expenseForm.reset();
+  };
+
+  const startEditIncome = (income: Income) => {
+    setEditingIncomeId(income.id);
+    incomeForm.reset({
+      name: income.name,
+      amountAnnualGross: income.amountAnnualGross,
+      owner: income.owner as any
+    });
+    setIsIncomeOpen(true);
+  };
+
+  const startEditExpense = (expense: Expense) => {
+    setEditingExpenseId(expense.id);
+    expenseForm.reset({
+      name: expense.name,
+      amountAnnual: expense.amountAnnual,
+      category: expense.category as any,
+      owner: expense.owner as any
+    });
+    setIsExpenseOpen(true);
   };
 
   const totalIncome = incomes.reduce((acc, curr) => acc + curr.amountAnnualGross, 0);
@@ -183,9 +213,14 @@ export default function BudgetPage() {
                         <TableCell>{i.owner === 'A' ? 'Party A' : 'Party B'}</TableCell>
                         <TableCell className="text-right tabular-nums">{formatCurrency(i.amountAnnualGross)}</TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="sm" onClick={() => removeIncome(i.id)}>
-                            <Trash2 className="w-4 h-4 text-muted-foreground" />
-                          </Button>
+                          <div className="flex justify-end gap-1">
+                            <Button variant="ghost" size="icon" onClick={() => startEditIncome(i)} className="h-8 w-8 text-muted-foreground hover:text-blue-600">
+                              <Edit2 className="w-4 h-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" onClick={() => removeIncome(i.id)} className="h-8 w-8 text-muted-foreground hover:text-red-500">
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -222,9 +257,14 @@ export default function BudgetPage() {
                         <TableCell className="capitalize">{e.category.replace('_', ' ')}</TableCell>
                         <TableCell className="text-right tabular-nums text-red-600">-{formatCurrency(e.amountAnnual)}</TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="sm" onClick={() => removeExpense(e.id)}>
-                            <Trash2 className="w-4 h-4 text-muted-foreground" />
-                          </Button>
+                          <div className="flex justify-end gap-1">
+                            <Button variant="ghost" size="icon" onClick={() => startEditExpense(e)} className="h-8 w-8 text-muted-foreground hover:text-blue-600">
+                              <Edit2 className="w-4 h-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" onClick={() => removeExpense(e.id)} className="h-8 w-8 text-muted-foreground hover:text-red-500">
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}

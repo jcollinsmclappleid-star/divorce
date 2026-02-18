@@ -30,9 +30,12 @@ const liabilityFormSchema = z.object({
 });
 
 export default function AssetsPage() {
-  const { assets, liabilities, addAsset, removeAsset, addLiability, removeLiability } = useAppStore();
+  const { assets, liabilities, addAsset, updateAsset, removeAsset, addLiability, updateLiability, removeLiability } = useAppStore();
   const [isAssetOpen, setIsAssetOpen] = useState(false);
   const [isLiabilityOpen, setIsLiabilityOpen] = useState(false);
+
+  const [editingAssetId, setEditingAssetId] = useState<string | null>(null);
+  const [editingLiabilityId, setEditingLiabilityId] = useState<string | null>(null);
 
   const assetForm = useForm<z.infer<typeof assetFormSchema>>({
     resolver: zodResolver(assetFormSchema),
@@ -45,15 +48,47 @@ export default function AssetsPage() {
   });
 
   const onAssetSubmit = (data: any) => {
-    addAsset({ ...data, liquidity: "liquid", saleCostPct: 0, taxCostPct: 0 }); // Defaults
+    if (editingAssetId) {
+      updateAsset(editingAssetId, data);
+    } else {
+      addAsset({ ...data, liquidity: "liquid", saleCostPct: 0, taxCostPct: 0 }); 
+    }
     setIsAssetOpen(false);
+    setEditingAssetId(null);
     assetForm.reset();
   };
 
   const onLiabilitySubmit = (data: any) => {
-    addLiability({ ...data }); 
+    if (editingLiabilityId) {
+      updateLiability(editingLiabilityId, data);
+    } else {
+      addLiability({ ...data }); 
+    }
     setIsLiabilityOpen(false);
+    setEditingLiabilityId(null);
     liabilityForm.reset();
+  };
+
+  const startEditAsset = (asset: Asset) => {
+    setEditingAssetId(asset.id);
+    assetForm.reset({
+      name: asset.name,
+      currentValue: asset.currentValue,
+      category: asset.category as any,
+      owner: asset.owner as any,
+    });
+    setIsAssetOpen(true);
+  };
+
+  const startEditLiability = (liability: Liability) => {
+    setEditingLiabilityId(liability.id);
+    liabilityForm.reset({
+      name: liability.name,
+      balance: liability.balance,
+      category: liability.category as any,
+      owner: liability.owner as any,
+    });
+    setIsLiabilityOpen(true);
   };
 
   const totalAssets = assets.reduce((sum, a) => sum + a.currentValue, 0);
@@ -212,10 +247,15 @@ export default function AssetsPage() {
                           </span>
                         </TableCell>
                         <TableCell className="text-right tabular-nums">{formatCurrency(asset.currentValue)}</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="icon" onClick={() => removeAsset(asset.id)} className="h-8 w-8 text-muted-foreground hover:text-red-500">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-1">
+                            <Button variant="ghost" size="icon" onClick={() => startEditAsset(asset)} className="h-8 w-8 text-muted-foreground hover:text-blue-600">
+                              <Edit2 className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" onClick={() => removeAsset(asset.id)} className="h-8 w-8 text-muted-foreground hover:text-red-500">
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -264,10 +304,15 @@ export default function AssetsPage() {
                           </span>
                         </TableCell>
                         <TableCell className="text-right tabular-nums text-red-600">-{formatCurrency(item.balance)}</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="icon" onClick={() => removeLiability(item.id)} className="h-8 w-8 text-muted-foreground hover:text-red-500">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-1">
+                            <Button variant="ghost" size="icon" onClick={() => startEditLiability(item)} className="h-8 w-8 text-muted-foreground hover:text-blue-600">
+                              <Edit2 className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" onClick={() => removeLiability(item.id)} className="h-8 w-8 text-muted-foreground hover:text-red-500">
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
