@@ -1,0 +1,263 @@
+PREMIUM PREVIEW + UNLOCK FLOW – FINAL IMPLEMENTATION
+
+Context:
+We have a functioning divorce financial modelling tool with:
+- Guided input wizard
+- Sell / A Keeps / B Keeps scenarios
+- Split sliders
+- Stability scoring
+- Narrative summaries
+- Source-of-funds breakdown
+- PDF export
+
+We now need to implement a professionally designed Preview → Unlock flow that:
+- Preserves modelling integrity
+- Uses professional terminology
+- Enhances conversion
+- Protects premium positioning
+- Enables £79 one-time purchase with 6-month unlimited re-runs
+- Prevents free access to full results
+
+No legal entitlement language.
+No manipulative urgency.
+No countdown timers.
+
+=================================================
+1) USER FLOW STRUCTURE
+=================================================
+
+Step 1:
+User completes full input wizard.
+
+Step 2:
+User clicks “Generate Results”.
+
+Step 3:
+Display PREVIEW PAGE (limited access).
+
+Step 4:
+User must unlock full analysis (£79 one-time) to access:
+- Detailed scenario breakdowns
+- Stability scores
+- Adjustable settlement sliders
+- Sensitivity testing
+- 12-month snapshot
+- 5-year projection
+- Structured Financial Brief (PDF)
+
+=================================================
+2) PREVIEW PAGE CONTENT (CONTROLLED VALUE REVEAL)
+=================================================
+
+A) Show (Professional Terminology + Clarifying Brackets)
+
+• Net Equity (property value less mortgage and selling costs)
+• Combined Net Asset Pool (assets available for division after debts)
+• Illustrative Equal Allocation (50/50 example only, non-adjustable)
+
+B) Show Stability Tease
+
+Display:
+“Preliminary Stability Score: 6X / 100”
+(blur final digit)
+
+C) Show Blurred Sections:
+
+- Full Sell vs Keep Comparison Table
+- Source of Funds Breakdown
+- 12-Month Financial Position
+- 5-Year Runway Projection
+- Sensitivity Analysis
+- Structured Financial Brief
+
+Overlay text:
+“Unlock Full Structured Analysis to View”
+
+D) Lock Inputs
+
+After preview:
+- Disable editing of all core financial inputs.
+- Display note:
+
+“Core financial inputs locked. Unlock full analysis to adjust settlement assumptions and modelling parameters.”
+
+Do not allow URL bypass.
+
+=================================================
+3) PREMIUM UNLOCK PAGE DESIGN
+=================================================
+
+Page must feel structured, professional, restrained.
+
+-------------------------------------------------
+HERO SECTION
+-------------------------------------------------
+
+Headline:
+See the Full Financial Picture Before You Make Decisions.
+
+Subheadline:
+Understand your position clearly and confidently — before committing to costly conversations or irreversible choices.
+
+Short body:
+You’ve already seen your core financial position.
+Unlock the complete structured modelling analysis to understand how your decisions affect liquidity, stability, and long-term sustainability.
+
+-------------------------------------------------
+VALUE SECTION – TRANSFORMATION FOCUSED
+-------------------------------------------------
+
+Headline:
+What Full Access Provides
+
+Bullet points must focus on outcomes, not features:
+
+• Compare Sell vs Retain scenarios side-by-side
+• Understand how settlement ratios change your financial stability
+• See how long your capital may realistically last
+• Identify funding requirements before committing
+• Evaluate mortgage affordability with structured assessment
+• Model different proposals as discussions evolve
+• Download a Structured Financial Brief (professional PDF)
+
+-------------------------------------------------
+DECISION SUPPORT SECTION
+-------------------------------------------------
+
+Headline:
+Clarity First. Conversations Second.
+
+Body:
+Financial decisions involving six-figure assets should not rely on rough estimates.
+
+This structured modelling allows you to:
+• Enter discussions prepared and organised
+• Identify financial pressure points early
+• Ask better, more focused questions
+• Avoid spending professional time clarifying basic numbers
+
+A single legal consultation can cost £250–£400 per hour.
+Structured financial clarity costs £79.
+
+This tool does not replace professional advice.
+It helps you use it more effectively.
+
+-------------------------------------------------
+PRICING CARD
+-------------------------------------------------
+
+£79
+One-Time Access
+
+Includes:
+• Unlimited re-runs for 6 months
+• Adjustable settlement modelling
+• Stability scoring
+• Monthly sustainability snapshot
+• 5-year projection analysis
+• Structured Financial Brief (PDF)
+
+Button:
+Unlock Full Structured Analysis – £79
+
+Under button:
+Private access. No subscription. Immediate unlock.
+
+Small reassurance:
+Access remains available for 6 months to model evolving discussions.
+
+-------------------------------------------------
+COMMITMENT REINFORCEMENT
+-------------------------------------------------
+
+Headline:
+You’ve Already Done the Hard Part.
+
+Body:
+Your financial inputs are complete.
+
+Unlock the full analysis now to see the complete picture while everything is fresh and accurate.
+
+=================================================
+4) POST-PAYMENT ACCESS CONTROL
+=================================================
+
+After payment:
+
+- Unlock full results page.
+- Enable sliders.
+- Enable scenario tabs.
+- Enable stability score full display.
+- Enable sensitivity testing.
+- Enable PDF export.
+
+Access duration:
+6 months from purchase timestamp.
+
+After 6 months:
+Show “Access Expired – Renew Access” page.
+
+=================================================
+5) REPORT STRUCTURE (UPGRADED PDF)
+=================================================
+
+PDF must be structured as follows:
+
+COVER PAGE:
+Structured Financial Brief
+Date
+Disclaimer footer
+
+SECTION 1 – Executive Summary
+- Scenario comparison table
+- Stability overview
+- Key financial indicators
+
+SECTION 2 – Scenario A: Sell & Divide
+- Narrative Summary
+- Source of Funds Table
+- Net Worth Composition
+- 12-Month Snapshot
+- Stability Assessment
+- Sensitivity Notes
+
+SECTION 3 – Scenario B: Party A Retains Property
+(Same structure)
+
+SECTION 4 – Scenario C: Party B Retains Property
+(Same structure)
+
+SECTION 5 – Assumptions & Methodology
+- Key inputs
+- Interest rate assumptions
+- Settlement ratios
+- Modelling limitations
+- Disclaimer
+
+Tone:
+Professional.
+Structured.
+Technical terminology supplemented with brackets.
+
+=================================================
+6) DESIGN REQUIREMENTS
+=================================================
+
+- Professional typography hierarchy
+- Clear section dividers
+- Neutral colour palette
+- Minimal iconography
+- No aggressive sales styling
+- High readability
+- Calm authority tone
+
+=================================================
+7) SECURITY REQUIREMENT
+=================================================
+
+- Ensure full results JSON is not exposed before unlock.
+- Validate access server-side.
+- Prevent direct route access to full results.
+
+=================================================
+END IMPLEMENTATION

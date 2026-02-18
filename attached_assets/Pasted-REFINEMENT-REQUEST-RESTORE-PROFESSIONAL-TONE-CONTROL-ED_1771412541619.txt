@@ -1,0 +1,175 @@
+REFINEMENT REQUEST – RESTORE PROFESSIONAL TONE + CONTROL EDITING + ENHANCE REPORT STRUCTURE
+
+Context:
+The previous simplification pass made the language too casual and overly basic.
+We need to restore professional credibility while keeping clarity.
+
+Objective:
+- Reinstate technical terminology
+- Supplement (not replace) technical terms with simplified explanations in brackets
+- Prevent free editing of core inputs
+- Improve report structure with segmented professional layouts and visual hierarchy
+- Maintain premium tone and integrity
+
+=================================================
+1) RESTORE TECHNICAL LANGUAGE (WITH CLARIFYING BRACKETS)
+=================================================
+
+Revert overly simplified phrases such as:
+- “Total value of everything”
+Back to:
+- “Total Net Asset Position”
+- “Combined Asset Pool”
+- “Net Distributable Capital”
+
+Where appropriate, add clarification in brackets, e.g.:
+
+- “Liquid Capital (available cash and investments)”
+- “Net Equity (property value less outstanding mortgage and selling costs)”
+- “Distributable Asset Pool (assets available for division after debts)”
+- “Funding Requirement (additional capital required to complete buyout)”
+- “Affordability Assessment (income vs projected mortgage obligation)”
+- “Runway Projection (how long capital may last at current expense levels)”
+
+Do NOT replace technical terms.
+Supplement them.
+
+Tone:
+Professional, structured, analytical.
+Not casual.
+Not conversational.
+
+=================================================
+2) REMOVE FREE INPUT EDITING POST-PREVIEW
+=================================================
+
+Users must NOT be able to freely edit core financial inputs without paying.
+
+Rules:
+- Before payment: user can enter initial numbers.
+- After preview snapshot: core inputs are locked.
+- Only sliders may be adjusted for illustrative modelling:
+    - Settlement split %
+    - Pension split %
+    - Interest rate stress
+    - Expense stress
+
+Disable:
+- Direct field editing on results page.
+- Any bypass of paywall via URL manipulation.
+
+Add small note:
+“Core inputs locked. Adjust modelling assumptions using sliders.”
+
+=================================================
+3) RESTORE STRUCTURAL SERIOUSNESS TO OUTPUT LANGUAGE
+=================================================
+
+Replace casual phrases such as:
+- “What each party ends up with”
+
+With:
+- “Final Allocated Position”
+- “Post-Settlement Capital Position”
+- “Resulting Financial Allocation”
+
+Avoid conversational tone.
+
+Example transformation:
+Instead of:
+“You receive £X and your partner receives £Y.”
+
+Use:
+“Under this scenario, Party A is allocated £X in liquid capital and Party B is allocated £Y, based on the selected settlement ratio.”
+
+=================================================
+4) ENHANCE REPORT STRUCTURE – SEGREGATED SECTIONS
+=================================================
+
+Upgrade PDF and on-screen reports to have structured, professional segmentation.
+
+Each scenario must have its own clearly titled report section:
+
+Report Structure:
+
+COVER PAGE
+- Title: Structured Financial Brief
+- Subtitle: Scenario Modelling Summary
+- Date
+- Disclaimer footer
+
+SECTION 1: Executive Summary
+- High-level comparison table
+- Stability score overview
+- Key risks highlighted
+
+SECTION 2: Scenario A – Sell & Divide
+- Scenario Title Banner
+- Executive Headline
+- Narrative Summary
+- Source of Funds Table
+- Net Worth Composition Chart
+- Monthly Snapshot
+- Stability Assessment
+- Sensitivity Notes
+
+SECTION 3: Scenario B – Party A Retains Property
+(Same structure as above)
+
+SECTION 4: Scenario C – Party B Retains Property
+(Same structure as above)
+
+SECTION 5: Assumptions & Methodology
+- Key financial inputs
+- Interest rate assumption
+- Expense assumptions
+- Settlement ratio
+- Modelling limitations
+- Clear disclaimer
+
+=================================================
+5) INTRODUCTORY VISUALS AND GRAPHICS
+=================================================
+
+Add subtle professional graphics:
+- Section dividers
+- Clean header bars
+- Minimal icons (property, liquidity, pension, risk)
+- Structured tables with borders
+- Clear typographic hierarchy
+
+Avoid:
+- Overly colourful visuals
+- Cartoon styling
+- Casual graphics
+
+Design direction:
+Professional financial report.
+Calm, neutral palette.
+High readability.
+
+=================================================
+6) PROTECT INTEGRITY OF MODELLING
+=================================================
+
+Do NOT:
+- Simplify outputs to the point of losing technical accuracy.
+- Remove terminology.
+- Replace structured financial concepts with vague summaries.
+
+Maintain:
+- Mathematical transparency.
+- Clear source-of-funds breakdown.
+- Proper terminology.
+
+Simplification must supplement clarity, not dilute substance.
+
+=================================================
+7) AFTER IMPLEMENTATION
+=================================================
+
+Provide summary of:
+- What language was restored.
+- How paywall input locking was implemented.
+- Any UI impact.
+- Any edge cases that may affect user experience.
