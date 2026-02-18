@@ -2,7 +2,7 @@ import { sql } from "drizzle-orm";
 import { pgTable, text, varchar, jsonb, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
-import { DivorceModelInputsSchema } from "./divorce_types";
+import { DivorceModelInputsSchema, Party, AssetCategory, LiabilityCategory, ExpenseCategory } from "./divorce_types";
 
 export const sessions = pgTable("sessions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -25,11 +25,11 @@ export const AppConfigSchema = z.object({
 });
 
 export const Owner = Party;
-export { AssetCategory, LiabilityCategory, ExpenseCategory };
 
 export type Session = typeof sessions.$inferSelect;
 export type AppState = z.infer<typeof AppStateSchema>;
 export type InsertSession = z.infer<typeof insertSessionSchema>;
 
+export { AssetCategory, LiabilityCategory, ExpenseCategory };
 export { DivorceModelInputsSchema };
 export * from "./divorce_types";

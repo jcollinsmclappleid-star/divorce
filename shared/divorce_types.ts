@@ -1,9 +1,7 @@
 
 import { z } from "zod";
 
-const Party = z.enum(["A", "B", "joint"]);
-const Liquidity = z.enum(["liquid", "semi_liquid", "illiquid"]);
-const AssetCategory = z.enum([
+export const AssetCategory = z.enum([
   "primary_home",
   "other_property",
   "cash",
@@ -14,10 +12,18 @@ const AssetCategory = z.enum([
   "personal_possessions",
   "other"
 ]);
-const PensionType = z.enum(["DC", "DB", "unknown"]);
-const LiabilityCategory = z.enum(["mortgage", "loan", "credit_card", "tax", "other"]);
-const IncomeTaxTreatment = z.enum(["use_tax_model", "net_provided"]);
-const ExpenseCategory = z.enum([
+export type AssetCategory = z.infer<typeof AssetCategory>;
+
+export const PensionType = z.enum(["DC", "DB", "unknown"]);
+export type PensionType = z.infer<typeof PensionType>;
+
+export const LiabilityCategory = z.enum(["mortgage", "loan", "credit_card", "tax", "other"]);
+export type LiabilityCategory = z.infer<typeof LiabilityCategory>;
+
+export const IncomeTaxTreatment = z.enum(["use_tax_model", "net_provided"]);
+export type IncomeTaxTreatment = z.infer<typeof IncomeTaxTreatment>;
+
+export const ExpenseCategory = z.enum([
   "living",
   "housing",
   "child",
@@ -26,7 +32,15 @@ const ExpenseCategory = z.enum([
   "transport",
   "other"
 ]);
-const EventType = z.enum(["one_off_cost", "one_off_income"]);
+export type ExpenseCategory = z.infer<typeof ExpenseCategory>;
+
+export const EventType = z.enum(["one_off_cost", "one_off_income"]);
+export type EventType = z.infer<typeof EventType>;
+
+export const Party = z.enum(["A", "B", "joint"]);
+export type Party = z.infer<typeof Party>;
+
+const Liquidity = z.enum(["liquid", "semi_liquid", "illiquid"]);
 
 export const AssetInputSchema = z
   .object({

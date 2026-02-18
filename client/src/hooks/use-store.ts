@@ -12,12 +12,15 @@ import {
 } from '@shared/schema';
 
 // Initial Empty State
-const initialState: AppState = {
+const initialState: any = {
   assets: [],
   liabilities: [],
   incomes: [],
   expenses: [],
-  config: AppConfigSchema.parse({}), // Use defaults from schema
+  config: {
+    taxYear: "2025/26",
+    currency: "GBP"
+  },
   scenarios: {
     S1_Sell_Split: { enabled: true, params: {} },
     S2_A_Keeps_Home: { enabled: false, params: {} },
