@@ -30,7 +30,17 @@ The financial engine is a critical component designed to be **deterministic, pur
 
 ### Data Layer
 
-PostgreSQL is used as the database, accessed via Drizzle ORM. The `shared/schema.ts` defines the `sessions` table, which stores the full `AppState` as JSONB. Drizzle Kit manages database migrations. Client-side state persistence is handled by Zustand with localStorage.
+PostgreSQL is used as the database, accessed via Drizzle ORM. The `shared/schema.ts` defines the `sessions` and `purchases` tables. The `sessions` table stores the full `AppState` as JSONB. The `purchases` table tracks Stripe payments with session tokens, checkout IDs, payment status, and 6-month expiry timestamps. Drizzle Kit manages database migrations. Client-side state persistence is handled by Zustand with localStorage.
+
+### Premium Access Flow (Preview → Unlock → Results)
+
+The application uses a freemium model with a £79 one-time payment for full access:
+- **Preview page** (`/preview`): Shows limited financial data (net equity, asset pool, 50/50 split) with blurred sections for premium content. Users are redirected here after completing the wizard or clicking example scenarios.
+- **Unlock page** (`/unlock`): Professional pricing page with Stripe Checkout integration.
+- **Payment success** (`/payment-success`): Verifies payment and grants 6-month access.
+- **Access control**: `/results` and `/report` are wrapped in `AccessGate` component that checks `GET /api/access/:sessionToken`. If no valid purchase, user is redirected to `/preview`.
+- **Stripe integration**: Uses Replit Stripe connector with `stripe-replit-sync` for webhook processing and data sync. Product: "Structured Financial Analysis" (£79 one-time). Webhook handler updates purchases table on checkout.session.completed.
+- **Session token**: Stored in localStorage as `dfm-session-token`, used to link purchases to browser sessions.
 
 ### Key Design Decisions
 
@@ -38,6 +48,7 @@ PostgreSQL is used as the database, accessed via Drizzle ORM. The `shared/schema
 2.  **Config-driven tax model**: All financial parameters are externalized in a JSON configuration, allowing for flexible updates.
 3.  **Scenario comparison model**: The tool focuses on modelling user-defined split assumptions rather than prescribing legal outcomes.
 4.  **Zod for validation**: Consistent schema validation is applied across both client and server using Zod.
+5.  **Freemium access model**: Preview page shows limited data to demonstrate value; full analysis requires £79 one-time Stripe payment with 6-month access window.
 
 ## External Dependencies
 
@@ -53,6 +64,7 @@ PostgreSQL is used as the database, accessed via Drizzle ORM. The `shared/schema
 -   **react-hook-form** + **@hookform/resolvers** — Form management.
 -   **shadcn/ui** (Radix UI primitives) — UI component library.
 -   **wouter** — Lightweight client-side router.
+-   **stripe** + **stripe-replit-sync** — Payment processing and webhook sync.
 
 ### Build Tools
 -   **Vite** — Frontend bundling.

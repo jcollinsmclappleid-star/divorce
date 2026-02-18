@@ -12,7 +12,21 @@ export const sessions = pgTable("sessions", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const purchases = pgTable("purchases", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionToken: varchar("session_token").notNull(),
+  stripeCheckoutSessionId: text("stripe_checkout_session_id"),
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  email: text("email"),
+  status: text("status").notNull().default("pending"),
+  purchasedAt: timestamp("purchased_at"),
+  expiresAt: timestamp("expires_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const insertSessionSchema = createInsertSchema(sessions);
+export const insertPurchaseSchema = createInsertSchema(purchases).omit({ id: true, createdAt: true });
+
 export const AppStateSchema = z.object({
   inputs: DivorceModelInputsSchema,
   activeScenario: z.string(),
@@ -27,6 +41,8 @@ export const AppConfigSchema = z.object({
 export const Owner = Party;
 
 export type Session = typeof sessions.$inferSelect;
+export type Purchase = typeof purchases.$inferSelect;
+export type InsertPurchase = z.infer<typeof insertPurchaseSchema>;
 export type AppState = z.infer<typeof AppStateSchema>;
 export type InsertSession = z.infer<typeof insertSessionSchema>;
 

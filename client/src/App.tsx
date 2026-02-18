@@ -7,14 +7,29 @@ import LandingPage from "@/pages/landing";
 import WizardPage from "@/pages/wizard";
 import ResultsPage from "@/pages/results";
 import ReportPage from "@/pages/report";
+import PreviewPage from "@/pages/preview";
+import UnlockPage from "@/pages/unlock";
+import PaymentSuccessPage from "@/pages/payment-success";
+import { AccessGate } from "@/components/access-gate";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={LandingPage} />
       <Route path="/wizard" component={WizardPage} />
-      <Route path="/results" component={ResultsPage} />
-      <Route path="/report" component={ReportPage} />
+      <Route path="/preview" component={PreviewPage} />
+      <Route path="/unlock" component={UnlockPage} />
+      <Route path="/payment-success" component={PaymentSuccessPage} />
+      <Route path="/results">
+        <AccessGate>
+          <ResultsPage />
+        </AccessGate>
+      </Route>
+      <Route path="/report">
+        <AccessGate>
+          <ReportPage />
+        </AccessGate>
+      </Route>
       <Route path="/dashboard"><Redirect to="/" /></Route>
       <Route path="/assets"><Redirect to="/" /></Route>
       <Route path="/budget"><Redirect to="/" /></Route>

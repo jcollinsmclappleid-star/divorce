@@ -80,7 +80,7 @@ export default function LandingPage() {
   const loadExample = (index: number) => {
     const example = EXAMPLE_SCENARIOS[index];
     loadState(example.data);
-    setLocation("/results");
+    setLocation("/preview");
   };
 
   return (

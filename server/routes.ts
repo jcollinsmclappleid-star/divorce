@@ -1,10 +1,9 @@
-
 import type { Express } from "express";
 import type { Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
-
+import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { seedDatabase } from "./seed";
 
 export async function registerRoutes(
@@ -12,28 +11,130 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
 
-  // Seed Data
   seedDatabase().catch(console.error);
-  
-  // PDF Generation Endpoint (Stub for now)
+
+  app.get('/api/stripe/publishable-key', async (_req, res) => {
+    try {
+      const key = await getStripePublishableKey();
+      res.json({ publishableKey: key });
+    } catch (err) {
+      res.status(500).json({ message: 'Failed to get publishable key' });
+    }
+  });
+
+  app.post('/api/checkout/create', async (req, res) => {
+    try {
+      const { sessionToken } = req.body;
+      if (!sessionToken) {
+        return res.status(400).json({ message: 'sessionToken is required' });
+      }
+
+      const stripe = await getUncachableStripeClient();
+
+      const products = await stripe.products.search({ query: "name:'Structured Financial Analysis'" });
+      if (products.data.length === 0) {
+        return res.status(500).json({ message: 'Product not configured' });
+      }
+
+      const prices = await stripe.prices.list({ product: products.data[0].id, active: true });
+      if (prices.data.length === 0) {
+        return res.status(500).json({ message: 'Price not configured' });
+      }
+
+      const priceId = prices.data[0].id;
+
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const checkoutSession = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [{ price: priceId, quantity: 1 }],
+        mode: 'payment',
+        success_url: `${baseUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/unlock`,
+        metadata: {
+          sessionToken,
+        },
+      });
+
+      await storage.createPurchase({
+        sessionToken,
+        stripeCheckoutSessionId: checkoutSession.id,
+        status: 'pending',
+      });
+
+      res.json({ url: checkoutSession.url });
+    } catch (err: any) {
+      console.error('Checkout error:', err);
+      res.status(500).json({ message: 'Failed to create checkout session' });
+    }
+  });
+
+  app.post('/api/checkout/verify', async (req, res) => {
+    try {
+      const { checkoutSessionId } = req.body;
+      if (!checkoutSessionId) {
+        return res.status(400).json({ message: 'checkoutSessionId is required' });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      const session = await stripe.checkout.sessions.retrieve(checkoutSessionId);
+
+      if (session.payment_status === 'paid') {
+        const purchase = await storage.getPurchaseByCheckoutSessionId(checkoutSessionId);
+        if (purchase && purchase.status !== 'paid') {
+          await storage.markPurchasePaid(
+            purchase.id,
+            session.payment_intent as string,
+            session.customer_details?.email ?? null
+          );
+        }
+        const updatedPurchase = await storage.getPurchaseByCheckoutSessionId(checkoutSessionId);
+        res.json({ 
+          status: 'paid', 
+          sessionToken: updatedPurchase?.sessionToken,
+          expiresAt: updatedPurchase?.expiresAt 
+        });
+      } else {
+        res.json({ status: session.payment_status });
+      }
+    } catch (err: any) {
+      console.error('Verify error:', err);
+      res.status(500).json({ message: 'Failed to verify payment' });
+    }
+  });
+
+  app.get('/api/access/:sessionToken', async (req, res) => {
+    try {
+      const { sessionToken } = req.params;
+      const purchase = await storage.getPurchaseBySessionToken(sessionToken);
+
+      if (!purchase) {
+        return res.json({ hasAccess: false, reason: 'no_purchase' });
+      }
+
+      if (purchase.expiresAt && new Date() > new Date(purchase.expiresAt)) {
+        return res.json({ hasAccess: false, reason: 'expired', expiresAt: purchase.expiresAt });
+      }
+
+      return res.json({ 
+        hasAccess: true, 
+        expiresAt: purchase.expiresAt,
+        purchasedAt: purchase.purchasedAt 
+      });
+    } catch (err) {
+      res.status(500).json({ message: 'Failed to check access' });
+    }
+  });
+
   app.post(api.pdf.generate.path, async (req, res) => {
     try {
-      // In a real implementation, we would use a library like 'pdfkit' or 'puppeteer'
-      // to generate a PDF from the request body (AppState).
-      // For now, we'll return a 501 Not Implemented or a dummy success.
-      
       console.log("Generating PDF for state:", req.body);
-      
-      // Simulate PDF generation delay
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
       res.json({ message: "PDF generation simulation successful. Check console." });
     } catch (error) {
        res.status(500).json({ message: "Failed to generate PDF" });
     }
   });
 
-  // Session Management (Optional for MVP, but good to have)
   app.post(api.sessions.create.path, async (req, res) => {
     try {
       const input = api.sessions.create.input.parse(req.body);

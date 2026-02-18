@@ -81,7 +81,7 @@ export default function WizardPage() {
 
   const goNext = useCallback(() => {
     if (currentStep === STEPS.length - 1) {
-      setLocation("/results");
+      setLocation("/preview");
     } else {
       setCurrentStep(s => Math.min(s + 1, STEPS.length - 1));
     }
