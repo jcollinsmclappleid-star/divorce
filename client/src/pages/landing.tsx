@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Calculator, Shield, ArrowRight, ChevronRight,
   BarChart3, Lock, Landmark, Home, TrendingUp,
-  FileText, Sliders, DollarSign, PiggyBank, Activity
+  FileText, Sliders, PoundSterling, PiggyBank, Activity
 } from "lucide-react";
 import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
 import { useAppStore } from "@/hooks/use-store";
@@ -34,7 +34,7 @@ const QUANTIFIES_ITEMS = [
     body: "Income tax and National Insurance modelling assumptions for 2025/26.",
   },
   {
-    icon: DollarSign,
+    icon: PoundSterling,
     title: "Mortgage Affordability",
     body: "Mortgage affordability benchmarks, based on the assumptions entered.",
   },
