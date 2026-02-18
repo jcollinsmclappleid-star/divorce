@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation, Link } from "wouter";
 import { useAccess, useSessionToken } from "@/hooks/use-access";
 import { Card, CardContent } from "@/components/ui/card";
@@ -37,6 +37,7 @@ export default function UnlockPage() {
   const sessionToken = useSessionToken();
   const { hasAccess, isLoading } = useAccess();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   useEffect(() => {
     if (!isLoading && hasAccess) {
@@ -154,11 +155,25 @@ export default function UnlockPage() {
                 ))}
               </ul>
 
+              <label className="flex items-start gap-2 text-xs text-muted-foreground cursor-pointer select-none" data-testid="label-terms-acceptance">
+                <input
+                  type="checkbox"
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
+                  className="mt-0.5 shrink-0"
+                  data-testid="checkbox-terms-acceptance"
+                />
+                <span className="leading-relaxed">
+                  I confirm that I understand this tool provides illustrative financial modelling only. It does not constitute legal, tax, or financial advice and I will seek independent professional advice before making financial decisions. I have read and accept the{" "}
+                  <Link href="/terms" className="underline text-primary">Terms of Use</Link>.
+                </span>
+              </label>
+
               <Button
                 className="w-full"
                 size="lg"
                 onClick={handleCheckout}
-                disabled={checkoutLoading}
+                disabled={checkoutLoading || !termsAccepted}
                 data-testid="button-checkout"
               >
                 {checkoutLoading ? (
@@ -175,7 +190,7 @@ export default function UnlockPage() {
                 <p>Private access. No subscription. Immediate unlock.</p>
                 <p>Access remains available for 6 months to model evolving assumptions.</p>
                 <p className="text-[10px] text-muted-foreground/70 leading-relaxed mt-2">
-                  By purchasing, you agree that this tool provides illustrative modelling only and does not constitute professional advice. No refunds are available once access has been granted, as the digital content is delivered immediately.
+                  By proceeding, you acknowledge that this tool provides illustrative financial modelling only and does not constitute legal, tax, or regulated financial advice. No advisory relationship is created. Outputs should not be relied upon for decision-making without independent professional advice.
                 </p>
               </div>
             </CardContent>

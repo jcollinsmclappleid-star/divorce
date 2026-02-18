@@ -76,7 +76,7 @@ function buildQualitativeExecutiveSummary(
       incomeParts.push(`Party ${higherParty} earns ${typeof ratio === "string" ? ratio : ratio + "x"} the income of the other party (${fmt(higherAmt)} versus ${fmt(lowerAmt)} gross), resulting in a material income disparity that affects post-separation sustainability.`);
     } else {
       const earner = incomeA > 0 ? "A" : "B";
-      incomeParts.push(`Only Party ${earner} has declared income, which creates a significant dependency consideration in all scenarios.`);
+      incomeParts.push(`Only Party ${earner} has declared income, which represents a single-income dependency across all modelled scenarios.`);
     }
     incomeParts.push(`After applying estimated 2025/26 UK income tax and National Insurance, net incomes are ${fmt(netA)} (Party A) and ${fmt(netB)} (Party B) per annum.`);
     if (engine.cmsAnnual > 0) {
@@ -231,7 +231,7 @@ export default function ReportPage() {
             <p key={i} className="text-sm text-gray-700 leading-relaxed mb-3 last:mb-0">{para}</p>
           ))}
           <p className="text-sm text-gray-600 italic mt-3 pt-2 border-t border-gray-200">
-            Financial modelling highlights trade-offs. Consider how each scenario aligns with your tolerance for liquidity, leverage, and income variability.
+            Financial modelling highlights trade-offs. Each scenario reflects different implications for liquidity, leverage, and income variability.
           </p>
         </ReportSection>
 
@@ -563,10 +563,10 @@ export default function ReportPage() {
                   const totalIncomeA = store.incomes.filter(i => i.owner === "A").reduce((s, i) => s + i.amountAnnualGross, 0);
                   const totalIncomeB = store.incomes.filter(i => i.owner === "B").reduce((s, i) => s + i.amountAnnualGross, 0);
                   return totalIncomeA > 0 && totalIncomeB > 0
-                    ? `The model assumes Party A earns ${fmt(totalIncomeA)}/yr and Party B earns ${fmt(totalIncomeB)}/yr. Consider whether these levels are secure for the projection period.`
+                    ? `The model assumes Party A earns ${fmt(totalIncomeA)}/yr and Party B earns ${fmt(totalIncomeB)}/yr. Income stability over the projection period may warrant independent verification.`
                     : totalIncomeA > 0
-                    ? `The model assumes Party A earns ${fmt(totalIncomeA)}/yr. Consider whether this is sustainable.`
-                    : `The model assumes Party B earns ${fmt(totalIncomeB)}/yr. Consider whether this is sustainable.`;
+                    ? `The model assumes Party A earns ${fmt(totalIncomeA)}/yr. Income sustainability over the projection period may warrant independent verification.`
+                    : `The model assumes Party B earns ${fmt(totalIncomeB)}/yr. Income sustainability over the projection period may warrant independent verification.`;
                 })()}
               </p>
             </div>
@@ -595,7 +595,7 @@ export default function ReportPage() {
             <div className="text-sm text-gray-600">
               <p className="font-medium text-gray-700 mb-0.5">Have all material assets and liabilities been included?</p>
               <p className="text-xs text-gray-500">
-                Consider whether there are additional accounts, liabilities, or income sources that should be factored in.
+                Additional accounts, liabilities, or income sources not included in this model may be relevant to the overall financial position.
               </p>
             </div>
           </div>
@@ -792,13 +792,13 @@ function ReportScenarioConsiderations({
     const party = propConcA > propConcB ? "Party A" : "Party B";
     const pct_val = Math.round(Math.max(propConcA, propConcB));
     considerations.push(
-      `This scenario results in ${pct_val}% of ${party}'s net worth being held in property. Consider whether reduced liquidity aligns with your comfort level for short-term financial flexibility.`
+      `This scenario results in ${pct_val}% of ${party}'s net worth being held in property. Reduced liquidity may be a relevant consideration for short-term financial flexibility.`
     );
   }
 
   if ((scenario.fundingGap ?? 0) > 0) {
     considerations.push(
-      `This scenario requires additional funding of ${fmt(scenario.fundingGap!)}. Consider how this shortfall would be addressed.`
+      `This scenario requires additional funding of ${fmt(scenario.fundingGap!)}. This shortfall may require increased borrowing or alternative asset sources.`
     );
   }
 
@@ -827,30 +827,30 @@ function ReportScenarioConsiderations({
   if (expenseA > 0 && liquidA < expenseA) {
     const months = Math.round((liquidA / expenseA) * 12);
     considerations.push(
-      `Party A's liquid capital covers approximately ${months} month${months !== 1 ? "s" : ""} of expenses. Consider contingency planning.`
+      `Party A's liquid capital covers approximately ${months} month${months !== 1 ? "s" : ""} of expenses. Contingency planning may warrant further assessment.`
     );
   }
   if (expenseB > 0 && liquidB < expenseB) {
     const months = Math.round((liquidB / expenseB) * 12);
     considerations.push(
-      `Party B's liquid capital covers approximately ${months} month${months !== 1 ? "s" : ""} of expenses. Consider contingency planning.`
+      `Party B's liquid capital covers approximately ${months} month${months !== 1 ? "s" : ""} of expenses. Contingency planning may warrant further assessment.`
     );
   }
 
   if (engine.budget.surplusA < 0) {
     considerations.push(
-      `Party A is projected to have a monthly deficit of ${fmt(Math.abs(engine.budget.surplusA / 12))}/month. Consider whether expenditure adjustments or supplementary income sources are available.`
+      `Party A is projected to have a monthly deficit of ${fmt(Math.abs(engine.budget.surplusA / 12))}/month. Expenditure adjustments or supplementary income sources may warrant further assessment.`
     );
   }
   if (engine.budget.surplusB < 0) {
     considerations.push(
-      `Party B is projected to have a monthly deficit of ${fmt(Math.abs(engine.budget.surplusB / 12))}/month. Consider whether expenditure adjustments or supplementary income sources are available.`
+      `Party B is projected to have a monthly deficit of ${fmt(Math.abs(engine.budget.surplusB / 12))}/month. Expenditure adjustments or supplementary income sources may warrant further assessment.`
     );
   }
 
   if (scenario.id === "S4") {
     considerations.push(
-      `This scenario involves a deferred settlement, meaning the property arrangement remains in place for an extended period. Consider the practical implications of ongoing shared legal obligations and future market conditions.`
+      `This scenario involves a deferred settlement, meaning the property arrangement remains in place for an extended period. Ongoing shared legal obligations and future market conditions may be relevant considerations.`
     );
   }
 

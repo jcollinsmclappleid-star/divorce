@@ -347,11 +347,11 @@ function ScenarioCard({ scenario, color }: { scenario: ScenarioResult; color: st
               <div className="flex items-center gap-2 mt-1">
                 {scenario.affordable ? (
                   <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50">
-                    <CheckCircle className="w-3 h-3 mr-1" /> Affordable
+                    <CheckCircle className="w-3 h-3 mr-1" /> Within Benchmark
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50">
-                    <AlertTriangle className="w-3 h-3 mr-1" /> May not be affordable
+                    <AlertTriangle className="w-3 h-3 mr-1" /> Exceeds Benchmark
                   </Badge>
                 )}
               </div>

@@ -261,7 +261,7 @@ export default function ResultsPage() {
               <div>
                 <h2 className="text-xl font-display font-bold mb-1 tracking-tight">Scenario Analysis</h2>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Select a scenario below for detailed analysis — including capital allocation, source of funds breakdown, monthly financial position, and stability assessment.
+                  Select a scenario below for detailed analysis — including capital allocation, source of funds breakdown, monthly financial position, and indicative stability index.
                 </p>
                 <div className="grid gap-3 sm:grid-cols-3 mb-6">
                   {allScenarios.map(s => {
@@ -833,15 +833,15 @@ function AssumptionReviewPrompts({
   prompts.push({
     question: "Are income projections stable?",
     context: totalIncomeA > 0 && totalIncomeB > 0
-      ? `The model assumes Party A earns ${formatCurrency(totalIncomeA)}/yr and Party B earns ${formatCurrency(totalIncomeB)}/yr on an ongoing basis. Consider whether these levels are secure for the projection period.`
+      ? `The model assumes Party A earns ${formatCurrency(totalIncomeA)}/yr and Party B earns ${formatCurrency(totalIncomeB)}/yr on an ongoing basis. Income stability over the projection period may warrant independent verification.`
       : totalIncomeA > 0
-      ? `The model assumes Party A earns ${formatCurrency(totalIncomeA)}/yr. Consider whether this is sustainable for the projection period.`
-      : `The model assumes Party B earns ${formatCurrency(totalIncomeB)}/yr. Consider whether this is sustainable for the projection period.`,
+      ? `The model assumes Party A earns ${formatCurrency(totalIncomeA)}/yr. Income sustainability over the projection period may warrant independent verification.`
+      : `The model assumes Party B earns ${formatCurrency(totalIncomeB)}/yr. Income sustainability over the projection period may warrant independent verification.`,
   });
 
   prompts.push({
     question: "Are expense projections conservative?",
-    context: `Expenses are inflated at ${(assumptions.inflationRate * 100).toFixed(1)}% per year. Post-separation costs often differ from current spending patterns. Consider whether the entered expenses reflect likely post-settlement outgoings.`,
+    context: `Expenses are inflated at ${(assumptions.inflationRate * 100).toFixed(1)}% per year. Post-separation costs often differ from current spending patterns. The entered expenses may not fully reflect likely post-settlement outgoings.`,
   });
 
   const hasMortgage = intermediate.totalMortgage > 0;
@@ -913,7 +913,7 @@ function ExecutiveTable({
           Executive Summary
         </CardTitle>
         <CardDescription>
-          Comparative financial summary across all modelled scenarios. Financial modelling highlights trade-offs — consider how each scenario aligns with your tolerance for liquidity, leverage, and income variability.
+          Comparative financial summary across all modelled scenarios. Each scenario reflects different implications for liquidity, leverage, and income variability.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -1145,13 +1145,13 @@ function generateScenarioConsiderations(
     const party = propConcA > propConcB ? "Party A" : "Party B";
     const pct = Math.round(Math.max(propConcA, propConcB));
     considerations.push(
-      `This scenario results in ${pct}% of ${party}'s net worth being held in property. Consider whether reduced liquidity aligns with your comfort level for short-term financial flexibility.`
+      `This scenario results in ${pct}% of ${party}'s net worth being held in property. Reduced liquidity may be a relevant consideration for short-term financial flexibility.`
     );
   }
 
   if ((scenario.fundingGap ?? 0) > 0) {
     considerations.push(
-      `This scenario requires additional funding of ${formatCurrency(scenario.fundingGap!)}. Consider how this shortfall would be addressed — for example, through increased borrowing or alternative asset sources.`
+      `This scenario requires additional funding of ${formatCurrency(scenario.fundingGap!)}. This shortfall may require increased borrowing or alternative asset sources.`
     );
   }
 

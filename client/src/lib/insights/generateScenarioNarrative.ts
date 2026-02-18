@@ -75,7 +75,7 @@ export function generateScenarioNarrative(
     riskFlags.push({
       label: "Accommodation transition required",
       severity: "warn",
-      detail: "Both parties will need to arrange new accommodation. Consider rental costs or deposit requirements.",
+      detail: "Both parties will need to arrange new accommodation. Rental costs or deposit requirements may be relevant considerations.",
     });
 
     return {
@@ -142,7 +142,7 @@ export function generateScenarioNarrative(
     riskFlags.push({
       label: "Mortgage affordability",
       severity: "ok",
-      detail: `Party ${keeper} should qualify for the mortgage based on typical market benchmarks.`,
+      detail: `Party ${keeper} falls within typical market lending benchmarks based on the income assumptions entered.`,
     });
   }
 
@@ -170,6 +170,6 @@ export function generateScenarioNarrative(
     keyDrivers,
     tradeOffs,
     riskFlags,
-    reassurance: `This scenario provides housing continuity for Party ${keeper} while ensuring Party ${leaver} receives their fair share of the equity as liquid capital.`,
+    reassurance: `This scenario provides housing continuity for Party ${keeper} while allocating Party ${leaver}'s modelled share of the equity as liquid capital.`,
   };
 }

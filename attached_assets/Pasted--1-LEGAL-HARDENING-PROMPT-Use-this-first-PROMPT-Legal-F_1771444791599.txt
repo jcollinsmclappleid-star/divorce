@@ -1,0 +1,181 @@
+
+⸻
+
+1️⃣ LEGAL HARDENING PROMPT
+
+Use this first.
+
+⸻
+
+PROMPT: Legal Framing & Liability Hardening
+
+You are reviewing a UK-based digital financial modelling tool called DivorceCalculatorUK.
+
+Your task is to:
+	1.	Review all website copy (landing page, preview page, results page, report PDF, checkout page).
+	2.	Identify any language that could be interpreted as:
+	•	Financial advice
+	•	Tax advice
+	•	Legal advice
+	•	Suitability recommendation
+	•	Entitlement guidance
+	•	Predicting court outcomes
+	•	Advising on mortgage eligibility
+	•	Advising on settlement fairness
+	3.	Replace or reframe any risky language using the following positioning:
+
+This is:
+	•	Illustrative financial modelling
+	•	Educational scenario testing
+	•	User-driven input based
+	•	Not advice
+	•	Not a recommendation
+	•	Not predictive of legal outcome
+
+	4.	Ensure:
+	•	Disclaimer appears in header (short form)
+	•	Full disclaimer in footer
+	•	Terms acceptance before payment
+	•	Clear statement that users should seek independent legal/financial advice
+	•	Mortgage affordability framed as “indicative market benchmarks” only
+	5.	Provide:
+	•	A rewritten master disclaimer
+	•	Suggested Terms of Use clauses (limitation of liability, no reliance, no advisory relationship)
+	•	Wording changes in tracked format (Before → After)
+
+Maintain premium tone. Avoid over-alarming language.
+
+Deliver structured output:
+	•	Executive Summary
+	•	Risk Areas Identified
+	•	Recommended Copy Changes
+	•	Draft Legal Text
+
+Do not change branding. Focus only on liability protection.
+
+⸻
+
+2️⃣ PRODUCTION FLOW TEST PROMPT
+
+Run this after legal is tightened.
+
+⸻
+
+PROMPT: End-to-End Production Flow Stress Test
+
+Simulate full live user journey for DivorceCalculatorUK:
+	1.	Enter realistic inputs (mid-income couple, property, pension, debts).
+	2.	Complete payment flow.
+	3.	Unlock results.
+	4.	Generate report.
+	5.	Download PDF on:
+	•	iPhone Safari
+	•	Desktop Chrome
+
+Validate:
+	•	No calculation inconsistencies
+	•	No rounding mismatches
+	•	Preview vs Unlock numbers identical
+	•	PDF matches on-screen data
+	•	Stability bands match logic engine
+	•	No NaN/Infinity/undefined
+	•	No broken UI states
+	•	No formatting overflow on mobile
+
+Also test:
+	•	Zero income case
+	•	Negative equity case
+	•	Very high income case
+	•	Extremely imbalanced split
+	•	Session timeout
+	•	Page refresh mid-flow
+
+Deliver structured report:
+	•	Summary dashboard
+	•	Issues found
+	•	Severity level
+	•	Recommended fixes
+	•	Confirmation of production readiness
+
+Do not implement changes without listing them first.
+
+⸻
+
+3️⃣ SEO FOUNDATION PROMPT
+
+Run next.
+
+⸻
+
+PROMPT: Technical SEO Foundation Build
+
+You are auditing a React SPA called DivorceCalculatorUK.
+
+Deliver a structured SEO implementation plan including:
+	1.	Required  and meta descriptions for:
+	•	Home
+	•	Preview
+	•	Results
+	•	FAQ (if exists)
+	2.	Open Graph + Twitter card tags
+	3.	robots.txt content
+	4.	sitemap.xml structure
+	5.	Canonical URL strategy
+	6.	JSON-LD structured data using:
+	•	SoftwareApplication schema
+	•	WebApplication
+	•	UK audience targeting
+	7.	Page speed optimisation:
+	•	Font reduction recommendations
+	•	Preconnect optimisation
+	•	Script defer strategy
+	8.	SPA indexing strategy:
+	•	Pre-rendering recommendation
+	•	SSR vs static export advice
+
+Deliver:
+	•	Code snippets ready to paste
+	•	Not theoretical commentary
+	•	Prioritised action order
+
+⸻
+
+4️⃣ CONVERSION VALIDATION PROMPT
+
+Before running paid ads.
+
+⸻
+
+PROMPT: Conversion & Pricing Validation Analysis
+
+You are evaluating the pricing and conversion positioning of DivorceCalculatorUK.
+
+Assume:
+	•	Target: UK individuals navigating separation/divorce
+	•	Goal: Premium positioning, not mass cheap calculator
+
+Evaluate:
+	•	Psychological framing
+	•	Trust signals
+	•	Emotional triggers
+	•	Risk reversal
+	•	Objection handling
+	•	CTA clarity
+	•	Pricing anchoring vs solicitor hourly rates
+
+Provide:
+	1.	Conversion risk analysis
+	2.	Copy adjustments to increase urgency without becoming salesy
+	3.	Suggested pricing tier structure
+	4.	Whether to include:
+	•	Limited-time framing
+	•	Refund guarantee
+	•	Re-run window emphasis
+	5.	Above-the-fold improvements
+	6.	Emotional pull refinement without creating advisory liability
+
+Output in structured format:
+	•	What’s working
+	•	What weakens conversion
+	•	Specific wording changes
+	•	Pricing strategy recommendation

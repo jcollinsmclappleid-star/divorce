@@ -63,22 +63,48 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground">6. Limitation of Liability</h2>
-            <p>To the fullest extent permitted by law, we shall not be liable for any loss, damage, or expense arising from your use of, or reliance on, the modelling outputs produced by this tool. This includes but is not limited to financial loss, legal costs, or any indirect or consequential damages.</p>
+            <h2 className="text-xl font-semibold text-foreground">6. No Advisory Relationship</h2>
+            <p>Use of this tool does not create any professional-client, advisory, fiduciary, or other similar relationship between you and DivorceCalculatorUK, its operators, or any affiliated party. No duty of care arises from your use of this tool.</p>
+            <p>The tool does not assess the suitability, fairness, or appropriateness of any financial settlement. It does not predict court outcomes, assess legal entitlement, or provide mortgage eligibility assessments.</p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground">7. Intellectual Property</h2>
+            <h2 className="text-xl font-semibold text-foreground">7. No Reliance</h2>
+            <p>You acknowledge and agree that you will not rely on the outputs of this tool as the basis for any legal, financial, or tax decision. All outputs are generated solely from the assumptions and data you provide, and may contain errors, omissions, or inaccuracies.</p>
+            <p>Mortgage affordability indicators are based on generalised market benchmarks and do not constitute a lending assessment, mortgage offer, or credit evaluation. They should not be interpreted as an indication that any mortgage application would be approved.</p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-foreground">8. User Responsibility for Data Input</h2>
+            <p>The accuracy and completeness of all modelling outputs depends entirely on the data you enter. You are solely responsible for ensuring that the information you provide is accurate, complete, and up to date.</p>
+            <p>DivorceCalculatorUK does not verify, validate, or audit the data you enter. Incomplete or inaccurate inputs will produce incomplete or inaccurate outputs.</p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-foreground">9. Limitation of Liability</h2>
+            <p>To the fullest extent permitted by law, we shall not be liable for any loss, damage, or expense arising from your use of, or reliance on, the modelling outputs produced by this tool. This includes but is not limited to:</p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>Financial loss, including losses arising from settlement decisions</li>
+              <li>Legal costs or expenses</li>
+              <li>Any indirect, consequential, or incidental damages</li>
+              <li>Losses arising from errors in user-provided data</li>
+              <li>Losses arising from changes in tax rates, legislation, or personal circumstances after the date of use</li>
+            </ul>
+            <p>Our total liability for any claim shall not exceed the amount paid by you for access to the service.</p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-foreground">10. Intellectual Property</h2>
             <p>All content, design, and functionality of DivorceCalculatorUK is protected by copyright and intellectual property laws. You may not reproduce, distribute, or create derivative works without written permission.</p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground">8. Governing Law</h2>
+            <h2 className="text-xl font-semibold text-foreground">11. Governing Law</h2>
             <p>These terms are governed by the laws of England and Wales. Any disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground">9. Changes to These Terms</h2>
+            <h2 className="text-xl font-semibold text-foreground">12. Changes to These Terms</h2>
             <p>We reserve the right to update these terms at any time. Changes will be posted on this page with an updated revision date. Continued use of the service after changes constitutes acceptance of the revised terms.</p>
           </section>
         </div>

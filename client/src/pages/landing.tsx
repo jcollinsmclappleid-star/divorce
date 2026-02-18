@@ -281,13 +281,27 @@ export default function LandingPage() {
             Structured Financial Modelling &mdash; &pound;79
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            A single professional consultation can cost <span className="font-semibold text-foreground">&pound;250&ndash;&pound;400 per hour</span>.
+            A single professional consultation typically costs <span className="font-semibold text-foreground">&pound;250&ndash;&pound;400 per hour</span>. Many individuals attend several before their financial picture becomes clearer.
           </p>
           <p className="text-muted-foreground leading-relaxed">
-            This platform provides structured modelling and scenario comparison for a one-time &pound;79, including six months of unlimited scenario reruns.
+            This platform provides structured modelling and scenario comparison for a <span className="font-semibold text-foreground">one-time &pound;79</span>, including six months of unlimited scenario reruns.
           </p>
+          <div className="grid grid-cols-3 gap-4 text-center max-w-md mx-auto py-4">
+            <div>
+              <p className="text-lg font-bold text-foreground">15 min</p>
+              <p className="text-xs text-muted-foreground">First model complete</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-foreground">6 months</p>
+              <p className="text-xs text-muted-foreground">Unlimited reruns</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-foreground">100%</p>
+              <p className="text-xs text-muted-foreground">Private &amp; secure</p>
+            </div>
+          </div>
           <p className="text-sm text-muted-foreground/80">
-            No subscription. No recurring fees. Most users complete their first model in under 15 minutes.
+            No subscription. No recurring fees. No sign-up required to explore.
           </p>
         </div>
       </section>
@@ -334,6 +348,13 @@ export default function LandingPage() {
           <p className="text-sm text-muted-foreground">
             Used by individuals preparing for mediation, solicitor meetings, and financial disclosure.
           </p>
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground/70 pt-2">
+            <span>All calculations in-browser</span>
+            <span>&middot;</span>
+            <span>No data stored on servers</span>
+            <span>&middot;</span>
+            <span>Stripe-secured payments</span>
+          </div>
         </div>
       </section>
 
