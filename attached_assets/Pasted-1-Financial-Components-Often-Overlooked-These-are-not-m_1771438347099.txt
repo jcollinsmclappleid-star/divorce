@@ -1,0 +1,252 @@
+1️⃣ Financial Components Often Overlooked
+
+These are not mandatory — but you should consciously decide.
+
+⸻
+
+A) Spousal Maintenance (Periodical Payments)
+
+Currently your model is capital-focused.
+
+In many UK divorces, ongoing maintenance materially affects:
+	•	Monthly surplus
+	•	Runway
+	•	Stability classification
+
+If not included, you must explicitly state:
+
+“Ongoing spousal maintenance not modelled unless entered manually.”
+
+Otherwise users assume it’s captured.
+
+⸻
+
+B) Child Maintenance (CMS)
+
+You mention CMS excluded.
+
+This is not minor.
+
+For many cases, it is one of the largest monthly cashflow shifts.
+
+If excluded, you should:
+	•	Either allow manual entry
+	•	Or clearly state it is not included in modelling
+
+Failure to do so risks misleading sustainability outputs.
+
+⸻
+
+C) Transition Costs
+
+When selling:
+	•	Moving costs
+	•	Rental deposit
+	•	Legal fees
+	•	Stamp duty on new purchase
+
+These can materially change runway in lower-liquidity cases.
+
+At minimum:
+Add an “Additional one-off costs” input field.
+
+⸻
+
+D) Pension Type Clarification
+
+Are pension inputs:
+	•	CETV (Cash Equivalent Transfer Value)?
+	•	Defined Contribution only?
+	•	Defined Benefit?
+
+If not clarified, some users may treat DB pensions like cash assets.
+
+You should include:
+
+“Pension values reflect transfer values and not income stream equivalence.”
+
+⸻
+
+E) Capital Gains Tax on Investments
+
+If you assume full liquidation with no tax:
+
+That is unrealistic in some scenarios.
+
+Either:
+	•	Add optional tax haircut %
+OR
+	•	Clearly state CGT not modelled.
+
+⸻
+
+2️⃣ Structural Modelling Considerations
+
+⸻
+
+A) Double Counting Risk
+
+You must ensure:
+	•	Pensions excluded from liquid capital
+	•	No debt duplicated across scenarios
+	•	Selling costs applied once
+
+This seems handled — but audit annually.
+
+⸻
+
+B) Stability Score Weighting
+
+Currently deduction-based.
+
+Ask yourself:
+
+Is -40 funding shortfall proportionate relative to -10 asset concentration?
+
+Your weights implicitly express value judgements.
+
+You must be comfortable defending them.
+
+⸻
+
+C) Inflation vs Income Assumption
+
+Clarify:
+
+Are you inflating:
+	•	Expenses only?
+	•	Income only?
+	•	Both?
+	•	Neither?
+
+Users will interpret differently.
+
+State it clearly.
+
+⸻
+
+3️⃣ Legal / Regulatory Framing Gaps
+
+Critical for UK context.
+
+⸻
+
+A) “Fairness” Language
+
+Ensure nowhere you imply:
+	•	This is a fair settlement
+	•	This is likely outcome
+	•	This reflects court practice
+
+You are modelling sustainability, not fairness.
+
+⸻
+
+B) Disclaimer Placement
+
+Too many disclaimers reduce trust.
+Too few increase liability.
+
+You need:
+	•	Top banner
+	•	Footer in report
+	•	Assumptions section
+
+Not more.
+
+⸻
+
+C) Data Retention & Privacy
+
+Have you considered:
+	•	Where user financial data is stored?
+	•	Encryption?
+	•	Retention period?
+	•	GDPR compliance?
+	•	Deletion mechanism?
+
+This is often overlooked.
+
+In divorce context, data sensitivity is extreme.
+
+⸻
+
+4️⃣ Product Positioning Blind Spots
+
+⸻
+
+A) Are You Modelling “Decision” or “Outcome”?
+
+Right now, you model:
+
+Sustainability.
+
+Not:
+	•	Likely court award
+	•	Needs-based settlement
+	•	Sharing principle outcomes
+
+That’s good.
+
+But your messaging must match that.
+
+⸻
+
+B) Emotional Weight
+
+This tool is used during high stress.
+
+You’ve added reflective prompts — good.
+
+But ensure tone is:
+
+Structured, not cold.
+
+Analytical, not robotic.
+
+⸻
+
+5️⃣ The Biggest Strategic Blind Spot
+
+The biggest risk you may not have considered:
+
+User over-reliance.
+
+If someone makes a major financial decision based solely on your tool, you must be able to demonstrate:
+	•	It is modelling-based
+	•	It is assumption-driven
+	•	It is not predictive
+
+That is where your liability lives — not in calculation bugs.
+
+⸻
+
+What You Do NOT Need
+
+You do not need:
+	•	Court outcome prediction
+	•	Section 25 factor modelling
+	•	Needs algorithm
+	•	Solicitor recommendation engine
+	•	Tax optimisation engine
+
+That would increase risk dramatically.
+
+⸻
+
+My Objective Assessment
+
+As a divorce separation financial modelling tool, you are:
+
+Technically strong
+Structurally coherent
+Commercially viable
+Not over-engineered
+
+The remaining gaps are:
+	•	Maintenance handling clarity
+	•	Transition cost realism
+	•	Explicit assumption transparency
+	•	Data protection strategy
+
+Not core engine flaws.

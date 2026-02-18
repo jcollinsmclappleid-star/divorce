@@ -1,0 +1,197 @@
+PREVIEW PAGE RESTRUCTURE + PRICING PSYCHOLOGY IMPLEMENTATION
+
+Context:
+We have a working financial modelling engine and unlock flow.
+We must now:
+
+1) Remove random stability tease (trust issue).
+2) Implement a high-trust, professional Preview page.
+3) Strengthen pricing framing.
+4) Preserve analytical tone.
+5) Avoid manipulative tactics.
+6) Keep modelling engine unchanged.
+
+Do NOT modify calculation logic.
+
+========================================================
+PART 1 — REMOVE RANDOM STABILITY TEASE (CRITICAL)
+========================================================
+
+Currently:
+Preview shows a random stability score in the 50–59 range.
+
+This must be removed immediately.
+
+Replace with deterministic preview logic:
+
+• Use the actual computed stability score.
+• Do NOT show full number.
+• Show a band or masked representation.
+
+Preferred implementation:
+
+If real score = 94:
+Display:
+
+Preliminary Financial Sustainability Score
+90+ / 100
+
+If real score = 67:
+Display:
+
+Preliminary Financial Sustainability Score
+60–69 / 100
+
+Band logic:
+90–100 → “90+ / 100”
+80–89 → “80–89 / 100”
+70–79 → “70–79 / 100”
+60–69 → “60–69 / 100”
+<60 → “Below 60 / 100”
+
+This must be derived from real computed value.
+No randomisation.
+No artificial downgrade.
+
+========================================================
+PART 2 — PREVIEW PAGE STRUCTURE (REBUILD)
+========================================================
+
+Replace existing preview layout with the following structure:
+
+--------------------------------------------------------
+SECTION 1 — Headline
+--------------------------------------------------------
+
+Headline:
+Your Financial Position Has Been Modelled.
+
+Subtext:
+Your asset pool, projected sustainability, and capital outcomes have been calculated under current assumptions. Unlock the full structured analysis to review scenario breakdowns, stability drivers, and 5-year projections.
+
+Tone:
+Calm. Professional. Analytical.
+
+--------------------------------------------------------
+SECTION 2 — CORE FINANCIAL SUMMARY (REAL DATA)
+--------------------------------------------------------
+
+Display these real computed values:
+
+• Net Property Equity
+• Combined Distributable Asset Pool
+• Illustrative 50/50 Liquid Allocation
+• Preliminary Financial Sustainability Score (banded)
+
+Each displayed cleanly with consistent currency formatting.
+
+Do NOT show:
+• Stability drivers
+• Runway year
+• Scenario breakdown
+
+--------------------------------------------------------
+SECTION 3 — STRUCTURED TEASE (BLURRED PANELS)
+--------------------------------------------------------
+
+Display blurred/locked preview panels for:
+
+• Scenario Comparison Table
+• 5-Year Capital Projection
+• Stability Assessment Drivers
+• Housing Feasibility Benchmark
+• Sensitivity Snapshot
+• Structured Financial Brief (PDF)
+
+Overlay each with:
+“Unlock to View”
+
+Panels should look real, not fake.
+Use actual layout blurred or masked.
+
+--------------------------------------------------------
+SECTION 4 — VALUE FRAMING (SUBTLE)
+--------------------------------------------------------
+
+Add calm comparison:
+
+A single professional consultation can cost £250–£400 per hour.
+
+Structured financial clarity:
+£79 one-time access (includes 6 months unlimited scenario modelling).
+
+No subscription.
+No recurring fees.
+
+Keep this neutral, not sales-driven.
+
+--------------------------------------------------------
+SECTION 5 — UNLOCK CTA
+--------------------------------------------------------
+
+Button:
+Unlock Full Structured Financial Brief — £79
+
+Under button:
+Immediate access. Private. No subscription. 6-month access included.
+
+========================================================
+PART 3 — PRICING PRESENTATION REFINEMENT
+========================================================
+
+Add small comparison grid below CTA:
+
+Free Preview:
+• Asset summary
+• Preliminary sustainability band
+
+Full Structured Brief (£79):
+• Scenario modelling (Sell / Retain)
+• Stability drivers explained
+• 5-year capital projections
+• Mortgage benchmark analysis
+• Sensitivity testing
+• Downloadable professional PDF
+• Unlimited re-runs for 6 months
+
+Keep grid minimalist and professional.
+
+========================================================
+PART 4 — TRUST REINFORCEMENT
+========================================================
+
+Add subtle reassurance:
+
+This tool provides structured financial modelling and does not replace legal or regulated financial advice. It is designed to help you approach professional discussions with clarity.
+
+Do NOT over-emphasise disclaimers.
+Do NOT repeat this multiple times.
+
+========================================================
+PART 5 — CONSISTENCY REQUIREMENTS
+========================================================
+
+Ensure:
+
+• Preview uses the same data object as full results.
+• No recalculation occurs post-unlock.
+• Currency formatting identical across preview and results.
+• Stability band aligns with real computed score.
+• No hidden “dummy” calculations.
+
+========================================================
+PART 6 — DELIVERABLES
+========================================================
+
+After implementation provide:
+
+1) Screenshot of new Preview page (mobile).
+2) Screenshot of new Preview page (desktop).
+3) Example of 3 different stability bands rendering.
+4) Confirmation random stability logic removed from codebase.
+
+Do not change pricing amount.
+Do not alter engine logic.
+Only modify presentation layer.
+
+END.

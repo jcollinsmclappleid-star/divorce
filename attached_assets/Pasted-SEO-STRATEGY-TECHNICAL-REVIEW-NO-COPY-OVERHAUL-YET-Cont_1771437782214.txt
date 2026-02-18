@@ -1,0 +1,100 @@
+SEO STRATEGY & TECHNICAL REVIEW (NO COPY OVERHAUL YET)
+
+Context:
+We have a UK divorce financial modelling tool targeting direct consumers (not law firms).
+
+Objective:
+Conduct a structured SEO review and strategy recommendation.
+
+IMPORTANT:
+Do NOT rewrite core copy yet.
+Do NOT add keyword stuffing.
+Do NOT alter conversion-focused sections.
+This is an audit + strategic plan only.
+
+=================================================
+PART 1 – TECHNICAL SEO AUDIT
+=================================================
+
+Evaluate:
+
+• Page titles
+• Meta descriptions
+• H1/H2 structure
+• Canonical tags
+• Robots.txt
+• Sitemap
+• Mobile responsiveness
+• Page speed (mobile)
+• Structured data (schema)
+• Open Graph tags
+
+Report:
+- Errors
+- Weaknesses
+- Quick wins
+
+=================================================
+PART 2 – KEYWORD STRATEGY (UK FOCUS)
+=================================================
+
+Identify:
+
+Primary high-competition terms:
+- divorce calculator uk
+- divorce financial settlement calculator
+- divorce settlement calculator uk
+
+Long-tail opportunities:
+- how much will I get in divorce UK
+- divorce house equity calculator
+- can I afford to keep the house after divorce
+- divorce financial split calculator UK
+- pension split divorce calculator
+
+Classify:
+High competition / Medium / Low
+Suggest realistic entry points.
+
+=================================================
+PART 3 – CONTENT STRATEGY (LONG-TERM)
+=================================================
+
+Recommend:
+
+- Supporting content pages (not blog spam)
+- FAQ structure
+- Educational but neutral pages
+- Comparison pages (calculator vs solicitor prep)
+
+Avoid:
+- Legal advice tone
+- Entitlement claims
+
+=================================================
+PART 4 – CONVERSION SAFETY CHECK
+=================================================
+
+Identify any SEO improvements that would:
+- Reduce clarity
+- Add clutter
+- Damage trust tone
+
+Recommend only SEO changes that preserve premium positioning.
+
+=================================================
+PART 5 – 90-DAY SEO PLAN
+=================================================
+
+Provide:
+
+1) Immediate technical fixes
+2) 30-day content actions
+3) 60-day link acquisition strategy
+4) 90-day ranking goals (realistic)
+
+Be honest.
+Avoid hype.
+Assume new domain authority is low.
+
+END.
