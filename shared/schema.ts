@@ -19,6 +19,14 @@ export const AppStateSchema = z.object({
   metadata: z.record(z.any()).optional()
 });
 
+export const AppConfigSchema = z.object({
+  taxYear: z.string(),
+  currency: z.string()
+});
+
+export const Owner = Party;
+export { AssetCategory, LiabilityCategory, ExpenseCategory };
+
 export type Session = typeof sessions.$inferSelect;
 export type AppState = z.infer<typeof AppStateSchema>;
 export type InsertSession = z.infer<typeof insertSessionSchema>;
