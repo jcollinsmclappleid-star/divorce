@@ -2,7 +2,7 @@ export { generateScenarioNarrative } from "./generateScenarioNarrative";
 export type { ScenarioNarrative, RiskFlag } from "./generateScenarioNarrative";
 
 export { buildSourceOfFunds } from "./buildSourceOfFunds";
-export type { SourceOfFunds, PartyFunds, FundRow, PensionBreakdown } from "./buildSourceOfFunds";
+export type { SourceOfFunds, PartyFunds, FundRow, FundSubItem, PensionBreakdown } from "./buildSourceOfFunds";
 
 export { computeStabilityScore } from "./computeStabilityScore";
 export type { StabilityResult, ScoreReason } from "./computeStabilityScore";

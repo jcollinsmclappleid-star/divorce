@@ -15,7 +15,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend
 } from "recharts";
 import {
-  Calculator, ChevronLeft, Check, X, AlertTriangle,
+  Calculator, ChevronLeft, ChevronRight, Check, X, AlertTriangle,
   TrendingUp, Edit, Shield, ArrowDown, ArrowUp, Minus,
   DollarSign, Home, Info, Lightbulb, BarChart3, Eye,
   Target, Activity, Building2
@@ -960,25 +960,61 @@ function NarrativeSection({ narrative }: { narrative: ScenarioNarrative }) {
   );
 }
 
+function FundRowItem({ row, index }: { row: { label: string; amount: number; subItems?: { label: string; amount: number }[] }; index: string | number }) {
+  const [expanded, setExpanded] = useState(false);
+  const hasSubs = row.subItems && row.subItems.length > 0;
+
+  return (
+    <div data-testid={`fund-row-${index}`}>
+      <button
+        type="button"
+        className={`flex items-center justify-between text-sm gap-2 w-full text-left ${hasSubs ? "cursor-pointer" : ""}`}
+        onClick={() => hasSubs && setExpanded(!expanded)}
+        data-testid={`button-expand-fund-${index}`}
+      >
+        <span className="text-muted-foreground flex items-center gap-1">
+          {hasSubs && (
+            <ChevronRight className={`w-3 h-3 transition-transform ${expanded ? "rotate-90" : ""}`} />
+          )}
+          {row.label}
+        </span>
+        <span className={`tabular-nums font-medium ${row.amount < 0 ? "text-red-500" : ""}`}>
+          {row.amount < 0 ? `(${formatCurrency(Math.abs(row.amount))})` : formatCurrency(row.amount)}
+        </span>
+      </button>
+      {expanded && row.subItems && (
+        <div className="ml-4 mt-1 mb-1.5 space-y-0.5 border-l-2 border-border pl-3" data-testid={`fund-subitems-${index}`}>
+          {row.subItems.map((sub, si) => (
+            <div key={si} className="flex items-center justify-between text-xs gap-2">
+              <span className="text-muted-foreground/80">{sub.label}</span>
+              <span className={`tabular-nums ${sub.amount < 0 ? "text-red-400" : "text-muted-foreground"}`}>
+                {sub.amount < 0 ? `(${formatCurrency(Math.abs(sub.amount))})` : formatCurrency(sub.amount)}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SourceOfFundsTable({ sourceOfFunds, scenario }: { sourceOfFunds: SourceOfFunds; scenario: ScenarioResult }) {
   return (
     <div className="space-y-3" data-testid="section-source-of-funds">
-      <h3 className="text-sm font-semibold">Source of Funds</h3>
+      <h3 className="text-sm font-semibold flex items-center gap-1.5">
+        Source of Funds
+        <span className="text-xs font-normal text-muted-foreground">(click rows to expand)</span>
+      </h3>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1">
           <h4 className="text-xs font-semibold text-blue-600 uppercase tracking-wider">Party A</h4>
           {sourceOfFunds.A.rows.map((r, i) => (
-            <div key={i} className="flex items-center justify-between text-sm gap-2">
-              <span className="text-muted-foreground">{r.label}</span>
-              <span className={`tabular-nums font-medium ${r.amount < 0 ? "text-red-500" : ""}`}>
-                {r.amount < 0 ? `(${formatCurrency(Math.abs(r.amount))})` : formatCurrency(r.amount)}
-              </span>
-            </div>
+            <FundRowItem key={i} row={r} index={`a-${i}`} />
           ))}
           <Separator className="my-1" />
           <div className="flex items-center justify-between text-sm font-semibold gap-2">
             <span>Net liquid capital</span>
-            <span className="tabular-nums text-blue-600">{formatCurrency(sourceOfFunds.A.netStartingLiquid)}</span>
+            <span className="tabular-nums text-blue-600" data-testid="text-net-liquid-a">{formatCurrency(sourceOfFunds.A.netStartingLiquid)}</span>
           </div>
           {sourceOfFunds.pension.A_after > 0 && (
             <div className="flex items-center justify-between text-xs text-muted-foreground gap-2">
@@ -990,17 +1026,12 @@ function SourceOfFundsTable({ sourceOfFunds, scenario }: { sourceOfFunds: Source
         <div className="space-y-1">
           <h4 className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Party B</h4>
           {sourceOfFunds.B.rows.map((r, i) => (
-            <div key={i} className="flex items-center justify-between text-sm gap-2">
-              <span className="text-muted-foreground">{r.label}</span>
-              <span className={`tabular-nums font-medium ${r.amount < 0 ? "text-red-500" : ""}`}>
-                {r.amount < 0 ? `(${formatCurrency(Math.abs(r.amount))})` : formatCurrency(r.amount)}
-              </span>
-            </div>
+            <FundRowItem key={i} row={r} index={`b-${i}`} />
           ))}
           <Separator className="my-1" />
           <div className="flex items-center justify-between text-sm font-semibold gap-2">
             <span>Net liquid capital</span>
-            <span className="tabular-nums text-emerald-600">{formatCurrency(sourceOfFunds.B.netStartingLiquid)}</span>
+            <span className="tabular-nums text-emerald-600" data-testid="text-net-liquid-b">{formatCurrency(sourceOfFunds.B.netStartingLiquid)}</span>
           </div>
           {sourceOfFunds.pension.B_after > 0 && (
             <div className="flex items-center justify-between text-xs text-muted-foreground gap-2">

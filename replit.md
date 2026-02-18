@@ -45,6 +45,8 @@ The core financial engine must be **deterministic, pure-function based, and full
   - Final CTA section
   - Footer with branding and disclaimer
 - **Feb 2026**: Updated routing: landing page at `/`, wizard moved to `/wizard`, results remain at `/results`
+- **Feb 2026**: Added video walkthrough section to landing page between Hero and Emotional sections, with generated scenario walkthrough video
+- **Feb 2026**: Enhanced Source of Funds in scenario analysis with expandable sub-bullets showing full calculation breakdown (property value, mortgage, sale costs, net equity, share percentage) for each fund row. Added `FundSubItem` type and `FundRowItem` component with click-to-expand chevron animation
 
 ## User Preferences
 

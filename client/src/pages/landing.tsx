@@ -5,8 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import {
   Calculator, Shield, TrendingUp, Eye, FileText,
   ArrowRight, ChevronRight, CheckCircle2, BarChart3,
-  AlertTriangle, Clock, Lock, Landmark
+  AlertTriangle, Clock, Lock, Landmark, Play
 } from "lucide-react";
+import walkthroughVideo from "../assets/videos/walkthrough.mp4";
 
 const USP_ITEMS = [
   {
@@ -131,6 +132,29 @@ export default function LandingPage() {
             <p className="text-xs text-muted-foreground pt-2">
               Illustrative modelling only. Not legal advice.
             </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 md:py-16" data-testid="section-video">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <div className="text-center mb-6">
+            <h2 className="text-xl md:text-2xl font-display font-bold" data-testid="text-video-headline">
+              See how it works in 30 seconds
+            </h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              From entering your numbers to a clear, structured financial overview.
+            </p>
+          </div>
+          <div className="rounded-md overflow-hidden border border-border shadow-lg">
+            <video
+              src={walkthroughVideo}
+              controls
+              playsInline
+              preload="metadata"
+              className="w-full aspect-video bg-muted"
+              data-testid="video-walkthrough"
+            />
           </div>
         </div>
       </section>

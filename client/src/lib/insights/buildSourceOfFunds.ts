@@ -1,9 +1,15 @@
 import type { ScenarioResult } from "@/hooks/use-engine";
 import type { StoreState } from "@/hooks/use-store";
 
+export interface FundSubItem {
+  label: string;
+  amount: number;
+}
+
 export interface FundRow {
   label: string;
   amount: number;
+  subItems?: FundSubItem[];
 }
 
 export interface PartyFunds {
@@ -24,6 +30,10 @@ export interface SourceOfFunds {
   pension: PensionBreakdown;
 }
 
+function pct(v: number): string {
+  return `${Math.round(v * 100)}%`;
+}
+
 export function buildSourceOfFunds(
   scenario: ScenarioResult,
   inputs: StoreState,
@@ -37,19 +47,17 @@ export function buildSourceOfFunds(
   const homeValue = inputs.assets.find(a => a.category === "primary_home")?.currentValue ?? 0;
   const totalMortgage = inputs.liabilities.filter(l => l.category === "mortgage").reduce((s, l) => s + l.balance, 0);
 
-  const savings = inputs.assets
-    .filter(a => a.category === "cash" && a.liquidity === "liquid")
-    .reduce((s, a) => s + a.currentValue, 0);
-  const investments = inputs.assets
-    .filter(a => a.category === "investments")
-    .reduce((s, a) => s + a.currentValue, 0);
-  const otherLiquid = inputs.assets
-    .filter(a => a.liquidity === "liquid" && a.category !== "cash" && a.category !== "investments" && a.category !== "pension" && a.category !== "primary_home")
-    .reduce((s, a) => s + a.currentValue, 0);
+  const savingsItems = inputs.assets.filter(a => a.category === "cash" && a.liquidity === "liquid");
+  const savings = savingsItems.reduce((s, a) => s + a.currentValue, 0);
 
-  const nonMortgageDebt = inputs.liabilities
-    .filter(l => l.category !== "mortgage")
-    .reduce((s, l) => s + l.balance, 0);
+  const investmentItems = inputs.assets.filter(a => a.category === "investments");
+  const investments = investmentItems.reduce((s, a) => s + a.currentValue, 0);
+
+  const otherLiquidItems = inputs.assets.filter(a => a.liquidity === "liquid" && a.category !== "cash" && a.category !== "investments" && a.category !== "pension" && a.category !== "primary_home");
+  const otherLiquid = otherLiquidItems.reduce((s, a) => s + a.currentValue, 0);
+
+  const debtItems = inputs.liabilities.filter(l => l.category !== "mortgage");
+  const nonMortgageDebt = debtItems.reduce((s, l) => s + l.balance, 0);
 
   const pensions = inputs.assets.filter(a => a.category === "pension");
   const totalPensionCETV = pensions.reduce((s, p) => s + (p.cetv ?? p.currentValue), 0);
@@ -57,29 +65,88 @@ export function buildSourceOfFunds(
     + pensions.filter(p => p.owner === "joint").reduce((s, p) => s + (p.cetv ?? p.currentValue) / 2, 0);
   const pensionToB_before = totalPensionCETV - pensionToA_before;
 
+  function buildEquitySubs(split: number): FundSubItem[] {
+    const subs: FundSubItem[] = [];
+    subs.push({ label: `Property value`, amount: homeValue });
+    if (totalMortgage > 0) subs.push({ label: `Less mortgage`, amount: -totalMortgage });
+    if (homeSaleCosts > 0) subs.push({ label: `Less sale costs`, amount: -Math.round(homeSaleCosts) });
+    subs.push({ label: `Net equity`, amount: Math.round(netHomeEquity) });
+    subs.push({ label: `Your ${pct(split)} share`, amount: Math.round(netHomeEquity * split) });
+    return subs;
+  }
+
+  function buildSavingsSubs(split: number): FundSubItem[] {
+    const subs: FundSubItem[] = [];
+    savingsItems.forEach(a => subs.push({ label: a.name || "Savings account", amount: a.currentValue }));
+    if (savingsItems.length > 1) subs.push({ label: `Total savings`, amount: savings });
+    subs.push({ label: `Your ${pct(split)} share`, amount: Math.round(savings * split) });
+    return subs;
+  }
+
+  function buildInvestmentSubs(split: number): FundSubItem[] {
+    const subs: FundSubItem[] = [];
+    investmentItems.forEach(a => subs.push({ label: a.name || "Investment", amount: a.currentValue }));
+    if (investmentItems.length > 1) subs.push({ label: `Total investments`, amount: investments });
+    subs.push({ label: `Your ${pct(split)} share`, amount: Math.round(investments * split) });
+    return subs;
+  }
+
+  function buildOtherSubs(split: number): FundSubItem[] {
+    const subs: FundSubItem[] = [];
+    otherLiquidItems.forEach(a => subs.push({ label: a.name || "Other asset", amount: a.currentValue }));
+    if (otherLiquidItems.length > 1) subs.push({ label: `Total other assets`, amount: otherLiquid });
+    subs.push({ label: `Your ${pct(split)} share`, amount: Math.round(otherLiquid * split) });
+    return subs;
+  }
+
+  function buildDebtSubs(split: number): FundSubItem[] {
+    const subs: FundSubItem[] = [];
+    debtItems.forEach(l => subs.push({ label: l.name || l.category, amount: l.balance }));
+    if (debtItems.length > 1) subs.push({ label: `Total debts`, amount: nonMortgageDebt });
+    subs.push({ label: `Your ${pct(split)} share`, amount: Math.round(nonMortgageDebt * split) });
+    return subs;
+  }
+
+  function buildLiquidAssetSubs(split: number): FundSubItem[] {
+    const subs: FundSubItem[] = [];
+    if (savings > 0) subs.push({ label: `Savings`, amount: savings });
+    if (investments > 0) subs.push({ label: `Investments`, amount: investments });
+    if (otherLiquid > 0) subs.push({ label: `Other liquid assets`, amount: otherLiquid });
+    subs.push({ label: `Total liquid pool`, amount: totalLiquid });
+    subs.push({ label: `Your ${pct(split)} share`, amount: Math.round(totalLiquid * split) });
+    return subs;
+  }
+
+  function buildBuyoutSubs(buyout: number, equityTotal: number): FundSubItem[] {
+    const subs: FundSubItem[] = [];
+    subs.push({ label: `Home equity`, amount: Math.round(equityTotal) });
+    subs.push({ label: `Other party's share owed`, amount: buyout });
+    return subs;
+  }
+
   if (scenario.id === "S1") {
     const rowsA: FundRow[] = [];
     const rowsB: FundRow[] = [];
 
     if (netHomeEquity > 0) {
-      rowsA.push({ label: "Share of property equity", amount: Math.round(netHomeEquity * splitA) });
-      rowsB.push({ label: "Share of property equity", amount: Math.round(netHomeEquity * splitB) });
+      rowsA.push({ label: "Share of property equity", amount: Math.round(netHomeEquity * splitA), subItems: buildEquitySubs(splitA) });
+      rowsB.push({ label: "Share of property equity", amount: Math.round(netHomeEquity * splitB), subItems: buildEquitySubs(splitB) });
     }
     if (savings > 0) {
-      rowsA.push({ label: "Share of savings", amount: Math.round(savings * splitA) });
-      rowsB.push({ label: "Share of savings", amount: Math.round(savings * splitB) });
+      rowsA.push({ label: "Share of savings", amount: Math.round(savings * splitA), subItems: buildSavingsSubs(splitA) });
+      rowsB.push({ label: "Share of savings", amount: Math.round(savings * splitB), subItems: buildSavingsSubs(splitB) });
     }
     if (investments > 0) {
-      rowsA.push({ label: "Share of investments", amount: Math.round(investments * splitA) });
-      rowsB.push({ label: "Share of investments", amount: Math.round(investments * splitB) });
+      rowsA.push({ label: "Share of investments", amount: Math.round(investments * splitA), subItems: buildInvestmentSubs(splitA) });
+      rowsB.push({ label: "Share of investments", amount: Math.round(investments * splitB), subItems: buildInvestmentSubs(splitB) });
     }
     if (otherLiquid > 0) {
-      rowsA.push({ label: "Share of other assets", amount: Math.round(otherLiquid * splitA) });
-      rowsB.push({ label: "Share of other assets", amount: Math.round(otherLiquid * splitB) });
+      rowsA.push({ label: "Share of other assets", amount: Math.round(otherLiquid * splitA), subItems: buildOtherSubs(splitA) });
+      rowsB.push({ label: "Share of other assets", amount: Math.round(otherLiquid * splitB), subItems: buildOtherSubs(splitB) });
     }
     if (nonMortgageDebt > 0) {
-      rowsA.push({ label: "Less share of debts", amount: -Math.round(nonMortgageDebt * splitA) });
-      rowsB.push({ label: "Less share of debts", amount: -Math.round(nonMortgageDebt * splitB) });
+      rowsA.push({ label: "Less share of debts", amount: -Math.round(nonMortgageDebt * splitA), subItems: buildDebtSubs(splitA) });
+      rowsB.push({ label: "Less share of debts", amount: -Math.round(nonMortgageDebt * splitB), subItems: buildDebtSubs(splitB) });
     }
 
     return {
@@ -102,13 +169,19 @@ export function buildSourceOfFunds(
   const leaverRows: FundRow[] = [];
 
   if (totalLiquid > 0) {
-    keeperRows.push({ label: "Share of liquid assets", amount: Math.round(totalLiquid * keeperSplit) });
-    leaverRows.push({ label: "Share of liquid assets", amount: Math.round(totalLiquid * leaverSplit) });
+    keeperRows.push({ label: "Share of liquid assets", amount: Math.round(totalLiquid * keeperSplit), subItems: buildLiquidAssetSubs(keeperSplit) });
+    leaverRows.push({ label: "Share of liquid assets", amount: Math.round(totalLiquid * leaverSplit), subItems: buildLiquidAssetSubs(leaverSplit) });
   }
 
   if (scenario.buyoutAmount && scenario.buyoutAmount > 0) {
-    keeperRows.push({ label: "Less buyout payment", amount: -scenario.buyoutAmount });
-    leaverRows.push({ label: "Buyout received", amount: scenario.buyoutAmount });
+    const equityForBuyout = netHomeEquity > 0 ? netHomeEquity : homeValue - totalMortgage;
+    keeperRows.push({ label: "Less buyout payment", amount: -scenario.buyoutAmount, subItems: buildBuyoutSubs(scenario.buyoutAmount, equityForBuyout) });
+    leaverRows.push({ label: "Buyout received", amount: scenario.buyoutAmount, subItems: [{ label: `Other party's equity share`, amount: scenario.buyoutAmount }] });
+  }
+
+  if (nonMortgageDebt > 0) {
+    keeperRows.push({ label: "Less share of debts", amount: -Math.round(nonMortgageDebt * keeperSplit), subItems: buildDebtSubs(keeperSplit) });
+    leaverRows.push({ label: "Less share of debts", amount: -Math.round(nonMortgageDebt * leaverSplit), subItems: buildDebtSubs(leaverSplit) });
   }
 
   const keeperLiq = keeper === "A" ? scenario.liquidStartA : scenario.liquidStartB;
