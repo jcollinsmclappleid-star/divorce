@@ -1,0 +1,197 @@
+PREMIUM VALUE ENHANCEMENTS – IMPLEMENTATION REQUEST
+
+Context:
+We already have:
+- Guided wizard
+- Sell / A Keeps / B Keeps scenarios
+- Split sliders
+- Pension split slider
+- Affordability logic
+- 5-year runway
+- Narrative summary
+- Source-of-funds breakdown
+- Stability score
+
+Objective:
+Enhance perceived premium value through interpretation, structured framing, and decision intelligence.
+Do NOT add legal predictions or rewrite core engine logic.
+
+=================================================
+1) ADD “DECISION LENS” VIEW MODES
+=================================================
+
+Add a toggle above results:
+
+View Mode:
+- Liquidity Focus
+- Long-Term Net Worth Focus
+- Risk & Sustainability Focus
+
+Each mode highlights different metrics visually (same data, different emphasis).
+
+Liquidity Focus:
+- Starting liquid capital
+- 12-month buffer (liquid / annual expenses)
+- Monthly surplus/deficit
+- 5-year runway
+
+Net Worth Focus:
+- Total net worth
+- % tied to property
+- % tied to pension
+- Concentration indicators
+
+Risk Focus:
+- Stability score
+- Funding gap
+- Affordability pass/fail
+- Sensitivity to interest rates
+
+This is a presentation layer only. No new calculations required beyond derived percentages.
+
+=================================================
+2) ADD “NEGOTIATION LEVERS” PANEL
+=================================================
+
+Under each scenario, add:
+
+Title: “What Would Improve This Outcome?”
+
+Automatically generate suggestions such as:
+- Increasing split by +5% improves your liquidity by £X
+- Reducing buyout by £Y removes funding gap
+- Reducing annual expenses by 10% extends runway by Z years
+- Reducing interest rate by 1% reduces mortgage by £X/month
+
+Implementation:
+Create a function:
+generateNegotiationLevers({ inputs, outputs })
+
+Return 3–5 structured suggestions based on simple deltas.
+No predictive legal language.
+Purely financial modelling adjustments.
+
+=================================================
+3) ADD “WHAT CHANGES MATTER MOST?” SENSITIVITY RANKING
+=================================================
+
+Instead of only offering stress toggles, calculate impact ranking:
+
+Test small variations:
+- +1% interest rate
+- +10% expenses
+- +5% split change
+
+Measure change in:
+- Runway years
+- Stability score
+- Monthly surplus
+
+Rank which factor changes outcome most.
+
+Display:
+
+“Most sensitive to:
+1. Interest rate
+2. Expense level
+3. Split ratio”
+
+This creates perceived analytical depth.
+
+=================================================
+4) ADD 12-MONTH SNAPSHOT PANEL
+=================================================
+
+Add a section:
+
+“Position After 12 Months”
+
+Display:
+- Liquid remaining after year 1
+- Mortgage balance after year 1 (if applicable)
+- Net worth after year 1
+- Surplus/deficit summary
+
+Users care about immediate stability more than 5-year charts.
+No new modelling system required — derive from year 1 projection.
+
+=================================================
+5) ADD HOUSING FEASIBILITY SUMMARY
+=================================================
+
+In keep scenarios, instead of only showing affordability pass/fail, add structured framing:
+
+“To proceed with this scenario, you would need:”
+- Mortgage approval of £X
+- Estimated monthly payment of £Y
+- Income multiple of Z
+- Deposit / available capital of £A
+
+No legal or lender advice. Just restate model assumptions clearly.
+
+=================================================
+6) ADD SCENARIO STRUCTURE COMPARISON TABLE
+=================================================
+
+Add qualitative comparison table:
+
+| Feature | Sell | A Keeps | B Keeps |
+|----------|------|---------|---------|
+| Immediate Liquidity | High/Medium/Low |
+| Mortgage Dependency | None/Yes |
+| Property Concentration | % |
+| Complexity Level | Low/Medium |
+
+This is descriptive only, derived from metrics.
+
+=================================================
+7) REFINE PDF OUTPUT LANGUAGE
+=================================================
+
+Rename PDF to:
+“Structured Financial Brief”
+
+Ensure PDF includes:
+- Executive summary
+- Scenario comparison table
+- Narrative summaries
+- Source-of-funds tables
+- Stability scores
+- 12-month snapshot
+- 5-year projection summary
+- Assumptions appendix
+- Disclaimer on every page
+
+Tone must feel professional and structured.
+
+=================================================
+8) PRESENTATION REFINEMENTS (NO ENGINE CHANGE)
+=================================================
+
+- Increase whitespace
+- Improve typography hierarchy
+- Use subtle section dividers
+- Use consistent GBP formatting
+- Add clear headline per scenario
+- Avoid clutter
+
+Premium feel through restraint.
+
+=================================================
+RULES
+=================================================
+
+- No entitlement language
+- No court outcome prediction
+- No maintenance calculation expansion
+- No complex new scenario branches
+- No new backend infrastructure
+
+Focus on interpretation, clarity, structured framing, and professional output.
+
+After implementation, provide:
+- Brief explanation of what was added
+- Any performance risks
+- Any suggestions for further premium upgrades (low complexity only)
+
+END
