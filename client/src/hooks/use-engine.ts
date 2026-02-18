@@ -55,6 +55,14 @@ export interface EngineResult {
   cmsAnnual: number;
   scenarios: ScenarioResult[];
   projections: Record<string, ProjectionYear[]>;
+  intermediate: {
+    netHomeEquity: number;
+    totalLiquid: number;
+    homeSaleCosts: number;
+    totalDebt: number;
+    homeValue: number;
+    totalMortgage: number;
+  };
 }
 
 function calcTaxForParty(partyIncomes: { amountAnnualGross: number; amountAnnualNet?: number; taxTreatment: string }[]): TaxBreakdown {
@@ -305,5 +313,13 @@ function runEngine(state: StoreState): EngineResult {
     cmsAnnual,
     scenarios: scenarioResults,
     projections,
+    intermediate: {
+      netHomeEquity,
+      totalLiquid: totalLiquid,
+      homeSaleCosts,
+      totalDebt: totalLiabilities,
+      homeValue,
+      totalMortgage: totalHomeMortgage,
+    },
   };
 }

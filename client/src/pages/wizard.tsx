@@ -18,7 +18,7 @@ import { formatCurrency } from "@/lib/utils";
 import {
   ChevronLeft, ChevronRight, Heart, Home, Wallet, Landmark,
   Briefcase, Calculator, Plus, Trash2, Edit2, Check, Settings2,
-  Shield, Users, TrendingUp, ArrowRight
+  Shield, Users, TrendingUp, ArrowRight, Receipt
 } from "lucide-react";
 
 const STEPS = [
@@ -28,8 +28,9 @@ const STEPS = [
   { id: 3, title: "Assets & Debts", icon: Wallet },
   { id: 4, title: "Pensions", icon: Landmark },
   { id: 5, title: "Income", icon: Briefcase },
-  { id: 6, title: "Costs & Support", icon: Calculator },
-  { id: 7, title: "Results", icon: TrendingUp },
+  { id: 6, title: "Living Costs", icon: Receipt },
+  { id: 7, title: "Support", icon: Calculator },
+  { id: 8, title: "Results", icon: TrendingUp },
 ];
 
 const STEP_COPY = [
@@ -54,12 +55,16 @@ const STEP_COPY = [
     reassurance: "Pensions can be a significant part of the overall picture. If you have a recent statement, the 'Cash Equivalent Transfer Value' (CETV) is the most useful figure."
   },
   {
-    prompt: "Income and monthly reality",
-    reassurance: "Understanding take-home pay and living costs helps model whether each scenario is sustainable long-term."
+    prompt: "Income",
+    reassurance: "Add each party's income sources. This helps model take-home pay and long-term sustainability."
   },
   {
-    prompt: "One-off costs and support",
-    reassurance: "If there are children or any anticipated one-off costs, include them here. These feed into the sustainability projections."
+    prompt: "Post-separation living costs",
+    reassurance: "Estimate what each person will spend after separation. This is key to modelling whether each scenario is sustainable. Use monthly figures if that's easier \u2014 we'll convert automatically."
+  },
+  {
+    prompt: "Support & assumptions",
+    reassurance: "If there are children, you can include a child maintenance estimate. These feed into the sustainability projections."
   },
   {
     prompt: "Your results",
@@ -202,8 +207,9 @@ function StepContent({ step, advancedMode }: { step: number; advancedMode: boole
     case 3: return <StepAssets advancedMode={advancedMode} />;
     case 4: return <StepPensions advancedMode={advancedMode} />;
     case 5: return <StepIncome advancedMode={advancedMode} />;
-    case 6: return <StepSupport advancedMode={advancedMode} />;
-    case 7: return <StepAssumptions />;
+    case 6: return <StepExpenses advancedMode={advancedMode} />;
+    case 7: return <StepSupport advancedMode={advancedMode} />;
+    case 8: return <StepAssumptions />;
     default: return null;
   }
 }
@@ -850,15 +856,35 @@ function StepPensions({ advancedMode }: { advancedMode: boolean }) {
   );
 }
 
+const EXPENSE_SUGGESTIONS: { name: string; category: string; owner: string; hint: string }[] = [
+  { name: "Rent / Housing", category: "housing", owner: "A", hint: "Include rent if you'll be moving out, or your share of housing costs" },
+  { name: "Council Tax", category: "housing", owner: "A", hint: "You'll each pay your own council tax after separation" },
+  { name: "Utilities (gas, electric, water)", category: "housing", owner: "A", hint: "Estimate monthly bills for your new living situation" },
+  { name: "Food & Groceries", category: "living", owner: "A", hint: "Weekly shop for yourself (and children if applicable)" },
+  { name: "Transport / Car", category: "transport", owner: "A", hint: "Fuel, insurance, tax, maintenance, or public transport costs" },
+  { name: "Insurance (home, life)", category: "insurance", owner: "A", hint: "Contents, life, or other personal insurance" },
+  { name: "Childcare", category: "child", owner: "A", hint: "Nursery, after-school clubs, or childminder costs" },
+  { name: "Phone & Internet", category: "living", owner: "A", hint: "Mobile phone contract, broadband" },
+  { name: "Clothing & Personal", category: "living", owner: "A", hint: "Clothing, toiletries, haircuts" },
+  { name: "Leisure & Social", category: "other", owner: "A", hint: "Hobbies, eating out, subscriptions" },
+];
+
+const CATEGORY_LABELS: Record<string, string> = {
+  living: "Living",
+  housing: "Housing",
+  child: "Children",
+  debt_service: "Debt",
+  insurance: "Insurance",
+  transport: "Transport",
+  other: "Other",
+};
+
 function StepIncome({ advancedMode }: { advancedMode: boolean }) {
-  const { incomes, expenses, addIncome, updateIncome, removeIncome, addExpense, updateExpense, removeExpense } = useAppStore();
+  const { incomes, addIncome, updateIncome, removeIncome } = useAppStore();
   const [incomeDialogOpen, setIncomeDialogOpen] = useState(false);
-  const [expenseDialogOpen, setExpenseDialogOpen] = useState(false);
   const [editingIncome, setEditingIncome] = useState<Income | null>(null);
-  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
 
   const [incomeForm, setIncomeForm] = useState({ name: "", amountAnnualGross: 0, owner: "A" as string });
-  const [expenseForm, setExpenseForm] = useState({ name: "", amountAnnual: 0, category: "living" as string, owner: "shared" as string });
 
   const openAddIncome = () => {
     setEditingIncome(null);
@@ -880,28 +906,6 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
       addIncome({ ...incomeForm, taxTreatment: "use_tax_model" });
     }
     setIncomeDialogOpen(false);
-  };
-
-  const openAddExpense = () => {
-    setEditingExpense(null);
-    setExpenseForm({ name: "", amountAnnual: 0, category: "living", owner: "shared" });
-    setExpenseDialogOpen(true);
-  };
-
-  const openEditExpense = (e: Expense) => {
-    setEditingExpense(e);
-    setExpenseForm({ name: e.name, amountAnnual: e.amountAnnual, category: e.category, owner: e.owner });
-    setExpenseDialogOpen(true);
-  };
-
-  const saveExpense = () => {
-    if (!expenseForm.name) return;
-    if (editingExpense) {
-      updateExpense(editingExpense.id, expenseForm);
-    } else {
-      addExpense({ ...expenseForm, inflationLinked: true });
-    }
-    setExpenseDialogOpen(false);
   };
 
   return (
@@ -951,53 +955,6 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
         )}
       </div>
 
-      <Separator />
-
-      <div>
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <Label className="text-base font-semibold">Monthly / annual expenses</Label>
-          <Button variant="outline" size="sm" onClick={openAddExpense} data-testid="button-add-expense">
-            <Plus className="w-4 h-4 mr-1" /> Add Expense
-          </Button>
-        </div>
-
-        {expenses.length === 0 ? (
-          <div className="text-center py-6 text-muted-foreground text-sm border-2 border-dashed rounded-lg">
-            Add living expenses to model post-separation sustainability.
-          </div>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Expense</TableHead>
-                <TableHead>Who pays</TableHead>
-                <TableHead className="text-right">Annual</TableHead>
-                <TableHead className="w-[70px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {expenses.map((e) => (
-                <TableRow key={e.id}>
-                  <TableCell className="font-medium">{e.name}</TableCell>
-                  <TableCell><Badge variant="secondary" className="text-xs">{e.owner === "shared" ? "Shared" : `Party ${e.owner}`}</Badge></TableCell>
-                  <TableCell className="text-right tabular-nums text-red-600">-{formatCurrency(e.amountAnnual)}</TableCell>
-                  <TableCell>
-                    <div className="flex justify-end gap-1">
-                      <Button variant="ghost" size="icon" onClick={() => openEditExpense(e)}>
-                        <Edit2 className="w-3 h-3" />
-                      </Button>
-                      <Button variant="ghost" size="icon" onClick={() => removeExpense(e.id)}>
-                        <Trash2 className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </div>
-
       <Dialog open={incomeDialogOpen} onOpenChange={setIncomeDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -1010,7 +967,7 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
               <Input value={incomeForm.name} onChange={(e) => setIncomeForm(f => ({ ...f, name: e.target.value }))} placeholder="e.g. Salary" data-testid="input-income-name" />
             </div>
             <div className="space-y-2">
-              <Label>Annual gross (£)</Label>
+              <Label>Annual gross ({"\u00A3"})</Label>
               <Input type="number" value={incomeForm.amountAnnualGross || ""} onChange={(e) => setIncomeForm(f => ({ ...f, amountAnnualGross: parseFloat(e.target.value) || 0 }))} data-testid="input-income-amount" />
             </div>
             <div className="space-y-2">
@@ -1029,21 +986,215 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
+  const { expenses, addExpense, updateExpense, removeExpense } = useAppStore();
+  const [expenseDialogOpen, setExpenseDialogOpen] = useState(false);
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [expenseFrequency, setExpenseFrequency] = useState<"monthly" | "annual">("monthly");
+
+  const [expenseForm, setExpenseForm] = useState({ name: "", amount: 0, category: "living" as string, owner: "A" as string, frequency: "monthly" as "monthly" | "annual" });
+
+  const openAddExpense = (suggestion?: typeof EXPENSE_SUGGESTIONS[0]) => {
+    setEditingExpense(null);
+    if (suggestion) {
+      setExpenseForm({ name: suggestion.name, amount: 0, category: suggestion.category, owner: suggestion.owner, frequency: "monthly" });
+    } else {
+      setExpenseForm({ name: "", amount: 0, category: "living", owner: "A", frequency: "monthly" });
+    }
+    setExpenseDialogOpen(true);
+  };
+
+  const openEditExpense = (e: Expense) => {
+    setEditingExpense(e);
+    const isMonthly = e.amountAnnual % 12 === 0;
+    setExpenseForm({
+      name: e.name,
+      amount: isMonthly ? Math.round(e.amountAnnual / 12) : e.amountAnnual,
+      category: e.category,
+      owner: e.owner,
+      frequency: isMonthly ? "monthly" : "annual",
+    });
+    setExpenseDialogOpen(true);
+  };
+
+  const saveExpense = () => {
+    if (!expenseForm.name) return;
+    const amountAnnual = expenseForm.frequency === "monthly" ? expenseForm.amount * 12 : expenseForm.amount;
+    if (editingExpense) {
+      updateExpense(editingExpense.id, { name: expenseForm.name, amountAnnual, category: expenseForm.category, owner: expenseForm.owner });
+    } else {
+      addExpense({ name: expenseForm.name, amountAnnual, category: expenseForm.category, owner: expenseForm.owner, inflationLinked: true });
+    }
+    setExpenseDialogOpen(false);
+  };
+
+  const addedNames = new Set(expenses.map(e => e.name));
+  const unusedSuggestions = EXPENSE_SUGGESTIONS.filter(s => !addedNames.has(s.name));
+
+  const totalAnnualA = expenses.filter(e => e.owner === "A").reduce((s, e) => s + e.amountAnnual, 0);
+  const totalAnnualB = expenses.filter(e => e.owner === "B").reduce((s, e) => s + e.amountAnnual, 0);
+  const totalShared = expenses.filter(e => e.owner === "shared").reduce((s, e) => s + e.amountAnnual, 0);
+
+  return (
+    <div className="space-y-6">
+      <div className="p-4 bg-muted/50 rounded-md space-y-2">
+        <p className="text-sm font-medium">Post-separation living costs</p>
+        <p className="text-xs text-muted-foreground">
+          Estimate what each person's living costs will be <strong>after separation</strong>. 
+          These feed into the sustainability and runway projections, helping you see whether each scenario is affordable long-term. 
+          Don't include mortgage payments here - those are calculated automatically from your home details.
+        </p>
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <div>
+            <Label className="text-base font-semibold">Living expenses</Label>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Add expenses for each party separately, or use the suggestions below
+            </p>
+          </div>
+          <Button variant="outline" size="sm" onClick={() => openAddExpense()} data-testid="button-add-expense">
+            <Plus className="w-4 h-4 mr-1" /> Add Custom
+          </Button>
+        </div>
+
+        {expenses.length > 0 && (
+          <>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Expense</TableHead>
+                  <TableHead>Who</TableHead>
+                  <TableHead className="text-right">Monthly</TableHead>
+                  <TableHead className="text-right">Annual</TableHead>
+                  <TableHead className="w-[70px]"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {expenses.map((e) => (
+                  <TableRow key={e.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{e.name}</span>
+                        <Badge variant="secondary" className="text-xs">{CATEGORY_LABELS[e.category] ?? e.category}</Badge>
+                      </div>
+                    </TableCell>
+                    <TableCell><Badge variant="secondary" className="text-xs">{e.owner === "shared" ? "Shared" : `Party ${e.owner}`}</Badge></TableCell>
+                    <TableCell className="text-right tabular-nums text-muted-foreground">{formatCurrency(Math.round(e.amountAnnual / 12))}/mo</TableCell>
+                    <TableCell className="text-right tabular-nums">{formatCurrency(e.amountAnnual)}/yr</TableCell>
+                    <TableCell>
+                      <div className="flex justify-end gap-1">
+                        <Button variant="ghost" size="icon" onClick={() => openEditExpense(e)} data-testid={`button-edit-expense-${e.id}`}>
+                          <Edit2 className="w-3 h-3" />
+                        </Button>
+                        <Button variant="ghost" size="icon" onClick={() => removeExpense(e.id)} data-testid={`button-remove-expense-${e.id}`}>
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            <div className="flex flex-wrap gap-4 mt-3 text-xs">
+              {totalAnnualA > 0 && (
+                <div className="flex items-center gap-1">
+                  <span className="text-muted-foreground">Party A total:</span>
+                  <span className="font-semibold">{formatCurrency(Math.round(totalAnnualA / 12))}/mo</span>
+                  <span className="text-muted-foreground">({formatCurrency(totalAnnualA)}/yr)</span>
+                </div>
+              )}
+              {totalAnnualB > 0 && (
+                <div className="flex items-center gap-1">
+                  <span className="text-muted-foreground">Party B total:</span>
+                  <span className="font-semibold">{formatCurrency(Math.round(totalAnnualB / 12))}/mo</span>
+                  <span className="text-muted-foreground">({formatCurrency(totalAnnualB)}/yr)</span>
+                </div>
+              )}
+              {totalShared > 0 && (
+                <div className="flex items-center gap-1">
+                  <span className="text-muted-foreground">Shared:</span>
+                  <span className="font-semibold">{formatCurrency(Math.round(totalShared / 12))}/mo</span>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+
+      {unusedSuggestions.length > 0 && (
+        <div className="space-y-2">
+          <Label className="text-sm text-muted-foreground">Common expenses to consider</Label>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {unusedSuggestions.map((s) => (
+              <button
+                key={s.name}
+                onClick={() => openAddExpense(s)}
+                className="flex items-start gap-3 p-3 text-left border rounded-md hover-elevate transition-colors group"
+                data-testid={`button-suggest-${s.category}`}
+              >
+                <Plus className="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" />
+                <div>
+                  <span className="text-sm font-medium">{s.name}</span>
+                  <p className="text-xs text-muted-foreground mt-0.5">{s.hint}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {expenses.length === 0 && unusedSuggestions.length === 0 && (
+        <div className="text-center py-6 text-muted-foreground text-sm border-2 border-dashed rounded-lg">
+          Add post-separation living expenses to model sustainability.
+        </div>
+      )}
 
       <Dialog open={expenseDialogOpen} onOpenChange={setExpenseDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{editingExpense ? "Edit Expense" : "Add Expense"}</DialogTitle>
-            <DialogDescription>Enter annual expense details.</DialogDescription>
+            <DialogDescription>Enter your estimated post-separation cost. You can enter monthly or annual amounts.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Expense name</Label>
-              <Input value={expenseForm.name} onChange={(e) => setExpenseForm(f => ({ ...f, name: e.target.value }))} placeholder="e.g. Rent" data-testid="input-expense-name" />
+              <Input value={expenseForm.name} onChange={(e) => setExpenseForm(f => ({ ...f, name: e.target.value }))} placeholder="e.g. Rent, Council Tax" data-testid="input-expense-name" />
             </div>
             <div className="space-y-2">
-              <Label>Annual amount (£)</Label>
-              <Input type="number" value={expenseForm.amountAnnual || ""} onChange={(e) => setExpenseForm(f => ({ ...f, amountAnnual: parseFloat(e.target.value) || 0 }))} data-testid="input-expense-amount" />
+              <Label>Amount ({"\u00A3"})</Label>
+              <div className="flex gap-2">
+                <Input
+                  type="number"
+                  value={expenseForm.amount || ""}
+                  onChange={(e) => setExpenseForm(f => ({ ...f, amount: parseFloat(e.target.value) || 0 }))}
+                  placeholder={expenseForm.frequency === "monthly" ? "e.g. 850" : "e.g. 10200"}
+                  className="flex-1"
+                  data-testid="input-expense-amount"
+                />
+                <Select value={expenseForm.frequency} onValueChange={(v: "monthly" | "annual") => setExpenseForm(f => ({ ...f, frequency: v }))}>
+                  <SelectTrigger className="w-[120px]" data-testid="select-expense-frequency">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="monthly">per month</SelectItem>
+                    <SelectItem value="annual">per year</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {expenseForm.amount > 0 && (
+                <p className="text-xs text-muted-foreground">
+                  = {expenseForm.frequency === "monthly"
+                    ? `${formatCurrency(expenseForm.amount * 12)} per year`
+                    : `${formatCurrency(Math.round(expenseForm.amount / 12))} per month`}
+                </p>
+              )}
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -1051,8 +1202,8 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
                 <Select value={expenseForm.category} onValueChange={(v) => setExpenseForm(f => ({ ...f, category: v }))}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    {ExpenseCategory.options.map(o => (
-                      <SelectItem key={o} value={o}>{o.replace(/_/g, ' ')}</SelectItem>
+                    {Object.entries(CATEGORY_LABELS).map(([val, label]) => (
+                      <SelectItem key={val} value={val}>{label}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -1062,9 +1213,9 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
                 <Select value={expenseForm.owner} onValueChange={(v) => setExpenseForm(f => ({ ...f, owner: v }))}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="shared">Shared</SelectItem>
                     <SelectItem value="A">Party A</SelectItem>
                     <SelectItem value="B">Party B</SelectItem>
+                    <SelectItem value="shared">Shared equally</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

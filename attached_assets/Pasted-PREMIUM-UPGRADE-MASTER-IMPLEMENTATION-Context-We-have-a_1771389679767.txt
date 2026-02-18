@@ -1,0 +1,296 @@
+PREMIUM UPGRADE MASTER IMPLEMENTATION
+
+Context:
+We have a working divorce financial modelling tool with:
+- Guided wizard UI
+- Sell & Split scenario
+- A Keeps Home scenario
+- B Keeps Home scenario
+- Split sliders
+- Pension split slider
+- Affordability logic
+- 5-year runway projection
+
+The tool works but still feels like a calculator.
+
+Objective:
+Elevate this into a premium financial decision modelling service that justifies paid usage, without adding legal entitlement logic or major engine rewrites.
+
+Do NOT:
+- Predict court outcomes
+- Use entitlement language
+- Give legal advice
+- Add speculative AI predictions
+- Rewrite the core financial engine unless necessary
+
+=================================================
+1) ADD EXECUTIVE SCENARIO SNAPSHOT (TOP OF RESULTS)
+=================================================
+
+At the top of Results page, add a comparison table:
+
+Columns:
+- Sell & Split
+- A Keeps Home
+- B Keeps Home
+
+Rows:
+- Starting Liquid (You)
+- Starting Liquid (Partner)
+- Buyout Required (if applicable)
+- Funding Gap (if applicable)
+- Annual Mortgage Payment (if applicable)
+- 5-Year Runway Outcome
+- Stability Score (You)
+- Stability Score (Partner)
+
+Format:
+Clean, professional table with currency formatting.
+This is the “instant clarity” summary.
+
+=================================================
+2) ADD STRUCTURED QUALITATIVE SCENARIO SUMMARIES
+=================================================
+
+Create a function:
+
+/lib/insights/generateScenarioNarrative.ts
+
+generateScenarioNarrative({
+  scenarioKey,
+  inputs,
+  outputs
+})
+
+Return structured object:
+
+{
+  headline: string,
+  summaryParagraph: string,
+  keyDrivers: string[],
+  tradeOffs: string[],
+  riskFlags: {
+    label: string,
+    severity: "ok" | "warn" | "risk",
+    detail: string
+  }[],
+  reassurance: string
+}
+
+Rules:
+- Must explain where money comes from
+- Must mention:
+  - property equity
+  - liquid assets
+  - debts
+  - pension shifts
+  - mortgage obligation (if keep)
+- Must clearly explain trade-offs (liquidity vs housing control)
+- Must remain calm, neutral, structured
+- No legal advice or entitlement claims
+
+Example tone:
+“In this scenario, the home is sold and net equity of £X is realised after selling costs. Combined with £Y in liquid assets and after £Z in debts, the distributable pool is £T. Based on a 60/40 split, your starting liquid capital is £A.”
+
+Add this narrative at the top of each scenario tab.
+
+=================================================
+3) ADD “SOURCE OF FUNDS” BREAKDOWN TABLE
+=================================================
+
+Create:
+
+/lib/insights/buildSourceOfFunds.ts
+
+For each scenario and each party, return:
+
+{
+  A: {
+    rows: { label: string, amount: number }[],
+    netStartingLiquid: number
+  },
+  B: {
+    rows: { label: string, amount: number }[],
+    netStartingLiquid: number
+  },
+  pension: {
+    A_after: number,
+    B_after: number,
+    A_delta: number,
+    B_delta: number
+  }
+}
+
+Display as table:
+
+Example (Sell scenario):
+
+Your Position:
+- Share of property equity: £X
+- Share of savings: £Y
+- Share of investments: £Z
+- Less share of debts: (£Q)
+= Net starting liquid: £A
+
+Keep net worth components separate from liquid.
+Do NOT mix pension into liquid totals.
+
+Add stacked bar chart showing composition:
+- Liquid
+- Property
+- Pension
+
+=================================================
+4) ADD STABILITY SCORE SYSTEM
+=================================================
+
+Create:
+
+/lib/insights/computeStabilityScore.ts
+
+Scoring model:
+Start at 100.
+
+Subtract:
+- -40 if funding gap > 0
+- -30 if affordability fails
+- -20 if runway hits 0 within 2 years
+- -10 if runway hits 0 within 5 years
+- -10 if starting liquid < 6 months expenses
+- -10 if >70% net worth tied to property (keep scenario)
+
+Clamp 0–100.
+
+Return:
+{
+  scoreA,
+  scoreB,
+  reasonsA: { label: string, points: number }[],
+  reasonsB: { label: string, points: number }[]
+}
+
+Display:
+- Score badge (0–100)
+- Label:
+  80–100 = Stable
+  60–79 = Watch
+  <60 = High Risk
+
+Must remain non-legal, financial modelling only.
+
+=================================================
+5) ADD COMPARISON DELTA PANEL
+=================================================
+
+Create:
+
+/lib/insights/compareToSell.ts
+
+For keep scenarios, calculate delta vs Sell:
+
+Return:
+{
+  deltaLiquidA,
+  deltaLiquidB,
+  deltaNetWorthA,
+  deltaNetWorthB,
+  deltaRunwayA,
+  deltaRunwayB,
+  notes: string[]
+}
+
+Display section:
+
+“Compared to Selling”
+- You have £X more/less liquid capital
+- Mortgage obligation of £Y annually
+- Runway changes by Z years
+
+=================================================
+6) ADD MONTHLY SNAPSHOT PANEL
+=================================================
+
+Under each scenario, show:
+
+Monthly Summary:
+- Net monthly income
+- Monthly expenses
+- Mortgage payment (if applicable)
+- Surplus / deficit
+
+This makes modelling feel real and tangible.
+
+=================================================
+7) ADD STRESS TEST TOGGLES
+=================================================
+
+Add toggle section:
+
+“What if?”:
+- Interest rate +1.5%
+- Living costs +10%
+
+Override assumptions temporarily and re-run calculation.
+Display changes in:
+- Runway
+- Stability score
+- Affordability status
+
+Keep simple and reversible.
+
+=================================================
+8) UPGRADE RESULTS LAYOUT
+=================================================
+
+Each scenario tab must now include:
+
+1) Headline
+2) Narrative summary
+3) Executive metrics (liquid, net worth, buyout, funding gap)
+4) Source of funds table
+5) Stacked composition chart
+6) Stability score + reasons
+7) Comparison delta panel (for keep)
+8) 5-year runway chart + table
+9) Monthly snapshot
+10) Reassurance line
+
+Maintain professional spacing and typography.
+Always show disclaimer:
+“Illustrative modelling only. Not legal, tax or financial advice.”
+
+=================================================
+9) PDF EXPORT UPGRADE
+=================================================
+
+Upgrade PDF to include:
+
+- Inputs summary
+- Executive scenario comparison table
+- For each scenario:
+  - Narrative summary
+  - Source-of-funds table
+  - Stability score
+  - Runway summary
+- Assumptions section
+- Disclaimer on every page
+
+If charts are complex to embed, include tables instead.
+
+=================================================
+10) AFTER IMPLEMENTATION — SELF REVIEW
+=================================================
+
+After implementing, provide:
+
+- 5 additional enhancements to increase perceived premium value
+- For each:
+  - Description
+  - Value impact
+  - Development effort (S/M/L)
+  - Risk level
+  - Recommend v1 or v2
+
+=================================================
+END
+=================================================
