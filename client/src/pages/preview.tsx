@@ -44,7 +44,7 @@ function getStabilityBand(score: number): string {
 function getStabilityBandColor(score: number): string {
   if (score >= 80) return "text-emerald-600";
   if (score >= 60) return "text-amber-600";
-  return "text-red-600";
+  return "text-slate-600";
 }
 
 function fmt(v: number) { return formatCurrency(v); }
@@ -90,7 +90,7 @@ export default function PreviewPage() {
         <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-primary" />
-            <span className="font-semibold text-sm">Financial Modeller</span>
+            <span className="font-semibold text-sm">DivorceCalculatorUK</span>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" asChild>
@@ -145,11 +145,11 @@ export default function PreviewPage() {
 
           <Card data-testid="card-stability-band">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Preliminary Financial Sustainability Score</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Indicative Financial Stability Index</CardTitle>
             </CardHeader>
             <CardContent>
               <p className={`text-2xl font-bold tabular-nums ${stabilityColor}`} data-testid="value-stability-band">{stabilityBand}</p>
-              <p className="text-xs text-muted-foreground mt-1">Score breakdown and stability drivers available in full analysis</p>
+              <p className="text-xs text-muted-foreground mt-1">Index breakdown and stability drivers available in full analysis</p>
             </CardContent>
           </Card>
         </div>
@@ -159,7 +159,7 @@ export default function PreviewPage() {
 
           <BlurredSection title="Scenario Comparison Table" height="h-40" />
           <BlurredSection title="5-Year Capital Projection" height="h-36" />
-          <BlurredSection title="Stability Assessment Drivers" height="h-32" />
+          <BlurredSection title="Indicative Stability Index Drivers" height="h-32" />
           <BlurredSection title="Housing Feasibility Benchmark" height="h-28" />
           <BlurredSection title="Sensitivity Snapshot" height="h-28" />
           <BlurredSection title="Structured Financial Brief (PDF)" height="h-24" />

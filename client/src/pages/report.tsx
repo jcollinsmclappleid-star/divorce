@@ -109,12 +109,12 @@ function buildQualitativeExecutiveSummary(
       parts.push(`Capital runway analysis indicates that Party A's liquid reserves are ${aStatus}, while Party B's are ${bStatus}.`);
     }
 
-    const scoreLabel = stability.labelA.includes("Elevated") || stability.labelB.includes("Elevated")
-      ? "elevated sustainability risk"
+    const scoreLabel = stability.labelA.includes("Pressure") || stability.labelB.includes("Pressure")
+      ? "liquidity pressure under current assumptions"
       : stability.labelA.includes("Moderate") || stability.labelB.includes("Moderate")
-      ? "moderate sustainability risk"
+      ? "moderate sustainability indicators"
       : "financial stability within the modelled parameters";
-    parts.push(`The overall assessment indicates ${scoreLabel} (Party A: ${stability.scoreA}/100, Party B: ${stability.scoreB}/100).`);
+    parts.push(`The indicative financial stability index reflects ${scoreLabel} (Party A: ${stability.scoreA}/100, Party B: ${stability.scoreB}/100). This index reflects liquidity sustainability and affordability benchmarks under current modelling assumptions and is not a lending or credit assessment.`);
 
     if (housing) {
       parts.push(`Affordability benchmarking classifies this scenario as "${housing.classification.toLowerCase()}" based on standard income multiple and payment-to-income ratio analysis.`);
@@ -403,11 +403,11 @@ export default function ReportPage() {
               </ReportCollapsible>
 
               <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Stability Assessment</h4>
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Indicative Financial Stability Index</h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Party A</p>
-                    <div className="text-xl font-bold tabular-nums" style={{ color: stability.scoreA >= 60 ? "#10B981" : stability.scoreA >= 35 ? "#F59E0B" : "#EF4444" }}>
+                    <div className="text-xl font-bold tabular-nums" style={{ color: stability.scoreA >= 60 ? "#10B981" : stability.scoreA >= 35 ? "#D97706" : "#64748B" }}>
                       {stability.scoreA}/100 <span className="text-xs font-normal text-gray-400">{stability.labelA}</span>
                     </div>
                     <div className="text-xs text-gray-500 mt-0.5">
@@ -427,7 +427,7 @@ export default function ReportPage() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Party B</p>
-                    <div className="text-xl font-bold tabular-nums" style={{ color: stability.scoreB >= 60 ? "#10B981" : stability.scoreB >= 35 ? "#F59E0B" : "#EF4444" }}>
+                    <div className="text-xl font-bold tabular-nums" style={{ color: stability.scoreB >= 60 ? "#10B981" : stability.scoreB >= 35 ? "#D97706" : "#64748B" }}>
                       {stability.scoreB}/100 <span className="text-xs font-normal text-gray-400">{stability.labelB}</span>
                     </div>
                     <div className="text-xs text-gray-500 mt-0.5">
@@ -644,7 +644,7 @@ export default function ReportPage() {
             <div><span className="font-semibold">Net Equity:</span> <span className="text-gray-600">The value of property after deducting the outstanding mortgage balance and estimated selling costs.</span></div>
             <div><span className="font-semibold">Equity Transfer Obligation:</span> <span className="text-gray-600">The lump sum payable by the party retaining the property to compensate the departing party for their share of net equity.</span></div>
             <div><span className="font-semibold">Capital Runway:</span> <span className="text-gray-600">The projected period for which liquid capital can sustain expenditure, measured in months or years.</span></div>
-            <div><span className="font-semibold">Stability Assessment:</span> <span className="text-gray-600">A composite indicator of financial resilience incorporating cash reserves, monthly surplus/deficit, mortgage burden, and capital runway.</span></div>
+            <div><span className="font-semibold">Indicative Financial Stability Index:</span> <span className="text-gray-600">A composite indicator reflecting liquidity sustainability and affordability benchmarks under current modelling assumptions. It is not a lending or credit assessment.</span></div>
             <div><span className="font-semibold">CETV (Cash Equivalent Transfer Value):</span> <span className="text-gray-600">The estimated lump sum value of a pension, used for comparison and division purposes.</span></div>
             <div><span className="font-semibold">CMS (Child Maintenance Service):</span> <span className="text-gray-600">The UK government service that calculates child maintenance obligations based on income and overnight stays.</span></div>
             <div><span className="font-semibold">Income Multiple:</span> <span className="text-gray-600">The ratio of mortgage required to gross annual income, used as an affordability benchmark.</span></div>
@@ -652,7 +652,7 @@ export default function ReportPage() {
         </section>
 
         <footer className="mt-12 pt-6 border-t border-gray-300 text-center space-y-2 pb-10">
-          <p className="text-xs text-gray-400 font-semibold">DivorceModeller.UK</p>
+          <p className="text-xs text-gray-400 font-semibold">DivorceCalculatorUK</p>
           <p className="text-[10px] text-gray-400 leading-relaxed max-w-lg mx-auto">
             Illustrative modelling only — not legal, tax, or financial advice.
             All outputs are estimates based on the information entered and standard assumptions. They should not be relied upon for decision-making without independent professional advice. Affordability indicators are benchmarked against typical market heuristics and do not represent a mortgage offer or credit assessment.
@@ -805,7 +805,7 @@ function ReportScenarioConsiderations({
       const ratio = Math.round((keeperMortgage / keeperNet) * 100);
       if (ratio > 35) {
         considerations.push(
-          `Mortgage obligations represent ${ratio}% of net income. Consider income stability over the next 3-5 years.`
+          `Mortgage obligations represent ${ratio}% of net income. Income sustainability over the next 3-5 years may warrant further assessment.`
         );
       }
     }

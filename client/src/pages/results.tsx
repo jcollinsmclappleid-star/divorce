@@ -174,7 +174,7 @@ export default function ResultsPage() {
               <Calculator className="h-5 w-5 text-primary-foreground" />
             </div>
             <span className="text-lg font-display font-bold tracking-tight hidden sm:inline-block">
-              DivorceModeller<span className="text-primary">.UK</span>
+              Divorce<span className="font-sans font-semibold text-primary">CalculatorUK</span>
             </span>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
@@ -419,7 +419,7 @@ function DecisionLensToggle({ viewLens, setViewLens }: { viewLens: ViewLens; set
   const lenses: { id: ViewLens; label: string; icon: typeof PoundSterling; description: string }[] = [
     { id: "liquidity", label: "Liquidity Analysis", icon: PoundSterling, description: "Liquid Capital [cash and realisable investments available immediately]" },
     { id: "networth", label: "Net Worth Analysis", icon: Target, description: "Total Net Asset Position [liquid capital, property equity, and pension valuations]" },
-    { id: "risk", label: "Stability & Projection", icon: Activity, description: "Composite Stability Assessment [financial resilience over projected period]" },
+    { id: "risk", label: "Stability & Projection", icon: Activity, description: "Indicative Stability Index [liquidity sustainability and affordability benchmarks]" },
   ];
 
   return (
@@ -867,7 +867,7 @@ function AssumptionReviewPrompts({
 
   prompts.push({
     question: "Have all material assets and liabilities been included?",
-    context: `The model operates on the assets, debts, and incomes entered. Consider whether there are additional accounts, liabilities, or income sources that should be factored in for a more complete picture.`,
+    context: `The model operates on the assets, debts, and incomes entered. There may be additional accounts, liabilities, or income sources that could be factored in for a more complete picture.`,
   });
 
   return (
@@ -1007,23 +1007,23 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Stability Assessment — Party A<InfoTip text="Composite financial resilience indicator for Party A — incorporating cash buffer adequacy, monthly surplus/deficit, mortgage burden ratio, and capital runway projection." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Indicative Stability Index — Party A<InfoTip text="Indicative financial stability index for Party A — incorporating cash buffer adequacy, monthly surplus/deficit, mortgage burden ratio, and capital runway projection. This is not a lending or credit assessment." /></></TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
                   return (
                     <TableCell key={s.id} className="text-center">
-                      <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Financially Stable (Modelled)"} />
+                      <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Stable (Modelled)"} />
                     </TableCell>
                   );
                 })}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Stability Assessment — Party B<InfoTip text="Composite financial resilience indicator for Party B — incorporating cash buffer adequacy, monthly surplus/deficit, mortgage burden ratio, and capital runway projection." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Indicative Stability Index — Party B<InfoTip text="Indicative financial stability index for Party B — incorporating cash buffer adequacy, monthly surplus/deficit, mortgage burden ratio, and capital runway projection. This is not a lending or credit assessment." /></></TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
                   return (
                     <TableCell key={s.id} className="text-center">
-                      <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Financially Stable (Modelled)"} />
+                      <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Stable (Modelled)"} />
                     </TableCell>
                   );
                 })}
@@ -1078,11 +1078,11 @@ function ExecutiveTable({
                       : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]">Yr {rw?.partyB.depletionYear}</Badge>}
                   </div>
                   <div className="min-w-0">
-                    <span className="text-muted-foreground block">Stability — A</span>
+                    <span className="text-muted-foreground block">Stability Index — A</span>
                     <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Stable"} compact />
                   </div>
                   <div className="min-w-0">
-                    <span className="text-muted-foreground block">Stability — B</span>
+                    <span className="text-muted-foreground block">Stability Index — B</span>
                     <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Stable"} compact />
                   </div>
                   {(s.fundingGap ?? 0) > 0 && (
@@ -1117,13 +1117,13 @@ function ExecutiveTable({
 
 function StabilityBadge({ score, label, compact }: { score: number; label: string; compact?: boolean }) {
   const colorClass = score >= 80
-    ? "text-emerald-600 border-emerald-200 bg-emerald-50"
+    ? "text-emerald-700 border-emerald-200 bg-emerald-50"
     : score >= 60
-    ? "text-amber-600 border-amber-200 bg-amber-50"
-    : "text-red-600 border-red-200 bg-red-50";
+    ? "text-amber-700 border-amber-200 bg-amber-50"
+    : "text-slate-700 border-slate-200 bg-slate-50";
 
   const shortLabel = compact
-    ? (score >= 80 ? "Stable" : score >= 60 ? "Moderate Risk" : "Elevated Risk")
+    ? (score >= 80 ? "Stable" : score >= 60 ? "Moderate" : "Liquidity Pressure")
     : label;
 
   return (
@@ -1170,7 +1170,7 @@ function generateScenarioConsiderations(
       const ratio = Math.round((keeperMortgage / keeperNet) * 100);
       if (ratio > 35) {
         considerations.push(
-          `Mortgage obligations represent ${ratio}% of the retaining party's net income. Consider income stability over the next 3-5 years and whether this proportion is sustainable under adverse conditions.`
+          `Mortgage obligations represent ${ratio}% of the retaining party's net income. This proportion may warrant assessment of income sustainability over the next 3-5 years under varying conditions.`
         );
       }
     }
@@ -1186,30 +1186,30 @@ function generateScenarioConsiderations(
   if (expenseA > 0 && liquidA < expenseA) {
     const months = Math.round((liquidA / expenseA) * 12);
     considerations.push(
-      `Party A's liquid capital covers approximately ${months} month${months !== 1 ? "s" : ""} of expenses. Consider contingency planning and whether access to additional liquidity would be needed.`
+      `Party A's liquid capital covers approximately ${months} month${months !== 1 ? "s" : ""} of expenses. Additional liquidity sources may need to be identified under current assumptions.`
     );
   }
   if (expenseB > 0 && liquidB < expenseB) {
     const months = Math.round((liquidB / expenseB) * 12);
     considerations.push(
-      `Party B's liquid capital covers approximately ${months} month${months !== 1 ? "s" : ""} of expenses. Consider contingency planning and whether access to additional liquidity would be needed.`
+      `Party B's liquid capital covers approximately ${months} month${months !== 1 ? "s" : ""} of expenses. Additional liquidity sources may need to be identified under current assumptions.`
     );
   }
 
   if (budget.surplusA < 0) {
     considerations.push(
-      `Party A is projected to have a monthly deficit of ${formatCurrency(Math.abs(budget.surplusA / 12))}/month under this scenario. Consider whether expenditure adjustments or supplementary income sources are available.`
+      `Party A is projected to have a monthly deficit of ${formatCurrency(Math.abs(budget.surplusA / 12))}/month under this scenario. Expenditure adjustments or supplementary income sources may be relevant considerations.`
     );
   }
   if (budget.surplusB < 0) {
     considerations.push(
-      `Party B is projected to have a monthly deficit of ${formatCurrency(Math.abs(budget.surplusB / 12))}/month under this scenario. Consider whether expenditure adjustments or supplementary income sources are available.`
+      `Party B is projected to have a monthly deficit of ${formatCurrency(Math.abs(budget.surplusB / 12))}/month under this scenario. Expenditure adjustments or supplementary income sources may be relevant considerations.`
     );
   }
 
   if (scenario.id === "S4") {
     considerations.push(
-      `This scenario involves a deferred settlement, meaning the property arrangement remains in place for an extended period. Consider the practical implications of ongoing shared legal obligations and future market conditions.`
+      `This scenario involves a deferred settlement structure, with the property arrangement remaining in place for an extended period. The practical implications of ongoing shared legal obligations and future market conditions may be relevant.`
     );
   }
 
@@ -1341,15 +1341,15 @@ function ScenarioDetailCard({
         <NarrativeSection narrative={narrative} />
 
         <div className="space-y-4 p-4 bg-muted/20 rounded-md" data-testid="block-financial-sustainability">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Financial Sustainability</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Indicative Stability Index</h3>
           
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-xs text-muted-foreground">Party A Stability</span>
+              <span className="text-xs text-muted-foreground">Party A Index</span>
               <StabilityBadge score={stabilityScore.scoreA} label={stabilityScore.labelA} />
             </div>
             <div className="flex items-center justify-between gap-2">
-              <span className="text-xs text-muted-foreground">Party B Stability</span>
+              <span className="text-xs text-muted-foreground">Party B Index</span>
               <StabilityBadge score={stabilityScore.scoreB} label={stabilityScore.labelB} />
             </div>
           </div>
@@ -1528,7 +1528,7 @@ function ScenarioDetailCard({
         )}
 
         <DetailCollapsible
-          title="Stability Assessment Detail"
+          title="Indicative Stability Index Detail"
           summary={<span>View scoring breakdown and assessment drivers</span>}
           testId="detail-stability-assessment"
         >
@@ -1817,7 +1817,7 @@ function StabilitySection({ score }: { score: StabilityResult }) {
   return (
     <div className="space-y-3" data-testid="section-stability">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <Shield className="w-3.5 h-3.5" /> Stability Assessment
+        <Shield className="w-3.5 h-3.5" /> Indicative Stability Index
       </h3>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-2">

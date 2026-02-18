@@ -11,22 +11,22 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 
 const VALUE_ITEMS = [
-  { icon: Scale, text: "Compare Sell vs Retain scenarios side-by-side" },
-  { icon: Sliders, text: "Understand how settlement ratios change your financial stability" },
-  { icon: TrendingUp, text: "See how long your capital may realistically last" },
-  { icon: Calculator, text: "See where your settlement capital comes from — and where it goes" },
-  { icon: BarChart3, text: "Understand which option is most financially sustainable" },
-  { icon: Search, text: "Identify which assumptions matter most to your outcome" },
-  { icon: FileText, text: "Professional report suitable for solicitor discussions (PDF)" },
+  { icon: Scale, text: "Compare alternative settlement structures side-by-side" },
+  { icon: Sliders, text: "Model how allocation ratios affect indicative stability" },
+  { icon: TrendingUp, text: "Assess projected capital sustainability over 5 years" },
+  { icon: Calculator, text: "Quantify where settlement capital originates and how it is allocated" },
+  { icon: BarChart3, text: "Evaluate structural implications of each scenario" },
+  { icon: Search, text: "Identify which assumptions have the greatest sensitivity impact" },
+  { icon: FileText, text: "Generate a structured financial brief suitable for professional discussions (PDF)" },
 ];
 
 const INCLUDES_ITEMS = [
-  "Unlimited re-runs for 6 months",
-  "Adjustable settlement modelling",
-  "Understand which option is most financially sustainable",
-  "Monthly sustainability snapshot",
-  "5-year projection analysis",
-  "Professional Financial Brief (PDF)",
+  "Unlimited scenario reruns for 6 months",
+  "Adjustable settlement structure modelling",
+  "Indicative stability index with driver analysis",
+  "Monthly financial position snapshot",
+  "5-year capital sustainability projection",
+  "Structured Financial Brief (PDF)",
 ];
 
 export default function UnlockPage() {
@@ -67,7 +67,7 @@ export default function UnlockPage() {
         <div className="max-w-4xl mx-auto flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-primary" />
-            <span className="font-semibold text-sm">Financial Modeller</span>
+            <span className="font-semibold text-sm">DivorceCalculatorUK</span>
           </div>
           <Button variant="ghost" size="sm" asChild>
             <Link href="/preview" data-testid="button-back-to-preview">
@@ -80,14 +80,11 @@ export default function UnlockPage() {
 
       <main className="max-w-3xl mx-auto px-4 py-12 space-y-16">
         <section className="text-center space-y-4" data-testid="section-hero">
-          <h1 className="text-3xl font-bold tracking-tight leading-tight">
-            See the Full Financial Picture<br />Before You Make Decisions.
+          <h1 className="text-3xl font-bold tracking-tight leading-tight font-display">
+            Structured Modelling for Informed Conversations.
           </h1>
           <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Understand your position clearly and confidently — before committing to costly conversations or irreversible choices.
-          </p>
-          <p className="text-sm text-muted-foreground/80 max-w-lg mx-auto leading-relaxed">
-            You have already seen your core financial position. Unlock the complete analysis to understand how your decisions affect liquidity, stability, and long-term sustainability.
+            Your preliminary financial position has been modelled. Unlock the complete structured analysis to compare alternative settlement structures and assess indicative sustainability.
           </p>
         </section>
 
@@ -104,35 +101,35 @@ export default function UnlockPage() {
         </section>
 
         <section className="space-y-4 text-center" data-testid="section-decision">
-          <h2 className="text-xl font-semibold">Clarity First. Conversations Second.</h2>
+          <h2 className="text-xl font-semibold">Private Exploration Before Public Decisions</h2>
           <div className="text-sm text-muted-foreground space-y-3 max-w-lg mx-auto leading-relaxed text-left">
-            <p>Financial decisions involving six-figure assets should not rely on rough estimates.</p>
-            <p>This structured modelling allows you to:</p>
+            <p>Financial decisions involving significant assets benefit from structured modelling before professional discussions.</p>
+            <p>This platform allows you to:</p>
             <ul className="space-y-1.5 ml-4">
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-3.5 h-3.5 text-primary mt-1 shrink-0" />
-                <span>Enter discussions prepared and organised</span>
+                <span>Approach discussions informed by quantified assumptions</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-3.5 h-3.5 text-primary mt-1 shrink-0" />
-                <span>Identify financial pressure points early</span>
+                <span>Identify areas of liquidity pressure under current assumptions</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-3.5 h-3.5 text-primary mt-1 shrink-0" />
-                <span>Ask better, more focused questions</span>
+                <span>Ask more focused, structured questions</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-3.5 h-3.5 text-primary mt-1 shrink-0" />
-                <span>Avoid spending professional time clarifying basic numbers</span>
+                <span>Reduce time spent clarifying baseline financial position</span>
               </li>
             </ul>
             <p className="pt-2">
-              A single legal consultation can cost £250–£400 per hour.
+              A single professional consultation can cost £250–£400 per hour.
               <br />
-              Financial clarity costs £79.
+              Structured financial modelling: £79.
             </p>
             <p className="text-xs text-muted-foreground/70">
-              This tool does not replace professional advice. It helps you use it more effectively.
+              This tool does not replace professional advice. It supports more informed conversations.
             </p>
           </div>
         </section>
@@ -153,7 +150,7 @@ export default function UnlockPage() {
               <ul className="text-sm text-left space-y-2">
                 {INCLUDES_ITEMS.map((item, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-primary mt-0.5 shrink-0" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -178,7 +175,7 @@ export default function UnlockPage() {
 
               <div className="text-xs text-muted-foreground space-y-1">
                 <p>Private access. No subscription. Immediate unlock.</p>
-                <p>Access remains available for 6 months to model evolving discussions.</p>
+                <p>Access remains available for 6 months to model evolving assumptions.</p>
                 <p className="text-[10px] text-muted-foreground/70 leading-relaxed mt-2">
                   By purchasing, you agree that this tool provides illustrative modelling only and does not constitute professional advice. No refunds are available once access has been granted, as the digital content is delivered immediately.
                 </p>
@@ -188,9 +185,9 @@ export default function UnlockPage() {
         </section>
 
         <section className="text-center space-y-3 pb-8" data-testid="section-reinforcement">
-          <h2 className="text-lg font-semibold">You have Already Done the Hard Part.</h2>
+          <h2 className="text-lg font-semibold">Your Assumptions Are Already Entered.</h2>
           <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-            Your financial inputs are complete. Unlock the full analysis now to see the complete picture while everything is fresh and accurate.
+            Unlock the full structured analysis now to review the complete financial model while your assumptions are current.
           </p>
         </section>
       </main>

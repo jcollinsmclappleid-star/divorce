@@ -24,9 +24,9 @@ export interface StabilityResult {
 }
 
 function getLabel(score: number): string {
-  if (score >= 80) return "Financially Stable (Modelled)";
-  if (score >= 60) return "Moderate Sustainability Risk (Modelled)";
-  return "Elevated Sustainability Risk (Modelled)";
+  if (score >= 80) return "Stable (Modelled)";
+  if (score >= 60) return "Moderate (Modelled)";
+  return "Liquidity Pressure Identified (Modelled)";
 }
 
 export function computeStabilityScore(

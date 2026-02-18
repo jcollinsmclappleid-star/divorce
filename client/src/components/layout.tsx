@@ -60,7 +60,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Calculator className="h-5 w-5 text-primary-foreground" />
               </div>
               <span className="text-xl font-display font-bold tracking-tight hidden sm:inline-block">
-                DivorceModeller<span className="text-primary">.UK</span>
+                Divorce<span className="font-sans font-semibold text-primary">CalculatorUK</span>
               </span>
             </Link>
           </div>
@@ -94,7 +94,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* Footer */}
       <footer className="border-t py-8 mt-auto bg-muted/30">
         <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
-          <p>© {new Date().getFullYear()} Divorce Modeller UK. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} DivorceCalculatorUK. All rights reserved.</p>
           <p className="mt-2 text-xs">Data is stored locally in your browser unless explicitly saved.</p>
         </div>
       </footer>

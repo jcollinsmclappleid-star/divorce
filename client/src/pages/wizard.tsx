@@ -25,52 +25,52 @@ import {
 
 const STEPS = [
   { id: 0, title: "Welcome", icon: Heart },
-  { id: 1, title: "Your Situation", icon: Users },
-  { id: 2, title: "Home", icon: Home },
-  { id: 3, title: "Assets & Debts", icon: Wallet },
-  { id: 4, title: "Pensions", icon: Landmark },
-  { id: 5, title: "Income", icon: Briefcase },
-  { id: 6, title: "Living Costs", icon: Receipt },
-  { id: 7, title: "Support", icon: Calculator },
-  { id: 8, title: "Results", icon: TrendingUp },
+  { id: 1, title: "About Your Situation", icon: Users },
+  { id: 2, title: "Property & Mortgage", icon: Home },
+  { id: 3, title: "Savings & Debts", icon: Wallet },
+  { id: 4, title: "Pension Provision", icon: Landmark },
+  { id: 5, title: "Income & Employment", icon: Briefcase },
+  { id: 6, title: "Monthly Expenses", icon: Receipt },
+  { id: 7, title: "Children & Support", icon: Calculator },
+  { id: 8, title: "Review & Model", icon: TrendingUp },
 ];
 
 const STEP_COPY = [
   {
-    prompt: "Let's get you some clarity",
-    reassurance: "This tool helps you explore different financial settlement options. All calculations happen in your browser \u2014 your data stays private. Take your time, and use your best estimates where you're unsure."
+    prompt: "Let's build your financial model",
+    reassurance: "This tool allows you to model different settlement structures and compare their financial implications. All calculations happen in your browser \u2014 your data stays private. Use your best estimates where you're unsure."
   },
   {
-    prompt: "Tell us about your situation",
-    reassurance: "We just need a few basics to get started. You can always come back and change these later."
+    prompt: "About your situation",
+    reassurance: "A few baseline assumptions to get started. You can always come back and adjust these later."
   },
   {
-    prompt: "Your family home",
-    reassurance: "The family home is often the biggest asset. A rough value is fine \u2014 you can refine it later."
+    prompt: "Property & mortgage",
+    reassurance: "The family home is often the largest asset. A rough valuation is fine \u2014 you can refine assumptions later."
   },
   {
-    prompt: "Other assets and debts",
-    reassurance: "Include savings, investments, vehicles, and any debts. Don't worry if you're not sure of exact figures \u2014 best estimates work well."
+    prompt: "Savings, investments & debts",
+    reassurance: "Include savings, investments, vehicles, and any liabilities. Best estimates work well for initial modelling."
   },
   {
-    prompt: "Pensions",
-    reassurance: "Pensions can be a significant part of the overall picture. If you have a recent statement, the 'Cash Equivalent Transfer Value' (CETV) is the most useful figure."
+    prompt: "Pension provision",
+    reassurance: "Pensions can be a significant part of the overall financial picture. If you have a recent statement, the Cash Equivalent Transfer Value (CETV) is the most useful figure."
   },
   {
-    prompt: "Income",
-    reassurance: "Add each party's income sources. This helps model take-home pay and long-term sustainability."
+    prompt: "Income & employment",
+    reassurance: "Add each party's income sources. This allows the model to calculate take-home pay and assess long-term sustainability."
   },
   {
-    prompt: "Post-separation living costs",
-    reassurance: "Estimate what each person will spend after separation. This is key to modelling whether each scenario is sustainable. Use monthly figures if that's easier \u2014 we'll convert automatically."
+    prompt: "Post-separation monthly expenses",
+    reassurance: "Estimate what each person is likely to spend after separation. This is key to modelling whether each scenario is financially sustainable."
   },
   {
-    prompt: "Support & assumptions",
-    reassurance: "If there are children, you can include a child maintenance estimate. These feed into the sustainability projections."
+    prompt: "Children & support assumptions",
+    reassurance: "If there are children, you can include a child maintenance estimate. These assumptions feed into the sustainability projections."
   },
   {
-    prompt: "Your results",
-    reassurance: "Here's how different settlement options compare. You can adjust the split ratios and explore different scenarios."
+    prompt: "Review & model",
+    reassurance: "Review your assumptions and compare how different settlement structures affect the financial position of each party."
   },
 ];
 
@@ -108,7 +108,7 @@ export default function WizardPage() {
               <Calculator className="h-5 w-5 text-primary-foreground" />
             </div>
             <span className="text-lg font-display font-bold tracking-tight hidden sm:inline-block">
-              DivorceModeller<span className="text-primary">.UK</span>
+              Divorce<span className="font-sans font-semibold text-primary">CalculatorUK</span>
             </span>
           </div>
 
