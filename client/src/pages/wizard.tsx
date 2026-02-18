@@ -1137,7 +1137,7 @@ function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
                 key={s.name}
                 onClick={() => openAddExpense(s)}
                 className="flex items-start gap-3 p-3 text-left border rounded-md hover-elevate transition-colors group"
-                data-testid={`button-suggest-${s.category}`}
+                data-testid={`button-suggest-${s.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
               >
                 <Plus className="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" />
                 <div>

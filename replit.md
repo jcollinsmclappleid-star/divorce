@@ -10,7 +10,15 @@ The core financial engine must be **deterministic, pure-function based, and full
 
 ## Recent Changes
 
-- **Feb 2026**: Converted app from multi-page navigation to a **guided 8-step wizard** (/) with a dedicated **Results page** (/results). The wizard walks users through: Welcome, Situation, Home, Assets, Pensions, Income, Costs, and Assumptions. The Results page shows a comparison summary table, scenario tabs with stability indicators, and live split/pension sliders with preset buttons (50/50, 60/40, 70/30).
+- **Feb 2026**: Expanded wizard to 9 steps: Welcome, Situation, Home, Assets, Pensions, Income, Living Costs, Support, Results. Living Costs step separated from Income with guided expense input (EXPENSE_SUGGESTIONS array with monthly/annual toggle and contextual hints).
+- **Feb 2026**: Added premium insight engine (`client/src/lib/insights/`) with 5 pure-function modules:
+  - `generateScenarioNarrative` — qualitative narrative summaries with headline, key drivers, trade-offs, risk flags
+  - `buildSourceOfFunds` — row-by-row breakdown of where each party's liquid capital comes from
+  - `computeStabilityScore` — 0-100 score with reasons (funding gap, affordability, runway, expense coverage, illiquidity)
+  - `compareToSell` — delta comparison between keep-home and sell scenarios (liquid, net worth, runway changes)
+  - `buildMonthlySnapshot` — monthly budget table (net income, expenses, mortgage, CMS) with surplus/deficit
+- **Feb 2026**: Rebuilt results page as premium decision-support tool with executive summary table, scenario detail cards (narrative + source-of-funds + composition chart + stability + monthly snapshot + comparison delta), stress test toggles (interest +1.5%, costs +10%), and projection charts.
+- **Feb 2026**: Engine now exports intermediate values (netHomeEquity, totalLiquid, homeSaleCosts, totalDebt) for insight modules.
 - **Feb 2026**: Refactored engine to always compute S1 (Sell & Split), S2 (A Keeps Home), S3 (B Keeps Home) using a shared `calcKeepsHome()` helper with role-swap pattern. S4 (Deferred Sale) is optional.
 - **Feb 2026**: Fixed tax aggregation to handle multiple income streams per party with mixed tax treatment.
 

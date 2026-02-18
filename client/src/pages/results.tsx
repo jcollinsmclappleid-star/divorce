@@ -419,8 +419,12 @@ function ScenarioDetailCard({
   );
 
   const comparison = useMemo(() => {
-    if (scenario.id === "S1" || !sellScenario) return null;
-    return compareToSell(scenario, sellScenario, projection ?? undefined, sellProjection);
+    if (scenario.id === "S1" || !sellScenario || scenario.id === "S4") return null;
+    try {
+      return compareToSell(scenario, sellScenario, projection ?? undefined, sellProjection);
+    } catch {
+      return null;
+    }
   }, [scenario, sellScenario, projection, sellProjection]);
 
   return (
