@@ -19,8 +19,8 @@ import type {
 
 const SCENARIO_META: Record<string, { label: string; color: string }> = {
   S1: { label: "Sell & Split", color: "#2563EB" },
-  S2: { label: "A Keeps Home", color: "#10B981" },
-  S3: { label: "B Keeps Home", color: "#8B5CF6" },
+  S2: { label: "A Keeps House", color: "#10B981" },
+  S3: { label: "B Keeps House", color: "#8B5CF6" },
   S4: { label: "Deferred Sale", color: "#F59E0B" },
 };
 
@@ -206,12 +206,12 @@ export default function ReportPage() {
               </tr>
             </thead>
             <tbody>
-              <ComparisonRow label="Liquid Cash — A" values={allScenarios.map(s => s.liquidStartA)} />
-              <ComparisonRow label="Liquid Cash — B" values={allScenarios.map(s => s.liquidStartB)} />
+              <ComparisonRow label="Easily Accessible Cash — A" values={allScenarios.map(s => s.liquidStartA)} />
+              <ComparisonRow label="Easily Accessible Cash — B" values={allScenarios.map(s => s.liquidStartB)} />
               <ComparisonRow label="Pension — A" values={allScenarios.map(s => s.pensionA)} />
               <ComparisonRow label="Pension — B" values={allScenarios.map(s => s.pensionB)} />
-              <ComparisonRow label="Total — A" values={allScenarios.map(s => s.totalA)} bold />
-              <ComparisonRow label="Total — B" values={allScenarios.map(s => s.totalB)} bold />
+              <ComparisonRow label="Total Value — A" values={allScenarios.map(s => s.totalA)} bold />
+              <ComparisonRow label="Total Value — B" values={allScenarios.map(s => s.totalB)} bold />
               <ComparisonRow label="Monthly Mortgage — A" values={allScenarios.map(s => s.mortgageMonthlyA ?? 0)} />
               <ComparisonRow label="Monthly Mortgage — B" values={allScenarios.map(s => s.mortgageMonthlyB ?? 0)} />
             </tbody>
@@ -236,7 +236,7 @@ export default function ReportPage() {
               </div>
 
               <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Source of Funds</h4>
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Where the Money Comes From</h4>
                 <div className="grid grid-cols-2 gap-6">
                   <FundsColumn label="Party A" funds={sourceOfFunds.A} color="text-blue-600" />
                   <FundsColumn label="Party B" funds={sourceOfFunds.B} color="text-emerald-600" />
@@ -244,7 +244,7 @@ export default function ReportPage() {
               </div>
 
               <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Stability Score</h4>
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Financial Health</h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Party A</p>
@@ -272,7 +272,7 @@ export default function ReportPage() {
               </div>
 
               <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Monthly Budget Snapshot</h4>
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Monthly Money In vs Money Out</h4>
                 <div className="grid grid-cols-2 gap-6 text-sm">
                   <div>
                     <p className="font-medium text-gray-700">Party A</p>
@@ -295,7 +295,7 @@ export default function ReportPage() {
 
               {housing && (
                 <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Housing Feasibility</h4>
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Can They Afford to Keep the House?</h4>
                   <div className="text-sm text-gray-600 space-y-0.5">
                     <p>Mortgage required: {fmt(housing.mortgageRequired)}</p>
                     <p>Income multiple: {housing.incomeMultiple.toFixed(1)}x <span className="text-xs text-gray-400">(UK standard: {housing.typicalMaxMultiple}x max)</span></p>
@@ -313,12 +313,12 @@ export default function ReportPage() {
 
               {comparison && (
                 <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Compared to Sell & Split</h4>
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">How This Compares to Just Selling</h4>
                   <div className="text-sm text-gray-600 space-y-0.5">
-                    <p>Liquid capital change — A: <DeltaValue v={comparison.deltaLiquidA} /></p>
-                    <p>Liquid capital change — B: <DeltaValue v={comparison.deltaLiquidB} /></p>
-                    <p>Net worth change — A: <DeltaValue v={comparison.deltaNetWorthA} /></p>
-                    <p>Net worth change — B: <DeltaValue v={comparison.deltaNetWorthB} /></p>
+                    <p>Accessible cash change — A: <DeltaValue v={comparison.deltaLiquidA} /></p>
+                    <p>Accessible cash change — B: <DeltaValue v={comparison.deltaLiquidB} /></p>
+                    <p>Total value change — A: <DeltaValue v={comparison.deltaNetWorthA} /></p>
+                    <p>Total value change — B: <DeltaValue v={comparison.deltaNetWorthB} /></p>
                     {comparison.notes.map((n: string, ni: number) => (
                       <p key={ni} className="text-xs text-gray-400">{n}</p>
                     ))}
@@ -428,7 +428,7 @@ function FundsColumn({ label, funds, color }: { label: string; funds: { rows: { 
         </tbody>
       </table>
       <div className="mt-1 pt-1 border-t border-gray-200 flex items-center justify-between text-sm font-semibold">
-        <span>Net liquid capital</span>
+        <span>Total accessible cash</span>
         <span className={`tabular-nums ${color}`}>{fmt(funds.netStartingLiquid)}</span>
       </div>
     </div>

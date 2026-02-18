@@ -9,13 +9,14 @@ import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { formatCurrency } from "@/lib/utils";
 import {
   ResponsiveContainer, BarChart, Bar, LineChart, Line,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend
+  XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend
 } from "recharts";
 import {
-  Calculator, ChevronLeft, ChevronRight, Check, X, AlertTriangle,
+  Calculator, ChevronLeft, ChevronRight, ChevronDown, Check, X, AlertTriangle,
   TrendingUp, Edit, Shield, ArrowDown, ArrowUp, Minus,
   DollarSign, Home, Info, Lightbulb, BarChart3, Eye,
   Target, Activity, Building2, FileText
@@ -39,10 +40,55 @@ type ViewLens = "liquidity" | "networth" | "risk";
 
 const SCENARIO_META: Record<string, { label: string; shortLabel: string; color: string; description: string }> = {
   S1: { label: "Sell & Split", shortLabel: "Sell & Split", color: "#2563EB", description: "Home is sold, proceeds divided" },
-  S2: { label: "A Keeps Home", shortLabel: "A Keeps", color: "#10B981", description: "Party A retains the family home" },
-  S3: { label: "B Keeps Home", shortLabel: "B Keeps", color: "#8B5CF6", description: "Party B retains the family home" },
+  S2: { label: "A Keeps House", shortLabel: "A Keeps House", color: "#10B981", description: "Party A keeps the family house" },
+  S3: { label: "B Keeps House", shortLabel: "B Keeps House", color: "#8B5CF6", description: "Party B keeps the family house" },
   S4: { label: "Deferred Sale", shortLabel: "Deferred", color: "#F59E0B", description: "Home sold at a later date" },
 };
+
+function InfoTip({ text }: { text: string }) {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button type="button" className="inline-flex items-center ml-1 text-muted-foreground/60 hover:text-muted-foreground cursor-help" data-testid="button-info-tip">
+          <Info className="w-3.5 h-3.5" />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="top" className="max-w-[250px] text-xs">
+        <p>{text}</p>
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
+function CollapsibleSection({ title, subtitle, icon, children, defaultOpen = false, testId }: { title: string; subtitle: string; icon: React.ReactNode; children: React.ReactNode; defaultOpen?: boolean; testId: string }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border rounded-md overflow-visible" data-testid={testId}>
+      <button
+        type="button"
+        className="w-full flex items-center justify-between gap-3 p-4 text-left hover-elevate"
+        onClick={() => setOpen(!open)}
+        data-testid={`button-toggle-${testId}`}
+      >
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center justify-center w-8 h-8 rounded-md bg-primary/10 text-primary shrink-0">
+            {icon}
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-sm font-semibold">{title}</h3>
+            <p className="text-xs text-muted-foreground">{subtitle}</p>
+          </div>
+        </div>
+        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform shrink-0 ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className="px-4 pb-4 pt-0">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function ResultsPage() {
   const store = useAppStore();
@@ -154,6 +200,15 @@ export default function ResultsPage() {
             </div>
 
             <DecisionLensToggle viewLens={viewLens} setViewLens={setViewLens} />
+
+            <div className="p-4 rounded-md border border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800">
+              <p className="text-sm text-blue-900 dark:text-blue-200 leading-relaxed" data-testid="text-guidance-callout">
+                <Info className="w-4 h-4 inline mr-1.5 -mt-0.5" />
+                The table below compares what each party walks away with under different settlement options. 
+                Hover over the <span className="inline-flex items-center"><Info className="w-3 h-3 mx-0.5" /></span> icons for plain-English explanations of each row. 
+                Use the sliders above to try different splits.
+              </p>
+            </div>
           </div>
 
           {displayScenarios.length > 0 ? (
@@ -167,35 +222,32 @@ export default function ResultsPage() {
                 store={store}
               />
 
-              <TwelveMonthSnapshot
-                scenarios={displayScenarios}
-                projections={engine.projections}
-                engine={engine}
-              />
-
-              <ScenarioStructureTable
-                scenarios={displayScenarios}
-                engine={engine}
-              />
-
-              <Separator />
-
               <div>
-                <h2 className="text-xl font-display font-bold mb-2 tracking-tight">Scenario Analysis</h2>
-                <p className="text-sm text-muted-foreground mb-4">Select a scenario for a detailed breakdown including narrative analysis, source of funds, risk assessment, and projections.</p>
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {allScenarios.map(s => (
-                    <Button
-                      key={s.id}
-                      variant={activeTab === s.id ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setActiveTab(activeTab === s.id ? null : s.id)}
-                      data-testid={`button-tab-${s.id}`}
-                    >
-                      <div className="w-2 h-2 rounded-full mr-1.5" style={{ backgroundColor: SCENARIO_META[s.id]?.color }} />
-                      {SCENARIO_META[s.id]?.label ?? s.name}
-                    </Button>
-                  ))}
+                <h2 className="text-xl font-display font-bold mb-1 tracking-tight">Scenario Analysis</h2>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Choose a scenario below to see a full breakdown — what each party receives, where the money comes from, monthly budgets, and risk assessment.
+                </p>
+                <div className="grid gap-3 sm:grid-cols-3 mb-6">
+                  {allScenarios.map(s => {
+                    const meta = SCENARIO_META[s.id];
+                    const isActive = activeTab === s.id;
+                    return (
+                      <button
+                        key={s.id}
+                        type="button"
+                        className={`text-left p-4 rounded-md border-2 transition-colors ${isActive ? "border-primary bg-primary/5" : "border-border hover-elevate"}`}
+                        onClick={() => setActiveTab(isActive ? null : s.id)}
+                        data-testid={`button-tab-${s.id}`}
+                      >
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: meta?.color }} />
+                          <span className="text-sm font-semibold">{meta?.label ?? s.name}</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">{meta?.description}</p>
+                        {isActive && <p className="text-xs text-primary font-medium mt-2">Showing breakdown below</p>}
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {activeScenario && (
@@ -209,25 +261,20 @@ export default function ResultsPage() {
                     sellProjection={s1 ? engine.projections["S1"] : undefined}
                   />
                 )}
+                {!activeScenario && (
+                  <div className="p-8 text-center border-2 border-dashed rounded-md">
+                    <p className="text-muted-foreground text-sm">Select one of the scenarios above to see its detailed breakdown</p>
+                  </div>
+                )}
               </div>
-
-              <Separator />
-
-              <SensitivityPanel
-                scenarios={displayScenarios}
-                engine={engine}
-                store={store}
-              />
-
-              <StressTestPanel />
 
               {allScenarios.length > 1 && (
                 <Card>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base flex items-center gap-2">
-                      <BarChart3 className="w-4 h-4" /> Total Position by Scenario
+                      <BarChart3 className="w-4 h-4" /> What Each Party Ends Up With
                     </CardTitle>
-                    <CardDescription>Net worth including liquid capital, home equity, and pensions</CardDescription>
+                    <CardDescription>Total value for each person, including cash, property share, and pensions</CardDescription>
                   </CardHeader>
                   <CardContent className="h-[300px]">
                     <ResponsiveContainer width="100%" height="100%">
@@ -241,7 +288,7 @@ export default function ResultsPage() {
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
                         <XAxis dataKey="name" axisLine={false} tickLine={false} fontSize={12} />
                         <YAxis axisLine={false} tickLine={false} fontSize={12} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
-                        <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                        <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
                         <Legend />
                         <Bar dataKey="Party A" fill="#2563EB" radius={[4, 4, 0, 0]} />
                         <Bar dataKey="Party B" fill="#10B981" radius={[4, 4, 0, 0]} />
@@ -251,8 +298,30 @@ export default function ResultsPage() {
                 </Card>
               )}
 
+              <div className="space-y-3">
+                <h2 className="text-lg font-display font-bold tracking-tight flex items-center gap-2">
+                  Dig Deeper
+                </h2>
+                <p className="text-sm text-muted-foreground">These sections offer more detailed analysis. Click any heading to expand it.</p>
+                <div className="space-y-2">
+                  <CollapsibleSection title="How the Scenarios Differ" subtitle="A side-by-side look at the key structural differences between options" icon={<BarChart3 className="w-4 h-4" />} testId="collapsible-structure">
+                    <ScenarioStructureTable scenarios={displayScenarios} engine={engine} />
+                  </CollapsibleSection>
+                  <CollapsibleSection title="Position After 12 Months" subtitle="How each option looks after the first year of living with it" icon={<Activity className="w-4 h-4" />} testId="collapsible-12-month">
+                    <TwelveMonthSnapshot scenarios={displayScenarios} projections={engine.projections} engine={engine} />
+                  </CollapsibleSection>
+                  <CollapsibleSection title="What Changes Matter Most" subtitle="Which assumptions have the biggest effect on your finances" icon={<Activity className="w-4 h-4" />} testId="collapsible-sensitivity">
+                    <SensitivityPanel scenarios={displayScenarios} engine={engine} store={store} />
+                  </CollapsibleSection>
+                  <CollapsibleSection title="Stress Testing" subtitle="Try changing mortgage rates and living costs to see how resilient each option is" icon={<AlertTriangle className="w-4 h-4" />} testId="collapsible-stress-test">
+                    <StressTestPanel />
+                  </CollapsibleSection>
+                </div>
+              </div>
+
               <div className="p-4 bg-muted/30 rounded-md text-xs text-muted-foreground space-y-2" data-testid="section-assumptions-appendix">
                 <h3 className="text-sm font-semibold text-foreground">Assumptions</h3>
+                <p className="text-xs text-muted-foreground mb-2">These are the numbers and settings used to calculate everything above. You can adjust the key ones using the sliders at the top.</p>
                 <div className="grid gap-x-8 gap-y-1 sm:grid-cols-2">
                   <div className="flex justify-between gap-2"><span>Asset split (A : B)</span><span className="tabular-nums">{Math.round(assumptions.splitRatio * 100)}% : {Math.round((1 - assumptions.splitRatio) * 100)}%</span></div>
                   <div className="flex justify-between gap-2"><span>Pension split (A : B)</span><span className="tabular-nums">{Math.round(assumptions.splitPensionToA * 100)}% : {Math.round((1 - assumptions.splitPensionToA) * 100)}%</span></div>
@@ -288,9 +357,9 @@ export default function ResultsPage() {
 
 function DecisionLensToggle({ viewLens, setViewLens }: { viewLens: ViewLens; setViewLens: (v: ViewLens) => void }) {
   const lenses: { id: ViewLens; label: string; icon: typeof DollarSign; description: string }[] = [
-    { id: "liquidity", label: "Liquidity Focus", icon: DollarSign, description: "Starting cash, monthly surplus, runway" },
-    { id: "networth", label: "Net Worth Focus", icon: Target, description: "Total position, property, pension concentration" },
-    { id: "risk", label: "Risk & Sustainability", icon: Activity, description: "Stability scores, funding gaps, affordability" },
+    { id: "liquidity", label: "Cash Focus", icon: DollarSign, description: "How much spendable money each person has" },
+    { id: "networth", label: "Total Wealth", icon: Target, description: "Everything each person owns, including property and pensions" },
+    { id: "risk", label: "Risk & Long-Term", icon: Activity, description: "How secure each person's finances are over time" },
   ];
 
   return (
@@ -349,7 +418,7 @@ function TwelveMonthSnapshot({
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-a">Party A liquid remaining</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-a">A's accessible cash after year 1</TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr1 = proj && proj.length > 1 ? proj[1] : null;
@@ -361,7 +430,7 @@ function TwelveMonthSnapshot({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-b">Party B liquid remaining</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-b">B's accessible cash after year 1</TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr1 = proj && proj.length > 1 ? proj[1] : null;
@@ -373,7 +442,7 @@ function TwelveMonthSnapshot({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-a">Monthly surplus (A)</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-a">A's monthly surplus or shortfall</TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr0Capital = proj && proj.length > 0 ? proj[0].capitalA : s.liquidStartA;
@@ -388,7 +457,7 @@ function TwelveMonthSnapshot({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-b">Monthly surplus (B)</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-b">B's monthly surplus or shortfall</TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr0Capital = proj && proj.length > 0 ? proj[0].capitalB : s.liquidStartB;
@@ -403,7 +472,7 @@ function TwelveMonthSnapshot({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-buffer-a">Months of buffer (A)</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-buffer-a">How many months A's savings cover</TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr0Cap = proj && proj.length > 0 ? proj[0].capitalA : s.liquidStartA;
@@ -493,7 +562,7 @@ function ScenarioStructureTable({
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground">Immediate liquidity</TableCell>
+                <TableCell className="text-sm text-muted-foreground">How much cash is available straight away</TableCell>
                 {scenarios.map(s => {
                   const label = getImmediateLiquidity(s);
                   return (
@@ -504,7 +573,7 @@ function ScenarioStructureTable({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground">Mortgage dependency</TableCell>
+                <TableCell className="text-sm text-muted-foreground">Needs a mortgage?</TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center text-sm">
                     {hasMortgage(s)
@@ -514,7 +583,7 @@ function ScenarioStructureTable({
                 ))}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground">Property concentration</TableCell>
+                <TableCell className="text-sm text-muted-foreground">How much wealth is tied up in property</TableCell>
                 {scenarios.map(s => {
                   const conc = propertyConcentration(s);
                   return (
@@ -527,7 +596,7 @@ function ScenarioStructureTable({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground">Pension concentration</TableCell>
+                <TableCell className="text-sm text-muted-foreground">How much wealth is in pensions</TableCell>
                 {scenarios.map(s => {
                   const totalA = s.totalA || 1;
                   const totalB = s.totalB || 1;
@@ -541,7 +610,7 @@ function ScenarioStructureTable({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground">Complexity level</TableCell>
+                <TableCell className="text-sm text-muted-foreground">How complicated to arrange</TableCell>
                 {scenarios.map(s => {
                   const comp = getComplexity(s);
                   return (
@@ -591,7 +660,7 @@ function SensitivityPanel({
           <Activity className="w-4 h-4" /> What Changes Matter Most?
         </CardTitle>
         <CardDescription>
-          Ranked by how much each factor affects your financial position. This shows which assumptions have the largest impact on sustainability.
+          These are the things that would make the biggest difference to your finances if they changed.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -671,19 +740,19 @@ function ExecutiveTable({
             </TableHeader>
             <TableBody>
               <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground">Party A liquid cash</TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Easily accessible cash (A)<InfoTip text="Money that Party A can access quickly — bank accounts, savings, ISAs, and investments that could be sold." /></></TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums font-semibold text-blue-600">{formatCurrency(s.liquidStartA)}</TableCell>
                 ))}
               </TableRow>
               <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground">Party B liquid cash</TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Easily accessible cash (B)<InfoTip text="Money that Party B can access quickly — bank accounts, savings, ISAs, and investments that could be sold." /></></TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums font-semibold text-emerald-600">{formatCurrency(s.liquidStartB)}</TableCell>
                 ))}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground">Buyout required</TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Payment to other party<InfoTip text="The lump sum the person keeping the house needs to pay the other person for their share of the home equity." /></></TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums">
                     {s.buyoutAmount != null && s.buyoutAmount > 0 ? formatCurrency(s.buyoutAmount) : <span className="text-muted-foreground">N/A</span>}
@@ -691,7 +760,7 @@ function ExecutiveTable({
                 ))}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground">Funding gap</TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Shortfall<InfoTip text="If the person keeping the house doesn't have enough cash to pay the other party, this is the amount they'd need to find — possibly through a bigger mortgage." /></></TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums">
                     {s.fundingGap != null && s.fundingGap > 0
@@ -701,7 +770,7 @@ function ExecutiveTable({
                 ))}
               </TableRow>
               <TableRow>
-                <TableCell className="font-medium text-muted-foreground">Annual mortgage cost</TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Yearly mortgage payments<InfoTip text="Total mortgage repayments per year. This is higher when someone keeps the house as they may need a larger mortgage." /></></TableCell>
                 {scenarios.map(s => {
                   const annual = ((s.mortgageMonthlyA ?? 0) + (s.mortgageMonthlyB ?? 0)) * 12;
                   return (
@@ -712,7 +781,7 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground">5-year runway</TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>How long savings last<InfoTip text="Whether each party's savings and cash will last at least 5 years based on their income, expenses and mortgage payments." /></></TableCell>
                 {scenarios.map(s => {
                   const runway = getRunway(projections[s.id]);
                   return (
@@ -725,7 +794,7 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground">Stability (A)</TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Financial health (A)<InfoTip text="An overall score for Party A's financial stability — considering their cash buffer, monthly surplus, mortgage burden and how long their savings last." /></></TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
                   return (
@@ -736,7 +805,7 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground">Stability (B)</TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Financial health (B)<InfoTip text="An overall score for Party B's financial stability — considering their cash buffer, monthly surplus, mortgage burden and how long their savings last." /></></TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
                   return (
@@ -747,13 +816,13 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={`font-bold ${viewLens === "networth" ? "bg-primary/5" : ""}`}>
-                <TableCell className="text-foreground">Net worth (A)</TableCell>
+                <TableCell className="text-foreground"><>Total value of everything (A)<InfoTip text="Everything Party A has — accessible cash plus their share of home equity plus pensions. Not all of this can be spent day-to-day." /></></TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums text-blue-600 text-base">{formatCurrency(s.totalA)}</TableCell>
                 ))}
               </TableRow>
               <TableRow className={`font-bold ${viewLens === "networth" ? "bg-primary/5" : ""}`}>
-                <TableCell className="text-foreground">Net worth (B)</TableCell>
+                <TableCell className="text-foreground"><>Total value of everything (B)<InfoTip text="Everything Party B has — accessible cash plus their share of home equity plus pensions. Not all of this can be spent day-to-day." /></></TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums text-emerald-600 text-base">{formatCurrency(s.totalB)}</TableCell>
                 ))}
@@ -879,12 +948,12 @@ function ScenarioDetailCard({
         {projection && projection.length > 1 && (
           <div>
             <h3 className="text-sm font-semibold mb-1 flex items-center gap-1">
-              <TrendingUp className="h-3 w-3" /> Liquid Cash Projection
+              <TrendingUp className="h-3 w-3" /> Accessible Cash Over Time
             </h3>
             <p className="text-xs text-muted-foreground mb-2">
               Shows each party's available cash over time. Each year: starting cash + net income - living costs - mortgage payments = end-of-year balance.
-              {((scenario.homeEquityA ?? 0) > 0 || (scenario.homeEquityB ?? 0) > 0) && " Home equity is excluded as it cannot be easily accessed."}
-              {" "}If a line drops below zero, that party may need to borrow or sell assets to cover costs.
+              {((scenario.homeEquityA ?? 0) > 0 || (scenario.homeEquityB ?? 0) > 0) && " Home value isn't included here because it can't easily be turned into spendable cash."}
+              {" "}If a line drops below zero, that person would need to borrow or sell something to cover their costs.
             </p>
             <div className="h-[260px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -892,7 +961,7 @@ function ScenarioDetailCard({
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
                   <XAxis dataKey="year" axisLine={false} tickLine={false} fontSize={11} />
                   <YAxis axisLine={false} tickLine={false} fontSize={11} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
-                  <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                  <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
                   <Legend />
                   <Line type="monotone" dataKey="capitalA" name="Party A" stroke="#2563EB" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="capitalB" name="Party B" stroke="#10B981" strokeWidth={2} dot={false} />
@@ -1009,8 +1078,8 @@ function SourceOfFundsTable({ sourceOfFunds, scenario }: { sourceOfFunds: Source
   return (
     <div className="space-y-3" data-testid="section-source-of-funds">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        Source of Funds
-        <span className="text-xs font-normal text-muted-foreground">(click rows to expand)</span>
+        Where the Money Comes From
+        <span className="text-xs font-normal text-muted-foreground">(tap any row for the full calculation)</span>
       </h3>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1">
@@ -1020,7 +1089,7 @@ function SourceOfFundsTable({ sourceOfFunds, scenario }: { sourceOfFunds: Source
           ))}
           <Separator className="my-1" />
           <div className="flex items-center justify-between text-sm font-semibold gap-2">
-            <span>Net liquid capital</span>
+            <span>Total accessible cash</span>
             <span className="tabular-nums text-blue-600" data-testid="text-net-liquid-a">{formatCurrency(sourceOfFunds.A.netStartingLiquid)}</span>
           </div>
           {sourceOfFunds.pension.A_after > 0 && (
@@ -1037,7 +1106,7 @@ function SourceOfFundsTable({ sourceOfFunds, scenario }: { sourceOfFunds: Source
           ))}
           <Separator className="my-1" />
           <div className="flex items-center justify-between text-sm font-semibold gap-2">
-            <span>Net liquid capital</span>
+            <span>Total accessible cash</span>
             <span className="tabular-nums text-emerald-600" data-testid="text-net-liquid-b">{formatCurrency(sourceOfFunds.B.netStartingLiquid)}</span>
           </div>
           {sourceOfFunds.pension.B_after > 0 && (
@@ -1077,7 +1146,7 @@ function CompositionChart({ scenario }: { scenario: ScenarioResult }) {
             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="hsl(var(--border))" />
             <XAxis type="number" axisLine={false} tickLine={false} fontSize={11} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
             <YAxis type="category" dataKey="name" axisLine={false} tickLine={false} fontSize={12} width={60} />
-            <Tooltip formatter={(value: number) => formatCurrency(value)} />
+            <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
             <Legend />
             <Bar dataKey="Liquid" stackId="a" fill="#3B82F6" radius={[0, 0, 0, 0]} />
             <Bar dataKey="Home Equity" stackId="a" fill="#F59E0B" radius={[0, 0, 0, 0]} />
@@ -1093,7 +1162,7 @@ function StabilitySection({ score }: { score: StabilityResult }) {
   return (
     <div className="space-y-3" data-testid="section-stability">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <Shield className="w-3.5 h-3.5" /> Stability Analysis
+        <Shield className="w-3.5 h-3.5" /> Financial Health Check
       </h3>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-2">
@@ -1132,7 +1201,7 @@ function StabilitySection({ score }: { score: StabilityResult }) {
 function MonthlySnapshotSection({ snapshot }: { snapshot: MonthlySnapshotResult }) {
   return (
     <div className="space-y-3" data-testid="section-monthly-snapshot">
-      <h3 className="text-sm font-semibold">Monthly Budget Snapshot</h3>
+      <h3 className="text-sm font-semibold">Monthly Money In vs Money Out</h3>
       <Table>
         <TableHeader>
           <TableRow>
@@ -1154,7 +1223,7 @@ function MonthlySnapshotSection({ snapshot }: { snapshot: MonthlySnapshotResult 
             </TableRow>
           ))}
           <TableRow className="font-semibold border-t-2">
-            <TableCell className="text-xs py-1.5">Monthly surplus / deficit</TableCell>
+            <TableCell className="text-xs py-1.5">Left over each month</TableCell>
             <TableCell className={`text-right tabular-nums text-xs py-1.5 font-bold ${snapshot.surplusA < 0 ? "text-red-600" : "text-emerald-600"}`}>
               {snapshot.surplusA < 0 ? `(${formatCurrency(Math.abs(snapshot.surplusA))})` : formatCurrency(snapshot.surplusA)}
             </TableCell>
@@ -1173,34 +1242,34 @@ function HousingFeasibilityPanel({ feasibility, scenarioId }: { feasibility: Hou
   return (
     <div className="p-4 border rounded-md space-y-3" data-testid="section-housing-feasibility">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <Building2 className="w-3.5 h-3.5" /> Housing Feasibility — Party {keeper}
+        <Building2 className="w-3.5 h-3.5" /> Can They Afford to Keep the House? — Party {keeper}
       </h3>
       <div className="grid gap-3 sm:grid-cols-3">
         <div className="space-y-0.5">
-          <span className="text-xs text-muted-foreground">Mortgage required</span>
+          <span className="text-xs text-muted-foreground">Mortgage needed</span>
           <p className="text-sm font-semibold tabular-nums" data-testid="text-hf-mortgage-required">{formatCurrency(feasibility.mortgageRequired)}</p>
         </div>
         <div className="space-y-0.5">
-          <span className="text-xs text-muted-foreground">Estimated monthly payment</span>
+          <span className="text-xs text-muted-foreground">Monthly mortgage payment</span>
           <p className="text-sm font-semibold tabular-nums" data-testid="text-hf-monthly-payment">{formatCurrency(feasibility.estimatedMonthlyPayment)}/mo</p>
         </div>
         <div className="space-y-0.5">
-          <span className="text-xs text-muted-foreground">Income multiple</span>
+          <span className="text-xs text-muted-foreground">Mortgage as multiple of income</span>
           <p className={`text-sm font-semibold tabular-nums ${feasibility.withinLendingCriteria ? "text-emerald-600" : "text-red-600"}`} data-testid="text-hf-income-multiple">
             {feasibility.incomeMultiple.toFixed(1)}x
             <span className="text-xs text-muted-foreground font-normal ml-1">(max {feasibility.typicalMaxMultiple}x)</span>
           </p>
         </div>
         <div className="space-y-0.5">
-          <span className="text-xs text-muted-foreground">Available liquid capital</span>
+          <span className="text-xs text-muted-foreground">Cash available for deposit</span>
           <p className="text-sm font-semibold tabular-nums" data-testid="text-hf-available-capital">{formatCurrency(feasibility.availableDeposit)}</p>
         </div>
         <div className="space-y-0.5">
-          <span className="text-xs text-muted-foreground">Equity position</span>
+          <span className="text-xs text-muted-foreground">Deposit as % of house value</span>
           <p className="text-sm font-semibold tabular-nums" data-testid="text-hf-equity-position">{feasibility.depositPercentage.toFixed(0)}%</p>
         </div>
         <div className="space-y-0.5">
-          <span className="text-xs text-muted-foreground">Payment as % of net income</span>
+          <span className="text-xs text-muted-foreground">How much of take-home pay goes to mortgage</span>
           <p className={`text-sm font-semibold tabular-nums ${feasibility.monthlyPaymentAsPercentOfNetIncome > 35 ? "text-amber-600" : "text-emerald-600"}`} data-testid="text-hf-payment-pct">
             {feasibility.monthlyPaymentAsPercentOfNetIncome.toFixed(0)}%
           </p>
@@ -1224,7 +1293,7 @@ function NegotiationLeversPanel({ levers }: { levers: NegotiationLever[] }) {
   return (
     <div className="p-4 border rounded-md space-y-3" data-testid="section-negotiation-levers">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <Lightbulb className="w-3.5 h-3.5" /> Negotiation Levers
+        <Lightbulb className="w-3.5 h-3.5" /> Ways to Improve the Outcome
       </h3>
       <p className="text-xs text-muted-foreground">
         Potential adjustments that could improve the outcome. These are illustrative — actual impacts depend on full recalculation.
@@ -1254,7 +1323,7 @@ function ComparisonDeltaPanel({ delta, scenarioId }: { delta: ComparisonDelta; s
   return (
     <div className="p-4 bg-muted/30 rounded-md space-y-2" data-testid="section-comparison-delta">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <TrendingUp className="w-3.5 h-3.5" /> Compared to Selling
+        <TrendingUp className="w-3.5 h-3.5" /> How This Compares to Just Selling
       </h3>
       <ul className="space-y-1.5">
         {delta.notes.map((note, i) => (
@@ -1294,7 +1363,7 @@ function StressTestPanel() {
     <Card data-testid="card-stress-test">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4" /> Stress Testing
+          <AlertTriangle className="w-4 h-4" /> What If Things Change?
         </CardTitle>
         <CardDescription>
           Adjust the sliders below to see how changes affect all the scenarios above in real time. 
@@ -1343,7 +1412,7 @@ function StressTestPanel() {
               <span>+30%</span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Adjust all living costs up or down to model inflation or lifestyle changes. 
+              Move all your living costs up or down to see what happens if prices rise or you manage to cut back. 
               A +10% increase shows how rising prices could erode your financial cushion.
             </p>
           </div>
