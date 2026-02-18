@@ -3,8 +3,22 @@ import type { Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
+import crypto from "crypto";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { seedDatabase } from "./seed";
+
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+function rateLimit(key: string, maxAttempts: number, windowMs: number): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(key);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(key, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+  if (entry.count >= maxAttempts) return false;
+  entry.count++;
+  return true;
+}
 
 export async function registerRoutes(
   httpServer: Server,
@@ -127,6 +141,11 @@ export async function registerRoutes(
 
   app.post('/api/access/recover', async (req, res) => {
     try {
+      const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
+      if (!rateLimit(`recover:${clientIp}`, 5, 60 * 60 * 1000)) {
+        return res.status(429).json({ message: 'Too many attempts. Please try again later.' });
+      }
+
       const schema = z.object({ email: z.string().email() });
       const { email } = schema.parse(req.body);
 
@@ -157,12 +176,22 @@ export async function registerRoutes(
   const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || process.env.SESSION_SECRET || '';
 
   function requireAdmin(req: any, res: any, next: any) {
+    const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
+    if (!rateLimit(`admin:${clientIp}`, 10, 15 * 60 * 1000)) {
+      return res.status(429).json({ message: 'Too many attempts. Please try again later.' });
+    }
+
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ message: 'Authentication required' });
     }
     const token = authHeader.slice(7);
-    if (!ADMIN_PASSWORD || token !== ADMIN_PASSWORD) {
+    if (!ADMIN_PASSWORD) {
+      return res.status(403).json({ message: 'Invalid credentials' });
+    }
+    const tokenBuf = Buffer.from(token);
+    const passBuf = Buffer.from(ADMIN_PASSWORD);
+    if (tokenBuf.length !== passBuf.length || !crypto.timingSafeEqual(tokenBuf, passBuf)) {
       return res.status(403).json({ message: 'Invalid credentials' });
     }
     next();

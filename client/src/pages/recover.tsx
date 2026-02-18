@@ -37,6 +37,10 @@ export default function RecoverPage() {
         body: JSON.stringify({ email: email.trim() }),
       });
 
+      if (res.status === 429) {
+        setState({ status: "error", message: "Too many attempts. Please wait a while before trying again." });
+        return;
+      }
       if (!res.ok) {
         setState({ status: "error", message: "Something went wrong. Please try again." });
         return;

@@ -63,6 +63,12 @@ Technical SEO is implemented for target domain `divorcecalculatoruk.co.uk`:
 - **Terms of Use** (`/terms`): UK consumer protection compliant, includes Consumer Rights Act 2015, 14-day cooling-off period, limitation of liability
 - **Google Fonts**: Reduced from 25+ families to Inter (primary) + Playfair Display (headings) only
 
+### Access Management
+- **Email recovery** (`/recover`): Users enter the email used at checkout to recover their session token and regain access. Rate-limited to 5 attempts per IP per hour.
+- **Expiry visibility**: Results page disclaimer bar shows access expiry date; amber warning badge when ≤14 days remain.
+- **Admin panel** (`/admin`): Password-protected (ADMIN_PASSWORD env var) panel for customer support. Lookup purchases by email, extend access by 1-12 months. Rate-limited admin auth with timing-safe comparison. No financial data exposed — only purchase metadata.
+- **Security**: Recovery endpoint rate-limited, admin auth uses crypto.timingSafeEqual, both endpoints behind rate limiting. Session tokens only unlock UI — all financial data stays in browser localStorage.
+
 ## External Dependencies
 
 ### Database
