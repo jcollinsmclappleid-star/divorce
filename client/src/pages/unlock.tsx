@@ -4,10 +4,11 @@ import { useAccess, useSessionToken } from "@/hooks/use-access";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
-  ShieldCheck, ArrowLeft, CheckCircle, Loader2,
+  ArrowLeft, CheckCircle, Loader2,
   BarChart3, TrendingUp, Calculator, FileText, Sliders, Search, Scale
 } from "lucide-react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
+import { Logo } from "@/components/logo";
 import { useNoIndex } from "@/hooks/use-noindex";
 
 const VALUE_ITEMS = [
@@ -65,10 +66,7 @@ export default function UnlockPage() {
     <div className="min-h-screen bg-background">
       <header className="border-b bg-background/95 backdrop-blur">
         <div className="max-w-4xl mx-auto flex items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-primary" />
-            <span className="font-semibold text-sm">DivorceCalculatorUK</span>
-          </div>
+          <Logo size="sm" />
           <Button variant="ghost" size="sm" asChild>
             <Link href="/preview" data-testid="button-back-to-preview">
               <ArrowLeft className="w-4 h-4 mr-1" />

@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useCreateSession } from "@/hooks/use-sessions";
 import { useAppStore } from "@/hooks/use-store";
 import { useState } from "react";
+import { Logo } from "@/components/logo";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: PieChart },
@@ -55,14 +56,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </SheetContent>
             </Sheet>
             
-            <Link href="/" className="flex items-center gap-2">
-              <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
-                <Calculator className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-display font-bold tracking-tight hidden sm:inline-block">
-                Divorce<span className="font-sans font-semibold text-primary">CalculatorUK</span>
-              </span>
-            </Link>
+            <Logo size="md" />
           </div>
 
           <nav className="hidden md:flex items-center gap-6">

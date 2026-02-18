@@ -6,6 +6,7 @@ import { CheckCircle, Loader2 } from "lucide-react";
 import { useAccess } from "@/hooks/use-access";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
+import { Logo } from "@/components/logo";
 
 export default function PaymentSuccessPage() {
   useDocumentTitle("Payment Confirmed | DivorceCalculatorUK");
@@ -53,6 +54,9 @@ export default function PaymentSuccessPage() {
     <div className="min-h-screen flex items-center justify-center bg-background p-6">
       <Card className="max-w-md w-full">
         <CardContent className="pt-8 pb-8 text-center space-y-6">
+          <div className="flex justify-center">
+            <Logo href="/" size="md" />
+          </div>
           {verifying ? (
             <>
               <Loader2 className="w-12 h-12 animate-spin text-muted-foreground mx-auto" />

@@ -6,10 +6,11 @@ import { computeStabilityScore } from "@/lib/insights/computeStabilityScore";
 import { formatCurrency } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Lock, ShieldCheck, Check, ArrowRight } from "lucide-react";
+import { Lock, Check, ArrowRight } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
+import { Logo } from "@/components/logo";
 
 function BlurredSection({ title, height = "h-32" }: { title: string; height?: string }) {
   return (
@@ -88,10 +89,7 @@ export default function PreviewPage() {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-primary" />
-            <span className="font-semibold text-sm">DivorceCalculatorUK</span>
-          </div>
+          <Logo size="sm" />
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" asChild>
               <Link href="/wizard" data-testid="button-edit-inputs-preview">Edit Inputs</Link>

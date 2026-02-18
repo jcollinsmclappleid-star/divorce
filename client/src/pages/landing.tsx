@@ -10,6 +10,7 @@ import {
 import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
 import { useAppStore } from "@/hooks/use-store";
 import { useDocumentTitle } from "@/hooks/use-document-title";
+import { Logo } from "@/components/logo";
 
 const QUANTIFIES_ITEMS = [
   {
@@ -104,14 +105,7 @@ export default function LandingPage() {
 
       <nav className="sticky top-0 z-[100] w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 bg-primary rounded-md flex items-center justify-center">
-              <Calculator className="h-4.5 w-4.5 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-display font-bold tracking-tight">
-              Divorce<span className="font-sans font-semibold text-primary">CalculatorUK</span>
-            </span>
-          </div>
+          <Logo size="md" />
           <Button
             onClick={() => setLocation("/wizard")}
             data-testid="button-nav-start"
@@ -363,13 +357,8 @@ export default function LandingPage() {
 
       <footer className="border-t border-border/40 py-8 bg-muted/20" data-testid="section-footer">
         <div className="container mx-auto px-4 text-center space-y-3">
-          <div className="flex items-center justify-center gap-2.5">
-            <div className="h-6 w-6 bg-primary rounded-md flex items-center justify-center">
-              <Calculator className="h-3.5 w-3.5 text-primary-foreground" />
-            </div>
-            <span className="text-sm font-display font-bold">
-              Divorce<span className="font-sans font-semibold text-primary">CalculatorUK</span>
-            </span>
+          <div className="flex items-center justify-center">
+            <Logo href="/" size="sm" />
           </div>
           <p className="text-xs text-muted-foreground/70 max-w-md mx-auto">
             Structured Financial Modelling for Separation & Divorce

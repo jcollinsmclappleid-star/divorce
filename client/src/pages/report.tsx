@@ -19,6 +19,7 @@ import type {
   SourceOfFunds, StabilityResult, MonthlySnapshotResult, HousingFeasibility,
 } from "@/lib/insights";
 import type { StabilityDriver } from "@/lib/insights/computeStabilityScore";
+import { LogoPrint } from "@/components/logo";
 
 const SCENARIO_META: Record<string, { label: string; color: string }> = {
   S1: { label: "Sell & Split", color: "#2563EB" },
@@ -206,6 +207,9 @@ export default function ReportPage() {
 
       <div className="max-w-4xl mx-auto px-8 py-10 print:px-0 print:py-0" data-testid="report-content">
         <header className="mb-10 pb-6 border-b-2 border-gray-800">
+          <div className="flex items-center justify-between mb-4">
+            <LogoPrint className="h-10" />
+          </div>
           <h1 className="text-3xl font-bold tracking-tight" data-testid="text-report-title">Structured Financial Brief</h1>
           <p className="text-sm text-gray-500 mt-1">
             Generated {new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })} &middot; UK {store.config.taxYear} Tax Rules
@@ -652,7 +656,9 @@ export default function ReportPage() {
         </section>
 
         <footer className="mt-12 pt-6 border-t border-gray-300 text-center space-y-2 pb-10">
-          <p className="text-xs text-gray-400 font-semibold">DivorceCalculatorUK</p>
+          <div className="flex justify-center mb-2">
+            <LogoPrint className="h-6" />
+          </div>
           <p className="text-[10px] text-gray-400 leading-relaxed max-w-lg mx-auto">
             Illustrative modelling only — not legal, tax, or financial advice.
             All outputs are estimates based on the information entered and standard assumptions. They should not be relied upon for decision-making without independent professional advice. Affordability indicators are benchmarked against typical market heuristics and do not represent a mortgage offer or credit assessment.

@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { useAppStore, Asset, Liability, Income, Expense } from "@/hooks/use-store";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
+import { Logo } from "@/components/logo";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -103,14 +104,7 @@ export default function WizardPage() {
 
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
-              <Calculator className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-display font-bold tracking-tight hidden sm:inline-block">
-              Divorce<span className="font-sans font-semibold text-primary">CalculatorUK</span>
-            </span>
-          </div>
+          <Logo size="md" />
 
           <div className="flex-1 max-w-lg mx-auto hidden md:block">
             <div className="flex items-center gap-1">
