@@ -1,6 +1,6 @@
 import { useMemo, Fragment } from "react";
 import { Link } from "wouter";
-import { useAppStore } from "@/hooks/use-store";
+import { useAppStore, StoreState } from "@/hooks/use-store";
 import { useEngine, ScenarioResult, ProjectionYear, RunwayResult } from "@/hooks/use-engine";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,109 @@ const SCENARIO_META: Record<string, { label: string; color: string }> = {
 
 function fmt(v: number) { return formatCurrency(v); }
 function pct(v: number) { return `${Math.round(v * 100)}%`; }
+
+function buildQualitativeExecutiveSummary(
+  engine: ReturnType<typeof useEngine>,
+  store: StoreState,
+  scenarioData: { sc: ScenarioResult; narrative: ReturnType<typeof generateScenarioNarrative>; stability: StabilityResult; housing: HousingFeasibility | null }[],
+): string[] {
+  const paragraphs: string[] = [];
+  const { intermediate } = engine;
+  const totalAssets = store.assets.reduce((s, a) => s + a.currentValue, 0);
+  const totalLiab = store.liabilities.reduce((s, l) => s + l.balance, 0);
+  const hasHome = store.assets.some(a => a.category === "primary_home" && a.currentValue > 0);
+  const homeValue = store.assets.find(a => a.category === "primary_home")?.currentValue ?? 0;
+  const hasPension = store.assets.some(a => a.category === "pension");
+  const totalPensionCETV = store.assets.filter(a => a.category === "pension").reduce((s, p) => s + (p.cetv ?? p.currentValue), 0);
+  const splitPct = Math.round(store.assumptions.splitRatio * 100);
+  const otherPct = 100 - splitPct;
+  const incomeA = engine.taxA.gross;
+  const incomeB = engine.taxB.gross;
+  const netA = engine.taxA.net;
+  const netB = engine.taxB.net;
+
+  const openingParts: string[] = [];
+  openingParts.push(`This report presents an illustrative financial analysis of the marital estate, comprising ${fmt(totalAssets)} in total assets${totalLiab > 0 ? ` offset by ${fmt(totalLiab)} in liabilities` : ""}, producing a combined net worth of ${fmt(engine.netWorth.total)}.`);
+
+  if (hasHome) {
+    const equityPct = totalAssets > 0 ? Math.round((homeValue / totalAssets) * 100) : 0;
+    openingParts.push(`The primary residence, valued at ${fmt(homeValue)} with ${fmt(intermediate.netHomeEquity)} in net equity after sale costs, represents approximately ${equityPct}% of total assets and is the single largest component of the estate.`);
+  }
+
+  if (hasPension && totalPensionCETV > 0) {
+    openingParts.push(`Pension provision totals ${fmt(totalPensionCETV)} by Cash Equivalent Transfer Value (CETV) and is treated separately from liquid assets within the modelling.`);
+  }
+
+  paragraphs.push(openingParts.join(" "));
+
+  const incomeParts: string[] = [];
+  if (incomeA > 0 || incomeB > 0) {
+    incomeParts.push(`Combined gross household income is ${fmt(incomeA + incomeB)} per annum.`);
+    if (incomeA > 0 && incomeB > 0) {
+      const higherParty = incomeA >= incomeB ? "A" : "B";
+      const higherAmt = Math.max(incomeA, incomeB);
+      const lowerAmt = Math.min(incomeA, incomeB);
+      const ratio = lowerAmt > 0 ? (higherAmt / lowerAmt).toFixed(1) : "significantly higher";
+      incomeParts.push(`Party ${higherParty} earns ${typeof ratio === "string" ? ratio : ratio + "x"} the income of the other party (${fmt(higherAmt)} versus ${fmt(lowerAmt)} gross), resulting in a material income disparity that affects post-separation sustainability.`);
+    } else {
+      const earner = incomeA > 0 ? "A" : "B";
+      incomeParts.push(`Only Party ${earner} has declared income, which creates a significant dependency consideration in all scenarios.`);
+    }
+    incomeParts.push(`After applying estimated 2025/26 UK income tax and National Insurance, net incomes are ${fmt(netA)} (Party A) and ${fmt(netB)} (Party B) per annum.`);
+    if (engine.cmsAnnual > 0) {
+      incomeParts.push(`Child maintenance obligations, estimated at ${fmt(engine.cmsAnnual)} per annum using the CMS formula, are factored into the projection model.`);
+    }
+  }
+  paragraphs.push(incomeParts.join(" "));
+
+  const scenarioParts: string[] = [];
+  const scCount = scenarioData.length;
+  scenarioParts.push(`The analysis models ${scCount} settlement scenario${scCount !== 1 ? "s" : ""} under a ${splitPct}/${otherPct} asset division assumption${store.assumptions.splitPensionToA !== store.assumptions.splitRatio ? `, with pensions split ${Math.round(store.assumptions.splitPensionToA * 100)}/${Math.round((1 - store.assumptions.splitPensionToA) * 100)}` : ""}.`);
+
+  for (const { sc, narrative, stability, housing } of scenarioData) {
+    const meta = SCENARIO_META[sc.id];
+    const label = meta?.label ?? sc.name;
+    const parts: string[] = [];
+    parts.push(`Under the "${label}" scenario, Party A receives a total net asset position of ${fmt(sc.totalA)} and Party B receives ${fmt(sc.totalB)}.`);
+
+    if (sc.id !== "S1" && sc.buyoutAmount && sc.buyoutAmount > 0) {
+      parts.push(`This requires a buyout payment (equity transfer obligation) of ${fmt(sc.buyoutAmount)}.`);
+    }
+
+    if (sc.fundingGap && sc.fundingGap > 0) {
+      parts.push(`A funding shortfall of ${fmt(sc.fundingGap)} is identified, indicating that additional borrowing or asset liquidation may be required.`);
+    }
+
+    const runway = engine.runways[sc.id];
+    if (runway) {
+      const aStatus = runway.partyA.sustained ? "sustained over the projection period" : `projected to deplete by year ${runway.partyA.depletionYear}`;
+      const bStatus = runway.partyB.sustained ? "sustained over the projection period" : `projected to deplete by year ${runway.partyB.depletionYear}`;
+      parts.push(`Capital runway analysis indicates that Party A's liquid reserves are ${aStatus}, while Party B's are ${bStatus}.`);
+    }
+
+    const scoreLabel = stability.labelA.includes("Elevated") || stability.labelB.includes("Elevated")
+      ? "elevated sustainability risk"
+      : stability.labelA.includes("Moderate") || stability.labelB.includes("Moderate")
+      ? "moderate sustainability risk"
+      : "financial stability within the modelled parameters";
+    parts.push(`The overall assessment indicates ${scoreLabel} (Party A: ${stability.scoreA}/100, Party B: ${stability.scoreB}/100).`);
+
+    if (housing) {
+      parts.push(`Affordability benchmarking classifies this scenario as "${housing.classification.toLowerCase()}" based on standard income multiple and payment-to-income ratio analysis.`);
+    }
+
+    scenarioParts.push(parts.join(" "));
+  }
+  paragraphs.push(scenarioParts.join(" "));
+
+  const closingParts: string[] = [];
+  closingParts.push("The figures presented in this report are based on the data provided and standard modelling assumptions, including current UK 2025/26 tax and National Insurance rates.");
+  closingParts.push(`All projections use an assumed inflation rate of ${(store.assumptions.inflationRate * 100).toFixed(1)}% and a mortgage interest rate of ${(store.assumptions.mortgageAPR * 100).toFixed(1)}% over a ${store.assumptions.mortgageTermYears}-year term.`);
+  closingParts.push("This analysis is illustrative only and does not constitute legal, tax, or financial advice. The scenarios modelled represent potential outcomes under specified assumptions and should not be interpreted as predictions or recommendations. Independent professional advice should be obtained before making any financial decisions relating to separation or divorce.");
+  paragraphs.push(closingParts.join(" "));
+
+  return paragraphs;
+}
 
 function computeAllScenarios(engine: ReturnType<typeof useEngine>): ScenarioResult[] {
   const all: ScenarioResult[] = [];
@@ -114,6 +217,12 @@ export default function ReportPage() {
             </p>
           </div>
         </header>
+
+        <ReportSection title="Executive Summary">
+          {buildQualitativeExecutiveSummary(engine, store, scenarioData).map((para, i) => (
+            <p key={i} className="text-sm text-gray-700 leading-relaxed mb-3 last:mb-0">{para}</p>
+          ))}
+        </ReportSection>
 
         <ReportSection title="1. Financial Position Summary">
           <div className="grid grid-cols-2 gap-8">
