@@ -326,6 +326,9 @@ export default function ResultsPage() {
                   <CollapsibleSection title="Stress Test Modelling" subtitle="Model the impact of interest rate and expenditure variations on scenario viability" icon={<AlertTriangle className="w-4 h-4" />} testId="collapsible-stress-test">
                     <StressTestPanel />
                   </CollapsibleSection>
+                  <CollapsibleSection title="Assumption Review Prompts" subtitle="Structured reflection points to help evaluate the assumptions underpinning this analysis" icon={<Lightbulb className="w-4 h-4" />} testId="collapsible-assumption-prompts">
+                    <AssumptionReviewPrompts engine={engine} store={store} />
+                  </CollapsibleSection>
                 </div>
               </div>
 
@@ -343,6 +346,10 @@ export default function ResultsPage() {
                   <div className="flex justify-between gap-2"><span>Child maintenance</span><span>{assumptions.includeCMSEstimate ? "CMS estimate" : "Not included"}</span></div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-3 italic">Tax figures are based on a simplified 2025/26 UK model and may not reflect individual circumstances.</p>
+                <div className="mt-3 pt-2 border-t border-muted space-y-1">
+                  <p className="text-xs font-medium text-muted-foreground">Exclusions & Assumptions:</p>
+                  <p className="text-xs text-muted-foreground">Early repayment charges, stamp duty, legal transfer fees, moving costs, and spousal maintenance are not separately modelled. Pension values are treated as nominal CETV figures without actuarial adjustment. No CGT liability is modelled — the principal private residence exemption is assumed for the family home.</p>
+                </div>
               </div>
             </>
           ) : (
@@ -792,6 +799,82 @@ function SensitivityPanel({
   );
 }
 
+function AssumptionReviewPrompts({
+  engine,
+  store,
+}: {
+  engine: ReturnType<typeof useEngine>;
+  store: ReturnType<typeof useAppStore>;
+}) {
+  const { budget, intermediate } = engine;
+  const assumptions = store.assumptions;
+
+  const prompts: { question: string; context: string }[] = [];
+
+  const totalIncomeA = store.incomes.filter(i => i.owner === "A").reduce((s, i) => s + i.amountAnnualGross, 0);
+  const totalIncomeB = store.incomes.filter(i => i.owner === "B").reduce((s, i) => s + i.amountAnnualGross, 0);
+
+  prompts.push({
+    question: "Are income projections stable?",
+    context: totalIncomeA > 0 && totalIncomeB > 0
+      ? `The model assumes Party A earns ${formatCurrency(totalIncomeA)}/yr and Party B earns ${formatCurrency(totalIncomeB)}/yr on an ongoing basis. Consider whether these levels are secure for the projection period.`
+      : totalIncomeA > 0
+      ? `The model assumes Party A earns ${formatCurrency(totalIncomeA)}/yr. Consider whether this is sustainable for the projection period.`
+      : `The model assumes Party B earns ${formatCurrency(totalIncomeB)}/yr. Consider whether this is sustainable for the projection period.`,
+  });
+
+  prompts.push({
+    question: "Are expense projections conservative?",
+    context: `Expenses are inflated at ${(assumptions.inflationRate * 100).toFixed(1)}% per year. Post-separation costs often differ from current spending patterns. Consider whether the entered expenses reflect likely post-settlement outgoings.`,
+  });
+
+  const hasMortgage = intermediate.totalMortgage > 0;
+  if (hasMortgage) {
+    prompts.push({
+      question: "Would a 1% interest rate increase materially affect comfort?",
+      context: `The current model uses a ${(assumptions.mortgageAPR * 100).toFixed(1)}% mortgage rate. If rates increase, monthly obligations rise. Review the sensitivity analysis above to quantify this impact for your circumstances.`,
+    });
+  }
+
+  if (assumptions.includeCMSEstimate && store.children.numChildren > 0) {
+    prompts.push({
+      question: "Are child maintenance assumptions realistic?",
+      context: `The model estimates child maintenance based on CMS basic-rate calculations for ${store.children.numChildren} child${store.children.numChildren > 1 ? "ren" : ""}. Actual CMS assessments may differ based on shared care arrangements and other factors.`,
+    });
+  }
+
+  prompts.push({
+    question: "Have all material assets and liabilities been included?",
+    context: `The model operates on the assets, debts, and incomes entered. Consider whether there are additional accounts, liabilities, or income sources that should be factored in for a more complete picture.`,
+  });
+
+  return (
+    <Card data-testid="card-assumption-prompts">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base flex items-center gap-2">
+          <Lightbulb className="w-4 h-4" /> Assumption Review Prompts
+        </CardTitle>
+        <CardDescription>
+          Structured reflection points to evaluate the assumptions underlying this analysis. These are not recommendations — they are designed to encourage structured thinking about key inputs.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
+          {prompts.map((p, i) => (
+            <div key={i} className="p-3 rounded-md border space-y-1" data-testid={`assumption-prompt-${i}`}>
+              <p className="text-sm font-semibold">{p.question}</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">{p.context}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-muted-foreground italic mt-4">
+          These prompts are provided to support structured review of assumptions. They do not constitute financial, legal, or tax advice.
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
 function ExecutiveTable({
   scenarios,
   projections,
@@ -816,7 +899,9 @@ function ExecutiveTable({
           <PoundSterling className="w-4 h-4" />
           Executive Summary
         </CardTitle>
-        <CardDescription>Comparative financial summary across all modelled scenarios</CardDescription>
+        <CardDescription>
+          Comparative financial summary across all modelled scenarios. Financial modelling highlights trade-offs — consider how each scenario aligns with your tolerance for liquidity, leverage, and income variability.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
@@ -959,6 +1044,113 @@ function StabilityBadge({ score, label }: { score: number; label: string }) {
   );
 }
 
+function generateScenarioConsiderations(
+  scenario: ScenarioResult,
+  engine: ReturnType<typeof useEngine>,
+  store: StoreState,
+): string[] {
+  const considerations: string[] = [];
+  const { intermediate, budget } = engine;
+
+  const totalA = scenario.totalA || 1;
+  const totalB = scenario.totalB || 1;
+  const propConcA = ((scenario.homeEquityA ?? 0) / totalA) * 100;
+  const propConcB = ((scenario.homeEquityB ?? 0) / totalB) * 100;
+
+  if (propConcA > 70 || propConcB > 70) {
+    const party = propConcA > propConcB ? "Party A" : "Party B";
+    const pct = Math.round(Math.max(propConcA, propConcB));
+    considerations.push(
+      `This scenario results in ${pct}% of ${party}'s net worth being held in property. Consider whether reduced liquidity aligns with your comfort level for short-term financial flexibility.`
+    );
+  }
+
+  if ((scenario.fundingGap ?? 0) > 0) {
+    considerations.push(
+      `This scenario requires additional funding of ${formatCurrency(scenario.fundingGap!)}. Consider how this shortfall would be addressed — for example, through increased borrowing or alternative asset sources.`
+    );
+  }
+
+  const hasMortgageA = (scenario.mortgageMonthlyA ?? 0) > 0;
+  const hasMortgageB = (scenario.mortgageMonthlyB ?? 0) > 0;
+  if (hasMortgageA || hasMortgageB) {
+    const keeperNet = hasMortgageA ? engine.taxA.net : engine.taxB.net;
+    const keeperMortgage = hasMortgageA ? (scenario.mortgageMonthlyA ?? 0) * 12 : (scenario.mortgageMonthlyB ?? 0) * 12;
+    if (keeperNet > 0) {
+      const ratio = Math.round((keeperMortgage / keeperNet) * 100);
+      if (ratio > 35) {
+        considerations.push(
+          `Mortgage obligations represent ${ratio}% of the retaining party's net income. Consider income stability over the next 3-5 years and whether this proportion is sustainable under adverse conditions.`
+        );
+      }
+    }
+  }
+
+  const liquidA = scenario.liquidStartA ?? 0;
+  const liquidB = scenario.liquidStartB ?? 0;
+  const expenseA = store.expenses.filter(e => e.owner === "A").reduce((s, e) => s + e.amountAnnual, 0)
+    + store.expenses.filter(e => e.owner === "shared").reduce((s, e) => s + e.amountAnnual / 2, 0);
+  const expenseB = store.expenses.filter(e => e.owner === "B").reduce((s, e) => s + e.amountAnnual, 0)
+    + store.expenses.filter(e => e.owner === "shared").reduce((s, e) => s + e.amountAnnual / 2, 0);
+
+  if (expenseA > 0 && liquidA < expenseA) {
+    const months = Math.round((liquidA / expenseA) * 12);
+    considerations.push(
+      `Party A's liquid capital covers approximately ${months} month${months !== 1 ? "s" : ""} of expenses. Consider contingency planning and whether access to additional liquidity would be needed.`
+    );
+  }
+  if (expenseB > 0 && liquidB < expenseB) {
+    const months = Math.round((liquidB / expenseB) * 12);
+    considerations.push(
+      `Party B's liquid capital covers approximately ${months} month${months !== 1 ? "s" : ""} of expenses. Consider contingency planning and whether access to additional liquidity would be needed.`
+    );
+  }
+
+  if (budget.surplusA < 0) {
+    considerations.push(
+      `Party A is projected to have a monthly deficit of ${formatCurrency(Math.abs(budget.surplusA / 12))}/month under this scenario. Consider whether expenditure adjustments or supplementary income sources are available.`
+    );
+  }
+  if (budget.surplusB < 0) {
+    considerations.push(
+      `Party B is projected to have a monthly deficit of ${formatCurrency(Math.abs(budget.surplusB / 12))}/month under this scenario. Consider whether expenditure adjustments or supplementary income sources are available.`
+    );
+  }
+
+  if (scenario.id === "S4") {
+    considerations.push(
+      `This scenario involves a deferred settlement, meaning the property arrangement remains in place for an extended period. Consider the practical implications of ongoing shared legal obligations and future market conditions.`
+    );
+  }
+
+  return considerations.slice(0, 5);
+}
+
+function ScenarioConsiderationsPanel({ considerations }: { considerations: string[] }) {
+  if (considerations.length === 0) return null;
+
+  return (
+    <div className="space-y-2" data-testid="section-scenario-considerations">
+      <h3 className="text-sm font-semibold flex items-center gap-1.5">
+        <Lightbulb className="h-3.5 w-3.5" /> Scenario Considerations
+      </h3>
+      <p className="text-xs text-muted-foreground italic">
+        The following are structured reflection points based on the modelled outputs. They are not recommendations or advice.
+      </p>
+      <div className="space-y-2">
+        {considerations.map((c, i) => (
+          <div key={i} className="flex items-start gap-3 p-3 rounded-md bg-muted/40 text-sm leading-relaxed" data-testid={`consideration-${i}`}>
+            <div className="flex items-center justify-center w-5 h-5 rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0 mt-0.5">
+              {i + 1}
+            </div>
+            <span>{c}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ScenarioDetailCard({
   scenario,
   projection,
@@ -1018,6 +1210,11 @@ function ScenarioDetailCard({
     [scenario, store, projection, engine.budget, intermediate]
   );
 
+  const considerations = useMemo(() =>
+    generateScenarioConsiderations(scenario, engine, store),
+    [scenario, engine, store]
+  );
+
   return (
     <Card data-testid={`card-detail-${scenario.id}`}>
       <CardHeader className="pb-3">
@@ -1055,6 +1252,8 @@ function ScenarioDetailCard({
         {comparison && <ComparisonDeltaPanel delta={comparison} scenarioId={scenario.id} />}
 
         {negotiationLevers.length > 0 && <NegotiationLeversPanel levers={negotiationLevers} />}
+
+        <ScenarioConsiderationsPanel considerations={considerations} />
 
         {projection && projection.length > 1 && (
           <div>

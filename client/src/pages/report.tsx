@@ -222,6 +222,9 @@ export default function ReportPage() {
           {buildQualitativeExecutiveSummary(engine, store, scenarioData).map((para, i) => (
             <p key={i} className="text-sm text-gray-700 leading-relaxed mb-3 last:mb-0">{para}</p>
           ))}
+          <p className="text-sm text-gray-600 italic mt-3 pt-2 border-t border-gray-200">
+            Financial modelling highlights trade-offs. Consider how each scenario aligns with your tolerance for liquidity, leverage, and income variability.
+          </p>
         </ReportSection>
 
         <ReportSection title="1. Financial Position Summary">
@@ -539,11 +542,61 @@ export default function ReportPage() {
                   </ul>
                 </div>
               )}
+
+              <ReportScenarioConsiderations scenario={sc} engine={engine} store={store} />
             </div>
           </ReportSection>
         ))}
 
-        <ReportSection title={`${5 + scenarioData.length}. Assumptions & Methodology`}>
+        <ReportSection title={`${5 + scenarioData.length}. Assumption Review Prompts`}>
+          <p className="text-xs text-gray-400 italic mb-3">Structured reflection points to evaluate the assumptions underpinning this analysis. These are not recommendations — they are provided to encourage structured review.</p>
+          <div className="space-y-3">
+            <div className="text-sm text-gray-600">
+              <p className="font-medium text-gray-700 mb-0.5">Are income projections stable?</p>
+              <p className="text-xs text-gray-500">
+                {(() => {
+                  const totalIncomeA = store.incomes.filter(i => i.owner === "A").reduce((s, i) => s + i.amountAnnualGross, 0);
+                  const totalIncomeB = store.incomes.filter(i => i.owner === "B").reduce((s, i) => s + i.amountAnnualGross, 0);
+                  return totalIncomeA > 0 && totalIncomeB > 0
+                    ? `The model assumes Party A earns ${fmt(totalIncomeA)}/yr and Party B earns ${fmt(totalIncomeB)}/yr. Consider whether these levels are secure for the projection period.`
+                    : totalIncomeA > 0
+                    ? `The model assumes Party A earns ${fmt(totalIncomeA)}/yr. Consider whether this is sustainable.`
+                    : `The model assumes Party B earns ${fmt(totalIncomeB)}/yr. Consider whether this is sustainable.`;
+                })()}
+              </p>
+            </div>
+            <div className="text-sm text-gray-600">
+              <p className="font-medium text-gray-700 mb-0.5">Are expense projections conservative?</p>
+              <p className="text-xs text-gray-500">
+                Expenses are inflated at {(store.assumptions.inflationRate * 100).toFixed(1)}% per year. Post-separation costs often differ from current spending patterns.
+              </p>
+            </div>
+            {engine.intermediate.totalMortgage > 0 && (
+              <div className="text-sm text-gray-600">
+                <p className="font-medium text-gray-700 mb-0.5">Would a 1% interest rate increase materially affect comfort?</p>
+                <p className="text-xs text-gray-500">
+                  The current model uses a {(store.assumptions.mortgageAPR * 100).toFixed(1)}% mortgage rate. Review the sensitivity analysis to quantify the impact of rate increases.
+                </p>
+              </div>
+            )}
+            {store.assumptions.includeCMSEstimate && store.children.numChildren > 0 && (
+              <div className="text-sm text-gray-600">
+                <p className="font-medium text-gray-700 mb-0.5">Are child maintenance assumptions realistic?</p>
+                <p className="text-xs text-gray-500">
+                  The model estimates child maintenance based on CMS basic-rate calculations for {store.children.numChildren} child{store.children.numChildren > 1 ? "ren" : ""}. Actual CMS assessments may differ based on shared care arrangements and other factors.
+                </p>
+              </div>
+            )}
+            <div className="text-sm text-gray-600">
+              <p className="font-medium text-gray-700 mb-0.5">Have all material assets and liabilities been included?</p>
+              <p className="text-xs text-gray-500">
+                Consider whether there are additional accounts, liabilities, or income sources that should be factored in.
+              </p>
+            </div>
+          </div>
+        </ReportSection>
+
+        <ReportSection title={`${6 + scenarioData.length}. Assumptions & Methodology`}>
           <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm">
             <AssumptionRow label="Asset Settlement Ratio" value={`${pct(store.assumptions.splitRatio)} / ${pct(1 - store.assumptions.splitRatio)}`} />
             <AssumptionRow label="Pension Settlement Ratio" value={`${pct(store.assumptions.splitPensionToA)} / ${pct(1 - store.assumptions.splitPensionToA)}`} />
@@ -561,13 +614,22 @@ export default function ReportPage() {
             )}
           </div>
           <div className="mt-4 pt-3 border-t">
-            <h4 className="font-semibold text-sm mb-2">Limitations</h4>
+            <h4 className="font-semibold text-sm mb-2">Limitations & Exclusions</h4>
             <ul className="text-xs text-gray-600 space-y-1 list-disc list-inside">
               <li>All figures are estimates based on the information entered and may differ from actual outcomes.</li>
               <li>Tax calculations use the {store.config.taxYear} model and may not reflect individual circumstances.</li>
               <li>Mortgage affordability indicators use typical market benchmarks and do not constitute a lending assessment.</li>
               <li>Property valuations, pension transfer values, and other asset values should be independently verified.</li>
               <li>This analysis does not account for potential changes in legislation, tax rates, or personal circumstances.</li>
+            </ul>
+          </div>
+          <div className="mt-3 pt-3 border-t">
+            <h4 className="font-semibold text-sm mb-2">Explicit Assumption Statements</h4>
+            <ul className="text-xs text-gray-600 space-y-1 list-disc list-inside">
+              <li><span className="font-medium">Transaction costs:</span> Estimated selling costs (agent fees, conveyancing) are deducted from net equity in sale scenarios. Early repayment charges, stamp duty on purchase, legal fees for transfers, and moving costs are not separately modelled. Users should obtain independent estimates for these items.</li>
+              <li><span className="font-medium">Pension valuations:</span> Pension values are entered by the user and treated as nominal CETV figures. No adjustment is made for pension type (defined benefit vs defined contribution), tax on drawdown, or actuarial factors. Pension sharing orders may result in different actual values.</li>
+              <li><span className="font-medium">Capital gains tax:</span> No CGT liability is modelled on the disposal of investments or assets. The principal private residence exemption is assumed to apply to the family home. Users with significant investment portfolios should seek independent tax advice.</li>
+              <li><span className="font-medium">Spousal maintenance:</span> Periodic spousal maintenance payments are not included in the model. If spousal maintenance is relevant, the net income and surplus figures should be adjusted accordingly.</li>
             </ul>
           </div>
         </ReportSection>
@@ -677,6 +739,108 @@ function DeltaValue({ v }: { v: number }) {
     <span className={v > 0 ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
       {v > 0 ? "+" : ""}{fmt(v)}
     </span>
+  );
+}
+
+function ReportScenarioConsiderations({
+  scenario,
+  engine,
+  store,
+}: {
+  scenario: ScenarioResult;
+  engine: ReturnType<typeof useEngine>;
+  store: StoreState;
+}) {
+  const considerations: string[] = [];
+  const { intermediate, budget } = engine;
+
+  const totalA = scenario.totalA || 1;
+  const totalB = scenario.totalB || 1;
+  const propConcA = ((scenario.homeEquityA ?? 0) / totalA) * 100;
+  const propConcB = ((scenario.homeEquityB ?? 0) / totalB) * 100;
+
+  if (propConcA > 70 || propConcB > 70) {
+    const party = propConcA > propConcB ? "Party A" : "Party B";
+    const pct_val = Math.round(Math.max(propConcA, propConcB));
+    considerations.push(
+      `This scenario results in ${pct_val}% of ${party}'s net worth being held in property. Consider whether reduced liquidity aligns with your comfort level for short-term financial flexibility.`
+    );
+  }
+
+  if ((scenario.fundingGap ?? 0) > 0) {
+    considerations.push(
+      `This scenario requires additional funding of ${fmt(scenario.fundingGap!)}. Consider how this shortfall would be addressed.`
+    );
+  }
+
+  const hasMortgageA = (scenario.mortgageMonthlyA ?? 0) > 0;
+  const hasMortgageB = (scenario.mortgageMonthlyB ?? 0) > 0;
+  if (hasMortgageA || hasMortgageB) {
+    const keeperNet = hasMortgageA ? engine.taxA.net : engine.taxB.net;
+    const keeperMortgage = hasMortgageA ? (scenario.mortgageMonthlyA ?? 0) * 12 : (scenario.mortgageMonthlyB ?? 0) * 12;
+    if (keeperNet > 0) {
+      const ratio = Math.round((keeperMortgage / keeperNet) * 100);
+      if (ratio > 35) {
+        considerations.push(
+          `Mortgage obligations represent ${ratio}% of net income. Consider income stability over the next 3-5 years.`
+        );
+      }
+    }
+  }
+
+  const liquidA = scenario.liquidStartA ?? 0;
+  const liquidB = scenario.liquidStartB ?? 0;
+  const expenseA = store.expenses.filter(e => e.owner === "A").reduce((s, e) => s + e.amountAnnual, 0)
+    + store.expenses.filter(e => e.owner === "shared").reduce((s, e) => s + e.amountAnnual / 2, 0);
+  const expenseB = store.expenses.filter(e => e.owner === "B").reduce((s, e) => s + e.amountAnnual, 0)
+    + store.expenses.filter(e => e.owner === "shared").reduce((s, e) => s + e.amountAnnual / 2, 0);
+
+  if (expenseA > 0 && liquidA < expenseA) {
+    const months = Math.round((liquidA / expenseA) * 12);
+    considerations.push(
+      `Party A's liquid capital covers approximately ${months} month${months !== 1 ? "s" : ""} of expenses. Consider contingency planning.`
+    );
+  }
+  if (expenseB > 0 && liquidB < expenseB) {
+    const months = Math.round((liquidB / expenseB) * 12);
+    considerations.push(
+      `Party B's liquid capital covers approximately ${months} month${months !== 1 ? "s" : ""} of expenses. Consider contingency planning.`
+    );
+  }
+
+  if (engine.budget.surplusA < 0) {
+    considerations.push(
+      `Party A is projected to have a monthly deficit of ${fmt(Math.abs(engine.budget.surplusA / 12))}/month. Consider whether expenditure adjustments or supplementary income sources are available.`
+    );
+  }
+  if (engine.budget.surplusB < 0) {
+    considerations.push(
+      `Party B is projected to have a monthly deficit of ${fmt(Math.abs(engine.budget.surplusB / 12))}/month. Consider whether expenditure adjustments or supplementary income sources are available.`
+    );
+  }
+
+  if (scenario.id === "S4") {
+    considerations.push(
+      `This scenario involves a deferred settlement, meaning the property arrangement remains in place for an extended period. Consider the practical implications of ongoing shared legal obligations and future market conditions.`
+    );
+  }
+
+  const limited = considerations.slice(0, 5);
+  if (limited.length === 0) return null;
+
+  return (
+    <div>
+      <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Scenario Considerations</h4>
+      <p className="text-[10px] text-gray-400 italic mb-2">Structured reflection points based on modelled outputs. Not recommendations or advice.</p>
+      <ul className="space-y-1">
+        {limited.map((c, i) => (
+          <li key={i} className="text-sm text-gray-600 flex items-start gap-1.5">
+            <span className="text-gray-400 mt-0.5">{i + 1}.</span>
+            <span>{c}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
