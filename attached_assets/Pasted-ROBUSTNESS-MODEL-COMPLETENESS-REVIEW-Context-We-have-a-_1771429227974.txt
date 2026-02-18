@@ -1,0 +1,150 @@
+ROBUSTNESS & MODEL COMPLETENESS REVIEW
+
+Context:
+We have a UK divorce financial modelling engine producing scenario-based outputs.
+
+Your task:
+Conduct a structured review of model robustness and recommend enhancements or confirm completeness.
+
+Do NOT add unnecessary complexity.
+Focus on financial sustainability modelling integrity.
+
+=================================================
+PART 1 – TRANSFER & MAINTENANCE LOGIC REVIEW
+=================================================
+
+1) Confirm whether the model includes:
+   - Spousal maintenance
+   - Child maintenance (CMS)
+   - One-time capital transfers
+   - One-time transition costs
+
+2) If not included, recommend minimal implementation that:
+   - Adjusts monthly surplus
+   - Impacts runway projection
+   - Adjusts stability score where relevant
+
+3) Confirm no double-counting occurs.
+
+=================================================
+PART 2 – DEBT ALLOCATION PRECISION
+=================================================
+
+1) Confirm whether debts can be:
+   - Assigned to Party A
+   - Assigned to Party B
+   - Marked as joint
+
+2) Confirm settlement logic correctly reallocates debt in retain scenarios.
+
+3) Recommend improvements if debt allocation is simplistic.
+
+=================================================
+PART 3 – TRANSACTION COST COVERAGE
+=================================================
+
+1) Confirm selling costs logic.
+2) Confirm whether:
+   - Early repayment charges
+   - Legal fees
+   - Moving costs
+   - Stamp duty
+   are included or excluded.
+
+3) If excluded, recommend whether:
+   - Add “Additional One-Off Costs” field
+   OR
+   - Explicit exclusion statement
+
+=================================================
+PART 4 – RUNWAY & LIQUIDITY STRENGTHENING
+=================================================
+
+1) Confirm runway logic:
+   - Year-by-year calculation
+   - Inflation applied correctly
+   - Income and expenses adjusted consistently
+
+2) Confirm capital cannot silently go negative without warning.
+
+3) Add Liquidity Ratio display:
+   Liquid Capital ÷ Annual Expenses
+
+=================================================
+PART 5 – SENSITIVITY COVERAGE
+=================================================
+
+Confirm current sensitivity covers:
+   - Interest rate change
+   - Expense increase
+
+Evaluate whether to add:
+   - Income reduction stress
+   - Temporary income shock
+
+Only recommend if materially beneficial.
+
+=================================================
+PART 6 – PENSION & CGT TRANSPARENCY
+=================================================
+
+1) Confirm pension valuation assumption clarity.
+2) Confirm whether CGT on investments is modelled.
+3) If not, recommend explicit assumption wording.
+
+=================================================
+PART 7 – STABILITY SCORE AUDITABILITY
+=================================================
+
+Confirm that:
+   - All deductions are traceable.
+   - Breakdown is visible.
+   - No subjective factors are included.
+
+If score uses heuristic logic, formalise deduction logic explicitly.
+
+=================================================
+PART 8 – EDGE CASE RESILIENCE
+=================================================
+
+Confirm model handles:
+
+   - Zero income
+   - Zero expenses
+   - Negative equity
+   - 100/0 split
+   - Extremely high interest rates
+   - Extremely high asset values
+
+No crashes.
+No unrealistic outputs.
+No divide-by-zero.
+
+=================================================
+PART 9 – OUTPUT CONSISTENCY
+=================================================
+
+Confirm:
+
+   - UI results reconcile exactly with report.
+   - Preview values reconcile with full results.
+   - No rounding inconsistencies.
+
+=================================================
+PART 10 – FINAL RECOMMENDATION
+=================================================
+
+Provide:
+
+1) Areas of weakness.
+2) Areas over-engineered.
+3) Additions that materially improve robustness.
+4) Additions that increase liability without value.
+5) What should NOT be added to keep model durable.
+
+Be structured.
+Be specific.
+Assume UK regulatory context.
+Assume direct-to-consumer positioning.
+
+END REVIEW.

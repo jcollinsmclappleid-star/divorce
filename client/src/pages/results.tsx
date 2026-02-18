@@ -542,10 +542,37 @@ function ScenarioStructureTable({
     return { A: Math.round(propA), B: Math.round(propB) };
   };
 
-  const getComplexity = (s: ScenarioResult): string => {
-    if (s.id === "S1") return "Low";
-    if ((s.fundingGap ?? 0) > 0) return "High";
-    return "Medium";
+  const getComplexity = (s: ScenarioResult): { label: string; score: number; factors: string[] } => {
+    let score = 0;
+    const factors: string[] = [];
+
+    if (s.id !== "S1") {
+      score += 1;
+      factors.push("Property transfer required");
+    }
+    if ((s.mortgageMonthlyA ?? 0) > 0 || (s.mortgageMonthlyB ?? 0) > 0) {
+      score += 1;
+      factors.push("Ongoing mortgage obligation");
+    }
+    if ((s.buyoutAmount ?? 0) > 0) {
+      score += 1;
+      factors.push("Equity transfer (buyout) payment");
+    }
+    if ((s.fundingGap ?? 0) > 0) {
+      score += 2;
+      factors.push("Funding shortfall — additional borrowing needed");
+    }
+    if (s.pensionA > 0 && s.pensionB > 0 && Math.abs(s.pensionA - s.pensionB) > 1000) {
+      score += 1;
+      factors.push("Pension sharing order required");
+    }
+    if (s.id === "S4") {
+      score += 1;
+      factors.push("Deferred settlement — ongoing legal arrangement");
+    }
+
+    const label = score <= 1 ? "Low" : score <= 3 ? "Medium" : "High";
+    return { label, score, factors };
   };
 
   return (
@@ -627,15 +654,39 @@ function ScenarioStructureTable({
                   const comp = getComplexity(s);
                   return (
                     <TableCell key={s.id} className="text-center">
-                      <Badge variant="outline" className={comp === "Low" ? "text-emerald-600 border-emerald-200 bg-emerald-50" : comp === "Medium" ? "text-amber-600 border-amber-200 bg-amber-50" : "text-red-600 border-red-200 bg-red-50"}>
-                        {comp}
-                      </Badge>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Badge variant="outline" className={`cursor-help ${comp.label === "Low" ? "text-emerald-600 border-emerald-200 bg-emerald-50" : comp.label === "Medium" ? "text-amber-600 border-amber-200 bg-amber-50" : "text-red-600 border-red-200 bg-red-50"}`}>
+                            {comp.label}
+                          </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className="max-w-xs">
+                          <p className="font-semibold text-xs mb-1">Score: {comp.score} ({comp.label})</p>
+                          {comp.factors.length > 0 ? (
+                            <ul className="text-xs space-y-0.5">
+                              {comp.factors.map((f, i) => <li key={i}>- {f}</li>)}
+                            </ul>
+                          ) : (
+                            <p className="text-xs">No additional complexity factors</p>
+                          )}
+                        </TooltipContent>
+                      </Tooltip>
                     </TableCell>
                   );
                 })}
               </TableRow>
             </TableBody>
           </Table>
+        </div>
+        <div className="mt-4 p-3 rounded-md bg-muted/50 text-xs text-muted-foreground space-y-1" data-testid="complexity-key">
+          <p className="font-semibold text-foreground text-xs">How complexity is scored:</p>
+          <p>Each scenario is scored against multiple factors. Property transfers, mortgage obligations, buyout payments, pension sharing orders, and deferred arrangements each add to the score. A funding shortfall adds the most weight.</p>
+          <div className="flex items-center gap-4 mt-1 flex-wrap">
+            <span className="flex items-center gap-1"><Badge variant="outline" className="text-[10px] py-0 px-1 text-emerald-600 border-emerald-200 bg-emerald-50">Low</Badge> Score 0-1</span>
+            <span className="flex items-center gap-1"><Badge variant="outline" className="text-[10px] py-0 px-1 text-amber-600 border-amber-200 bg-amber-50">Medium</Badge> Score 2-3</span>
+            <span className="flex items-center gap-1"><Badge variant="outline" className="text-[10px] py-0 px-1 text-red-600 border-red-200 bg-red-50">High</Badge> Score 4+</span>
+          </div>
+          <p className="mt-1">Hover over any complexity badge above to see which specific factors apply to each scenario.</p>
         </div>
       </CardContent>
     </Card>
@@ -653,6 +704,7 @@ function SensitivityPanel({
 }) {
   const { intermediate, budget } = engine;
   const scenario = scenarios[0];
+  const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
   if (!scenario) return null;
 
   const ranking = useMemo(() =>
@@ -663,7 +715,7 @@ function SensitivityPanel({
     [scenario, store, budget, intermediate]
   );
 
-  const rankIcons = ["1st", "2nd", "3rd"];
+  const rankIcons = ["1st", "2nd", "3rd", "4th"];
 
   return (
     <Card data-testid="card-sensitivity">
@@ -672,36 +724,66 @@ function SensitivityPanel({
           <Activity className="w-4 h-4" /> Sensitivity Analysis
         </CardTitle>
         <CardDescription>
-          Ranked assessment of which assumption variations have the greatest impact on financial outcomes.
+          Ranked assessment of which assumption changes have the greatest impact on financial outcomes. Each factor is tested independently — click any factor to see the calculation methodology.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="p-3 rounded-md bg-muted/50 mb-4 text-xs text-muted-foreground space-y-1" data-testid="sensitivity-key">
+          <p className="font-semibold text-foreground text-xs">How this analysis works:</p>
+          <p>Each assumption below is varied by a fixed amount while all other inputs remain unchanged. The resulting change in annual surplus (or starting capital for one-off factors) is calculated and factors are ranked by total impact magnitude.</p>
+          <div className="flex items-center gap-4 mt-1 flex-wrap">
+            <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-red-500" /> Negative impact</span>
+            <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-emerald-500" /> Positive impact</span>
+            <span className="flex items-center gap-1"><Badge variant="outline" className="text-[10px] py-0 px-1">annual</Badge> Recurring yearly effect</span>
+            <span className="flex items-center gap-1"><Badge variant="outline" className="text-[10px] py-0 px-1">one-off</Badge> One-time capital change</span>
+          </div>
+        </div>
+        <div className="space-y-3">
           {ranking.map((f, i) => (
-            <div key={f.factor} className="flex items-start gap-4 p-3 rounded-md border" data-testid={`sensitivity-factor-${f.rank}`}>
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0">
-                {rankIcons[i] ?? `${i + 1}`}
-              </div>
-              <div className="flex-1 min-w-0 space-y-1">
-                <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <span className="text-sm font-semibold">{f.factor}</span>
-                  <Badge variant="outline" className="text-xs">{f.description}</Badge>
+            <div
+              key={f.factor}
+              className="p-3 rounded-md border cursor-pointer"
+              data-testid={`sensitivity-factor-${f.rank}`}
+              onClick={() => setExpandedIdx(expandedIdx === i ? null : i)}
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0">
+                  {rankIcons[i] ?? `${i + 1}`}
                 </div>
-                <div className="grid gap-1 sm:grid-cols-2 text-xs text-muted-foreground">
-                  <div className="flex items-center gap-1.5">
-                    <span>Impact on Party A surplus:</span>
-                    <span className={`tabular-nums font-medium ${f.impactOnSurplusA < 0 ? "text-red-600" : f.impactOnSurplusA > 0 ? "text-emerald-600" : ""}`}>
-                      {f.impactOnSurplusA > 0 ? "+" : ""}{formatCurrency(f.impactOnSurplusA)}/yr
-                    </span>
+                <div className="flex-1 min-w-0 space-y-1.5">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <span className="text-sm font-semibold">{f.factor}</span>
+                    <div className="flex items-center gap-1.5">
+                      <Badge variant="outline" className="text-xs">{f.impactType}</Badge>
+                      <Badge variant="outline" className="text-xs">{f.description}</Badge>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <span>Impact on Party B surplus:</span>
-                    <span className={`tabular-nums font-medium ${f.impactOnSurplusB < 0 ? "text-red-600" : f.impactOnSurplusB > 0 ? "text-emerald-600" : ""}`}>
-                      {f.impactOnSurplusB > 0 ? "+" : ""}{formatCurrency(f.impactOnSurplusB)}/yr
-                    </span>
+                  <div className="grid gap-1 sm:grid-cols-2 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1.5">
+                      <span>Party A:</span>
+                      <span className={`tabular-nums font-medium ${f.impactValueA < 0 ? "text-red-600" : f.impactValueA > 0 ? "text-emerald-600" : ""}`}>
+                        {f.impactLabelA}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span>Party B:</span>
+                      <span className={`tabular-nums font-medium ${f.impactValueB < 0 ? "text-red-600" : f.impactValueB > 0 ? "text-emerald-600" : ""}`}>
+                        {f.impactLabelB}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground/60">
+                    <Info className="w-3 h-3" />
+                    <span>{expandedIdx === i ? "Click to collapse" : "Click to see methodology"}</span>
                   </div>
                 </div>
               </div>
+              {expandedIdx === i && (
+                <div className="mt-3 pt-3 border-t text-xs text-muted-foreground leading-relaxed" data-testid={`sensitivity-methodology-${f.rank}`}>
+                  <p className="font-semibold text-foreground mb-1">Calculation methodology:</p>
+                  <p>{f.methodology}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
