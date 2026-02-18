@@ -708,7 +708,7 @@ function ScenarioStructureTable({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground">Implementation Complexity<InfoTip text="Each scenario is scored against factors including property transfers, mortgage obligations, buyout payments, pension sharing orders, and deferred arrangements. Low: Score 0-1 | Medium: Score 2-3 | High: Score 4+" /></TableCell>
+                <TableCell className="text-sm text-muted-foreground">Steps to Complete<InfoTip text="How many legal and financial steps are needed to put this scenario into effect. Factors include property transfers, mortgage obligations, buyout payments, pension sharing orders, and deferred arrangements. Low: 0-1 steps | Medium: 2-3 steps | High: 4+ steps" /></TableCell>
                 {scenarios.map(s => {
                   const comp = getComplexity(s);
                   return (
@@ -1497,23 +1497,24 @@ function ScenarioDetailCard({
             <span className="tabular-nums">
               +1% rate: <span className="text-amber-600 font-medium">{formatCurrency(sensitivityMonthlyDiff)}/mo</span>
               {" | "}
-              +10% costs: <span className="text-amber-600 font-medium">-{formatCurrency(tenPctExpenseImpact)}/yr</span>
+              +10% costs: <span className="text-amber-600 font-medium">-{formatCurrency(tenPctExpenseImpact)}/yr combined</span>
             </span>
           }
           testId="detail-sensitivity-snapshot"
         >
           <div className="space-y-2">
-            <div className="p-3 bg-muted/30 rounded-md space-y-1">
+            <div className="p-3 bg-muted/30 rounded-md space-y-1.5">
               <p className="text-sm font-medium">If interest rate increases by 1%:</p>
-              <p className="text-xs text-muted-foreground flex items-center gap-1">
-                Monthly payment changes by <span className="tabular-nums font-semibold text-amber-600">{formatCurrency(sensitivityMonthlyDiff)}/mo</span>
+              <p className="text-xs text-muted-foreground">
+                {scenario.id === "S1" ? "Combined" : scenario.id === "S2" ? "Party A" : scenario.id === "S3" ? "Party B" : "Combined"} mortgage payment increases by <span className="tabular-nums font-semibold text-amber-600">{formatCurrency(sensitivityMonthlyDiff)}/mo</span>
               </p>
             </div>
-            <div className="p-3 bg-muted/30 rounded-md space-y-1">
+            <div className="p-3 bg-muted/30 rounded-md space-y-1.5">
               <p className="text-sm font-medium">If expenses increase by 10%:</p>
-              <p className="text-xs text-muted-foreground flex items-center gap-1">
-                Annual surplus changes by <span className="tabular-nums font-semibold text-amber-600">-{formatCurrency(tenPctExpenseImpact)}/yr</span>
-              </p>
+              <div className="grid gap-1 sm:grid-cols-2 text-xs text-muted-foreground">
+                <p>Party A surplus changes by <span className="tabular-nums font-semibold text-amber-600">-{formatCurrency(Math.round(expenseA * 0.1))}/yr</span></p>
+                <p>Party B surplus changes by <span className="tabular-nums font-semibold text-amber-600">-{formatCurrency(Math.round(expenseB * 0.1))}/yr</span></p>
+              </div>
             </div>
           </div>
         </DetailCollapsible>
@@ -2102,21 +2103,27 @@ function SensitivitySnapshotPanel({ engine, store }: { engine: ReturnType<typeof
   const totalExpenses = store.expenses.reduce((s, e) => s + e.amountAnnual, 0);
   const tenPctExpenseImpact = Math.round(totalExpenses * 0.1);
 
+  const expenseA = store.expenses.filter(e => e.owner === "A").reduce((s, e) => s + e.amountAnnual, 0)
+    + store.expenses.filter(e => e.owner === "shared").reduce((s, e) => s + e.amountAnnual / 2, 0);
+  const expenseB = store.expenses.filter(e => e.owner === "B").reduce((s, e) => s + e.amountAnnual, 0)
+    + store.expenses.filter(e => e.owner === "shared").reduce((s, e) => s + e.amountAnnual / 2, 0);
+
   return (
     <Card data-testid="card-sensitivity-snapshot">
       <CardContent className="pt-4 space-y-3">
         <div className="space-y-2">
-          <div className="p-3 bg-muted/30 rounded-md space-y-1">
+          <div className="p-3 bg-muted/30 rounded-md space-y-1.5">
             <p className="text-sm font-medium">If interest rate increases by 1%:</p>
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              Monthly payment changes by <span className="tabular-nums font-semibold text-amber-600">{formatCurrency(monthlyDiff)}/mo</span>
+            <p className="text-xs text-muted-foreground">
+              Mortgage payment increases by <span className="tabular-nums font-semibold text-amber-600">{formatCurrency(monthlyDiff)}/mo</span> for the party retaining the mortgage
             </p>
           </div>
-          <div className="p-3 bg-muted/30 rounded-md space-y-1">
+          <div className="p-3 bg-muted/30 rounded-md space-y-1.5">
             <p className="text-sm font-medium">If expenses increase by 10%:</p>
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              Annual surplus changes by <span className="tabular-nums font-semibold text-amber-600">-{formatCurrency(tenPctExpenseImpact)}/yr</span>
-            </p>
+            <div className="grid gap-1 sm:grid-cols-2 text-xs text-muted-foreground">
+              <p>Party A surplus changes by <span className="tabular-nums font-semibold text-amber-600">-{formatCurrency(Math.round(expenseA * 0.1))}/yr</span></p>
+              <p>Party B surplus changes by <span className="tabular-nums font-semibold text-amber-600">-{formatCurrency(Math.round(expenseB * 0.1))}/yr</span></p>
+            </div>
           </div>
         </div>
       </CardContent>
