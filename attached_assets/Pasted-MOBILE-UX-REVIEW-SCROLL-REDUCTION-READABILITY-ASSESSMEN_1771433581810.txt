@@ -1,0 +1,137 @@
+MOBILE UX REVIEW – SCROLL REDUCTION & READABILITY ASSESSMENT
+
+Context:
+The current application (results view + scenario detail + report view) is functional but may require excessive vertical scrolling on mobile devices.
+
+Objective:
+Conduct a structured UX review specifically focused on reducing scroll fatigue and improving mobile readability.
+
+IMPORTANT:
+Do NOT implement changes yet.
+Provide structured analysis and design options for approval first.
+
+=================================================
+PART 1 – CURRENT MOBILE SCROLL ANALYSIS
+=================================================
+
+1) Estimate average scroll depth required on mobile for:
+   - Executive Summary screen
+   - Single scenario view
+   - Stability assessment section
+   - Source of funds section
+   - Full report view
+
+2) Identify:
+   - Long vertical blocks
+   - Repeated structures
+   - Redundant text
+   - Tables that stack poorly on mobile
+   - Sections that could be collapsible
+
+3) Highlight which sections contribute most to scroll length.
+
+=================================================
+PART 2 – STRUCTURAL REDUCTION OPTIONS
+=================================================
+
+Propose layout strategies WITHOUT removing analytical content.
+
+Consider:
+
+A) Collapsible Sections
+   - Default collapsed for:
+       • Source of funds detail
+       • Sensitivity analysis
+       • Assumptions
+       • Glossary
+   - Keep Executive Summary expanded by default
+
+B) Tabbed Navigation (Per Scenario)
+   Instead of vertical stacking:
+       • Overview
+       • Capital
+       • Stability
+       • Runway
+       • Sensitivity
+   Evaluate feasibility and complexity.
+
+C) Horizontal Swipe Cards
+   For scenario comparison:
+       Swipe between Sell / A Keeps / B Keeps
+   Instead of stacking all three vertically.
+
+D) Sticky Summary Header
+   Small persistent header showing:
+       • Stability Score
+       • Runway status
+       • Liquid capital
+   So user retains context while scrolling.
+
+E) Accordion Format for Detailed Tables
+   Particularly for:
+       • Source of Funds
+       • Income & Tax Breakdown
+       • Pension Breakdown
+
+=================================================
+PART 3 – CONTENT CONSOLIDATION REVIEW
+=================================================
+
+Identify areas where:
+
+1) Text can be condensed without reducing clarity.
+2) Redundant disclaimers can be centralised.
+3) Repeated labels can be removed.
+4) Visual grouping can replace explanatory text.
+
+Do NOT remove modelling detail.
+Focus on presentation efficiency.
+
+=================================================
+PART 4 – MOBILE TABLE OPTIMISATION
+=================================================
+
+Review all tables and propose:
+
+- Column reduction strategies
+- Vertical stacking alternatives
+- Summary-first, expand-for-detail format
+- Highlight rows only (e.g., net totals) in summary view
+
+=================================================
+PART 5 – PREMIUM AESTHETIC CONSIDERATION
+=================================================
+
+Ensure recommendations:
+
+- Maintain professional financial tone
+- Avoid overly “app-like” consumer feel
+- Preserve seriousness
+- Do not gamify
+
+=================================================
+PART 6 – IMPLEMENTATION IMPACT ASSESSMENT
+=================================================
+
+For each proposed solution provide:
+
+- Complexity (Low / Medium / High)
+- Risk of calculation inconsistency
+- Risk of confusing users
+- Estimated development effort
+- Whether it improves perceived premium value
+
+=================================================
+PART 7 – FINAL RECOMMENDATION
+=================================================
+
+Provide:
+
+1) Top 3 changes that deliver maximum scroll reduction with minimal risk.
+2) Changes NOT recommended (and why).
+3) Whether mobile layout needs a separate mobile-optimised design layer.
+
+Do NOT implement changes.
+Await confirmation before proceeding.
+
+END REVIEW.

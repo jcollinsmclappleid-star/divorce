@@ -1,0 +1,222 @@
+MOBILE-FIRST IMPLEMENTATION INSTRUCTIONS (APPROVED CHANGES + SPECIFIC DEFAULTS)
+
+Context:
+Assume the majority of users will be on mobile (375px width). The current results and report UI requires excessive vertical scrolling, reducing readability and conversion.
+
+Objective:
+Reduce scroll fatigue by ~50–70% on mobile WITHOUT removing analytical content or undermining the professional “financial brief” tone. Implement changes in the main UI (results pages) and ensure the report view remains printable but also readable on mobile.
+
+IMPORTANT:
+Proceed to implement the items below (approved). Do NOT implement tabs or swipe gestures at this stage.
+
+========================================================
+A) INFORMATION ARCHITECTURE (MOBILE-FIRST GROUPING)
+========================================================
+
+Restructure each scenario detail view into 3 grouped blocks (this improves mental flow and reduces scroll):
+
+1) FINANCIAL SUSTAINABILITY (keep highly visible)
+   - Stability Score (headline + classification)
+   - Capital Runway headline (Party A / Party B summary line)
+   - Key risk flags (funding shortfall, affordability benchmark exceed, depletion year)
+   - Liquidity ratio line (Liquid capital ÷ annual expenses)
+
+2) CAPITAL POSITION (expandable detail)
+   - Source of Funds (summary-first with expandable breakdown)
+   - Net equity + selling costs clarity
+   - Final allocated capital position (A/B)
+
+3) HOUSING POSITION (expandable detail)
+   - Affordability benchmark assessment (modelled)
+   - Buyout requirement + funding gap (if applicable)
+   - Housing transition note (if sell scenario)
+
+After these blocks, keep additional analysis collapsible:
+- Monthly Snapshot (expandable)
+- Projection chart/table (expandable)
+- Sensitivity snapshot (expandable)
+- Negotiation levers (expandable)
+- Scenario considerations (expandable)
+
+========================================================
+B) DEFAULT EXPANSION RULES (CRITICAL FOR MOBILE UX)
+========================================================
+
+In ScenarioDetailCard, default states on mobile:
+
+EXPANDED by default:
+- Scenario narrative summary (short + structured)
+- Stability Score headline (and classification)
+- Capital Runway summary line (Party A and Party B)
+- Key flags summary (max 3 items)
+
+COLLAPSED by default (with clear “Show details”):
+- Source of Funds breakdown (show totals only)
+- Monthly Snapshot (show surplus/deficit only)
+- Housing Feasibility panel (show “Within/Exceeds benchmark” only)
+- Projection chart/table
+- Sensitivity snapshot
+- Negotiation levers
+- Scenario considerations
+- Assumptions (UI)
+- Glossary (UI)
+
+Rationale:
+Never hide the “conclusions”. Hide the “detail”.
+
+========================================================
+C) COLLAPSIBLE SUB-SECTIONS WITHIN SCENARIO DETAIL (APPROVED)
+========================================================
+
+Implement collapsible subsections inside ScenarioDetailCard using existing CollapsibleSection pattern.
+
+Each collapsible section must:
+- Have a clear title
+- Show 1–2 summary lines when collapsed
+- Use professional label language (no casual phrasing)
+- Avoid heavy animations
+
+Recommended section list + collapsed summaries:
+
+1) Source of Funds (Capital Construction)
+   Collapsed summary: “Party A liquid capital: £X | Party B liquid capital: £Y”
+   Expand: full breakdown table
+
+2) Monthly Sustainability Snapshot
+   Collapsed summary: “Party A surplus/deficit: £X/mo | Party B: £Y/mo”
+   Expand: income/expense/mortgage rows
+
+3) Housing Feasibility (Modelled Benchmarks)
+   Collapsed summary: “Benchmark: Within / Exceeds thresholds”
+   Expand: ratio, income multiple, mortgage payment
+
+4) Capital Projection (5-Year)
+   Collapsed summary: “Lowest capital (A): £X | (B): £Y”
+   Expand: table + chart (if available)
+
+5) Sensitivity Snapshot
+   Collapsed summary: “+1% rate: £X/mo | +10% costs: -£Y/yr”
+   Expand: full sensitivity detail
+
+6) Negotiation Levers
+   Collapsed summary: “3 suggestions available”
+   Expand: list of lever suggestions
+
+7) Scenario Considerations
+   Collapsed summary: “Key considerations available”
+   Expand: 3–5 structured prompts
+
+========================================================
+D) ACCORDION “SUMMARY-FIRST” TABLES (APPROVED)
+========================================================
+
+Source of Funds table:
+- Show top-level totals visible by default:
+  • Net property equity (if applicable)
+  • Net liquid capital
+  • Debts impact
+  • Pension position (separate from liquid)
+  • Total allocated net position
+
+- Expand to reveal line-by-line items (cash, investments, other assets, debts, buyout flow).
+
+Monthly snapshot table:
+- Show totals by default:
+  • Net monthly income
+  • Total monthly outgoings
+  • Net surplus/deficit
+
+- Expand to reveal detail categories.
+
+========================================================
+E) EXECUTIVE SUMMARY TABLE MOBILE LAYOUT (NO HORIZONTAL SCROLL)
+========================================================
+
+The “scenario comparison” table currently overflows and forces sideways scrolling on mobile.
+Implement responsive alternative at small breakpoints:
+
+On mobile:
+- Replace wide table with stacked “Scenario Summary Cards” (one card per scenario)
+- Each card shows key metrics:
+  • Party A: liquid capital
+  • Party B: liquid capital
+  • Runway: A / B (Sustained or Yr X)
+  • Stability: A / B (Modelled classification)
+  • Funding shortfall (if any)
+  • Mortgage payment (if any)
+
+On desktop:
+- Keep the table layout.
+
+Goal:
+No horizontal scrolling for comparison.
+
+========================================================
+F) DISCLAIMER CONSOLIDATION (APPROVED, WITH CAUTION)
+========================================================
+
+Disclaimers appear too many times and add vertical clutter.
+
+Implement:
+- Persistent top banner disclaimer (short, single line)
+- Single footer disclaimer block (expanded text)
+
+Remove duplicate inline disclaimers from:
+- Scenario considerations
+- Assumption prompts
+- Repeated section footers
+
+Do NOT remove:
+- Assumptions & Methodology content (keep, but collapsible in UI).
+
+========================================================
+G) REPORT VIEW (PRINTABLE + MOBILE READABLE)
+========================================================
+
+Report view should remain printable, but for mobile readability:
+
+- Keep report section headers prominent
+- Add collapsible sections in report UI view ONLY (not in the exported PDF):
+  • Source of Funds
+  • Detailed tables
+  • Projection table
+  • Assumptions appendix
+
+The exported PDF remains fully expanded and print-ready.
+The on-screen report page can be collapsible for mobile.
+
+========================================================
+H) CONSISTENCY REQUIREMENT
+========================================================
+
+Ensure that:
+- Any labels, stability classifications, and benchmark language match the report wording exactly.
+- UI and PDF values reconcile exactly.
+- No content is removed from the model; only presentation is optimized.
+
+========================================================
+I) DELIBERATELY NOT IMPLEMENTING (FOR NOW)
+========================================================
+
+Do NOT implement at this stage:
+- Tabbed navigation within scenario card
+- Swipe/gesture scenario switching
+- Separate mobile-only codebase
+
+These increase complexity and risk.
+
+========================================================
+J) DELIVERABLES
+========================================================
+
+After implementing, provide:
+1) Before/after screenshots (mobile width) of:
+   - Executive summary comparison area
+   - A scenario detail view (collapsed + expanded)
+   - Source of funds table (summary + expanded)
+2) Confirm the estimated scroll reduction (screens) for:
+   - Scenario detail view
+   - Report page
+3) Confirm no horizontal scroll remains on mobile for comparison outputs
+
+END.
