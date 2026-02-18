@@ -1,0 +1,312 @@
+🔷 MASTER BRAND & WORDING REDESIGN PROMPT
+
+Project: DivorceCalculatorUK
+
+Objective: Premium, emotionally intelligent, liability-safe positioning
+
+⸻
+
+CORE STRATEGIC FRAMEWORK
+
+DivorceCalculatorUK is:
+
+• A structured financial modelling platform
+• An illustrative scenario comparison tool
+• A private, controlled analytical environment
+
+It is NOT:
+
+• Legal advice
+• Financial advice
+• Tax advice
+• Court outcome prediction
+• Entitlement assessment
+• Recommendation engine
+
+All language must reflect modelling, illustration, and assumption-based analysis.
+
+Emotion should focus on:
+Uncertainty → Structure
+Overwhelm → Control
+Fear → Visibility
+
+Never imply outcome guarantees or recommendations.
+
+⸻
+
+1️⃣ BRAND POSITIONING UPDATE
+
+Brand: DivorceCalculatorUK
+
+Tagline (choose one and apply consistently):
+
+Option A:
+Structured Financial Modelling for Separation & Divorce
+
+Option B:
+Illustrative Financial Modelling Before Important Decisions
+
+Tone:
+Calm. Analytical. Assured. Not soft. Not aggressive.
+
+Typography direction:
+• Elegant serif for headings
+• Clean modern sans for body
+• Deep navy primary colour
+• Muted accent blue or emerald
+
+Logo direction:
+• Minimal wordmark-first approach
+• Subtle geometric icon optional (structured square split vertically)
+• No hearts, no broken imagery
+• No bright consumer colours
+• Feels like a financial analytics platform
+
+Provide:
+• Horizontal logo
+• Stacked logo
+• Favicon mark
+
+⸻
+
+2️⃣ FULL HOMEPAGE COPY REWRITE
+
+Rewrite homepage with the following structure and wording intent:
+
+⸻
+
+HERO SECTION
+
+Headline:
+
+When Everything Feels Uncertain, Your Numbers Shouldn’t.
+
+Subheadline:
+
+Model how different settlement structures affect your liquidity, housing affordability, and long-term financial position — based solely on the assumptions you enter.
+
+Supporting Line:
+
+Illustrative financial modelling. Not legal, tax, or financial advice.
+
+Primary CTA:
+
+Start My Financial Model
+
+Secondary CTA:
+
+View Example Output
+
+Small reassurance below CTA:
+
+Private. Structured. No sign-up required to explore.
+
+⸻
+
+SECTION: THE CORE PROBLEM
+
+Title:
+
+Separation Changes Financial Structure — Not Just Circumstances.
+
+Body copy:
+
+During separation, financial decisions are often discussed before they are fully modelled.
+What changes is not simply who owns what — but how structure affects liquidity, affordability, and sustainability over time.
+
+DivorceCalculatorUK allows you to explore those structural differences before important conversations take place.
+
+⸻
+
+SECTION: WHAT THE MODEL ANALYSES
+
+Title:
+
+What This Model Quantifies
+
+Create structured grid with concise descriptions:
+
+• Net property equity and transaction assumptions
+• Liquid assets and liabilities
+• Pension allocation (transfer value basis)
+• UK 2025/26 tax modelling assumptions
+• Mortgage affordability benchmarks
+• Capital allocation and liquidity concentration
+• 5-year capital sustainability projection
+• Sensitivity testing (interest rate and expense assumptions)
+
+All descriptions must include subtle phrase:
+“Based on the assumptions entered.”
+
+⸻
+
+SECTION: HOW IT WORKS
+
+Title:
+
+A Structured Approach
+
+Steps:
+	1.	Enter Your Financial Assumptions
+	2.	Model Alternative Settlement Structures
+	3.	Compare Indicative Stability & Sustainability
+	4.	Generate a Structured Financial Brief
+
+Keep concise. No emotional claims.
+
+⸻
+
+SECTION: WHY STRUCTURED MODELLING MATTERS
+
+Title:
+
+Private Exploration Before Public Decisions
+
+Body copy:
+
+A structured financial overview allows you to approach professional discussions informed by quantified assumptions.
+
+Instead of relying on estimates or verbal descriptions, you can see how structural changes affect liquidity and projected sustainability.
+
+This tool does not replace professional advice. It supports more informed conversations.
+
+⸻
+
+SECTION: EXAMPLE OUTPUT
+
+Show:
+
+• Executive summary preview
+• Stability index panel
+• Scenario comparison layout
+• Structured PDF preview
+
+Make it feel like:
+Private wealth report.
+Clean.
+Minimal.
+
+No phone mockups.
+
+⸻
+
+SECTION: PRICING FRAME (If Paid Model Active)
+
+Title:
+
+Structured Financial Modelling — £79
+
+Body:
+
+A single professional consultation can cost £250–£400 per hour.
+
+This platform provides structured modelling and scenario comparison for a one-time £79, including six months of unlimited scenario reruns.
+
+No subscription. No recurring fees.
+
+⸻
+
+SECTION: SCOPE & LIMITATIONS
+
+Title:
+
+Scope & Limitations
+
+Content:
+
+This platform provides illustrative financial modelling only.
+
+It does not:
+• Provide legal advice
+• Provide financial advice
+• Provide tax advice
+• Predict court outcomes
+• Assess entitlement
+• Replace independent professional advice
+
+All outputs are generated solely from the financial assumptions entered by the user.
+
+Maintain calm, institutional tone.
+
+⸻
+
+3️⃣ LANGUAGE CONTROL RULES (APPLY SITE-WIDE)
+
+Replace any advisory phrasing with modelling phrasing.
+
+Use:
+
+“Model”
+“Illustrate”
+“Quantify”
+“Compare”
+“Assess indicative sustainability”
+“Evaluate structural implications”
+
+Avoid:
+
+“Should”
+“Best”
+“Ensure”
+“Protect”
+“Guarantee”
+“Know you’ll be okay”
+“Qualify”
+“Approved”
+
+Risk phrasing must say:
+
+“Liquidity pressure identified under current assumptions.”
+
+Not:
+
+“You are high risk.”
+
+⸻
+
+4️⃣ STABILITY SCORE REFRAME
+
+Rename:
+
+“Stability Score”
+
+To:
+
+Indicative Financial Stability Index
+
+Add footnote:
+
+Index reflects liquidity sustainability and affordability benchmarks under current modelling assumptions. It is not a lending or credit assessment.
+
+⸻
+
+5️⃣ DESIGN REFINEMENT INSTRUCTIONS
+
+• Increase whitespace
+• Reduce rounded consumer-style cards
+• Strengthen heading hierarchy
+• Use neutral risk colours
+• Remove playful iconography
+• Maintain mobile-first clarity
+• Avoid emotional imagery
+
+The site must feel like:
+A structured analytical instrument.
+
+⸻
+
+6️⃣ DELIVERABLES REQUIRED FROM AGENT
+
+Return:
+	1.	Full revised homepage copy
+	2.	Updated section structure
+	3.	Logo concept explanation
+	4.	Typography & colour system proposal
+	5.	Rationale for each wording shift
+	6.	Confirmation no advisory language remains
+
+Do not implement until proposal approved.
+
+⸻
+
+END PROMPT
