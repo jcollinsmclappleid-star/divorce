@@ -24,7 +24,7 @@ function BlurredSection({ title, height = "h-32" }: { title: string; height?: st
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/60 rounded-md">
         <Lock className="w-5 h-5 text-muted-foreground mb-2" />
         <p className="text-sm font-medium text-muted-foreground">{title}</p>
-        <p className="text-xs text-muted-foreground/70 mt-1">Unlock Full Analysis to View</p>
+        <p className="text-xs text-muted-foreground/70 mt-1">Available in Full Structured Analysis</p>
       </div>
     </div>
   );
@@ -74,10 +74,10 @@ export default function PreviewPage() {
 
       <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
         <div className="text-center space-y-3">
-          <h1 className="text-2xl font-bold tracking-tight" data-testid="text-preview-title">Your Financial Preview</h1>
+          <h1 className="text-2xl font-bold tracking-tight" data-testid="text-preview-title">Preliminary Financial Summary</h1>
           <p className="text-muted-foreground text-sm max-w-xl mx-auto">
-            Based on the information you have provided, here is an overview of your financial position.
-            Unlock the full analysis for detailed scenario modelling, stability assessment, and a downloadable report.
+            Based on the information provided, the following represents a summary of the preliminary financial position.
+            Unlock the full structured analysis for comprehensive scenario modelling, stability assessment, and a downloadable Structured Financial Brief.
           </p>
         </div>
 
@@ -94,7 +94,7 @@ export default function PreviewPage() {
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold tabular-nums">{fmt(intermediate.netHomeEquity)}</p>
-              <p className="text-xs text-muted-foreground mt-1">Property value less mortgage and selling costs</p>
+              <p className="text-xs text-muted-foreground mt-1">Property value less outstanding mortgage and estimated realisation costs</p>
             </CardContent>
           </Card>
 
@@ -104,7 +104,7 @@ export default function PreviewPage() {
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold tabular-nums">{fmt(intermediate.totalLiquid + intermediate.netHomeEquity)}</p>
-              <p className="text-xs text-muted-foreground mt-1">Assets available for division after debts</p>
+              <p className="text-xs text-muted-foreground mt-1">Combined distributable asset pool [total assets less total liabilities]</p>
             </CardContent>
           </Card>
 
@@ -114,7 +114,7 @@ export default function PreviewPage() {
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold tabular-nums">{fmt((intermediate.totalLiquid + intermediate.netHomeEquity) / 2)}</p>
-              <p className="text-xs text-muted-foreground mt-1">50/50 example only (non-adjustable in preview)</p>
+              <p className="text-xs text-muted-foreground mt-1">Illustrative 50/50 distribution (adjustable in full analysis)</p>
             </CardContent>
           </Card>
         </div>
@@ -123,8 +123,8 @@ export default function PreviewPage() {
           <CardContent className="py-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Preliminary Financial Health Score</p>
-                <p className="text-xs text-muted-foreground/70 mt-1">Full breakdown available with complete analysis</p>
+                <p className="text-sm font-medium text-muted-foreground">Preliminary Stability Assessment</p>
+                <p className="text-xs text-muted-foreground/70 mt-1">Detailed stability breakdown available in full analysis</p>
               </div>
               <div className="flex items-baseline gap-0.5">
                 <span className="text-3xl font-bold tabular-nums">{stabilityFirstDigit}</span>
@@ -136,19 +136,19 @@ export default function PreviewPage() {
         </Card>
 
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Full Analysis Includes</h2>
+          <h2 className="text-lg font-semibold">Full Analytical Pack Includes</h2>
 
-          <BlurredSection title="Scenario Comparison (Sell vs Keep)" height="h-40" />
-          <BlurredSection title="Where the Money Comes From" height="h-32" />
-          <BlurredSection title="Position After 12 Months" height="h-28" />
-          <BlurredSection title="5-Year Financial Projection" height="h-36" />
-          <BlurredSection title="What Changes Matter Most (Sensitivity)" height="h-28" />
-          <BlurredSection title="Structured Financial Brief (PDF)" height="h-24" />
+          <BlurredSection title="Scenario Comparison — Sale vs Retention" height="h-40" />
+          <BlurredSection title="Source of Funds Breakdown" height="h-32" />
+          <BlurredSection title="12-Month Capital Position" height="h-28" />
+          <BlurredSection title="Multi-Year Capital Projection" height="h-36" />
+          <BlurredSection title="Sensitivity Analysis" height="h-28" />
+          <BlurredSection title="Structured Financial Brief (PDF Report)" height="h-24" />
         </div>
 
         <div className="text-center space-y-4 py-6">
           <p className="text-sm text-muted-foreground">
-            Core financial inputs are locked. Unlock the full analysis to adjust settlement assumptions and modelling parameters.
+            Settlement ratio adjustment and detailed modelling parameters are available in the full structured analysis.
           </p>
           <Button size="lg" className="px-8" onClick={() => navigate('/unlock')} data-testid="button-unlock-cta">
             <Lock className="w-4 h-4 mr-2" />

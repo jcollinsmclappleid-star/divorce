@@ -35,10 +35,10 @@ export function computeStabilityScore(
     const keeper = scenario.id === "S2" ? "A" : "B";
     if (keeper === "A") {
       scoreA -= 40;
-      reasonsA.push({ label: "Funding gap exists", points: -40 });
+      reasonsA.push({ label: "Funding shortfall identified", points: -40 });
     } else {
       scoreB -= 40;
-      reasonsB.push({ label: "Funding gap exists", points: -40 });
+      reasonsB.push({ label: "Funding shortfall identified", points: -40 });
     }
   }
 
@@ -46,10 +46,10 @@ export function computeStabilityScore(
     const keeper = scenario.id === "S2" ? "A" : "B";
     if (keeper === "A") {
       scoreA -= 30;
-      reasonsA.push({ label: "Mortgage affordability fails", points: -30 });
+      reasonsA.push({ label: "Mortgage affordability threshold exceeded", points: -30 });
     } else {
       scoreB -= 30;
-      reasonsB.push({ label: "Mortgage affordability fails", points: -30 });
+      reasonsB.push({ label: "Mortgage affordability threshold exceeded", points: -30 });
     }
   }
 
@@ -65,18 +65,18 @@ export function computeStabilityScore(
 
     if (hitYearA !== null && hitYearA <= 2) {
       scoreA -= 20;
-      reasonsA.push({ label: "Capital runs out within 2 years", points: -20 });
+      reasonsA.push({ label: "Capital reserve depleted within 2 years", points: -20 });
     } else if (hitYearA !== null && hitYearA <= 5) {
       scoreA -= 10;
-      reasonsA.push({ label: "Capital runs out within 5 years", points: -10 });
+      reasonsA.push({ label: "Capital reserve depleted within 5 years", points: -10 });
     }
 
     if (hitYearB !== null && hitYearB <= 2) {
       scoreB -= 20;
-      reasonsB.push({ label: "Capital runs out within 2 years", points: -20 });
+      reasonsB.push({ label: "Capital reserve depleted within 2 years", points: -20 });
     } else if (hitYearB !== null && hitYearB <= 5) {
       scoreB -= 10;
-      reasonsB.push({ label: "Capital runs out within 5 years", points: -10 });
+      reasonsB.push({ label: "Capital reserve depleted within 5 years", points: -10 });
     }
   }
 
@@ -90,11 +90,11 @@ export function computeStabilityScore(
 
   if (expenseA > 0 && scenario.liquidStartA < sixMonthsA) {
     scoreA -= 10;
-    reasonsA.push({ label: "Starting liquid < 6 months expenses", points: -10 });
+    reasonsA.push({ label: "Initial liquid capital below 6-month expenditure reserve", points: -10 });
   }
   if (expenseB > 0 && scenario.liquidStartB < sixMonthsB) {
     scoreB -= 10;
-    reasonsB.push({ label: "Starting liquid < 6 months expenses", points: -10 });
+    reasonsB.push({ label: "Initial liquid capital below 6-month expenditure reserve", points: -10 });
   }
 
   if (scenario.id !== "S1") {
@@ -104,10 +104,10 @@ export function computeStabilityScore(
     if (keeperTotal > 0 && (keeperHomeEquity / keeperTotal) > 0.7) {
       if (keeper === "A") {
         scoreA -= 10;
-        reasonsA.push({ label: ">70% net worth tied to property", points: -10 });
+        reasonsA.push({ label: "Over 70% of net worth concentrated in property", points: -10 });
       } else {
         scoreB -= 10;
-        reasonsB.push({ label: ">70% net worth tied to property", points: -10 });
+        reasonsB.push({ label: "Over 70% of net worth concentrated in property", points: -10 });
       }
     }
   }
@@ -115,8 +115,8 @@ export function computeStabilityScore(
   scoreA = Math.max(0, Math.min(100, scoreA));
   scoreB = Math.max(0, Math.min(100, scoreB));
 
-  if (reasonsA.length === 0) reasonsA.push({ label: "No risk factors identified", points: 0 });
-  if (reasonsB.length === 0) reasonsB.push({ label: "No risk factors identified", points: 0 });
+  if (reasonsA.length === 0) reasonsA.push({ label: "No adverse risk factors identified", points: 0 });
+  if (reasonsB.length === 0) reasonsB.push({ label: "No adverse risk factors identified", points: 0 });
 
   return {
     scoreA,

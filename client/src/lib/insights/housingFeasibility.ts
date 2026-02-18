@@ -51,23 +51,23 @@ export function computeHousingFeasibility(
 
   if (withinLendingCriteria) {
     notes.push(
-      `Mortgage of £${Math.round(mortgageRequired)} is within typical lending limits (${incomeMultiple.toFixed(1)} times income)`
+      `Mortgage obligation of £${Math.round(mortgageRequired)} is within standard lending criteria (${incomeMultiple.toFixed(1)}x gross income)`
     );
   } else {
     notes.push(
-      `Mortgage of £${Math.round(mortgageRequired)} exceeds typical 4.5x income multiple — lender may require additional security`
+      `Mortgage obligation of £${Math.round(mortgageRequired)} exceeds the standard 4.5x gross income multiple — lender may require additional collateral or guarantees`
     );
   }
 
   if (monthlyPaymentAsPercentOfNetIncome > 35) {
     notes.push(
-      `Mortgage payments would take ${Math.round(monthlyPaymentAsPercentOfNetIncome)}% of take-home pay, exceeding the typical 35% affordability threshold`
+      `Mortgage payments would represent ${Math.round(monthlyPaymentAsPercentOfNetIncome)}% of net income, exceeding the standard 35% affordability threshold`
     );
   }
 
   if (depositPercentage > 20) {
     notes.push(
-      `Strong equity position at ${Math.round(depositPercentage)}% — no requirement for mortgage insurance`
+      `Strong equity position at ${Math.round(depositPercentage)}% — no mortgage indemnity requirement`
     );
   }
 

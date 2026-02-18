@@ -64,13 +64,13 @@ export function compareToSell(
   const leaverDeltaLiq = leaver === "A" ? deltaLiquidA : deltaLiquidB;
 
   if (keeperDeltaLiq < 0) {
-    notes.push(`Party ${keeper} has ${formatCurrency(Math.abs(keeperDeltaLiq))} less liquid capital than selling`);
+    notes.push(`Party ${keeper} has ${formatCurrency(Math.abs(keeperDeltaLiq))} reduced liquid capital compared to the sale scenario`);
   } else if (keeperDeltaLiq > 0) {
-    notes.push(`Party ${keeper} has ${formatCurrency(keeperDeltaLiq)} more liquid capital than selling`);
+    notes.push(`Party ${keeper} has ${formatCurrency(keeperDeltaLiq)} additional liquid capital compared to the sale scenario`);
   }
 
   if (leaverDeltaLiq > 0) {
-    notes.push(`Party ${leaver} has ${formatCurrency(leaverDeltaLiq)} more liquid capital (receives buyout)`);
+    notes.push(`Party ${leaver} receives ${formatCurrency(leaverDeltaLiq)} additional liquid capital via equity buyout`);
   }
 
   const monthlyMtg = keeper === "A" ? (keepScenario.mortgageMonthlyA ?? 0) : (keepScenario.mortgageMonthlyB ?? 0);

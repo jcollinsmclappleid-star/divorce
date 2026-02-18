@@ -1,0 +1,163 @@
+REFINEMENT REQUEST – RESTORE PROFESSIONAL LANGUAGE & SEGREGATE REPORT STRUCTURE
+
+Context:
+The previous simplification pass made the language too casual and overly basic.
+We must restore professional credibility while keeping clarity.
+Do NOT oversimplify financial terminology.
+Instead, retain technical language and supplement with brief clarifications in brackets.
+
+Objective:
+1) Reinstate structured financial terminology.
+2) Prevent casual phrasing.
+3) Enhance report segmentation with clear professional structure.
+4) Preserve modelling integrity and seriousness.
+
+=================================================
+1) RESTORE TECHNICAL LANGUAGE (WITH CLARIFYING BRACKETS)
+=================================================
+
+Replace casual language such as:
+
+- “Total value of everything”
+- “What each party ends up with”
+- “How long your money lasts”
+- “Money available”
+- “Can you afford it”
+
+With professional terminology:
+
+- “Total Net Asset Position”
+- “Combined Distributable Asset Pool”
+- “Final Allocated Capital Position”
+- “Liquid Capital (available cash and investments)”
+- “Net Equity (property value less outstanding mortgage and estimated selling costs)”
+- “Funding Requirement (additional capital required to complete buyout)”
+- “Affordability Assessment (income vs projected mortgage obligation)”
+- “Runway Projection (estimated duration capital may sustain current expense levels)”
+- “Stability Assessment (composite financial resilience indicator)”
+
+IMPORTANT:
+Do not replace technical terms.
+Keep them and add simplified explanation in brackets only where helpful.
+
+Tone must be:
+Structured.
+Professional.
+Analytical.
+Calm.
+Not conversational.
+
+=================================================
+2) REMOVE CASUAL OUTPUT STRUCTURE
+=================================================
+
+Replace phrasing such as:
+“You receive £X.”
+
+With:
+“Under this scenario, Party A is allocated £X in liquid capital, based on the selected settlement ratio.”
+
+Replace:
+“Party B ends up with…”
+
+With:
+“Party B’s post-settlement capital position reflects…”
+
+Maintain formal neutrality.
+
+=================================================
+3) SEGREGATE REPORT STRUCTURE CLEARLY
+=================================================
+
+Upgrade both on-screen results and PDF into clearly segmented sections.
+
+Each scenario must have its own clearly titled section.
+
+STRUCTURE:
+
+-------------------------------------------------
+COVER PAGE
+-------------------------------------------------
+Title: Structured Financial Brief
+Subtitle: Scenario Modelling Summary
+Date
+Disclaimer footer
+
+-------------------------------------------------
+SECTION 1 – Executive Overview
+-------------------------------------------------
+- Scenario comparison table
+- Stability score overview
+- Key financial indicators
+- Summary of major funding requirements (if any)
+
+-------------------------------------------------
+SECTION 2 – Scenario A: Sale & Distribution
+-------------------------------------------------
+Subsections:
+• Executive Narrative Summary
+• Source of Funds Breakdown
+• Net Worth Composition
+• Monthly Financial Position
+• Stability Assessment
+• Sensitivity Considerations
+
+-------------------------------------------------
+SECTION 3 – Scenario B: Party A Retains Property
+-------------------------------------------------
+Same structured subsections as above.
+
+-------------------------------------------------
+SECTION 4 – Scenario C: Party B Retains Property
+-------------------------------------------------
+Same structured subsections as above.
+
+-------------------------------------------------
+SECTION 5 – Assumptions & Methodology
+-------------------------------------------------
+- Key financial inputs
+- Settlement ratio assumptions
+- Interest rate assumptions
+- Expense assumptions
+- Modelling limitations
+- Formal disclaimer
+
+=================================================
+4) ENHANCE VISUAL HIERARCHY
+=================================================
+
+Implement:
+
+- Clear section headers
+- Professional divider lines
+- Subsection labels
+- Structured tables with visible borders
+- Consistent GBP formatting
+- Neutral colour palette
+- No casual icons
+- No playful styling
+
+The design should resemble a structured financial report, not a consumer budgeting app.
+
+=================================================
+5) PRESERVE MODELLING INTEGRITY
+=================================================
+
+Do NOT:
+- Remove technical concepts.
+- Replace structured financial terminology with vague summaries.
+- Oversimplify to conversational tone.
+
+Clarity must supplement precision — not replace it.
+
+=================================================
+6) POST-IMPLEMENTATION SUMMARY
+=================================================
+
+After implementation, provide:
+- List of restored terminology.
+- List of removed casual phrases.
+- Confirmation of report segmentation structure.
+- Any potential UX impacts.
+
+END.

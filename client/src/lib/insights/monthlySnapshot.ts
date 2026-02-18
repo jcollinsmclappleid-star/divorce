@@ -26,7 +26,7 @@ export function buildMonthlySnapshot(
 
   const netMonthlyA = Math.round(taxA.net / 12);
   const netMonthlyB = Math.round(taxB.net / 12);
-  lines.push({ label: "Net monthly income", amountA: netMonthlyA, amountB: netMonthlyB });
+  lines.push({ label: "Net Monthly Income", amountA: netMonthlyA, amountB: netMonthlyB });
 
   const expenseA = inputs.expenses.filter(e => e.owner === "A").reduce((s, e) => s + e.amountAnnual, 0);
   const expenseB = inputs.expenses.filter(e => e.owner === "B").reduce((s, e) => s + e.amountAnnual, 0);
@@ -34,17 +34,17 @@ export function buildMonthlySnapshot(
 
   const totalExpenseA = Math.round((expenseA + sharedExpense / 2) / 12);
   const totalExpenseB = Math.round((expenseB + sharedExpense / 2) / 12);
-  lines.push({ label: "Living expenses", amountA: -totalExpenseA, amountB: -totalExpenseB });
+  lines.push({ label: "Monthly Expenditure", amountA: -totalExpenseA, amountB: -totalExpenseB });
 
   const mtgA = scenario.mortgageMonthlyA ?? 0;
   const mtgB = scenario.mortgageMonthlyB ?? 0;
   if (mtgA > 0 || mtgB > 0) {
-    lines.push({ label: "Mortgage payment", amountA: -Math.round(mtgA), amountB: -Math.round(mtgB) });
+    lines.push({ label: "Mortgage Obligation", amountA: -Math.round(mtgA), amountB: -Math.round(mtgB) });
   }
 
   if (inputs.assumptions.includeCMSEstimate && cmsAnnual > 0) {
     const cmsMonthly = Math.round(cmsAnnual / 12);
-    lines.push({ label: "Child maintenance", amountA: -cmsMonthly, amountB: cmsMonthly });
+    lines.push({ label: "Child Maintenance Obligation", amountA: -cmsMonthly, amountB: cmsMonthly });
   }
 
   const surplusA = netMonthlyA - totalExpenseA - Math.round(mtgA) - (inputs.assumptions.includeCMSEstimate ? Math.round(cmsAnnual / 12) : 0);

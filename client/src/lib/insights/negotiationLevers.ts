@@ -26,8 +26,8 @@ export function generateNegotiationLevers(
   const liquidChange = Math.round((totalLiquid + netHomeEquity) * 0.05);
   if (liquidChange > 0) {
     levers.push({
-      title: `Shift asset split to ${newSplitPct}% : ${otherNewPct}%`,
-      impact: `Shifting asset split to ${newSplitPct}% : ${otherNewPct}% would change Party A's liquid capital by +£${liquidChange}`,
+      title: `Adjust asset allocation to ${newSplitPct}% : ${otherNewPct}%`,
+      impact: `Adjusting asset allocation to ${newSplitPct}% : ${otherNewPct}% would increase Party A's liquid capital by +£${liquidChange}`,
       beneficiary: "A",
       magnitude: liquidChange,
     });
@@ -43,8 +43,8 @@ export function generateNegotiationLevers(
     const annualSaving = Math.round(expenseA * reductionPct / 100);
     const monthlySaving = Math.round(annualSaving / 12);
     levers.push({
-      title: `Reduce Party A's living costs by ${reductionPct}%`,
-      impact: `Cutting £${annualSaving}/yr (£${monthlySaving}/mo) from Party A's expenses would close the monthly deficit`,
+      title: `Reduce Party A's monthly expenditure by ${reductionPct}%`,
+      impact: `Reducing £${annualSaving}/yr (£${monthlySaving}/mo) from Party A's expenditure would eliminate the monthly deficit`,
       beneficiary: "A",
       magnitude: annualSaving,
     });
@@ -55,8 +55,8 @@ export function generateNegotiationLevers(
     const annualSaving = Math.round(expenseB * reductionPct / 100);
     const monthlySaving = Math.round(annualSaving / 12);
     levers.push({
-      title: `Reduce Party B's living costs by ${reductionPct}%`,
-      impact: `Cutting £${annualSaving}/yr (£${monthlySaving}/mo) from Party B's expenses would close the monthly deficit`,
+      title: `Reduce Party B's monthly expenditure by ${reductionPct}%`,
+      impact: `Reducing £${annualSaving}/yr (£${monthlySaving}/mo) from Party B's expenditure would eliminate the monthly deficit`,
       beneficiary: "B",
       magnitude: annualSaving,
     });
@@ -68,8 +68,8 @@ export function generateNegotiationLevers(
     const monthlySaving = Math.round(totalMortgage * 0.01 / 12);
     const beneficiary: "A" | "B" | "both" = hasMortgageA && hasMortgageB ? "both" : hasMortgageA ? "A" : "B";
     levers.push({
-      title: "Reduce mortgage rate by 1%",
-      impact: `Reducing mortgage rate by 1% saves £${monthlySaving}/month`,
+      title: "Reduce mortgage interest rate by 1%",
+      impact: `A 1% reduction in mortgage interest rate yields a saving of £${monthlySaving}/month`,
       beneficiary,
       magnitude: monthlySaving * 12,
     });
@@ -79,8 +79,8 @@ export function generateNegotiationLevers(
     const gap = Math.round(scenario.fundingGap);
     const keeper = scenario.id === "S2" ? "A" : "B";
     levers.push({
-      title: `Reduce the buyout by £${gap}`,
-      impact: `Reducing the buyout by £${gap} eliminates the funding gap`,
+      title: `Reduce equity buyout obligation by £${gap}`,
+      impact: `Reducing the equity buyout by £${gap} eliminates the funding shortfall`,
       beneficiary: keeper as "A" | "B",
       magnitude: gap,
     });
@@ -101,8 +101,8 @@ export function generateNegotiationLevers(
       const savingsNeeded = annualBurn > 0 ? Math.round(capitalAtStart / (negYearA + 1) - capitalAtStart / negYearA + Math.abs(surplusA)) : 0;
       const approxSaving = Math.round(expenseA * 0.05);
       levers.push({
-        title: "Extend Party A's financial runway",
-        impact: `Reducing annual expenses by 5% (£${approxSaving}/year) could extend Party A's runway by approximately 1 year`,
+        title: "Extend Party A's capital runway",
+        impact: `Reducing annual expenditure by 5% (£${approxSaving}/year) could extend Party A's capital runway by approximately 1 year`,
         beneficiary: "A",
         magnitude: approxSaving,
       });
@@ -111,8 +111,8 @@ export function generateNegotiationLevers(
     if (negYearB !== null && negYearB <= 5 && negYearB > 0 && expenseB > 0) {
       const approxSaving = Math.round(expenseB * 0.05);
       levers.push({
-        title: "Extend Party B's financial runway",
-        impact: `Reducing annual expenses by 5% (£${approxSaving}/year) could extend Party B's runway by approximately 1 year`,
+        title: "Extend Party B's capital runway",
+        impact: `Reducing annual expenditure by 5% (£${approxSaving}/year) could extend Party B's capital runway by approximately 1 year`,
         beneficiary: "B",
         magnitude: approxSaving,
       });

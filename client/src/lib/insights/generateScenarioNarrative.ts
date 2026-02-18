@@ -64,16 +64,16 @@ export function generateScenarioNarrative(
       parts.push(`Pensions (total CETV ${formatCurrency(totalPensionCETV)}) are split separately: Party A retains ${formatCurrency(scenario.pensionA)}, Party B retains ${formatCurrency(scenario.pensionB)}.`);
     }
 
-    keyDrivers.push("All assets converted to cash for a clean division");
+    keyDrivers.push("All assets converted to liquid capital for a clean division");
     if (hasHome) keyDrivers.push("Property equity forms the largest component");
-    if (totalLiquid > 0) keyDrivers.push("Existing savings added to the pool");
+    if (totalLiquid > 0) keyDrivers.push("Existing liquid capital added to the distributable pool");
 
     tradeOffs.push("Maximum liquidity and flexibility for both parties");
     tradeOffs.push("Both parties need to find new housing");
     tradeOffs.push("No ongoing mortgage obligation");
 
     riskFlags.push({
-      label: "Housing transition",
+      label: "Accommodation transition required",
       severity: "warn",
       detail: "Both parties will need to arrange new accommodation. Consider rental costs or deposit requirements.",
     });
@@ -95,7 +95,7 @@ export function generateScenarioNarrative(
 
   if (hasHome) {
     const homeEquityRetained = Math.max(0, homeValue - totalMortgage);
-    parts.push(`Party ${keeper} keeps the family home (${formatCurrency(homeValue)}) with ${formatCurrency(homeEquityRetained)} in equity (this is illiquid \u2014 tied up in the property).`);
+    parts.push(`Party ${keeper} retains the property (${formatCurrency(homeValue)}) with ${formatCurrency(homeEquityRetained)} in equity (this is illiquid \u2014 tied up in the property).`);
 
     if (scenario.buyoutAmount && scenario.buyoutAmount > 0) {
       parts.push(`A buyout payment of ${formatCurrency(scenario.buyoutAmount)} is due to Party ${leaver} to compensate for their share of the home equity.`);
@@ -109,24 +109,24 @@ export function generateScenarioNarrative(
     }
   }
 
-  parts.push(`After the buyout, Party ${keeper} has ${formatCurrency(keeper === "A" ? scenario.liquidStartA : scenario.liquidStartB)} in liquid cash, while Party ${leaver} has ${formatCurrency(leaver === "A" ? scenario.liquidStartA : scenario.liquidStartB)}.`);
+  parts.push(`After the buyout, Party ${keeper} is allocated ${formatCurrency(keeper === "A" ? scenario.liquidStartA : scenario.liquidStartB)} in liquid capital, while Party ${leaver} receives ${formatCurrency(leaver === "A" ? scenario.liquidStartA : scenario.liquidStartB)}.`);
 
   if (hasPension && totalPensionCETV > 0) {
     parts.push(`Pensions are split separately: Party A retains ${formatCurrency(scenario.pensionA)}, Party B retains ${formatCurrency(scenario.pensionB)}.`);
   }
 
   keyDrivers.push(`Party ${keeper} retains housing stability`);
-  keyDrivers.push("Home equity is illiquid and not available as cash");
+  keyDrivers.push("Home equity is illiquid and not available as liquid capital");
   if (totalMortgage > 0) keyDrivers.push("Ongoing mortgage creates a monthly obligation");
   if (scenario.buyoutAmount && scenario.buyoutAmount > 0) keyDrivers.push(`Buyout payment of ${formatCurrency(scenario.buyoutAmount)} required`);
 
   tradeOffs.push(`Party ${keeper}: housing security, but reduced liquidity and ongoing mortgage costs`);
-  tradeOffs.push(`Party ${leaver}: more liquid capital, but needs to find new housing`);
-  tradeOffs.push("The keeper's net worth is higher on paper, but much of it is tied up in the property");
+  tradeOffs.push(`Party ${leaver}: additional liquid capital, but requires new accommodation`);
+  tradeOffs.push("The retaining party's net worth is higher on paper, but a significant portion is illiquid property equity");
 
   if (scenario.fundingGap && scenario.fundingGap > 0) {
     riskFlags.push({
-      label: "Funding gap",
+      label: "Funding shortfall",
       severity: "risk",
       detail: `Party ${keeper} needs an additional ${formatCurrency(scenario.fundingGap)} to fund the buyout. This may require remortgaging or other borrowing.`,
     });
@@ -156,7 +156,7 @@ export function generateScenarioNarrative(
       const mtgPctIncome = keeperIncome > 0 ? Math.round((annualMtg / keeperIncome) * 100) : 0;
       if (mtgPctIncome > 35) {
         riskFlags.push({
-          label: "High mortgage burden",
+          label: "Elevated mortgage-to-income ratio",
           severity: "warn",
           detail: `Mortgage payments represent ${mtgPctIncome}% of Party ${keeper}'s gross income, which is above the typical 35% comfort threshold.`,
         });

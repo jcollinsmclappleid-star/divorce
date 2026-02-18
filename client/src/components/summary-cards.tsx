@@ -12,13 +12,13 @@ export function SummaryCards({ netWorth, liquidity }: SummaryProps) {
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8">
       <Card className="hover:shadow-md transition-shadow border-l-4 border-l-primary">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Net Worth</CardTitle>
+          <CardTitle className="text-sm font-medium">Combined Net Worth</CardTitle>
           <TrendingUp className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{formatCurrency(netWorth.total)}</div>
           <p className="text-xs text-muted-foreground mt-1">
-            Combined marital assets
+            Total net asset position [assets less liabilities]
           </p>
         </CardContent>
       </Card>
@@ -32,11 +32,11 @@ export function SummaryCards({ netWorth, liquidity }: SummaryProps) {
           <div className="flex justify-between items-end">
             <div>
               <div className="text-2xl font-bold text-blue-600">{formatCurrency(netWorth.partyA)}</div>
-              <p className="text-xs text-muted-foreground mt-1">Net Position</p>
+              <p className="text-xs text-muted-foreground mt-1">Net Asset Position</p>
             </div>
             <div className="text-right">
                <div className="text-sm font-semibold text-slate-600">{formatCurrency(liquidity.partyA)}</div>
-               <p className="text-xs text-muted-foreground">Liquid</p>
+               <p className="text-xs text-muted-foreground">Liquid Capital</p>
             </div>
           </div>
         </CardContent>
@@ -51,11 +51,11 @@ export function SummaryCards({ netWorth, liquidity }: SummaryProps) {
           <div className="flex justify-between items-end">
             <div>
               <div className="text-2xl font-bold text-emerald-600">{formatCurrency(netWorth.partyB)}</div>
-              <p className="text-xs text-muted-foreground mt-1">Net Position</p>
+              <p className="text-xs text-muted-foreground mt-1">Net Asset Position</p>
             </div>
             <div className="text-right">
                <div className="text-sm font-semibold text-slate-600">{formatCurrency(liquidity.partyB)}</div>
-               <p className="text-xs text-muted-foreground">Liquid</p>
+               <p className="text-xs text-muted-foreground">Liquid Capital</p>
             </div>
           </div>
         </CardContent>

@@ -48,8 +48,8 @@ export function computeSensitivityRanking(
   const impactSurplusB_rate = hasMortgageB ? -Math.round(mortgageB * 0.01) : 0;
 
   factors.push({
-    factor: "Interest rate",
-    description: "+1% interest rate",
+    factor: "Interest Rate Movement",
+    description: "+1% interest rate increase",
     impactOnSurplusA: Math.round(impactSurplusA_rate),
     impactOnSurplusB: Math.round(impactSurplusB_rate),
     impactOnRunwayA: estimateRunwayChange(impactSurplusA_rate, surplusA, projectionYears),
@@ -65,8 +65,8 @@ export function computeSensitivityRanking(
   const impactExpB = -Math.round(expenseB * 0.10);
 
   factors.push({
-    factor: "Living costs",
-    description: "+10% living costs",
+    factor: "Expenditure Inflation",
+    description: "+10% increase in monthly expenditure",
     impactOnSurplusA: impactExpA,
     impactOnSurplusB: impactExpB,
     impactOnRunwayA: estimateRunwayChange(impactExpA, surplusA, projectionYears),
@@ -76,8 +76,8 @@ export function computeSensitivityRanking(
   const splitImpact = Math.round((totalLiquid + netHomeEquity) * 0.05);
 
   factors.push({
-    factor: "Asset split",
-    description: "+5% asset split to A",
+    factor: "Asset Allocation Variance",
+    description: "+5% asset allocation shift to Party A",
     impactOnSurplusA: splitImpact,
     impactOnSurplusB: -splitImpact,
     impactOnRunwayA: estimateRunwayChange(splitImpact, surplusA, projectionYears),

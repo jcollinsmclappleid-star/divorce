@@ -18,7 +18,7 @@ import {
 import {
   Calculator, ChevronLeft, ChevronRight, ChevronDown, Check, X, AlertTriangle,
   TrendingUp, Edit, Shield, ArrowDown, ArrowUp, Minus,
-  DollarSign, Home, Info, Lightbulb, BarChart3, Eye,
+  PoundSterling, Home, Info, Lightbulb, BarChart3, Eye,
   Target, Activity, Building2, FileText
 } from "lucide-react";
 import {
@@ -39,10 +39,10 @@ import type {
 type ViewLens = "liquidity" | "networth" | "risk";
 
 const SCENARIO_META: Record<string, { label: string; shortLabel: string; color: string; description: string }> = {
-  S1: { label: "Sell & Split", shortLabel: "Sell & Split", color: "#2563EB", description: "Home is sold, proceeds divided" },
-  S2: { label: "A Keeps House", shortLabel: "A Keeps House", color: "#10B981", description: "Party A keeps the family house" },
-  S3: { label: "B Keeps House", shortLabel: "B Keeps House", color: "#8B5CF6", description: "Party B keeps the family house" },
-  S4: { label: "Deferred Sale", shortLabel: "Deferred", color: "#F59E0B", description: "Home sold at a later date" },
+  S1: { label: "Sell & Split", shortLabel: "Sell & Split", color: "#2563EB", description: "Property sold; net proceeds distributed between parties" },
+  S2: { label: "A Keeps House", shortLabel: "A Keeps House", color: "#10B981", description: "Party A retains the family property" },
+  S3: { label: "B Keeps House", shortLabel: "B Keeps House", color: "#8B5CF6", description: "Party B retains the family property" },
+  S4: { label: "Deferred Sale", shortLabel: "Deferred", color: "#F59E0B", description: "Property sale deferred to a future date" },
 };
 
 function InfoTip({ text }: { text: string }) {
@@ -202,8 +202,7 @@ export default function ResultsPage() {
                 Structured Financial Brief
               </h1>
               <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed max-w-2xl">
-                Compare how different settlement options affect both parties. Adjust the sliders above to explore different splits. 
-                Use the view modes below to focus on what matters most to you.
+                Compare post-settlement financial positions under each scenario. Adjust the settlement ratio using the controls above. Select an analytical lens below to prioritise the relevant metrics.
               </p>
             </div>
 
@@ -212,9 +211,7 @@ export default function ResultsPage() {
             <div className="p-4 rounded-md border border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800">
               <p className="text-sm text-blue-900 dark:text-blue-200 leading-relaxed" data-testid="text-guidance-callout">
                 <Info className="w-4 h-4 inline mr-1.5 -mt-0.5" />
-                The table below compares what each party walks away with under different settlement options. 
-                Click or tap the <span className="inline-flex items-center"><Info className="w-3 h-3 mx-0.5" /></span> icons for plain-English explanations of each row. 
-                Use the sliders above to try different splits.
+                The table below compares the allocated capital position for each party under each settlement scenario. Select the <span className="inline-flex items-center"><Info className="w-3 h-3 mx-0.5" /></span> information icons for supplementary definitions. Use the settlement ratio controls to model alternative distributions.
               </p>
             </div>
           </div>
@@ -233,7 +230,7 @@ export default function ResultsPage() {
               <div>
                 <h2 className="text-xl font-display font-bold mb-1 tracking-tight">Scenario Analysis</h2>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Choose a scenario below to see a full breakdown — what each party receives, where the money comes from, monthly budgets, and risk assessment.
+                  Select a scenario below for detailed analysis — including capital allocation, source of funds breakdown, monthly financial position, and stability assessment.
                 </p>
                 <div className="grid gap-3 sm:grid-cols-3 mb-6">
                   {allScenarios.map(s => {
@@ -280,9 +277,9 @@ export default function ResultsPage() {
                 <Card>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base flex items-center gap-2">
-                      <BarChart3 className="w-4 h-4" /> What Each Party Ends Up With
+                      <BarChart3 className="w-4 h-4" /> Final Allocated Capital Position
                     </CardTitle>
-                    <CardDescription>Total value for each person, including cash, property share, and pensions</CardDescription>
+                    <CardDescription>Total net asset allocation per party, comprising liquid capital, property equity, and pension valuations</CardDescription>
                   </CardHeader>
                   <CardContent className="h-[300px]">
                     <ResponsiveContainer width="100%" height="100%">
@@ -308,28 +305,28 @@ export default function ResultsPage() {
 
               <div className="space-y-3">
                 <h2 className="text-lg font-display font-bold tracking-tight flex items-center gap-2">
-                  Dig Deeper
+                  Supplementary Analysis
                 </h2>
-                <p className="text-sm text-muted-foreground">These sections offer more detailed analysis. Click any heading to expand it.</p>
+                <p className="text-sm text-muted-foreground">Expand any section below for additional analytical detail.</p>
                 <div className="space-y-2">
-                  <CollapsibleSection title="How the Scenarios Differ" subtitle="A side-by-side look at the key structural differences between options" icon={<BarChart3 className="w-4 h-4" />} testId="collapsible-structure">
+                  <CollapsibleSection title="Structural Comparison" subtitle="Qualitative structural assessment across modelled scenarios" icon={<BarChart3 className="w-4 h-4" />} testId="collapsible-structure">
                     <ScenarioStructureTable scenarios={displayScenarios} engine={engine} />
                   </CollapsibleSection>
-                  <CollapsibleSection title="Position After 12 Months" subtitle="How each option looks after the first year of living with it" icon={<Activity className="w-4 h-4" />} testId="collapsible-12-month">
+                  <CollapsibleSection title="12-Month Financial Position" subtitle="Projected capital position following 12 months under each scenario" icon={<Activity className="w-4 h-4" />} testId="collapsible-12-month">
                     <TwelveMonthSnapshot scenarios={displayScenarios} projections={engine.projections} engine={engine} />
                   </CollapsibleSection>
-                  <CollapsibleSection title="What Changes Matter Most" subtitle="Which assumptions have the biggest effect on your finances" icon={<Activity className="w-4 h-4" />} testId="collapsible-sensitivity">
+                  <CollapsibleSection title="Sensitivity Analysis" subtitle="Ranked impact of assumption variations on financial outcomes" icon={<Activity className="w-4 h-4" />} testId="collapsible-sensitivity">
                     <SensitivityPanel scenarios={displayScenarios} engine={engine} store={store} />
                   </CollapsibleSection>
-                  <CollapsibleSection title="Stress Testing" subtitle="Try changing mortgage rates and living costs to see how resilient each option is" icon={<AlertTriangle className="w-4 h-4" />} testId="collapsible-stress-test">
+                  <CollapsibleSection title="Stress Test Modelling" subtitle="Model the impact of interest rate and expenditure variations on scenario viability" icon={<AlertTriangle className="w-4 h-4" />} testId="collapsible-stress-test">
                     <StressTestPanel />
                   </CollapsibleSection>
                 </div>
               </div>
 
               <div className="p-4 bg-muted/30 rounded-md text-xs text-muted-foreground space-y-2" data-testid="section-assumptions-appendix">
-                <h3 className="text-sm font-semibold text-foreground">Assumptions</h3>
-                <p className="text-xs text-muted-foreground mb-2">These are the numbers and settings used to calculate everything above. You can adjust the key ones using the sliders at the top.</p>
+                <h3 className="text-sm font-semibold text-foreground">Key Assumptions & Parameters</h3>
+                <p className="text-xs text-muted-foreground mb-2">The following parameters underpin all calculations presented above. Core settlement ratios are adjustable via the controls at the top of this page.</p>
                 <div className="grid gap-x-8 gap-y-1 sm:grid-cols-2">
                   <div className="flex justify-between gap-2"><span>Asset split (A : B)</span><span className="tabular-nums">{Math.round(assumptions.splitRatio * 100)}% : {Math.round((1 - assumptions.splitRatio) * 100)}%</span></div>
                   <div className="flex justify-between gap-2"><span>Pension split (A : B)</span><span className="tabular-nums">{Math.round(assumptions.splitPensionToA * 100)}% : {Math.round((1 - assumptions.splitPensionToA) * 100)}%</span></div>
@@ -356,7 +353,7 @@ export default function ResultsPage() {
       <footer className="border-t py-8 mt-auto bg-muted/30">
         <div className="container mx-auto px-4 text-center text-muted-foreground text-xs space-y-1.5">
           <p className="font-medium">Illustrative modelling only. Not legal, tax or financial advice.</p>
-          <p>Data is stored locally in your browser unless explicitly saved. No data is transmitted to any server for calculations.</p>
+          <p>All calculations are performed locally in your browser. No financial data is transmitted to any external server.</p>
         </div>
       </footer>
     </div>
@@ -364,16 +361,16 @@ export default function ResultsPage() {
 }
 
 function DecisionLensToggle({ viewLens, setViewLens }: { viewLens: ViewLens; setViewLens: (v: ViewLens) => void }) {
-  const lenses: { id: ViewLens; label: string; icon: typeof DollarSign; description: string }[] = [
-    { id: "liquidity", label: "Cash Focus", icon: DollarSign, description: "How much spendable money each person has" },
-    { id: "networth", label: "Total Wealth", icon: Target, description: "Everything each person owns, including property and pensions" },
-    { id: "risk", label: "Risk & Long-Term", icon: Activity, description: "How secure each person's finances are over time" },
+  const lenses: { id: ViewLens; label: string; icon: typeof PoundSterling; description: string }[] = [
+    { id: "liquidity", label: "Liquidity Analysis", icon: PoundSterling, description: "Liquid Capital [cash and realisable investments available immediately]" },
+    { id: "networth", label: "Net Worth Analysis", icon: Target, description: "Total Net Asset Position [liquid capital, property equity, and pension valuations]" },
+    { id: "risk", label: "Stability & Projection", icon: Activity, description: "Composite Stability Assessment [financial resilience over projected period]" },
   ];
 
   return (
     <div className="flex flex-wrap gap-2" data-testid="section-decision-lens">
       <Label className="text-xs text-muted-foreground w-full flex items-center gap-1.5">
-        <Eye className="w-3 h-3" /> View Mode
+        <Eye className="w-3 h-3" /> Analytical Lens
       </Label>
       {lenses.map(l => (
         <Button
@@ -404,9 +401,9 @@ function TwelveMonthSnapshot({
     <Card data-testid="card-12-month-snapshot">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
-          <Activity className="w-4 h-4" /> Position After 12 Months
+          <Activity className="w-4 h-4" /> 12-Month Capital Position
         </CardTitle>
-        <CardDescription>How each scenario looks after the first year — immediate stability at a glance</CardDescription>
+        <CardDescription>Projected liquid capital position for each party following 12 months under each scenario</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
@@ -426,7 +423,7 @@ function TwelveMonthSnapshot({
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-a">A's accessible cash after year 1</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-a">Party A — Liquid Capital at Month 12</TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr1 = proj && proj.length > 1 ? proj[1] : null;
@@ -438,7 +435,7 @@ function TwelveMonthSnapshot({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-b">B's accessible cash after year 1</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-b">Party B — Liquid Capital at Month 12</TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr1 = proj && proj.length > 1 ? proj[1] : null;
@@ -450,7 +447,7 @@ function TwelveMonthSnapshot({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-a">A's monthly surplus or shortfall</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-a">Party A — Monthly Surplus / (Deficit)</TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr0Capital = proj && proj.length > 0 ? proj[0].capitalA : s.liquidStartA;
@@ -465,7 +462,7 @@ function TwelveMonthSnapshot({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-b">B's monthly surplus or shortfall</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-b">Party B — Monthly Surplus / (Deficit)</TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr0Capital = proj && proj.length > 0 ? proj[0].capitalB : s.liquidStartB;
@@ -480,7 +477,7 @@ function TwelveMonthSnapshot({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-buffer-a">How many months A's savings cover</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-buffer-a">Party A — Capital Runway [months]</TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr0Cap = proj && proj.length > 0 ? proj[0].capitalA : s.liquidStartA;
@@ -570,7 +567,7 @@ function ScenarioStructureTable({
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground">How much cash is available straight away</TableCell>
+                <TableCell className="text-sm text-muted-foreground">Immediate Liquidity [cash available on completion]</TableCell>
                 {scenarios.map(s => {
                   const label = getImmediateLiquidity(s);
                   return (
@@ -581,7 +578,7 @@ function ScenarioStructureTable({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground">Needs a mortgage?</TableCell>
+                <TableCell className="text-sm text-muted-foreground">Mortgage Obligation Required</TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center text-sm">
                     {hasMortgage(s)
@@ -591,7 +588,7 @@ function ScenarioStructureTable({
                 ))}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground">How much wealth is tied up in property</TableCell>
+                <TableCell className="text-sm text-muted-foreground">Property Concentration [% of net worth held in property]</TableCell>
                 {scenarios.map(s => {
                   const conc = propertyConcentration(s);
                   return (
@@ -604,7 +601,7 @@ function ScenarioStructureTable({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground">How much wealth is in pensions</TableCell>
+                <TableCell className="text-sm text-muted-foreground">Pension Concentration [% of net worth held in pension]</TableCell>
                 {scenarios.map(s => {
                   const totalA = s.totalA || 1;
                   const totalB = s.totalB || 1;
@@ -618,7 +615,7 @@ function ScenarioStructureTable({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground">How complicated to arrange</TableCell>
+                <TableCell className="text-sm text-muted-foreground">Implementation Complexity</TableCell>
                 {scenarios.map(s => {
                   const comp = getComplexity(s);
                   return (
@@ -665,10 +662,10 @@ function SensitivityPanel({
     <Card data-testid="card-sensitivity">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
-          <Activity className="w-4 h-4" /> What Changes Matter Most?
+          <Activity className="w-4 h-4" /> Sensitivity Analysis
         </CardTitle>
         <CardDescription>
-          These are the things that would make the biggest difference to your finances if they changed.
+          Ranked assessment of which assumption variations have the greatest impact on financial outcomes.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -685,13 +682,13 @@ function SensitivityPanel({
                 </div>
                 <div className="grid gap-1 sm:grid-cols-2 text-xs text-muted-foreground">
                   <div className="flex items-center gap-1.5">
-                    <span>Impact on A's surplus:</span>
+                    <span>Impact on Party A surplus:</span>
                     <span className={`tabular-nums font-medium ${f.impactOnSurplusA < 0 ? "text-red-600" : f.impactOnSurplusA > 0 ? "text-emerald-600" : ""}`}>
                       {f.impactOnSurplusA > 0 ? "+" : ""}{formatCurrency(f.impactOnSurplusA)}/yr
                     </span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <span>Impact on B's surplus:</span>
+                    <span>Impact on Party B surplus:</span>
                     <span className={`tabular-nums font-medium ${f.impactOnSurplusB < 0 ? "text-red-600" : f.impactOnSurplusB > 0 ? "text-emerald-600" : ""}`}>
                       {f.impactOnSurplusB > 0 ? "+" : ""}{formatCurrency(f.impactOnSurplusB)}/yr
                     </span>
@@ -725,10 +722,10 @@ function ExecutiveTable({
     <Card data-testid="card-executive-table">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
-          <DollarSign className="w-4 h-4" />
+          <PoundSterling className="w-4 h-4" />
           Executive Summary
         </CardTitle>
-        <CardDescription>At-a-glance comparison across all scenarios</CardDescription>
+        <CardDescription>Comparative financial summary across all modelled scenarios</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
@@ -748,19 +745,19 @@ function ExecutiveTable({
             </TableHeader>
             <TableBody>
               <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Easily accessible cash (A)<InfoTip text="Money that Party A can access quickly — bank accounts, savings, ISAs, and investments that could be sold." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Liquid Capital — Party A<InfoTip text="Liquid capital represents funds Party A can access immediately — bank accounts, savings, ISAs, and realisable investments." /></></TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums font-semibold text-blue-600">{formatCurrency(s.liquidStartA)}</TableCell>
                 ))}
               </TableRow>
               <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Easily accessible cash (B)<InfoTip text="Money that Party B can access quickly — bank accounts, savings, ISAs, and investments that could be sold." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Liquid Capital — Party B<InfoTip text="Liquid capital represents funds Party B can access immediately — bank accounts, savings, ISAs, and realisable investments." /></></TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums font-semibold text-emerald-600">{formatCurrency(s.liquidStartB)}</TableCell>
                 ))}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Payment to other party<InfoTip text="The lump sum the person keeping the house needs to pay the other person for their share of the home equity." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Equity Transfer Obligation<InfoTip text="The lump sum payable by the party retaining the property to compensate the departing party for their share of net equity." /></></TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums">
                     {s.buyoutAmount != null && s.buyoutAmount > 0 ? formatCurrency(s.buyoutAmount) : <span className="text-muted-foreground">N/A</span>}
@@ -768,7 +765,7 @@ function ExecutiveTable({
                 ))}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Shortfall<InfoTip text="If the person keeping the house doesn't have enough cash to pay the other party, this is the amount they'd need to find — possibly through a bigger mortgage." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Funding Requirement<InfoTip text="Where the retaining party's liquid capital is insufficient to meet the equity transfer obligation, this represents the additional capital required — typically funded through an increased mortgage." /></></TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums">
                     {s.fundingGap != null && s.fundingGap > 0
@@ -778,7 +775,7 @@ function ExecutiveTable({
                 ))}
               </TableRow>
               <TableRow>
-                <TableCell className="font-medium text-muted-foreground"><>Yearly mortgage payments<InfoTip text="Total mortgage repayments per year. This is higher when someone keeps the house as they may need a larger mortgage." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Annual Mortgage Obligation<InfoTip text="Total annual mortgage repayments. In property retention scenarios, this may include an increased mortgage to fund the equity transfer." /></></TableCell>
                 {scenarios.map(s => {
                   const annual = ((s.mortgageMonthlyA ?? 0) + (s.mortgageMonthlyB ?? 0)) * 12;
                   return (
@@ -789,7 +786,7 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>How long savings last<InfoTip text="Whether each party's savings and cash will last at least 5 years based on their income, expenses and mortgage payments." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Capital Runway Assessment<InfoTip text="Whether each party's liquid capital is projected to sustain their outgoings for at least 5 years based on current income, expenditure, and mortgage obligations." /></></TableCell>
                 {scenarios.map(s => {
                   const runway = getRunway(projections[s.id]);
                   return (
@@ -802,7 +799,7 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Financial health (A)<InfoTip text="An overall score for Party A's financial stability — considering their cash buffer, monthly surplus, mortgage burden and how long their savings last." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Stability Assessment — Party A<InfoTip text="Composite financial resilience indicator for Party A — incorporating cash buffer adequacy, monthly surplus/deficit, mortgage burden ratio, and capital runway projection." /></></TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
                   return (
@@ -813,7 +810,7 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Financial health (B)<InfoTip text="An overall score for Party B's financial stability — considering their cash buffer, monthly surplus, mortgage burden and how long their savings last." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Stability Assessment — Party B<InfoTip text="Composite financial resilience indicator for Party B — incorporating cash buffer adequacy, monthly surplus/deficit, mortgage burden ratio, and capital runway projection." /></></TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
                   return (
@@ -824,13 +821,13 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={`font-bold ${viewLens === "networth" ? "bg-primary/5" : ""}`}>
-                <TableCell className="text-foreground"><>Total value of everything (A)<InfoTip text="Everything Party A has — accessible cash plus their share of home equity plus pensions. Not all of this can be spent day-to-day." /></></TableCell>
+                <TableCell className="text-foreground"><>Total Net Asset Position — Party A<InfoTip text="Party A's combined net asset position — comprising liquid capital, allocated property equity, and pension valuations. Not all components are immediately realisable." /></></TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums text-blue-600 text-base">{formatCurrency(s.totalA)}</TableCell>
                 ))}
               </TableRow>
               <TableRow className={`font-bold ${viewLens === "networth" ? "bg-primary/5" : ""}`}>
-                <TableCell className="text-foreground"><>Total value of everything (B)<InfoTip text="Everything Party B has — accessible cash plus their share of home equity plus pensions. Not all of this can be spent day-to-day." /></></TableCell>
+                <TableCell className="text-foreground"><>Total Net Asset Position — Party B<InfoTip text="Party B's combined net asset position — comprising liquid capital, allocated property equity, and pension valuations. Not all components are immediately realisable." /></></TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums text-emerald-600 text-base">{formatCurrency(s.totalB)}</TableCell>
                 ))}
@@ -956,12 +953,10 @@ function ScenarioDetailCard({
         {projection && projection.length > 1 && (
           <div>
             <h3 className="text-sm font-semibold mb-1 flex items-center gap-1">
-              <TrendingUp className="h-3 w-3" /> Accessible Cash Over Time
+              <TrendingUp className="h-3 w-3" /> Liquid Capital Projection
             </h3>
             <p className="text-xs text-muted-foreground mb-2">
-              Shows each party's available cash over time. Each year: starting cash + net income - living costs - mortgage payments = end-of-year balance.
-              {((scenario.homeEquityA ?? 0) > 0 || (scenario.homeEquityB ?? 0) > 0) && " Home value isn't included here because it can't easily be turned into spendable cash."}
-              {" "}If a line drops below zero, that person would need to borrow or sell something to cover their costs.
+              Projected liquid capital trajectory for each party over the modelling period. Annual balance reflects: opening capital + net income - expenditure - mortgage obligations. Property equity is excluded as it is not immediately realisable. A line falling below zero indicates a projected capital shortfall.
             </p>
             <div className="h-[260px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -1086,8 +1081,8 @@ function SourceOfFundsTable({ sourceOfFunds, scenario }: { sourceOfFunds: Source
   return (
     <div className="space-y-3" data-testid="section-source-of-funds">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        Where the Money Comes From
-        <span className="text-xs font-normal text-muted-foreground">(tap any row for the full calculation)</span>
+        Source of Funds Breakdown
+        <span className="text-xs font-normal text-muted-foreground">(expand any line for detailed composition)</span>
       </h3>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1">
@@ -1097,7 +1092,7 @@ function SourceOfFundsTable({ sourceOfFunds, scenario }: { sourceOfFunds: Source
           ))}
           <Separator className="my-1" />
           <div className="flex items-center justify-between text-sm font-semibold gap-2">
-            <span>Total accessible cash</span>
+            <span>Net Liquid Capital</span>
             <span className="tabular-nums text-blue-600" data-testid="text-net-liquid-a">{formatCurrency(sourceOfFunds.A.netStartingLiquid)}</span>
           </div>
           {sourceOfFunds.pension.A_after > 0 && (
@@ -1114,7 +1109,7 @@ function SourceOfFundsTable({ sourceOfFunds, scenario }: { sourceOfFunds: Source
           ))}
           <Separator className="my-1" />
           <div className="flex items-center justify-between text-sm font-semibold gap-2">
-            <span>Total accessible cash</span>
+            <span>Net Liquid Capital</span>
             <span className="tabular-nums text-emerald-600" data-testid="text-net-liquid-b">{formatCurrency(sourceOfFunds.B.netStartingLiquid)}</span>
           </div>
           {sourceOfFunds.pension.B_after > 0 && (
@@ -1170,7 +1165,7 @@ function StabilitySection({ score }: { score: StabilityResult }) {
   return (
     <div className="space-y-3" data-testid="section-stability">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <Shield className="w-3.5 h-3.5" /> Financial Health Check
+        <Shield className="w-3.5 h-3.5" /> Stability Assessment
       </h3>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-2">
@@ -1209,7 +1204,7 @@ function StabilitySection({ score }: { score: StabilityResult }) {
 function MonthlySnapshotSection({ snapshot }: { snapshot: MonthlySnapshotResult }) {
   return (
     <div className="space-y-3" data-testid="section-monthly-snapshot">
-      <h3 className="text-sm font-semibold">Monthly Money In vs Money Out</h3>
+      <h3 className="text-sm font-semibold">Monthly Financial Position</h3>
       <Table>
         <TableHeader>
           <TableRow>
@@ -1231,7 +1226,7 @@ function MonthlySnapshotSection({ snapshot }: { snapshot: MonthlySnapshotResult 
             </TableRow>
           ))}
           <TableRow className="font-semibold border-t-2">
-            <TableCell className="text-xs py-1.5">Left over each month</TableCell>
+            <TableCell className="text-xs py-1.5">Net Monthly Surplus / (Deficit)</TableCell>
             <TableCell className={`text-right tabular-nums text-xs py-1.5 font-bold ${snapshot.surplusA < 0 ? "text-red-600" : "text-emerald-600"}`}>
               {snapshot.surplusA < 0 ? `(${formatCurrency(Math.abs(snapshot.surplusA))})` : formatCurrency(snapshot.surplusA)}
             </TableCell>
@@ -1250,34 +1245,34 @@ function HousingFeasibilityPanel({ feasibility, scenarioId }: { feasibility: Hou
   return (
     <div className="p-4 border rounded-md space-y-3" data-testid="section-housing-feasibility">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <Building2 className="w-3.5 h-3.5" /> Can They Afford to Keep the House? — Party {keeper}
+        <Building2 className="w-3.5 h-3.5" /> Affordability Assessment — Party {keeper}
       </h3>
       <div className="grid gap-3 sm:grid-cols-3">
         <div className="space-y-0.5">
-          <span className="text-xs text-muted-foreground">Mortgage needed</span>
+          <span className="text-xs text-muted-foreground">Mortgage Requirement</span>
           <p className="text-sm font-semibold tabular-nums" data-testid="text-hf-mortgage-required">{formatCurrency(feasibility.mortgageRequired)}</p>
         </div>
         <div className="space-y-0.5">
-          <span className="text-xs text-muted-foreground">Monthly mortgage payment</span>
+          <span className="text-xs text-muted-foreground">Estimated Monthly Repayment</span>
           <p className="text-sm font-semibold tabular-nums" data-testid="text-hf-monthly-payment">{formatCurrency(feasibility.estimatedMonthlyPayment)}/mo</p>
         </div>
         <div className="space-y-0.5">
-          <span className="text-xs text-muted-foreground">Mortgage as multiple of income</span>
+          <span className="text-xs text-muted-foreground">Income Multiple</span>
           <p className={`text-sm font-semibold tabular-nums ${feasibility.withinLendingCriteria ? "text-emerald-600" : "text-red-600"}`} data-testid="text-hf-income-multiple">
             {feasibility.incomeMultiple.toFixed(1)}x
             <span className="text-xs text-muted-foreground font-normal ml-1">(max {feasibility.typicalMaxMultiple}x)</span>
           </p>
         </div>
         <div className="space-y-0.5">
-          <span className="text-xs text-muted-foreground">Cash available for deposit</span>
+          <span className="text-xs text-muted-foreground">Available Deposit Capital</span>
           <p className="text-sm font-semibold tabular-nums" data-testid="text-hf-available-capital">{formatCurrency(feasibility.availableDeposit)}</p>
         </div>
         <div className="space-y-0.5">
-          <span className="text-xs text-muted-foreground">Deposit as % of house value</span>
+          <span className="text-xs text-muted-foreground">Loan-to-Value Position</span>
           <p className="text-sm font-semibold tabular-nums" data-testid="text-hf-equity-position">{feasibility.depositPercentage.toFixed(0)}%</p>
         </div>
         <div className="space-y-0.5">
-          <span className="text-xs text-muted-foreground">How much of take-home pay goes to mortgage</span>
+          <span className="text-xs text-muted-foreground">Mortgage-to-Net-Income Ratio</span>
           <p className={`text-sm font-semibold tabular-nums ${feasibility.monthlyPaymentAsPercentOfNetIncome > 35 ? "text-amber-600" : "text-emerald-600"}`} data-testid="text-hf-payment-pct">
             {feasibility.monthlyPaymentAsPercentOfNetIncome.toFixed(0)}%
           </p>
@@ -1301,10 +1296,10 @@ function NegotiationLeversPanel({ levers }: { levers: NegotiationLever[] }) {
   return (
     <div className="p-4 border rounded-md space-y-3" data-testid="section-negotiation-levers">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <Lightbulb className="w-3.5 h-3.5" /> Ways to Improve the Outcome
+        <Lightbulb className="w-3.5 h-3.5" /> Potential Negotiation Considerations
       </h3>
       <p className="text-xs text-muted-foreground">
-        Potential adjustments that could improve the outcome. These are illustrative — actual impacts depend on full recalculation.
+        Illustrative adjustments that may influence the settlement position. Actual impact is subject to full recalculation.
       </p>
       <div className="space-y-2">
         {levers.map((lever, i) => (
@@ -1331,7 +1326,7 @@ function ComparisonDeltaPanel({ delta, scenarioId }: { delta: ComparisonDelta; s
   return (
     <div className="p-4 bg-muted/30 rounded-md space-y-2" data-testid="section-comparison-delta">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <TrendingUp className="w-3.5 h-3.5" /> How This Compares to Just Selling
+        <TrendingUp className="w-3.5 h-3.5" /> Comparison to Sale & Distribution Scenario
       </h3>
       <ul className="space-y-1.5">
         {delta.notes.map((note, i) => (
@@ -1371,19 +1366,17 @@ function StressTestPanel() {
     <Card data-testid="card-stress-test">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4" /> What If Things Change?
+          <AlertTriangle className="w-4 h-4" /> Stress Test Modelling
         </CardTitle>
         <CardDescription>
-          Adjust the sliders below to see how changes affect all the scenarios above in real time. 
-          Try increasing the mortgage rate to see how higher repayments impact affordability, 
-          or raise living costs to model the effect of inflation.
+          Adjust the parameters below to model the impact of interest rate and expenditure variations on all scenarios above. Changes are applied in real time.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid gap-6 sm:grid-cols-2">
           <div className="space-y-3">
             <div className="flex items-center justify-between gap-2">
-              <Label className="text-sm font-medium">Mortgage interest rate</Label>
+              <Label className="text-sm font-medium">Mortgage Interest Rate</Label>
               <span className="text-sm font-bold tabular-nums text-primary" data-testid="text-mortgage-rate">{mortgageRatePct.toFixed(1)}%</span>
             </div>
             <Slider
@@ -1397,14 +1390,13 @@ function StressTestPanel() {
               <span>10%</span>
             </div>
             <p className="text-xs text-muted-foreground">
-              The rate used to calculate monthly mortgage payments in keep-home scenarios. 
-              Slide right to stress test against higher rates (e.g. if the Bank of England raises rates).
+              The assumed interest rate applied to mortgage obligations in property retention scenarios. Increase to model the impact of potential rate rises.
             </p>
           </div>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between gap-2">
-              <Label className="text-sm font-medium">Living costs adjustment</Label>
+              <Label className="text-sm font-medium">Expenditure Adjustment</Label>
               <span className="text-sm font-bold tabular-nums text-primary" data-testid="text-cost-adjustment">
                 {costAdjustPct > 0 ? `+${costAdjustPct}%` : costAdjustPct === 0 ? "Baseline" : `${costAdjustPct}%`}
               </span>
@@ -1420,8 +1412,7 @@ function StressTestPanel() {
               <span>+30%</span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Move all your living costs up or down to see what happens if prices rise or you manage to cut back. 
-              A +10% increase shows how rising prices could erode your financial cushion.
+              Applies a percentage adjustment to all entered expenditure items. Use to model the impact of inflationary pressure on monthly sustainability.
             </p>
           </div>
         </div>
