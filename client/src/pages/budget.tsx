@@ -11,6 +11,9 @@ import { useAppStore } from "@/hooks/use-store";
 import { formatCurrency } from "@/lib/utils";
 import { Income, Expense, ExpenseCategory } from "@shared/schema";
 import { Edit2, Plus, Trash2, ArrowUpCircle, ArrowDownCircle } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 const incomeFormSchema = z.object({
   name: z.string().min(1, "Name required"),
