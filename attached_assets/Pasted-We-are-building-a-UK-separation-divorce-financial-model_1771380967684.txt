@@ -1,0 +1,130 @@
+We are building a UK separation/divorce financial modelling engine (illustrative only). It must support a comprehensive household balance-sheet + cashflow model with multi-scenario outcomes.
+
+The model must include, at minimum, these domains:
+
+A) Balance Sheet (Assets/Liabilities)
+1) Assets (support unlimited items, each with owner A/B/joint):
+- Cash (current/savings)
+- Investments (ISA/GIA/other)
+- Property: primary home + other properties (each property is its own asset)
+- Pensions: DC/DB (DB via CETV as input; do not actuarially convert)
+- Business interests (simple valuation input)
+- Vehicles
+- Personal possessions (optional)
+- Other assets
+For each asset: currentValue, liquidity class, growthRate assumption, saleCostPct, taxCostPct, notes.
+
+2) Liabilities (unlimited items, owner A/B/joint):
+- Mortgages (linked to property assetId; include APR and remaining term)
+- Loans (APR + term optional)
+- Credit cards (APR optional)
+- Tax debts
+- Other liabilities
+
+B) Income & Taxes (UK)
+3) Income streams (unlimited items per person):
+- Employment income
+- Self-employment income (simplified)
+- Pension income
+- Rental income
+- Dividends/interest (simplified)
+- Benefits (optional; can be “user-entered net” for MVP)
+Each income stream has: grossAnnual, netAnnual optional, growthRate optional, taxTreatment.
+
+4) Tax model (config-driven, toggleable):
+- Income tax (personal allowance + taper + bands)
+- Employee NI (Class 1 Category A)
+- (Optional later) Student loans plans
+If tax model disabled: accept net incomes directly.
+
+C) Household Budget & Lifestyle
+5) Expenses (unlimited items):
+- Living costs
+- Housing costs (mortgage payments/rent, council tax, utilities)
+- Child-related costs
+- Insurance
+- Transport
+- Debt service (if not computed from liabilities)
+Each expense: annualAmount, inflationLinked boolean, owner A/B/shared, category.
+
+D) Children & Transfers
+6) Children:
+- number of children
+- nights with each parent (for shared care adjustments if CMS estimate enabled)
+
+7) Transfers between parties (unlimited, user-controlled):
+- voluntary support payments A->B or B->A
+- child maintenance estimate (optional): must be explicitly labelled “estimate only”
+Transfers have: annualAmount, inflationLinked.
+
+E) Scenario Engine (must generate multiple scenarios)
+8) Scenarios required:
+S1 Sell primary home & split
+S2 A keeps home, buys out B (explicit buyout mechanics)
+S3 B keeps home, buys out A
+S4 Keep jointly for X years then sell (includes mortgage payment during joint period)
+S5 No property (split liquid + pensions only)
+S6 Optional: Retain other property vs sell (per-property toggle)
+S7 Optional: “Offset pensions instead of split” (pension offset calculator)
+
+9) Split controls (per pool, per scenario):
+- liquid split % to A
+- property equity split % to A
+- pension split % to A
+- illiquid non-property split % to A
+Defaults 50/50 but user-adjustable.
+
+F) Mortgage / Housing Affordability
+10) Mortgage affordability checks:
+- Income multiple rule (gross multiple)
+- Net DTI rule (annual mortgage payment / net income)
+- Stress test rate (optional toggle)
+Mortgage payment must use monthly amortisation (APR/12).
+
+G) Projection Model (multi-year)
+11) Projections must produce:
+- 10-year default (user adjustable)
+- Year-by-year: income, taxes, expenses, transfers, net cashflow
+- Liquid capital runway (cannot go below 0)
+- Net worth trajectory (liquid + assets - liabilities, with asset growth)
+- Property value growth if retained (config growth rate)
+- Investment growth if retained (config growth rate)
+- Pensions remain non-liquid net worth (do not drawdown unless user adds retirement withdrawal assumptions)
+
+12) Events / one-offs:
+- One-off costs (legal fees, moving costs, stamp duty estimate as optional input, renovation, etc.)
+- One-off proceeds (inheritance, bonus)
+These must be supported as dated cashflow events in projection.
+
+H) Outputs (must be transparent)
+13) Outputs per scenario:
+- Start-of-scenario balance sheets for A and B
+- Pool split breakdown (what was split, how, and why)
+- Buyout calculations (if applicable) including funding sources and funding gap
+- Mortgage affordability result + explanation
+- Cashflow summary (year 1 and steady-state)
+- Runway to £0 liquid capital (if it occurs) for each party
+- 10-year projection table for both parties
+- Assumptions snapshot (all config + user overrides)
+
+I) Implementation requirements
+14) All calculations must be in pure functions and unit-tested:
+- taxes, NI, net income
+- mortgage payment
+- CMS estimate (if enabled)
+- pool splitting
+- buyout mechanics
+- projection engine with events
+- scenario builders
+
+15) The UI must not contain financial logic. The engine must return:
+- machine-readable outputs
+- human-readable “calculation explanation” steps (strings) for auditability.
+
+16) Disclaimers:
+- Persistent on UI and in PDFs.
+- No entitlement language.
+- CMS output labelled “estimate only”.
+
+Build order:
+- types/config → engine modules → tests → minimal UI → PDF export → styling.

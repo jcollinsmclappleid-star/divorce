@@ -1,0 +1,174 @@
+{
+  "meta": {
+    "country": "UK",
+    "currency": "GBP",
+    "version": "1.0.0",
+    "lastReviewed": "2026-02-18",
+    "sources": [
+      "GOV.UK rates and thresholds for employers 2025 to 2026",
+      "GOV.UK (Budget annex) personal allowance income limit & taper statement",
+      "nidirect child maintenance rates explained",
+      "nidirect shared care reduction bands"
+    ],
+    "notes": [
+      "All tax/NI/CMS values are config-driven; engine must not hardcode.",
+      "This tool is illustrative modelling only. Not legal/tax/financial advice."
+    ]
+  },
+  "rounding": {
+    "currencyDecimals": 2,
+    "roundHalfUp": true
+  },
+  "defaults": {
+    "inflationRate": 0.02,
+    "projectionYears": 10,
+    "incomeMultiple": 4.5,
+    "housePriceGrowthRate": 0.02,
+    "saleCostPctByAssetCategory": {
+      "primary_home": 0.02,
+      "other_property": 0.03,
+      "investments": 0.0,
+      "business": 0.0,
+      "vehicle": 0.0,
+      "personal_possessions": 0.0,
+      "cash": 0.0,
+      "pension": 0.0,
+      "other": 0.0
+    },
+    "taxCostPctByAssetCategory": {
+      "primary_home": 0.0,
+      "other_property": 0.0,
+      "investments": 0.0,
+      "business": 0.0,
+      "vehicle": 0.0,
+      "personal_possessions": 0.0,
+      "cash": 0.0,
+      "pension": 0.0,
+      "other": 0.0
+    },
+    "mortgage": {
+      "defaultAPR": 0.05,
+      "defaultTermYears": 25
+    },
+    "budget": {
+      "defaultAnnualLivingCostPerAdult": 25000,
+      "defaultChildCostPerChildAnnual": 6000,
+      "inflateExpenses": true
+    }
+  },
+  "affordability": {
+    "enabled": true,
+    "incomeMultipleRule": {
+      "enabled": true,
+      "multiple": 4.5
+    },
+    "dtiRule": {
+      "enabled": true,
+      "maxNetIncomeRatio": 0.35
+    }
+  },
+  "taxModel": {
+    "enabledByDefault": false,
+    "incomeTax": {
+      "enabled": true,
+      "personalAllowance": {
+        "amount": 12570,
+        "taper": {
+          "enabled": true,
+          "startsAt": 100000,
+          "endsAt": 125140,
+          "reductionPer2Over": 1
+        }
+      },
+      "bands": [
+        { "name": "basic", "from": 0, "to": 37700, "rate": 0.2 },
+        { "name": "higher", "from": 37700, "to": 125140, "rate": 0.4 },
+        { "name": "additional", "from": 125140, "to": null, "rate": 0.45 }
+      ],
+      "notes": [
+        "Bands are for England/Wales/NI for 2025/26; amounts are ABOVE personal allowance threshold.",
+        "Implementation must subtract personal allowance (after taper) before applying bands."
+      ]
+    },
+    "nationalInsurance": {
+      "enabled": true,
+      "employeeClass1": {
+        "calculationBasis": "annual",
+        "thresholds": {
+          "lowerEarningsLimit": 6500,
+          "primaryThreshold": 12570,
+          "upperEarningsLimit": 50270
+        },
+        "bands": [
+          { "name": "lel_to_pt", "from": 6500, "to": 12570, "rate": 0.0 },
+          { "name": "main", "from": 12570, "to": 50270, "rate": 0.08 },
+          { "name": "upper", "from": 50270, "to": null, "rate": 0.02 }
+        ],
+        "notes": [
+          "Employee primary rates shown for Category A: 0% up to PT, 8% PT-to-UEL, 2% above UEL."
+        ]
+      }
+    },
+    "netIncomeDefinitionForCMS": {
+      "enabled": true,
+      "method": "approx_net",
+      "notes": [
+        "If CMS estimate enabled, compute approx net = gross - incomeTax - employeeNI."
+      ]
+    }
+  },
+  "childMaintenanceModel": {
+    "enabledByDefault": false,
+    "disclaimerText": "CMS-style estimate only (not official). For official calculation use GOV.UK calculator.",
+    "incomeBasis": "gross_weekly",
+    "flatRate": {
+      "weeklyAmount": 7,
+      "appliesIfGrossWeeklyIncomeAtOrBelow": 100
+    },
+    "reducedRate": {
+      "appliesIfGrossWeeklyIncomeOver": 100,
+      "appliesIfGrossWeeklyIncomeUnder": 200,
+      "baseWeeklyAmountOnFirst100": 7,
+      "percentageOnRemainderUpTo200_byChildren": {
+        "1": 0.17,
+        "2": 0.25,
+        "3plus": 0.31
+      },
+      "notes": [
+        "Reduced-rate table shown for cases not supporting other children. Extend later if needed."
+      ]
+    },
+    "basicRate": {
+      "appliesIfGrossWeeklyIncomeAtOrAbove": 200,
+      "appliesIfGrossWeeklyIncomeAtOrBelow": 800,
+      "pctOfGross_byChildren": {
+        "1": 0.12,
+        "2": 0.16,
+        "3plus": 0.19
+      }
+    },
+    "basicPlusRate": {
+      "appliesOnIncomeOver": 800,
+      "appliesUpToWeeklyIncome": 3000,
+      "pctOnExcessOver800_byChildren": {
+        "1": 0.09,
+        "2": 0.12,
+        "3plus": 0.15
+      }
+    },
+    "sharedCare": {
+      "enabled": true,
+      "bands": [
+        { "minNights": 0, "maxNights": 51, "reductionFraction": 0.0, "extraWeeklyReduction": 0 },
+        { "minNights": 52, "maxNights": 103, "reductionFraction": 0.1428571429, "extraWeeklyReduction": 0 },
+        { "minNights": 104, "maxNights": 155, "reductionFraction": 0.2857142857, "extraWeeklyReduction": 0 },
+        { "minNights": 156, "maxNights": 174, "reductionFraction": 0.4285714286, "extraWeeklyReduction": 0 },
+        { "minNights": 175, "maxNights": 365, "reductionFraction": 0.5, "extraWeeklyReduction": 7 }
+      ],
+      "floorWeeklyAmount": 7,
+      "notes": [
+        "Apply shared care reduction to reduced/basic/basic-plus amounts; do not reduce below £7/week."
+      ]
+    }
+  }
+}

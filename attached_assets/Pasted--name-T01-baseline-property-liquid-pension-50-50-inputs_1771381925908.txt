@@ -1,0 +1,855 @@
+[
+  {
+    "name": "T01_baseline_property_liquid_pension_50_50",
+    "inputs": {
+      "assets": [
+        { "id": "home", "name": "Primary Home", "category": "primary_home", "ownership": "joint", "currentValue": 500000, "liquidity": "illiquid", "saleCostPct": 0.02 },
+        { "id": "cash1", "name": "Savings", "category": "cash", "ownership": "joint", "currentValue": 50000, "liquidity": "liquid" },
+        { "id": "penA", "name": "Pension A", "category": "pension", "ownership": "A", "currentValue": 100000, "liquidity": "illiquid", "pensionType": "DC", "cetv": 100000 },
+        { "id": "penB", "name": "Pension B", "category": "pension", "ownership": "B", "currentValue": 100000, "liquidity": "illiquid", "pensionType": "DC", "cetv": 100000 }
+      ],
+      "liabilities": [
+        { "id": "mort1", "name": "Mortgage", "category": "mortgage", "ownership": "joint", "balance": 200000, "securedAgainstAssetId": "home" }
+      ],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Salary A", "amountAnnualGross": 60000, "taxTreatment": "use_tax_model" },
+        { "id": "incB", "owner": "B", "name": "Salary B", "amountAnnualGross": 30000, "taxTreatment": "use_tax_model" }
+      ],
+      "expenses": [
+        { "id": "eA", "owner": "A", "name": "Living A", "amountAnnual": 25000, "inflationLinked": true, "category": "living" },
+        { "id": "eB", "owner": "B", "name": "Living B", "amountAnnual": 25000, "inflationLinked": true, "category": "living" }
+      ],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 5,
+        "inflationRate": 0.02,
+        "includeTaxModel": true,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "common": {
+        "primaryHome": { "grossEquity": 300000, "saleCosts": 10000, "netSaleEquity": 290000 },
+        "totalLiquid": 50000,
+        "totalPensionCETV": 200000,
+        "pensionAfterSplit": { "A": 100000, "B": 100000 }
+      },
+      "scenarioS1": {
+        "poolLiquidPlusSoldProperty": 340000,
+        "liquidStart": { "A": 170000, "B": 170000 }
+      }
+    }
+  },
+
+  {
+    "name": "T02_no_property_liquid_only_50_50",
+    "inputs": {
+      "assets": [
+        { "id": "cash", "name": "Cash", "category": "cash", "ownership": "joint", "currentValue": 20000, "liquidity": "liquid" },
+        { "id": "inv", "name": "Investments", "category": "investments", "ownership": "joint", "currentValue": 80000, "liquidity": "semi_liquid" }
+      ],
+      "liabilities": [],
+      "incomes": [],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 3,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "common": { "totalLiquid": 20000, "totalPensionCETV": 0 },
+      "scenarioS5": { "liquidStart": { "A": 10000, "B": 10000 } }
+    }
+  },
+
+  {
+    "name": "T03_negative_equity_home_net_sale_equity_clamped_to_0",
+    "inputs": {
+      "assets": [
+        { "id": "home", "name": "Home", "category": "primary_home", "ownership": "joint", "currentValue": 200000, "liquidity": "illiquid", "saleCostPct": 0.02 }
+      ],
+      "liabilities": [
+        { "id": "mort", "name": "Mortgage", "category": "mortgage", "ownership": "joint", "balance": 230000, "securedAgainstAssetId": "home" }
+      ],
+      "incomes": [],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "common": {
+        "primaryHome": { "grossEquity": -30000, "saleCosts": 4000, "netSaleEquity": 0 }
+      }
+    }
+  },
+
+  {
+    "name": "T04_60_40_split_to_A_on_property_and_liquid",
+    "inputs": {
+      "assets": [
+        { "id": "home", "name": "Home", "category": "primary_home", "ownership": "joint", "currentValue": 400000, "liquidity": "illiquid", "saleCostPct": 0.02 },
+        { "id": "cash", "name": "Cash", "category": "cash", "ownership": "joint", "currentValue": 60000, "liquidity": "liquid" }
+      ],
+      "liabilities": [
+        { "id": "mort", "name": "Mortgage", "category": "mortgage", "ownership": "joint", "balance": 100000, "securedAgainstAssetId": "home" }
+      ],
+      "incomes": [],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.6,
+        "splitPropertyToA": 0.6,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "common": {
+        "primaryHome": { "grossEquity": 300000, "saleCosts": 8000, "netSaleEquity": 292000 },
+        "totalLiquid": 60000
+      },
+      "scenarioS1": {
+        "poolLiquidPlusSoldProperty": 352000,
+        "liquidStart": { "A": 211200, "B": 140800 }
+      }
+    }
+  },
+
+  {
+    "name": "T05_pension_equalisation_from_unequal_start",
+    "inputs": {
+      "assets": [
+        { "id": "penA", "name": "Pension A", "category": "pension", "ownership": "A", "currentValue": 250000, "liquidity": "illiquid", "pensionType": "DC", "cetv": 250000 },
+        { "id": "penB", "name": "Pension B", "category": "pension", "ownership": "B", "currentValue": 50000, "liquidity": "illiquid", "pensionType": "DC", "cetv": 50000 }
+      ],
+      "liabilities": [],
+      "incomes": [],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "common": {
+        "totalPensionCETV": 300000,
+        "pensionAfterSplit": { "A": 150000, "B": 150000 },
+        "pensionDelta": { "A": -100000, "B": 100000 }
+      }
+    }
+  },
+
+  {
+    "name": "T06_buyout_gap_trigger_A_keeps_home_insufficient_liquid",
+    "inputs": {
+      "assets": [
+        { "id": "home", "name": "Home", "category": "primary_home", "ownership": "joint", "currentValue": 600000, "liquidity": "illiquid", "saleCostPct": 0.02 },
+        { "id": "cash", "name": "Cash", "category": "cash", "ownership": "joint", "currentValue": 20000, "liquidity": "liquid" }
+      ],
+      "liabilities": [
+        { "id": "mort", "name": "Mortgage", "category": "mortgage", "ownership": "joint", "balance": 100000, "securedAgainstAssetId": "home" }
+      ],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Salary A", "amountAnnualGross": 90000, "taxTreatment": "use_tax_model" }
+      ],
+      "expenses": [
+        { "id": "eA", "owner": "A", "name": "Living A", "amountAnnual": 25000, "inflationLinked": true, "category": "living" },
+        { "id": "eB", "owner": "B", "name": "Living B", "amountAnnual": 25000, "inflationLinked": true, "category": "living" }
+      ],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 3,
+        "inflationRate": 0.02,
+        "includeTaxModel": true,
+        "includeCMSEstimate": false,
+        "mortgageAPR": 0.05,
+        "mortgageTermYears": 25,
+        "incomeMultiple": 4.5,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "common": {
+        "primaryHome": { "grossEquity": 500000, "saleCosts": 12000, "netSaleEquity": 488000 },
+        "totalLiquid": 20000
+      },
+      "scenarioS2_A_keeps_home": {
+        "buyoutToB": 244000,
+        "liquidShareA_beforeBuyout": 10000,
+        "fundingGap": 234000,
+        "liquidStartAfterClamp": { "A": 0, "B": 254000 },
+        "affordability": { "maxMortgageCapacity": 405000, "affordable": true }
+      }
+    }
+  },
+
+  {
+    "name": "T07_affordability_fail_income_multiple",
+    "inputs": {
+      "assets": [
+        { "id": "home", "name": "Home", "category": "primary_home", "ownership": "joint", "currentValue": 450000, "liquidity": "illiquid", "saleCostPct": 0.02 },
+        { "id": "cash", "name": "Cash", "category": "cash", "ownership": "joint", "currentValue": 100000, "liquidity": "liquid" }
+      ],
+      "liabilities": [
+        { "id": "mort", "name": "Mortgage", "category": "mortgage", "ownership": "joint", "balance": 350000, "securedAgainstAssetId": "home" }
+      ],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Salary A", "amountAnnualGross": 60000, "taxTreatment": "use_tax_model" }
+      ],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": true,
+        "includeCMSEstimate": false,
+        "incomeMultiple": 4.5,
+        "mortgageAPR": 0.05,
+        "mortgageTermYears": 25,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "scenarioS2_A_keeps_home": {
+        "affordability": { "maxMortgageCapacity": 270000, "affordable": false }
+      }
+    }
+  },
+
+  {
+    "name": "T08_tax_model_off_net_income_provided",
+    "inputs": {
+      "assets": [],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Net pay A", "amountAnnualGross": 0, "taxTreatment": "net_provided", "amountAnnualNet": 42000 },
+        { "id": "incB", "owner": "B", "name": "Net pay B", "amountAnnualGross": 0, "taxTreatment": "net_provided", "amountAnnualNet": 24000 }
+      ],
+      "expenses": [
+        { "id": "eA", "owner": "A", "name": "Living", "amountAnnual": 25000, "inflationLinked": true, "category": "living" },
+        { "id": "eB", "owner": "B", "name": "Living", "amountAnnual": 25000, "inflationLinked": true, "category": "living" }
+      ],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 2,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "netIncomeAnnual": { "A": 42000, "B": 24000 }
+    }
+  },
+
+  {
+    "name": "T09_cms_flat_rate_<=100_weekly",
+    "inputs": {
+      "assets": [],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Low income", "amountAnnualGross": 5200, "taxTreatment": "use_tax_model" }
+      ],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 1, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": true,
+        "includeCMSEstimate": true,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "cmsEstimate": { "weeklyAmount": 7 }
+    }
+  },
+
+  {
+    "name": "T10_cms_reduced_rate_band_income_150_weekly_one_child_no_shared_care",
+    "inputs": {
+      "assets": [],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Income", "amountAnnualGross": 7800, "taxTreatment": "use_tax_model" }
+      ],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 1, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": true,
+        "includeCMSEstimate": true,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "cmsEstimate": { "weeklyAmountApprox": 15.5 }
+    }
+  },
+
+  {
+    "name": "T11_cms_basic_rate_500_weekly_two_children_shared_care_60_nights_reduction_1_7th",
+    "inputs": {
+      "assets": [],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Income", "amountAnnualGross": 26000, "taxTreatment": "use_tax_model" }
+      ],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 2, "nightsWithA": 60, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": true,
+        "includeCMSEstimate": true,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "cmsEstimate": { "weeklyAmountApprox": 57.14 }
+    }
+  },
+
+  {
+    "name": "T12_cms_basic_plus_1000_weekly_three_plus_children_no_shared_care",
+    "inputs": {
+      "assets": [],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Income", "amountAnnualGross": 52000, "taxTreatment": "use_tax_model" }
+      ],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 3, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": true,
+        "includeCMSEstimate": true,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "cmsEstimate": { "weeklyAmountApprox": 166.0 }
+    }
+  },
+
+  {
+    "name": "T13_shared_care_175plus_floor_7_applies",
+    "inputs": {
+      "assets": [],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Income", "amountAnnualGross": 13000, "taxTreatment": "use_tax_model" }
+      ],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 1, "nightsWithA": 200, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": true,
+        "includeCMSEstimate": true,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "cmsEstimate": { "weeklyAmountMin": 7 }
+    }
+  },
+
+  {
+    "name": "T14_mortgage_payment_sanity_check_200k_5pct_25y",
+    "inputs": {
+      "assets": [],
+      "liabilities": [
+        { "id": "mort", "name": "Mortgage", "category": "mortgage", "ownership": "A", "balance": 200000, "interestAPR": 0.05, "termYearsRemaining": 25 }
+      ],
+      "incomes": [],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "mortgageAPR": 0.05,
+        "mortgageTermYears": 25,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "mortgage": { "annualPaymentApprox": 14000 }
+    }
+  },
+
+  {
+    "name": "T15_projection_capital_declines_to_zero",
+    "inputs": {
+      "assets": [
+        { "id": "cash", "name": "Cash", "category": "cash", "ownership": "A", "currentValue": 10000, "liquidity": "liquid" }
+      ],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Net", "amountAnnualGross": 0, "taxTreatment": "net_provided", "amountAnnualNet": 12000 }
+      ],
+      "expenses": [
+        { "id": "eA", "owner": "A", "name": "Living", "amountAnnual": 25000, "inflationLinked": false, "category": "living" }
+      ],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 1.0,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 2,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "projection": { "A_year2_liquidEnd": 0 }
+    }
+  },
+
+  {
+    "name": "T16_projection_capital_grows_when_surplus",
+    "inputs": {
+      "assets": [
+        { "id": "cash", "name": "Cash", "category": "cash", "ownership": "A", "currentValue": 10000, "liquidity": "liquid" }
+      ],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Net", "amountAnnualGross": 0, "taxTreatment": "net_provided", "amountAnnualNet": 40000 }
+      ],
+      "expenses": [
+        { "id": "eA", "owner": "A", "name": "Living", "amountAnnual": 25000, "inflationLinked": false, "category": "living" }
+      ],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 1.0,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "projection": { "A_year1_liquidEnd": 25000 }
+    }
+  },
+
+  {
+    "name": "T17_one_off_cost_event_reduces_capital_year2",
+    "inputs": {
+      "assets": [
+        { "id": "cash", "name": "Cash", "category": "cash", "ownership": "A", "currentValue": 30000, "liquidity": "liquid" }
+      ],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Net", "amountAnnualGross": 0, "taxTreatment": "net_provided", "amountAnnualNet": 30000 }
+      ],
+      "expenses": [
+        { "id": "eA", "owner": "A", "name": "Living", "amountAnnual": 25000, "inflationLinked": false, "category": "living" }
+      ],
+      "transfers": [],
+      "events": [
+        { "id": "ev1", "type": "one_off_cost", "owner": "A", "year": 2, "amount": 10000 }
+      ],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 1.0,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 2,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "projection": { "A_year2_liquidEnd": 15000 }
+    }
+  },
+
+  {
+    "name": "T18_transfer_A_to_B_annual_6000_affects_both_cashflows",
+    "inputs": {
+      "assets": [
+        { "id": "cash", "name": "Cash", "category": "cash", "ownership": "A", "currentValue": 10000, "liquidity": "liquid" },
+        { "id": "cashB", "name": "Cash B", "category": "cash", "ownership": "B", "currentValue": 5000, "liquidity": "liquid" }
+      ],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Net A", "amountAnnualGross": 0, "taxTreatment": "net_provided", "amountAnnualNet": 40000 },
+        { "id": "incB", "owner": "B", "name": "Net B", "amountAnnualGross": 0, "taxTreatment": "net_provided", "amountAnnualNet": 20000 }
+      ],
+      "expenses": [
+        { "id": "eA", "owner": "A", "name": "Living A", "amountAnnual": 25000, "inflationLinked": false, "category": "living" },
+        { "id": "eB", "owner": "B", "name": "Living B", "amountAnnual": 25000, "inflationLinked": false, "category": "living" }
+      ],
+      "transfers": [
+        { "id": "t1", "from": "A", "to": "B", "amountAnnual": 6000, "inflationLinked": false }
+      ],
+      "events": [],
+      "children": { "numChildren": 1, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 1.0,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "projection": { "A_year1_liquidEnd": 19000, "B_year1_liquidEnd": 6000 }
+    }
+  },
+
+  {
+    "name": "T19_two_properties_other_property_sold_by_default",
+    "inputs": {
+      "assets": [
+        { "id": "home", "name": "Home", "category": "primary_home", "ownership": "joint", "currentValue": 500000, "liquidity": "illiquid", "saleCostPct": 0.02 },
+        { "id": "let", "name": "BTL", "category": "other_property", "ownership": "joint", "currentValue": 300000, "liquidity": "illiquid", "saleCostPct": 0.03 },
+        { "id": "cash", "name": "Cash", "category": "cash", "ownership": "joint", "currentValue": 20000, "liquidity": "liquid" }
+      ],
+      "liabilities": [
+        { "id": "mort1", "name": "Home Mortgage", "category": "mortgage", "ownership": "joint", "balance": 200000, "securedAgainstAssetId": "home" },
+        { "id": "mort2", "name": "BTL Mortgage", "category": "mortgage", "ownership": "joint", "balance": 100000, "securedAgainstAssetId": "let" }
+      ],
+      "incomes": [],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "common": {
+        "primaryHome": { "netSaleEquity": 290000 },
+        "otherPropertyNetSaleEquityTotal": 191000
+      },
+      "scenarioS1": {
+        "poolLiquidPlusSoldProperty": 501000,
+        "liquidStart": { "A": 250500, "B": 250500 }
+      }
+    }
+  },
+
+  {
+    "name": "T20_joint_years_then_sell_2y_house_growth_2pct",
+    "inputs": {
+      "assets": [
+        { "id": "home", "name": "Home", "category": "primary_home", "ownership": "joint", "currentValue": 400000, "liquidity": "illiquid", "saleCostPct": 0.02 },
+        { "id": "cash", "name": "Cash", "category": "cash", "ownership": "joint", "currentValue": 0, "liquidity": "liquid" }
+      ],
+      "liabilities": [
+        { "id": "mort", "name": "Mortgage", "category": "mortgage", "ownership": "joint", "balance": 200000, "securedAgainstAssetId": "home", "interestAPR": 0.05, "termYearsRemaining": 25 }
+      ],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Net A", "amountAnnualGross": 0, "taxTreatment": "net_provided", "amountAnnualNet": 40000 },
+        { "id": "incB", "owner": "B", "name": "Net B", "amountAnnualGross": 0, "taxTreatment": "net_provided", "amountAnnualNet": 40000 }
+      ],
+      "expenses": [
+        { "id": "eA", "owner": "A", "name": "Living A", "amountAnnual": 25000, "inflationLinked": false, "category": "living" },
+        { "id": "eB", "owner": "B", "name": "Living B", "amountAnnual": 25000, "inflationLinked": false, "category": "living" }
+      ],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 3,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "mortgageAPR": 0.05,
+        "mortgageTermYears": 25,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true, "jointHomeYears": 2 }
+      }
+    },
+    "expected": {
+      "scenarioS4_joint_then_sell": {
+        "projectedHouseValueYear2Approx": 416160,
+        "netSaleEquityYear2Approx": 207837
+      }
+    }
+  },
+
+  {
+    "name": "T21_income_tax_personal_allowance_taper_starts_over_100k",
+    "inputs": {
+      "assets": [],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Gross A", "amountAnnualGross": 110000, "taxTreatment": "use_tax_model" }
+      ],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": true,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "tax": { "personalAllowanceApprox": 7570 }
+    }
+  },
+
+  {
+    "name": "T22_income_tax_personal_allowance_zero_at_125140_or_above",
+    "inputs": {
+      "assets": [],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Gross A", "amountAnnualGross": 125140, "taxTreatment": "use_tax_model" }
+      ],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": true,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "tax": { "personalAllowanceApprox": 0 }
+    }
+  },
+
+  {
+    "name": "T23_NI_band_edges_just_below_PT_no_NI",
+    "inputs": {
+      "assets": [],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Gross A", "amountAnnualGross": 12569, "taxTreatment": "use_tax_model" }
+      ],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": true,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "ni": { "annualApprox": 0 }
+    }
+  },
+
+  {
+    "name": "T24_NI_above_UEL_includes_upper_rate",
+    "inputs": {
+      "assets": [],
+      "liabilities": [],
+      "incomes": [
+        { "id": "incA", "owner": "A", "name": "Gross A", "amountAnnualGross": 60000, "taxTreatment": "use_tax_model" }
+      ],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": true,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "ni": { "annualApprox": 3843.6 }
+    }
+  },
+
+  {
+    "name": "T25_schema_validation_rejects_missing_secured_asset_id",
+    "inputs": {
+      "assets": [
+        { "id": "home", "name": "Home", "category": "primary_home", "ownership": "joint", "currentValue": 300000, "liquidity": "illiquid" }
+      ],
+      "liabilities": [
+        { "id": "mort", "name": "Mortgage", "category": "mortgage", "ownership": "joint", "balance": 200000, "securedAgainstAssetId": "MISSING" }
+      ],
+      "incomes": [],
+      "expenses": [],
+      "transfers": [],
+      "events": [],
+      "children": { "numChildren": 0, "nightsWithA": 0, "nightsWithB": 0 },
+      "assumptions": {
+        "splitLiquidToA": 0.5,
+        "splitPropertyToA": 0.5,
+        "splitIlliquidToA": 0.5,
+        "splitPensionToA": 0.5,
+        "projectionYears": 1,
+        "inflationRate": 0.02,
+        "includeTaxModel": false,
+        "includeCMSEstimate": false,
+        "scenarioToggles": { "sellOtherPropertiesByDefault": true }
+      }
+    },
+    "expected": {
+      "shouldFailValidation": true
+    }
+  }
+]

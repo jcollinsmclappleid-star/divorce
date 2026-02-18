@@ -1,0 +1,78 @@
+I have added a fully populated `/lib/engine/config/config.fixed.json` containing UK 2025/26 Income Tax bands + personal allowance taper, employee Class 1 NIC thresholds/rates, and an OPTIONAL CMS-style child maintenance estimate model (gross weekly, reduced/basic/basic-plus) + shared-care reductions.
+
+You MUST:
+- Hardcode ZERO tax/NI/CMS values. Everything must come from config.
+- Keep ALL financial logic in pure functions under `/lib/engine/`.
+- Use decimal-safe arithmetic (decimal.js or equivalent) and round currency to 2dp consistently.
+- Implement a deterministic, test-driven engine first, before UI styling.
+
+Implement these modules:
+
+1) `/lib/engine/config/loadConfig.ts`
+- Load and validate config via Zod, return strongly typed config.
+
+2) `/lib/engine/calc/incomeTax.ts`
+- calcPersonalAllowance(adjustedNetIncome): apply taper from config (reduce £1 per £2 above startsAt; never below 0).
+- calcTaxableIncome = max(0, grossIncome - personalAllowance)
+- Apply England/Wales/NI bands from config to taxable income (bands are “above personal allowance threshold”).
+- Return incomeTaxAnnual.
+
+3) `/lib/engine/calc/nationalInsurance.ts`
+- Employee Class 1 annual NI using thresholds/bands from config:
+  - 0% from LEL to PT
+  - main rate PT to UEL
+  - upper rate above UEL
+- Return niAnnual.
+
+4) `/lib/engine/calc/netIncome.ts`
+- If taxModel enabled: net = gross - incomeTax - NI (and clamp at >=0).
+- If taxModel disabled: accept net income inputs directly.
+
+5) `/lib/engine/calc/mortgage.ts`
+- Monthly amortisation from APR/12; return annualPayment + monthlyPayment.
+
+6) `/lib/engine/calc/childMaintenanceEstimate.ts`
+- Only used if childMaintenanceModel enabled OR user toggles it on.
+- Use config rules:
+  - flat rate £7 if grossWeekly <= 100
+  - reduced rate 100<income<200: £7 + pct*(income-100)
+  - basic rate 200-800: pct*grossWeekly
+  - basic-plus: basic on first 800 + pctOnExcess*(income-800) for income 800-3000 cap
+- Apply shared-care reduction band fraction and extra £7 where applicable.
+- Enforce floor £7/week after shared-care reductions.
+- Label output explicitly as “estimate only”.
+
+7) Scenario engine under `/lib/engine/scenarios/`
+Build scenarios:
+S1 Sell primary home & split pools
+S2 A keeps home buyout B
+S3 B keeps home buyout A
+S4 Keep jointly X years then sell (include mortgage payments during joint years, house growth)
+S5 No property (split liquid + pensions only)
+
+8) Projection engine `/lib/engine/calc/projection.ts`
+- 10-year table per party: income, expenses (inflation-linked), transfers, net cashflow, liquid end, net worth
+- Liquid cannot go below 0
+- Property value can grow per config if retained; pensions remain non-liquid net worth (no drawdown unless later added)
+
+9) Orchestrator `/lib/engine/index.ts`
+- calculateAll(inputs, config) returns:
+  - common results
+  - each scenario results
+  - assumptions snapshot used
+
+TESTS (must be created before UI):
+- At least 20 tests, including:
+  - Income tax taper behaviour at 100k+ and near 125,140
+  - Income tax band edges
+  - NI band edges using PT/UEL
+  - CMS example cases (flat/reduced/basic/basic-plus + shared care)
+  - Scenario buyout funding gap
+  - Negative equity handling
+  - Projection inflation effects
+All tests must pass deterministically.
+
+After tests pass, build minimal UI:
+- Input form (assets/liabilities/income/expenses/children/transfers)
+- Scenario tabs
+- PDF export including disclaimers and assumptions snapshot

@@ -1,0 +1,147 @@
+export type Party = "A" | "B" | "joint";
+
+export type AssetCategory =
+  | "primary_home"
+  | "other_property"
+  | "cash"
+  | "investments"
+  | "pension"
+  | "business"
+  | "vehicle"
+  | "personal_possessions"
+  | "other";
+
+export type Liquidity = "liquid" | "semi_liquid" | "illiquid";
+
+export type PensionType = "DC" | "DB" | "unknown";
+
+export type LiabilityCategory = "mortgage" | "loan" | "credit_card" | "tax" | "other";
+
+export type IncomeTaxTreatment = "use_tax_model" | "net_provided";
+
+export type ExpenseCategory =
+  | "living"
+  | "housing"
+  | "child"
+  | "debt_service"
+  | "insurance"
+  | "transport"
+  | "other";
+
+export type EventType = "one_off_cost" | "one_off_income";
+
+export interface AssetInput {
+  id: string;
+  name: string;
+  category: AssetCategory;
+  ownership: Party; // A/B/joint
+  currentValue: number; // GBP >=0
+  liquidity: Liquidity;
+  growthRate?: number; // e.g. 0.02 (optional)
+  saleCostPct?: number; // e.g. 0.02 (optional; else config default by category)
+  taxCostPct?: number; // optional
+  notes?: string;
+
+  // pension-only fields:
+  pensionType?: PensionType;
+  cetv?: number; // if provided, overrides currentValue for pension valuation
+  isInPayment?: boolean;
+  annualPensionIfKnown?: number;
+}
+
+export interface LiabilityInput {
+  id: string;
+  name: string;
+  category: LiabilityCategory;
+  ownership: Party; // A/B/joint
+  balance: number; // GBP >=0
+  interestAPR?: number; // e.g. 0.05 (optional)
+  termYearsRemaining?: number; // optional
+  securedAgainstAssetId?: string; // for mortgages/secured loans
+  notes?: string;
+}
+
+export interface IncomeInput {
+  id: string;
+  owner: "A" | "B";
+  name: string;
+  amountAnnualGross: number; // >=0
+  taxTreatment: IncomeTaxTreatment;
+  amountAnnualNet?: number; // required if net_provided
+  growthRate?: number; // optional
+  notes?: string;
+}
+
+export interface ExpenseInput {
+  id: string;
+  owner: "A" | "B" | "shared";
+  name: string;
+  amountAnnual: number; // >=0
+  inflationLinked: boolean; // default true
+  category: ExpenseCategory;
+  notes?: string;
+}
+
+export interface TransferInput {
+  id: string;
+  from: "A" | "B";
+  to: "A" | "B";
+  amountAnnual: number; // >=0
+  inflationLinked: boolean;
+  notes?: string;
+}
+
+export interface EventInput {
+  id: string;
+  type: EventType;
+  owner: "A" | "B";
+  year: number; // 1..projectionYears
+  amount: number; // >=0
+  inflationLinked?: boolean; // default false
+  notes?: string;
+}
+
+export interface ChildrenInput {
+  numChildren: number; // 0..10
+  nightsWithA: number; // 0..365
+  nightsWithB: number; // 0..365
+}
+
+export interface ScenarioToggles {
+  // Property behaviour
+  sellOtherPropertiesByDefault: boolean; // if true, treat other_property as sold unless scenario override later
+  jointHomeYears?: number; // used for S4
+}
+
+export interface AssumptionsInput {
+  // pool splits (fractions 0..1)
+  splitLiquidToA: number; // default 0.5
+  splitPropertyToA: number; // default 0.5
+  splitIlliquidToA: number; // default 0.5 (non-property, non-pension)
+  splitPensionToA: number; // default 0.5
+
+  // projections
+  projectionYears: number; // default config
+  inflationRate: number; // default config
+  includeTaxModel: boolean; // if true: compute net from gross using config
+  includeCMSEstimate: boolean; // if true: compute CMS-style estimate using config (label estimate)
+
+  // affordability (optional overrides; else config)
+  incomeMultiple?: number;
+  mortgageAPR?: number;
+  mortgageTermYears?: number;
+
+  // scenario toggles
+  scenarioToggles: ScenarioToggles;
+}
+
+export interface DivorceModelInputs {
+  assets: AssetInput[];
+  liabilities: LiabilityInput[];
+  incomes: IncomeInput[];
+  expenses: ExpenseInput[];
+  transfers: TransferInput[];
+  events: EventInput[];
+  children: ChildrenInput;
+  assumptions: AssumptionsInput;
+}
