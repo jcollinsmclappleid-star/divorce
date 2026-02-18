@@ -1,10 +1,10 @@
-import { useMemo, Fragment } from "react";
+import { useState, useMemo, Fragment } from "react";
 import { Link } from "wouter";
 import { useAppStore, StoreState } from "@/hooks/use-store";
 import { useEngine, ScenarioResult, ProjectionYear, RunwayResult } from "@/hooks/use-engine";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Printer } from "lucide-react";
+import { ArrowLeft, Printer, ChevronDown } from "lucide-react";
 import {
   generateScenarioNarrative,
   buildSourceOfFunds,
@@ -387,8 +387,7 @@ export default function ReportPage() {
                 )}
               </div>
 
-              <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Source of Funds Breakdown</h4>
+              <ReportCollapsible title="Source of Funds Breakdown">
                 <div className="grid grid-cols-2 gap-6">
                   <FundsColumn label="Party A" funds={sourceOfFunds.A} color="text-blue-600" />
                   <FundsColumn label="Party B" funds={sourceOfFunds.B} color="text-emerald-600" />
@@ -397,7 +396,7 @@ export default function ReportPage() {
                   <span>Total Allocated Net Position</span>
                   <span className="tabular-nums">{fmt(sc.liquidStartA + sc.liquidStartB)}</span>
                 </div>
-              </div>
+              </ReportCollapsible>
 
               <div>
                 <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Stability Assessment</h4>
@@ -449,8 +448,7 @@ export default function ReportPage() {
                 const runway = engine.runways[sc.id];
                 if (!runway) return null;
                 return (
-                  <div>
-                    <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Capital Runway (5-Year Projection)</h4>
+                  <ReportCollapsible title="Capital Runway (5-Year Projection)">
                     <div className="grid grid-cols-2 gap-6 text-sm">
                       <div>
                         <p className="font-medium text-gray-700 mb-1">Party A</p>
@@ -469,12 +467,11 @@ export default function ReportPage() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </ReportCollapsible>
                 );
               })()}
 
-              <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Monthly Financial Position</h4>
+              <ReportCollapsible title="Monthly Financial Position">
                 <div className="grid grid-cols-2 gap-6 text-sm">
                   <div>
                     <p className="font-medium text-gray-700">Party A</p>
@@ -493,7 +490,7 @@ export default function ReportPage() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </ReportCollapsible>
 
               {housing && (
                 <div>
@@ -614,7 +611,7 @@ export default function ReportPage() {
             )}
           </div>
           <div className="mt-4 pt-3 border-t">
-            <h4 className="font-semibold text-sm mb-2">Limitations & Exclusions</h4>
+            <ReportCollapsible title="Limitations & Exclusions">
             <ul className="text-xs text-gray-600 space-y-1 list-disc list-inside">
               <li>All figures are estimates based on the information entered and may differ from actual outcomes.</li>
               <li>Tax calculations use the {store.config.taxYear} model and may not reflect individual circumstances.</li>
@@ -622,15 +619,17 @@ export default function ReportPage() {
               <li>Property valuations, pension transfer values, and other asset values should be independently verified.</li>
               <li>This analysis does not account for potential changes in legislation, tax rates, or personal circumstances.</li>
             </ul>
+            </ReportCollapsible>
           </div>
           <div className="mt-3 pt-3 border-t">
-            <h4 className="font-semibold text-sm mb-2">Explicit Assumption Statements</h4>
+            <ReportCollapsible title="Explicit Assumption Statements">
             <ul className="text-xs text-gray-600 space-y-1 list-disc list-inside">
               <li><span className="font-medium">Transaction costs:</span> Estimated selling costs (agent fees, conveyancing) are deducted from net equity in sale scenarios. Early repayment charges, stamp duty on purchase, legal fees for transfers, and moving costs are not separately modelled. Users should obtain independent estimates for these items.</li>
               <li><span className="font-medium">Pension valuations:</span> Pension values are entered by the user and treated as nominal CETV figures. No adjustment is made for pension type (defined benefit vs defined contribution), tax on drawdown, or actuarial factors. Pension sharing orders may result in different actual values.</li>
               <li><span className="font-medium">Capital gains tax:</span> No CGT liability is modelled on the disposal of investments or assets. The principal private residence exemption is assumed to apply to the family home. Users with significant investment portfolios should seek independent tax advice.</li>
               <li><span className="font-medium">Spousal maintenance:</span> Periodic spousal maintenance payments are not included in the model. If spousal maintenance is relevant, the net income and surplus figures should be adjusted accordingly.</li>
             </ul>
+            </ReportCollapsible>
           </div>
         </ReportSection>
 
@@ -666,6 +665,26 @@ function ReportSection({ title, children }: { title: string; children: React.Rea
       <h2 className="text-lg font-bold text-gray-900 mb-3 pb-1 border-b border-gray-200">{title}</h2>
       {children}
     </section>
+  );
+}
+
+function ReportCollapsible({ title, children }: { title: string; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <button
+        type="button"
+        className="print:hidden w-full flex items-center justify-between gap-2 py-1 text-left"
+        onClick={() => setOpen(!open)}
+      >
+        <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500">{title}</h4>
+        <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      <h4 className="hidden print:block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">{title}</h4>
+      <div className={open ? "" : "hidden print:block"}>
+        {children}
+      </div>
+    </div>
   );
 }
 

@@ -99,6 +99,37 @@ function CollapsibleSection({ title, subtitle, icon, children, defaultOpen = fal
   );
 }
 
+function DetailCollapsible({ title, summary, children, defaultOpen = false, testId }: { 
+  title: string; 
+  summary: React.ReactNode; 
+  children: React.ReactNode; 
+  defaultOpen?: boolean; 
+  testId: string;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border rounded-md" data-testid={testId}>
+      <button
+        type="button"
+        className="w-full flex items-start justify-between gap-3 p-3 text-left"
+        onClick={() => setOpen(!open)}
+        data-testid={`button-toggle-${testId}`}
+      >
+        <div className="min-w-0 flex-1">
+          <h4 className="text-sm font-semibold">{title}</h4>
+          {!open && <div className="text-xs text-muted-foreground mt-0.5">{summary}</div>}
+        </div>
+        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform shrink-0 mt-0.5 ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className="px-3 pb-3 pt-0">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ResultsPage() {
   const store = useAppStore();
   const { assumptions, updateAssumptions } = store;
@@ -332,25 +363,31 @@ export default function ResultsPage() {
                 </div>
               </div>
 
-              <div className="p-4 bg-muted/30 rounded-md text-xs text-muted-foreground space-y-2" data-testid="section-assumptions-appendix">
-                <h3 className="text-sm font-semibold text-foreground">Key Assumptions & Parameters</h3>
-                <p className="text-xs text-muted-foreground mb-2">The following parameters underpin all calculations presented above. Core settlement ratios are adjustable via the controls at the top of this page.</p>
-                <div className="grid gap-x-8 gap-y-1 sm:grid-cols-2">
-                  <div className="flex justify-between gap-2"><span>Asset split (A : B)</span><span className="tabular-nums">{Math.round(assumptions.splitRatio * 100)}% : {Math.round((1 - assumptions.splitRatio) * 100)}%</span></div>
-                  <div className="flex justify-between gap-2"><span>Pension split (A : B)</span><span className="tabular-nums">{Math.round(assumptions.splitPensionToA * 100)}% : {Math.round((1 - assumptions.splitPensionToA) * 100)}%</span></div>
-                  <div className="flex justify-between gap-2"><span>Mortgage rate</span><span className="tabular-nums">{(assumptions.mortgageAPR * 100).toFixed(1)}%</span></div>
-                  <div className="flex justify-between gap-2"><span>Mortgage term</span><span className="tabular-nums">{assumptions.mortgageTermYears} years</span></div>
-                  <div className="flex justify-between gap-2"><span>Inflation rate</span><span className="tabular-nums">{(assumptions.inflationRate * 100).toFixed(1)}%</span></div>
-                  <div className="flex justify-between gap-2"><span>Projection period</span><span className="tabular-nums">{assumptions.projectionYears} years</span></div>
-                  <div className="flex justify-between gap-2"><span>Tax model</span><span>{assumptions.includeTaxModel ? "2025/26 UK rates" : "Disabled"}</span></div>
-                  <div className="flex justify-between gap-2"><span>Child maintenance</span><span>{assumptions.includeCMSEstimate ? "CMS estimate" : "Not included"}</span></div>
+              <CollapsibleSection 
+                title="Key Assumptions & Methodology" 
+                subtitle="Parameters, exclusions, and methodology underpinning the analysis" 
+                icon={<Info className="w-4 h-4" />} 
+                testId="collapsible-assumptions-methodology"
+              >
+                <div className="text-xs text-muted-foreground space-y-2">
+                  <p className="text-xs text-muted-foreground mb-2">The following parameters underpin all calculations presented above. Core settlement ratios are adjustable via the controls at the top of this page.</p>
+                  <div className="grid gap-x-8 gap-y-1 sm:grid-cols-2">
+                    <div className="flex justify-between gap-2"><span>Asset split (A : B)</span><span className="tabular-nums">{Math.round(assumptions.splitRatio * 100)}% : {Math.round((1 - assumptions.splitRatio) * 100)}%</span></div>
+                    <div className="flex justify-between gap-2"><span>Pension split (A : B)</span><span className="tabular-nums">{Math.round(assumptions.splitPensionToA * 100)}% : {Math.round((1 - assumptions.splitPensionToA) * 100)}%</span></div>
+                    <div className="flex justify-between gap-2"><span>Mortgage rate</span><span className="tabular-nums">{(assumptions.mortgageAPR * 100).toFixed(1)}%</span></div>
+                    <div className="flex justify-between gap-2"><span>Mortgage term</span><span className="tabular-nums">{assumptions.mortgageTermYears} years</span></div>
+                    <div className="flex justify-between gap-2"><span>Inflation rate</span><span className="tabular-nums">{(assumptions.inflationRate * 100).toFixed(1)}%</span></div>
+                    <div className="flex justify-between gap-2"><span>Projection period</span><span className="tabular-nums">{assumptions.projectionYears} years</span></div>
+                    <div className="flex justify-between gap-2"><span>Tax model</span><span>{assumptions.includeTaxModel ? "2025/26 UK rates" : "Disabled"}</span></div>
+                    <div className="flex justify-between gap-2"><span>Child maintenance</span><span>{assumptions.includeCMSEstimate ? "CMS estimate" : "Not included"}</span></div>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-3 italic">Tax figures are based on a simplified 2025/26 UK model and may not reflect individual circumstances.</p>
+                  <div className="mt-3 pt-2 border-t border-muted space-y-1">
+                    <p className="text-xs font-medium text-muted-foreground">Exclusions & Assumptions:</p>
+                    <p className="text-xs text-muted-foreground">Early repayment charges, stamp duty, legal transfer fees, moving costs, and spousal maintenance are not separately modelled. Pension values are treated as nominal CETV figures without actuarial adjustment. No CGT liability is modelled — the principal private residence exemption is assumed for the family home.</p>
+                  </div>
                 </div>
-                <p className="text-xs text-muted-foreground mt-3 italic">Tax figures are based on a simplified 2025/26 UK model and may not reflect individual circumstances.</p>
-                <div className="mt-3 pt-2 border-t border-muted space-y-1">
-                  <p className="text-xs font-medium text-muted-foreground">Exclusions & Assumptions:</p>
-                  <p className="text-xs text-muted-foreground">Early repayment charges, stamp duty, legal transfer fees, moving costs, and spousal maintenance are not separately modelled. Pension values are treated as nominal CETV figures without actuarial adjustment. No CGT liability is modelled — the principal private residence exemption is assumed for the family home.</p>
-                </div>
-              </div>
+              </CollapsibleSection>
             </>
           ) : (
             <Card>
@@ -656,7 +693,7 @@ function ScenarioStructureTable({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground">Implementation Complexity</TableCell>
+                <TableCell className="text-sm text-muted-foreground">Implementation Complexity<InfoTip text="Each scenario is scored against factors including property transfers, mortgage obligations, buyout payments, pension sharing orders, and deferred arrangements. Low: Score 0-1 | Medium: Score 2-3 | High: Score 4+" /></TableCell>
                 {scenarios.map(s => {
                   const comp = getComplexity(s);
                   return (
@@ -684,16 +721,6 @@ function ScenarioStructureTable({
               </TableRow>
             </TableBody>
           </Table>
-        </div>
-        <div className="mt-4 p-3 rounded-md bg-muted/50 text-xs text-muted-foreground space-y-1" data-testid="complexity-key">
-          <p className="font-semibold text-foreground text-xs">How complexity is scored:</p>
-          <p>Each scenario is scored against multiple factors. Property transfers, mortgage obligations, buyout payments, pension sharing orders, and deferred arrangements each add to the score. A funding shortfall adds the most weight.</p>
-          <div className="flex items-center gap-4 mt-1 flex-wrap">
-            <span className="flex items-center gap-1"><Badge variant="outline" className="text-[10px] py-0 px-1 text-emerald-600 border-emerald-200 bg-emerald-50">Low</Badge> Score 0-1</span>
-            <span className="flex items-center gap-1"><Badge variant="outline" className="text-[10px] py-0 px-1 text-amber-600 border-amber-200 bg-amber-50">Medium</Badge> Score 2-3</span>
-            <span className="flex items-center gap-1"><Badge variant="outline" className="text-[10px] py-0 px-1 text-red-600 border-red-200 bg-red-50">High</Badge> Score 4+</span>
-          </div>
-          <p className="mt-1">Hover over any complexity badge above to see which specific factors apply to each scenario.</p>
         </div>
       </CardContent>
     </Card>
@@ -731,20 +758,11 @@ function SensitivityPanel({
           <Activity className="w-4 h-4" /> Sensitivity Analysis
         </CardTitle>
         <CardDescription>
-          Ranked assessment of which assumption changes have the greatest impact on financial outcomes. Each factor is tested independently — click any factor to see the calculation methodology.
+          Ranked assessment of which assumption changes have the greatest impact on financial outcomes. Each factor is tested independently.
+          <InfoTip text="Each assumption is varied by a fixed amount while all other inputs remain unchanged. The resulting change in annual surplus is calculated and factors are ranked by total impact magnitude. Red = negative impact, Green = positive impact." />
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="p-3 rounded-md bg-muted/50 mb-4 text-xs text-muted-foreground space-y-1" data-testid="sensitivity-key">
-          <p className="font-semibold text-foreground text-xs">How this analysis works:</p>
-          <p>Each assumption below is varied by a fixed amount while all other inputs remain unchanged. The resulting change in annual surplus (or starting capital for one-off factors) is calculated and factors are ranked by total impact magnitude.</p>
-          <div className="flex items-center gap-4 mt-1 flex-wrap">
-            <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-red-500" /> Negative impact</span>
-            <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-emerald-500" /> Positive impact</span>
-            <span className="flex items-center gap-1"><Badge variant="outline" className="text-[10px] py-0 px-1">annual</Badge> Recurring yearly effect</span>
-            <span className="flex items-center gap-1"><Badge variant="outline" className="text-[10px] py-0 px-1">one-off</Badge> One-time capital change</span>
-          </div>
-        </div>
         <div className="space-y-3">
           {ranking.map((f, i) => (
             <div
@@ -867,9 +885,6 @@ function AssumptionReviewPrompts({
             </div>
           ))}
         </div>
-        <p className="text-xs text-muted-foreground italic mt-4">
-          These prompts are provided to support structured review of assumptions. They do not constitute financial, legal, or tax advice.
-        </p>
       </CardContent>
     </Card>
   );
@@ -904,7 +919,7 @@ function ExecutiveTable({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto">
+        <div className="hidden lg:block overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -1024,6 +1039,73 @@ function ExecutiveTable({
             </TableBody>
           </Table>
         </div>
+
+        <div className="lg:hidden space-y-3" data-testid="mobile-executive-cards">
+          {scenarios.map(s => {
+            const st = stabilityScores[s.id];
+            const rw = runways[s.id];
+            const meta = SCENARIO_META[s.id];
+            const annual = ((s.mortgageMonthlyA ?? 0) + (s.mortgageMonthlyB ?? 0)) * 12;
+            return (
+              <div key={s.id} className="p-4 border rounded-md space-y-2.5" data-testid={`mobile-card-${s.id}`}>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: meta?.color }} />
+                  <span className="text-sm font-semibold">{meta?.label ?? s.name}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <span className="text-muted-foreground block">Liquid Capital — A</span>
+                    <span className="tabular-nums font-semibold text-blue-600">{formatCurrency(s.liquidStartA)}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground block">Liquid Capital — B</span>
+                    <span className="tabular-nums font-semibold text-emerald-600">{formatCurrency(s.liquidStartB)}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground block">Runway — A</span>
+                    {rw?.partyA.sustained
+                      ? <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50 text-[10px]">Sustained</Badge>
+                      : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]">Yr {rw?.partyA.depletionYear}</Badge>}
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground block">Runway — B</span>
+                    {rw?.partyB.sustained
+                      ? <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50 text-[10px]">Sustained</Badge>
+                      : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]">Yr {rw?.partyB.depletionYear}</Badge>}
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground block">Stability — A</span>
+                    <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Stable"} />
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground block">Stability — B</span>
+                    <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Stable"} />
+                  </div>
+                  {(s.fundingGap ?? 0) > 0 && (
+                    <div className="col-span-2">
+                      <span className="text-muted-foreground block">Funding Shortfall</span>
+                      <span className="tabular-nums font-semibold text-amber-600">{formatCurrency(s.fundingGap!)}</span>
+                    </div>
+                  )}
+                  {annual > 0 && (
+                    <div className="col-span-2">
+                      <span className="text-muted-foreground block">Annual Mortgage Obligation</span>
+                      <span className="tabular-nums font-semibold text-amber-600">{formatCurrency(annual)}/yr</span>
+                    </div>
+                  )}
+                  <div>
+                    <span className="text-muted-foreground block">Total Net — A</span>
+                    <span className="tabular-nums font-bold text-blue-600">{formatCurrency(s.totalA)}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground block">Total Net — B</span>
+                    <span className="tabular-nums font-bold text-emerald-600">{formatCurrency(s.totalB)}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </CardContent>
     </Card>
   );
@@ -1134,9 +1216,6 @@ function ScenarioConsiderationsPanel({ considerations }: { considerations: strin
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
         <Lightbulb className="h-3.5 w-3.5" /> Scenario Considerations
       </h3>
-      <p className="text-xs text-muted-foreground italic">
-        The following are structured reflection points based on the modelled outputs. They are not recommendations or advice.
-      </p>
       <div className="space-y-2">
         {considerations.map((c, i) => (
           <div key={i} className="flex items-start gap-3 p-3 rounded-md bg-muted/40 text-sm leading-relaxed" data-testid={`consideration-${i}`}>
@@ -1215,6 +1294,24 @@ function ScenarioDetailCard({
     [scenario, engine, store]
   );
 
+  const currentMortgagePayment = calcMortgagePayment(intermediate.totalMortgage, store.assumptions.mortgageAPR, store.assumptions.mortgageTermYears);
+  const stressedMortgagePayment = calcMortgagePayment(intermediate.totalMortgage, store.assumptions.mortgageAPR + 0.01, store.assumptions.mortgageTermYears);
+  const sensitivityMonthlyDiff = stressedMortgagePayment.monthlyPayment - currentMortgagePayment.monthlyPayment;
+  const totalExpenses = store.expenses.reduce((s, e) => s + e.amountAnnual, 0);
+  const tenPctExpenseImpact = Math.round(totalExpenses * 0.1);
+
+  const expenseA = store.expenses.filter(e => e.owner === "A").reduce((s, e) => s + e.amountAnnual, 0)
+    + store.expenses.filter(e => e.owner === "shared").reduce((s, e) => s + e.amountAnnual / 2, 0);
+  const expenseB = store.expenses.filter(e => e.owner === "B").reduce((s, e) => s + e.amountAnnual, 0)
+    + store.expenses.filter(e => e.owner === "shared").reduce((s, e) => s + e.amountAnnual / 2, 0);
+  const liquidityRatioA = expenseA > 0 ? scenario.liquidStartA / expenseA : 0;
+  const liquidityRatioB = expenseB > 0 ? scenario.liquidStartB / expenseB : 0;
+
+  const runway = engine.runways[scenario.id];
+
+  const lowestA = projection ? Math.min(...projection.map(p => p.capitalA)) : scenario.liquidStartA;
+  const lowestB = projection ? Math.min(...projection.map(p => p.capitalB)) : scenario.liquidStartB;
+
   return (
     <Card data-testid={`card-detail-${scenario.id}`}>
       <CardHeader className="pb-3">
@@ -1232,52 +1329,203 @@ function ScenarioDetailCard({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-5">
         <NarrativeSection narrative={narrative} />
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          <SourceOfFundsTable sourceOfFunds={sourceOfFunds} scenario={scenario} />
-          <CompositionChart scenario={scenario} />
+        <div className="space-y-4 p-4 bg-muted/20 rounded-md" data-testid="block-financial-sustainability">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Financial Sustainability</h3>
+          
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs text-muted-foreground">Party A Stability</span>
+              <StabilityBadge score={stabilityScore.scoreA} label={stabilityScore.labelA} />
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs text-muted-foreground">Party B Stability</span>
+              <StabilityBadge score={stabilityScore.scoreB} label={stabilityScore.labelB} />
+            </div>
+          </div>
+
+          {runway && (
+            <div className="grid gap-3 sm:grid-cols-2 text-sm">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-muted-foreground">Capital Runway — A</span>
+                <Badge variant="outline" className={runway.partyA.sustained ? "text-emerald-600 border-emerald-200 bg-emerald-50" : "text-amber-600 border-amber-200 bg-amber-50"}>
+                  {runway.partyA.sustained ? "Sustained" : `Depletes Yr ${runway.partyA.depletionYear}`}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-muted-foreground">Capital Runway — B</span>
+                <Badge variant="outline" className={runway.partyB.sustained ? "text-emerald-600 border-emerald-200 bg-emerald-50" : "text-amber-600 border-amber-200 bg-amber-50"}>
+                  {runway.partyB.sustained ? "Sustained" : `Depletes Yr ${runway.partyB.depletionYear}`}
+                </Badge>
+              </div>
+            </div>
+          )}
+
+          {narrative.riskFlags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {narrative.riskFlags.slice(0, 3).map((f, i) => {
+                const colorClass = f.severity === "ok"
+                  ? "text-emerald-600 border-emerald-200 bg-emerald-50"
+                  : f.severity === "warn"
+                  ? "text-amber-600 border-amber-200 bg-amber-50"
+                  : "text-red-600 border-red-200 bg-red-50";
+                return (
+                  <Badge key={i} variant="outline" className={colorClass} data-testid={`badge-risk-${i}`}>
+                    {f.severity === "ok" ? <Check className="w-3 h-3 mr-1" /> : <AlertTriangle className="w-3 h-3 mr-1" />}
+                    {f.label}
+                  </Badge>
+                );
+              })}
+            </div>
+          )}
+
+          <div className="grid gap-3 sm:grid-cols-2 text-xs">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-muted-foreground">Liquidity Ratio — A</span>
+              <span className={`tabular-nums font-medium ${liquidityRatioA < 1 ? "text-red-600" : liquidityRatioA < 2 ? "text-amber-600" : "text-emerald-600"}`}>
+                {liquidityRatioA.toFixed(1)}x annual expenses
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-muted-foreground">Liquidity Ratio — B</span>
+              <span className={`tabular-nums font-medium ${liquidityRatioB < 1 ? "text-red-600" : liquidityRatioB < 2 ? "text-amber-600" : "text-emerald-600"}`}>
+                {liquidityRatioB.toFixed(1)}x annual expenses
+              </span>
+            </div>
+          </div>
         </div>
 
-        {housingFeasibility && <HousingFeasibilityPanel feasibility={housingFeasibility} scenarioId={scenario.id} />}
+        <DetailCollapsible
+          title="Capital Position"
+          summary={<span className="tabular-nums">Party A liquid: <span className="text-blue-600 font-medium">{formatCurrency(sourceOfFunds.A.netStartingLiquid)}</span> | Party B liquid: <span className="text-emerald-600 font-medium">{formatCurrency(sourceOfFunds.B.netStartingLiquid)}</span></span>}
+          testId="detail-capital-position"
+        >
+          <div className="space-y-4">
+            <SourceOfFundsTable sourceOfFunds={sourceOfFunds} scenario={scenario} />
+            <CompositionChart scenario={scenario} />
+          </div>
+        </DetailCollapsible>
 
-        <CapitalRunwaySection runway={engine.runways[scenario.id]} />
-
-        <div className="grid gap-6 lg:grid-cols-2">
-          <StabilitySection score={stabilityScore} />
-          <MonthlySnapshotSection snapshot={monthlySnapshot} />
-        </div>
+        {housingFeasibility && (
+          <DetailCollapsible
+            title="Housing Position"
+            summary={
+              <Badge variant="outline" className={housingFeasibility.withinBenchmarkThresholds ? "text-emerald-600 border-emerald-200 bg-emerald-50" : "text-amber-600 border-amber-200 bg-amber-50"}>
+                {housingFeasibility.classification}
+              </Badge>
+            }
+            testId="detail-housing-position"
+          >
+            <HousingFeasibilityPanel feasibility={housingFeasibility} scenarioId={scenario.id} />
+          </DetailCollapsible>
+        )}
 
         {comparison && <ComparisonDeltaPanel delta={comparison} scenarioId={scenario.id} />}
 
-        {negotiationLevers.length > 0 && <NegotiationLeversPanel levers={negotiationLevers} />}
-
-        <ScenarioConsiderationsPanel considerations={considerations} />
+        <DetailCollapsible
+          title="Monthly Sustainability Snapshot"
+          summary={
+            <span className="tabular-nums">
+              Party A: <span className={monthlySnapshot.surplusA < 0 ? "text-red-600 font-medium" : "text-emerald-600 font-medium"}>{monthlySnapshot.surplusA < 0 ? `(${formatCurrency(Math.abs(monthlySnapshot.surplusA))})` : formatCurrency(monthlySnapshot.surplusA)}/mo</span>
+              {" | "}
+              Party B: <span className={monthlySnapshot.surplusB < 0 ? "text-red-600 font-medium" : "text-emerald-600 font-medium"}>{monthlySnapshot.surplusB < 0 ? `(${formatCurrency(Math.abs(monthlySnapshot.surplusB))})` : formatCurrency(monthlySnapshot.surplusB)}/mo</span>
+            </span>
+          }
+          testId="detail-monthly-snapshot"
+        >
+          <MonthlySnapshotSection snapshot={monthlySnapshot} />
+        </DetailCollapsible>
 
         {projection && projection.length > 1 && (
-          <div>
-            <h3 className="text-sm font-semibold mb-1 flex items-center gap-1">
-              <TrendingUp className="h-3 w-3" /> Liquid Capital Projection
-            </h3>
-            <p className="text-xs text-muted-foreground mb-2">
-              Projected liquid capital trajectory for each party over the modelling period. Annual balance reflects: opening capital + net income - expenditure - mortgage obligations. Property equity is excluded as it is not immediately realisable. A line falling below zero indicates a projected capital shortfall.
-            </p>
-            <div className="h-[260px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={projection}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
-                  <XAxis dataKey="year" axisLine={false} tickLine={false} fontSize={11} />
-                  <YAxis axisLine={false} tickLine={false} fontSize={11} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
-                  <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
-                  <Legend />
-                  <Line type="monotone" dataKey="capitalA" name="Party A" stroke="#2563EB" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="capitalB" name="Party B" stroke="#10B981" strokeWidth={2} dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
+          <DetailCollapsible
+            title="Capital Projection (5-Year)"
+            summary={
+              <span className="tabular-nums">
+                Lowest capital — A: <span className={`font-medium ${lowestA < 0 ? "text-red-600" : ""}`}>{formatCurrency(lowestA)}</span>
+                {" | "}
+                B: <span className={`font-medium ${lowestB < 0 ? "text-red-600" : ""}`}>{formatCurrency(lowestB)}</span>
+              </span>
+            }
+            testId="detail-capital-projection"
+          >
+            <div>
+              <p className="text-xs text-muted-foreground mb-2">
+                Projected liquid capital trajectory for each party over the modelling period. Annual balance reflects: opening capital + net income - expenditure - mortgage obligations. Property equity is excluded as it is not immediately realisable. A line falling below zero indicates a projected capital shortfall.
+              </p>
+              <div className="h-[260px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={projection}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
+                    <XAxis dataKey="year" axisLine={false} tickLine={false} fontSize={11} />
+                    <YAxis axisLine={false} tickLine={false} fontSize={11} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
+                    <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
+                    <Legend />
+                    <Line type="monotone" dataKey="capitalA" name="Party A" stroke="#2563EB" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="capitalB" name="Party B" stroke="#10B981" strokeWidth={2} dot={false} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+              <CapitalRunwaySection runway={runway} />
+            </div>
+          </DetailCollapsible>
+        )}
+
+        <DetailCollapsible
+          title="Sensitivity Snapshot"
+          summary={
+            <span className="tabular-nums">
+              +1% rate: <span className="text-amber-600 font-medium">{formatCurrency(sensitivityMonthlyDiff)}/mo</span>
+              {" | "}
+              +10% costs: <span className="text-amber-600 font-medium">-{formatCurrency(tenPctExpenseImpact)}/yr</span>
+            </span>
+          }
+          testId="detail-sensitivity-snapshot"
+        >
+          <div className="space-y-2">
+            <div className="p-3 bg-muted/30 rounded-md space-y-1">
+              <p className="text-sm font-medium">If interest rate increases by 1%:</p>
+              <p className="text-xs text-muted-foreground flex items-center gap-1">
+                Monthly payment changes by <span className="tabular-nums font-semibold text-amber-600">{formatCurrency(sensitivityMonthlyDiff)}/mo</span>
+              </p>
+            </div>
+            <div className="p-3 bg-muted/30 rounded-md space-y-1">
+              <p className="text-sm font-medium">If expenses increase by 10%:</p>
+              <p className="text-xs text-muted-foreground flex items-center gap-1">
+                Annual surplus changes by <span className="tabular-nums font-semibold text-amber-600">-{formatCurrency(tenPctExpenseImpact)}/yr</span>
+              </p>
             </div>
           </div>
+        </DetailCollapsible>
+
+        {negotiationLevers.length > 0 && (
+          <DetailCollapsible
+            title="Negotiation Levers"
+            summary={<span>{negotiationLevers.length} suggestion{negotiationLevers.length !== 1 ? "s" : ""} available</span>}
+            testId="detail-negotiation-levers"
+          >
+            <NegotiationLeversPanel levers={negotiationLevers} />
+          </DetailCollapsible>
         )}
+
+        {considerations.length > 0 && (
+          <DetailCollapsible
+            title="Scenario Considerations"
+            summary={<span>Key considerations available</span>}
+            testId="detail-scenario-considerations"
+          >
+            <ScenarioConsiderationsPanel considerations={considerations} />
+          </DetailCollapsible>
+        )}
+
+        <DetailCollapsible
+          title="Stability Assessment Detail"
+          summary={<span>View scoring breakdown and assessment drivers</span>}
+          testId="detail-stability-assessment"
+        >
+          <StabilitySection score={stabilityScore} />
+        </DetailCollapsible>
 
         <div className="p-3 bg-muted/30 rounded-md text-xs text-muted-foreground italic" data-testid="text-reassurance">
           {narrative.reassurance}
@@ -1383,53 +1631,88 @@ function FundRowItem({ row, index }: { row: { label: string; amount: number; sub
 }
 
 function SourceOfFundsTable({ sourceOfFunds, scenario }: { sourceOfFunds: SourceOfFunds; scenario: ScenarioResult }) {
+  const [showDetail, setShowDetail] = useState(false);
+  
   return (
     <div className="space-y-3" data-testid="section-source-of-funds">
-      <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        Source of Funds Breakdown
-        <span className="text-xs font-normal text-muted-foreground">(expand any line for detailed composition)</span>
-      </h3>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1">
-          <h4 className="text-xs font-semibold text-blue-600 uppercase tracking-wider">Party A</h4>
-          {sourceOfFunds.A.rows.map((r, i) => (
-            <FundRowItem key={i} row={r} index={`a-${i}`} />
-          ))}
-          <Separator className="my-1" />
-          <div className="flex items-center justify-between text-sm font-semibold gap-2">
-            <span>Net Liquid Capital</span>
-            <span className="tabular-nums text-blue-600" data-testid="text-net-liquid-a">{formatCurrency(sourceOfFunds.A.netStartingLiquid)}</span>
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-sm font-semibold">Source of Funds</h3>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowDetail(!showDetail)}
+          data-testid="button-toggle-funds-detail"
+        >
+          {showDetail ? "Hide Detail" : "Show Detail"}
+          <ChevronDown className={`w-3.5 h-3.5 ml-1 transition-transform ${showDetail ? "rotate-180" : ""}`} />
+        </Button>
+      </div>
+
+      <div className="space-y-1.5">
+        {(scenario.homeEquityA ?? 0) > 0 || (scenario.homeEquityB ?? 0) > 0 ? (
+          <div className="flex items-center justify-between text-sm gap-2">
+            <span className="text-muted-foreground">Net Property Equity</span>
+            <span className="tabular-nums font-medium">
+              A: <span className="text-blue-600">{formatCurrency(scenario.homeEquityA ?? 0)}</span>
+              {" / "}
+              B: <span className="text-emerald-600">{formatCurrency(scenario.homeEquityB ?? 0)}</span>
+            </span>
           </div>
-          {sourceOfFunds.pension.A_after > 0 && (
-            <div className="flex items-center justify-between text-xs text-muted-foreground gap-2">
-              <span>Pension (separate)</span>
-              <span className="tabular-nums">{formatCurrency(sourceOfFunds.pension.A_after)}</span>
-            </div>
-          )}
+        ) : null}
+        <div className="flex items-center justify-between text-sm gap-2">
+          <span className="text-muted-foreground">Net Liquid Capital</span>
+          <span className="tabular-nums font-medium">
+            A: <span className="text-blue-600">{formatCurrency(sourceOfFunds.A.netStartingLiquid)}</span>
+            {" / "}
+            B: <span className="text-emerald-600">{formatCurrency(sourceOfFunds.B.netStartingLiquid)}</span>
+          </span>
         </div>
-        <div className="space-y-1">
-          <h4 className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Party B</h4>
-          {sourceOfFunds.B.rows.map((r, i) => (
-            <FundRowItem key={i} row={r} index={`b-${i}`} />
-          ))}
-          <Separator className="my-1" />
-          <div className="flex items-center justify-between text-sm font-semibold gap-2">
-            <span>Net Liquid Capital</span>
-            <span className="tabular-nums text-emerald-600" data-testid="text-net-liquid-b">{formatCurrency(sourceOfFunds.B.netStartingLiquid)}</span>
+        {(sourceOfFunds.pension.A_after > 0 || sourceOfFunds.pension.B_after > 0) && (
+          <div className="flex items-center justify-between text-sm gap-2">
+            <span className="text-muted-foreground">Pension Position (separate)</span>
+            <span className="tabular-nums font-medium">
+              A: {formatCurrency(sourceOfFunds.pension.A_after)}
+              {" / "}
+              B: {formatCurrency(sourceOfFunds.pension.B_after)}
+            </span>
           </div>
-          {sourceOfFunds.pension.B_after > 0 && (
-            <div className="flex items-center justify-between text-xs text-muted-foreground gap-2">
-              <span>Pension (separate)</span>
-              <span className="tabular-nums">{formatCurrency(sourceOfFunds.pension.B_after)}</span>
-            </div>
-          )}
+        )}
+        <Separator className="my-1" />
+        <div className="flex items-center justify-between text-sm font-bold gap-2">
+          <span>Total Allocated Net Position</span>
+          <span className="tabular-nums" data-testid="text-total-allocated-net">{formatCurrency(scenario.liquidStartA + scenario.liquidStartB)}</span>
         </div>
       </div>
-      <Separator className="my-2" />
-      <div className="flex items-center justify-between text-sm font-bold gap-2">
-        <span>Total Allocated Net Position</span>
-        <span className="tabular-nums" data-testid="text-total-allocated-net">{formatCurrency(scenario.liquidStartA + scenario.liquidStartB)}</span>
-      </div>
+
+      {showDetail && (
+        <div className="pt-2 border-t space-y-4">
+          <p className="text-xs text-muted-foreground">Expand any line for detailed composition</p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1">
+              <h4 className="text-xs font-semibold text-blue-600 uppercase tracking-wider">Party A</h4>
+              {sourceOfFunds.A.rows.map((r, i) => (
+                <FundRowItem key={i} row={r} index={`a-${i}`} />
+              ))}
+              <Separator className="my-1" />
+              <div className="flex items-center justify-between text-sm font-semibold gap-2">
+                <span>Net Liquid Capital</span>
+                <span className="tabular-nums text-blue-600" data-testid="text-net-liquid-a">{formatCurrency(sourceOfFunds.A.netStartingLiquid)}</span>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <h4 className="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Party B</h4>
+              {sourceOfFunds.B.rows.map((r, i) => (
+                <FundRowItem key={i} row={r} index={`b-${i}`} />
+              ))}
+              <Separator className="my-1" />
+              <div className="flex items-center justify-between text-sm font-semibold gap-2">
+                <span>Net Liquid Capital</span>
+                <span className="tabular-nums text-emerald-600" data-testid="text-net-liquid-b">{formatCurrency(sourceOfFunds.B.netStartingLiquid)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1437,7 +1720,7 @@ function SourceOfFundsTable({ sourceOfFunds, scenario }: { sourceOfFunds: Source
 function CapitalRunwaySection({ runway }: { runway?: RunwayResult }) {
   if (!runway) return null;
   return (
-    <div className="p-4 border rounded-md space-y-3" data-testid="section-capital-runway">
+    <div className="space-y-3" data-testid="section-capital-runway">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
         <TrendingUp className="w-3.5 h-3.5" /> Capital Runway (5-Year Projection)
       </h3>
@@ -1581,40 +1864,89 @@ function StabilitySection({ score }: { score: StabilityResult }) {
 }
 
 function MonthlySnapshotSection({ snapshot }: { snapshot: MonthlySnapshotResult }) {
+  const [showDetail, setShowDetail] = useState(false);
+  
+  const totalOutgoingsA = snapshot.lines.filter(l => l.amountA < 0).reduce((s, l) => s + l.amountA, 0);
+  const totalOutgoingsB = snapshot.lines.filter(l => l.amountB < 0).reduce((s, l) => s + l.amountB, 0);
+  
   return (
     <div className="space-y-3" data-testid="section-monthly-snapshot">
-      <h3 className="text-sm font-semibold">Monthly Financial Position</h3>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead></TableHead>
-            <TableHead className="text-right text-blue-600 text-xs">Party A</TableHead>
-            <TableHead className="text-right text-emerald-600 text-xs">Party B</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {snapshot.lines.map((line, i) => (
-            <TableRow key={i}>
-              <TableCell className="text-xs text-muted-foreground py-1.5">{line.label}</TableCell>
-              <TableCell className={`text-right tabular-nums text-xs py-1.5 ${line.amountA < 0 ? "text-red-500" : ""}`}>
-                {line.amountA < 0 ? `(${formatCurrency(Math.abs(line.amountA))})` : formatCurrency(line.amountA)}
-              </TableCell>
-              <TableCell className={`text-right tabular-nums text-xs py-1.5 ${line.amountB < 0 ? "text-red-500" : ""}`}>
-                {line.amountB < 0 ? `(${formatCurrency(Math.abs(line.amountB))})` : formatCurrency(line.amountB)}
-              </TableCell>
-            </TableRow>
-          ))}
-          <TableRow className="font-semibold border-t-2">
-            <TableCell className="text-xs py-1.5">Net Monthly Surplus / (Deficit)</TableCell>
-            <TableCell className={`text-right tabular-nums text-xs py-1.5 font-bold ${snapshot.surplusA < 0 ? "text-red-600" : "text-emerald-600"}`}>
-              {snapshot.surplusA < 0 ? `(${formatCurrency(Math.abs(snapshot.surplusA))})` : formatCurrency(snapshot.surplusA)}
-            </TableCell>
-            <TableCell className={`text-right tabular-nums text-xs py-1.5 font-bold ${snapshot.surplusB < 0 ? "text-red-600" : "text-emerald-600"}`}>
-              {snapshot.surplusB < 0 ? `(${formatCurrency(Math.abs(snapshot.surplusB))})` : formatCurrency(snapshot.surplusB)}
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-sm font-semibold">Monthly Financial Position</h3>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowDetail(!showDetail)}
+          data-testid="button-toggle-monthly-detail"
+        >
+          {showDetail ? "Hide Detail" : "Show Detail"}
+          <ChevronDown className={`w-3.5 h-3.5 ml-1 transition-transform ${showDetail ? "rotate-180" : ""}`} />
+        </Button>
+      </div>
+
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between text-sm gap-2">
+          <span className="text-muted-foreground">Net Monthly Income</span>
+          <span className="tabular-nums font-medium">
+            A: <span className="text-blue-600">{formatCurrency(snapshot.netMonthlyIncomeA)}</span>
+            {" / "}
+            B: <span className="text-emerald-600">{formatCurrency(snapshot.netMonthlyIncomeB)}</span>
+          </span>
+        </div>
+        <div className="flex items-center justify-between text-sm gap-2">
+          <span className="text-muted-foreground">Total Monthly Outgoings</span>
+          <span className="tabular-nums font-medium">
+            A: <span className="text-red-500">{formatCurrency(Math.abs(totalOutgoingsA))}</span>
+            {" / "}
+            B: <span className="text-red-500">{formatCurrency(Math.abs(totalOutgoingsB))}</span>
+          </span>
+        </div>
+        <Separator className="my-1" />
+        <div className="flex items-center justify-between text-sm font-bold gap-2">
+          <span>Net Surplus / (Deficit)</span>
+          <span className="tabular-nums">
+            A: <span className={snapshot.surplusA < 0 ? "text-red-600" : "text-emerald-600"}>{snapshot.surplusA < 0 ? `(${formatCurrency(Math.abs(snapshot.surplusA))})` : formatCurrency(snapshot.surplusA)}</span>
+            {" / "}
+            B: <span className={snapshot.surplusB < 0 ? "text-red-600" : "text-emerald-600"}>{snapshot.surplusB < 0 ? `(${formatCurrency(Math.abs(snapshot.surplusB))})` : formatCurrency(snapshot.surplusB)}</span>
+          </span>
+        </div>
+      </div>
+
+      {showDetail && (
+        <div className="pt-2 border-t">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead></TableHead>
+                <TableHead className="text-right text-blue-600 text-xs">Party A</TableHead>
+                <TableHead className="text-right text-emerald-600 text-xs">Party B</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {snapshot.lines.map((line, i) => (
+                <TableRow key={i}>
+                  <TableCell className="text-xs text-muted-foreground py-1.5">{line.label}</TableCell>
+                  <TableCell className={`text-right tabular-nums text-xs py-1.5 ${line.amountA < 0 ? "text-red-500" : ""}`}>
+                    {line.amountA < 0 ? `(${formatCurrency(Math.abs(line.amountA))})` : formatCurrency(line.amountA)}
+                  </TableCell>
+                  <TableCell className={`text-right tabular-nums text-xs py-1.5 ${line.amountB < 0 ? "text-red-500" : ""}`}>
+                    {line.amountB < 0 ? `(${formatCurrency(Math.abs(line.amountB))})` : formatCurrency(line.amountB)}
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableRow className="font-semibold border-t-2">
+                <TableCell className="text-xs py-1.5">Net Monthly Surplus / (Deficit)</TableCell>
+                <TableCell className={`text-right tabular-nums text-xs py-1.5 font-bold ${snapshot.surplusA < 0 ? "text-red-600" : "text-emerald-600"}`}>
+                  {snapshot.surplusA < 0 ? `(${formatCurrency(Math.abs(snapshot.surplusA))})` : formatCurrency(snapshot.surplusA)}
+                </TableCell>
+                <TableCell className={`text-right tabular-nums text-xs py-1.5 font-bold ${snapshot.surplusB < 0 ? "text-red-600" : "text-emerald-600"}`}>
+                  {snapshot.surplusB < 0 ? `(${formatCurrency(Math.abs(snapshot.surplusB))})` : formatCurrency(snapshot.surplusB)}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </div>
   );
 }
@@ -1625,7 +1957,7 @@ function HousingFeasibilityPanel({ feasibility, scenarioId }: { feasibility: Hou
     ? "N/A"
     : `${feasibility.mortgageToNetIncomeRatio.toFixed(1)}%`;
   return (
-    <div className="p-4 border rounded-md space-y-3" data-testid="section-housing-feasibility">
+    <div className="space-y-3" data-testid="section-housing-feasibility">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
         <Building2 className="w-3.5 h-3.5" /> Affordability Benchmark Assessment (Modelled) — Party {keeper}
         <InfoTip text="Benchmarks are illustrative modelling references only and do not represent actual credit or affordability decisions." />
@@ -1682,13 +2014,10 @@ function HousingFeasibilityPanel({ feasibility, scenarioId }: { feasibility: Hou
 
 function NegotiationLeversPanel({ levers }: { levers: NegotiationLever[] }) {
   return (
-    <div className="p-4 border rounded-md space-y-3" data-testid="section-negotiation-levers">
+    <div className="space-y-3" data-testid="section-negotiation-levers">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
         <Lightbulb className="w-3.5 h-3.5" /> Potential Negotiation Considerations
       </h3>
-      <p className="text-xs text-muted-foreground">
-        Illustrative adjustments that may influence the settlement position. Actual impact is subject to full recalculation.
-      </p>
       <div className="space-y-2">
         {levers.map((lever, i) => (
           <div key={i} className="flex items-start gap-3 p-2.5 rounded-md bg-muted/30" data-testid={`negotiation-lever-${i}`}>
