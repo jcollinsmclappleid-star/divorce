@@ -1,0 +1,197 @@
+EDGE-CASE STRESS TEST EXECUTION (RUN + REPORT)
+
+Context:
+We have a UK divorce financial modelling app with:
+- Scenario modelling (Sell / A Keeps / B Keeps)
+- Split sliders (assets + pensions)
+- Stability score + classification
+- Capital runway projection (5 years)
+- Affordability benchmark assessment
+- PDF report generation
+
+Task:
+Run the edge-case stress tests below through the app/model and report results back to me in a structured table + findings summary.
+
+IMPORTANT RULES:
+1) Do NOT refactor or “improve” the model during testing.
+2) If a case fails, record it, explain why, propose the minimal fix, and stop there (no silent changes).
+3) Ensure UI outputs and report outputs reconcile (where applicable).
+4) For each case, test Sell scenario + A Keeps + B Keeps (if applicable). If a scenario cannot apply (e.g., no mortgage), report “N/A” with explanation.
+5) Verify invariants and flag any breach.
+
+========================================================
+A) REQUIRED INVARIANTS (CHECK FOR EVERY CASE)
+========================================================
+For each scenario and party, verify:
+- No NaN / Infinity / undefined values
+- No divide-by-zero errors (especially ratios)
+- Currency formatting consistent (GBP)
+- Totals reconcile:
+  PartyA liquid + PartyB liquid + fees/known deductions == total distributable liquid pool (within rounding tolerance)
+- Runway logic:
+  If capital hits <= 0 in year N, runway badge must show Year N (per party)
+- Stability logic:
+  Stability deductions must match trigger conditions
+- Affordability logic:
+  Mortgage-to-net-income ratio is computed on same time basis (monthly/monthly or annual/annual) and stays plausible (no 3000% anomalies unless income extremely small and time basis correct)
+- Preview vs paid outputs match exactly
+- UI vs PDF values match exactly
+
+========================================================
+B) OUTPUTS TO CAPTURE (FOR EACH CASE)
+========================================================
+For each scenario (Sell, A Keeps, B Keeps), capture:
+- Net equity
+- Combined net asset pool
+- Party A starting liquid capital
+- Party B starting liquid capital
+- Funding shortfall (if any)
+- Mortgage payment (if any)
+- Mortgage-to-net-income ratio (if any)
+- Monthly surplus/deficit (A, B)
+- Runway outcome (A, B): Sustained 5y or Yr N depletion
+- Stability score (A, B)
+- Stability classification (A, B)
+- Any warnings/flags displayed
+
+========================================================
+C) EDGE-CASE TEST SUITE (RUN ALL)
+========================================================
+
+Use these inputs unless noted:
+- Selling costs = current app default (do not change)
+- Inflation = current app default
+- Interest rate = current app default unless specified
+- Assume “net income” inputs are net (after tax) unless app is computing from gross
+
+Case E1 — Zero income both
+Property 400000; Mortgage 200000; Savings 30000; Investments 10000; Debts 5000;
+Pension A/B 80000/80000;
+Income A/B 0/0; Expenses A/B 24000/24000;
+Split assets 50/50; pensions 50/50.
+
+Case E2 — Zero expenses
+Property 400000; Mortgage 200000; Savings 30000; Investments 10000; Debts 5000;
+Pensions 80000/80000;
+Income A/B 45000/45000; Expenses A/B 0/0.
+
+Case E3 — Zero mortgage
+Property 500000; Mortgage 0; Savings 20000; Investments 20000; Debts 0;
+Pensions 100000/100000;
+Income A/B 50000/40000; Expenses A/B 30000/26000.
+
+Case E4 — All inputs zero
+Property 0; Mortgage 0; Savings 0; Investments 0; Debts 0; Pensions 0/0;
+Income 0/0; Expenses 0/0.
+
+Case E5 — Negative equity
+Property 300000; Mortgage 350000; Savings 20000; Investments 0; Debts 5000;
+Pensions 50000/50000;
+Income A/B 50000/40000; Expenses A/B 28000/26000.
+
+Case E6 — Depletes in year 1
+Property 350000; Mortgage 250000; Savings 5000; Investments 0; Debts 20000;
+Pensions 40000/30000;
+Income A/B 30000/25000; Expenses A/B 32000/28000.
+
+Case E7 — Massive funding shortfall (keep scenario)
+Property 700000; Mortgage 200000; Savings 10000; Investments 0; Debts 0;
+Pensions 150000/50000;
+Income A/B 60000/35000; Expenses A/B 36000/26000;
+Set A Keeps and verify buyout requirement/funding gap.
+
+Case E8 — 100/0 asset split
+Use Case 1 baseline:
+Property 400000; Mortgage 200000; Savings 40000; Investments 20000; Debts 10000;
+Pensions 80000/80000;
+Income A/B 55000/45000; Expenses A/B 30000/28000;
+Set assets split 100/0; pensions 50/50.
+
+Case E9 — 0/100 asset split
+Same as E8 but assets split 0/100.
+
+Case E10 — Pension split extreme
+Use baseline inputs (E8) but assets split 50/50 and pensions 80/20.
+
+Case E11 — Low income high mortgage
+Property 450000; Mortgage 350000; Savings 10000; Investments 0; Debts 0;
+Pensions 30000/30000;
+Income A/B 20000/20000; Expenses A/B 16000/16000.
+
+Case E12 — Very high income
+Property 600000; Mortgage 200000; Savings 50000; Investments 50000; Debts 0;
+Pensions 200000/150000;
+Income A/B 500000/120000; Expenses A/B 80000/50000.
+
+Case E13 — Interest rate 15%
+Use baseline inputs (E8) and set interest to 15% (or closest supported) and re-run.
+
+Case E14 — Interest rate 0%
+Use baseline inputs (E8) and set interest to 0% (or closest supported) and re-run.
+
+Case E15 — Inflation effect sanity
+Use baseline inputs (E8). Confirm which items inflate (expenses vs income) and ensure year-by-year projection reflects methodology.
+
+Case E16 — Surplus every year
+Property 400000; Mortgage 150000; Savings 60000; Investments 20000; Debts 0;
+Pensions 100000/100000;
+Income A/B 80000/70000; Expenses A/B 20000/18000.
+
+Case E17 — Small annual deficit, never hits zero in 5y
+Property 400000; Mortgage 200000; Savings 60000; Investments 10000; Debts 0;
+Pensions 80000/70000;
+Income A/B 45000/42000; Expenses A/B 43000/41000.
+
+Case E18 — Decimal inputs
+Property 450000.75; Mortgage 200000.25; Savings 10000.10; Investments 5000.55; Debts 1000.20;
+Pensions 50000.33/40000.44;
+Income A/B 55000.33/45000.11; Expenses A/B 30000.66/28000.22.
+
+Case E19 — Large numbers
+Property 5000000; Mortgage 3000000; Savings 250000; Investments 500000; Debts 150000;
+Pensions 1000000/800000;
+Income A/B 300000/200000; Expenses A/B 120000/90000.
+
+Case E20 — High net worth, low liquidity
+Property 800000; Mortgage 100000; Savings 5000; Investments 0; Debts 0;
+Pensions 120000/100000;
+Income A/B 55000/45000; Expenses A/B 32000/30000.
+
+Case E21 — High liquidity, low net worth
+Property 250000; Mortgage 230000; Savings 150000; Investments 50000; Debts 10000;
+Pensions 30000/30000;
+Income A/B 45000/42000; Expenses A/B 28000/27000.
+
+Case E22 — Sensitivity: +1% interest
+Use baseline inputs (E8). Apply +1% interest stress toggle and confirm all dependent outputs update.
+
+Case E23 — Sensitivity: +10% expenses
+Use baseline inputs (E8). Apply +10% expenses toggle and confirm all dependent outputs update.
+
+Case E24 — Preview vs Unlock consistency
+Use baseline inputs (E8). Record preview outputs, then unlock (simulate paid state) and confirm exact match.
+
+Case E25 — UI vs PDF consistency
+Use baseline inputs (E8). Export PDF and confirm all key numbers match UI.
+
+========================================================
+D) REPORT BACK FORMAT (STRICT)
+========================================================
+
+1) Summary dashboard:
+- # cases passed fully
+- # cases failed
+- list of top 5 failure types
+
+2) Results table (one row per case, with pass/fail):
+Columns:
+CaseID | Scenario(s) affected | Failure? | What broke | Likely cause | Minimal fix | Severity (High/Med/Low)
+
+3) For each FAIL case:
+- show the exact incorrect output value(s)
+- which invariant failed
+- recommended minimal fix (code location if known)
+
+Do not implement fixes unless explicitly asked after review.
+
+END.
