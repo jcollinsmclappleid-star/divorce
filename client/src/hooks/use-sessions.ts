@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, buildUrl } from "@shared/routes";
-import { AppState } from "@shared/schema";
+import { StoreState as AppState } from "./use-store";
 import { useToast } from "@/hooks/use-toast";
 
 export function useSessions() {

@@ -8,7 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useAppStore } from "@/hooks/use-store";
-import { Asset, Liability, AssetCategory, LiabilityCategory, Owner } from "@shared/schema";
+import { AssetCategory, LiabilityCategory, Owner } from "@shared/schema";
+import { Asset, Liability } from "@/hooks/use-store";
 import { Plus, Trash2, Edit2, Wallet, CreditCard } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { useForm } from "react-hook-form";

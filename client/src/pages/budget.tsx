@@ -9,7 +9,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useAppStore } from "@/hooks/use-store";
 import { formatCurrency } from "@/lib/utils";
-import { Income, Expense, ExpenseCategory } from "@shared/schema";
+import { ExpenseCategory } from "@shared/schema";
+import { Income, Expense } from "@/hooks/use-store";
 import { Edit2, Plus, Trash2, ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

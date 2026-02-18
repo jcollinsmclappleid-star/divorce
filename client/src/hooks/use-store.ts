@@ -2,17 +2,91 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
 import { 
-  AppState, 
-  Asset, 
-  Liability, 
-  Income, 
-  Expense, 
   AppConfigSchema,
-  ScenarioType
 } from '@shared/schema';
 
-// Initial Empty State
-const initialState: any = {
+export interface Asset {
+  id: string;
+  name: string;
+  category: string;
+  owner: string;
+  currentValue: number;
+  liquidity: string;
+  saleCostPct: number;
+  taxCostPct: number;
+  growthRate?: number;
+  pensionType?: string;
+  cetv?: number;
+  securedLiabilityId?: string;
+}
+
+export interface Liability {
+  id: string;
+  name: string;
+  category: string;
+  owner: string;
+  balance: number;
+  interestAPR?: number;
+  termYearsRemaining?: number;
+  securedAgainstAssetId?: string;
+}
+
+export interface Income {
+  id: string;
+  name: string;
+  owner: string;
+  amountAnnualGross: number;
+  amountAnnualNet?: number;
+  taxTreatment: string;
+  growthRate?: number;
+}
+
+export interface Expense {
+  id: string;
+  name: string;
+  owner: string;
+  amountAnnual: number;
+  category: string;
+  inflationLinked: boolean;
+}
+
+export interface Assumptions {
+  splitRatio: number;
+  splitPropertyToA: number;
+  splitPensionToA: number;
+  projectionYears: number;
+  inflationRate: number;
+  includeTaxModel: boolean;
+  includeCMSEstimate: boolean;
+  mortgageAPR: number;
+  mortgageTermYears: number;
+}
+
+export interface Children {
+  numChildren: number;
+  nightsWithA: number;
+  nightsWithB: number;
+}
+
+export interface Scenarios {
+  S1_Sell_Split: { enabled: boolean; params: Record<string, any> };
+  S2_A_Keeps_Home: { enabled: boolean; params: Record<string, any> };
+  S3_B_Keeps_Home: { enabled: boolean; params: Record<string, any> };
+  S4_Joint_Then_Sell: { enabled: boolean; params: Record<string, any> };
+}
+
+export interface StoreState {
+  assets: Asset[];
+  liabilities: Liability[];
+  incomes: Income[];
+  expenses: Expense[];
+  config: { taxYear: string; currency: string };
+  scenarios: Scenarios;
+  assumptions: Assumptions;
+  children: Children;
+}
+
+const initialState: StoreState = {
   assets: [],
   liabilities: [],
   incomes: [],
@@ -26,46 +100,56 @@ const initialState: any = {
     S2_A_Keeps_Home: { enabled: false, params: {} },
     S3_B_Keeps_Home: { enabled: false, params: {} },
     S4_Joint_Then_Sell: { enabled: false, params: {} },
-    S5_No_Property: { enabled: false, params: {} },
+  },
+  assumptions: {
+    splitRatio: 0.5,
+    splitPropertyToA: 0.5,
+    splitPensionToA: 0.5,
+    projectionYears: 10,
+    inflationRate: 0.02,
+    includeTaxModel: true,
+    includeCMSEstimate: false,
+    mortgageAPR: 0.05,
+    mortgageTermYears: 25,
+  },
+  children: {
+    numChildren: 0,
+    nightsWithA: 182,
+    nightsWithB: 183,
   }
 };
 
 interface AppActions {
-  // Assets
   addAsset: (asset: Omit<Asset, 'id'>) => void;
   updateAsset: (id: string, asset: Partial<Asset>) => void;
   removeAsset: (id: string) => void;
   
-  // Liabilities
   addLiability: (liability: Omit<Liability, 'id'>) => void;
   updateLiability: (id: string, liability: Partial<Liability>) => void;
   removeLiability: (id: string) => void;
 
-  // Incomes
   addIncome: (income: Omit<Income, 'id'>) => void;
   updateIncome: (id: string, income: Partial<Income>) => void;
   removeIncome: (id: string) => void;
 
-  // Expenses
   addExpense: (expense: Omit<Expense, 'id'>) => void;
   updateExpense: (id: string, expense: Partial<Expense>) => void;
   removeExpense: (id: string) => void;
 
-  // Config & Scenarios
-  updateConfig: (config: Partial<AppState['config']>) => void;
-  toggleScenario: (type: keyof typeof ScenarioType.Values, enabled: boolean) => void;
+  updateConfig: (config: Partial<StoreState['config']>) => void;
+  toggleScenario: (type: keyof Scenarios, enabled: boolean) => void;
+  updateAssumptions: (assumptions: Partial<Assumptions>) => void;
+  updateChildren: (children: Partial<Children>) => void;
 
-  // Management
   reset: () => void;
-  loadState: (state: AppState) => void;
+  loadState: (state: StoreState) => void;
 }
 
-export const useAppStore = create<AppState & AppActions>()(
+export const useAppStore = create<StoreState & AppActions>()(
   persist(
     (set) => ({
       ...initialState,
 
-      // Assets
       addAsset: (asset) => set((state) => ({ 
         assets: [...state.assets, { ...asset, id: uuidv4() }] 
       })),
@@ -76,7 +160,6 @@ export const useAppStore = create<AppState & AppActions>()(
         assets: state.assets.filter(a => a.id !== id)
       })),
 
-      // Liabilities
       addLiability: (liability) => set((state) => ({
         liabilities: [...state.liabilities, { ...liability, id: uuidv4() }]
       })),
@@ -87,7 +170,6 @@ export const useAppStore = create<AppState & AppActions>()(
         liabilities: state.liabilities.filter(l => l.id !== id)
       })),
 
-      // Incomes
       addIncome: (income) => set((state) => ({
         incomes: [...state.incomes, { ...income, id: uuidv4() }]
       })),
@@ -98,7 +180,6 @@ export const useAppStore = create<AppState & AppActions>()(
         incomes: state.incomes.filter(i => i.id !== id)
       })),
 
-      // Expenses
       addExpense: (expense) => set((state) => ({
         expenses: [...state.expenses, { ...expense, id: uuidv4() }]
       })),
@@ -109,18 +190,22 @@ export const useAppStore = create<AppState & AppActions>()(
         expenses: state.expenses.filter(e => e.id !== id)
       })),
 
-      // Config & Scenarios
       updateConfig: (configUpdates) => set((state) => ({
         config: { ...state.config, ...configUpdates }
       })),
       toggleScenario: (type, enabled) => set((state) => ({
         scenarios: {
           ...state.scenarios,
-          [type]: { ...state.scenarios[type as any], enabled }
+          [type]: { ...state.scenarios[type], enabled }
         }
       })),
+      updateAssumptions: (updates) => set((state) => ({
+        assumptions: { ...state.assumptions, ...updates }
+      })),
+      updateChildren: (updates) => set((state) => ({
+        children: { ...state.children, ...updates }
+      })),
 
-      // Management
       reset: () => set(initialState),
       loadState: (newState) => set(newState),
     }),

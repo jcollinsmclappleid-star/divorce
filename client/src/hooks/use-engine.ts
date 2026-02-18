@@ -1,113 +1,296 @@
 import { useMemo } from 'react';
-import { useAppStore } from './use-store';
-import { AppState } from '@shared/schema';
+import { useAppStore, StoreState } from './use-store';
+import { loadConfig } from '@/lib/engine/config/loadConfig';
+import { calcIncomeTax, calcPersonalAllowance, round } from '@/lib/engine/calc/incomeTax';
+import { calcNationalInsurance } from '@/lib/engine/calc/nationalInsurance';
+import { calcMortgagePayment } from '@/lib/engine/calc/mortgage';
+import { calculateCMSWeekly as calcCMS } from '@/lib/engine/calc/childMaintenanceEstimate';
 
-// This is a simplified "Engine" for demonstration. 
-// In a real app, this would be much more complex and likely in its own lib/engine folder.
+const config = loadConfig();
 
-export interface SimulationResult {
-  netWorth: {
-    total: number;
-    partyA: number;
-    partyB: number;
-  };
-  liquidity: {
-    partyA: number;
-    partyB: number;
-  };
-  budget: {
-    surplusA: number;
-    surplusB: number;
-  };
-  projection: Array<{
-    year: number;
-    assetsA: number;
-    assetsB: number;
-  }>;
+export interface TaxBreakdown {
+  gross: number;
+  personalAllowance: number;
+  incomeTax: number;
+  nationalInsurance: number;
+  net: number;
 }
 
-export function useEngine() {
+export interface ScenarioResult {
+  id: string;
+  name: string;
+  enabled: boolean;
+  liquidStartA: number;
+  liquidStartB: number;
+  pensionA: number;
+  pensionB: number;
+  totalA: number;
+  totalB: number;
+  buyoutAmount?: number;
+  fundingGap?: number;
+  mortgageCapacity?: number;
+  affordable?: boolean;
+  projectedHomeValue?: number;
+  deferredEquity?: number;
+  deferYears?: number;
+}
+
+export interface ProjectionYear {
+  year: number;
+  capitalA: number;
+  capitalB: number;
+}
+
+export interface EngineResult {
+  netWorth: { total: number; partyA: number; partyB: number };
+  liquidity: { partyA: number; partyB: number };
+  budget: { surplusA: number; surplusB: number };
+  taxA: TaxBreakdown;
+  taxB: TaxBreakdown;
+  cmsWeekly: number;
+  cmsAnnual: number;
+  scenarios: ScenarioResult[];
+  projections: Record<string, ProjectionYear[]>;
+}
+
+function calcTaxForParty(partyIncomes: { amountAnnualGross: number; amountAnnualNet?: number; taxTreatment: string }[]): TaxBreakdown {
+  if (partyIncomes.length === 0) {
+    return { gross: 0, personalAllowance: 0, incomeTax: 0, nationalInsurance: 0, net: 0 };
+  }
+
+  let totalNet = 0;
+  const netProvidedIncomes = partyIncomes.filter(i => i.taxTreatment === 'net_provided');
+  const taxModelIncomes = partyIncomes.filter(i => i.taxTreatment !== 'net_provided');
+
+  totalNet += netProvidedIncomes.reduce((s, i) => s + (i.amountAnnualNet ?? i.amountAnnualGross), 0);
+
+  const taxModelGross = taxModelIncomes.reduce((s, i) => s + i.amountAnnualGross, 0);
+  const totalGross = partyIncomes.reduce((s, i) => s + i.amountAnnualGross, 0);
+
+  const pa = calcPersonalAllowance(taxModelGross, config);
+  const tax = calcIncomeTax(taxModelGross, config);
+  const ni = calcNationalInsurance(taxModelGross, config);
+  totalNet += round(taxModelGross - tax - ni);
+
+  return { gross: totalGross, personalAllowance: pa, incomeTax: tax, nationalInsurance: ni, net: totalNet };
+}
+
+export function useEngine(): EngineResult {
   const state = useAppStore();
 
-  const result = useMemo<SimulationResult>(() => {
-    return calculateScenario(state);
-  }, [state.assets, state.liabilities, state.incomes, state.expenses, state.config]);
-
-  return result;
+  return useMemo(() => {
+    return runEngine(state);
+  }, [
+    state.assets, state.liabilities, state.incomes, state.expenses,
+    state.assumptions, state.children, state.scenarios, state.config
+  ]);
 }
 
-function calculateScenario(state: AppState): SimulationResult {
-  // 1. Calculate Net Worth
-  let assetsA = 0;
-  let assetsB = 0;
-  
-  state.assets.forEach(a => {
-    const val = a.currentValue * (1 - a.saleCostPct - a.taxCostPct);
+function runEngine(state: StoreState): EngineResult {
+  const { assets, liabilities, incomes, expenses, assumptions, children, scenarios } = state;
+
+  const totalAssets = assets.reduce((s, a) => s + a.currentValue, 0);
+  const totalLiabilities = liabilities.reduce((s, l) => s + l.balance, 0);
+
+  let assetsA = 0, assetsB = 0;
+  assets.forEach(a => {
+    const val = a.currentValue;
     if (a.owner === 'A') assetsA += val;
     else if (a.owner === 'B') assetsB += val;
-    else {
-      assetsA += val / 2;
-      assetsB += val / 2;
-    }
+    else { assetsA += val / 2; assetsB += val / 2; }
   });
 
-  let liabilitiesA = 0;
-  let liabilitiesB = 0;
-
-  state.liabilities.forEach(l => {
-    if (l.owner === 'A') liabilitiesA += l.balance;
-    else if (l.owner === 'B') liabilitiesB += l.balance;
-    else {
-      liabilitiesA += l.balance / 2;
-      liabilitiesB += l.balance / 2;
-    }
+  let liabA = 0, liabB = 0;
+  liabilities.forEach(l => {
+    if (l.owner === 'A') liabA += l.balance;
+    else if (l.owner === 'B') liabB += l.balance;
+    else { liabA += l.balance / 2; liabB += l.balance / 2; }
   });
 
-  const netWorthA = assetsA - liabilitiesA;
-  const netWorthB = assetsB - liabilitiesB;
+  const netWorthA = assetsA - liabA;
+  const netWorthB = assetsB - liabB;
 
-  // 2. Calculate Budget
-  let incomeA = state.incomes.filter(i => i.owner === 'A').reduce((sum, i) => sum + (i.amountAnnualNet || i.amountAnnualGross * 0.8), 0);
-  let incomeB = state.incomes.filter(i => i.owner === 'B').reduce((sum, i) => sum + (i.amountAnnualNet || i.amountAnnualGross * 0.8), 0);
+  const liquidAssets = assets.filter(a =>
+    a.liquidity === 'liquid' && a.category !== 'pension'
+  );
+  const liquidA = liquidAssets.filter(a => a.owner === 'A').reduce((s, a) => s + a.currentValue, 0)
+    + liquidAssets.filter(a => a.owner === 'joint').reduce((s, a) => s + a.currentValue / 2, 0);
+  const liquidB = liquidAssets.filter(a => a.owner === 'B').reduce((s, a) => s + a.currentValue, 0)
+    + liquidAssets.filter(a => a.owner === 'joint').reduce((s, a) => s + a.currentValue / 2, 0);
 
-  let expenseA = state.expenses.filter(e => e.owner === 'A').reduce((sum, e) => sum + e.amountAnnual, 0);
-  let expenseB = state.expenses.filter(e => e.owner === 'B').reduce((sum, e) => sum + e.amountAnnual, 0);
-  let expenseShared = state.expenses.filter(e => e.owner === 'shared').reduce((sum, e) => sum + e.amountAnnual, 0);
+  const incomesA = incomes.filter(i => i.owner === 'A');
+  const incomesB = incomes.filter(i => i.owner === 'B');
+  const grossA = incomesA.reduce((s, i) => s + i.amountAnnualGross, 0);
+  const grossB = incomesB.reduce((s, i) => s + i.amountAnnualGross, 0);
 
-  const surplusA = incomeA - expenseA - (expenseShared / 2);
-  const surplusB = incomeB - expenseB - (expenseShared / 2);
+  const taxA = assumptions.includeTaxModel
+    ? calcTaxForParty(incomesA)
+    : { gross: grossA, personalAllowance: 0, incomeTax: 0, nationalInsurance: 0, net: grossA };
+  const taxB = assumptions.includeTaxModel
+    ? calcTaxForParty(incomesB)
+    : { gross: grossB, personalAllowance: 0, incomeTax: 0, nationalInsurance: 0, net: grossB };
 
-  // 3. Simple Projection
-  const projection = [];
-  let currentAssetsA = netWorthA;
-  let currentAssetsB = netWorthB;
+  const expenseA = expenses.filter(e => e.owner === 'A').reduce((s, e) => s + e.amountAnnual, 0);
+  const expenseB = expenses.filter(e => e.owner === 'B').reduce((s, e) => s + e.amountAnnual, 0);
+  const expenseShared = expenses.filter(e => e.owner === 'shared').reduce((s, e) => s + e.amountAnnual, 0);
 
-  for (let i = 0; i <= 10; i++) {
-    projection.push({
-      year: new Date().getFullYear() + i,
-      assetsA: currentAssetsA,
-      assetsB: currentAssetsB,
+  const surplusA = taxA.net - expenseA - (expenseShared / 2);
+  const surplusB = taxB.net - expenseB - (expenseShared / 2);
+
+  let cmsWeekly = 0;
+  let cmsAnnual = 0;
+  if (assumptions.includeCMSEstimate && children.numChildren > 0) {
+    cmsWeekly = calcCMS(grossA, children.numChildren, children.nightsWithA, config);
+    cmsAnnual = round(cmsWeekly * 52);
+  }
+
+  const primaryHome = assets.find(a => a.category === 'primary_home');
+  const homeValue = primaryHome?.currentValue ?? 0;
+  const homeMortgages = liabilities.filter(l =>
+    l.securedAgainstAssetId === primaryHome?.id || l.category === 'mortgage'
+  );
+  const totalHomeMortgage = homeMortgages.reduce((s, l) => s + l.balance, 0);
+  const homeSaleCostPct = primaryHome?.saleCostPct ?? config.defaults.saleCostPctByAssetCategory.primary_home;
+  const grossEquity = homeValue - totalHomeMortgage;
+  const homeSaleCosts = homeValue * homeSaleCostPct;
+  const netHomeEquity = Math.max(0, grossEquity - homeSaleCosts);
+
+  const pensions = assets.filter(a => a.category === 'pension');
+  const totalPensionCETV = pensions.reduce((s, p) => s + (p.cetv ?? p.currentValue), 0);
+  const pensionToA = totalPensionCETV * assumptions.splitPensionToA;
+  const pensionToB = totalPensionCETV * (1 - assumptions.splitPensionToA);
+
+  const totalLiquid = liquidAssets.reduce((s, a) => s + a.currentValue, 0);
+  const otherProperties = assets.filter(a => a.category === 'other_property');
+  const otherPropEquity = otherProperties.reduce((acc, p) => {
+    const morts = liabilities.filter(l => l.securedAgainstAssetId === p.id);
+    const mortBal = morts.reduce((s, l) => s + l.balance, 0);
+    const sc = p.saleCostPct ?? config.defaults.saleCostPctByAssetCategory.other_property;
+    return acc + Math.max(0, p.currentValue - mortBal - (p.currentValue * sc));
+  }, 0);
+
+  const scenarioResults: ScenarioResult[] = [];
+
+  if (scenarios.S1_Sell_Split.enabled) {
+    const pool = totalLiquid + netHomeEquity + otherPropEquity;
+    const liqA = round(pool * assumptions.splitRatio);
+    const liqB = round(pool * (1 - assumptions.splitRatio));
+    scenarioResults.push({
+      id: 'S1',
+      name: 'Clean Break (Sell & Split)',
+      enabled: true,
+      liquidStartA: liqA,
+      liquidStartB: liqB,
+      pensionA: round(pensionToA),
+      pensionB: round(pensionToB),
+      totalA: round(liqA + pensionToA),
+      totalB: round(liqB + pensionToB),
     });
+  }
 
-    // Grow by inflation + surplus
-    currentAssetsA = currentAssetsA * (1 + state.config.inflationRate) + surplusA;
-    currentAssetsB = currentAssetsB * (1 + state.config.inflationRate) + surplusB;
+  if (scenarios.S2_A_Keeps_Home.enabled) {
+    const buyoutToB = round(netHomeEquity * (1 - assumptions.splitPropertyToA));
+    const liquidShareA = totalLiquid * assumptions.splitRatio;
+    const fundingGap = Math.max(0, round(buyoutToB - liquidShareA));
+    const capacity = round(grossA * (config.affordability.incomeMultipleRule.multiple));
+    const liqA = round(Math.max(0, liquidShareA - buyoutToB));
+    const liqB = round(totalLiquid * (1 - assumptions.splitRatio) + buyoutToB);
+    scenarioResults.push({
+      id: 'S2',
+      name: 'Party A Keeps Home',
+      enabled: true,
+      liquidStartA: liqA,
+      liquidStartB: liqB,
+      pensionA: round(pensionToA),
+      pensionB: round(pensionToB),
+      totalA: round(liqA + homeValue - totalHomeMortgage + pensionToA),
+      totalB: round(liqB + pensionToB),
+      buyoutAmount: buyoutToB,
+      fundingGap,
+      mortgageCapacity: capacity,
+      affordable: capacity >= totalHomeMortgage,
+    });
+  }
+
+  if (scenarios.S3_B_Keeps_Home.enabled) {
+    const buyoutToA = round(netHomeEquity * assumptions.splitPropertyToA);
+    const liquidShareB = totalLiquid * (1 - assumptions.splitRatio);
+    const fundingGap = Math.max(0, round(buyoutToA - liquidShareB));
+    const capacity = round(grossB * (config.affordability.incomeMultipleRule.multiple));
+    const liqA = round(totalLiquid * assumptions.splitRatio + buyoutToA);
+    const liqB = round(Math.max(0, liquidShareB - buyoutToA));
+    scenarioResults.push({
+      id: 'S3',
+      name: 'Party B Keeps Home',
+      enabled: true,
+      liquidStartA: liqA,
+      liquidStartB: liqB,
+      pensionA: round(pensionToA),
+      pensionB: round(pensionToB),
+      totalA: round(liqA + pensionToA),
+      totalB: round(liqB + homeValue - totalHomeMortgage + pensionToB),
+      buyoutAmount: buyoutToA,
+      fundingGap,
+      mortgageCapacity: capacity,
+      affordable: capacity >= totalHomeMortgage,
+    });
+  }
+
+  if (scenarios.S4_Joint_Then_Sell.enabled) {
+    const deferYears = 3;
+    const growthRate = config.defaults.housePriceGrowthRate;
+    const projectedHome = round(homeValue * Math.pow(1 + growthRate, deferYears));
+    const projectedMort = totalHomeMortgage;
+    const projectedEquity = Math.max(0, round(projectedHome - projectedMort - projectedHome * homeSaleCostPct));
+    const liqA = round(totalLiquid * assumptions.splitRatio);
+    const liqB = round(totalLiquid * (1 - assumptions.splitRatio));
+    scenarioResults.push({
+      id: 'S4',
+      name: 'Mesher Order (Deferred Sale)',
+      enabled: true,
+      liquidStartA: liqA,
+      liquidStartB: liqB,
+      pensionA: round(pensionToA),
+      pensionB: round(pensionToB),
+      totalA: round(liqA + projectedEquity * assumptions.splitRatio + pensionToA),
+      totalB: round(liqB + projectedEquity * (1 - assumptions.splitRatio) + pensionToB),
+      projectedHomeValue: projectedHome,
+      deferredEquity: projectedEquity,
+      deferYears,
+    });
+  }
+
+  const projections: Record<string, ProjectionYear[]> = {};
+  for (const sc of scenarioResults) {
+    const years: ProjectionYear[] = [];
+    let capA = sc.liquidStartA;
+    let capB = sc.liquidStartB;
+    const currentYear = new Date().getFullYear();
+    const inflRate = assumptions.inflationRate;
+    let annualSurplusA = surplusA - (assumptions.includeCMSEstimate ? cmsAnnual : 0);
+    let annualSurplusB = surplusB + (assumptions.includeCMSEstimate ? cmsAnnual : 0);
+
+    for (let y = 0; y <= assumptions.projectionYears; y++) {
+      years.push({ year: currentYear + y, capitalA: round(capA), capitalB: round(capB) });
+
+      const assetGrowth = 1 + inflRate;
+      capA = capA * assetGrowth + annualSurplusA;
+      capB = capB * assetGrowth + annualSurplusB;
+      annualSurplusA *= (1 + inflRate);
+      annualSurplusB *= (1 + inflRate);
+    }
+    projections[sc.id] = years;
   }
 
   return {
-    netWorth: {
-      total: netWorthA + netWorthB,
-      partyA: netWorthA,
-      partyB: netWorthB,
-    },
-    liquidity: {
-      partyA: netWorthA * 0.6, // Mock liquidity calculation
-      partyB: netWorthB * 0.6,
-    },
-    budget: {
-      surplusA,
-      surplusB,
-    },
-    projection
+    netWorth: { total: round(netWorthA + netWorthB), partyA: round(netWorthA), partyB: round(netWorthB) },
+    liquidity: { partyA: round(liquidA), partyB: round(liquidB) },
+    budget: { surplusA: round(surplusA), surplusB: round(surplusB) },
+    taxA,
+    taxB,
+    cmsWeekly,
+    cmsAnnual,
+    scenarios: scenarioResults,
+    projections,
   };
 }
