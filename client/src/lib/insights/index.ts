@@ -12,3 +12,12 @@ export type { ComparisonDelta } from "./compareToSell";
 
 export { buildMonthlySnapshot } from "./monthlySnapshot";
 export type { MonthlySnapshotResult, MonthlyLine } from "./monthlySnapshot";
+
+export { generateNegotiationLevers } from "./negotiationLevers";
+export type { NegotiationLever } from "./negotiationLevers";
+
+export { computeSensitivityRanking } from "./sensitivityRanking";
+export type { SensitivityFactor } from "./sensitivityRanking";
+
+export { computeHousingFeasibility } from "./housingFeasibility";
+export type { HousingFeasibility } from "./housingFeasibility";

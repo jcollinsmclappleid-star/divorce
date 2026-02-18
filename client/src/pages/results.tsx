@@ -17,7 +17,8 @@ import {
 import {
   Calculator, ChevronLeft, Check, X, AlertTriangle,
   TrendingUp, Edit, Shield, ArrowDown, ArrowUp, Minus,
-  DollarSign, Home, Info
+  DollarSign, Home, Info, Lightbulb, BarChart3, Eye,
+  Target, Activity, Building2
 } from "lucide-react";
 import {
   generateScenarioNarrative,
@@ -25,8 +26,16 @@ import {
   computeStabilityScore,
   compareToSell,
   buildMonthlySnapshot,
+  generateNegotiationLevers,
+  computeSensitivityRanking,
+  computeHousingFeasibility,
 } from "@/lib/insights";
-import type { ScenarioNarrative, SourceOfFunds, StabilityResult, ComparisonDelta, MonthlySnapshotResult } from "@/lib/insights";
+import type {
+  ScenarioNarrative, SourceOfFunds, StabilityResult, ComparisonDelta, MonthlySnapshotResult,
+  NegotiationLever, SensitivityFactor, HousingFeasibility,
+} from "@/lib/insights";
+
+type ViewLens = "liquidity" | "networth" | "risk";
 
 const SCENARIO_META: Record<string, { label: string; shortLabel: string; color: string; description: string }> = {
   S1: { label: "Sell & Split", shortLabel: "Sell & Split", color: "#2563EB", description: "Home is sold, proceeds divided" },
@@ -40,6 +49,7 @@ export default function ResultsPage() {
   const { assumptions, updateAssumptions } = store;
   const engine = useEngine();
   const [activeTab, setActiveTab] = useState<string | null>(null);
+  const [viewLens, setViewLens] = useState<ViewLens>("liquidity");
 
   const allScenarios = computeAllScenarios(engine);
   const displayScenarios = allScenarios.filter(s => s.id !== "S4");
@@ -123,15 +133,20 @@ export default function ResultsPage() {
         </div>
       </div>
 
-      <main className="flex-1 container mx-auto px-4 py-6 max-w-6xl">
-        <div className="space-y-8">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-results-title">
-              Settlement Comparison
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Compare how different settlement options affect both parties. Adjust the sliders above to explore different splits.
-            </p>
+      <main className="flex-1 container mx-auto px-4 py-8 max-w-6xl">
+        <div className="space-y-10">
+          <div className="space-y-4">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight" data-testid="text-results-title">
+                Structured Financial Brief
+              </h1>
+              <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed max-w-2xl">
+                Compare how different settlement options affect both parties. Adjust the sliders above to explore different splits. 
+                Use the view modes below to focus on what matters most to you.
+              </p>
+            </div>
+
+            <DecisionLensToggle viewLens={viewLens} setViewLens={setViewLens} />
           </div>
 
           {displayScenarios.length > 0 ? (
@@ -140,12 +155,28 @@ export default function ResultsPage() {
                 scenarios={displayScenarios}
                 projections={engine.projections}
                 stabilityScores={stabilityScores}
+                viewLens={viewLens}
+                engine={engine}
+                store={store}
               />
 
+              <TwelveMonthSnapshot
+                scenarios={displayScenarios}
+                projections={engine.projections}
+                engine={engine}
+              />
+
+              <ScenarioStructureTable
+                scenarios={displayScenarios}
+                engine={engine}
+              />
+
+              <Separator />
+
               <div>
-                <h2 className="text-xl font-display font-bold mb-3">Scenario Analysis</h2>
-                <p className="text-sm text-muted-foreground mb-4">Select a scenario to see a detailed breakdown of where the money comes from, risk analysis, and projections.</p>
-                <div className="flex flex-wrap gap-2 mb-4">
+                <h2 className="text-xl font-display font-bold mb-2 tracking-tight">Scenario Analysis</h2>
+                <p className="text-sm text-muted-foreground mb-4">Select a scenario for a detailed breakdown including narrative analysis, source of funds, risk assessment, and projections.</p>
+                <div className="flex flex-wrap gap-2 mb-6">
                   {allScenarios.map(s => (
                     <Button
                       key={s.id}
@@ -173,12 +204,22 @@ export default function ResultsPage() {
                 )}
               </div>
 
+              <Separator />
+
+              <SensitivityPanel
+                scenarios={displayScenarios}
+                engine={engine}
+                store={store}
+              />
+
               <StressTestPanel />
 
               {allScenarios.length > 1 && (
                 <Card>
-                  <CardHeader>
-                    <CardTitle className="text-base">Total Position by Scenario</CardTitle>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <BarChart3 className="w-4 h-4" /> Total Position by Scenario
+                    </CardTitle>
                     <CardDescription>Net worth including liquid capital, home equity, and pensions</CardDescription>
                   </CardHeader>
                   <CardContent className="h-[300px]">
@@ -202,6 +243,20 @@ export default function ResultsPage() {
                   </CardContent>
                 </Card>
               )}
+
+              <div className="p-4 bg-muted/30 rounded-md text-xs text-muted-foreground space-y-2" data-testid="section-assumptions-appendix">
+                <h3 className="text-sm font-semibold text-foreground">Assumptions</h3>
+                <div className="grid gap-x-8 gap-y-1 sm:grid-cols-2">
+                  <div className="flex justify-between gap-2"><span>Asset split (A : B)</span><span className="tabular-nums">{Math.round(assumptions.splitRatio * 100)}% : {Math.round((1 - assumptions.splitRatio) * 100)}%</span></div>
+                  <div className="flex justify-between gap-2"><span>Pension split (A : B)</span><span className="tabular-nums">{Math.round(assumptions.splitPensionToA * 100)}% : {Math.round((1 - assumptions.splitPensionToA) * 100)}%</span></div>
+                  <div className="flex justify-between gap-2"><span>Mortgage rate</span><span className="tabular-nums">{(assumptions.mortgageAPR * 100).toFixed(1)}%</span></div>
+                  <div className="flex justify-between gap-2"><span>Mortgage term</span><span className="tabular-nums">{assumptions.mortgageTermYears} years</span></div>
+                  <div className="flex justify-between gap-2"><span>Inflation rate</span><span className="tabular-nums">{(assumptions.inflationRate * 100).toFixed(1)}%</span></div>
+                  <div className="flex justify-between gap-2"><span>Projection period</span><span className="tabular-nums">{assumptions.projectionYears} years</span></div>
+                  <div className="flex justify-between gap-2"><span>Tax model</span><span>{assumptions.includeTaxModel ? "2025/26 UK rates" : "Disabled"}</span></div>
+                  <div className="flex justify-between gap-2"><span>Child maintenance</span><span>{assumptions.includeCMSEstimate ? "CMS estimate" : "Not included"}</span></div>
+                </div>
+              </div>
             </>
           ) : (
             <Card>
@@ -214,13 +269,356 @@ export default function ResultsPage() {
         </div>
       </main>
 
-      <footer className="border-t py-6 mt-auto bg-muted/30">
-        <div className="container mx-auto px-4 text-center text-muted-foreground text-xs space-y-1">
+      <footer className="border-t py-8 mt-auto bg-muted/30">
+        <div className="container mx-auto px-4 text-center text-muted-foreground text-xs space-y-1.5">
           <p className="font-medium">Illustrative modelling only. Not legal, tax or financial advice.</p>
-          <p>Data is stored locally in your browser unless explicitly saved.</p>
+          <p>Data is stored locally in your browser unless explicitly saved. No data is transmitted to any server for calculations.</p>
         </div>
       </footer>
     </div>
+  );
+}
+
+function DecisionLensToggle({ viewLens, setViewLens }: { viewLens: ViewLens; setViewLens: (v: ViewLens) => void }) {
+  const lenses: { id: ViewLens; label: string; icon: typeof DollarSign; description: string }[] = [
+    { id: "liquidity", label: "Liquidity Focus", icon: DollarSign, description: "Starting cash, monthly surplus, runway" },
+    { id: "networth", label: "Net Worth Focus", icon: Target, description: "Total position, property, pension concentration" },
+    { id: "risk", label: "Risk & Sustainability", icon: Activity, description: "Stability scores, funding gaps, affordability" },
+  ];
+
+  return (
+    <div className="flex flex-wrap gap-2" data-testid="section-decision-lens">
+      <Label className="text-xs text-muted-foreground w-full flex items-center gap-1.5">
+        <Eye className="w-3 h-3" /> View Mode
+      </Label>
+      {lenses.map(l => (
+        <Button
+          key={l.id}
+          variant={viewLens === l.id ? "default" : "outline"}
+          size="sm"
+          onClick={() => setViewLens(l.id)}
+          data-testid={`button-lens-${l.id}`}
+        >
+          <l.icon className="w-3.5 h-3.5 mr-1.5" />
+          {l.label}
+        </Button>
+      ))}
+    </div>
+  );
+}
+
+function TwelveMonthSnapshot({
+  scenarios,
+  projections,
+  engine,
+}: {
+  scenarios: ScenarioResult[];
+  projections: Record<string, ProjectionYear[]>;
+  engine: ReturnType<typeof useEngine>;
+}) {
+  return (
+    <Card data-testid="card-12-month-snapshot">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base flex items-center gap-2">
+          <Activity className="w-4 h-4" /> Position After 12 Months
+        </CardTitle>
+        <CardDescription>How each scenario looks after the first year — immediate stability at a glance</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="min-w-[180px]"></TableHead>
+                {scenarios.map(s => (
+                  <TableHead key={s.id} className="text-center min-w-[130px]">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: SCENARIO_META[s.id]?.color }} />
+                      <span className="text-xs">{SCENARIO_META[s.id]?.shortLabel ?? s.name}</span>
+                    </div>
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-a">Party A liquid remaining</TableCell>
+                {scenarios.map(s => {
+                  const proj = projections[s.id];
+                  const yr1 = proj && proj.length > 1 ? proj[1] : null;
+                  return (
+                    <TableCell key={s.id} className="text-center tabular-nums text-sm" data-testid={`value-yr1-liquid-a-${s.id}`}>
+                      {yr1 ? <span className={yr1.capitalA < 0 ? "text-red-600 font-semibold" : "text-blue-600 font-semibold"}>{formatCurrency(yr1.capitalA)}</span> : <span className="text-muted-foreground">—</span>}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+              <TableRow>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-b">Party B liquid remaining</TableCell>
+                {scenarios.map(s => {
+                  const proj = projections[s.id];
+                  const yr1 = proj && proj.length > 1 ? proj[1] : null;
+                  return (
+                    <TableCell key={s.id} className="text-center tabular-nums text-sm" data-testid={`value-yr1-liquid-b-${s.id}`}>
+                      {yr1 ? <span className={yr1.capitalB < 0 ? "text-red-600 font-semibold" : "text-emerald-600 font-semibold"}>{formatCurrency(yr1.capitalB)}</span> : <span className="text-muted-foreground">—</span>}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+              <TableRow>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-a">Monthly surplus (A)</TableCell>
+                {scenarios.map(s => {
+                  const proj = projections[s.id];
+                  const yr0Capital = proj && proj.length > 0 ? proj[0].capitalA : s.liquidStartA;
+                  const yr1Capital = proj && proj.length > 1 ? proj[1].capitalA : yr0Capital;
+                  const annualCashFlow = yr1Capital - yr0Capital;
+                  const surplus = Math.round(annualCashFlow / 12);
+                  return (
+                    <TableCell key={s.id} className="text-center tabular-nums text-sm" data-testid={`value-yr1-surplus-a-${s.id}`}>
+                      <span className={surplus < 0 ? "text-red-600" : "text-emerald-600"}>{surplus < 0 ? `(${formatCurrency(Math.abs(surplus))})` : formatCurrency(surplus)}/mo</span>
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+              <TableRow>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-b">Monthly surplus (B)</TableCell>
+                {scenarios.map(s => {
+                  const proj = projections[s.id];
+                  const yr0Capital = proj && proj.length > 0 ? proj[0].capitalB : s.liquidStartB;
+                  const yr1Capital = proj && proj.length > 1 ? proj[1].capitalB : yr0Capital;
+                  const annualCashFlow = yr1Capital - yr0Capital;
+                  const surplus = Math.round(annualCashFlow / 12);
+                  return (
+                    <TableCell key={s.id} className="text-center tabular-nums text-sm" data-testid={`value-yr1-surplus-b-${s.id}`}>
+                      <span className={surplus < 0 ? "text-red-600" : "text-emerald-600"}>{surplus < 0 ? `(${formatCurrency(Math.abs(surplus))})` : formatCurrency(surplus)}/mo</span>
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+              <TableRow>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-buffer-a">Months of buffer (A)</TableCell>
+                {scenarios.map(s => {
+                  const proj = projections[s.id];
+                  const yr0Cap = proj && proj.length > 0 ? proj[0].capitalA : s.liquidStartA;
+                  const yr1Cap = proj && proj.length > 1 ? proj[1].capitalA : yr0Cap;
+                  const annualCashFlow = yr1Cap - yr0Cap;
+                  const monthlyBurn = annualCashFlow < 0 ? Math.abs(annualCashFlow) / 12 : 0;
+                  const bufferMonths = monthlyBurn > 0 ? Math.round(yr0Cap / monthlyBurn) : yr0Cap > 0 ? 99 : 0;
+                  const displayBuffer = Math.min(bufferMonths, 99);
+                  return (
+                    <TableCell key={s.id} className="text-center tabular-nums text-sm" data-testid={`value-yr1-buffer-a-${s.id}`}>
+                      <span className={displayBuffer < 6 ? "text-red-600" : displayBuffer < 12 ? "text-amber-600" : "text-emerald-600"}>
+                        {displayBuffer >= 99 ? "99+" : displayBuffer} months
+                      </span>
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function ScenarioStructureTable({
+  scenarios,
+  engine,
+}: {
+  scenarios: ScenarioResult[];
+  engine: ReturnType<typeof useEngine>;
+}) {
+  const { intermediate } = engine;
+
+  const getImmediateLiquidity = (s: ScenarioResult): string => {
+    const totalLiq = s.liquidStartA + s.liquidStartB;
+    if (totalLiq > 200000) return "High";
+    if (totalLiq > 50000) return "Medium";
+    return "Low";
+  };
+
+  const getLiquidityColor = (label: string) => {
+    if (label === "High") return "text-emerald-600 bg-emerald-50 border-emerald-200";
+    if (label === "Medium") return "text-amber-600 bg-amber-50 border-amber-200";
+    return "text-red-600 bg-red-50 border-red-200";
+  };
+
+  const hasMortgage = (s: ScenarioResult) => ((s.mortgageMonthlyA ?? 0) + (s.mortgageMonthlyB ?? 0)) > 0;
+
+  const propertyConcentration = (s: ScenarioResult) => {
+    const totalA = s.totalA || 1;
+    const totalB = s.totalB || 1;
+    const propA = ((s.homeEquityA ?? 0) / totalA * 100);
+    const propB = ((s.homeEquityB ?? 0) / totalB * 100);
+    return { A: Math.round(propA), B: Math.round(propB) };
+  };
+
+  const getComplexity = (s: ScenarioResult): string => {
+    if (s.id === "S1") return "Low";
+    if ((s.fundingGap ?? 0) > 0) return "High";
+    return "Medium";
+  };
+
+  return (
+    <Card data-testid="card-scenario-structure">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base flex items-center gap-2">
+          <BarChart3 className="w-4 h-4" /> Scenario Structure Comparison
+        </CardTitle>
+        <CardDescription>Qualitative comparison of key structural features across scenarios</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="min-w-[180px]">Feature</TableHead>
+                {scenarios.map(s => (
+                  <TableHead key={s.id} className="text-center min-w-[120px]">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: SCENARIO_META[s.id]?.color }} />
+                      <span className="text-xs">{SCENARIO_META[s.id]?.shortLabel ?? s.name}</span>
+                    </div>
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="text-sm text-muted-foreground">Immediate liquidity</TableCell>
+                {scenarios.map(s => {
+                  const label = getImmediateLiquidity(s);
+                  return (
+                    <TableCell key={s.id} className="text-center">
+                      <Badge variant="outline" className={getLiquidityColor(label)}>{label}</Badge>
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+              <TableRow>
+                <TableCell className="text-sm text-muted-foreground">Mortgage dependency</TableCell>
+                {scenarios.map(s => (
+                  <TableCell key={s.id} className="text-center text-sm">
+                    {hasMortgage(s)
+                      ? <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50">Yes</Badge>
+                      : <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50">None</Badge>}
+                  </TableCell>
+                ))}
+              </TableRow>
+              <TableRow>
+                <TableCell className="text-sm text-muted-foreground">Property concentration</TableCell>
+                {scenarios.map(s => {
+                  const conc = propertyConcentration(s);
+                  return (
+                    <TableCell key={s.id} className="text-center text-xs tabular-nums">
+                      {conc.A > 0 || conc.B > 0 ? (
+                        <span>A: {conc.A}% / B: {conc.B}%</span>
+                      ) : <span className="text-muted-foreground">None</span>}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+              <TableRow>
+                <TableCell className="text-sm text-muted-foreground">Pension concentration</TableCell>
+                {scenarios.map(s => {
+                  const totalA = s.totalA || 1;
+                  const totalB = s.totalB || 1;
+                  const penA = Math.round(s.pensionA / totalA * 100);
+                  const penB = Math.round(s.pensionB / totalB * 100);
+                  return (
+                    <TableCell key={s.id} className="text-center text-xs tabular-nums">
+                      {penA > 0 || penB > 0 ? <span>A: {penA}% / B: {penB}%</span> : <span className="text-muted-foreground">None</span>}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+              <TableRow>
+                <TableCell className="text-sm text-muted-foreground">Complexity level</TableCell>
+                {scenarios.map(s => {
+                  const comp = getComplexity(s);
+                  return (
+                    <TableCell key={s.id} className="text-center">
+                      <Badge variant="outline" className={comp === "Low" ? "text-emerald-600 border-emerald-200 bg-emerald-50" : comp === "Medium" ? "text-amber-600 border-amber-200 bg-amber-50" : "text-red-600 border-red-200 bg-red-50"}>
+                        {comp}
+                      </Badge>
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function SensitivityPanel({
+  scenarios,
+  engine,
+  store,
+}: {
+  scenarios: ScenarioResult[];
+  engine: ReturnType<typeof useEngine>;
+  store: ReturnType<typeof useAppStore>;
+}) {
+  const { intermediate, budget } = engine;
+  const scenario = scenarios[0];
+  if (!scenario) return null;
+
+  const ranking = useMemo(() =>
+    computeSensitivityRanking(
+      scenario, store, budget.surplusA, budget.surplusB,
+      intermediate.totalLiquid, intermediate.netHomeEquity, intermediate.totalMortgage,
+    ),
+    [scenario, store, budget, intermediate]
+  );
+
+  const rankIcons = ["1st", "2nd", "3rd"];
+
+  return (
+    <Card data-testid="card-sensitivity">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base flex items-center gap-2">
+          <Activity className="w-4 h-4" /> What Changes Matter Most?
+        </CardTitle>
+        <CardDescription>
+          Ranked by how much each factor affects your financial position. This shows which assumptions have the largest impact on sustainability.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {ranking.map((f, i) => (
+            <div key={f.factor} className="flex items-start gap-4 p-3 rounded-md border" data-testid={`sensitivity-factor-${f.rank}`}>
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0">
+                {rankIcons[i] ?? `${i + 1}`}
+              </div>
+              <div className="flex-1 min-w-0 space-y-1">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <span className="text-sm font-semibold">{f.factor}</span>
+                  <Badge variant="outline" className="text-xs">{f.description}</Badge>
+                </div>
+                <div className="grid gap-1 sm:grid-cols-2 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-1.5">
+                    <span>Impact on A's surplus:</span>
+                    <span className={`tabular-nums font-medium ${f.impactOnSurplusA < 0 ? "text-red-600" : f.impactOnSurplusA > 0 ? "text-emerald-600" : ""}`}>
+                      {f.impactOnSurplusA > 0 ? "+" : ""}{formatCurrency(f.impactOnSurplusA)}/yr
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span>Impact on B's surplus:</span>
+                    <span className={`tabular-nums font-medium ${f.impactOnSurplusB < 0 ? "text-red-600" : f.impactOnSurplusB > 0 ? "text-emerald-600" : ""}`}>
+                      {f.impactOnSurplusB > 0 ? "+" : ""}{formatCurrency(f.impactOnSurplusB)}/yr
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -228,10 +626,16 @@ function ExecutiveTable({
   scenarios,
   projections,
   stabilityScores,
+  viewLens,
+  engine,
+  store,
 }: {
   scenarios: ScenarioResult[];
   projections: Record<string, ProjectionYear[]>;
   stabilityScores: Record<string, StabilityResult>;
+  viewLens: ViewLens;
+  engine: ReturnType<typeof useEngine>;
+  store: ReturnType<typeof useAppStore>;
 }) {
   return (
     <Card data-testid="card-executive-table">
@@ -259,19 +663,19 @@ function ExecutiveTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
+              <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
                 <TableCell className="font-medium text-muted-foreground">Party A liquid cash</TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums font-semibold text-blue-600">{formatCurrency(s.liquidStartA)}</TableCell>
                 ))}
               </TableRow>
-              <TableRow>
+              <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
                 <TableCell className="font-medium text-muted-foreground">Party B liquid cash</TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums font-semibold text-emerald-600">{formatCurrency(s.liquidStartB)}</TableCell>
                 ))}
               </TableRow>
-              <TableRow>
+              <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
                 <TableCell className="font-medium text-muted-foreground">Buyout required</TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums">
@@ -279,7 +683,7 @@ function ExecutiveTable({
                   </TableCell>
                 ))}
               </TableRow>
-              <TableRow>
+              <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
                 <TableCell className="font-medium text-muted-foreground">Funding gap</TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums">
@@ -300,7 +704,7 @@ function ExecutiveTable({
                   );
                 })}
               </TableRow>
-              <TableRow>
+              <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
                 <TableCell className="font-medium text-muted-foreground">5-year runway</TableCell>
                 {scenarios.map(s => {
                   const runway = getRunway(projections[s.id]);
@@ -313,7 +717,7 @@ function ExecutiveTable({
                   );
                 })}
               </TableRow>
-              <TableRow>
+              <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
                 <TableCell className="font-medium text-muted-foreground">Stability (A)</TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
@@ -324,7 +728,7 @@ function ExecutiveTable({
                   );
                 })}
               </TableRow>
-              <TableRow>
+              <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
                 <TableCell className="font-medium text-muted-foreground">Stability (B)</TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
@@ -335,13 +739,13 @@ function ExecutiveTable({
                   );
                 })}
               </TableRow>
-              <TableRow className="font-bold">
+              <TableRow className={`font-bold ${viewLens === "networth" ? "bg-primary/5" : ""}`}>
                 <TableCell className="text-foreground">Net worth (A)</TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums text-blue-600 text-base">{formatCurrency(s.totalA)}</TableCell>
                 ))}
               </TableRow>
-              <TableRow className="font-bold">
+              <TableRow className={`font-bold ${viewLens === "networth" ? "bg-primary/5" : ""}`}>
                 <TableCell className="text-foreground">Net worth (B)</TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center tabular-nums text-emerald-600 text-base">{formatCurrency(s.totalB)}</TableCell>
@@ -413,10 +817,26 @@ function ScenarioDetailCard({
     }
   }, [scenario, sellScenario, projection, sellProjection]);
 
+  const housingFeasibility = useMemo(() => {
+    const isKeeperA = scenario.id === "S2";
+    const keeperGross = isKeeperA ? engine.taxA.gross : engine.taxB.gross;
+    const keeperNet = isKeeperA ? engine.taxA.net : engine.taxB.net;
+    return computeHousingFeasibility(scenario, keeperGross, keeperNet, intermediate.homeValue, intermediate.totalMortgage);
+  }, [scenario, engine.taxA, engine.taxB, intermediate]);
+
+  const negotiationLevers = useMemo(() =>
+    generateNegotiationLevers(
+      scenario, store, projection ?? undefined,
+      engine.budget.surplusA, engine.budget.surplusB,
+      intermediate.totalLiquid, intermediate.netHomeEquity, intermediate.totalMortgage,
+    ),
+    [scenario, store, projection, engine.budget, intermediate]
+  );
+
   return (
     <Card data-testid={`card-detail-${scenario.id}`}>
       <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-2">
+        <div className="flex items-start justify-between gap-2 flex-wrap">
           <div>
             <CardTitle className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full" style={{ backgroundColor: SCENARIO_META[scenario.id]?.color }} />
@@ -438,12 +858,16 @@ function ScenarioDetailCard({
           <CompositionChart scenario={scenario} />
         </div>
 
+        {housingFeasibility && <HousingFeasibilityPanel feasibility={housingFeasibility} scenarioId={scenario.id} />}
+
         <div className="grid gap-6 lg:grid-cols-2">
           <StabilitySection score={stabilityScore} />
           <MonthlySnapshotSection snapshot={monthlySnapshot} />
         </div>
 
         {comparison && <ComparisonDeltaPanel delta={comparison} scenarioId={scenario.id} />}
+
+        {negotiationLevers.length > 0 && <NegotiationLeversPanel levers={negotiationLevers} />}
 
         {projection && projection.length > 1 && (
           <div>
@@ -702,6 +1126,87 @@ function MonthlySnapshotSection({ snapshot }: { snapshot: MonthlySnapshotResult 
           </TableRow>
         </TableBody>
       </Table>
+    </div>
+  );
+}
+
+function HousingFeasibilityPanel({ feasibility, scenarioId }: { feasibility: HousingFeasibility; scenarioId: string }) {
+  const keeper = scenarioId === "S2" ? "A" : "B";
+  return (
+    <div className="p-4 border rounded-md space-y-3" data-testid="section-housing-feasibility">
+      <h3 className="text-sm font-semibold flex items-center gap-1.5">
+        <Building2 className="w-3.5 h-3.5" /> Housing Feasibility — Party {keeper}
+      </h3>
+      <div className="grid gap-3 sm:grid-cols-3">
+        <div className="space-y-0.5">
+          <span className="text-xs text-muted-foreground">Mortgage required</span>
+          <p className="text-sm font-semibold tabular-nums" data-testid="text-hf-mortgage-required">{formatCurrency(feasibility.mortgageRequired)}</p>
+        </div>
+        <div className="space-y-0.5">
+          <span className="text-xs text-muted-foreground">Estimated monthly payment</span>
+          <p className="text-sm font-semibold tabular-nums" data-testid="text-hf-monthly-payment">{formatCurrency(feasibility.estimatedMonthlyPayment)}/mo</p>
+        </div>
+        <div className="space-y-0.5">
+          <span className="text-xs text-muted-foreground">Income multiple</span>
+          <p className={`text-sm font-semibold tabular-nums ${feasibility.withinLendingCriteria ? "text-emerald-600" : "text-red-600"}`} data-testid="text-hf-income-multiple">
+            {feasibility.incomeMultiple.toFixed(1)}x
+            <span className="text-xs text-muted-foreground font-normal ml-1">(max {feasibility.typicalMaxMultiple}x)</span>
+          </p>
+        </div>
+        <div className="space-y-0.5">
+          <span className="text-xs text-muted-foreground">Available liquid capital</span>
+          <p className="text-sm font-semibold tabular-nums" data-testid="text-hf-available-capital">{formatCurrency(feasibility.availableDeposit)}</p>
+        </div>
+        <div className="space-y-0.5">
+          <span className="text-xs text-muted-foreground">Equity position</span>
+          <p className="text-sm font-semibold tabular-nums" data-testid="text-hf-equity-position">{feasibility.depositPercentage.toFixed(0)}%</p>
+        </div>
+        <div className="space-y-0.5">
+          <span className="text-xs text-muted-foreground">Payment as % of net income</span>
+          <p className={`text-sm font-semibold tabular-nums ${feasibility.monthlyPaymentAsPercentOfNetIncome > 35 ? "text-amber-600" : "text-emerald-600"}`} data-testid="text-hf-payment-pct">
+            {feasibility.monthlyPaymentAsPercentOfNetIncome.toFixed(0)}%
+          </p>
+        </div>
+      </div>
+      {feasibility.notes.length > 0 && (
+        <ul className="space-y-1 mt-2">
+          {feasibility.notes.map((note, i) => (
+            <li key={i} className="text-xs text-muted-foreground flex items-start gap-1.5">
+              <Info className="w-3 h-3 mt-0.5 shrink-0 text-blue-500" />
+              <span>{note}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function NegotiationLeversPanel({ levers }: { levers: NegotiationLever[] }) {
+  return (
+    <div className="p-4 border rounded-md space-y-3" data-testid="section-negotiation-levers">
+      <h3 className="text-sm font-semibold flex items-center gap-1.5">
+        <Lightbulb className="w-3.5 h-3.5" /> Negotiation Levers
+      </h3>
+      <p className="text-xs text-muted-foreground">
+        Potential adjustments that could improve the outcome. These are illustrative — actual impacts depend on full recalculation.
+      </p>
+      <div className="space-y-2">
+        {levers.map((lever, i) => (
+          <div key={i} className="flex items-start gap-3 p-2.5 rounded-md bg-muted/30" data-testid={`negotiation-lever-${i}`}>
+            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0 mt-0.5">
+              {i + 1}
+            </div>
+            <div className="space-y-0.5 min-w-0">
+              <p className="text-sm font-medium">{lever.title}</p>
+              <p className="text-xs text-muted-foreground">{lever.impact}</p>
+              <Badge variant="outline" className="text-xs mt-0.5">
+                Benefits Party {lever.beneficiary === "both" ? "A & B" : lever.beneficiary}
+              </Badge>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

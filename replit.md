@@ -23,6 +23,18 @@ The core financial engine must be **deterministic, pure-function based, and full
 - **Feb 2026**: Engine now exports intermediate values (netHomeEquity, totalLiquid, homeSaleCosts, totalDebt) for insight modules.
 - **Feb 2026**: Refactored engine to always compute S1 (Sell & Split), S2 (A Keeps Home), S3 (B Keeps Home) using a shared `calcKeepsHome()` helper with role-swap pattern. S4 (Deferred Sale) is optional.
 - **Feb 2026**: Fixed tax aggregation to handle multiple income streams per party with mixed tax treatment.
+- **Feb 2026**: Added 3 new premium insight modules (`client/src/lib/insights/`):
+  - `generateNegotiationLevers` — 3-5 structured suggestions for improving outcomes (split adjustment, expense reduction, rate reduction, buyout reduction, runway extension)
+  - `computeSensitivityRanking` — ranks interest rate, living costs, and asset split changes by combined impact magnitude on surplus and runway
+  - `computeHousingFeasibility` — keep-home mortgage analysis (income multiple vs 4.5x UK standard, deposit percentage, affordability threshold, descriptive notes)
+- **Feb 2026**: Added advanced reporting sections to results page:
+  - Decision Lens toggle (Liquidity Focus / Net Worth Focus / Risk & Sustainability) that highlights relevant rows in executive summary
+  - 12-Month Snapshot table showing year-1 liquid remaining, monthly surplus, and months of buffer per scenario
+  - Scenario Structure Comparison table with qualitative features (immediate liquidity, mortgage dependency, property/pension concentration, complexity level)
+  - Sensitivity Ranking panel showing which factors (interest rate, living costs, asset split) have the largest impact
+  - Housing Feasibility panel in keep-home scenario cards (mortgage required, income multiple, equity position, payment as % of net income)
+  - Negotiation Levers panel in scenario detail cards with actionable suggestions and pound amounts
+  - Assumptions appendix at bottom of results page
 
 ## User Preferences
 
