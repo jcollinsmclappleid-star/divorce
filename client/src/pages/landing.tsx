@@ -120,7 +120,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 pt-20 pb-24 md:pt-28 md:pb-32 relative">
           <div className="max-w-2xl mx-auto text-center space-y-7">
             <Badge variant="secondary" className="text-xs px-3 py-1">
-              UK 2025/26 Tax Rules
+              UK 2025/26 Income Tax &amp; NI Rates
             </Badge>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight" data-testid="text-hero-headline">
               When Everything Feels Uncertain, Your Numbers Shouldn't.
