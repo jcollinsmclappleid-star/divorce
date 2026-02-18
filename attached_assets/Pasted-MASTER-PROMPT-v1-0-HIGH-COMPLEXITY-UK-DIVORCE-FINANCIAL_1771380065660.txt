@@ -1,0 +1,391 @@
+MASTER PROMPT v1.0 — HIGH COMPLEXITY UK DIVORCE FINANCIAL MODELLER
+
+Build a UK Divorce Financial Modelling Web Application.
+
+This application provides illustrative financial modelling only. It is NOT legal advice, not tax advice, and not financial advice. It must display a persistent disclaimer on every page and in PDF outputs:
+“Illustrative financial modelling only. Not legal, tax, or financial advice. Outputs are estimates based on user inputs and configurable assumptions.”
+
+PRIMARY GOAL:
+Create the most detailed, transparent, scenario-based divorce financial modelling tool practical for consumers, with a deterministic engine, full auditability of calculations, and a robust test suite. The app must generate multi-scenario outputs covering assets, liabilities, pensions, housing, budgets, and multi-year projections.
+
+IMPORTANT CONSTRAINT:
+Do NOT compute “entitlements” or claim what a court would do. The tool only models outcomes under USER-SELECTED split assumptions and configurable rules.
+
+⸻
+
+1) TECH STACK & ARCHITECTURE (NON-NEGOTIABLE)
+	•	Next.js (App Router) + TypeScript
+	•	Engine is pure functions in /lib/engine/
+	•	All user input is validated with Zod (or equivalent)
+	•	No financial logic in UI components
+	•	Unit tests using Vitest (or Jest)
+	•	Deterministic calculations (no randomness)
+	•	Decimal-safe arithmetic: use a decimal library (e.g. decimal.js) OR implement safe rounding rules and document them
+	•	Persist sessions locally (localStorage) for MVP; no user accounts
+	•	PDF generation server-side (Next route) using a template engine
+
+Folders:
+	•	/lib/engine/types.ts
+	•	/lib/engine/config.ts (loads config JSON)
+	•	/lib/engine/calc/*.ts modular calculators
+	•	/lib/engine/index.ts orchestration
+	•	/lib/engine/tests/*.test.ts
+
+⸻
+
+2) CORE DESIGN: DATA MODEL (DETAILED)
+
+Represent all finances using structured objects so the model can handle many items.
+
+2.1 Parties
+
+Two parties: A and B.
+
+2.2 Assets
+
+Asset object schema:
+	•	id: string
+	•	name: string
+	•	category: one of
+	•	“primary_home”
+	•	“other_property”
+	•	“cash”
+	•	“investments”
+	•	“pension”
+	•	“business”
+	•	“vehicle”
+	•	“personal_possessions”
+	•	“other”
+	•	ownership: “A” | “B” | “joint”
+	•	currentValue: number (GBP)
+	•	liquidity: “liquid” | “semi_liquid” | “illiquid”
+	•	saleCostPct: number (default from config by category)
+	•	taxCostPct: number (default 0, configurable)
+	•	notes: string optional
+
+Special rules:
+	•	If category is “pension”, also include:
+	•	pensionType: “DC” | “DB” | “unknown”
+	•	cetv: number (use currentValue as CETV if provided)
+	•	isInPayment: boolean optional
+	•	annualPensionIfKnown: number optional
+
+2.3 Liabilities
+
+Liability object schema:
+	•	id: string
+	•	name: string
+	•	category: “mortgage” | “loan” | “credit_card” | “tax” | “other”
+	•	ownership: “A” | “B” | “joint”
+	•	balance: number
+	•	interestAPR: number optional (default from config)
+	•	termYearsRemaining: number optional
+	•	securedAgainstAssetId: string optional
+
+Mortgages:
+	•	Must support one or more mortgages secured against properties.
+	•	A property can be linked to a mortgage liability via securedAgainstAssetId.
+
+2.4 Income & Expenses (Budget Model)
+
+Income object schema:
+	•	id
+	•	owner: “A” | “B”
+	•	name
+	•	amountAnnualGross
+	•	taxTreatment: “use_tax_model” | “net_provided”
+	•	amountAnnualNet (required if taxTreatment=“net_provided”)
+
+Expense object schema:
+	•	id
+	•	owner: “A” | “B” | “shared”
+	•	name
+	•	amountAnnual
+	•	inflationLinked: boolean (default true)
+	•	category: “living” | “housing” | “child” | “debt_service” | “insurance” | “other”
+
+Children schema:
+	•	numChildren: number
+	•	nightsWithA: number (0-365)
+	•	nightsWithB: number (0-365)
+	•	childCostsAnnual: number (optional; if blank use config default per child)
+
+NOTE: Do NOT implement statutory child maintenance rules unless they are fully specified in config with tests. For MVP, treat child maintenance as an optional user-input transfer.
+
+Optional Transfers schema:
+	•	transfers: array of
+	•	from: “A” | “B”
+	•	to: “A” | “B”
+	•	amountAnnual
+	•	inflationLinked boolean
+
+⸻
+
+3) CONFIGURATION (ALL UK-SPECIFIC VALUES LIVE HERE)
+
+Create /lib/engine/config/defaultConfig.json with:
+	•	rounding:
+	•	currencyDecimals: 2
+	•	defaults:
+	•	saleCostPctByAssetCategory: map
+	•	taxCostPctByAssetCategory: map (default 0)
+	•	inflationRate: 0.02
+	•	projectionYears: 10
+	•	incomeMultiple: 4.5
+	•	defaultMortgageAPR: 0.05
+	•	defaultMortgageTermYears: 25
+	•	defaultAnnualLivingCostPerAdult: 25000
+	•	defaultChildCostPerChildAnnual: 6000 (editable)
+	•	affordability:
+	•	maxDTIRatio: 0.35 (optional extra rule)
+	•	taxModel (optional but supported):
+	•	enabled: boolean default false
+	•	NOTE: If enabled, config provides all thresholds and rates; engine uses them deterministically.
+
+The app must allow the user to toggle:
+	•	useTaxModel true/false
+If false, users provide net income.
+
+This avoids the agent guessing UK tax rules.
+
+⸻
+
+4) SCENARIO ENGINE (MULTI-SCENARIO, DETAILED)
+
+The model must generate at least these scenarios:
+
+Scenario S1: “Sell Primary Home & Split”
+Scenario S2: “A Keeps Primary Home (Buyout B)”
+Scenario S3: “B Keeps Primary Home (Buyout A)”
+Scenario S4: “Keep Home Jointly for X years then sell” (simplified)
+Scenario S5: “No property (split liquid + pensions only)”
+
+Each scenario returns:
+	•	balance sheet outcome per party (assets, liabilities, net worth)
+	•	liquidity outcome per party (liquid capital available)
+	•	pension outcome per party (pension positions after split)
+	•	cashflow/budget outcome per party (annual net surplus/deficit)
+	•	multi-year projection (capital runway, net worth trajectory)
+	•	key flags (funding gap, affordability fail, negative liquid)
+
+⸻
+
+5) DETAILED CALCULATION RULES (DETERMINISTIC)
+
+5.1 Normalise Balance Sheet
+
+Compute for each party:
+	•	Assets by category and liquidity
+	•	Liabilities by category
+	•	Net worth = totalAssets - totalLiabilities
+
+5.2 Property Equity (Per Property)
+
+For each property asset:
+	•	linkedMortgageBalance = sum(liabilities where securedAgainstAssetId == property.id)
+	•	grossEquity = property.currentValue - linkedMortgageBalance
+	•	saleCosts = property.currentValue * saleCostPct
+	•	taxCosts = property.currentValue * taxCostPct (default 0)
+	•	netSaleEquity = max(grossEquity - saleCosts - taxCosts, 0)
+
+Store per-property results.
+
+5.3 Asset Pools for Splitting
+
+Create three pools:
+
+Pool L (Liquid): assets with liquidity=“liquid” excluding pensions
+Pool I (Illiquid non-pension): assets with liquidity!=“liquid” excluding property and pensions
+Pool P (Property net equity): netSaleEquity totals per scenario (depends if sold)
+Pool PEN (Pensions): pension CETV totals
+
+Each pool is split using scenario-specific percentages:
+	•	splitPctToA for general assets
+	•	pensionSplitPctToA for pensions (separate control)
+	•	propertySplitPctToA (can be same as general by default)
+
+All split pcts are user inputs with defaults 50/50.
+
+5.4 Pensions
+
+Treat pensions as a separate pool PEN:
+	•	totalPensionCETV = sum pension CETVs
+	•	pensionA_after = totalPensionCETV * pensionSplitPctToA
+	•	pensionB_after = remainder
+Return deltas vs original pension ownership.
+
+Do NOT apply growth or drawdown to pensions in projections unless user sets a pensionGrowthRate and withdrawal assumptions; keep pensions as non-liquid net worth component.
+
+5.5 Scenario S1: Sell Primary Home & Split
+	•	Primary home is sold: use netSaleEquity for that property in Pool P
+	•	If other properties exist, default behaviour: user chooses per property “sell or retain” toggle; if not chosen, assume sell for MVP
+	•	Total sale proceeds included in Pool P and split
+	•	Liabilities tied to sold properties are cleared in scenario outcome (mortgages repaid via sale proceeds already accounted by equity calc)
+	•	Parties receive liquid capital from split pools (L + P + optionally I if user chooses to liquidate)
+
+LiquidCapitalStartA = splitShare(L) + splitShare(P) + liquidatedShare(I if liquidate=true)
+Same for B.
+
+5.6 Scenario S2: A Keeps Primary Home, Buys Out B (Explicit Mechanics)
+
+Primary home retained by A:
+	•	B entitled to a cash buyout based on propertySplitPctToA.
+Compute:
+	•	B_propertyShare = netSaleEquity_primary * (1 - propertySplitPctToA)
+	•	BuyoutToB = B_propertyShare
+
+Funding sources for buyout:
+	1.	A’s share of liquid pool L (post split)
+	2.	optionally A can liquidate semi-liquid investments (flag)
+	3.	if still short, fundingGap remains (no new borrowing modelled in MVP)
+
+Mechanics:
+	•	Split liquid pool L into liquidShareA/liquidShareB.
+	•	Apply buyout transfer:
+	•	A_liquid_after = liquidShareA - BuyoutToB
+	•	B_liquid_after = liquidShareB + BuyoutToB
+	•	If A_liquid_after < 0: set to 0 and record fundingGap = abs(negative)
+
+Balance sheet:
+	•	A retains the property asset at currentValue and the mortgage liability remains with A (unless ownership is joint; in scenario S2 assign mortgage ownership to A)
+	•	B has no property asset and no mortgage liability for that property
+	•	If there are other joint assets/liabilities, split per general pool rules.
+
+Mortgage affordability (A):
+Two checks:
+	1.	Income multiple check: mortgageOutstanding <= incomeUserA_gross * incomeMultiple
+	2.	DTI check (optional): annualMortgagePayment <= incomeUserA_net * maxDTIRatio
+Use net income if provided or tax model if enabled.
+
+Mortgage annual payment:
+Use monthly amortisation:
+monthlyRate = APR/12
+n = termYears12
+monthlyPayment = P * r(1+r)^n / ((1+r)^n - 1)
+annualPayment = monthlyPayment*12
+
+Return affordability flags and reasons.
+
+5.7 Scenario S3: B Keeps Primary Home
+
+Mirror of S2 with roles swapped.
+
+5.8 Scenario S4: Keep Home Jointly for X Years then Sell
+
+Inputs:
+	•	jointPeriodYears (default 2)
+Rules:
+	•	During joint period, home remains joint asset and mortgage remains joint liability.
+	•	For simplicity, assume each pays 50% of mortgage payment during joint period (configurable).
+	•	After joint period, property sold at:
+	•	projectedHouseValue = houseValue * (1 + housePriceGrowthRate)^(jointPeriodYears)
+	•	housePriceGrowthRate from config default 0.02
+	•	Then split net equity with propertySplitPctToA.
+	•	This scenario affects cashflow projections by including mortgage payment expense during joint years.
+
+5.9 Budget & Transfers
+
+Compute annual net cashflow per party:
+netIncomeAnnual - totalExpensesAnnual +/- transfers
+
+Expenses include:
+	•	living costs (inflate)
+	•	housing (mortgage payment if they keep property; rent if provided)
+	•	child costs (inflate)
+	•	debt service (if debts retained)
+
+Transfers can represent:
+	•	voluntary maintenance-like payments (user input only)
+
+5.10 Multi-Year Projections (10-year default)
+
+Project for each party:
+	•	Liquid capital runway (cannot go below 0)
+	•	Net worth trajectory = liquidCapital + illiquidAssetsValue + pensionCETV - liabilities
+
+Projection rules per year y:
+	•	Inflate expenses that are inflationLinked.
+	•	Income constant unless user specifies incomeGrowthRate.
+	•	Liquid capital evolves:
+liquidEnd = max(liquidStart + netCashflow, 0)
+	•	Net worth evolves:
+netWorth = liquidEnd + (illiquidAssets remain constant unless scenario includes house price growth) + pensionCETV - liabilities
+If property retained and housePriceGrowthRate provided, revalue property each year.
+
+Return yearly table with:
+	•	year
+	•	income
+	•	expenses
+	•	transfers
+	•	netCashflow
+	•	liquidEnd
+	•	netWorth
+
+⸻
+
+6) INPUT VALIDATION (STRICT)
+
+Reject:
+	•	negative values for assets unless explicitly allowed (e.g., mortgage in liabilities)
+	•	split percentages outside 0..1
+	•	nightsWithA + nightsWithB > 365
+	•	mortgage linked to missing property id
+Warn (but allow):
+	•	mortgage balance > property value (negative equity)
+
+⸻
+
+7) OUTPUTS (UI + PDF)
+
+Results page must show for each scenario:
+	•	Summary cards:
+	•	LiquidCapitalStart A/B
+	•	NetWorthStart A/B
+	•	PensionAfterSplit A/B
+	•	FundingGap if any
+	•	Affordability pass/fail and why
+	•	Detailed tables:
+	•	Balance sheet by category
+	•	Property breakdown (equity, costs, net)
+	•	Pool splits and transfers
+	•	Projection table (10-year)
+	•	Key assumptions used (from config + user overrides)
+
+PDF must include:
+	•	Inputs snapshot
+	•	Assumptions snapshot
+	•	All scenario outputs + tables
+	•	Disclaimers
+
+⸻
+
+8) TEST SUITE (MUST BE COMPREHENSIVE)
+
+Write at least 20 deterministic tests covering:
+	•	Multiple properties, multiple mortgages
+	•	Joint vs individual ownership
+	•	Negative equity handling
+	•	Scenario S2/S3 buyout funding gap
+	•	Mortgage affordability pass/fail under both checks
+	•	Pensions equalisation with unequal starting pensions
+	•	Liquid vs illiquid pool handling
+	•	Projection inflation effect
+	•	Joint home for X years then sale (S4)
+	•	Transfers impact on runway
+	•	Validation rejects invalid inputs
+
+Each test must assert exact numeric outputs to 2 decimals.
+
+Use fixed config in tests.
+
+⸻
+
+9) BUILD ORDER
+	1.	Implement types + config loader
+	2.	Implement engine common calculations + scenario builders
+	3.	Implement tests until green
+	4.	Build minimal UI for inputs/results
+	5.	Add PDF export
+	6.	Only then refine styling
+
+If anything is ambiguous, list questions BEFORE coding.
