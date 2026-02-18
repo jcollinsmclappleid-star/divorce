@@ -1233,7 +1233,7 @@ function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
           <div>
             <Label className="text-base font-semibold">Living expenses</Label>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Add expenses for each party separately, or use the suggestions below
+              Add each party's individual post-separation expenses. Use the suggestions below as a starting point.
             </p>
           </div>
           <Button variant="outline" size="sm" onClick={() => openAddExpense()} data-testid="button-add-expense">
@@ -1262,7 +1262,7 @@ function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
                         <Badge variant="secondary" className="text-xs">{CATEGORY_LABELS[e.category] ?? e.category}</Badge>
                       </div>
                     </TableCell>
-                    <TableCell><Badge variant="secondary" className="text-xs">{e.owner === "shared" ? "Shared" : `Party ${e.owner}`}</Badge></TableCell>
+                    <TableCell><Badge variant="secondary" className="text-xs">{e.owner === "shared" ? "Both (50/50)" : `Party ${e.owner}`}</Badge></TableCell>
                     <TableCell className="text-right tabular-nums text-muted-foreground">{formatCurrency(Math.round(e.amountAnnual / 12))}/mo</TableCell>
                     <TableCell className="text-right tabular-nums">{formatCurrency(e.amountAnnual)}/yr</TableCell>
                     <TableCell>
@@ -1297,8 +1297,9 @@ function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
               )}
               {totalShared > 0 && (
                 <div className="flex items-center gap-1">
-                  <span className="text-muted-foreground">Shared:</span>
+                  <span className="text-muted-foreground">Both (split equally):</span>
                   <span className="font-semibold">{formatCurrency(Math.round(totalShared / 12))}/mo</span>
+                  <span className="text-muted-foreground">({formatCurrency(Math.round(totalShared / 24))}/mo each)</span>
                 </div>
               )}
             </div>
@@ -1393,9 +1394,10 @@ function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
                   <SelectContent>
                     <SelectItem value="A">Party A</SelectItem>
                     <SelectItem value="B">Party B</SelectItem>
-                    <SelectItem value="shared">Shared equally</SelectItem>
+                    <SelectItem value="shared">Both (split equally)</SelectItem>
                   </SelectContent>
                 </Select>
+                <p className="text-xs text-muted-foreground">Most post-separation costs should be assigned to one party. Use "Both" only for genuinely shared costs like joint childcare.</p>
               </div>
             </div>
           </div>
