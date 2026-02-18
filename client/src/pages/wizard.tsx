@@ -454,6 +454,26 @@ function StepHome({ advancedMode }: { advancedMode: boolean }) {
   );
 }
 
+const ASSET_SUGGESTIONS: { name: string; category: string; owner: string; hint: string }[] = [
+  { name: "Joint Savings Account", category: "cash", owner: "joint", hint: "Current or savings accounts held jointly" },
+  { name: "ISA", category: "investments", owner: "A", hint: "Individual Savings Account - check your latest statement for the current value" },
+  { name: "Stocks & Shares", category: "investments", owner: "A", hint: "Share portfolios, investment platforms (e.g. Hargreaves Lansdown, Vanguard)" },
+  { name: "Premium Bonds", category: "cash", owner: "joint", hint: "Check your NS&I account for the current holding" },
+  { name: "Buy-to-Let Property", category: "other_property", owner: "joint", hint: "Investment or rental property - use current market value estimate" },
+  { name: "Business Interest", category: "business", owner: "A", hint: "Share of a business - use the most recent valuation or accountant's estimate" },
+  { name: "Vehicle", category: "vehicle", owner: "A", hint: "Car, motorbike or other vehicle - use a trade-in or private sale value" },
+  { name: "Valuables / Jewellery", category: "personal_possessions", owner: "joint", hint: "High-value items such as jewellery, art, antiques or collections" },
+];
+
+const DEBT_SUGGESTIONS: { name: string; category: string; owner: string; hint: string }[] = [
+  { name: "Credit Card", category: "credit_card", owner: "A", hint: "Outstanding balance on credit cards" },
+  { name: "Personal Loan", category: "loan", owner: "joint", hint: "Bank or building society personal loan" },
+  { name: "Car Finance", category: "loan", owner: "A", hint: "HP, PCP or other vehicle finance agreement" },
+  { name: "Student Loan", category: "loan", owner: "A", hint: "Student loan balance (Plan 1, 2, or postgrad)" },
+  { name: "Tax Owed", category: "tax", owner: "A", hint: "Any outstanding tax liability to HMRC" },
+  { name: "Overdraft", category: "loan", owner: "A", hint: "Arranged or unarranged overdraft balance" },
+];
+
 function StepAssets({ advancedMode }: { advancedMode: boolean }) {
   const { assets, liabilities, addAsset, updateAsset, removeAsset, addLiability, updateLiability, removeLiability } = useAppStore();
   const [editingAsset, setEditingAsset] = useState<Asset | null>(null);
@@ -467,9 +487,13 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
   const nonHomeAssets = assets.filter(a => a.category !== "primary_home" && a.category !== "pension");
   const nonMortgageLiabilities = liabilities.filter(l => l.category !== "mortgage");
 
-  const openAddAsset = () => {
+  const openAddAsset = (suggestion?: typeof ASSET_SUGGESTIONS[0]) => {
     setEditingAsset(null);
-    setAssetForm({ name: "", currentValue: 0, category: "cash", owner: "joint" });
+    if (suggestion) {
+      setAssetForm({ name: suggestion.name, currentValue: 0, category: suggestion.category, owner: suggestion.owner });
+    } else {
+      setAssetForm({ name: "", currentValue: 0, category: "cash", owner: "joint" });
+    }
     setAssetDialogOpen(true);
   };
 
@@ -489,9 +513,13 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
     setAssetDialogOpen(false);
   };
 
-  const openAddLiability = () => {
+  const openAddLiability = (suggestion?: typeof DEBT_SUGGESTIONS[0]) => {
     setEditingLiability(null);
-    setLiabilityForm({ name: "", balance: 0, category: "loan", owner: "joint" });
+    if (suggestion) {
+      setLiabilityForm({ name: suggestion.name, balance: 0, category: suggestion.category, owner: suggestion.owner });
+    } else {
+      setLiabilityForm({ name: "", balance: 0, category: "loan", owner: "joint" });
+    }
     setLiabilityDialogOpen(true);
   };
 
@@ -511,21 +539,34 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
     setLiabilityDialogOpen(false);
   };
 
+  const addedAssetNames = new Set(nonHomeAssets.map(a => a.name));
+  const unusedAssetSuggestions = ASSET_SUGGESTIONS.filter(s => !addedAssetNames.has(s.name));
+  const addedDebtNames = new Set(nonMortgageLiabilities.map(l => l.name));
+  const unusedDebtSuggestions = DEBT_SUGGESTIONS.filter(s => !addedDebtNames.has(s.name));
+
   return (
     <div className="space-y-6">
+      <div className="p-4 bg-muted/50 rounded-md space-y-2">
+        <p className="text-sm font-medium">Assets beyond the family home</p>
+        <p className="text-xs text-muted-foreground">
+          Include all savings, investments, vehicles, business interests, and other valuable assets.
+          Also add any debts besides the mortgage. These all feed into the settlement calculations.
+        </p>
+      </div>
+
       <div>
         <div className="flex items-center justify-between gap-2 mb-3">
           <Label className="text-base font-semibold">Savings, investments &amp; other assets</Label>
-          <Button variant="outline" size="sm" onClick={openAddAsset} data-testid="button-add-asset">
-            <Plus className="w-4 h-4 mr-1" /> Add
+          <Button variant="outline" size="sm" onClick={() => openAddAsset()} data-testid="button-add-asset">
+            <Plus className="w-4 h-4 mr-1" /> Add Custom
           </Button>
         </div>
 
-        {nonHomeAssets.length === 0 ? (
+        {nonHomeAssets.length === 0 && unusedAssetSuggestions.length === 0 ? (
           <div className="text-center py-6 text-muted-foreground text-sm border-2 border-dashed rounded-lg">
             No other assets added yet.
           </div>
-        ) : (
+        ) : nonHomeAssets.length === 0 ? null : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -562,21 +603,43 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
         )}
       </div>
 
+      {unusedAssetSuggestions.length > 0 && (
+        <div className="space-y-2">
+          <Label className="text-sm text-muted-foreground">Common assets to consider</Label>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {unusedAssetSuggestions.map((s) => (
+              <button
+                key={s.name}
+                onClick={() => openAddAsset(s)}
+                className="flex items-start gap-3 p-3 text-left border rounded-md hover-elevate transition-colors"
+                data-testid={`button-suggest-asset-${s.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+              >
+                <Plus className="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" />
+                <div>
+                  <span className="text-sm font-medium">{s.name}</span>
+                  <p className="text-xs text-muted-foreground mt-0.5">{s.hint}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <Separator />
 
       <div>
         <div className="flex items-center justify-between gap-2 mb-3">
           <Label className="text-base font-semibold">Other debts &amp; loans</Label>
-          <Button variant="outline" size="sm" onClick={openAddLiability} data-testid="button-add-liability">
-            <Plus className="w-4 h-4 mr-1" /> Add
+          <Button variant="outline" size="sm" onClick={() => openAddLiability()} data-testid="button-add-liability">
+            <Plus className="w-4 h-4 mr-1" /> Add Custom
           </Button>
         </div>
 
-        {nonMortgageLiabilities.length === 0 ? (
+        {nonMortgageLiabilities.length === 0 && unusedDebtSuggestions.length === 0 ? (
           <div className="text-center py-6 text-muted-foreground text-sm border-2 border-dashed rounded-lg">
             No other debts added yet.
           </div>
-        ) : (
+        ) : nonMortgageLiabilities.length === 0 ? null : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -612,6 +675,28 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
           </Table>
         )}
       </div>
+
+      {unusedDebtSuggestions.length > 0 && (
+        <div className="space-y-2">
+          <Label className="text-sm text-muted-foreground">Common debts to consider</Label>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {unusedDebtSuggestions.map((s) => (
+              <button
+                key={s.name}
+                onClick={() => openAddLiability(s)}
+                className="flex items-start gap-3 p-3 text-left border rounded-md hover-elevate transition-colors"
+                data-testid={`button-suggest-debt-${s.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+              >
+                <Plus className="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" />
+                <div>
+                  <span className="text-sm font-medium">{s.name}</span>
+                  <p className="text-xs text-muted-foreground mt-0.5">{s.hint}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <Dialog open={assetDialogOpen} onOpenChange={setAssetDialogOpen}>
         <DialogContent>
@@ -708,6 +793,24 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
   );
 }
 
+const PENSION_SUGGESTIONS: { name: string; owner: string; pensionType: string; hint: string }[] = [
+  { name: "Workplace Pension (A)", owner: "A", pensionType: "DC", hint: "Auto-enrolled or employer pension scheme - check your annual statement for the CETV" },
+  { name: "Workplace Pension (B)", owner: "B", pensionType: "DC", hint: "Party B's employer pension - request a CETV from the scheme administrator" },
+  { name: "SIPP / Private Pension", owner: "A", pensionType: "DC", hint: "Self-Invested Personal Pension - log in to your platform for the current value" },
+  { name: "Final Salary Pension", owner: "A", pensionType: "DB", hint: "Defined Benefit / final salary scheme - CETV must be requested from the scheme" },
+  { name: "State Pension Top-up", owner: "A", pensionType: "DC", hint: "Additional voluntary contributions to the State Pension" },
+];
+
+const INCOME_SUGGESTIONS: { name: string; owner: string; hint: string }[] = [
+  { name: "Salary (A)", owner: "A", hint: "Annual gross salary before tax - check your payslip or P60" },
+  { name: "Salary (B)", owner: "B", hint: "Party B's annual gross salary before tax" },
+  { name: "Self-Employment", owner: "A", hint: "Net profit from self-employment (before personal tax)" },
+  { name: "Rental Income", owner: "joint", hint: "Gross annual rent received from investment property" },
+  { name: "Dividends", owner: "A", hint: "Annual dividend income from shares or company ownership" },
+  { name: "Child Benefit", owner: "A", hint: "Annual Child Benefit received (tax-free up to income threshold)" },
+  { name: "Other Benefits", owner: "A", hint: "Universal Credit, Tax Credits, or other state benefits" },
+];
+
 function StepPensions({ advancedMode }: { advancedMode: boolean }) {
   const { assets, addAsset, updateAsset, removeAsset } = useAppStore();
   const pensions = assets.filter(a => a.category === "pension");
@@ -716,9 +819,13 @@ function StepPensions({ advancedMode }: { advancedMode: boolean }) {
   const [editing, setEditing] = useState<Asset | null>(null);
   const [form, setForm] = useState({ name: "", currentValue: 0, cetv: 0, owner: "A" as string, pensionType: "DC" as string });
 
-  const openAdd = () => {
+  const openAdd = (suggestion?: typeof PENSION_SUGGESTIONS[0]) => {
     setEditing(null);
-    setForm({ name: "", currentValue: 0, cetv: 0, owner: "A", pensionType: "DC" });
+    if (suggestion) {
+      setForm({ name: suggestion.name, currentValue: 0, cetv: 0, owner: suggestion.owner, pensionType: suggestion.pensionType });
+    } else {
+      setForm({ name: "", currentValue: 0, cetv: 0, owner: "A", pensionType: "DC" });
+    }
     setDialogOpen(true);
   };
 
@@ -750,9 +857,20 @@ function StepPensions({ advancedMode }: { advancedMode: boolean }) {
   };
 
   const totalCETV = pensions.reduce((s, p) => s + (p.cetv ?? p.currentValue), 0);
+  const addedPensionNames = new Set(pensions.map(p => p.name));
+  const unusedPensionSuggestions = PENSION_SUGGESTIONS.filter(s => !addedPensionNames.has(s.name));
 
   return (
     <div className="space-y-6">
+      <div className="p-4 bg-muted/50 rounded-md space-y-2">
+        <p className="text-sm font-medium">Pension assets</p>
+        <p className="text-xs text-muted-foreground">
+          Pensions are often one of the largest assets in a divorce. The key figure is the <strong>CETV</strong> (Cash Equivalent Transfer Value) 
+          which represents the pension's value if it were transferred. You can find this on your annual statement or by requesting it from 
+          your pension provider. Pensions are split separately from other assets.
+        </p>
+      </div>
+
       <div className="flex items-center justify-between gap-2">
         <div>
           <Label className="text-base font-semibold">Pension plans</Label>
@@ -760,17 +878,17 @@ function StepPensions({ advancedMode }: { advancedMode: boolean }) {
             <p className="text-sm text-muted-foreground">Total CETV: {formatCurrency(totalCETV)}</p>
           )}
         </div>
-        <Button variant="outline" size="sm" onClick={openAdd} data-testid="button-add-pension">
-          <Plus className="w-4 h-4 mr-1" /> Add Pension
+        <Button variant="outline" size="sm" onClick={() => openAdd()} data-testid="button-add-pension">
+          <Plus className="w-4 h-4 mr-1" /> Add Custom
         </Button>
       </div>
 
-      {pensions.length === 0 ? (
+      {pensions.length === 0 && unusedPensionSuggestions.length === 0 ? (
         <div className="text-center py-6 text-muted-foreground text-sm border-2 border-dashed rounded-lg">
           <Landmark className="w-8 h-8 mx-auto mb-2 text-muted-foreground/40" />
           No pensions added yet. If either party has a workplace or private pension, add it here.
         </div>
-      ) : (
+      ) : pensions.length === 0 ? null : (
         <Table>
           <TableHeader>
             <TableRow>
@@ -802,6 +920,28 @@ function StepPensions({ advancedMode }: { advancedMode: boolean }) {
             ))}
           </TableBody>
         </Table>
+      )}
+
+      {unusedPensionSuggestions.length > 0 && (
+        <div className="space-y-2">
+          <Label className="text-sm text-muted-foreground">Common pension types to consider</Label>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {unusedPensionSuggestions.map((s) => (
+              <button
+                key={s.name}
+                onClick={() => openAdd(s)}
+                className="flex items-start gap-3 p-3 text-left border rounded-md hover-elevate transition-colors"
+                data-testid={`button-suggest-pension-${s.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+              >
+                <Plus className="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" />
+                <div>
+                  <span className="text-sm font-medium">{s.name}</span>
+                  <p className="text-xs text-muted-foreground mt-0.5">{s.hint}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
       )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -886,9 +1026,13 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
 
   const [incomeForm, setIncomeForm] = useState({ name: "", amountAnnualGross: 0, owner: "A" as string });
 
-  const openAddIncome = () => {
+  const openAddIncome = (suggestion?: typeof INCOME_SUGGESTIONS[0]) => {
     setEditingIncome(null);
-    setIncomeForm({ name: "", amountAnnualGross: 0, owner: "A" });
+    if (suggestion) {
+      setIncomeForm({ name: suggestion.name, amountAnnualGross: 0, owner: suggestion.owner });
+    } else {
+      setIncomeForm({ name: "", amountAnnualGross: 0, owner: "A" });
+    }
     setIncomeDialogOpen(true);
   };
 
@@ -908,21 +1052,33 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
     setIncomeDialogOpen(false);
   };
 
+  const addedIncomeNames = new Set(incomes.map(i => i.name));
+  const unusedIncomeSuggestions = INCOME_SUGGESTIONS.filter(s => !addedIncomeNames.has(s.name));
+
   return (
     <div className="space-y-6">
+      <div className="p-4 bg-muted/50 rounded-md space-y-2">
+        <p className="text-sm font-medium">Income sources</p>
+        <p className="text-xs text-muted-foreground">
+          Add each party's income sources. Enter <strong>annual gross</strong> (before tax) amounts. 
+          The model will calculate take-home pay using 2025/26 UK tax and NI rates. 
+          Include all regular income: employment, self-employment, benefits, rental income, dividends, etc.
+        </p>
+      </div>
+
       <div>
         <div className="flex items-center justify-between gap-2 mb-3">
           <Label className="text-base font-semibold">Income sources</Label>
-          <Button variant="outline" size="sm" onClick={openAddIncome} data-testid="button-add-income">
-            <Plus className="w-4 h-4 mr-1" /> Add Income
+          <Button variant="outline" size="sm" onClick={() => openAddIncome()} data-testid="button-add-income">
+            <Plus className="w-4 h-4 mr-1" /> Add Custom
           </Button>
         </div>
 
-        {incomes.length === 0 ? (
+        {incomes.length === 0 && unusedIncomeSuggestions.length === 0 ? (
           <div className="text-center py-6 text-muted-foreground text-sm border-2 border-dashed rounded-lg">
             Add income sources for both parties.
           </div>
-        ) : (
+        ) : incomes.length === 0 ? null : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -954,6 +1110,28 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
           </Table>
         )}
       </div>
+
+      {unusedIncomeSuggestions.length > 0 && (
+        <div className="space-y-2">
+          <Label className="text-sm text-muted-foreground">Common income types to consider</Label>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {unusedIncomeSuggestions.map((s) => (
+              <button
+                key={s.name}
+                onClick={() => openAddIncome(s)}
+                className="flex items-start gap-3 p-3 text-left border rounded-md hover-elevate transition-colors"
+                data-testid={`button-suggest-income-${s.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+              >
+                <Plus className="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" />
+                <div>
+                  <span className="text-sm font-medium">{s.name}</span>
+                  <p className="text-xs text-muted-foreground mt-0.5">{s.hint}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <Dialog open={incomeDialogOpen} onOpenChange={setIncomeDialogOpen}>
         <DialogContent>

@@ -17,7 +17,9 @@ The core financial engine must be **deterministic, pure-function based, and full
   - `computeStabilityScore` — 0-100 score with reasons (funding gap, affordability, runway, expense coverage, illiquidity)
   - `compareToSell` — delta comparison between keep-home and sell scenarios (liquid, net worth, runway changes)
   - `buildMonthlySnapshot` — monthly budget table (net income, expenses, mortgage, CMS) with surplus/deficit
-- **Feb 2026**: Rebuilt results page as premium decision-support tool with executive summary table, scenario detail cards (narrative + source-of-funds + composition chart + stability + monthly snapshot + comparison delta), stress test toggles (interest +1.5%, costs +10%), and projection charts.
+- **Feb 2026**: Added guided suggestion panels (ASSET_SUGGESTIONS, DEBT_SUGGESTIONS, PENSION_SUGGESTIONS, INCOME_SUGGESTIONS) to wizard steps 3-5, matching the EXPENSE_SUGGESTIONS pattern with name/category/owner/hint fields and auto-filtering of already-added items.
+- **Feb 2026**: Replaced stress test toggles with continuous sliders: mortgage rate slider (1-10%) and living costs adjustment slider (-20% to +30%). Added "How projections work" explanation panel and enhanced projection chart descriptions.
+- **Feb 2026**: Rebuilt results page as premium decision-support tool with executive summary table, scenario detail cards (narrative + source-of-funds + composition chart + stability + monthly snapshot + comparison delta), stress test sliders, and projection charts.
 - **Feb 2026**: Engine now exports intermediate values (netHomeEquity, totalLiquid, homeSaleCosts, totalDebt) for insight modules.
 - **Feb 2026**: Refactored engine to always compute S1 (Sell & Split), S2 (A Keeps Home), S3 (B Keeps Home) using a shared `calcKeepsHome()` helper with role-swap pattern. S4 (Deferred Sale) is optional.
 - **Feb 2026**: Fixed tax aggregation to handle multiple income streams per party with mixed tax treatment.

@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
 import {
@@ -41,8 +40,6 @@ export default function ResultsPage() {
   const { assumptions, updateAssumptions } = store;
   const engine = useEngine();
   const [activeTab, setActiveTab] = useState<string | null>(null);
-  const [stressInterest, setStressInterest] = useState(false);
-  const [stressCosts, setStressCosts] = useState(false);
 
   const allScenarios = computeAllScenarios(engine);
   const displayScenarios = allScenarios.filter(s => s.id !== "S4");
@@ -172,18 +169,11 @@ export default function ResultsPage() {
                     stabilityScore={stabilityScores[activeScenario.id]}
                     sellScenario={s1}
                     sellProjection={s1 ? engine.projections["S1"] : undefined}
-                    stressInterest={stressInterest}
-                    stressCosts={stressCosts}
                   />
                 )}
               </div>
 
-              <StressTestPanel
-                stressInterest={stressInterest}
-                setStressInterest={setStressInterest}
-                stressCosts={stressCosts}
-                setStressCosts={setStressCosts}
-              />
+              <StressTestPanel />
 
               {allScenarios.length > 1 && (
                 <Card>
@@ -388,8 +378,6 @@ function ScenarioDetailCard({
   stabilityScore,
   sellScenario,
   sellProjection,
-  stressInterest,
-  stressCosts,
 }: {
   scenario: ScenarioResult;
   projection: ProjectionYear[] | null | undefined;
@@ -398,8 +386,6 @@ function ScenarioDetailCard({
   stabilityScore: StabilityResult;
   sellScenario?: ScenarioResult;
   sellProjection?: ProjectionYear[];
-  stressInterest: boolean;
-  stressCosts: boolean;
 }) {
   const { intermediate } = engine;
 
@@ -465,8 +451,9 @@ function ScenarioDetailCard({
               <TrendingUp className="h-3 w-3" /> Liquid Cash Projection
             </h3>
             <p className="text-xs text-muted-foreground mb-2">
-              Cash position over time, after mortgage payments and living costs.
-              {((scenario.homeEquityA ?? 0) > 0 || (scenario.homeEquityB ?? 0) > 0) && " Home equity is not included (illiquid)."}
+              Shows each party's available cash over time. Each year: starting cash + net income - living costs - mortgage payments = end-of-year balance.
+              {((scenario.homeEquityA ?? 0) > 0 || (scenario.homeEquityB ?? 0) > 0) && " Home equity is excluded as it cannot be easily accessed."}
+              {" "}If a line drops below zero, that party may need to borrow or sell assets to cover costs.
             </p>
             <div className="h-[260px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -743,61 +730,89 @@ function ComparisonDeltaPanel({ delta, scenarioId }: { delta: ComparisonDelta; s
   );
 }
 
-function StressTestPanel({
-  stressInterest,
-  setStressInterest,
-  stressCosts,
-  setStressCosts,
-}: {
-  stressInterest: boolean;
-  setStressInterest: (v: boolean) => void;
-  stressCosts: boolean;
-  setStressCosts: (v: boolean) => void;
-}) {
-  const { assumptions, updateAssumptions } = useAppStore();
+function StressTestPanel() {
+  const { assumptions, updateAssumptions, expenses, updateExpense } = useAppStore();
+  const mortgageRatePct = Math.round(assumptions.mortgageAPR * 1000) / 10;
+  const [costAdjustPct, setCostAdjustPct] = useState(0);
+  const baseCostsRef = useMemo(() => {
+    return expenses.map(e => ({ id: e.id, base: e.amountAnnual }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expenses.length]);
 
-  const toggleInterest = (checked: boolean) => {
-    setStressInterest(checked);
-    if (checked) {
-      updateAssumptions({ mortgageAPR: assumptions.mortgageAPR + 0.015 });
-    } else {
-      updateAssumptions({ mortgageAPR: Math.max(0.01, assumptions.mortgageAPR - 0.015) });
-    }
-  };
-
-  const toggleCosts = (checked: boolean) => {
-    setStressCosts(checked);
-    const store = useAppStore.getState();
-    const factor = checked ? 1.1 : 1 / 1.1;
-    store.expenses.forEach(e => {
-      store.updateExpense(e.id, { amountAnnual: Math.round(e.amountAnnual * factor) });
+  const applyCostAdjustment = (pct: number) => {
+    const factor = 1 + pct / 100;
+    baseCostsRef.forEach(({ id, base }) => {
+      updateExpense(id, { amountAnnual: Math.round(base * factor) });
     });
+    setCostAdjustPct(pct);
   };
 
   return (
     <Card data-testid="card-stress-test">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4" /> What If?
+          <AlertTriangle className="w-4 h-4" /> Stress Testing
         </CardTitle>
-        <CardDescription>Stress test your scenarios with different assumptions. Changes are applied live and reversible.</CardDescription>
+        <CardDescription>
+          Adjust the sliders below to see how changes affect all the scenarios above in real time. 
+          Try increasing the mortgage rate to see how higher repayments impact affordability, 
+          or raise living costs to model the effect of inflation.
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-wrap gap-6">
-          <div className="flex items-center gap-3">
-            <Switch checked={stressInterest} onCheckedChange={toggleInterest} data-testid="switch-stress-interest" />
-            <div>
-              <Label className="text-sm">Interest rate +1.5%</Label>
-              <p className="text-xs text-muted-foreground">Test higher mortgage costs</p>
+      <CardContent className="space-y-6">
+        <div className="grid gap-6 sm:grid-cols-2">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <Label className="text-sm font-medium">Mortgage interest rate</Label>
+              <span className="text-sm font-bold tabular-nums text-primary" data-testid="text-mortgage-rate">{mortgageRatePct.toFixed(1)}%</span>
             </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <Switch checked={stressCosts} onCheckedChange={toggleCosts} data-testid="switch-stress-costs" />
-            <div>
-              <Label className="text-sm">Living costs +10%</Label>
-              <p className="text-xs text-muted-foreground">Test inflation impact</p>
+            <Slider
+              value={[mortgageRatePct * 10]}
+              onValueChange={([v]) => updateAssumptions({ mortgageAPR: v / 1000 })}
+              min={10} max={100} step={5}
+              data-testid="slider-mortgage-rate"
+            />
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>1%</span>
+              <span>10%</span>
             </div>
+            <p className="text-xs text-muted-foreground">
+              The rate used to calculate monthly mortgage payments in keep-home scenarios. 
+              Slide right to stress test against higher rates (e.g. if the Bank of England raises rates).
+            </p>
           </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <Label className="text-sm font-medium">Living costs adjustment</Label>
+              <span className="text-sm font-bold tabular-nums text-primary" data-testid="text-cost-adjustment">
+                {costAdjustPct > 0 ? `+${costAdjustPct}%` : costAdjustPct === 0 ? "Baseline" : `${costAdjustPct}%`}
+              </span>
+            </div>
+            <Slider
+              value={[costAdjustPct]}
+              onValueChange={([v]) => applyCostAdjustment(v)}
+              min={-20} max={30} step={5}
+              data-testid="slider-cost-adjustment"
+            />
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>-20%</span>
+              <span>+30%</span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Adjust all living costs up or down to model inflation or lifestyle changes. 
+              A +10% increase shows how rising prices could erode your financial cushion.
+            </p>
+          </div>
+        </div>
+
+        <div className="p-3 bg-muted/30 rounded-md text-xs text-muted-foreground space-y-1">
+          <p className="font-medium text-foreground">How projections work</p>
+          <p>
+            Each year, the model takes each party's starting liquid capital and adds their annual surplus (net income minus living costs minus mortgage payments). 
+            If the surplus is negative, savings are drawn down. The projection chart shows when (if ever) liquid capital runs out, 
+            helping you assess long-term sustainability of each scenario.
+          </p>
         </div>
       </CardContent>
     </Card>

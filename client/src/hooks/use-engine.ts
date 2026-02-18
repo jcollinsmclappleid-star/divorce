@@ -172,7 +172,9 @@ function runEngine(state: StoreState): EngineResult {
   const pensionToA = totalPensionCETV * assumptions.splitPensionToA;
   const pensionToB = totalPensionCETV * (1 - assumptions.splitPensionToA);
 
-  const totalLiquid = liquidAssets.reduce((s, a) => s + a.currentValue, 0);
+  const totalLiquid = liquidAssets
+    .filter(a => a.category !== 'primary_home' && a.category !== 'other_property')
+    .reduce((s, a) => s + a.currentValue, 0);
   const otherProperties = assets.filter(a => a.category === 'other_property');
   const otherPropEquity = otherProperties.reduce((acc, p) => {
     const morts = liabilities.filter(l => l.securedAgainstAssetId === p.id);
