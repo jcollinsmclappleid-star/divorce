@@ -1486,7 +1486,7 @@ function StepAssumptions() {
             onClick={() => setPreset(0.5, 0.5)}
             data-testid="button-preset-equal"
           >
-            Equal split (50/50)
+            Equal (50/50)
           </Button>
           <Button
             variant={assumptions.splitRatio === 0.6 && assumptions.splitPensionToA === 0.6 ? "default" : "outline"}
@@ -1504,6 +1504,14 @@ function StepAssumptions() {
           >
             Strong tilt (70/30)
           </Button>
+          <Button
+            variant={assumptions.splitRatio === 0.8 && assumptions.splitPensionToA === 0.8 ? "default" : "outline"}
+            size="sm"
+            onClick={() => setPreset(0.8, 0.8)}
+            data-testid="button-preset-heavy"
+          >
+            Heavy tilt (80/20)
+          </Button>
         </div>
       </div>
 
@@ -1512,8 +1520,8 @@ function StepAssumptions() {
         <Slider
           value={[assumptions.splitRatio * 100]}
           onValueChange={([v]) => updateAssumptions({ splitRatio: v / 100 })}
-          min={30}
-          max={70}
+          min={10}
+          max={90}
           step={5}
           data-testid="slider-split-ratio"
         />

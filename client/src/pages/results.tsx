@@ -165,7 +165,7 @@ export default function ResultsPage() {
               <Slider
                 value={[assumptions.splitRatio * 100]}
                 onValueChange={([v]) => updateAssumptions({ splitRatio: v / 100 })}
-                min={30} max={70} step={5}
+                min={10} max={90} step={5}
                 data-testid="slider-split-ratio"
               />
               <div className="flex justify-between text-xs text-muted-foreground mt-0.5">
