@@ -110,15 +110,15 @@ function buildQualitativeExecutiveSummary(
       parts.push(`Capital runway analysis indicates that Party A's liquid reserves are ${aStatus}, while Party B's are ${bStatus}.`);
     }
 
-    const scoreLabel = stability.labelA.includes("Pressure") || stability.labelB.includes("Pressure")
-      ? "liquidity pressure under current assumptions"
+    const scoreLabel = stability.labelA.includes("Lower") || stability.labelB.includes("Lower")
+      ? "lower resilience under current assumptions"
       : stability.labelA.includes("Moderate") || stability.labelB.includes("Moderate")
       ? "moderate sustainability indicators"
       : "financial stability within the modelled parameters";
-    parts.push(`The indicative financial stability index reflects ${scoreLabel} (Party A: ${stability.scoreA}/100, Party B: ${stability.scoreB}/100). This index reflects liquidity sustainability and affordability benchmarks under current modelling assumptions and is not a lending or credit assessment.`);
+    parts.push(`The financial sustainability indicator reflects ${scoreLabel} (Party A: ${stability.scoreA}/100, Party B: ${stability.scoreB}/100). This indicator reflects liquidity sustainability and lending capacity benchmarks under current modelling assumptions and is not a lending or credit assessment.`);
 
     if (housing) {
-      parts.push(`Affordability benchmarking classifies this scenario as "${housing.classification.toLowerCase()}" based on standard income multiple and payment-to-income ratio analysis.`);
+      parts.push(`Lending capacity benchmarking classifies this scenario as "${housing.classification.toLowerCase()}" based on standard income multiple and payment-to-income ratio analysis.`);
     }
 
     scenarioParts.push(parts.join(" "));
@@ -221,7 +221,7 @@ export default function ReportPage() {
           <div className="mt-4 p-3 border border-gray-300 rounded text-xs text-gray-600 leading-relaxed">
             <p className="font-semibold text-gray-700 mb-1">IMPORTANT</p>
             <p>
-              This document provides illustrative financial modelling only and does not constitute legal, tax, or financial advice. All figures are estimates based on the information entered and standard assumptions. Affordability indicators use typical market benchmarks and do not represent mortgage offers or credit assessments. Independent professional advice should be obtained before making any financial decisions.
+              This document provides illustrative financial modelling only and does not constitute legal, tax, or financial advice. All figures are estimates based on the information entered and standard assumptions. Lending capacity benchmarks are generalised income multiple illustrations and do not constitute a lending assessment, mortgage advice, or credit approval indication. Independent professional review may be warranted before making any financial decisions.
             </p>
           </div>
         </header>
@@ -407,7 +407,7 @@ export default function ReportPage() {
               </ReportCollapsible>
 
               <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Indicative Financial Stability Index</h4>
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Financial Sustainability Indicator (Illustrative Model Output)</h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs text-gray-500 mb-0.5">Party A</p>
@@ -502,7 +502,7 @@ export default function ReportPage() {
 
               {housing && (
                 <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Affordability Benchmark Assessment (Modelled)</h4>
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Indicative Lending Capacity Benchmark (Non-Lender Specific)</h4>
                   <div className="text-sm text-gray-600 space-y-0.5">
                     <p className={housing.withinBenchmarkThresholds ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
                       {housing.classification}
@@ -514,7 +514,7 @@ export default function ReportPage() {
                     {housing.notes.map((n: string, ni: number) => (
                       <p key={ni} className="text-xs text-gray-400">{n}</p>
                     ))}
-                    <p className="text-xs text-gray-400 italic mt-1">Benchmarks are illustrative modelling references only and do not represent lending decisions.</p>
+                    <p className="text-xs text-gray-400 italic mt-1">This is a generalised income multiple illustration and does not constitute a lending assessment, mortgage advice, or credit approval indication.</p>
                   </div>
                 </div>
               )}
@@ -641,7 +641,7 @@ export default function ReportPage() {
             <ReportCollapsible title="Limitations & Exclusions">
             <ul className="text-xs text-gray-600 space-y-1 list-disc list-inside">
               <li>All figures are estimates based on the information entered and may differ from actual outcomes.</li>
-              <li>Mortgage affordability indicators use typical market benchmarks and do not constitute a lending assessment.</li>
+              <li>Lending capacity benchmarks are generalised income multiple illustrations and do not constitute a lending assessment, mortgage advice, or credit approval indication.</li>
               <li>Property valuations, pension transfer values, and other asset values should be independently verified.</li>
               <li>This analysis does not account for potential changes in legislation, tax rates, or personal circumstances.</li>
             </ul>
@@ -666,10 +666,10 @@ export default function ReportPage() {
             <div><span className="font-semibold">Net Equity:</span> <span className="text-gray-600">The value of property after deducting the outstanding mortgage balance and estimated selling costs.</span></div>
             <div><span className="font-semibold">Equity Transfer Obligation:</span> <span className="text-gray-600">The lump sum payable by the party retaining the property to compensate the departing party for their share of net equity.</span></div>
             <div><span className="font-semibold">Capital Runway:</span> <span className="text-gray-600">The projected period for which liquid capital can sustain expenditure, measured in months or years.</span></div>
-            <div><span className="font-semibold">Indicative Financial Stability Index:</span> <span className="text-gray-600">A composite indicator reflecting liquidity sustainability and affordability benchmarks under current modelling assumptions. It is not a lending or credit assessment.</span></div>
+            <div><span className="font-semibold">Financial Sustainability Indicator (Illustrative Model Output):</span> <span className="text-gray-600">A composite indicator reflecting liquidity sustainability and lending capacity benchmarks under current modelling assumptions. It is not a suitability or lending assessment.</span></div>
             <div><span className="font-semibold">CETV (Cash Equivalent Transfer Value):</span> <span className="text-gray-600">The estimated lump sum value of a pension, used for comparison and division purposes.</span></div>
             <div><span className="font-semibold">CMS (Child Maintenance Service):</span> <span className="text-gray-600">The UK government service that calculates child maintenance obligations based on income and overnight stays.</span></div>
-            <div><span className="font-semibold">Income Multiple:</span> <span className="text-gray-600">The ratio of mortgage required to gross annual income, used as an affordability benchmark.</span></div>
+            <div><span className="font-semibold">Income Multiple:</span> <span className="text-gray-600">The ratio of mortgage required to gross annual income, used as a generalised lending capacity benchmark.</span></div>
           </div>
         </section>
 
@@ -679,7 +679,7 @@ export default function ReportPage() {
           </div>
           <p className="text-[10px] text-gray-400 leading-relaxed max-w-lg mx-auto">
             Illustrative modelling only — not legal, tax, or financial advice.
-            All outputs are estimates based on the information entered and standard assumptions. They should not be relied upon for decision-making without independent professional advice. Affordability indicators are benchmarked against typical market heuristics and do not represent a mortgage offer or credit assessment.
+            All outputs are estimates based on the information entered and standard assumptions. They must not be relied upon for decision-making. Lending capacity benchmarks are generalised income multiple illustrations and do not constitute a lending assessment, mortgage advice, or credit approval indication.
           </p>
         </footer>
       </div>

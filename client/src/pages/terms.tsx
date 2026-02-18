@@ -34,6 +34,8 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold text-foreground">2. Important Disclaimer</h2>
             <p className="font-medium text-foreground">This Tool does not provide legal advice, tax advice, or regulated financial advice. It is not authorised or regulated by the Financial Conduct Authority (FCA), the Solicitors Regulation Authority (SRA), or any other professional regulatory body.</p>
+            <p>The Service does not provide regulated financial advice under the Financial Services and Markets Act 2000 (FSMA). The Tool does not recommend specific financial products, lenders, investments, or settlement structures and does not assess suitability for any regulated financial arrangement.</p>
+            <p>This tool does not predict court outcomes, judicial discretion, legal entitlement, or settlement fairness. It models financial structures only.</p>
             <p>All outputs are illustrative models only. They must not be relied upon as the basis for any legal, financial, or tax decision. Any decisions related to divorce financial settlements may warrant independent professional review by a qualified solicitor, financial adviser, or tax professional.</p>
           </section>
 
@@ -71,7 +73,7 @@ export default function TermsPage() {
               <li>Spousal maintenance (periodical payments) is not modelled</li>
               <li>Early repayment charges, stamp duty, legal transfer fees, and moving costs are not separately modelled</li>
               <li>Pension values are treated as nominal CETV figures without actuarial adjustment, pension type differentiation, or tax-on-drawdown modelling</li>
-              <li>Mortgage affordability indicators are based on generalised market benchmarks and do not constitute a lending assessment, mortgage offer, or credit evaluation</li>
+              <li>Lending capacity benchmarks are generalised income multiple illustrations and do not constitute a lending assessment, mortgage advice, or credit approval indication</li>
               <li>Child maintenance estimates use a simplified CMS-style formula and may differ from official CMS calculations</li>
             </ul>
           </section>

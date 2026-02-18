@@ -35,8 +35,8 @@ const QUANTIFIES_ITEMS = [
   },
   {
     icon: PoundSterling,
-    title: "Mortgage Affordability",
-    body: "Mortgage affordability benchmarks, based on the assumptions entered.",
+    title: "Lending Capacity Benchmark",
+    body: "Indicative lending capacity benchmark (non-lender specific), based on the assumptions entered.",
   },
   {
     icon: BarChart3,
@@ -123,13 +123,13 @@ export default function LandingPage() {
               UK 2025/26 Income Tax &amp; NI Rates
             </Badge>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight" data-testid="text-hero-headline">
-              When Everything Feels Uncertain, Your Numbers Shouldn't.
+              Structured Financial Modelling for Separation & Divorce
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto">
-              Model how different settlement structures affect your liquidity, housing affordability, and long-term financial position &mdash; based solely on the assumptions you enter.
+              Model how different settlement structures affect your liquidity, lending capacity benchmarks, and long-term financial position &mdash; based solely on the assumptions you enter.
             </p>
             <p className="text-sm text-muted-foreground/80">
-              Illustrative financial modelling. Not legal, tax, or financial advice.
+              Illustrative financial modelling. Not legal, tax, or financial advice. Does not predict court outcomes or assess entitlement.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
               <Button
@@ -164,7 +164,7 @@ export default function LandingPage() {
             When a household becomes two, the financial picture changes in ways that are difficult to see clearly &mdash; until they're modelled.
           </p>
           <p className="text-muted-foreground leading-relaxed">
-            What changes is not simply who owns what &mdash; but how structure affects liquidity, affordability, and sustainability over time.
+            What changes is not simply who owns what &mdash; but how structure affects liquidity, lending capacity, and sustainability over time.
           </p>
           <p className="text-muted-foreground leading-relaxed">
             DivorceCalculatorUK allows you to explore those structural differences before important conversations take place.
@@ -319,8 +319,9 @@ export default function LandingPage() {
               "Provide legal advice",
               "Provide financial advice",
               "Provide tax advice",
-              "Predict court outcomes",
-              "Assess entitlement",
+              "Predict court outcomes, judicial discretion, or settlement fairness",
+              "Assess entitlement or legal rights",
+              "Provide suitability assessments or lending evaluations",
               "Replace independent professional advice",
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-3">
@@ -376,6 +377,47 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section className="py-16 md:py-20 bg-muted/30" data-testid="section-faq">
+        <div className="container mx-auto px-4 max-w-2xl">
+          <h2 className="text-2xl md:text-3xl font-display font-bold text-center mb-10" data-testid="text-faq-headline">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-6">
+            {[
+              {
+                q: "Does this predict what I will receive in court?",
+                a: "No. This tool does not predict court outcomes, judicial discretion, legal entitlement, or settlement fairness. It models financial structures only. A court considers a wide range of factors — including needs, contributions, and welfare of children — that are beyond the scope of any mathematical model.",
+              },
+              {
+                q: "Is this financial or legal advice?",
+                a: "No. This tool provides illustrative financial modelling only. It is not authorised or regulated by the FCA, SRA, or any other professional body. Independent professional advice may be warranted before making any decisions.",
+              },
+              {
+                q: "How accurate are the tax calculations?",
+                a: "The tax engine applies a simplified UK income tax and employee Class 1 National Insurance calculation only, based on published HMRC 2025/26 rates. It excludes dividend rates, Scottish rates, self-employed NI, Capital Gains Tax, pension relief, and other reliefs. Full details are available on the Model Methodology page.",
+              },
+              {
+                q: "What do the lending capacity benchmarks mean?",
+                a: "These are generalised income multiple illustrations (typically 4-4.5x gross income) and do not constitute a lending assessment, mortgage advice, or credit approval indication. Actual lending decisions depend on individual creditworthiness, lender criteria, and other factors.",
+              },
+              {
+                q: "Is my data safe?",
+                a: "All financial calculations are performed locally in your web browser. The financial data you enter is not transmitted to our servers. Payment processing is handled securely by Stripe.",
+              },
+              {
+                q: "What does the Financial Sustainability Indicator mean?",
+                a: "This is a model-based indicator generated by a simplified mathematical model. It reflects liquidity sustainability and lending capacity benchmarks under current modelling assumptions. It does not constitute financial advice, risk profiling, or suitability assessment.",
+              },
+            ].map((item, i) => (
+              <div key={i} data-testid={`faq-item-${i}`}>
+                <h3 className="text-sm font-semibold text-foreground mb-1.5">{item.q}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <footer className="border-t border-border/40 py-8 bg-muted/20" data-testid="section-footer">
         <div className="container mx-auto px-4 text-center space-y-3">
           <div className="flex items-center justify-center">
@@ -390,6 +432,9 @@ export default function LandingPage() {
             </Link>
             <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-terms">
               Terms of Use
+            </Link>
+            <Link href="/methodology" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-methodology">
+              Model Methodology
             </Link>
           </div>
           <p className="text-xs text-muted-foreground">

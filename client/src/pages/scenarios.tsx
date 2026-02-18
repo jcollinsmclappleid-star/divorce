@@ -280,11 +280,11 @@ export default function ScenariosPage() {
                               <div className="mt-1">
                                 {result.affordable ? (
                                   <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50">
-                                    <CheckCircle className="w-3 h-3 mr-1" /> Mortgage Affordable
+                                    <CheckCircle className="w-3 h-3 mr-1" /> Within Lending Benchmark
                                   </Badge>
                                 ) : (
                                   <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50">
-                                    <AlertTriangle className="w-3 h-3 mr-1" /> May Not Be Affordable
+                                    <AlertTriangle className="w-3 h-3 mr-1" /> Exceeds Lending Benchmark
                                   </Badge>
                                 )}
                               </div>

@@ -143,11 +143,11 @@ export default function PreviewPage() {
 
           <Card data-testid="card-stability-band">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Indicative Financial Stability Index</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Financial Sustainability Indicator</CardTitle>
             </CardHeader>
             <CardContent>
               <p className={`text-2xl font-bold tabular-nums ${stabilityColor}`} data-testid="value-stability-band">{stabilityBand}</p>
-              <p className="text-xs text-muted-foreground mt-1">Index breakdown and stability drivers available in full analysis</p>
+              <p className="text-xs text-muted-foreground mt-1">Indicator breakdown and sustainability drivers available in full analysis</p>
             </CardContent>
           </Card>
         </div>
@@ -157,7 +157,7 @@ export default function PreviewPage() {
 
           <BlurredSection title="Scenario Comparison Table" height="h-40" />
           <BlurredSection title="5-Year Capital Projection" height="h-36" />
-          <BlurredSection title="Indicative Stability Index Drivers" height="h-32" />
+          <BlurredSection title="Financial Sustainability Indicator Drivers" height="h-32" />
           <BlurredSection title="Housing Feasibility Benchmark" height="h-28" />
           <BlurredSection title="Sensitivity Snapshot" height="h-28" />
           <BlurredSection title="Structured Financial Brief (PDF)" height="h-24" />

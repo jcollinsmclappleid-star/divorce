@@ -24,7 +24,7 @@ const VALUE_ITEMS = [
 const INCLUDES_ITEMS = [
   "Unlimited scenario reruns for 6 months",
   "Adjustable settlement structure modelling",
-  "Indicative stability index with driver analysis",
+  "Financial sustainability indicator with driver analysis",
   "Monthly financial position snapshot",
   "5-year capital sustainability projection",
   "Structured Financial Brief (PDF)",
@@ -111,7 +111,7 @@ export default function UnlockPage() {
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-3.5 h-3.5 text-primary mt-1 shrink-0" />
-                <span>Identify areas of liquidity pressure under current assumptions</span>
+                <span>Identify areas of lower resilience under current assumptions</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-3.5 h-3.5 text-primary mt-1 shrink-0" />

@@ -134,15 +134,15 @@ export function generateScenarioNarrative(
 
   if (scenario.affordable === false) {
     riskFlags.push({
-      label: "Mortgage affordability",
+      label: "Lending capacity benchmark",
       severity: "risk",
-      detail: `Party ${keeper} may not qualify for the mortgage based on typical market benchmarks (typically 4-4.5x income).`,
+      detail: `Party ${keeper} exceeds the generalised income multiple benchmark based on the assumptions entered (typically 4-4.5x income).`,
     });
   } else if (scenario.affordable === true) {
     riskFlags.push({
-      label: "Mortgage affordability",
+      label: "Lending capacity benchmark",
       severity: "ok",
-      detail: `Party ${keeper} falls within typical market lending benchmarks based on the income assumptions entered.`,
+      detail: `Party ${keeper} falls within the generalised income multiple benchmark based on the assumptions entered.`,
     });
   }
 

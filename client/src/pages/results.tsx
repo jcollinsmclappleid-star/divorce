@@ -261,7 +261,7 @@ export default function ResultsPage() {
               <div>
                 <h2 className="text-xl font-display font-bold mb-1 tracking-tight">Scenario Analysis</h2>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Select a scenario below for detailed analysis — including capital allocation, source of funds breakdown, monthly financial position, and indicative stability index.
+                  Select a scenario below for detailed analysis — including capital allocation, source of funds breakdown, monthly financial position, and financial sustainability indicator.
                 </p>
                 <div className="grid gap-3 sm:grid-cols-3 mb-6">
                   {allScenarios.map(s => {
@@ -416,7 +416,7 @@ export default function ResultsPage() {
       <footer className="border-t py-8 mt-auto bg-muted/30">
         <div className="container mx-auto px-4 text-center text-muted-foreground text-xs space-y-1.5">
           <p className="font-medium">Illustrative modelling only — not legal, tax, or financial advice.</p>
-          <p>All outputs are estimates based on the information entered and standard assumptions. They should not be relied upon for decision-making without independent professional advice. Affordability indicators are benchmarked against typical market heuristics and do not represent a mortgage offer or credit assessment.</p>
+          <p>All outputs are estimates based on the information entered and standard assumptions. They must not be relied upon for decision-making. Lending capacity benchmarks are generalised income multiple illustrations and do not constitute a lending assessment, mortgage advice, or credit approval indication.</p>
           <p>All calculations are performed locally in your browser. No financial data is transmitted to any external server.</p>
         </div>
       </footer>
@@ -428,7 +428,7 @@ function DecisionLensToggle({ viewLens, setViewLens }: { viewLens: ViewLens; set
   const lenses: { id: ViewLens; label: string; icon: typeof PoundSterling; description: string }[] = [
     { id: "liquidity", label: "Liquidity Analysis", icon: PoundSterling, description: "Liquid Capital [cash and realisable investments available immediately]" },
     { id: "networth", label: "Net Worth Analysis", icon: Target, description: "Total Net Asset Position [liquid capital, property equity, and pension valuations]" },
-    { id: "risk", label: "Stability & Projection", icon: Activity, description: "Indicative Stability Index [liquidity sustainability and affordability benchmarks]" },
+    { id: "risk", label: "Sustainability & Projection", icon: Activity, description: "Financial Sustainability Indicator [liquidity sustainability and lending capacity benchmarks]" },
   ];
 
   return (
@@ -1016,23 +1016,23 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Indicative Stability Index — Party A<InfoTip text="Indicative financial stability index for Party A — incorporating cash buffer adequacy, monthly surplus/deficit, mortgage burden ratio, and capital runway projection. This is not a lending or credit assessment." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Financial Sustainability — Party A<InfoTip text="Illustrative model output for Party A — incorporating cash buffer adequacy, monthly surplus/deficit, lending capacity benchmark, and capital runway projection. This is not a suitability or lending assessment." /></></TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
                   return (
                     <TableCell key={s.id} className="text-center">
-                      <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Stable (Modelled)"} />
+                      <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Higher Resilience (Modelled)"} />
                     </TableCell>
                   );
                 })}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Indicative Stability Index — Party B<InfoTip text="Indicative financial stability index for Party B — incorporating cash buffer adequacy, monthly surplus/deficit, mortgage burden ratio, and capital runway projection. This is not a lending or credit assessment." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Financial Sustainability — Party B<InfoTip text="Illustrative model output for Party B — incorporating cash buffer adequacy, monthly surplus/deficit, lending capacity benchmark, and capital runway projection. This is not a suitability or lending assessment." /></></TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
                   return (
                     <TableCell key={s.id} className="text-center">
-                      <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Stable (Modelled)"} />
+                      <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Higher Resilience (Modelled)"} />
                     </TableCell>
                   );
                 })}
@@ -1087,12 +1087,12 @@ function ExecutiveTable({
                       : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]">Yr {rw?.partyB.depletionYear}</Badge>}
                   </div>
                   <div className="min-w-0">
-                    <span className="text-muted-foreground block">Stability Index — A</span>
-                    <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Stable"} compact />
+                    <span className="text-muted-foreground block">Sustainability — A</span>
+                    <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Higher Resilience"} compact />
                   </div>
                   <div className="min-w-0">
-                    <span className="text-muted-foreground block">Stability Index — B</span>
-                    <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Stable"} compact />
+                    <span className="text-muted-foreground block">Sustainability — B</span>
+                    <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Higher Resilience"} compact />
                   </div>
                   {(s.fundingGap ?? 0) > 0 && (
                     <div className="col-span-2">
@@ -1132,7 +1132,7 @@ function StabilityBadge({ score, label, compact }: { score: number; label: strin
     : "text-slate-700 border-slate-200 bg-slate-50";
 
   const shortLabel = compact
-    ? (score >= 80 ? "Stable" : score >= 60 ? "Moderate" : "Liquidity Pressure")
+    ? (score >= 80 ? "Higher Resilience" : score >= 60 ? "Moderate Resilience" : "Lower Resilience")
     : label;
 
   return (
@@ -1350,7 +1350,7 @@ function ScenarioDetailCard({
         <NarrativeSection narrative={narrative} />
 
         <div className="space-y-4 p-4 bg-muted/20 rounded-md" data-testid="block-financial-sustainability">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Indicative Stability Index</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Financial Sustainability Indicator</h3>
           
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="flex items-center justify-between gap-2">
@@ -1537,7 +1537,7 @@ function ScenarioDetailCard({
         )}
 
         <DetailCollapsible
-          title="Indicative Stability Index Detail"
+          title="Financial Sustainability Indicator Detail"
           summary={<span>View scoring breakdown and assessment drivers</span>}
           testId="detail-stability-assessment"
         >
@@ -1826,8 +1826,9 @@ function StabilitySection({ score }: { score: StabilityResult }) {
   return (
     <div className="space-y-3" data-testid="section-stability">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <Shield className="w-3.5 h-3.5" /> Indicative Stability Index
+        <Shield className="w-3.5 h-3.5" /> Financial Sustainability Indicator (Illustrative Model Output)
       </h3>
+      <p className="text-[10px] text-muted-foreground/70 italic">Model-generated composite metric. Not a suitability assessment, risk profile, or financial recommendation.</p>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
@@ -1976,9 +1977,10 @@ function HousingFeasibilityPanel({ feasibility, scenarioId }: { feasibility: Hou
   return (
     <div className="space-y-3" data-testid="section-housing-feasibility">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <Building2 className="w-3.5 h-3.5" /> Affordability Benchmark Assessment (Modelled) — Party {keeper}
-        <InfoTip text="Benchmarks are illustrative modelling references only and do not represent actual credit or affordability decisions." />
+        <Building2 className="w-3.5 h-3.5" /> Indicative Lending Capacity Benchmark (Non-Lender Specific) — Party {keeper}
+        <InfoTip text="This is a generalised income multiple illustration and does not constitute a lending assessment, mortgage advice, or credit approval indication." />
       </h3>
+      <p className="text-[10px] text-muted-foreground/70 italic">Generalised income multiple illustration only. Does not constitute a lending assessment or credit approval indication.</p>
       <div className="flex items-center gap-2 mb-1">
         <Badge variant="outline" className={feasibility.withinBenchmarkThresholds ? "text-emerald-600 border-emerald-200 bg-emerald-50" : "text-amber-600 border-amber-200 bg-amber-50"}>
           {feasibility.classification}

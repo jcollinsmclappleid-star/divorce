@@ -89,3 +89,22 @@ Technical SEO is implemented for target domain `divorcecalculatoruk.co.uk`:
 -   **decimal.js** (or equivalent) — For precise financial calculations.
 -   **PDF generation library** — For server-side report generation.
 -   **vitest** — For engine unit testing.
+
+## Regulatory Compliance (February 2026)
+
+### Terminology Standards
+- **Lending capacity**: All references use "Indicative Lending Capacity Benchmark (Non-Lender Specific)" with disclaimer: "generalised income multiple illustrations and do not constitute a lending assessment, mortgage advice, or credit approval indication"
+- **Sustainability indicator**: "Financial Sustainability Indicator (Illustrative Model Output)" with bands: "Higher Resilience" (80+), "Moderate Resilience" (60-79), "Lower Resilience" (<60)
+- **Court outcomes**: Explicit boundary: "Does not predict court outcomes, judicial discretion, legal entitlement, or settlement fairness"
+- **FCA perimeter**: FSMA 2000 statement in Terms Section 2; no regulated financial advice, no product recommendations, no suitability assessments
+
+### Key Pages
+- `/methodology` — Model Methodology & Limitations (8 sections, SEO-indexed)
+- `/terms` — Terms of Use (18 sections, FSMA 2000 + FCA/SRA disclaimers)
+- `/privacy` — Privacy Policy (15 sections, UK GDPR compliant)
+- Landing page FAQ section with 6 regulatory Q&As
+
+### Language Policy
+- Strictly non-advisory: use "may warrant assessment", "may be relevant considerations"
+- Avoid: "Consider...", "should", "recommend", "advise", "fair", "entitled"
+- Use: "Independent professional review may be warranted" not "is recommended"

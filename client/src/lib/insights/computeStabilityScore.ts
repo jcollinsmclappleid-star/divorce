@@ -24,9 +24,9 @@ export interface StabilityResult {
 }
 
 function getLabel(score: number): string {
-  if (score >= 80) return "Stable (Modelled)";
-  if (score >= 60) return "Moderate (Modelled)";
-  return "Liquidity Pressure Identified (Modelled)";
+  if (score >= 80) return "Higher Resilience (Modelled)";
+  if (score >= 60) return "Moderate Resilience (Modelled)";
+  return "Lower Resilience (Modelled)";
 }
 
 export function computeStabilityScore(
@@ -56,10 +56,10 @@ export function computeStabilityScore(
     const keeper = scenario.id === "S2" ? "A" : "B";
     if (keeper === "A") {
       scoreA -= 30;
-      reasonsA.push({ label: "Indicative affordability benchmark exceeded", points: -30 });
+      reasonsA.push({ label: "Indicative lending capacity benchmark exceeded", points: -30 });
     } else {
       scoreB -= 30;
-      reasonsB.push({ label: "Indicative affordability benchmark exceeded", points: -30 });
+      reasonsB.push({ label: "Indicative lending capacity benchmark exceeded", points: -30 });
     }
   }
 

@@ -12,6 +12,7 @@ import UnlockPage from "@/pages/unlock";
 import PaymentSuccessPage from "@/pages/payment-success";
 import PrivacyPage from "@/pages/privacy";
 import TermsPage from "@/pages/terms";
+import MethodologyPage from "@/pages/methodology";
 import { AccessGate } from "@/components/access-gate";
 
 function Router() {
@@ -24,6 +25,7 @@ function Router() {
       <Route path="/payment-success" component={PaymentSuccessPage} />
       <Route path="/privacy" component={PrivacyPage} />
       <Route path="/terms" component={TermsPage} />
+      <Route path="/methodology" component={MethodologyPage} />
       <Route path="/results">
         <AccessGate>
           <ResultsPage />
