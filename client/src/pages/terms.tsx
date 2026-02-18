@@ -105,7 +105,7 @@ export default function TermsPage() {
             <h2 className="text-xl font-semibold text-foreground">7. Access and Payment</h2>
             <ul className="list-disc pl-6 space-y-1">
               <li>A limited preview of modelling results is available free of charge</li>
-              <li>Full access to the structured financial analysis requires a one-time payment of £79</li>
+              <li>Full access to the structured financial analysis requires a one-time payment (currently £59 during launch phase; standard price £79)</li>
               <li>Full access is valid for 6 months from the date of purchase</li>
               <li>Access is linked to your browser session token, which is stored locally on your device. Clearing browser data, switching devices, or using private/incognito browsing may result in loss of access. We are unable to recover or transfer session tokens</li>
               <li>Payments are processed securely by Stripe. DivorceCalculatorUK does not store or have access to your payment card details</li>
@@ -134,7 +134,7 @@ export default function TermsPage() {
               <li>We shall not be liable for losses arising from changes in tax rates, legislation, interest rates, property values, or personal circumstances occurring before, during, or after your use of the Tool</li>
               <li>We shall not be liable for any loss of data, loss of access, or service interruptions</li>
             </ul>
-            <p>Our total aggregate liability for any and all claims arising from or related to the Service shall not exceed the amount you paid for access to the Service (£79 or such other amount as was charged at the time of purchase).</p>
+            <p>Our total aggregate liability for any and all claims arising from or related to the Service shall not exceed the amount you paid for access to the Service (the amount charged at the time of your purchase).</p>
             <p>Nothing in these terms excludes or limits liability for death or personal injury caused by negligence, fraud or fraudulent misrepresentation, or any other liability that cannot be excluded or limited under applicable law.</p>
           </section>
 

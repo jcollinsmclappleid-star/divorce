@@ -103,9 +103,23 @@ export default function LandingPage() {
         Illustrative modelling only. Not legal, tax or financial advice.
       </div>
 
+      <div className="w-full bg-primary py-6 px-4" data-testid="banner-brand">
+        <div className="container mx-auto flex flex-col items-center justify-center gap-2">
+          <h2 className="text-2xl md:text-3xl font-display font-bold text-primary-foreground tracking-tight" data-testid="text-brand-name">
+            DivorceCalculatorUK
+          </h2>
+          <p className="text-primary-foreground/70 text-xs tracking-widest uppercase">
+            Structured Financial Modelling
+          </p>
+        </div>
+      </div>
+
       <nav className="sticky top-0 z-[100] w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between gap-4">
-          <Logo size="md" />
+        <div className="container mx-auto px-4 h-12 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <button onClick={scrollToHowItWorks} className="hover:text-foreground transition-colors" data-testid="link-how-it-works">How It Works</button>
+            <Link href="/methodology" className="hover:text-foreground transition-colors" data-testid="link-nav-methodology">Methodology</Link>
+          </div>
           <Button
             onClick={() => setLocation("/wizard")}
             data-testid="button-nav-start"

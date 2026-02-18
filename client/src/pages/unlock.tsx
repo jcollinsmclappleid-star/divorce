@@ -125,7 +125,7 @@ export default function UnlockPage() {
             <p className="pt-2">
               A single professional consultation can cost £250–£400 per hour.
               <br />
-              Structured financial modelling: £79.
+              Structured financial modelling: £59.
             </p>
             <p className="text-xs text-muted-foreground/70">
               This tool does not replace professional advice. It supports more informed conversations.
@@ -138,12 +138,11 @@ export default function UnlockPage() {
             <CardContent className="pt-8 pb-8 space-y-6 text-center">
               <div>
                 <div className="inline-block bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full mb-3" data-testid="badge-access-duration">
-                  6-month unlimited access — one-time payment
+                  Launch Phase Access
                 </div>
-                <div className="text-4xl font-bold tracking-tight">£79</div>
-                <div className="text-xs text-muted-foreground mt-0.5">(no VAT applicable)</div>
-                <div className="text-sm text-muted-foreground mt-1">One-time payment — no subscription, no recurring charges</div>
-                <div className="text-xs text-muted-foreground">6-month unlimited access from date of purchase</div>
+                <div className="text-4xl font-bold tracking-tight" data-testid="text-price">£59</div>
+                <div className="text-sm text-muted-foreground mt-1">Six Months Unlimited Access</div>
+                <div className="text-xs text-muted-foreground/60 mt-1">Standard access price: £79</div>
               </div>
 
               <ul className="text-sm text-left space-y-2">
@@ -182,13 +181,12 @@ export default function UnlockPage() {
                     Redirecting to payment...
                   </>
                 ) : (
-                  "Unlock Full Structured Analysis — £79"
+                  "Unlock Full Analysis — £59"
                 )}
               </Button>
 
               <div className="text-xs text-muted-foreground space-y-1">
-                <p>Private access. No subscription. Immediate unlock.</p>
-                <p>Access remains available for 6 months to model evolving assumptions.</p>
+                <p>One-time payment. No subscription. Six months unlimited access.</p>
                 <p className="mt-1">
                   Already purchased? <Link href="/recover" className="underline text-primary" data-testid="link-recover">Recover your access</Link>
                 </p>

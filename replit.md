@@ -34,12 +34,12 @@ PostgreSQL is used as the database, accessed via Drizzle ORM. The `shared/schema
 
 ### Premium Access Flow (Preview → Unlock → Results)
 
-The application uses a freemium model with a £79 one-time payment for full access:
+The application uses a freemium model with a £59 launch phase payment (standard £79) for full access:
 - **Preview page** (`/preview`): Shows limited financial data (net equity, asset pool, 50/50 split) with blurred sections for premium content. Users are redirected here after completing the wizard or clicking example scenarios.
 - **Unlock page** (`/unlock`): Professional pricing page with Stripe Checkout integration.
 - **Payment success** (`/payment-success`): Verifies payment and grants 6-month access.
 - **Access control**: `/results` and `/report` are wrapped in `AccessGate` component that checks `GET /api/access/:sessionToken`. If no valid purchase, user is redirected to `/preview`.
-- **Stripe integration**: Uses Replit Stripe connector with `stripe-replit-sync` for webhook processing and data sync. Product: "Structured Financial Analysis" (£79 one-time). Webhook handler updates purchases table on checkout.session.completed.
+- **Stripe integration**: Uses Replit Stripe connector with `stripe-replit-sync` for webhook processing and data sync. Product: "Structured Financial Analysis" (£59 launch phase; standard £79). Webhook handler updates purchases table on checkout.session.completed.
 - **Session token**: Stored in localStorage as `dfm-session-token`, used to link purchases to browser sessions.
 
 ### Key Design Decisions
@@ -48,7 +48,7 @@ The application uses a freemium model with a £79 one-time payment for full acce
 2.  **Config-driven tax model**: All financial parameters are externalized in a JSON configuration, allowing for flexible updates.
 3.  **Scenario comparison model**: The tool focuses on modelling user-defined split assumptions rather than prescribing legal outcomes.
 4.  **Zod for validation**: Consistent schema validation is applied across both client and server using Zod.
-5.  **Freemium access model**: Preview page shows limited data to demonstrate value; full analysis requires £79 one-time Stripe payment with 6-month access window.
+5.  **Freemium access model**: Preview page shows limited data to demonstrate value; full analysis requires £59 launch phase Stripe payment (standard £79) with 6-month access window.
 
 ### SEO Foundation
 
