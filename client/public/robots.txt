@@ -6,4 +6,6 @@ Disallow: /report
 Disallow: /wizard
 Disallow: /unlock
 Disallow: /payment-success
+Disallow: /recover
+Disallow: /admin
 Sitemap: https://divorcecalculatoruk.co.uk/sitemap.xml

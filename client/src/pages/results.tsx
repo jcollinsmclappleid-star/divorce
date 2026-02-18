@@ -4,6 +4,7 @@ import { useAppStore } from "@/hooks/use-store";
 import { useEngine, ScenarioResult, ProjectionYear, RunwayResult } from "@/hooks/use-engine";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
+import { useAccess } from "@/hooks/use-access";
 import { Logo } from "@/components/logo";
 import { calcMortgagePayment } from "@/lib/engine/calc/mortgage";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -164,8 +165,9 @@ export default function ResultsPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans">
-      <div className="bg-primary/10 text-primary px-4 py-1.5 text-xs text-center font-medium border-b border-primary/20" data-testid="text-disclaimer">
-        Illustrative modelling only. Not legal, tax or financial advice.
+      <div className="bg-primary/10 text-primary px-4 py-1.5 text-xs text-center font-medium border-b border-primary/20 flex items-center justify-center gap-3 flex-wrap" data-testid="text-disclaimer">
+        <span>Illustrative modelling only. Not legal, tax or financial advice.</span>
+        <AccessExpiryNotice />
       </div>
 
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -2222,5 +2224,29 @@ function computeAllScenarios(engine: ReturnType<typeof useEngine>): ScenarioResu
   if (s4) allEnabled.push(s4);
 
   return allEnabled.length > 0 ? allEnabled : engine.scenarios;
+}
+
+function AccessExpiryNotice() {
+  const { expiresAt } = useAccess();
+  if (!expiresAt) return null;
+
+  const expiry = new Date(expiresAt);
+  const now = new Date();
+  const daysLeft = Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  const formatted = expiry.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+
+  if (daysLeft <= 14) {
+    return (
+      <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]" data-testid="badge-expiry-warning">
+        Access expires {formatted}
+      </Badge>
+    );
+  }
+
+  return (
+    <span className="text-[10px] opacity-70" data-testid="text-expiry-date">
+      Access valid until {formatted}
+    </span>
+  );
 }
 

@@ -13,6 +13,8 @@ import PaymentSuccessPage from "@/pages/payment-success";
 import PrivacyPage from "@/pages/privacy";
 import TermsPage from "@/pages/terms";
 import MethodologyPage from "@/pages/methodology";
+import RecoverPage from "@/pages/recover";
+import AdminPage from "@/pages/admin";
 import { AccessGate } from "@/components/access-gate";
 
 function Router() {
@@ -26,6 +28,8 @@ function Router() {
       <Route path="/privacy" component={PrivacyPage} />
       <Route path="/terms" component={TermsPage} />
       <Route path="/methodology" component={MethodologyPage} />
+      <Route path="/recover" component={RecoverPage} />
+      <Route path="/admin" component={AdminPage} />
       <Route path="/results">
         <AccessGate>
           <ResultsPage />

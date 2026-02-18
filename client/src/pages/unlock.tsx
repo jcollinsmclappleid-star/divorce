@@ -189,6 +189,9 @@ export default function UnlockPage() {
               <div className="text-xs text-muted-foreground space-y-1">
                 <p>Private access. No subscription. Immediate unlock.</p>
                 <p>Access remains available for 6 months to model evolving assumptions.</p>
+                <p className="mt-1">
+                  Already purchased? <Link href="/recover" className="underline text-primary" data-testid="link-recover">Recover your access</Link>
+                </p>
                 <p className="text-[10px] text-muted-foreground/70 leading-relaxed mt-2">
                   By proceeding, you acknowledge that this tool provides illustrative financial modelling only and does not constitute legal, tax, or regulated financial advice. No advisory relationship is created. Outputs should not be relied upon for decision-making without independent professional advice.
                 </p>

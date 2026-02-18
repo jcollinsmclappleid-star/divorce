@@ -1,6 +1,6 @@
 import { db } from "./db";
 import { sessions, purchases, type Session, type InsertSession, type Purchase, type InsertPurchase } from "@shared/schema";
-import { eq, and, sql } from "drizzle-orm";
+import { eq, and, sql, desc } from "drizzle-orm";
 
 export interface IStorage {
   createSession(session: InsertSession): Promise<Session>;
@@ -11,6 +11,8 @@ export interface IStorage {
   getPurchaseBySessionToken(sessionToken: string): Promise<Purchase | undefined>;
   getPurchaseByCheckoutSessionId(checkoutSessionId: string): Promise<Purchase | undefined>;
   markPurchasePaid(id: string, paymentIntentId: string, email: string | null): Promise<Purchase>;
+  getPaidPurchasesByEmail(email: string): Promise<Purchase[]>;
+  extendPurchaseExpiry(purchaseId: string, months: number): Promise<Purchase>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -74,6 +76,40 @@ export class DatabaseStorage implements IStorage {
         expiresAt: expiresAt,
       })
       .where(eq(purchases.id, id))
+      .returning();
+    return updated;
+  }
+
+  async getPaidPurchasesByEmail(email: string): Promise<Purchase[]> {
+    return db
+      .select()
+      .from(purchases)
+      .where(
+        and(
+          eq(purchases.email, email.toLowerCase().trim()),
+          eq(purchases.status, "paid")
+        )
+      )
+      .orderBy(desc(purchases.purchasedAt));
+  }
+
+  async extendPurchaseExpiry(purchaseId: string, months: number): Promise<Purchase> {
+    const [purchase] = await db
+      .select()
+      .from(purchases)
+      .where(eq(purchases.id, purchaseId));
+
+    if (!purchase) throw new Error("Purchase not found");
+
+    const currentExpiry = purchase.expiresAt ? new Date(purchase.expiresAt) : new Date();
+    const baseDate = currentExpiry > new Date() ? currentExpiry : new Date();
+    const newExpiry = new Date(baseDate);
+    newExpiry.setMonth(newExpiry.getMonth() + months);
+
+    const [updated] = await db
+      .update(purchases)
+      .set({ expiresAt: newExpiry })
+      .where(eq(purchases.id, purchaseId))
       .returning();
     return updated;
   }

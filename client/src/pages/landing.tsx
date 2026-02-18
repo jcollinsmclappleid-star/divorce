@@ -436,6 +436,9 @@ export default function LandingPage() {
             <Link href="/methodology" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-methodology">
               Model Methodology
             </Link>
+            <Link href="/recover" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-recover">
+              Recover Access
+            </Link>
           </div>
           <p className="text-xs text-muted-foreground">
             Illustrative financial modelling only. This tool does not provide legal, tax, or financial advice.

@@ -125,6 +125,96 @@ export async function registerRoutes(
     }
   });
 
+  app.post('/api/access/recover', async (req, res) => {
+    try {
+      const schema = z.object({ email: z.string().email() });
+      const { email } = schema.parse(req.body);
+
+      const purchases = await storage.getPaidPurchasesByEmail(email);
+      if (purchases.length === 0) {
+        return res.json({ found: false });
+      }
+
+      const validPurchase = purchases.find(p => p.expiresAt && new Date(p.expiresAt) > new Date());
+      if (!validPurchase) {
+        return res.json({ found: true, expired: true });
+      }
+
+      return res.json({
+        found: true,
+        expired: false,
+        sessionToken: validPurchase.sessionToken,
+        expiresAt: validPurchase.expiresAt,
+      });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Valid email address required' });
+      }
+      res.status(500).json({ message: 'Failed to recover access' });
+    }
+  });
+
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || process.env.SESSION_SECRET || '';
+
+  function requireAdmin(req: any, res: any, next: any) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+    const token = authHeader.slice(7);
+    if (!ADMIN_PASSWORD || token !== ADMIN_PASSWORD) {
+      return res.status(403).json({ message: 'Invalid credentials' });
+    }
+    next();
+  }
+
+  app.post('/api/admin/lookup', requireAdmin, async (req, res) => {
+    try {
+      const schema = z.object({ email: z.string().email() });
+      const { email } = schema.parse(req.body);
+
+      const purchases = await storage.getPaidPurchasesByEmail(email);
+      const results = purchases.map(p => ({
+        id: p.id,
+        email: p.email,
+        status: p.status,
+        purchasedAt: p.purchasedAt,
+        expiresAt: p.expiresAt,
+        isActive: p.expiresAt ? new Date(p.expiresAt) > new Date() : false,
+      }));
+
+      return res.json({ purchases: results });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Valid email address required' });
+      }
+      res.status(500).json({ message: 'Lookup failed' });
+    }
+  });
+
+  app.post('/api/admin/extend', requireAdmin, async (req, res) => {
+    try {
+      const schema = z.object({
+        purchaseId: z.string().min(1),
+        months: z.number().int().min(1).max(12),
+      });
+      const { purchaseId, months } = schema.parse(req.body);
+
+      const updated = await storage.extendPurchaseExpiry(purchaseId, months);
+      return res.json({
+        id: updated.id,
+        email: updated.email,
+        expiresAt: updated.expiresAt,
+        status: updated.status,
+      });
+    } catch (err: any) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Invalid input' });
+      }
+      res.status(500).json({ message: err.message || 'Extension failed' });
+    }
+  });
+
   app.post(api.pdf.generate.path, async (req, res) => {
     try {
       console.log("Generating PDF for state:", req.body);
