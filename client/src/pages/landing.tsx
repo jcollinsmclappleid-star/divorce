@@ -294,13 +294,13 @@ export default function LandingPage() {
       <section className="py-16 md:py-20" data-testid="section-pricing">
         <div className="container mx-auto px-4 max-w-xl text-center space-y-6">
           <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-pricing-headline">
-            Structured Financial Modelling &mdash; &pound;79
+            Structured Financial Modelling &mdash; &pound;59
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             A single professional consultation typically costs <span className="font-semibold text-foreground">&pound;250&ndash;&pound;400 per hour</span>. Many individuals attend several before their financial picture becomes clearer.
           </p>
           <p className="text-muted-foreground leading-relaxed">
-            This platform provides structured modelling and scenario comparison for a <span className="font-semibold text-foreground">one-time &pound;79</span>, including six months of unlimited scenario reruns.
+            This platform provides structured modelling and scenario comparison for a <span className="font-semibold text-foreground">one-time &pound;59</span>, including six months of unlimited scenario reruns.
           </p>
           <div className="grid grid-cols-3 gap-4 text-center max-w-md mx-auto py-4">
             <div>
