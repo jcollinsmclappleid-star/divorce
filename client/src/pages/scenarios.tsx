@@ -200,7 +200,12 @@ export default function ScenariosPage() {
                   </div>
                   {engine.cmsWeekly > 0 && (
                     <div className="text-sm mt-2 space-y-0.5">
-                      <p>Estimated CMS: <strong>{formatCurrency(engine.cmsWeekly)}/week</strong> ({formatCurrency(engine.cmsAnnual)}/year)</p>
+                      <p>
+                        {assumptions.overrideCMSAnnual != null && assumptions.overrideCMSAnnual > 0
+                          ? <>Child maintenance (override): <strong>{formatCurrency(engine.cmsWeekly)}/week</strong> ({formatCurrency(engine.cmsAnnual)}/year)</>
+                          : <>Estimated CMS: <strong>{formatCurrency(engine.cmsWeekly)}/week</strong> ({formatCurrency(engine.cmsAnnual)}/year)</>
+                        }
+                      </p>
                       {engine.cmsYearsRemaining > 0 && (
                         <p className="text-xs text-muted-foreground">Based on child ages entered, payments modelled for ~{engine.cmsYearsRemaining} further year{engine.cmsYearsRemaining !== 1 ? "s" : ""}</p>
                       )}

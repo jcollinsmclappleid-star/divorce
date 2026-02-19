@@ -155,6 +155,10 @@ export const AssumptionsSchema = z.object({
   includeTaxModel: z.boolean(),
   includeCMSEstimate: z.boolean(),
 
+  overrideNetIncomeA: z.number().finite().min(0).nullable().optional(),
+  overrideNetIncomeB: z.number().finite().min(0).nullable().optional(),
+  overrideCMSAnnual: z.number().finite().min(0).nullable().optional(),
+
   incomeMultiple: z.number().finite().min(0).max(10).optional(),
   mortgageAPR: z.number().finite().min(0).max(1).optional(),
   mortgageTermYears: z.number().int().min(1).max(40).optional(),

@@ -60,6 +60,9 @@ export interface Assumptions {
   includeCMSEstimate: boolean;
   mortgageAPR: number;
   mortgageTermYears: number;
+  overrideNetIncomeA?: number | null;
+  overrideNetIncomeB?: number | null;
+  overrideCMSAnnual?: number | null;
 }
 
 export interface Children {

@@ -1043,7 +1043,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 function StepIncome({ advancedMode }: { advancedMode: boolean }) {
-  const { incomes, addIncome, updateIncome, removeIncome } = useAppStore();
+  const { incomes, addIncome, updateIncome, removeIncome, assumptions, updateAssumptions } = useAppStore();
   const [incomeDialogOpen, setIncomeDialogOpen] = useState(false);
   const [editingIncome, setEditingIncome] = useState<Income | null>(null);
 
@@ -1152,6 +1152,47 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
                 </div>
               </button>
             ))}
+          </div>
+        </div>
+      )}
+
+      {advancedMode && (
+        <div className="space-y-4 pt-2">
+          <Separator />
+          <Label className="text-sm font-medium text-muted-foreground">Override Take-Home Pay (Optional)</Label>
+          <p className="text-xs text-muted-foreground">
+            If you know the actual annual take-home pay (after tax, NI, and any deductions), enter it here. 
+            This will replace the model's estimated net income for that party. Leave blank to use the model's calculation.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label className="text-sm">Party A take-home ({"\u00A3"}/year)</Label>
+              <Input
+                type="number"
+                min={0}
+                placeholder="Leave blank for model estimate"
+                value={assumptions.overrideNetIncomeA ?? ""}
+                onChange={(e) => {
+                  const v = parseFloat(e.target.value);
+                  updateAssumptions({ overrideNetIncomeA: isNaN(v) || v <= 0 ? null : v });
+                }}
+                data-testid="input-override-net-a"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm">Party B take-home ({"\u00A3"}/year)</Label>
+              <Input
+                type="number"
+                min={0}
+                placeholder="Leave blank for model estimate"
+                value={assumptions.overrideNetIncomeB ?? ""}
+                onChange={(e) => {
+                  const v = parseFloat(e.target.value);
+                  updateAssumptions({ overrideNetIncomeB: isNaN(v) || v <= 0 ? null : v });
+                }}
+                data-testid="input-override-net-b"
+              />
+            </div>
           </div>
         </div>
       )}
@@ -1452,6 +1493,30 @@ function StepSupport({ advancedMode }: { advancedMode: boolean }) {
           />
           <Label>Include child maintenance estimate in projections</Label>
         </div>
+
+        {assumptions.includeCMSEstimate && (
+          <div className="space-y-3 p-4 bg-muted/30 rounded-md">
+            <Label className="text-sm font-medium">Override Child Maintenance Amount (Optional)</Label>
+            <p className="text-xs text-muted-foreground">
+              If you have a private arrangement or know your actual CMS assessment, enter it here.
+              Leave blank to use the model's CMS formula estimate.
+            </p>
+            <div className="space-y-2">
+              <Label className="text-sm">Annual child maintenance ({"\u00A3"}/year)</Label>
+              <Input
+                type="number"
+                min={0}
+                placeholder="Leave blank for CMS formula estimate"
+                value={assumptions.overrideCMSAnnual ?? ""}
+                onChange={(e) => {
+                  const v = parseFloat(e.target.value);
+                  updateAssumptions({ overrideCMSAnnual: isNaN(v) || v <= 0 ? null : v });
+                }}
+                data-testid="input-override-cms"
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {advancedMode && (

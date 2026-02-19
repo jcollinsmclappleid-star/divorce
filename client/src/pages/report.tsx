@@ -78,10 +78,18 @@ function buildQualitativeExecutiveSummary(
       const earner = incomeA > 0 ? "A" : "B";
       incomeParts.push(`Only Party ${earner} has declared income, which represents a single-income dependency across all modelled scenarios.`);
     }
-    incomeParts.push(`After applying estimated 2025/26 UK income tax and National Insurance, net incomes are ${fmt(netA)} (Party A) and ${fmt(netB)} (Party B) per annum.`);
+    const netALabel = store.assumptions.overrideNetIncomeA != null && store.assumptions.overrideNetIncomeA > 0
+      ? `${fmt(engine.taxA.net)} (Party A, user-provided override)`
+      : `${fmt(engine.taxA.net)} (Party A)`;
+    const netBLabel = store.assumptions.overrideNetIncomeB != null && store.assumptions.overrideNetIncomeB > 0
+      ? `${fmt(engine.taxB.net)} (Party B, user-provided override)`
+      : `${fmt(engine.taxB.net)} (Party B)`;
+    incomeParts.push(`After applying estimated 2025/26 UK income tax and National Insurance, net incomes are ${netALabel} and ${netBLabel} per annum.`);
     if (engine.cmsAnnual > 0) {
+      const cmsSource = store.assumptions.overrideCMSAnnual != null && store.assumptions.overrideCMSAnnual > 0
+        ? "a user-provided override" : "the CMS formula";
       const cmsDuration = engine.cmsYearsRemaining > 0 ? ` Payments are modelled for approximately ${engine.cmsYearsRemaining} further year${engine.cmsYearsRemaining !== 1 ? "s" : ""}, based on the ages of the children entered.` : "";
-      incomeParts.push(`Child maintenance obligations, estimated at ${fmt(engine.cmsAnnual)} per annum using the CMS formula, are factored into the projection model.${cmsDuration}`);
+      incomeParts.push(`Child maintenance obligations, estimated at ${fmt(engine.cmsAnnual)} per annum using ${cmsSource}, are factored into the projection model.${cmsDuration}`);
     }
   }
   paragraphs.push(incomeParts.join(" "));
@@ -620,6 +628,15 @@ export default function ReportPage() {
                 <AssumptionRow label="Dependent Children" value={`${store.children.numChildren}`} />
                 <AssumptionRow label="Overnight Stays with Party A" value={`${store.children.nightsWithA}`} />
               </>
+            )}
+            {(store.assumptions.overrideNetIncomeA != null && store.assumptions.overrideNetIncomeA > 0) && (
+              <AssumptionRow label="Party A Net Income Override" value={fmt(store.assumptions.overrideNetIncomeA)} />
+            )}
+            {(store.assumptions.overrideNetIncomeB != null && store.assumptions.overrideNetIncomeB > 0) && (
+              <AssumptionRow label="Party B Net Income Override" value={fmt(store.assumptions.overrideNetIncomeB)} />
+            )}
+            {(store.assumptions.overrideCMSAnnual != null && store.assumptions.overrideCMSAnnual > 0) && (
+              <AssumptionRow label="Child Maintenance Override" value={`${fmt(store.assumptions.overrideCMSAnnual)}/yr`} />
             )}
           </div>
           <div className="mt-4 pt-3 border-t">

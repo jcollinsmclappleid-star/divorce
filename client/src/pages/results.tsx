@@ -380,6 +380,20 @@ export default function ResultsPage() {
                     <div className="flex justify-between gap-2"><span>Projection period</span><span className="tabular-nums">{assumptions.projectionYears} years</span></div>
                     <div className="flex justify-between gap-2"><span>Tax model</span><span>{assumptions.includeTaxModel ? "2025/26 UK rates" : "Disabled"}</span></div>
                     <div className="flex justify-between gap-2"><span>Child maintenance</span><span>{assumptions.includeCMSEstimate ? `CMS estimate (${engine.cmsYearsRemaining > 0 ? `~${engine.cmsYearsRemaining} yrs remaining` : "all children 16+"})` : "Not included"}</span></div>
+                    {(assumptions.overrideNetIncomeA != null || assumptions.overrideNetIncomeB != null || assumptions.overrideCMSAnnual != null) && (
+                      <div className="mt-2 pt-2 border-t border-muted space-y-1">
+                        <p className="text-xs font-medium text-amber-600 dark:text-amber-400">User Overrides Applied:</p>
+                        {assumptions.overrideNetIncomeA != null && assumptions.overrideNetIncomeA > 0 && (
+                          <div className="flex justify-between gap-2 text-xs"><span>Party A take-home (override)</span><span className="tabular-nums">{formatCurrency(assumptions.overrideNetIncomeA)}/yr</span></div>
+                        )}
+                        {assumptions.overrideNetIncomeB != null && assumptions.overrideNetIncomeB > 0 && (
+                          <div className="flex justify-between gap-2 text-xs"><span>Party B take-home (override)</span><span className="tabular-nums">{formatCurrency(assumptions.overrideNetIncomeB)}/yr</span></div>
+                        )}
+                        {assumptions.overrideCMSAnnual != null && assumptions.overrideCMSAnnual > 0 && (
+                          <div className="flex justify-between gap-2 text-xs"><span>Child maintenance (override)</span><span className="tabular-nums">{formatCurrency(assumptions.overrideCMSAnnual)}/yr</span></div>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="mt-3 pt-2 border-t border-muted space-y-1">
                     <p className="text-xs font-medium text-muted-foreground">Tax Model Scope (2025/26):</p>

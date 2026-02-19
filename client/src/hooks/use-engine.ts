@@ -149,12 +149,22 @@ function runEngine(state: StoreState): EngineResult {
   const grossA = incomesA.reduce((s, i) => s + i.amountAnnualGross, 0);
   const grossB = incomesB.reduce((s, i) => s + i.amountAnnualGross, 0);
 
-  const taxA = assumptions.includeTaxModel
+  const rawTaxA = assumptions.includeTaxModel
     ? calcTaxForParty(incomesA)
     : { gross: grossA, personalAllowance: 0, incomeTax: 0, nationalInsurance: 0, net: grossA };
-  const taxB = assumptions.includeTaxModel
+  const rawTaxB = assumptions.includeTaxModel
     ? calcTaxForParty(incomesB)
     : { gross: grossB, personalAllowance: 0, incomeTax: 0, nationalInsurance: 0, net: grossB };
+
+  const hasOverrideNetA = assumptions.overrideNetIncomeA != null && assumptions.overrideNetIncomeA > 0;
+  const hasOverrideNetB = assumptions.overrideNetIncomeB != null && assumptions.overrideNetIncomeB > 0;
+
+  const taxA: TaxBreakdown = hasOverrideNetA
+    ? { ...rawTaxA, net: assumptions.overrideNetIncomeA! }
+    : rawTaxA;
+  const taxB: TaxBreakdown = hasOverrideNetB
+    ? { ...rawTaxB, net: assumptions.overrideNetIncomeB! }
+    : rawTaxB;
 
   const expenseA = expenses.filter(e => e.owner === 'A').reduce((s, e) => s + e.amountAnnual, 0);
   const expenseB = expenses.filter(e => e.owner === 'B').reduce((s, e) => s + e.amountAnnual, 0);
@@ -163,11 +173,17 @@ function runEngine(state: StoreState): EngineResult {
   const surplusA = taxA.net - expenseA - (expenseShared / 2);
   const surplusB = taxB.net - expenseB - (expenseShared / 2);
 
+  const hasOverrideCMS = assumptions.overrideCMSAnnual != null && assumptions.overrideCMSAnnual > 0;
   let cmsWeekly = 0;
   let cmsAnnual = 0;
   if (assumptions.includeCMSEstimate && children.numChildren > 0) {
-    cmsWeekly = calcCMS(grossA, children.numChildren, children.nightsWithA, config);
-    cmsAnnual = round(cmsWeekly * 52);
+    if (hasOverrideCMS) {
+      cmsAnnual = round(assumptions.overrideCMSAnnual!);
+      cmsWeekly = round(cmsAnnual / 52);
+    } else {
+      cmsWeekly = calcCMS(grossA, children.numChildren, children.nightsWithA, config);
+      cmsAnnual = round(cmsWeekly * 52);
+    }
   }
 
   const primaryHome = assets.find(a => a.category === 'primary_home');
@@ -312,6 +328,9 @@ function runEngine(state: StoreState): EngineResult {
   function cmsForYear(projectionYear: number): number {
     const eligible = eligibleChildrenInYear(projectionYear);
     if (eligible <= 0) return 0;
+    if (hasOverrideCMS) {
+      return round(cmsAnnual * (eligible / children.numChildren));
+    }
     if (eligible === children.numChildren) return cmsAnnual;
     const weeklyForYear = calcCMS(grossA, eligible, children.nightsWithA, config);
     return round(weeklyForYear * 52);
