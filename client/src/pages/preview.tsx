@@ -11,7 +11,6 @@ import { useEffect, useMemo } from "react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { Logo } from "@/components/logo";
-import { LogoMark } from "@/components/logo-mark";
 
 function BlurredSection({ title, height = "h-32" }: { title: string; height?: string }) {
   return (
@@ -103,7 +102,7 @@ export default function PreviewPage() {
 
         <div className="text-center space-y-3">
           <div className="flex justify-center mb-2">
-            <LogoMark size={64} variant="navy" />
+            <Logo href="/" size="lg" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight" data-testid="text-preview-title">
             Your Financial Position Has Been Modelled.

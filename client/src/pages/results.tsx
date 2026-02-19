@@ -6,7 +6,6 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { useAccess } from "@/hooks/use-access";
 import { Logo } from "@/components/logo";
-import { LogoMark } from "@/components/logo-mark";
 import { calcMortgagePayment } from "@/lib/engine/calc/mortgage";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -231,12 +230,9 @@ export default function ResultsPage() {
         <div className="space-y-10">
           <div className="space-y-4">
             <div>
-              <div className="flex items-center gap-3 mb-1">
-                <LogoMark size={48} variant="navy" />
-                <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight" data-testid="text-results-title">
-                  Structured Financial Brief
-                </h1>
-              </div>
+              <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight" data-testid="text-results-title">
+                Structured Financial Brief
+              </h1>
               <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed max-w-2xl">
                 Compare post-settlement financial positions under each scenario. Adjust the settlement ratio using the controls above. Select an analytical lens below to prioritise the relevant metrics.
               </p>

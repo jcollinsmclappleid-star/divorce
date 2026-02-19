@@ -20,7 +20,6 @@ import type {
 } from "@/lib/insights";
 import type { StabilityDriver } from "@/lib/insights/computeStabilityScore";
 import { LogoPrint } from "@/components/logo";
-import { LogoMark } from "@/components/logo-mark";
 
 const SCENARIO_META: Record<string, { label: string; color: string }> = {
   S1: { label: "Sell & Split", color: "#2563EB" },
@@ -218,10 +217,7 @@ export default function ReportPage() {
       <div className="max-w-4xl mx-auto px-8 py-10 print:px-0 print:py-0" data-testid="report-content">
         <header className="mb-10 pb-6 border-b-2 border-gray-800">
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <LogoMark size={48} variant="navy" />
-              <LogoPrint className="h-10" />
-            </div>
+            <LogoPrint className="h-14" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight" data-testid="text-report-title">Structured Financial Brief</h1>
           <p className="text-sm text-gray-500 mt-1">

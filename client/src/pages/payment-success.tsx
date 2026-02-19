@@ -7,7 +7,6 @@ import { useAccess } from "@/hooks/use-access";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { Logo } from "@/components/logo";
-import { LogoMark } from "@/components/logo-mark";
 
 export default function PaymentSuccessPage() {
   useDocumentTitle("Payment Confirmed | DivorceCalculatorUK");
@@ -55,9 +54,8 @@ export default function PaymentSuccessPage() {
     <div className="min-h-screen flex items-center justify-center bg-background p-6">
       <Card className="max-w-md w-full">
         <CardContent className="pt-8 pb-8 text-center space-y-6">
-          <div className="flex flex-col items-center gap-2">
-            <LogoMark size={56} variant="navy" />
-            <Logo href="/" size="md" />
+          <div className="flex justify-center">
+            <Logo href="/" size="lg" />
           </div>
           {verifying ? (
             <>
