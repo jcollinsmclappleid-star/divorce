@@ -103,15 +103,6 @@ export default function LandingPage() {
         Illustrative modelling only. Not legal, tax or financial advice.
       </div>
 
-      <div className="w-full bg-primary py-6 px-4" data-testid="banner-brand">
-        <div className="container mx-auto flex flex-col items-center justify-center gap-3">
-          <Logo href="/" size="lg" />
-          <p className="text-primary-foreground/70 text-xs tracking-widest uppercase">
-            Structured Financial Modelling
-          </p>
-        </div>
-      </div>
-
       <nav className="sticky top-0 z-[100] w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 h-12 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
