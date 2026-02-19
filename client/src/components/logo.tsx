@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import logoImage from "@assets/99837457-0E25-4053-9466-A21F982CCA30_1771443541335.png";
+import logoImage from "@assets/9204D1B1-4FBF-42EF-9A10-FF773B2F9F35_1771463140495.png";
 
 interface LogoProps {
   href?: string;
