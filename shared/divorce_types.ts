@@ -133,6 +133,7 @@ export const EventInputSchema = z.object({
 export const ChildrenInputSchema = z
   .object({
     numChildren: z.number().int().min(0).max(10),
+    childAges: z.array(z.number().int().min(0).max(18)).optional().default([]),
     nightsWithA: z.number().int().min(0).max(365),
     nightsWithB: z.number().int().min(0).max(365)
   })

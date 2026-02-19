@@ -379,7 +379,7 @@ export default function ResultsPage() {
                     <div className="flex justify-between gap-2"><span>Inflation rate</span><span className="tabular-nums">{(assumptions.inflationRate * 100).toFixed(1)}%</span></div>
                     <div className="flex justify-between gap-2"><span>Projection period</span><span className="tabular-nums">{assumptions.projectionYears} years</span></div>
                     <div className="flex justify-between gap-2"><span>Tax model</span><span>{assumptions.includeTaxModel ? "2025/26 UK rates" : "Disabled"}</span></div>
-                    <div className="flex justify-between gap-2"><span>Child maintenance</span><span>{assumptions.includeCMSEstimate ? "CMS estimate" : "Not included"}</span></div>
+                    <div className="flex justify-between gap-2"><span>Child maintenance</span><span>{assumptions.includeCMSEstimate ? `CMS estimate (${engine.cmsYearsRemaining > 0 ? `~${engine.cmsYearsRemaining} yrs remaining` : "all children 16+"})` : "Not included"}</span></div>
                   </div>
                   <div className="mt-3 pt-2 border-t border-muted space-y-1">
                     <p className="text-xs font-medium text-muted-foreground">Tax Model Scope (2025/26):</p>

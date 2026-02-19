@@ -281,32 +281,57 @@ function StepSituation({ advancedMode }: { advancedMode: boolean }) {
         </div>
 
         {children.numChildren > 0 && (
-          <div className="grid gap-4 sm:grid-cols-2 p-4 bg-muted/30 rounded-md">
-            <div className="space-y-2">
-              <Label className="text-sm">Number of children</Label>
-              <Input
-                type="number"
-                min={1}
-                max={10}
-                value={children.numChildren}
-                onChange={(e) => updateChildren({ numChildren: parseInt(e.target.value) || 1 })}
-                data-testid="input-num-children"
-              />
+          <div className="space-y-4 p-4 bg-muted/30 rounded-md">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label className="text-sm">Number of children</Label>
+                <Input
+                  type="number"
+                  min={1}
+                  max={10}
+                  value={children.numChildren}
+                  onChange={(e) => updateChildren({ numChildren: parseInt(e.target.value) || 1 })}
+                  data-testid="input-num-children"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-sm">Nights per year with Party A</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  max={365}
+                  value={children.nightsWithA}
+                  onChange={(e) => {
+                    const n = parseInt(e.target.value) || 0;
+                    updateChildren({ nightsWithA: n, nightsWithB: Math.max(0, 365 - n) });
+                  }}
+                  data-testid="input-nights-a"
+                />
+                <p className="text-xs text-muted-foreground">{children.nightsWithB} nights with Party B</p>
+              </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm">Nights per year with Party A</Label>
-              <Input
-                type="number"
-                min={0}
-                max={365}
-                value={children.nightsWithA}
-                onChange={(e) => {
-                  const n = parseInt(e.target.value) || 0;
-                  updateChildren({ nightsWithA: n, nightsWithB: Math.max(0, 365 - n) });
-                }}
-                data-testid="input-nights-a"
-              />
-              <p className="text-xs text-muted-foreground">{children.nightsWithB} nights with Party B</p>
+              <Label className="text-sm">Age of each child</Label>
+              <p className="text-xs text-muted-foreground">Child maintenance typically applies until age 16 (or 20 if in full-time education). Ages help model when payments may end.</p>
+              <div className="grid gap-2 sm:grid-cols-3">
+                {(children.childAges || []).slice(0, children.numChildren).map((age, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <Label className="text-xs text-muted-foreground whitespace-nowrap shrink-0">Child {i + 1}</Label>
+                    <Input
+                      type="number"
+                      min={0}
+                      max={18}
+                      value={age}
+                      onChange={(e) => {
+                        const newAges = [...(children.childAges || [])];
+                        newAges[i] = Math.max(0, Math.min(18, parseInt(e.target.value) || 0));
+                        updateChildren({ childAges: newAges });
+                      }}
+                      data-testid={`input-child-age-${i}`}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}

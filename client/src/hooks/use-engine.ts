@@ -65,6 +65,7 @@ export interface EngineResult {
   taxB: TaxBreakdown;
   cmsWeekly: number;
   cmsAnnual: number;
+  cmsYearsRemaining: number;
   scenarios: ScenarioResult[];
   projections: Record<string, ProjectionYear[]>;
   runways: Record<string, RunwayResult>;
@@ -292,6 +293,30 @@ function runEngine(state: StoreState): EngineResult {
     });
   }
 
+  const rawChildAges = children.childAges || [];
+  const childAges = rawChildAges.length >= children.numChildren
+    ? rawChildAges.slice(0, children.numChildren)
+    : [...rawChildAges, ...Array(Math.max(0, children.numChildren - rawChildAges.length)).fill(5)];
+  const cmsEndAge = 16;
+
+  function eligibleChildrenInYear(projectionYear: number): number {
+    if (!assumptions.includeCMSEstimate || children.numChildren <= 0) return 0;
+    let count = 0;
+    for (let i = 0; i < children.numChildren; i++) {
+      const age = (childAges[i] ?? 5) + projectionYear;
+      if (age < cmsEndAge) count++;
+    }
+    return count;
+  }
+
+  function cmsForYear(projectionYear: number): number {
+    const eligible = eligibleChildrenInYear(projectionYear);
+    if (eligible <= 0) return 0;
+    if (eligible === children.numChildren) return cmsAnnual;
+    const weeklyForYear = calcCMS(grossA, eligible, children.nightsWithA, config);
+    return round(weeklyForYear * 52);
+  }
+
   const projections: Record<string, ProjectionYear[]> = {};
   for (const sc of scenarioResults) {
     const years: ProjectionYear[] = [];
@@ -303,17 +328,20 @@ function runEngine(state: StoreState): EngineResult {
     const mortgageAnnualA = (sc.mortgageMonthlyA ?? 0) * 12;
     const mortgageAnnualB = (sc.mortgageMonthlyB ?? 0) * 12;
 
-    let annualSurplusA = surplusA - (assumptions.includeCMSEstimate ? cmsAnnual : 0) - mortgageAnnualA;
-    let annualSurplusB = surplusB + (assumptions.includeCMSEstimate ? cmsAnnual : 0) - mortgageAnnualB;
+    const baseSurplusA = surplusA - mortgageAnnualA;
+    const baseSurplusB = surplusB - mortgageAnnualB;
 
     for (let y = 0; y <= assumptions.projectionYears; y++) {
+      const cmsThisYear = cmsForYear(y);
+      const inflMultiplier = Math.pow(1 + inflRate, y);
+      const annualSurplusA = (baseSurplusA - cmsThisYear) * inflMultiplier;
+      const annualSurplusB = (baseSurplusB + cmsThisYear) * inflMultiplier;
+
       years.push({ year: currentYear + y, capitalA: round(capA), capitalB: round(capB) });
 
       const assetGrowth = 1 + inflRate;
       capA = capA * assetGrowth + annualSurplusA;
       capB = capB * assetGrowth + annualSurplusB;
-      annualSurplusA *= (1 + inflRate);
-      annualSurplusB *= (1 + inflRate);
     }
     projections[sc.id] = years;
   }
@@ -352,6 +380,12 @@ function runEngine(state: StoreState): EngineResult {
     };
   }
 
+  let cmsYearsRemaining = 0;
+  if (assumptions.includeCMSEstimate && children.numChildren > 0 && childAges.length > 0) {
+    const youngestAge = Math.min(...childAges.map(a => a ?? 5));
+    cmsYearsRemaining = Math.max(0, cmsEndAge - youngestAge);
+  }
+
   return {
     netWorth: { total: round(netWorthA + netWorthB), partyA: round(netWorthA), partyB: round(netWorthB) },
     liquidity: { partyA: round(liquidA), partyB: round(liquidB) },
@@ -360,6 +394,7 @@ function runEngine(state: StoreState): EngineResult {
     taxB,
     cmsWeekly,
     cmsAnnual,
+    cmsYearsRemaining,
     scenarios: scenarioResults,
     projections,
     runways,

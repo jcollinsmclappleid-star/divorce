@@ -64,6 +64,7 @@ export interface Assumptions {
 
 export interface Children {
   numChildren: number;
+  childAges: number[];
   nightsWithA: number;
   nightsWithB: number;
 }
@@ -114,6 +115,7 @@ const initialState: StoreState = {
   },
   children: {
     numChildren: 0,
+    childAges: [],
     nightsWithA: 182,
     nightsWithB: 183,
   }
@@ -202,9 +204,19 @@ export const useAppStore = create<StoreState & AppActions>()(
       updateAssumptions: (updates) => set((state) => ({
         assumptions: { ...state.assumptions, ...updates }
       })),
-      updateChildren: (updates) => set((state) => ({
-        children: { ...state.children, ...updates }
-      })),
+      updateChildren: (updates) => set((state) => {
+        const merged = { ...state.children, ...updates };
+        if ('numChildren' in updates && updates.numChildren !== undefined) {
+          const n = updates.numChildren;
+          const existing = merged.childAges || [];
+          if (n > existing.length) {
+            merged.childAges = [...existing, ...Array(n - existing.length).fill(5)];
+          } else {
+            merged.childAges = existing.slice(0, n);
+          }
+        }
+        return { children: merged };
+      }),
 
       reset: () => set(initialState),
       loadState: (newState) => set(newState),
@@ -212,6 +224,20 @@ export const useAppStore = create<StoreState & AppActions>()(
     {
       name: 'divorce-model-storage',
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        if (state && state.children) {
+          const c = state.children;
+          if (!c.childAges || c.childAges.length === 0) {
+            if (c.numChildren > 0) {
+              c.childAges = Array(c.numChildren).fill(5);
+            } else {
+              c.childAges = [];
+            }
+          } else if (c.childAges.length < c.numChildren) {
+            c.childAges = [...c.childAges, ...Array(c.numChildren - c.childAges.length).fill(5)];
+          }
+        }
+      },
     }
   )
 );

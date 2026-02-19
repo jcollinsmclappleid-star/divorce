@@ -80,7 +80,8 @@ function buildQualitativeExecutiveSummary(
     }
     incomeParts.push(`After applying estimated 2025/26 UK income tax and National Insurance, net incomes are ${fmt(netA)} (Party A) and ${fmt(netB)} (Party B) per annum.`);
     if (engine.cmsAnnual > 0) {
-      incomeParts.push(`Child maintenance obligations, estimated at ${fmt(engine.cmsAnnual)} per annum using the CMS formula, are factored into the projection model.`);
+      const cmsDuration = engine.cmsYearsRemaining > 0 ? ` Payments are modelled for approximately ${engine.cmsYearsRemaining} further year${engine.cmsYearsRemaining !== 1 ? "s" : ""}, based on the ages of the children entered.` : "";
+      incomeParts.push(`Child maintenance obligations, estimated at ${fmt(engine.cmsAnnual)} per annum using the CMS formula, are factored into the projection model.${cmsDuration}`);
     }
   }
   paragraphs.push(incomeParts.join(" "));
@@ -283,6 +284,9 @@ export default function ReportPage() {
               <span className="text-gray-600">Estimated Child Maintenance (CMS Calculation): </span>
               <span className="font-semibold tabular-nums">{fmt(engine.cmsAnnual)}/yr</span>
               <span className="text-gray-400 text-xs ml-2">({fmt(engine.cmsWeekly)}/wk)</span>
+              {engine.cmsYearsRemaining > 0 && (
+                <span className="text-gray-400 text-xs ml-2">| ~{engine.cmsYearsRemaining} yr{engine.cmsYearsRemaining !== 1 ? "s" : ""} remaining based on child ages</span>
+              )}
             </div>
           )}
           <p className="text-xs text-gray-400 italic mt-3">Tax figures are based on a simplified 2025/26 UK model and may not reflect individual circumstances.</p>
@@ -610,7 +614,7 @@ export default function ReportPage() {
             <AssumptionRow label="Projection Period" value={`${store.assumptions.projectionYears} years`} />
             <AssumptionRow label="Assumed Inflation Rate" value={`${(store.assumptions.inflationRate * 100).toFixed(1)}%`} />
             <AssumptionRow label="Tax Model Applied" value={store.assumptions.includeTaxModel ? "UK 2025/26" : "Off"} />
-            <AssumptionRow label="Child Maintenance (CMS)" value={store.assumptions.includeCMSEstimate ? "Included" : "Excluded"} />
+            <AssumptionRow label="Child Maintenance (CMS)" value={store.assumptions.includeCMSEstimate ? `Included (${engine.cmsYearsRemaining > 0 ? `~${engine.cmsYearsRemaining} yrs remaining` : "all children 16+"})` : "Excluded"} />
             {store.children.numChildren > 0 && (
               <>
                 <AssumptionRow label="Dependent Children" value={`${store.children.numChildren}`} />
