@@ -80,6 +80,7 @@ export default function WizardPage() {
   useNoIndex();
   const [currentStep, setCurrentStep] = useState(0);
   const [advancedMode, setAdvancedMode] = useState(false);
+  const [acknowledged, setAcknowledged] = useState(false);
   const [, setLocation] = useLocation();
 
   const progress = ((currentStep) / (STEPS.length - 1)) * 100;
@@ -165,7 +166,7 @@ export default function WizardPage() {
 
         <Card className="mb-6">
           <CardContent className="pt-6">
-            <StepContent step={currentStep} advancedMode={advancedMode} />
+            <StepContent step={currentStep} advancedMode={advancedMode} acknowledged={acknowledged} setAcknowledged={setAcknowledged} />
           </CardContent>
         </Card>
 
@@ -186,6 +187,7 @@ export default function WizardPage() {
 
           <Button
             onClick={goNext}
+            disabled={currentStep === STEPS.length - 1 && !acknowledged}
             data-testid="button-continue"
           >
             {currentStep === STEPS.length - 1 ? "View Full Results" : "Continue"}
@@ -197,7 +199,7 @@ export default function WizardPage() {
   );
 }
 
-function StepContent({ step, advancedMode }: { step: number; advancedMode: boolean }) {
+function StepContent({ step, advancedMode, acknowledged, setAcknowledged }: { step: number; advancedMode: boolean; acknowledged: boolean; setAcknowledged: (v: boolean) => void }) {
   switch (step) {
     case 0: return <StepWelcome />;
     case 1: return <StepSituation advancedMode={advancedMode} />;
@@ -207,7 +209,7 @@ function StepContent({ step, advancedMode }: { step: number; advancedMode: boole
     case 5: return <StepIncome advancedMode={advancedMode} />;
     case 6: return <StepExpenses advancedMode={advancedMode} />;
     case 7: return <StepSupport advancedMode={advancedMode} />;
-    case 8: return <StepAssumptions />;
+    case 8: return <StepAssumptions acknowledged={acknowledged} setAcknowledged={setAcknowledged} />;
     default: return null;
   }
 }
@@ -1552,7 +1554,7 @@ function StepSupport({ advancedMode }: { advancedMode: boolean }) {
   );
 }
 
-function StepAssumptions() {
+function StepAssumptions({ acknowledged, setAcknowledged }: { acknowledged: boolean; setAcknowledged: (v: boolean) => void }) {
   const { assumptions, updateAssumptions } = useAppStore();
 
   const setPreset = (split: number, pension: number) => {
@@ -1659,6 +1661,24 @@ function StepAssumptions() {
             data-testid="input-inflation-rate"
           />
         </div>
+      </div>
+
+      <Separator />
+
+      <div className="p-4 bg-muted/50 rounded-md space-y-3">
+        <p className="text-sm font-medium text-foreground">Before generating results</p>
+        <label className="flex items-start gap-3 cursor-pointer" data-testid="label-acknowledgement">
+          <input
+            type="checkbox"
+            checked={acknowledged}
+            onChange={(e) => setAcknowledged(e.target.checked)}
+            className="mt-0.5 h-4 w-4 rounded border-border accent-primary shrink-0"
+            data-testid="checkbox-acknowledgement"
+          />
+          <span className="text-sm text-muted-foreground leading-snug">
+            I understand that this tool provides illustrative financial modelling only. It does not constitute legal, tax, or financial advice, and does not predict court outcomes or settlement entitlements. Independent professional advice may be warranted before making decisions based on these outputs.
+          </span>
+        </label>
       </div>
     </div>
   );

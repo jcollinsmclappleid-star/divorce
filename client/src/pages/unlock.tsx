@@ -4,12 +4,42 @@ import { useAccess, useSessionToken } from "@/hooks/use-access";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
-  ArrowLeft, CheckCircle, Loader2,
-  BarChart3, TrendingUp, Calculator, FileText, Sliders, Search, Scale
+  ArrowLeft, CheckCircle, Loader2, Check,
+  BarChart3, TrendingUp, Calculator, FileText, Sliders, Search, Scale,
+  Shield, Lock, Zap
 } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { Logo } from "@/components/logo";
 import { useNoIndex } from "@/hooks/use-noindex";
+
+const VALUE_PROPOSITION_ITEMS = [
+  "Structured analysis across multiple settlement scenarios",
+  "5-year financial projections with sustainability indicators",
+  "Downloadable professional financial brief",
+  "6 months of unlimited access to update and re-run your analysis",
+];
+
+const TRUST_SIGNALS = [
+  { icon: Lock, text: "All calculations performed in your browser — your data stays private" },
+  { icon: Shield, text: "Built on UK 2025/26 HMRC tax rules" },
+  { icon: Zap, text: "Instant access after payment" },
+];
+
+const FAQ_ITEMS = [
+  {
+    question: "What happens after I pay?",
+    answer: "You'll get immediate access to your full financial analysis, including all scenarios, projections, charts, and a downloadable report. Your access lasts 6 months.",
+  },
+  {
+    question: "Is my data safe?",
+    answer: "All financial calculations happen in your browser. Your sensitive financial data is never sent to or stored on our servers.",
+  },
+  {
+    question: "Can I update my figures later?",
+    answer: "Yes. During your 6-month access period, you can update your inputs and re-run the analysis as many times as you need.",
+  },
+];
 
 const VALUE_ITEMS = [
   { icon: Scale, text: "Compare alternative settlement structures side-by-side" },
@@ -136,6 +166,18 @@ export default function UnlockPage() {
           </div>
         </section>
 
+        <section className="space-y-4" data-testid="section-value-proposition">
+          <h2 className="text-xl font-semibold text-center">What You Get</h2>
+          <ul className="max-w-md mx-auto space-y-3">
+            {VALUE_PROPOSITION_ITEMS.map((item, i) => (
+              <li key={i} className="flex items-start gap-3" data-testid={`text-value-prop-${i}`}>
+                <Check className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <span className="text-sm leading-relaxed">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <section className="flex justify-center" data-testid="section-pricing">
           <Card className="max-w-sm w-full">
             <CardContent className="pt-8 pb-8 space-y-6 text-center">
@@ -199,6 +241,35 @@ export default function UnlockPage() {
               </div>
             </CardContent>
           </Card>
+        </section>
+
+        <section className="space-y-4" data-testid="section-trust-signals">
+          <div className="max-w-md mx-auto flex flex-col gap-3">
+            {TRUST_SIGNALS.map((signal, i) => (
+              <div key={i} className="flex items-center gap-3" data-testid={`text-trust-signal-${i}`}>
+                <signal.icon className="w-4 h-4 text-muted-foreground shrink-0" />
+                <span className="text-xs text-muted-foreground">{signal.text}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-4 max-w-lg mx-auto" data-testid="section-faq">
+          <h2 className="text-xl font-semibold text-center">Frequently Asked Questions</h2>
+          <Accordion type="single" collapsible className="w-full">
+            {FAQ_ITEMS.map((faq, i) => (
+              <AccordionItem key={i} value={`faq-${i}`}>
+                <AccordionTrigger className="text-sm text-left" data-testid={`button-faq-${i}`}>
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <p className="text-sm text-muted-foreground leading-relaxed" data-testid={`text-faq-answer-${i}`}>
+                    {faq.answer}
+                  </p>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </section>
 
         <section className="text-center space-y-3 pb-8" data-testid="section-reinforcement">

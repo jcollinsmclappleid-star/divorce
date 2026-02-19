@@ -77,6 +77,16 @@ export default function MethodologyPage() {
               <li>Scottish income tax rates are not applied — England, Wales, and Northern Ireland rates are used for all parties</li>
               <li>Self-employed NI (Class 2 and Class 4) is excluded</li>
               <li>Capital Gains Tax, High Income Child Benefit Charge, pension contribution relief, student loan repayments, Marriage Allowance, and Married Couple's Allowance are all excluded</li>
+              <li>Employer pension contributions, salary sacrifice arrangements, and benefits-in-kind are not modelled</li>
+              <li>No modelling of tax reliefs for charitable donations, Enterprise Investment Scheme, or other tax-advantaged investments</li>
+            </ul>
+
+            <p className="font-medium mt-3">Child maintenance limitations:</p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>Uses a simplified CMS-style formula based on gross income of the paying party and number of qualifying children</li>
+              <li>Does not model shared care adjustments, variations for other relevant children, special expenses, or voluntary agreements</li>
+              <li>CMS rates applied: 12% (1 child), 16% (2 children), 19% (3+ children) of gross income above the £7 per week flat rate threshold</li>
+              <li>Does not account for CMS collection charges, enforcement actions, or direct pay vs Collect &amp; Pay distinctions</li>
             </ul>
 
             <p className="font-medium mt-3">Projection limitations:</p>
@@ -123,6 +133,36 @@ export default function MethodologyPage() {
             <h2 className="text-xl font-semibold text-foreground">8. Configuration and Updates</h2>
             <p>Tax rates, NI thresholds, and lending capacity parameters are stored in an external configuration file (<code>config.fixed.json</code>). When HMRC publishes updated rates for a new tax year, the configuration file is updated accordingly. No changes to the model code are required to update tax parameters.</p>
             <p>The current configuration reflects HMRC published rates for the 2025/26 UK tax year. Users should verify that the tax year applied matches their requirements.</p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-foreground">9. Calculation Methodology</h2>
+            <p>The following outlines the core calculation methodology used within the model.</p>
+
+            <p className="font-medium mt-3">Net income calculation:</p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>Gross income is entered by the user for each party</li>
+              <li>Income tax is calculated using 2025/26 HMRC rates: 0% personal allowance (£12,570), 20% basic rate (£12,571–£50,270), 40% higher rate (£50,271–£125,140), 45% additional rate (above £125,140)</li>
+              <li>Personal allowance tapers by £1 for every £2 of income above £100,000</li>
+              <li>Employee Class 1 NI is calculated at 8% on earnings between £12,570 and £50,270, and 2% above £50,270</li>
+              <li>Net income = Gross income − Income tax − National Insurance</li>
+              <li>Users may override the calculated net income with their own figure if they have more accurate information</li>
+            </ul>
+
+            <p className="font-medium mt-3">Monthly surplus / deficit:</p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>Monthly net income = Annual net income ÷ 12</li>
+              <li>Monthly outgoings = Monthly living expenses + Monthly mortgage payment (if applicable)</li>
+              <li>Monthly surplus or deficit = Monthly net income − Monthly outgoings − Monthly child maintenance (if applicable)</li>
+            </ul>
+
+            <p className="font-medium mt-3">Reserve duration:</p>
+            <ul className="list-disc pl-6 space-y-1">
+              <li>Starting liquid capital is the total of cash, savings, and investments allocated to each party under each scenario</li>
+              <li>If a party has a monthly deficit, reserve duration = Starting liquid capital ÷ Monthly deficit (in months)</li>
+              <li>If a party has a monthly surplus, reserves are not being depleted and duration is shown as 99+ months</li>
+              <li>Figures below 12 months indicate a limited financial buffer under current assumptions</li>
+            </ul>
           </section>
 
           <div className="pt-6 border-t border-border">

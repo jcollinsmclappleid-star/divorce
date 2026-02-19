@@ -503,7 +503,7 @@ function TwelveMonthSnapshot({
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-a">Party A — Liquid Capital at Month 12</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-a"><>Party A — Liquid Capital at Month 12<InfoTip text="Starting liquid capital (cash, savings, investments allocated to Party A) minus 12 months of net outgoings (monthly expenses plus any mortgage payments, minus net monthly income after tax and NI). A negative figure indicates projected outgoings exceed available liquid reserves within the first year." /></></TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr1 = proj && proj.length > 1 ? proj[1] : null;
@@ -515,7 +515,7 @@ function TwelveMonthSnapshot({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-b">Party B — Liquid Capital at Month 12</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-b"><>Party B — Liquid Capital at Month 12<InfoTip text="Starting liquid capital (cash, savings, investments allocated to Party B) minus 12 months of net outgoings (monthly expenses plus any mortgage payments, minus net monthly income after tax and NI). A negative figure indicates projected outgoings exceed available liquid reserves within the first year." /></></TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr1 = proj && proj.length > 1 ? proj[1] : null;
@@ -527,7 +527,7 @@ function TwelveMonthSnapshot({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-a">Party A — Monthly Surplus / (Deficit)</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-a"><>Party A — Monthly Surplus / (Deficit)<InfoTip text="The difference between net monthly income (after tax/NI) and total monthly outgoings (living expenses plus mortgage). A surplus means income exceeds outgoings; a deficit means outgoings exceed income, drawing down liquid reserves each month." /></></TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr0Capital = proj && proj.length > 0 ? proj[0].capitalA : s.liquidStartA;
@@ -542,7 +542,7 @@ function TwelveMonthSnapshot({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-b">Party B — Monthly Surplus / (Deficit)</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-b"><>Party B — Monthly Surplus / (Deficit)<InfoTip text="The difference between net monthly income (after tax/NI) and total monthly outgoings (living expenses plus mortgage). A surplus means income exceeds outgoings; a deficit means outgoings exceed income, drawing down liquid reserves each month." /></></TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr0Capital = proj && proj.length > 0 ? proj[0].capitalB : s.liquidStartB;
@@ -557,7 +557,7 @@ function TwelveMonthSnapshot({
                 })}
               </TableRow>
               <TableRow>
-                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-buffer-a">Party A — Capital Runway [months]</TableCell>
+                <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-buffer-a"><>Party A — Months of Reserves Remaining<InfoTip text="If Party A has a monthly deficit, this shows how many months their starting liquid capital would last at that rate of drawdown. 99+ means income covers outgoings with no drawdown required. Below 12 months indicates limited financial buffer." /></></TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr0Cap = proj && proj.length > 0 ? proj[0].capitalA : s.liquidStartA;
@@ -1006,7 +1006,7 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>5-Year Runway — Party A<InfoTip text="Whether Party A's liquid capital is projected to sustain their outgoings for at least 5 years based on current income, expenditure, and mortgage obligations." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>5-Year Reserves — Party A<InfoTip text="Whether Party A's liquid capital is projected to sustain their outgoings for at least 5 years based on current income, expenditure, and mortgage obligations." /></></TableCell>
                 {scenarios.map(s => {
                   const rw = runways[s.id];
                   return (
@@ -1019,7 +1019,7 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>5-Year Runway — Party B<InfoTip text="Whether Party B's liquid capital is projected to sustain their outgoings for at least 5 years based on current income, expenditure, and mortgage obligations." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>5-Year Reserves — Party B<InfoTip text="Whether Party B's liquid capital is projected to sustain their outgoings for at least 5 years based on current income, expenditure, and mortgage obligations." /></></TableCell>
                 {scenarios.map(s => {
                   const rw = runways[s.id];
                   return (
@@ -1032,7 +1032,7 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Financial Sustainability — Party A<InfoTip text="Illustrative model output for Party A — incorporating cash buffer adequacy, monthly surplus/deficit, lending capacity benchmark, and capital runway projection. This is not a suitability or lending assessment." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Financial Sustainability — Party A<InfoTip text="Illustrative model output for Party A — incorporating cash buffer adequacy, monthly surplus/deficit, lending capacity benchmark, and reserve duration projection. This is not a suitability or lending assessment." /></></TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
                   return (
@@ -1043,7 +1043,7 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
-                <TableCell className="font-medium text-muted-foreground"><>Financial Sustainability — Party B<InfoTip text="Illustrative model output for Party B — incorporating cash buffer adequacy, monthly surplus/deficit, lending capacity benchmark, and capital runway projection. This is not a suitability or lending assessment." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>Financial Sustainability — Party B<InfoTip text="Illustrative model output for Party B — incorporating cash buffer adequacy, monthly surplus/deficit, lending capacity benchmark, and reserve duration projection. This is not a suitability or lending assessment." /></></TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
                   return (
@@ -1091,13 +1091,13 @@ function ExecutiveTable({
                     <span className="tabular-nums font-semibold text-emerald-600">{formatCurrency(s.liquidStartB)}</span>
                   </div>
                   <div className="min-w-0">
-                    <span className="text-muted-foreground block">Runway — A</span>
+                    <span className="text-muted-foreground block">Reserves — A</span>
                     {rw?.partyA.sustained
                       ? <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50 text-[10px]">Sustained</Badge>
                       : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]">Yr {rw?.partyA.depletionYear}</Badge>}
                   </div>
                   <div className="min-w-0">
-                    <span className="text-muted-foreground block">Runway — B</span>
+                    <span className="text-muted-foreground block">Reserves — B</span>
                     {rw?.partyB.sustained
                       ? <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50 text-[10px]">Sustained</Badge>
                       : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]">Yr {rw?.partyB.depletionYear}</Badge>}
@@ -1382,13 +1382,13 @@ function ScenarioDetailCard({
           {runway && (
             <div className="grid gap-3 sm:grid-cols-2 text-sm">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-muted-foreground">Capital Runway — A</span>
+                <span className="text-muted-foreground">Reserves — A</span>
                 <Badge variant="outline" className={runway.partyA.sustained ? "text-emerald-600 border-emerald-200 bg-emerald-50" : "text-amber-600 border-amber-200 bg-amber-50"}>
                   {runway.partyA.sustained ? "Sustained" : `Depletes Yr ${runway.partyA.depletionYear}`}
                 </Badge>
               </div>
               <div className="flex items-center justify-between gap-2">
-                <span className="text-muted-foreground">Capital Runway — B</span>
+                <span className="text-muted-foreground">Reserves — B</span>
                 <Badge variant="outline" className={runway.partyB.sustained ? "text-emerald-600 border-emerald-200 bg-emerald-50" : "text-amber-600 border-amber-200 bg-amber-50"}>
                   {runway.partyB.sustained ? "Sustained" : `Depletes Yr ${runway.partyB.depletionYear}`}
                 </Badge>
@@ -1756,7 +1756,7 @@ function CapitalRunwaySection({ runway }: { runway?: RunwayResult }) {
   return (
     <div className="space-y-3" data-testid="section-capital-runway">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <TrendingUp className="w-3.5 h-3.5" /> Capital Runway (5-Year Projection)
+        <TrendingUp className="w-3.5 h-3.5" /> Reserve Duration (5-Year Projection)
       </h3>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">

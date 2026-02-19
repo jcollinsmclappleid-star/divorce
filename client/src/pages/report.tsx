@@ -31,12 +31,17 @@ const SCENARIO_META: Record<string, { label: string; color: string }> = {
 function fmt(v: number) { return formatCurrency(v); }
 function pct(v: number) { return `${Math.round(v * 100)}%`; }
 
+interface ExecSummarySection {
+  heading: string;
+  paragraphs: string[];
+}
+
 function buildQualitativeExecutiveSummary(
   engine: ReturnType<typeof useEngine>,
   store: StoreState,
   scenarioData: { sc: ScenarioResult; narrative: ReturnType<typeof generateScenarioNarrative>; stability: StabilityResult; housing: HousingFeasibility | null }[],
-): string[] {
-  const paragraphs: string[] = [];
+): ExecSummarySection[] {
+  const sections: ExecSummarySection[] = [];
   const { intermediate } = engine;
   const totalAssets = store.assets.reduce((s, a) => s + a.currentValue, 0);
   const totalLiab = store.liabilities.reduce((s, l) => s + l.balance, 0);
@@ -48,22 +53,17 @@ function buildQualitativeExecutiveSummary(
   const otherPct = 100 - splitPct;
   const incomeA = engine.taxA.gross;
   const incomeB = engine.taxB.gross;
-  const netA = engine.taxA.net;
-  const netB = engine.taxB.net;
 
-  const openingParts: string[] = [];
-  openingParts.push(`This report presents an illustrative financial analysis of the marital estate, comprising ${fmt(totalAssets)} in total assets${totalLiab > 0 ? ` offset by ${fmt(totalLiab)} in liabilities` : ""}, producing a combined net worth of ${fmt(engine.netWorth.total)}.`);
-
+  const estateParts: string[] = [];
+  estateParts.push(`This report presents an illustrative financial analysis of the marital estate, comprising ${fmt(totalAssets)} in total assets${totalLiab > 0 ? ` offset by ${fmt(totalLiab)} in liabilities` : ""}, producing a combined net worth of ${fmt(engine.netWorth.total)}.`);
   if (hasHome) {
     const equityPct = totalAssets > 0 ? Math.round((homeValue / totalAssets) * 100) : 0;
-    openingParts.push(`The primary residence, valued at ${fmt(homeValue)} with ${fmt(intermediate.netHomeEquity)} in net equity after sale costs, represents approximately ${equityPct}% of total assets and is the single largest component of the estate.`);
+    estateParts.push(`The primary residence, valued at ${fmt(homeValue)} with ${fmt(intermediate.netHomeEquity)} in net equity after sale costs, represents approximately ${equityPct}% of total assets and is the single largest component of the estate.`);
   }
-
   if (hasPension && totalPensionCETV > 0) {
-    openingParts.push(`Pension provision totals ${fmt(totalPensionCETV)} by Cash Equivalent Transfer Value (CETV) and is treated separately from liquid assets within the modelling.`);
+    estateParts.push(`Pension provision totals ${fmt(totalPensionCETV)} by Cash Equivalent Transfer Value (CETV) and is treated separately from liquid assets within the modelling.`);
   }
-
-  paragraphs.push(openingParts.join(" "));
+  sections.push({ heading: "Estate Overview", paragraphs: [estateParts.join(" ")] });
 
   const incomeParts: string[] = [];
   if (incomeA > 0 || incomeB > 0) {
@@ -91,12 +91,12 @@ function buildQualitativeExecutiveSummary(
       const cmsDuration = engine.cmsYearsRemaining > 0 ? ` Payments are modelled for approximately ${engine.cmsYearsRemaining} further year${engine.cmsYearsRemaining !== 1 ? "s" : ""}, based on the ages of the children entered.` : "";
       incomeParts.push(`Child maintenance obligations, estimated at ${fmt(engine.cmsAnnual)} per annum using ${cmsSource}, are factored into the projection model.${cmsDuration}`);
     }
+    sections.push({ heading: "Income & Tax Position", paragraphs: [incomeParts.join(" ")] });
   }
-  paragraphs.push(incomeParts.join(" "));
 
-  const scenarioParts: string[] = [];
   const scCount = scenarioData.length;
-  scenarioParts.push(`The analysis models ${scCount} settlement scenario${scCount !== 1 ? "s" : ""} under a ${splitPct}/${otherPct} asset division assumption${store.assumptions.splitPensionToA !== store.assumptions.splitRatio ? `, with pensions split ${Math.round(store.assumptions.splitPensionToA * 100)}/${Math.round((1 - store.assumptions.splitPensionToA) * 100)}` : ""}.`);
+  const scenarioIntro = `The analysis models ${scCount} settlement scenario${scCount !== 1 ? "s" : ""} under a ${splitPct}/${otherPct} asset division assumption${store.assumptions.splitPensionToA !== store.assumptions.splitRatio ? `, with pensions split ${Math.round(store.assumptions.splitPensionToA * 100)}/${Math.round((1 - store.assumptions.splitPensionToA) * 100)}` : ""}.`;
+  const scenarioParas: string[] = [scenarioIntro];
 
   for (const { sc, narrative, stability, housing } of scenarioData) {
     const meta = SCENARIO_META[sc.id];
@@ -116,7 +116,7 @@ function buildQualitativeExecutiveSummary(
     if (runway) {
       const aStatus = runway.partyA.sustained ? "sustained over the projection period" : `projected to deplete by year ${runway.partyA.depletionYear}`;
       const bStatus = runway.partyB.sustained ? "sustained over the projection period" : `projected to deplete by year ${runway.partyB.depletionYear}`;
-      parts.push(`Capital runway analysis indicates that Party A's liquid reserves are ${aStatus}, while Party B's are ${bStatus}.`);
+      parts.push(`Reserve duration analysis indicates that Party A's liquid reserves are ${aStatus}, while Party B's are ${bStatus}.`);
     }
 
     const scoreLabel = stability.labelA.includes("Lower") || stability.labelB.includes("Lower")
@@ -130,17 +130,17 @@ function buildQualitativeExecutiveSummary(
       parts.push(`Lending capacity benchmarking classifies this scenario as "${housing.classification.toLowerCase()}" based on standard income multiple and payment-to-income ratio analysis.`);
     }
 
-    scenarioParts.push(parts.join(" "));
+    scenarioParas.push(parts.join(" "));
   }
-  paragraphs.push(scenarioParts.join(" "));
+  sections.push({ heading: "Scenario Analysis", paragraphs: scenarioParas });
 
   const closingParts: string[] = [];
   closingParts.push("The figures presented in this report are based on the data provided and standard modelling assumptions, including current UK 2025/26 tax and National Insurance rates.");
   closingParts.push(`All projections use an assumed inflation rate of ${(store.assumptions.inflationRate * 100).toFixed(1)}% and a mortgage interest rate of ${(store.assumptions.mortgageAPR * 100).toFixed(1)}% over a ${store.assumptions.mortgageTermYears}-year term.`);
-  closingParts.push("This analysis is illustrative only and does not constitute legal, tax, or financial advice. The scenarios modelled represent potential outcomes under specified assumptions and should not be interpreted as predictions or recommendations. Independent professional advice should be obtained before making any financial decisions relating to separation or divorce.");
-  paragraphs.push(closingParts.join(" "));
+  closingParts.push("This analysis is illustrative only and does not constitute legal, tax, or financial advice. The scenarios modelled represent potential outcomes under specified assumptions and are not predictions or recommendations. Independent professional review may be warranted before making any financial decisions relating to separation or divorce.");
+  sections.push({ heading: "Basis of Preparation", paragraphs: [closingParts.join(" ")] });
 
-  return paragraphs;
+  return sections;
 }
 
 function computeAllScenarios(engine: ReturnType<typeof useEngine>): ScenarioResult[] {
@@ -236,10 +236,15 @@ export default function ReportPage() {
         </header>
 
         <ReportSection title="Executive Summary">
-          {buildQualitativeExecutiveSummary(engine, store, scenarioData).map((para, i) => (
-            <p key={i} className="text-sm text-gray-700 leading-relaxed mb-3 last:mb-0">{para}</p>
+          {buildQualitativeExecutiveSummary(engine, store, scenarioData).map((section, si) => (
+            <div key={si} className={si > 0 ? "mt-4 pt-3 border-t border-gray-100" : ""}>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">{section.heading}</h4>
+              {section.paragraphs.map((para, pi) => (
+                <p key={pi} className="text-sm text-gray-700 leading-relaxed mb-2 last:mb-0">{para}</p>
+              ))}
+            </div>
           ))}
-          <p className="text-sm text-gray-600 italic mt-3 pt-2 border-t border-gray-200">
+          <p className="text-sm text-gray-600 italic mt-4 pt-2 border-t border-gray-200">
             Financial modelling highlights trade-offs. Each scenario reflects different implications for liquidity, leverage, and income variability.
           </p>
         </ReportSection>
@@ -357,11 +362,11 @@ export default function ReportPage() {
               <ComparisonRow label="Monthly Mortgage Obligation — Party B" values={allScenarios.map(s => s.mortgageMonthlyB ?? 0)} />
               {allScenarios.map((_, i) => i === 0 ? (
                 <tr key="runway-header" className="border-b border-gray-200">
-                  <td className="py-1 text-gray-600 text-xs font-semibold" colSpan={allScenarios.length + 1}>5-Year Capital Runway</td>
+                  <td className="py-1 text-gray-600 text-xs font-semibold" colSpan={allScenarios.length + 1}>5-Year Reserve Duration</td>
                 </tr>
               ) : null)}
               <tr className="border-b border-gray-100">
-                <td className="py-1 text-gray-600">5-Year Runway — Party A</td>
+                <td className="py-1 text-gray-600">5-Year Reserves — Party A</td>
                 {allScenarios.map(s => {
                   const rw = engine.runways[s.id];
                   return (
@@ -374,7 +379,7 @@ export default function ReportPage() {
                 })}
               </tr>
               <tr className="border-b border-gray-100">
-                <td className="py-1 text-gray-600">5-Year Runway — Party B</td>
+                <td className="py-1 text-gray-600">5-Year Reserves — Party B</td>
                 {allScenarios.map(s => {
                   const rw = engine.runways[s.id];
                   return (
@@ -468,7 +473,7 @@ export default function ReportPage() {
                 const runway = engine.runways[sc.id];
                 if (!runway) return null;
                 return (
-                  <ReportCollapsible title="Capital Runway (5-Year Projection)">
+                  <ReportCollapsible title="Reserve Duration (5-Year Projection)">
                     <div className="grid grid-cols-2 gap-6 text-sm">
                       <div>
                         <p className="font-medium text-gray-700 mb-1">Party A</p>
@@ -671,10 +676,10 @@ export default function ReportPage() {
           <div className="mt-3 pt-3 border-t">
             <ReportCollapsible title="Explicit Assumption Statements">
             <ul className="text-xs text-gray-600 space-y-1 list-disc list-inside">
-              <li><span className="font-medium">Transaction costs:</span> Estimated selling costs (agent fees, conveyancing) are deducted from net equity in sale scenarios. Early repayment charges, stamp duty on purchase, legal fees for transfers, and moving costs are not separately modelled. Users should obtain independent estimates for these items.</li>
+              <li><span className="font-medium">Transaction costs:</span> Estimated selling costs (agent fees, conveyancing) are deducted from net equity in sale scenarios. Early repayment charges, stamp duty on purchase, legal fees for transfers, and moving costs are not separately modelled. Independent estimates for these items may be warranted.</li>
               <li><span className="font-medium">Pension valuations:</span> Pension values are entered by the user and treated as nominal CETV figures. No adjustment is made for pension type (defined benefit vs defined contribution), tax on drawdown, or actuarial factors. Pension sharing orders may result in different actual values.</li>
-              <li><span className="font-medium">Capital gains tax:</span> No CGT liability is modelled on the disposal of investments or assets. The principal private residence exemption is assumed to apply to the family home. Users with significant investment portfolios should seek independent tax advice.</li>
-              <li><span className="font-medium">Spousal maintenance:</span> Periodic spousal maintenance payments are not included in the model. If spousal maintenance is relevant, the net income and surplus figures should be adjusted accordingly.</li>
+              <li><span className="font-medium">Capital gains tax:</span> No CGT liability is modelled on the disposal of investments or assets. The principal private residence exemption is assumed to apply to the family home. Independent tax review may be warranted where significant investment portfolios are involved.</li>
+              <li><span className="font-medium">Spousal maintenance:</span> Periodic spousal maintenance payments are not included in the model. Where spousal maintenance is applicable, net income and surplus figures may require adjustment to reflect those payments.</li>
             </ul>
             </ReportCollapsible>
           </div>
@@ -686,7 +691,7 @@ export default function ReportPage() {
             <div><span className="font-semibold">Liquid Capital:</span> <span className="text-gray-600">Cash, savings, ISAs, and investments that can be accessed or realised within a short timeframe.</span></div>
             <div><span className="font-semibold">Net Equity:</span> <span className="text-gray-600">The value of property after deducting the outstanding mortgage balance and estimated selling costs.</span></div>
             <div><span className="font-semibold">Equity Transfer Obligation:</span> <span className="text-gray-600">The lump sum payable by the party retaining the property to compensate the departing party for their share of net equity.</span></div>
-            <div><span className="font-semibold">Capital Runway:</span> <span className="text-gray-600">The projected period for which liquid capital can sustain expenditure, measured in months or years.</span></div>
+            <div><span className="font-semibold">Reserve Duration:</span> <span className="text-gray-600">The projected period for which liquid reserves can sustain expenditure, measured in months or years.</span></div>
             <div><span className="font-semibold">Financial Sustainability Indicator (Illustrative Model Output):</span> <span className="text-gray-600">A composite indicator reflecting liquidity sustainability and lending capacity benchmarks under current modelling assumptions. It is not a suitability or lending assessment.</span></div>
             <div><span className="font-semibold">CETV (Cash Equivalent Transfer Value):</span> <span className="text-gray-600">The estimated lump sum value of a pension, used for comparison and division purposes.</span></div>
             <div><span className="font-semibold">CMS (Child Maintenance Service):</span> <span className="text-gray-600">The UK government service that calculates child maintenance obligations based on income and overnight stays.</span></div>
