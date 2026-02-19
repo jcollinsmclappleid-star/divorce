@@ -103,9 +103,14 @@ export default function LandingPage() {
         Illustrative modelling only. Not legal, tax or financial advice.
       </div>
 
+      <div className="w-full py-8 px-4">
+        <div className="container mx-auto flex justify-center">
+          <Logo href="/" size="lg" />
+        </div>
+      </div>
+
       <nav className="sticky top-0 z-[100] w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 h-12 flex items-center justify-between gap-4">
-          <Logo href="/" size="sm" />
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <button onClick={scrollToHowItWorks} className="hover:text-foreground transition-colors" data-testid="link-how-it-works">How It Works</button>
             <Link href="/methodology" className="hover:text-foreground transition-colors" data-testid="link-nav-methodology">Methodology</Link>
