@@ -11,6 +11,7 @@ import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
 import { useAppStore } from "@/hooks/use-store";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { Logo } from "@/components/logo";
+import { LogoMark } from "@/components/logo-mark";
 
 const QUANTIFIES_ITEMS = [
   {
@@ -104,7 +105,8 @@ export default function LandingPage() {
       </div>
 
       <div className="w-full bg-primary py-6 px-4" data-testid="banner-brand">
-        <div className="container mx-auto flex flex-col items-center justify-center gap-2">
+        <div className="container mx-auto flex flex-col items-center justify-center gap-3">
+          <LogoMark size={72} variant="white" />
           <h2 className="text-2xl md:text-3xl font-display font-bold text-primary-foreground tracking-tight" data-testid="text-brand-name">
             DivorceCalculatorUK
           </h2>

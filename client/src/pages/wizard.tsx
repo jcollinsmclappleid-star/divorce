@@ -4,6 +4,7 @@ import { useAppStore, Asset, Liability, Income, Expense } from "@/hooks/use-stor
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { Logo } from "@/components/logo";
+import { LogoMark } from "@/components/logo-mark";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -215,8 +216,8 @@ function StepContent({ step, advancedMode }: { step: number; advancedMode: boole
 function StepWelcome() {
   return (
     <div className="text-center py-8 space-y-6">
-      <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-        <Heart className="w-8 h-8 text-primary" />
+      <div className="flex justify-center">
+        <LogoMark size={80} variant="navy" />
       </div>
       <div className="space-y-3 max-w-lg mx-auto">
         <h2 className="text-xl font-display font-bold">Welcome to your financial clarity tool</h2>

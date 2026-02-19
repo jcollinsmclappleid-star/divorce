@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { Logo } from "@/components/logo";
+import { LogoMark } from "@/components/logo-mark";
 import { useNoIndex } from "@/hooks/use-noindex";
 
 const VALUE_ITEMS = [
@@ -79,6 +80,9 @@ export default function UnlockPage() {
 
       <main className="max-w-3xl mx-auto px-4 py-12 space-y-16">
         <section className="text-center space-y-4" data-testid="section-hero">
+          <div className="flex justify-center mb-2">
+            <LogoMark size={72} variant="navy" />
+          </div>
           <h1 className="text-3xl font-bold tracking-tight leading-tight font-display">
             Structured Modelling for Informed Conversations.
           </h1>
