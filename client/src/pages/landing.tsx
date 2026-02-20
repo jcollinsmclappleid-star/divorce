@@ -4,80 +4,49 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Calculator, Shield, ArrowRight, ChevronRight,
-  BarChart3, Lock, Landmark, Home, TrendingUp,
-  FileText, Sliders, PoundSterling, PiggyBank, Activity
+  BarChart3, Lock,
+  FileText, TrendingUp, Activity,
+  Check
 } from "lucide-react";
 import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
 import { useAppStore } from "@/hooks/use-store";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { Logo } from "@/components/logo";
 
-const QUANTIFIES_ITEMS = [
-  {
-    icon: Home,
-    title: "Net Property Equity",
-    body: "Net property equity and transaction cost assumptions.",
-  },
-  {
-    icon: PiggyBank,
-    title: "Liquid Assets & Liabilities",
-    body: "Liquid assets and liabilities, based on the figures entered.",
-  },
-  {
-    icon: Landmark,
-    title: "Pension Allocation",
-    body: "Pension allocation on a transfer value basis, based on the assumptions entered.",
-  },
-  {
-    icon: Calculator,
-    title: "UK 2025/26 Tax Modelling",
-    body: "Income tax and National Insurance modelling assumptions for 2025/26.",
-  },
-  {
-    icon: PoundSterling,
-    title: "Lending Capacity Benchmark",
-    body: "Indicative lending capacity benchmark (non-lender specific), based on the assumptions entered.",
-  },
-  {
-    icon: BarChart3,
-    title: "Capital Allocation",
-    body: "Capital allocation and liquidity concentration analysis.",
-  },
-  {
-    icon: TrendingUp,
-    title: "5-Year Sustainability",
-    body: "5-year capital sustainability projection, based on the assumptions entered.",
-  },
-  {
-    icon: Sliders,
-    title: "Sensitivity Testing",
-    body: "Interest rate and expense assumption sensitivity testing.",
-  },
+const WHAT_YOU_GET = [
+  "Net property equity and transaction cost modelling",
+  "Liquid assets, liabilities, and pension allocation analysis",
+  "UK 2025/26 income tax and National Insurance modelling",
+  "Indicative lending capacity benchmarks (non-lender specific)",
+  "Capital allocation and liquidity concentration analysis",
+  "5-year capital sustainability projections",
+  "Interest rate and expense sensitivity testing",
+  "Downloadable Structured Financial Brief (PDF)",
 ];
 
 const HOW_IT_WORKS = [
   {
     step: 1,
     title: "Enter Your Financial Assumptions",
-    body: "In your own time, privately, with no pressure to share.",
+    body: "Privately, in your own time, with no pressure to share.",
     icon: Calculator,
   },
   {
     step: 2,
-    title: "Model Alternative Settlement Structures",
+    title: "Model Settlement Structures",
     body: "Compare selling, retaining the home, and adjusted splits.",
     icon: BarChart3,
   },
   {
     step: 3,
-    title: "Compare Indicative Stability & Sustainability",
+    title: "Compare Stability & Sustainability",
     body: "Understand what drives each outcome, not just the headline totals.",
     icon: Activity,
   },
   {
     step: 4,
-    title: "Generate a Structured Financial Brief",
-    body: "A clear, organised overview to inform professional conversations.",
+    title: "Generate a Financial Brief",
+    body: "A clear overview to inform professional conversations.",
     icon: FileText,
   },
 ];
@@ -86,10 +55,6 @@ export default function LandingPage() {
   useDocumentTitle("Divorce Financial Settlement Calculator UK | DivorceCalculatorUK");
   const [, setLocation] = useLocation();
   const loadState = useAppStore((s) => s.loadState);
-
-  const scrollToHowItWorks = () => {
-    document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" });
-  };
 
   const loadExample = (index: number) => {
     const example = EXAMPLE_SCENARIOS[index];
@@ -110,9 +75,8 @@ export default function LandingPage() {
       </div>
 
       <nav className="sticky top-0 z-[100] w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 h-12 flex items-center justify-between gap-4">
+        <div className="container mx-auto px-4 h-12 flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <button onClick={scrollToHowItWorks} className="hover:text-foreground transition-colors" data-testid="link-how-it-works">How It Works</button>
             <Link href="/methodology" className="hover:text-foreground transition-colors" data-testid="link-nav-methodology">Methodology</Link>
           </div>
           <Button
@@ -135,10 +99,10 @@ export default function LandingPage() {
               Structured Financial Modelling for Separation & Divorce
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto">
-              Model how different settlement structures affect your liquidity, lending capacity benchmarks, and long-term financial position &mdash; based solely on the assumptions you enter.
+              Model how different settlement structures affect your liquidity, lending capacity, and long-term financial position &mdash; privately, before important conversations take place.
             </p>
             <p className="text-sm text-muted-foreground/80">
-              Illustrative financial modelling. Not legal, tax, or financial advice. Does not predict court outcomes or assess entitlement.
+              Illustrative financial modelling. Not legal, tax, or financial advice.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
               <Button
@@ -164,88 +128,48 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-muted/30" data-testid="section-problem">
-        <div className="container mx-auto px-4 max-w-2xl text-center space-y-6">
-          <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-problem-headline">
-            Separation Changes Financial Structure &mdash; Not Just Circumstances.
-          </h2>
-          <p className="text-muted-foreground leading-relaxed">
-            When a household becomes two, the financial picture changes in ways that are difficult to see clearly &mdash; until they're modelled.
-          </p>
-          <p className="text-muted-foreground leading-relaxed">
-            What changes is not simply who owns what &mdash; but how structure affects liquidity, lending capacity, and sustainability over time.
-          </p>
-          <p className="text-muted-foreground leading-relaxed">
-            DivorceCalculatorUK allows you to explore those structural differences before important conversations take place.
-          </p>
-        </div>
-      </section>
-
-      <section className="py-16 md:py-20" data-testid="section-quantifies">
+      <section className="py-16 md:py-20 bg-muted/30" data-testid="section-features">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-quantifies-headline">
-              What This Model Quantifies
-            </h2>
-          </div>
-          <div className="grid gap-4 md:gap-5 sm:grid-cols-2 lg:grid-cols-4 max-w-5xl mx-auto">
-            {QUANTIFIES_ITEMS.map((item, i) => (
-              <Card key={i} data-testid={`card-quantifies-${i}`}>
-                <CardContent className="pt-6 space-y-3">
-                  <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center">
-                    <item.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <h3 className="text-sm font-semibold text-foreground">{item.title}</h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{item.body}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="how-it-works" className="py-16 md:py-20 bg-muted/30" data-testid="section-how-it-works">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-how-headline">
-              A Structured Approach
-            </h2>
-          </div>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto">
-            {HOW_IT_WORKS.map((item) => (
-              <div key={item.step} className="text-center space-y-3" data-testid={`step-how-${item.step}`}>
-                <div className="h-12 w-12 rounded-md bg-primary text-primary-foreground flex items-center justify-center text-lg font-bold mx-auto">
-                  {item.step}
-                </div>
-                <h3 className="text-sm font-semibold text-foreground">{item.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{item.body}</p>
+          <div className="max-w-5xl mx-auto">
+            <div className="grid gap-12 lg:gap-16 lg:grid-cols-2">
+              <div className="space-y-5">
+                <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-quantifies-headline">
+                  What This Model Quantifies
+                </h2>
+                <ul className="space-y-2.5">
+                  {WHAT_YOU_GET.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2.5" data-testid={`text-feature-${i}`}>
+                      <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                      <span className="text-sm leading-snug">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            ))}
+
+              <div className="space-y-5">
+                <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-how-headline">
+                  How It Works
+                </h2>
+                <div className="space-y-5">
+                  {HOW_IT_WORKS.map((item) => (
+                    <div key={item.step} className="flex items-start gap-4" data-testid={`step-how-${item.step}`}>
+                      <div className="h-10 w-10 rounded-md bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold shrink-0">
+                        {item.step}
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold">{item.title}</h3>
+                        <p className="text-xs text-muted-foreground leading-relaxed mt-0.5">{item.body}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16 md:py-20" data-testid="section-why">
-        <div className="container mx-auto px-4 max-w-2xl text-center space-y-6">
-          <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-why-headline">
-            Private Exploration Before Public Decisions
-          </h2>
-          <p className="text-muted-foreground leading-relaxed">
-            A structured financial overview allows you to approach professional discussions informed by quantified assumptions.
-          </p>
-          <p className="text-muted-foreground leading-relaxed">
-            Many people find that seeing the numbers clearly, before conversations begin, changes the nature of those conversations entirely.
-          </p>
-          <p className="text-muted-foreground leading-relaxed">
-            Instead of relying on estimates or verbal descriptions, you can see how structural changes affect liquidity and projected sustainability.
-          </p>
-          <p className="text-sm text-muted-foreground/80">
-            This tool does not replace professional advice. It supports more informed conversations.
-          </p>
-        </div>
-      </section>
-
-      <section className="py-16 md:py-20 bg-muted/30" data-testid="section-examples">
+      <section className="py-16 md:py-20" data-testid="section-examples">
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-examples-headline">
@@ -284,16 +208,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20" data-testid="section-pricing">
-        <div className="container mx-auto px-4 max-w-xl text-center space-y-6">
+      <section className="py-16 md:py-20 bg-muted/30" data-testid="section-pricing">
+        <div className="container mx-auto px-4 max-w-2xl text-center space-y-6">
           <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-pricing-headline">
             Structured Financial Modelling &mdash; &pound;59
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            A single professional consultation typically costs <span className="font-semibold text-foreground">&pound;250&ndash;&pound;400 per hour</span>. Many individuals attend several before their financial picture becomes clearer.
-          </p>
-          <p className="text-muted-foreground leading-relaxed">
-            This platform provides structured modelling and scenario comparison for a <span className="font-semibold text-foreground">one-time &pound;59</span>, including six months of unlimited scenario reruns.
+            A single professional consultation typically costs <span className="font-semibold text-foreground">&pound;250&ndash;&pound;400 per hour</span>. This platform provides structured modelling and scenario comparison for a <span className="font-semibold text-foreground">one-time &pound;59</span>, with six months of unlimited reruns.
           </p>
           <div className="grid grid-cols-3 gap-4 text-center max-w-md mx-auto py-4">
             <div>
@@ -309,62 +230,25 @@ export default function LandingPage() {
               <p className="text-xs text-muted-foreground">Private &amp; secure</p>
             </div>
           </div>
-          <p className="text-sm text-muted-foreground/80">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground/70">
+            <div className="flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5" />
+              <span>All calculations in-browser</span>
+            </div>
+            <span>&middot;</span>
+            <div className="flex items-center gap-1.5">
+              <Shield className="w-3.5 h-3.5" />
+              <span>No data stored on servers</span>
+            </div>
+            <span>&middot;</span>
+            <div className="flex items-center gap-1.5">
+              <TrendingUp className="w-3.5 h-3.5" />
+              <span>Stripe-secured payments</span>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground/60">
             No subscription. No recurring fees. No sign-up required to explore.
           </p>
-        </div>
-      </section>
-
-      <section className="py-16 md:py-20 bg-muted/30" data-testid="section-scope">
-        <div className="container mx-auto px-4 max-w-2xl">
-          <h2 className="text-2xl md:text-3xl font-display font-bold text-center mb-8" data-testid="text-scope-headline">
-            Scope & Limitations
-          </h2>
-          <p className="text-muted-foreground leading-relaxed text-center mb-6">
-            This platform provides illustrative financial modelling only.
-          </p>
-          <div className="space-y-3 max-w-md mx-auto">
-            {[
-              "Provide legal advice",
-              "Provide financial advice",
-              "Provide tax advice",
-              "Predict court outcomes, judicial discretion, or settlement fairness",
-              "Assess entitlement or legal rights",
-              "Provide suitability assessments or lending evaluations",
-              "Replace independent professional advice",
-            ].map((item, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <span className="text-muted-foreground/60 text-sm mt-0.5 flex-shrink-0">&mdash;</span>
-                <span className="text-sm text-muted-foreground">It does not {item.toLowerCase()}</span>
-              </div>
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground/70 text-center mt-6">
-            All outputs are generated solely from the financial assumptions entered by the user.
-          </p>
-        </div>
-      </section>
-
-      <section className="py-16 md:py-20" data-testid="section-reassurance">
-        <div className="container mx-auto px-4 max-w-xl text-center space-y-5">
-          <div className="flex justify-center gap-3">
-            <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center">
-              <Lock className="w-5 h-5 text-primary" />
-            </div>
-            <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center">
-              <Shield className="w-5 h-5 text-primary" />
-            </div>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Used by individuals preparing for mediation, solicitor meetings, and financial disclosure.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground/70 pt-2">
-            <span>All calculations in-browser</span>
-            <span>&middot;</span>
-            <span>No data stored on servers</span>
-            <span>&middot;</span>
-            <span>Stripe-secured payments</span>
-          </div>
         </div>
       </section>
 
@@ -373,6 +257,9 @@ export default function LandingPage() {
           <h2 className="text-3xl md:text-4xl font-display font-bold" data-testid="text-cta-headline">
             Start with structure.
           </h2>
+          <p className="text-muted-foreground max-w-md mx-auto leading-relaxed">
+            Seeing the numbers clearly, before conversations begin, changes the nature of those conversations entirely.
+          </p>
           <Button
             size="lg"
             onClick={() => setLocation("/wizard")}
@@ -412,6 +299,10 @@ export default function LandingPage() {
               {
                 q: "Is my data safe?",
                 a: "All financial calculations are performed locally in your web browser. The financial data you enter is not transmitted to our servers. Payment processing is handled securely by Stripe.",
+              },
+              {
+                q: "What are the scope and limitations of this tool?",
+                a: "This platform provides illustrative financial modelling only. It does not provide legal, financial, or tax advice. It does not predict court outcomes, assess entitlement, provide suitability assessments or lending evaluations, or replace independent professional advice. All outputs are generated solely from the financial assumptions entered by the user.",
               },
               {
                 q: "What does the Financial Sustainability Indicator mean?",
