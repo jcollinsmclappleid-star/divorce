@@ -2,12 +2,11 @@ import { useLocation, Link } from "wouter";
 import { useAppStore } from "@/hooks/use-store";
 import { useEngine } from "@/hooks/use-engine";
 import { useAccess } from "@/hooks/use-access";
-import { computeStabilityScore } from "@/lib/insights/computeStabilityScore";
 import { formatCurrency } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Lock, Check, ArrowRight } from "lucide-react";
-import { useEffect, useMemo } from "react";
+import { Lock, Check } from "lucide-react";
+import { useEffect } from "react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { Logo } from "@/components/logo";
@@ -34,20 +33,6 @@ function BlurredSection({ title, height = "h-32" }: { title: string; height?: st
   );
 }
 
-function getStabilityBand(score: number): string {
-  if (score >= 90) return "90+ / 100";
-  if (score >= 80) return "80\u201389 / 100";
-  if (score >= 70) return "70\u201379 / 100";
-  if (score >= 60) return "60\u201369 / 100";
-  return "Below 60 / 100";
-}
-
-function getStabilityBandColor(score: number): string {
-  if (score >= 80) return "text-emerald-600";
-  if (score >= 60) return "text-amber-600";
-  return "text-slate-600";
-}
-
 function fmt(v: number) { return formatCurrency(v); }
 
 export default function PreviewPage() {
@@ -71,19 +56,8 @@ export default function PreviewPage() {
   }
 
   const { intermediate } = engine;
-  const s1 = engine.scenarios.find(s => s.id === "S1");
-
-  const stabilityScore = useMemo(() => {
-    if (!s1) return 100;
-    const result = computeStabilityScore(s1, engine.projections["S1"], store);
-    return Math.min(result.scoreA, result.scoreB);
-  }, [s1, engine.projections, store]);
-
-  const stabilityBand = getStabilityBand(stabilityScore);
-  const stabilityColor = getStabilityBandColor(stabilityScore);
 
   const combinedPool = intermediate.totalLiquid + intermediate.netHomeEquity;
-  const equalSplit = combinedPool / 2;
 
   return (
     <div className="min-h-screen bg-background">
@@ -108,12 +82,12 @@ export default function PreviewPage() {
             Your Financial Position Has Been Modelled.
           </h1>
           <p className="text-muted-foreground text-sm max-w-xl mx-auto leading-relaxed">
-            Your asset pool, projected sustainability, and capital outcomes have been calculated under current assumptions.
-            Unlock the full structured analysis to review scenario breakdowns, stability drivers, and 5-year projections.
+            Your asset pool and capital position have been calculated under current assumptions.
+            Unlock the full structured analysis to review scenario breakdowns, sustainability indicators, and 5-year projections.
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <Card data-testid="card-net-equity">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Net Property Equity</CardTitle>
@@ -134,23 +108,29 @@ export default function PreviewPage() {
             </CardContent>
           </Card>
 
-          <Card data-testid="card-equal-split">
+          <Card className="relative" data-testid="card-equal-split-locked">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Illustrative 50/50 Liquid Allocation</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Scenario Allocation Analysis</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold tabular-nums" data-testid="value-equal-split">{fmt(equalSplit)}</p>
-              <p className="text-xs text-muted-foreground mt-1">Illustrative 50/50 distribution (adjustable in full analysis)</p>
+              <div className="flex items-center gap-2 text-muted-foreground/60">
+                <Lock className="w-4 h-4 shrink-0" />
+                <p className="text-sm">Available in full analysis</p>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">Compare adjustable splits across multiple settlement structures</p>
             </CardContent>
           </Card>
 
-          <Card data-testid="card-stability-band">
+          <Card className="relative" data-testid="card-stability-locked">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Financial Sustainability Indicator</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className={`text-2xl font-bold tabular-nums ${stabilityColor}`} data-testid="value-stability-band">{stabilityBand}</p>
-              <p className="text-xs text-muted-foreground mt-1">Indicator breakdown and sustainability drivers available in full analysis</p>
+              <div className="flex items-center gap-2 text-muted-foreground/60">
+                <Lock className="w-4 h-4 shrink-0" />
+                <p className="text-sm">Available in full analysis</p>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">Indicator breakdown and sustainability drivers</p>
             </CardContent>
           </Card>
         </div>
@@ -202,11 +182,11 @@ export default function PreviewPage() {
             <CardContent className="space-y-2">
               <div className="flex items-start gap-2">
                 <Check className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
-                <span className="text-sm text-muted-foreground">Asset summary</span>
+                <span className="text-sm text-muted-foreground">Net equity and asset pool summary</span>
               </div>
               <div className="flex items-start gap-2">
                 <Check className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
-                <span className="text-sm text-muted-foreground">Preliminary sustainability band</span>
+                <span className="text-sm text-muted-foreground">Confirmation your model has been calculated</span>
               </div>
             </CardContent>
           </Card>
