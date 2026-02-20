@@ -68,16 +68,17 @@ export default function LandingPage() {
         Illustrative modelling only. Not legal, tax or financial advice.
       </div>
 
-      <div className="w-full py-8 px-4">
+      <div className="w-full py-10 px-4">
         <div className="container mx-auto flex justify-center">
-          <Logo href="/" size="lg" />
+          <Logo href="/" size="lg" showBrandName />
         </div>
       </div>
 
       <nav className="sticky top-0 z-[100] w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 h-12 flex items-center justify-between gap-2 flex-wrap">
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <Link href="/methodology" className="hover:text-foreground transition-colors" data-testid="link-nav-methodology">Methodology</Link>
+          <div className="flex items-center gap-4">
+            <Logo href="/" size="sm" showBrandName />
+            <Link href="/methodology" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-methodology">Methodology</Link>
           </div>
           <Button
             onClick={() => setLocation("/wizard")}
@@ -321,11 +322,8 @@ export default function LandingPage() {
       <footer className="border-t border-border/40 py-8 bg-muted/20" data-testid="section-footer">
         <div className="container mx-auto px-4 text-center space-y-3">
           <div className="flex items-center justify-center">
-            <Logo href="/" size="sm" />
+            <Logo href="/" size="sm" showBrandName />
           </div>
-          <p className="text-xs text-muted-foreground/70 max-w-md mx-auto">
-            Structured Financial Modelling for Separation & Divorce
-          </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-privacy">
               Privacy Policy
