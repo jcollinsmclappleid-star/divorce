@@ -188,7 +188,7 @@ export default function ResultsPage() {
         </div>
       </header>
 
-      <div className="sticky top-[57px] z-40 border-b bg-background/95 backdrop-blur">
+      <div className="sticky top-[57px] z-40 border-b bg-background border-border/40">
         <div className="container mx-auto px-4 py-3">
           <div className="flex flex-wrap items-end gap-4">
             <div className="flex-1 min-w-[200px]">
@@ -796,20 +796,20 @@ function SensitivityPanel({
           {ranking.map((f, i) => (
             <div
               key={f.factor}
-              className="p-3 rounded-md border cursor-pointer"
+              className="p-3 rounded-md border cursor-pointer overflow-hidden"
               data-testid={`sensitivity-factor-${f.rank}`}
               onClick={() => setExpandedIdx(expandedIdx === i ? null : i)}
             >
-              <div className="flex items-start gap-4">
+              <div className="flex items-start gap-3">
                 <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0">
                   {rankIcons[i] ?? `${i + 1}`}
                 </div>
                 <div className="flex-1 min-w-0 space-y-1.5">
-                  <div className="flex items-center justify-between gap-2 flex-wrap">
-                    <span className="text-sm font-semibold">{f.factor}</span>
-                    <div className="flex items-center gap-1.5">
-                      <Badge variant="outline" className="text-xs">{f.impactType}</Badge>
-                      <Badge variant="outline" className="text-xs">{f.description}</Badge>
+                  <div className="space-y-1.5">
+                    <span className="text-sm font-semibold block">{f.factor}</span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <Badge variant="outline" className="text-xs whitespace-nowrap">{f.impactType}</Badge>
+                      <Badge variant="outline" className="text-xs"><span className="line-clamp-1">{f.description}</span></Badge>
                     </div>
                   </div>
                   <div className="grid gap-1 sm:grid-cols-2 text-xs text-muted-foreground">
@@ -1152,9 +1152,9 @@ function StabilityBadge({ score, label, compact }: { score: number; label: strin
     : label;
 
   return (
-    <Badge variant="outline" className={`${colorClass} max-w-full`} data-testid={`badge-stability-${score}`}>
+    <Badge variant="outline" className={`${colorClass} max-w-full whitespace-nowrap`} data-testid={`badge-stability-${score}`}>
       <Shield className="w-3 h-3 mr-1 shrink-0" />
-      <span className="truncate">{score} {shortLabel}</span>
+      <span className="truncate">{score} {compact ? shortLabel.replace("Resilience", "Res.") : shortLabel}</span>
     </Badge>
   );
 }
@@ -1356,7 +1356,7 @@ function ScenarioDetailCard({
             </CardTitle>
             <CardDescription className="mt-1">{SCENARIO_META[scenario.id]?.description}</CardDescription>
           </div>
-          <div className="flex gap-2 shrink-0">
+          <div className="flex gap-2 flex-wrap">
             <StabilityBadge score={stabilityScore.scoreA} label={`A: ${stabilityScore.labelA}`} />
             <StabilityBadge score={stabilityScore.scoreB} label={`B: ${stabilityScore.labelB}`} />
           </div>
