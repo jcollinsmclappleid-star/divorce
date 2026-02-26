@@ -1,0 +1,279 @@
+Below are expanded 500–700 word versions of the three FAQ pages, structured for:
+	•	Depth
+	•	SEO
+	•	Internal linking
+	•	Modelling context
+	•	Liability control
+	•	Non-deterministic language
+
+You can publish these as standalone content pages.
+
+⸻
+
+1️⃣ Is a 50/50 Divorce Split Automatic in the UK?
+
+URL: /is-50-50-split-automatic-uk
+
+Is a 50/50 Divorce Split Automatic in the UK?
+
+In England & Wales, a 50/50 split of assets is not automatic.
+
+Financial arrangements following divorce are determined under a discretionary legal framework. Courts consider a range of statutory factors including income, needs, contributions, housing requirements, and the welfare of children.
+
+In longer marriages, equality is often referenced as a starting point for discussion. However, this does not create a presumption that assets will be divided equally in every case.
+
+High-level government guidance on financial orders is available via GOV.UK guidance on financial orders in divorce.
+
+⸻
+
+What Does “50/50” Mean in Financial Terms?
+
+A 50/50 split refers to an equal division of net marital assets after liabilities are deducted.
+
+This typically involves:
+	•	Totaling property equity
+	•	Valuing pensions
+	•	Including savings and investments
+	•	Subtracting outstanding debts
+	•	Allocating equal shares numerically
+
+However, equal totals do not necessarily mean equal liquidity.
+
+For example:
+	•	One party may retain property.
+	•	The other may retain pension assets.
+	•	Access to capital may differ significantly.
+
+Structured modelling allows you to see how an equal division assumption translates into cash flow and sustainability over time.
+
+You can explore this using a divorce 50/50 split calculator UK modelling page.
+
+⸻
+
+What This Means in Practice
+
+In practical terms, equal division modelling helps to:
+	•	Establish a neutral baseline
+	•	Compare alternative percentage scenarios
+	•	Highlight pension vs capital trade-offs
+	•	Assess mortgage affordability impact
+	•	Identify potential liquidity pressure
+
+It does not determine entitlement or predict court outcomes.
+
+Instead, it illustrates the financial consequences of a specific numerical assumption.
+
+For a deeper understanding of how structured modelling works, see our divorce financial modelling in England & Wales guide.
+
+⸻
+
+Why Equality Is Not Always Applied
+
+Courts may depart from equal division where:
+	•	Housing needs differ
+	•	Income disparity is significant
+	•	There are dependent children
+	•	Assets are non-matrimonial
+	•	Health or earning capacity differs
+
+These assessments are fact-specific and discretionary.
+
+Financial calculators cannot replicate judicial discretion. They provide structured numerical comparison only.
+
+⸻
+
+Using Structured Modelling Before Mediation
+
+Before mediation or legal consultation, modelling an equal division scenario can:
+	•	Clarify asset totals
+	•	Identify liquidity risks
+	•	Support informed discussions
+	•	Reduce misunderstandings about headline figures
+
+To explore scenario comparisons, use the divorce financial modelling tool.
+
+⸻
+
+Disclaimer
+
+This page provides high-level financial modelling information only. It does not constitute legal advice or predict court outcomes.
+
+⸻
+
+2️⃣ Can I Keep the House After Divorce?
+
+URL: /can-i-keep-the-house-after-divorce-uk
+
+Can I Keep the House After Divorce?
+
+Whether one party can retain the family home after divorce depends on multiple financial considerations.
+
+There is no automatic right to retain property. Courts assess housing needs, affordability, available capital, and the overall asset picture.
+
+High-level guidance on financial orders can be found via GOV.UK guidance on financial orders in divorce.
+
+⸻
+
+Key Financial Factors
+
+When modelling property retention, the following are typically considered:
+
+1. Net Equity
+
+Current property value minus outstanding mortgage and estimated sale costs.
+
+2. Mortgage Affordability
+
+Whether the retaining party can meet lender affordability criteria on a single income.
+
+Income multiple benchmarks (often around 4–4.5x gross income) are generalised illustrations only and not lending approvals.
+
+3. Liquidity
+
+Retaining property may reduce access to capital for:
+	•	Emergency expenses
+	•	Legal fees
+	•	Pension balancing
+
+4. Sustainability
+
+Ongoing affordability must consider:
+	•	Income volatility
+	•	Interest rate sensitivity
+	•	Household expenses
+
+⸻
+
+What This Means in Practice
+
+Retaining the house may increase housing stability but create:
+	•	Reduced liquidity
+	•	Higher debt concentration
+	•	Budget sensitivity
+
+Structured financial modelling can illustrate:
+	•	Post-retention net asset allocation
+	•	Cash flow sustainability
+	•	Mortgage stress scenarios
+	•	Alternative sale scenarios
+
+This comparison helps clarify trade-offs without determining legal outcome.
+
+For detailed modelling, see our divorce house buyout calculator UK page.
+
+⸻
+
+Selling the Property
+
+In some cases, sale of the property:
+	•	Releases capital
+	•	Reduces debt exposure
+	•	Simplifies asset division
+
+However, it may also require rehousing and introduce transaction costs.
+
+Modelling both retention and sale scenarios allows side-by-side comparison before mediation.
+
+⸻
+
+Explore Structured Scenario Comparison
+
+You can model:
+	•	Equity splits
+	•	Affordability assumptions
+	•	Sustainability indicators
+
+using the divorce financial modelling tool.
+
+⸻
+
+Disclaimer
+
+This page provides high-level financial modelling information only and does not determine legal entitlement.
+
+⸻
+
+3️⃣ How Are Pensions Divided in Divorce?
+
+URL: /how-are-pensions-divided-in-divorce-uk
+
+How Are Pensions Divided in Divorce?
+
+Pensions are treated as financial assets within divorce financial remedy proceedings in England & Wales.
+
+They may represent a substantial proportion of overall marital wealth.
+
+General information on pension sharing is available via GOV.UK pension sharing orders guidance.
+
+⸻
+
+Main Approaches to Pension Division
+
+Pension Sharing
+
+A percentage of one pension fund is transferred into the other party’s name, creating independent pension rights.
+
+Offsetting
+
+One party retains pension assets while the other receives alternative capital (e.g., more property equity or savings).
+
+Attachment Orders
+
+In limited cases, future pension income may be redirected.
+
+⸻
+
+Why Pensions Are Complex
+
+Pensions differ from other assets because:
+	•	They are not immediately accessible
+	•	They are subject to retirement age rules
+	•	Their value may fluctuate
+	•	They have long-term income implications
+
+Equal capital division does not always result in equal retirement income.
+
+⸻
+
+What This Means in Practice
+
+When modelling pension division, it is useful to compare:
+	•	Total asset allocation
+	•	Liquidity impact
+	•	Retirement timeline effects
+	•	Short-term capital needs
+
+For example:
+	•	Retaining more pension may reduce immediate liquidity.
+	•	Offsetting may increase short-term capital but reduce long-term retirement security.
+
+Structured modelling allows scenario comparison without recommending a specific approach.
+
+For comparative modelling, see our divorce pension split UK page.
+
+⸻
+
+Tax and Valuation Considerations
+
+Pension values are typically based on Cash Equivalent Transfer Values (CETVs).
+
+Tax implications, lifetime allowance history, and scheme-specific rules may affect real-world outcomes. These complexities are not fully captured in simplified modelling.
+
+Modelling illustrates numerical impact only.
+
+⸻
+
+Using Modelling Before Professional Advice
+
+Before consulting a solicitor or financial adviser, modelling can help clarify:
+	•	Asset distribution differences
+	•	Liquidity trade-offs
+	•	Long-term sustainability considerations
+
+Explore structured comparisons using the divorce financial modelling tool.
+
+⸻
+
+Disclaimer
+
+This page provides high-level financial modelling information only. It does not constitute legal or tax advice.

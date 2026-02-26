@@ -1,0 +1,297 @@
+Below is a copy-paste ready content generation prompt for your pillar page.
+
+It is engineered to:
+	•	Boost SEO
+	•	Avoid legal or tax advice positioning
+	•	Maintain technical precision
+	•	Insert authoritative government links appropriately
+	•	Preserve liability controls
+	•	Align with your structured modelling positioning
+
+Do not edit tone constraints unless necessary.
+
+⸻
+
+CONTENT GENERATION PROMPT — PILLAR PAGE
+
+You are writing a long-form SEO pillar page for a UK-based financial modelling platform called DivorceCalculatorUK.
+
+This platform provides structured financial scenario modelling only. It does NOT provide legal advice, tax advice, or predict court outcomes.
+
+The audience is individuals in England & Wales preparing for mediation or legal consultation.
+
+The objective is to:
+	•	Build topical authority
+	•	Rank for long-tail UK divorce financial modelling keywords
+	•	Improve trust signals
+	•	Avoid oversimplification
+	•	Avoid entitlement language
+	•	Avoid deterministic outcomes
+	•	Maintain professional tone
+	•	Insert authoritative government links where appropriate
+
+⸻
+
+TITLE
+
+Divorce Financial Modelling in England & Wales
+
+⸻
+
+META DESCRIPTION (155–165 characters)
+
+Understand how structured financial modelling can help you explore asset division scenarios before mediation or legal advice in England & Wales.
+
+⸻
+
+STRUCTURE REQUIREMENTS
+
+Write 1,800–2,400 words.
+
+Use clear H2 and H3 headings.
+
+Use precise, neutral language.
+
+Do NOT:
+	•	Predict court outcomes
+	•	State what someone “will receive”
+	•	Use “entitled to”
+	•	Suggest legal strategy
+	•	Provide tax optimisation advice
+	•	Use emotional tone
+
+Frame all explanations as:
+“High-level financial framework overview”
+
+⸻
+
+REQUIRED SECTIONS
+
+⸻
+
+H1: Divorce Financial Modelling in England & Wales
+
+Opening section:
+	•	Explain why financial clarity is important before mediation.
+	•	Clarify that courts exercise discretion.
+	•	State that this page explains financial modelling concepts, not legal entitlements.
+	•	Include internal link to the main modelling tool page using anchor text:
+“divorce financial modelling tool”.
+
+⸻
+
+H2: Understanding the Financial Framework in England & Wales
+
+Explain at a high level:
+	•	Financial remedies under the Matrimonial Causes Act 1973 (do not quote sections in detail).
+	•	Equality as a starting point in long marriages.
+	•	Needs-based assessment.
+	•	Treatment of pensions.
+	•	Welfare of children considerations.
+
+Insert an external link (open in new tab) to:
+GOV.UK page explaining financial orders on divorce.
+Use descriptive anchor text such as:
+“GOV.UK guidance on financial orders in divorce”
+
+Do not interpret legislation.
+Do not analyse case law.
+Do not predict outcomes.
+
+⸻
+
+H2: Why Structured Financial Modelling Matters Before Legal Advice
+
+Explain:
+	•	Emotional decisions vs structured comparison
+	•	Modelling liquidity vs headline asset totals
+	•	Importance of scenario comparison
+	•	How structured modelling can support mediation conversations
+
+Use neutral phrasing:
+“This does not determine legal entitlement but illustrates numerical implications.”
+
+⸻
+
+H2: Common Financial Scenarios in Divorce
+
+Create subsections:
+
+H3: Equal Division (50/50) Scenario Modelling
+
+Explain:
+	•	What equal division means numerically.
+	•	Why it may not reflect final outcome.
+	•	Liquidity differences between parties.
+
+Internally link to:
+“50/50 divorce split calculator UK” page.
+
+⸻
+
+H3: Retaining or Selling the Family Home
+
+Explain:
+	•	Net equity calculation
+	•	Transaction costs
+	•	Mortgage affordability considerations
+	•	Liquidity concentration risk
+
+Internally link to:
+“divorce house buyout calculator UK”
+
+Do not provide mortgage advice.
+Use phrasing:
+“Typical income multiples (often around 4–4.5x gross income) are illustrative only.”
+
+⸻
+
+H3: Pension Sharing and Offsetting
+
+Explain:
+	•	Difference between pension sharing and offsetting.
+	•	Long-term retirement implications.
+	•	Liquidity trade-offs.
+
+Insert an external link to:
+GOV.UK pension sharing information.
+Use anchor:
+“pension sharing orders guidance”
+
+Do not suggest which option is better.
+
+⸻
+
+H3: Income Disparity and Child Maintenance
+
+Explain:
+	•	Statutory child maintenance system.
+	•	That CMS calculations are separate from court financial remedy.
+	•	Financial sustainability impact.
+
+Insert external link to:
+Child Maintenance Service calculator page.
+Use anchor:
+“Child Maintenance Service calculation guidance”
+
+Clarify:
+“This platform does not replace statutory CMS tools.”
+
+⸻
+
+H2: Tax and Financial Assumptions in Modelling
+
+Explain:
+	•	UK income tax bands (2025/26).
+	•	Simplified modelling approach.
+	•	Exclusions (CGT, dividend rates, Scottish rates, pension reliefs).
+
+Insert link to:
+HMRC income tax rates page.
+Use anchor:
+“HMRC 2025/26 income tax rates”
+
+Clarify:
+“Tax modelling is simplified and illustrative only.”
+
+⸻
+
+H2: Sustainability and Lending Capacity Considerations
+
+Explain:
+	•	Income multiples (illustrative benchmarks).
+	•	Expense sensitivity testing.
+	•	Interest rate stress testing.
+	•	Liquidity sustainability over 5 years.
+
+Use phrasing:
+“These benchmarks are generalised illustrations, not lending decisions.”
+
+Avoid mortgage advice.
+
+⸻
+
+H2: Limitations of Divorce Financial Calculators
+
+Clearly state:
+	•	Cannot predict court outcomes.
+	•	Cannot assess fairness.
+	•	Cannot determine entitlement.
+	•	Dependent on user inputs.
+	•	Does not replace legal advice.
+
+Use precise, controlled language.
+
+⸻
+
+H2: When to Seek Professional Advice
+
+Encourage:
+	•	Family solicitor
+	•	Mediator
+	•	Financial adviser
+
+Clarify:
+“This modelling is designed to support informed conversations, not replace professional advice.”
+
+⸻
+
+H2: Use Structured Financial Modelling Before Important Conversations
+
+Strong but neutral CTA.
+
+Encourage users to:
+“Explore structured financial scenarios using the DivorceCalculatorUK modelling tool.”
+
+Do not use sales pressure.
+
+⸻
+
+SEO REQUIREMENTS
+
+Naturally incorporate these phrases (without keyword stuffing):
+	•	Divorce calculator UK
+	•	Divorce financial modelling
+	•	Divorce 50/50 split UK
+	•	Divorce pension split UK
+	•	Divorce house buyout UK
+	•	Mortgage after divorce UK
+	•	Financial settlement modelling England & Wales
+
+Use natural variation.
+
+⸻
+
+LINKING RULES
+	•	Maximum 1–2 external government links per major section.
+	•	Open in new tab.
+	•	Use descriptive anchor text.
+	•	Do not overlink.
+	•	Do not imply endorsement.
+
+⸻
+
+STYLE RULES
+
+Tone: Professional, structured, analytical.
+
+Avoid:
+	•	Emotional reassurance
+	•	Conversational tone
+	•	Simplistic claims
+	•	Certainty language
+	•	Advisory verbs (“should”, “must”, “recommend”)
+
+Maintain clarity and authority without overstating scope.
+
+⸻
+
+END WITH STANDARD DISCLAIMER BLOCK
+
+Include at end:
+
+“This page provides high-level financial modelling information only. It does not constitute legal, tax, or financial advice and does not predict court outcomes. Independent professional advice should be obtained before making financial decisions.”
+
+⸻
+
+End of prompt.
