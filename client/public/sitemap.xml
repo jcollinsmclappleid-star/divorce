@@ -6,6 +6,56 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-financial-modelling</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-50-50-split-calculator-uk</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-house-buyout-calculator-uk</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-pension-split-calculator-uk</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-mortgage-affordability-after-separation</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-financial-checklist-before-mediation</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/is-50-50-split-automatic-uk</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/can-i-keep-the-house-after-divorce-uk</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/how-are-pensions-divided-in-divorce-uk</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/methodology</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://divorcecalculatoruk.co.uk/privacy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
@@ -14,10 +64,5 @@
     <loc>https://divorcecalculatoruk.co.uk/terms</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/methodology</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
   </url>
 </urlset>

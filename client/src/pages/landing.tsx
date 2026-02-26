@@ -73,6 +73,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-4">
             <Logo href="/" size="sm" showBrandName />
             <Link href="/methodology" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-methodology">Methodology</Link>
+            <Link href="/divorce-financial-modelling" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-guides">Guides</Link>
           </div>
           <Button
             onClick={() => setLocation("/wizard")}
@@ -319,6 +320,9 @@ export default function LandingPage() {
             <Logo href="/" size="sm" showBrandName />
           </div>
           <div className="flex items-center justify-center gap-4 flex-wrap">
+            <Link href="/divorce-financial-modelling" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-guides">
+              Guides
+            </Link>
             <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-privacy">
               Privacy Policy
             </Link>

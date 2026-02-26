@@ -110,6 +110,26 @@ Technical SEO is implemented for target domain `divorcecalculatoruk.co.uk`:
 - `/privacy` — Privacy Policy (15 sections, UK GDPR compliant)
 - Landing page FAQ section with 6 regulatory Q&As
 
+### SEO Content Cluster (9 pages)
+All content pages use a shared `ContentPageLayout` component (`client/src/components/content-page-layout.tsx`) with sticky nav, hero, inline CTAs, related pages grid, disclaimer, and footer. Pages are in `client/src/pages/content/`.
+
+**Pillar page:**
+- `/divorce-financial-modelling` — "Divorce Financial Modelling in England & Wales" (Tabs, Accordions, icon Cards, GOV.UK external links)
+
+**Cluster pages (5):**
+- `/divorce-50-50-split-calculator-uk` — 50/50 Split Calculator (Party A/B comparison Cards)
+- `/divorce-house-buyout-calculator-uk` — House Buyout Calculator (stepped equity breakdown, Accordion affordability)
+- `/divorce-pension-split-calculator-uk` — Pension Split Calculator (sharing vs offsetting comparison Cards)
+- `/divorce-mortgage-affordability-after-separation` — Mortgage Affordability (stress test Accordions)
+- `/divorce-financial-checklist-before-mediation` — Mediation Checklist (7 checklist Cards)
+
+**FAQ pages (3, expanded 500-700 words each):**
+- `/is-50-50-split-automatic-uk` — "Is 50/50 Automatic?" (callout Card, Accordion reasons)
+- `/can-i-keep-the-house-after-divorce-uk` — "Can I Keep the House?" (factor Cards, retain vs sell comparison)
+- `/how-are-pensions-divided-in-divorce-uk` — "How Are Pensions Divided?" (approach Cards, Accordion tax/valuation)
+
+**SEO infrastructure:** All pages in sitemap.xml (pillar 0.8, clusters 0.6, FAQs 0.5), meta descriptions injected dynamically, cross-linked internally + to pillar + to tool. External GOV.UK links open in new tab with `rel="noopener noreferrer"`.
+
 ### Language Policy
 - Strictly non-advisory: use "may warrant assessment", "may be relevant considerations"
 - Avoid: "Consider...", "should", "recommend", "advise", "fair", "entitled"

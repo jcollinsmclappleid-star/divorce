@@ -16,6 +16,15 @@ import MethodologyPage from "@/pages/methodology";
 import RecoverPage from "@/pages/recover";
 import AdminPage from "@/pages/admin";
 import { AccessGate } from "@/components/access-gate";
+import PillarPage from "@/pages/content/pillar-divorce-financial-modelling";
+import Cluster5050Split from "@/pages/content/cluster-5050-split";
+import ClusterHouseBuyout from "@/pages/content/cluster-house-buyout";
+import ClusterPensionSplit from "@/pages/content/cluster-pension-split";
+import ClusterMortgageAffordability from "@/pages/content/cluster-mortgage-affordability";
+import ClusterMediationChecklist from "@/pages/content/cluster-mediation-checklist";
+import Faq5050Automatic from "@/pages/content/faq-5050-automatic";
+import FaqKeepHouse from "@/pages/content/faq-keep-house";
+import FaqPensionsDivided from "@/pages/content/faq-pensions-divided";
 
 function Router() {
   return (
@@ -30,6 +39,15 @@ function Router() {
       <Route path="/methodology" component={MethodologyPage} />
       <Route path="/recover" component={RecoverPage} />
       <Route path="/admin" component={AdminPage} />
+      <Route path="/divorce-financial-modelling" component={PillarPage} />
+      <Route path="/divorce-50-50-split-calculator-uk" component={Cluster5050Split} />
+      <Route path="/divorce-house-buyout-calculator-uk" component={ClusterHouseBuyout} />
+      <Route path="/divorce-pension-split-calculator-uk" component={ClusterPensionSplit} />
+      <Route path="/divorce-mortgage-affordability-after-separation" component={ClusterMortgageAffordability} />
+      <Route path="/divorce-financial-checklist-before-mediation" component={ClusterMediationChecklist} />
+      <Route path="/is-50-50-split-automatic-uk" component={Faq5050Automatic} />
+      <Route path="/can-i-keep-the-house-after-divorce-uk" component={FaqKeepHouse} />
+      <Route path="/how-are-pensions-divided-in-divorce-uk" component={FaqPensionsDivided} />
       <Route path="/results">
         <AccessGate>
           <ResultsPage />
