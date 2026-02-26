@@ -20,12 +20,15 @@ import {
   PiggyBank,
   Banknote,
   CreditCard,
+  Landmark,
+  Clock,
 } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
   InlineCTA,
   ExternalLinkButton,
+  useFaqJsonLd,
 } from "@/components/content-page-layout";
 
 const relatedPages = [
@@ -64,8 +67,24 @@ const financialBreakdownItems = [
   { icon: CreditCard, label: "Outstanding Debts", description: "Credit cards, personal loans, and other liabilities deducted from total assets." },
 ];
 
+const FAQ_SCHEMA_ITEMS = [
+  {
+    question: "Is a 50/50 divorce split automatic in the UK?",
+    answer: "No. Courts assess statutory factors and exercise discretion. In longer marriages, equality is often referenced as a starting point, but outcomes are fact-specific and may depart from equal division depending on needs and circumstances.",
+  },
+  {
+    question: "What does 50/50 mean financially in divorce?",
+    answer: "A 50/50 split refers to equal division of net marital assets after liabilities are deducted. However, equal totals do not necessarily mean equal liquidity — one party may retain property while the other retains pension assets.",
+  },
+  {
+    question: "Why might a court depart from 50/50?",
+    answer: "Courts may depart from equality where housing needs differ, income disparity is significant, there are dependent children, assets are non-matrimonial, or health or earning capacity differs between the parties.",
+  },
+];
+
 export default function FAQ5050Automatic() {
   const [, setLocation] = useLocation();
+  useFaqJsonLd(FAQ_SCHEMA_ITEMS);
 
   return (
     <ContentPageLayout
@@ -90,6 +109,31 @@ export default function FAQ5050Automatic() {
                     GOV.UK: Financial orders in divorce
                   </ExternalLinkButton>
                 </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-yardstick-heading">
+          The Yardstick of Equality
+        </h2>
+        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+          The principle of equality as a "yardstick" or cross-check in divorce financial proceedings originates from the House of Lords decision in White v White (2001). This landmark case established that there is no automatic bias in favour of the breadwinner and that a judge's proposed outcome ought to be checked against the yardstick of equality before being finalised.
+        </p>
+        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+          The White v White principle does not mandate equal division. Rather, it establishes that any departure from equality requires justification based on the specific facts of the case. In practice, courts assess the section 25 factors of the Matrimonial Causes Act 1973 and then cross-check the proposed outcome against equality. If the result departs significantly from a 50/50 split, the court must be satisfied that there is good reason for the departure.
+        </p>
+        <Card className="bg-muted/40" data-testid="card-yardstick-note">
+          <CardContent className="pt-5 pb-4">
+            <div className="flex items-start gap-3">
+              <Landmark className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">White v White (2001)</h3>
+                <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                  This case involved a farming couple with assets significantly exceeding needs. The House of Lords held that non-discrimination between breadwinner and homemaker roles is a fundamental principle, and equality provides a useful cross-check — not a presumption. Subsequent cases, including Miller v Miller; McFarlane v McFarlane (2006), further developed the concepts of needs, compensation, and sharing as the three strands of fairness.
+                </p>
               </div>
             </div>
           </CardContent>
@@ -207,6 +251,46 @@ export default function FAQ5050Automatic() {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-marriage-length-heading">
+          Short vs Long Marriages
+        </h2>
+        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+          The length of the marriage is a significant factor in how courts approach asset division. While there is no statutory definition of "short" or "long" marriages, the distinction affects the starting point for division and the treatment of different asset categories.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Card data-testid="card-short-marriage">
+            <CardContent className="pt-5 pb-4">
+              <div className="flex items-start gap-3">
+                <Clock className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground">Shorter Marriages</h3>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                    In shorter marriages (often characterised as under five years, though this is not a fixed boundary), courts may place greater emphasis on restoring each party to their pre-marriage financial position. Pre-marital assets, inheritances, and assets brought into the marriage may receive different treatment. The sharing principle from White v White may carry less weight where the period of joint endeavour has been brief.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-long-marriage">
+            <CardContent className="pt-5 pb-4">
+              <div className="flex items-start gap-3">
+                <Users className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground">Longer Marriages</h3>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                    In longer marriages, the yardstick of equality becomes a stronger reference point. Over time, the distinction between matrimonial and non-matrimonial assets may become less relevant as assets become increasingly intermingled. The contributions of both parties — whether financial or domestic — are treated as having equal weight, and the sharing principle is applied more broadly to the overall asset pool.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
+          Marriage length is one of several factors assessed under section 25 of the Matrimonial Causes Act 1973. Modelling different percentage scenarios can illustrate the financial impact of departures from equality, regardless of marriage duration.
+        </p>
       </ContentSection>
 
       <ContentSection>

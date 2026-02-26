@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Home, Banknote, PiggyBank, Landmark, CreditCard, Wallet, Receipt, FileCheck, Eye, ShieldCheck, Clock } from "lucide-react";
+import { Home, Banknote, PiggyBank, Landmark, CreditCard, Wallet, Receipt, FileCheck, Eye, ShieldCheck, Clock, FileText, FolderOpen, HardDrive } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -103,6 +103,26 @@ export default function ClusterMediationChecklist() {
       </ContentSection>
 
       <ContentSection muted>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-6" data-testid="text-form-e-overview">
+          Form E Overview
+        </h2>
+        <p className="text-muted-foreground mb-6 leading-relaxed">
+          Form E is the standard financial disclosure form used in divorce proceedings in England and Wales. It is a court document that requires both parties to provide a comprehensive statement of their financial position, including assets, liabilities, income, and expenditure. While Form E is formally required during contested financial remedy proceedings, its structure provides a useful framework for organising financial information at any stage.
+        </p>
+        <Card data-testid="card-form-e">
+          <CardContent className="pt-5 pb-4 flex gap-3">
+            <FileText className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+            <div>
+              <h3 className="text-sm font-semibold text-foreground mb-1">Why Gathering Information Early Helps</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Gathering financial information before mediation — even informally — mirrors the categories required by Form E. This includes property valuations, pension CETVs, bank statements, mortgage details, and income evidence. Having this information assembled early may reduce delays if proceedings become contested, and enables more productive mediation discussions from the outset. The categories in the checklist above align with the main sections of Form E, making the transition to formal disclosure more straightforward if it becomes necessary.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </ContentSection>
+
+      <ContentSection>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-6" data-testid="text-why-preparation">
           Why Preparation Matters
         </h2>
@@ -150,6 +170,35 @@ export default function ClusterMediationChecklist() {
       </ContentSection>
 
       <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-6" data-testid="text-digital-records">
+          Digital vs Paper Records
+        </h2>
+        <p className="text-muted-foreground mb-6 leading-relaxed">
+          Organising financial records digitally can streamline the mediation process and reduce the risk of misplaced documents. Many financial institutions now provide online access to statements and valuations, making digital collection more practical than relying solely on paper records.
+        </p>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Card data-testid="card-digital-benefits">
+            <CardContent className="pt-5 pb-4 flex gap-3">
+              <FolderOpen className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-1">Digital Organisation</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">Creating a structured folder system for financial documents — organised by category (property, pensions, savings, debts, income) — enables quick retrieval during mediation sessions. Downloaded bank statements, pension valuations, and mortgage statements can be stored securely and shared electronically with mediators or legal professionals when needed.</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-paper-records">
+            <CardContent className="pt-5 pb-4 flex gap-3">
+              <HardDrive className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-1">Backup and Security</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">Maintaining secure backups of financial records is a practical consideration during separation. Cloud storage with appropriate security settings, or encrypted external drives, can protect against document loss. Where paper originals exist (such as property deeds or older pension certificates), scanning and storing digital copies alongside the originals may be warranted.</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-4" data-testid="text-official-guidance">
           Official Guidance
         </h2>

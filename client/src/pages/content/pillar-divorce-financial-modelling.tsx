@@ -30,6 +30,13 @@ import {
   Ban,
   FileWarning,
   LineChart,
+  BookOpen,
+  XCircle,
+  Home,
+  Wallet,
+  Baby,
+  Hourglass,
+  Building2,
 } from "lucide-react";
 
 const relatedPages = [
@@ -120,6 +127,85 @@ export default function PillarDivorceFinancialModelling() {
       </ContentSection>
 
       <ContentSection muted>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-section-s25-factors">
+          The Role of Section 25 Factors
+        </h2>
+        <p className="text-muted-foreground text-sm leading-relaxed mb-4">
+          The Matrimonial Causes Act 1973, Section 25 sets out the factors a court is required to consider when determining financial provision on divorce. These factors are not ranked in any fixed hierarchy (other than the welfare of minor children being the first consideration), and courts exercise broad discretion in weighing them against the specific circumstances of each case.
+        </p>
+        <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+          Understanding how these factors interact is central to assessing the range of plausible financial outcomes. Financial modelling does not replicate judicial reasoning, but it can clarify the numerical implications when different assumptions about asset allocation are applied.
+        </p>
+        <Accordion type="multiple" data-testid="accordion-s25-factors">
+          <AccordionItem value="needs-obligations" data-testid="accordion-item-needs-obligations">
+            <AccordionTrigger data-testid="accordion-trigger-needs-obligations">
+              <span className="flex items-center gap-2">
+                <HandCoins className="w-4 h-4 text-primary" />
+                Financial Needs and Obligations
+              </span>
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Courts assess what each party requires to meet their reasonable needs, including housing, day-to-day living expenses, and obligations such as existing debts or dependant support. In many cases, particularly where there are insufficient assets to meet both parties' needs fully, the needs-based analysis becomes the dominant factor. Modelling different allocation percentages can illustrate whether each party's stated expenditure requirements are met under various scenarios.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="earning-capacity" data-testid="accordion-item-earning-capacity">
+            <AccordionTrigger data-testid="accordion-trigger-earning-capacity">
+              <span className="flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-primary" />
+                Income and Earning Capacity
+              </span>
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Beyond current income, courts may consider each party's capacity to earn in the future. This includes qualifications, work experience, age, and any career impact resulting from caring responsibilities during the marriage. Where one party has been out of the workforce, a period of adjustment may be relevant. Financial modelling can illustrate how different income assumptions affect post-separation affordability and sustainability over a projected period.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="standard-living" data-testid="accordion-item-standard-living">
+            <AccordionTrigger data-testid="accordion-trigger-standard-living">
+              <span className="flex items-center gap-2">
+                <Scale className="w-4 h-4 text-primary" />
+                Standard of Living During the Marriage
+              </span>
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                The standard of living enjoyed during the marriage provides a reference point, though courts recognise that separation typically results in a reduction for both parties as one household becomes two. This factor is particularly relevant in higher-asset cases where maintaining a comparable lifestyle may be financially feasible. In lower-asset cases, the focus tends to shift towards meeting basic needs rather than replicating previous living standards.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="contributions" data-testid="accordion-item-contributions-detail">
+            <AccordionTrigger data-testid="accordion-trigger-contributions-detail">
+              <span className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-primary" />
+                Contributions (Financial and Non-Financial)
+              </span>
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Courts consider both financial contributions (such as earnings and capital brought into the marriage) and non-financial contributions (such as homemaking and childcare). Following the House of Lords decision in White v White (2000), there is a general principle that financial and non-financial contributions are to be treated equally. This principle does not automatically produce a 50/50 outcome but establishes equality of contribution as a cross-check against any proposed division.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="duration-age" data-testid="accordion-item-duration-age">
+            <AccordionTrigger data-testid="accordion-trigger-duration-age">
+              <span className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-primary" />
+                Duration of Marriage and Age of Parties
+              </span>
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                The length of the marriage affects how assets are characterised and divided. In longer marriages, all assets — including those brought into the marriage — may be treated as part of the shared pool. In shorter marriages, pre-marital assets or inheritances may receive different treatment. The age of each party also affects future earning potential and pension accumulation timescales. Modelling can illustrate how different assumptions about asset inclusion affect overall division outcomes.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </ContentSection>
+
+      <ContentSection>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-section-why-modelling">
           Why Structured Modelling Matters
         </h2>
@@ -143,6 +229,61 @@ export default function PillarDivorceFinancialModelling() {
       </ContentSection>
 
       <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-section-cannot-do">
+          What Financial Modelling Cannot Do
+        </h2>
+        <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+          Structured modelling is a numerical illustration tool. It is important to understand its boundaries clearly, as misinterpreting outputs may lead to unrealistic expectations or uninformed decisions.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Card data-testid="card-cannot-predict">
+            <CardContent className="pt-4 pb-3 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <Gavel className="w-4 h-4 text-muted-foreground/70 shrink-0" />
+                <span className="text-sm font-semibold">Not Predicting Court Outcomes</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Courts exercise broad discretion under the Matrimonial Causes Act 1973. No calculator or modelling tool can replicate judicial reasoning or predict what a court may determine. Modelling illustrates the numerical consequences of hypothetical assumptions — it does not forecast legal outcomes.
+              </p>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-cannot-legal">
+            <CardContent className="pt-4 pb-3 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-muted-foreground/70 shrink-0" />
+                <span className="text-sm font-semibold">Not Replacing Legal Advice</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Financial modelling does not assess legal rights, entitlements, or procedural requirements. It cannot determine whether an agreement is enforceable or whether specific disclosure obligations have been met. Independent legal advice from a qualified family solicitor remains essential for binding decisions.
+              </p>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-cannot-fairness">
+            <CardContent className="pt-4 pb-3 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <XCircle className="w-4 h-4 text-muted-foreground/70 shrink-0" />
+                <span className="text-sm font-semibold">Not Assessing Fairness</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                The concept of fairness in financial proceedings involves subjective and fact-specific judicial assessment. Modelling presents numerical outputs based on stated inputs. It does not evaluate whether any particular division would be considered fair, reasonable, or appropriate by a court or mediator.
+              </p>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-cannot-regulated">
+            <CardContent className="pt-4 pb-3 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-muted-foreground/70 shrink-0" />
+                <span className="text-sm font-semibold">Not Providing Regulated Advice</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                This tool is not regulated by the Financial Conduct Authority (FCA) and does not provide financial advice within the meaning of the Financial Services and Markets Act 2000. Pension, investment, and tax planning decisions may warrant review by a regulated financial adviser.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-section-scenarios">
           Common Financial Scenarios
         </h2>
@@ -162,6 +303,12 @@ export default function PillarDivorceFinancialModelling() {
             <p className="text-sm text-muted-foreground leading-relaxed">
               An equal division assumption models a 50/50 allocation of net marital assets. This provides a neutral baseline comparison, illustrates liquidity differences, highlights pension vs cash trade-offs, and demonstrates income sustainability impact.
             </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              A critical aspect of 50/50 modelling is recognising that asset composition matters as much as total value. A portfolio consisting of £200,000 in property equity, £150,000 in pension funds, and £50,000 in savings produces very different post-separation outcomes depending on which assets each party retains. Property equity may require sale or remortgage to access, pension funds are typically locked until retirement age, and only liquid savings provide immediate financial flexibility. Modelling each combination illustrates these trade-offs numerically.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Equal division may also interact with income disparity. Where one party earns significantly more than the other, a 50/50 asset split may still result in materially different monthly budgets and sustainability indicators. Modelling both the capital position and the ongoing income picture together provides a more complete illustration of post-separation financial positions.
+            </p>
             <p className="text-xs text-muted-foreground">
               Equal division modelling is illustrative only and may not reflect any final agreement or court determination.
             </p>
@@ -178,6 +325,12 @@ export default function PillarDivorceFinancialModelling() {
             <p className="text-sm text-muted-foreground leading-relaxed">
               The family home is frequently the largest asset. Financial modelling considers current market value, outstanding mortgage, estimated sale costs, net equity, and affordability under a single income. Retaining property may increase housing stability but reduce accessible capital.
             </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Where one party wishes to retain the property, a buyout scenario typically involves remortgaging to release the departing party's share of equity. This requires the retaining party to demonstrate sufficient income to service the new mortgage independently. Modelling illustrates the relationship between equity release, mortgage affordability at various interest rates, and the remaining liquid capital available after the transaction.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Alternatively, a sale scenario distributes net proceeds after deducting the mortgage balance, estimated agent fees, and potential early repayment charges. Modelling both retention and sale outcomes side by side allows parties to assess the financial trade-offs — housing stability versus capital flexibility — before engaging with legal or financial professionals.
+            </p>
             <div className="flex items-center gap-3 flex-wrap">
               <InlineCTA label="Model property scenarios" />
               <Link href="/divorce-house-buyout-calculator-uk" className="text-xs text-primary font-medium hover:underline" data-testid="link-house-cluster">
@@ -190,6 +343,12 @@ export default function PillarDivorceFinancialModelling() {
             <h3 className="text-base font-semibold">Pension Sharing and Offsetting</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Pensions may represent a significant proportion of total wealth. Two broad mechanisms are often discussed: pension sharing (division of pension fund value) and offsetting (retaining pension in exchange for other assets). Modelling illustrates long-term retirement impact, liquidity differences, and short-term capital availability trade-offs.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Pension sharing involves a court order that transfers a percentage of one party's pension to the other, creating a separate pension credit in the recipient's name. The Cash Equivalent Transfer Value (CETV) is commonly used as a reference figure, though CETVs for defined benefit schemes may not fully capture the underlying value of guaranteed income in retirement. Actuarial analysis may be warranted for complex pension arrangements.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Offsetting involves one party retaining their pension entitlement while the other receives a greater share of non-pension assets (such as property equity or savings) to compensate. This approach avoids the administrative complexity of pension sharing but introduces a fundamental comparison challenge: pension wealth is illiquid and deferred, while property or cash is accessible now. Modelling can illustrate the nominal value trade-off, though independent financial advice may be warranted to assess the true equivalence.
             </p>
             <ExternalLinkButton href="https://www.gov.uk/pension-sharing-when-you-divorce">
               GOV.UK: Pension sharing orders
@@ -206,6 +365,12 @@ export default function PillarDivorceFinancialModelling() {
             <h3 className="text-base font-semibold">Income Disparity and Child Maintenance</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Where children are involved, statutory child maintenance calculations are typically handled separately through the Child Maintenance Service. Financial modelling may illustrate net income differences post-separation, household budget impact, and sustainability indicators.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              The CMS basic rate applies a percentage of the paying parent's gross income (after pension contributions): 12% for one child, 16% for two children, and 19% for three or more children. Shared care arrangements may reduce the amount payable. These payments directly affect monthly disposable income for both households and may warrant inclusion when modelling post-separation budgets.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Beyond statutory child maintenance, courts may consider additional provision for children's needs through a financial order — particularly in higher-income cases or where specific needs such as school fees or medical expenses arise. Modelling the combined impact of child maintenance payments alongside housing costs, tax, and other outgoings provides a more comprehensive illustration of each party's post-separation financial position.
             </p>
             <ExternalLinkButton href="https://www.gov.uk/calculate-child-maintenance">
               GOV.UK: CMS calculation guidance
@@ -288,6 +453,50 @@ export default function PillarDivorceFinancialModelling() {
       </ContentSection>
 
       <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-section-child-maintenance">
+          Child Maintenance and Income Disparities
+        </h2>
+        <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+          Where children are involved, statutory child maintenance obligations directly affect post-separation household budgets. The Child Maintenance Service (CMS) applies formulaic rates based on the paying parent's gross income. Understanding how these payments interact with tax, housing costs, and other outgoings is central to assessing financial sustainability for both households.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Card data-testid="card-cms-basic-rate">
+            <CardContent className="pt-4 pb-3 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <Baby className="w-4 h-4 text-primary shrink-0" />
+                <span className="text-sm font-semibold">CMS Basic Rate</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                The basic rate applies where the paying parent's gross weekly income falls between £200 and £800. Standard percentages are 12% for one qualifying child, 16% for two, and 19% for three or more. These percentages are applied to gross income after pension contributions are deducted.
+              </p>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-cms-reduced-rate">
+            <CardContent className="pt-4 pb-3 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <Wallet className="w-4 h-4 text-primary shrink-0" />
+                <span className="text-sm font-semibold">Reduced Rate</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Where gross weekly income is between £100 and £200, a reduced rate applies. This uses a tapered formula that blends a flat rate with a percentage-based calculation. Below £100 per week (or where the paying parent receives certain benefits), a flat rate of £7 per week applies regardless of the number of children.
+              </p>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-income-disparity">
+            <CardContent className="pt-4 pb-3 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-primary shrink-0" />
+                <span className="text-sm font-semibold">Income Disparity Impact</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Significant income differences between parties may result in one household having substantially lower disposable income post-separation. Modelling net income after tax, NI, child maintenance, and housing costs for both parties illustrates whether each household's essential expenditure can be sustained under the stated assumptions.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-section-sustainability">
           Sustainability & Lending Capacity
         </h2>
@@ -298,6 +507,39 @@ export default function PillarDivorceFinancialModelling() {
           Lending benchmarks referenced are generalised illustrations, not lending decisions or guarantees. Sustainability modelling highlights potential pressure points under stated assumptions.
         </p>
         <InlineCTA label="Run sustainability modelling" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-section-deferred-sale">
+          Deferred Sale Orders
+        </h2>
+        <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+          In some cases, an immediate sale or transfer of the family home may not be appropriate. Courts may order a deferred sale — allowing one party (typically the parent with primary care of children) to remain in the property for a defined period before it is sold and proceeds divided. Two common forms of deferred sale order are Mesher orders and Martin orders.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Card data-testid="card-mesher-order">
+            <CardContent className="pt-4 pb-3 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <Home className="w-4 h-4 text-primary shrink-0" />
+                <span className="text-sm font-semibold">Mesher Orders</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                A Mesher order defers the sale of the family home until a specified triggering event — most commonly when the youngest child reaches 18, finishes full-time education, or ceases to live at the property. The occupying party remains in the home and is typically responsible for mortgage payments and maintenance costs. Upon the triggering event, the property is sold and net proceeds divided according to the percentages specified in the order. Modelling can illustrate the projected equity position at future dates under different property value assumptions.
+              </p>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-martin-order">
+            <CardContent className="pt-4 pb-3 space-y-1.5">
+              <div className="flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-primary shrink-0" />
+                <span className="text-sm font-semibold">Martin Orders</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                A Martin order is similar but typically applies where there are no dependent children. The sale is deferred until the occupying party remarries, cohabits, dies, or voluntarily chooses to sell. These orders are less common and tend to arise in cases where the occupying party has limited housing alternatives. The departing party's capital remains tied up in the property for an indefinite period, which may affect their ability to purchase alternative housing. This trade-off between immediate capital access and deferred entitlement is a key consideration that modelling can help illustrate.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       </ContentSection>
 
       <ContentSection muted>

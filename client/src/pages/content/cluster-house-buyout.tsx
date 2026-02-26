@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Home, ArrowDown, AlertTriangle, Banknote, ShieldAlert, TrendingDown } from "lucide-react";
+import { Home, ArrowDown, AlertTriangle, Banknote, ShieldAlert, TrendingDown, FileCheck, Clock, Scale } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -140,6 +140,32 @@ export default function ClusterHouseBuyout() {
         </Accordion>
       </ContentSection>
 
+      <ContentSection muted>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-6" data-testid="text-stamp-duty">
+          Stamp Duty Considerations
+        </h2>
+        <p className="text-muted-foreground mb-4 leading-relaxed">
+          Stamp Duty Land Tax (SDLT) treatment varies depending on timing and the nature of the property transfer. Understanding these distinctions is relevant when modelling buyout costs.
+        </p>
+        <Card data-testid="card-sdlt-info">
+          <CardContent className="pt-5 pb-4 flex gap-3">
+            <FileCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+            <div>
+              <h3 className="text-sm font-semibold text-foreground mb-2">Transfer Between Spouses</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-2">
+                Transfers of property between spouses or civil partners as part of a divorce or dissolution are generally exempt from SDLT, provided the transfer is made pursuant to a court order or agreement. This applies during the period of separation and divorce proceedings.
+              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-2">
+                However, if a party purchases a new property after decree absolute — particularly where they already own or retain an interest in another property — the higher rate SDLT surcharge may apply. This additional cost can be significant and may warrant inclusion in financial modelling.
+              </p>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                SDLT rates and exemptions are subject to change. Independent professional verification of current rules may be warranted.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </ContentSection>
+
       <ContentSection>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-4" data-testid="text-liquidity-risk">
           Liquidity Risk
@@ -173,6 +199,48 @@ export default function ClusterHouseBuyout() {
           </CardContent>
         </Card>
         <InlineCTA label="Model property scenarios" />
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-6" data-testid="text-deferred-sale">
+          Deferred Sale Alternative
+        </h2>
+        <p className="text-muted-foreground mb-6 leading-relaxed">
+          Where an immediate buyout is not affordable or practical, courts may consider deferred sale arrangements. These allow one party to remain in the property for a defined period before a future sale and division of proceeds.
+        </p>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Card data-testid="card-mesher-order">
+            <CardContent className="pt-5 pb-4 flex gap-3">
+              <Clock className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-2">Mesher Order</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-2">
+                  A Mesher order postpones the sale of the family home until a specified triggering event — typically the youngest child reaching 18, completing full-time education, or the occupying party remarrying or cohabiting. Both parties retain a defined share of the equity.
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  This arrangement prioritises children's housing stability but means the non-occupying party's capital remains tied up in the property for an extended period, affecting their ability to purchase alternative accommodation.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-martin-order">
+            <CardContent className="pt-5 pb-4 flex gap-3">
+              <Scale className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-2">Martin Order</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-2">
+                  A Martin order allows one party to remain in the property indefinitely — or until they choose to sell, remarry, or cohabit. This is more commonly used where there are no dependent children but one party has a particular housing need.
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  The non-occupying party's share remains locked in the property for a potentially indefinite period. Modelling the financial implications of deferred access to capital may be relevant when evaluating this arrangement.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
+          Both types of deferred sale order involve trade-offs between immediate housing needs and long-term financial flexibility. Independent legal advice may be warranted to assess suitability.
+        </p>
       </ContentSection>
     </ContentPageLayout>
   );

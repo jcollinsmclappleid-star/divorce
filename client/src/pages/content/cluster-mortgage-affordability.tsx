@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Wallet, Receipt, TrendingUp, Calculator } from "lucide-react";
+import { Wallet, Receipt, TrendingUp, Calculator, Users, Briefcase, HeartHandshake, FileSearch, CreditCard, Landmark } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -89,6 +89,44 @@ export default function ClusterMortgageAffordability() {
         </div>
       </ContentSection>
 
+      <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-6" data-testid="text-income-changes">
+          Post-Separation Income Changes
+        </h2>
+        <p className="text-muted-foreground mb-6 leading-relaxed">
+          Separation frequently affects household income in ways that may not be immediately apparent. Where two incomes previously supported a single household, post-separation each party typically bears independent housing costs on a reduced income base. Understanding these changes is a relevant consideration when assessing mortgage sustainability.
+        </p>
+        <div className="grid sm:grid-cols-3 gap-4">
+          <Card data-testid="card-income-joint">
+            <CardContent className="pt-5 pb-4 flex gap-3">
+              <Users className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-1">Loss of Joint Income Benefits</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">Two-income households often benefit from combined tax thresholds, shared utility costs, and pooled resources. Separation removes these efficiencies, meaning net disposable income per person typically decreases even if gross income remains unchanged.</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-income-maintenance">
+            <CardContent className="pt-5 pb-4 flex gap-3">
+              <HeartHandshake className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-1">Potential Maintenance Payments</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">Spousal or child maintenance obligations may affect the paying party's disposable income and mortgage capacity. Conversely, maintenance receipts may form part of the receiving party's income for affordability purposes, though lender treatment of maintenance income varies.</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-income-work">
+            <CardContent className="pt-5 pb-4 flex gap-3">
+              <Briefcase className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-1">Return to Work Considerations</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">Where one party has been out of the workforce during the marriage, returning to employment may take time. Initial earnings may be lower than historical income levels, and childcare costs may reduce net income further during the transition period.</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </ContentSection>
+
       <ContentSection muted>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-6" data-testid="text-stress-testing">
           Stress Testing Scenarios
@@ -129,6 +167,47 @@ export default function ClusterMortgageAffordability() {
           </AccordionItem>
         </Accordion>
         <InlineCTA label="Run affordability modelling" />
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-6" data-testid="text-lender-assessment">
+          What Lenders Typically Assess
+        </h2>
+        <p className="text-muted-foreground mb-4 leading-relaxed">
+          While this tool does not replicate lender criteria, understanding the general categories that lenders typically evaluate may provide useful context when modelling affordability scenarios. Actual lending decisions involve proprietary criteria and individual assessment.
+        </p>
+        <Accordion type="multiple" className="w-full">
+          <AccordionItem value="income-verification" data-testid="accordion-income-verification">
+            <AccordionTrigger className="text-sm font-semibold">
+              Income Verification
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Lenders generally require evidence of stable, verifiable income. For employed applicants, this typically includes recent payslips and P60 forms. Self-employed applicants may need to provide two or three years of accounts or SA302 tax calculations. Some lenders may accept maintenance income as part of affordability assessments, though policies vary considerably between institutions.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="credit-history" data-testid="accordion-credit-history">
+            <AccordionTrigger className="text-sm font-semibold">
+              Credit History
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                A credit search forms part of the standard application process. Joint financial associations from the marriage may remain on credit files until formally disassociated. Outstanding debts, missed payments, and county court judgments may affect eligibility. Separation itself does not appear on credit records, but financial disruption during the process may leave marks that affect future applications.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="deposit-equity" data-testid="accordion-deposit-equity">
+            <AccordionTrigger className="text-sm font-semibold">
+              Deposit & Equity Requirements
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Where a party is retaining the existing property, the equity held after buying out the other party's share effectively serves as the deposit. Where purchasing a new property, deposit requirements typically range from 5% to 25% of the purchase price, with lower interest rates generally available at higher deposit levels. The loan-to-value ratio is a key factor in both pricing and eligibility.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </ContentSection>
 
       <ContentSection>

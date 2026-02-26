@@ -1,0 +1,303 @@
+🔵 CLUSTER EXPANSIONS
+
+⸻
+
+1️⃣ Divorce House Buyout Calculator UK – Property Retention Modelling
+
+URL: /divorce-house-buyout-calculator-uk
+
+Divorce House Buyout Calculator UK – Property Retention Scenario Modelling
+
+The family home is often the most significant financial asset in divorce. Whether one party retains the property or it is sold can materially affect liquidity, debt exposure, and long-term sustainability.
+
+In England & Wales, there is no automatic right to retain property. Outcomes are determined within a discretionary legal framework. High-level guidance is available via GOV.UK.
+
+Structured financial modelling can illustrate the numerical consequences of retaining or selling the home under defined assumptions.
+
+It does not determine legal entitlement.
+
+⸻
+
+Step 1: Calculating Net Equity
+
+Property modelling begins with net equity:
+
+Market value
+– Outstanding mortgage
+– Estimated sale costs
+= Net equity
+
+Example:
+	•	Property value: £600,000
+	•	Mortgage: £180,000
+	•	Sale costs (illustrative): £12,000
+Net equity ≈ £408,000
+
+This forms part of the broader marital asset pool.
+
+⸻
+
+Step 2: Buyout Mechanics
+
+If one party retains the home, they may need to:
+	•	Refinance the mortgage in sole name
+	•	Release equity to compensate the other party
+	•	Offset against other assets (e.g., pension)
+
+Example:
+
+If total net pool = £800,000
+Equal division = £400,000 each
+
+If one party keeps £408,000 equity home, they may owe balancing capital elsewhere.
+
+Modelling allows this to be visualised numerically.
+
+⸻
+
+Step 3: Mortgage Affordability Assessment
+
+Affordability modelling may consider:
+	•	Gross annual income
+	•	General income multiple benchmarks (often ~4–4.5x gross income, illustrative only)
+	•	Existing debt
+	•	Interest rate sensitivity
+
+Example:
+
+Income: £70,000
+4.5x multiple ≈ £315,000 (illustrative only)
+
+If required borrowing exceeds this range, retention may require additional capital or alternative structuring.
+
+These benchmarks are not lending decisions.
+
+⸻
+
+Step 4: Liquidity & Concentration Risk
+
+Retaining the property may create:
+	•	High asset concentration
+	•	Reduced accessible cash
+	•	Increased vulnerability to interest rate shifts
+
+Example:
+
+£408,000 in property
+£20,000 in savings
+
+Liquidity imbalance becomes apparent.
+
+Structured modelling can test alternative scenarios:
+	•	Property sale
+	•	Partial equity release
+	•	Different percentage splits
+
+⸻
+
+Step 5: Sustainability Modelling
+
+Long-term sustainability may involve testing:
+	•	2% interest increase
+	•	Income reduction
+	•	Increased childcare costs
+	•	Maintenance obligations
+
+This transforms property retention analysis from static division to forward-looking viability.
+
+⸻
+
+Sale Scenario Comparison
+
+Selling the property may:
+	•	Release capital
+	•	Reduce debt exposure
+	•	Increase liquidity flexibility
+
+However, it may require rehousing and incur transaction costs.
+
+Side-by-side comparison provides clarity.
+
+⸻
+
+Explore Structured Comparison
+
+Use the divorce financial modelling tool to compare:
+	•	Retention vs sale
+	•	Equal vs alternative splits
+	•	Interest stress scenarios
+
+This modelling is illustrative only and does not determine legal outcome.
+
+⸻
+
+Disclaimer
+
+This page provides high-level financial modelling information only and does not constitute legal or mortgage advice.
+
+⸻
+
+2️⃣ Divorce Pension Split Calculator UK – Scenario Modelling
+
+URL: /divorce-pension-split-calculator-uk
+
+Divorce Pension Split Calculator UK – Retirement Asset Modelling
+
+Pensions are often one of the largest components of marital wealth. Their treatment can significantly influence both immediate capital distribution and long-term retirement outcomes.
+
+High-level information on pension sharing orders is available via GOV.UK.
+
+Structured modelling can illustrate numerical differences between pension sharing and offsetting assumptions.
+
+⸻
+
+Pension Sharing
+
+Pension sharing typically involves:
+	•	Assigning a percentage of one pension fund
+	•	Creating an independent pension pot for the other party
+
+Example:
+
+Pension CETV: £300,000
+50% share → £150,000 transfer
+
+Modelling can illustrate resulting asset totals and long-term capital structure.
+
+⸻
+
+Pension Offsetting
+
+Offsetting may involve:
+	•	One party retaining pension assets
+	•	The other retaining more property or cash
+
+Example:
+
+Party A retains £300,000 pension
+Party B receives additional £300,000 property equity
+
+Short-term liquidity differs materially from long-term retirement value.
+
+⸻
+
+Liquidity vs Retirement Security
+
+Pensions are:
+	•	Long-term
+	•	Illiquid
+	•	Subject to retirement age access rules
+
+Offsetting may increase immediate capital while reducing long-term retirement provision.
+
+Modelling allows numerical comparison without recommending an approach.
+
+⸻
+
+Tax Considerations
+
+Pension tax treatment is complex and scheme-dependent.
+
+Simplified modelling does not fully account for:
+	•	Lifetime allowance history
+	•	Scheme-specific rules
+	•	Early access penalties
+	•	Detailed tax relief calculations
+
+Tax modelling remains illustrative only.
+
+⸻
+
+Sustainability Impact
+
+Pension-heavy allocations may require:
+	•	Alternative capital planning
+	•	Interim liquidity assessment
+	•	Retirement timeline modelling
+
+Structured comparison helps clarify these trade-offs.
+
+⸻
+
+Use Structured Scenario Comparison
+
+Explore comparative pension allocation modelling using the divorce financial modelling tool.
+
+⸻
+
+Disclaimer
+
+This page provides high-level financial modelling information only and does not constitute legal or tax advice.
+
+⸻
+
+3️⃣ Mortgage After Divorce UK – Affordability Modelling
+
+URL: /divorce-mortgage-affordability-after-separation
+
+Mortgage After Divorce UK – Post-Separation Affordability Modelling
+
+Post-separation mortgage feasibility depends on income, debt levels, and expenditure structure.
+
+Affordability modelling can illustrate how income changes impact borrowing capacity and sustainability.
+
+It does not replace regulated mortgage advice.
+
+⸻
+
+Income Reassessment
+
+Separation often changes:
+	•	Household income
+	•	Maintenance obligations
+	•	Childcare costs
+	•	Tax position
+
+Simplified modelling may apply current income tax bands published by HM Revenue & Customs.
+
+⸻
+
+Income Multiples
+
+Generalised income multiple benchmarks (often 4–4.5x gross income) may be referenced for illustration only.
+
+Lenders apply additional affordability stress tests.
+
+⸻
+
+Stress Testing
+
+Modelling may test:
+	•	1–3% interest rate increases
+	•	10% income reduction
+	•	Increased household costs
+
+This forward-looking modelling is often absent from simple calculators.
+
+⸻
+
+Capital Buffer Assessment
+
+Post-separation households may require:
+	•	Emergency savings buffer
+	•	Maintenance for legal costs
+	•	Unexpected expense capacity
+
+Liquidity modelling clarifies buffer adequacy.
+
+⸻
+
+Compare Scenarios
+
+You may compare:
+	•	Retain property
+	•	Downsize
+	•	Sell and rent
+
+using structured modelling assumptions.
+
+⸻
+
+Disclaimer
+
+This page provides illustrative financial modelling only.

@@ -111,24 +111,34 @@ Technical SEO is implemented for target domain `divorcecalculatoruk.co.uk`:
 - Landing page FAQ section with 6 regulatory Q&As
 
 ### SEO Content Cluster (9 pages)
-All content pages use a shared `ContentPageLayout` component (`client/src/components/content-page-layout.tsx`) with sticky nav, hero, inline CTAs, related pages grid, disclaimer, and footer. Pages are in `client/src/pages/content/`.
+All content pages use a shared `ContentPageLayout` component (`client/src/components/content-page-layout.tsx`) with sticky nav, hero, inline CTAs, OG meta tags, canonical tags, Article JSON-LD, BreadcrumbList JSON-LD, related pages grid, disclaimer, and footer. Pages are in `client/src/pages/content/`.
 
-**Pillar page:**
-- `/divorce-financial-modelling` — "Divorce Financial Modelling in England & Wales" (Tabs, Accordions, icon Cards, GOV.UK external links)
+**Pillar page (~2000 words):**
+- `/divorce-financial-modelling` — "Divorce Financial Modelling in England & Wales" (Tabs, Accordions, icon Cards, GOV.UK external links, Section 25 factors detail, deferred sale orders, child maintenance overview)
 
-**Cluster pages (5):**
-- `/divorce-50-50-split-calculator-uk` — 50/50 Split Calculator (Party A/B comparison Cards)
-- `/divorce-house-buyout-calculator-uk` — House Buyout Calculator (stepped equity breakdown, Accordion affordability)
-- `/divorce-pension-split-calculator-uk` — Pension Split Calculator (sharing vs offsetting comparison Cards)
-- `/divorce-mortgage-affordability-after-separation` — Mortgage Affordability (stress test Accordions)
-- `/divorce-financial-checklist-before-mediation` — Mediation Checklist (7 checklist Cards)
+**Cluster pages (5, ~800-1000 words each):**
+- `/divorce-50-50-split-calculator-uk` — 50/50 Split Calculator (Party A/B comparison Cards, asset composition analysis, common misconceptions Accordion)
+- `/divorce-house-buyout-calculator-uk` — House Buyout Calculator (stepped equity breakdown, Accordion affordability, SDLT considerations, deferred sale alternatives)
+- `/divorce-pension-split-calculator-uk` — Pension Split Calculator (sharing vs offsetting Cards, DB vs DC comparison, actuarial advice guidance)
+- `/divorce-mortgage-affordability-after-separation` — Mortgage Affordability (stress test Accordions, post-separation income changes, lender assessment overview)
+- `/divorce-financial-checklist-before-mediation` — Mediation Checklist (7 checklist Cards, Form E overview, digital records guidance)
 
-**FAQ pages (3, expanded 500-700 words each):**
-- `/is-50-50-split-automatic-uk` — "Is 50/50 Automatic?" (callout Card, Accordion reasons)
-- `/can-i-keep-the-house-after-divorce-uk` — "Can I Keep the House?" (factor Cards, retain vs sell comparison)
-- `/how-are-pensions-divided-in-divorce-uk` — "How Are Pensions Divided?" (approach Cards, Accordion tax/valuation)
+**FAQ pages (3, ~600-700 words each, with FAQ JSON-LD schema):**
+- `/is-50-50-split-automatic-uk` — "Is 50/50 Automatic?" (callout Card, Accordion reasons, White v White principle, short vs long marriages)
+- `/can-i-keep-the-house-after-divorce-uk` — "Can I Keep the House?" (factor Cards, retain vs sell comparison, children's housing needs, transfer of title)
+- `/how-are-pensions-divided-in-divorce-uk` — "How Are Pensions Divided?" (approach Cards, Accordion tax/valuation, state pension considerations, pension actuary role)
 
-**SEO infrastructure:** All pages in sitemap.xml (pillar 0.8, clusters 0.6, FAQs 0.5), meta descriptions injected dynamically, cross-linked internally + to pillar + to tool. External GOV.UK links open in new tab with `rel="noopener noreferrer"`.
+**SEO infrastructure:**
+- All pages in sitemap.xml (pillar 0.8, clusters 0.6, FAQs 0.5)
+- Meta descriptions injected dynamically per page
+- Canonical tags injected dynamically per page
+- Article JSON-LD schema on all content pages
+- BreadcrumbList JSON-LD schema on all content pages
+- FAQ JSON-LD schema on landing page and 3 FAQ pages
+- OG meta tags injected dynamically per page
+- Cross-linked internally + to pillar + to tool
+- External GOV.UK links open in new tab with `rel="noopener noreferrer"`
+- JSON-LD price in index.html: £59 (launch phase)
 
 ### Language Policy
 - Strictly non-advisory: use "may warrant assessment", "may be relevant considerations"

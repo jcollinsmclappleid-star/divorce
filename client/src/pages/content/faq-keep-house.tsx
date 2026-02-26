@@ -12,12 +12,16 @@ import {
   PiggyBank,
   CheckCircle,
   XCircle,
+  Users,
+  FileText,
+  ArrowLeftRight,
 } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
   InlineCTA,
   ExternalLinkButton,
+  useFaqJsonLd,
 } from "@/components/content-page-layout";
 
 const relatedPages = [
@@ -88,8 +92,24 @@ const sellCons = [
   "Market timing uncertainty",
 ];
 
+const FAQ_SCHEMA_ITEMS = [
+  {
+    question: "Can I keep the house after divorce in the UK?",
+    answer: "Whether one party can retain the family home depends on multiple financial considerations including net equity, mortgage affordability on a single income, available liquidity, and ongoing cost sustainability. There is no automatic right to retain property.",
+  },
+  {
+    question: "What financial factors affect keeping the house?",
+    answer: "Key factors include net equity (property value minus mortgage and sale costs), whether a new or existing mortgage is affordable on one income, sufficient liquid reserves for emergencies, and whether ongoing housing costs are sustainable alongside living expenses.",
+  },
+  {
+    question: "Is it better to keep or sell the house in divorce?",
+    answer: "Retaining property provides housing stability but may reduce liquidity and increase debt concentration. Selling releases capital for both parties and simplifies division but requires rehousing. Structured modelling can illustrate these trade-offs.",
+  },
+];
+
 export default function FAQKeepHouse() {
   const [, setLocation] = useLocation();
+  useFaqJsonLd(FAQ_SCHEMA_ITEMS);
 
   return (
     <ContentPageLayout
@@ -129,6 +149,31 @@ export default function FAQKeepHouse() {
       </ContentSection>
 
       <ContentSection muted>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-children-housing-heading">
+          Children's Housing Needs
+        </h2>
+        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+          Where there are dependent children, their accommodation needs are a primary consideration in financial remedy proceedings. Courts place significant weight on ensuring that children have suitable housing, which may influence how property is allocated between the parties.
+        </p>
+        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+          The welfare of children is not the paramount consideration in financial proceedings (unlike in children's proceedings under the Children Act 1989), but it is the first consideration under section 25(1) of the Matrimonial Causes Act 1973. In practice, this means that housing the primary carer and children adequately may take priority over achieving a numerically equal division of assets.
+        </p>
+        <Card className="bg-muted/40" data-testid="card-children-housing">
+          <CardContent className="pt-5 pb-4">
+            <div className="flex items-start gap-3">
+              <Users className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Practical Implications</h3>
+                <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                  Where the family home provides stability for children — proximity to schools, established social networks, and continuity of routine — courts may give weight to these factors when assessing whether property retention is appropriate. This does not create an automatic right to retain, but children's needs frequently influence the outcome. Modelling can illustrate the financial trade-offs involved in retaining the property versus selling and rehousing.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </ContentSection>
+
+      <ContentSection>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-practice-heading">
           What This Means in Practice
         </h2>
@@ -212,6 +257,43 @@ export default function FAQKeepHouse() {
         <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
           Modelling both retention and sale scenarios allows side-by-side comparison before mediation.
         </p>
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-transfer-title-heading">
+          Transfer of Title
+        </h2>
+        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+          When one party retains the family home, the legal mechanism for transferring ownership depends on the circumstances. Understanding the distinction between a transfer of equity and a sale helps clarify the practical steps involved.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Card data-testid="card-transfer-equity">
+            <CardContent className="pt-5 pb-4">
+              <div className="flex items-start gap-3">
+                <FileText className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground">Transfer of Equity</h3>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                    A transfer of equity involves removing one party from the property title while the other remains. This typically requires the remaining party to remortgage in their sole name and may involve a lump sum payment to the departing party representing their share of equity. Transfers between spouses as part of a court order are generally exempt from Stamp Duty Land Tax, though independent legal advice on the specific circumstances may be warranted.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-sale-purchase">
+            <CardContent className="pt-5 pb-4">
+              <div className="flex items-start gap-3">
+                <ArrowLeftRight className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground">Sale and Purchase</h3>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                    Where neither party retains the existing property, a sale releases capital for both parties to purchase or rent independently. Sale proceeds are divided according to the agreed or court-ordered split. Transaction costs — including estate agent fees, conveyancing fees, and potential SDLT on new purchases — reduce the net capital available. Modelling these costs provides a clearer picture of post-sale purchasing capacity.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </ContentSection>
 
       <ContentSection muted>

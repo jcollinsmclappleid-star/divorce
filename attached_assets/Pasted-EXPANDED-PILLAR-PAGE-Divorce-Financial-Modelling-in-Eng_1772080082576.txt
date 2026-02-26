@@ -1,0 +1,356 @@
+EXPANDED PILLAR PAGE
+
+Divorce Financial Modelling in England & Wales
+
+⸻
+
+Divorce Financial Modelling in England & Wales
+
+Divorce financial arrangements in England & Wales are determined within a discretionary legal framework. Courts assess a range of statutory factors when considering how property, pensions, income, and liabilities should be treated following separation.
+
+Because outcomes are fact-specific and discretionary, structured financial modelling can be useful prior to mediation or legal consultation. Modelling does not determine legal entitlement or predict court outcomes. It provides numerical comparisons under clearly defined assumptions.
+
+This guide explains how divorce financial modelling works, the common asset categories involved, and how scenario comparison can clarify financial implications before formal advice is obtained.
+
+For structured comparison under your own assumptions, you may use the divorce financial modelling tool.
+
+⸻
+
+The Legal Context: Discretion and Financial Remedy
+
+Financial orders on divorce in England & Wales are governed by statutory principles and judicial discretion. Courts consider factors such as:
+	•	Welfare of any minor children
+	•	Income and earning capacity
+	•	Financial needs and obligations
+	•	Property and other financial resources
+	•	Standard of living during the marriage
+	•	Duration of the marriage
+	•	Contributions made by each party
+	•	Age and health considerations
+
+High-level guidance is available via GOV.UK.
+
+Equality is often referenced in long marriages as a starting point in discussion. However, this does not create an automatic presumption of equal division. Outcomes may depart from equality where needs, housing requirements, or other factors justify adjustment.
+
+Financial modelling does not replicate judicial discretion. It illustrates the financial consequences of specific numerical allocations.
+
+⸻
+
+Categorising Assets in Divorce
+
+Understanding asset categories is essential before modelling.
+
+Matrimonial Assets
+
+Typically include:
+	•	Family home
+	•	Savings accumulated during marriage
+	•	Pension accrual during marriage
+	•	Joint investments
+
+Non-Matrimonial Assets
+
+May include:
+	•	Pre-marital property
+	•	Inheritances
+	•	Gifts
+	•	Assets acquired after separation
+
+Treatment of these assets depends on circumstances and judicial assessment.
+
+Modelling allows separation of asset pools numerically without determining legal classification.
+
+⸻
+
+Financial Disclosure and Data Gathering
+
+Before formal financial remedy proceedings, parties typically exchange detailed financial disclosure. This may include property valuations, pension statements, income evidence, and liability schedules.
+
+While structured modelling does not replace disclosure requirements, it can:
+	•	Organise data clearly
+	•	Highlight liquidity concentration
+	•	Illustrate asset distribution under different assumptions
+
+This can support informed mediation discussions.
+
+⸻
+
+Core Financial Scenarios in Divorce
+
+1️⃣ Equal Division (50/50) Modelling
+
+An equal division scenario models what a 50/50 allocation of net assets would look like numerically.
+
+Example:
+	•	Property value: £600,000
+	•	Mortgage: £150,000
+	•	Pension (combined): £250,000
+	•	Savings: £80,000
+
+Net assets:
+£600,000 – £150,000 = £450,000 property equity
+Total pool: £450,000 + £250,000 + £80,000 = £780,000
+
+Under a 50/50 assumption:
+£390,000 per party (illustrative only)
+
+However, liquidity may differ substantially if one party retains the property and the other retains pension assets.
+
+Equal totals do not necessarily mean equal financial flexibility.
+
+Detailed exploration is available on the divorce 50/50 split calculator UK page.
+
+⸻
+
+2️⃣ Retaining the Family Home
+
+Property retention modelling typically examines:
+	•	Net equity
+	•	Mortgage affordability
+	•	Cash flow sustainability
+	•	Liquidity concentration
+
+Income multiple benchmarks (often around 4–4.5x gross income) are generalised illustrations, not lending approvals.
+
+Example scenario:
+	•	Post-separation income: £65,000
+	•	Mortgage multiple: 4.5x
+	•	Potential borrowing capacity: ~£292,500 (illustrative)
+
+This must be tested against actual lending criteria and affordability stress.
+
+Modelling helps illustrate:
+	•	Equity release needed
+	•	Monthly payment sensitivity
+	•	Impact of interest rate increases
+
+For scenario comparison, see the divorce house buyout calculator UK page.
+
+⸻
+
+3️⃣ Pension Sharing and Offsetting
+
+Pensions often represent a significant proportion of total marital wealth.
+
+Broad mechanisms include:
+	•	Pension sharing
+	•	Offsetting
+	•	Attachment orders
+
+High-level information is available via GOV.UK pension sharing guidance.
+
+Numerical modelling may compare:
+	•	Equal pension division
+	•	Pension-heavy offset
+	•	Capital-heavy offset
+
+Example:
+
+If one party retains a £250,000 pension while the other retains £250,000 in additional property equity, short-term liquidity differs materially from long-term retirement value.
+
+Modelling illustrates these differences without recommending a specific approach.
+
+⸻
+
+4️⃣ Income Disparity and Sustainability
+
+Post-separation sustainability depends on:
+	•	Net income
+	•	Essential expenditure
+	•	Debt servicing
+	•	Child maintenance obligations
+
+Statutory child maintenance calculations are handled separately via the Child Maintenance Service.
+
+Structured modelling can illustrate:
+	•	Income after estimated tax
+	•	Housing costs
+	•	Sensitivity to rate increases
+	•	Budget resilience over 3–5 years
+
+It does not replace statutory tools or professional advice.
+
+⸻
+
+Tax Assumptions in Financial Modelling
+
+Income modelling may apply simplified UK tax bands based on publicly available data from HM Revenue & Customs.
+
+Simplified modelling may:
+	•	Estimate net income
+	•	Illustrate higher-rate thresholds
+	•	Apply basic National Insurance assumptions
+
+It does not account for:
+	•	Capital Gains Tax
+	•	Dividend taxation complexity
+	•	Scottish tax bands
+	•	Pension relief rules
+	•	Individualised allowances
+
+Tax modelling is illustrative only.
+
+⸻
+
+Sensitivity and Risk Analysis
+
+A meaningful modelling exercise should test:
+	•	Interest rate increases
+	•	Income reduction scenarios
+	•	Unexpected expenditure
+	•	Childcare cost changes
+	•	Inflation assumptions
+
+This transforms modelling from static division to forward-looking sustainability assessment.
+
+Few generic calculators incorporate stress testing. Structured modelling allows these comparisons numerically.
+
+⸻
+
+Limitations of Divorce Financial Calculators
+
+Financial modelling tools:
+	•	Do not determine entitlement
+	•	Do not assess fairness
+	•	Do not replicate judicial discretion
+	•	Depend entirely on input accuracy
+	•	Cannot replace professional legal advice
+
+They provide structured numerical comparisons only.
+
+⸻
+
+When Professional Advice Is Essential
+
+Binding financial arrangements require:
+	•	Family solicitor input
+	•	Potential mediator involvement
+	•	Possibly regulated financial advice
+
+Modelling supports informed discussion. It does not substitute regulated advice.
+
+⸻
+
+Explore Structured Scenario Comparison
+
+Before mediation or consultation, structured financial modelling may help clarify:
+	•	Liquidity distribution
+	•	Affordability feasibility
+	•	Long-term sustainability
+	•	Capital trade-offs
+
+You can explore alternative numerical assumptions using the DivorceCalculatorUK financial modelling tool.
+
+⸻
+
+Disclaimer
+
+This guide provides high-level financial modelling information only. It does not constitute legal, tax, or financial advice and does not predict court outcomes.
+
+⸻
+
+EXPANDED CLUSTER TEMPLATE EXAMPLE
+
+(Apply same structure to all clusters)
+
+Below is a fully expanded version of the 50/50 cluster page (~1,000+ words).
+
+⸻
+
+Divorce 50/50 Split Calculator UK – Financial Scenario Modelling
+
+Is a 50/50 Split Automatic?
+
+In England & Wales, a 50/50 division of assets is not automatic. While equality is sometimes referenced as a starting point in long marriages, outcomes remain discretionary.
+
+Courts consider needs, housing requirements, income disparity, and other statutory factors.
+
+High-level guidance is available via GOV.UK.
+
+⸻
+
+What Does a 50/50 Split Represent Numerically?
+
+A 50/50 modelling scenario:
+	1.	Totals net marital assets
+	2.	Deducts liabilities
+	3.	Allocates equal shares
+
+Example:
+	•	House equity: £450,000
+	•	Pension value: £200,000
+	•	Savings: £50,000
+Total: £700,000
+
+Equal division assumption: £350,000 per party (illustrative only)
+
+However, composition matters.
+
+⸻
+
+Liquidity vs Headline Totals
+
+If one party retains:
+	•	Entire property (£450,000 equity)
+and the other retains:
+	•	Pension + savings (£250,000 total)
+
+Total values differ from liquidity access.
+
+Property is illiquid and debt-dependent. Pension is long-term. Cash is immediately accessible.
+
+Modelling highlights these differences.
+
+⸻
+
+What This Means in Practice
+
+Equal division modelling can:
+	•	Provide baseline comparison
+	•	Identify mortgage feasibility
+	•	Highlight capital shortfall
+	•	Reveal pension-heavy imbalance
+
+It does not predict final settlement.
+
+⸻
+
+Alternative Percentage Scenarios
+
+Modelling may also compare:
+	•	60/40 splits
+	•	55/45 splits
+	•	Property-retention offsets
+
+This allows sensitivity comparison before mediation.
+
+⸻
+
+When Equality May Be Adjusted
+
+Adjustment considerations may include:
+	•	Child housing needs
+	•	Income capacity differences
+	•	Health considerations
+	•	Asset source
+
+These are fact-specific and discretionary.
+
+Financial calculators cannot replicate judicial reasoning.
+
+⸻
+
+Using Structured Modelling
+
+Structured modelling can:
+	•	Compare multiple percentage splits
+	•	Assess sustainability
+	•	Illustrate long-term impact
+
+Explore assumptions using the divorce financial modelling tool.
+
+⸻
+
+Disclaimer
+
+This page provides illustrative financial modelling only and does not determine legal entitlement.

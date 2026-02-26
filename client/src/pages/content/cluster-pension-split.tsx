@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Clock, Lock, BarChart3, Coins } from "lucide-react";
+import { Clock, Lock, BarChart3, Coins, Building2, PiggyBank, UserCheck } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -140,6 +140,54 @@ export default function ClusterPensionSplit() {
       </ContentSection>
 
       <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-6" data-testid="text-db-vs-dc">
+          Defined Benefit vs Defined Contribution
+        </h2>
+        <p className="text-muted-foreground mb-6 leading-relaxed">
+          The type of pension scheme fundamentally affects how it is valued, shared, and modelled. Understanding the distinction between defined benefit and defined contribution schemes is essential for meaningful scenario comparison.
+        </p>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Card data-testid="card-defined-benefit">
+            <CardContent className="pt-5 pb-4 flex gap-3">
+              <Building2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-2">Defined Benefit (DB)</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-2">
+                  DB schemes provide a guaranteed income in retirement, typically calculated as a proportion of final or career-average salary multiplied by years of service. The pension provider bears the investment risk.
+                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-2">
+                  The cash equivalent transfer value (CETV) is the scheme's estimate of the capital cost of providing the promised benefits. However, CETVs may significantly understate or overstate the true economic value of DB pension rights, particularly in the current interest rate environment.
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  DB schemes include most public sector pensions (NHS, teachers, civil service, police, armed forces) and some older private sector arrangements.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-defined-contribution">
+            <CardContent className="pt-5 pb-4 flex gap-3">
+              <PiggyBank className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-2">Defined Contribution (DC)</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-2">
+                  DC schemes accumulate a pot of invested contributions. The eventual retirement income depends on the fund's investment performance, the charges applied, and the method of drawdown chosen at retirement. The member bears the investment risk.
+                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-2">
+                  DC pension values are more straightforward to assess — the fund value represents the current worth of the accumulated pot. However, comparing DC values directly with DB CETVs can be misleading due to the fundamentally different nature of the benefits.
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Most modern workplace pensions and personal pensions (SIPPs) are defined contribution arrangements.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
+          Where both DB and DC pensions are present, comparing them on a like-for-like basis requires careful analysis. Professional actuarial input may be warranted for complex pension arrangements.
+        </p>
+      </ContentSection>
+
+      <ContentSection muted>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-4" data-testid="text-pension-modelling">
           What Modelling Illustrates
         </h2>
@@ -149,6 +197,38 @@ export default function ClusterPensionSplit() {
         <p className="text-sm text-muted-foreground leading-relaxed">
           Professional actuarial advice may be needed for complex pension arrangements, particularly defined benefit schemes.
         </p>
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-6" data-testid="text-actuarial-advice">
+          When Actuarial Advice May Be Warranted
+        </h2>
+        <p className="text-muted-foreground mb-4 leading-relaxed">
+          While financial modelling tools can illustrate the broad impact of pension sharing percentages and offsetting scenarios, certain situations involve complexity that may exceed the scope of generalised modelling.
+        </p>
+        <Card data-testid="card-actuarial-warranted">
+          <CardContent className="pt-5 pb-4 flex gap-3">
+            <UserCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+            <div>
+              <h3 className="text-sm font-semibold text-foreground mb-2">Situations Where Actuarial Input May Be Relevant</h3>
+              <div className="space-y-2 text-sm text-muted-foreground leading-relaxed">
+                <p>
+                  Where one or both parties hold defined benefit pension schemes, the relationship between the CETV and the true economic value of benefits can be complex. An actuary can provide a more nuanced assessment of what a pension sharing order would deliver in practice.
+                </p>
+                <p>
+                  Where there are multiple pension schemes of different types, or where pension values are large relative to other assets, expert analysis may help ensure that offsetting calculations reflect genuine economic equivalence rather than nominal value comparisons.
+                </p>
+                <p>
+                  Where there is a significant age gap between parties, differing retirement ages, or one party has already commenced drawing pension benefits, the financial implications of sharing or offsetting become more intricate.
+                </p>
+              </div>
+              <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
+                Independent professional review may be warranted where pension complexity exceeds the scope of generalised modelling tools.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+        <InlineCTA label="Compare pension scenarios" />
       </ContentSection>
     </ContentPageLayout>
   );

@@ -162,6 +162,7 @@ export default function UnlockPage() {
 
                 <div className="text-xs text-muted-foreground text-center space-y-1">
                   <p>One-time payment. No subscription.</p>
+                  <p>14-day cooling-off period under the Consumer Rights Act 2015. See <Link href="/terms" className="underline text-primary" data-testid="link-refund-terms">Terms</Link> for details.</p>
                   <p>
                     Already purchased? <Link href="/recover" className="underline text-primary" data-testid="link-recover">Recover your access</Link>
                   </p>

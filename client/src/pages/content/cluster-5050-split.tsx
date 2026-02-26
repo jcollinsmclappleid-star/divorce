@@ -1,6 +1,12 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Scale, BarChart3, ShieldCheck, TrendingUp, Users } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Scale, BarChart3, ShieldCheck, TrendingUp, Users, Droplets, Clock, Sprout } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -149,6 +155,47 @@ export default function Cluster5050Split() {
         <InlineCTA label="Model a 50/50 scenario" />
       </ContentSection>
 
+      <ContentSection muted>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-6" data-testid="text-asset-composition">
+          Asset Composition Matters
+        </h2>
+        <p className="text-muted-foreground mb-6 leading-relaxed">
+          An equal split by total value does not necessarily produce equivalent financial positions. A portfolio containing £200,000 in property equity and £200,000 in pension rights is fundamentally different from £400,000 in cash savings. The nature, accessibility, and growth characteristics of each asset class affect real-world outcomes significantly.
+        </p>
+        <div className="grid sm:grid-cols-3 gap-4">
+          <Card data-testid="card-composition-liquidity">
+            <CardContent className="pt-5 pb-4 flex gap-3">
+              <Droplets className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-1">Liquidity</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">Cash and savings are immediately accessible. Property equity requires a sale or remortgage to release. Pension funds are typically locked until minimum pension age. Two allocations with the same total value may provide very different levels of immediate financial flexibility.</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-composition-timing">
+            <CardContent className="pt-5 pb-4 flex gap-3">
+              <Clock className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-1">Access Timing</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">Different assets become available at different life stages. Pension wealth may not be accessible for decades, while property equity depends on market conditions and sale timing. Modelling illustrates when each asset class becomes practically useful.</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-composition-growth">
+            <CardContent className="pt-5 pb-4 flex gap-3">
+              <Sprout className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-1">Growth Potential</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">Asset classes grow at different rates. Pension investments may compound over decades in tax-advantaged wrappers. Property values fluctuate with local markets. Cash savings may be eroded by inflation. These differences mean equal value today does not imply equal value in the future.</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
+          Understanding these distinctions is central to meaningful scenario comparison. A 50/50 allocation by total value may produce materially different real-world outcomes depending on which assets each party receives.
+        </p>
+      </ContentSection>
+
       <ContentSection>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-4" data-testid="text-5050-considerations">
           Key Considerations
@@ -173,6 +220,57 @@ export default function Cluster5050Split() {
             </p>
           </div>
         </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-6" data-testid="text-common-misconceptions">
+          Common Misconceptions
+        </h2>
+        <p className="text-muted-foreground mb-4 leading-relaxed">
+          Several widespread assumptions about 50/50 division in England & Wales do not accurately reflect how financial remedy proceedings operate. Structured modelling can help clarify these distinctions.
+        </p>
+        <Accordion type="multiple" className="w-full">
+          <AccordionItem value="law" data-testid="accordion-misconception-law">
+            <AccordionTrigger className="text-sm font-semibold">
+              "50/50 is the law"
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                There is no statutory requirement for equal division in England & Wales. While the House of Lords in White v White (2001) established equality as a "yardstick" or cross-check, outcomes remain discretionary. Courts assess multiple factors under Section 25 of the Matrimonial Causes Act 1973, and the final allocation depends on the specific circumstances of each case. Equal division may be the outcome in many long-marriage cases, but it is not guaranteed.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="all-assets" data-testid="accordion-misconception-all-assets">
+            <AccordionTrigger className="text-sm font-semibold">
+              "All assets are automatically included"
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                While all assets are potentially relevant and subject to disclosure, the treatment of specific assets may vary. Pre-marital assets, inherited wealth, and gifts may be treated differently depending on the length of the marriage and whether they have been "mingled" with matrimonial assets. The distinction between matrimonial and non-matrimonial property can be significant, particularly in shorter marriages.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="pensions" data-testid="accordion-misconception-pensions">
+            <AccordionTrigger className="text-sm font-semibold">
+              "Pensions are less important than property"
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Pension assets frequently represent a substantial proportion of overall marital wealth — in some cases exceeding the value of the family home. Overlooking or undervaluing pension rights can result in a materially incomplete picture of the financial landscape. The cash equivalent transfer value (CETV) may not fully reflect the economic benefit of a pension, particularly for defined benefit schemes, making careful analysis essential.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="equal-outcome" data-testid="accordion-misconception-equal-outcome">
+            <AccordionTrigger className="text-sm font-semibold">
+              "Equal value means equal outcome"
+            </AccordionTrigger>
+            <AccordionContent>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Two allocations with the same total value can produce very different practical outcomes. A party receiving primarily property equity faces ongoing maintenance costs, potential interest rate exposure, and illiquidity. A party receiving primarily pension rights has long-term retirement provision but limited immediate access to capital. Modelling these differences helps illustrate why numerical equality does not automatically translate to equivalent financial positions.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </ContentSection>
     </ContentPageLayout>
   );

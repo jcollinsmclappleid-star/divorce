@@ -14,6 +14,11 @@ interface RelatedPage {
   badge: string;
 }
 
+interface Breadcrumb {
+  name: string;
+  href: string;
+}
+
 interface ContentPageLayoutProps {
   title: string;
   subtitle: string;
@@ -21,34 +26,81 @@ interface ContentPageLayoutProps {
   metaDescription: string;
   relatedPages: RelatedPage[];
   children: React.ReactNode;
+  breadcrumbs?: Breadcrumb[];
 }
 
-function useOgMeta(title: string, description: string, path: string) {
+function useSeoMeta(title: string, description: string, path: string, pageTitle: string, breadcrumbs?: Breadcrumb[]) {
   useEffect(() => {
     const baseUrl = "https://divorcecalculatoruk.co.uk";
-    const tags: { property: string; content: string }[] = [
+    const fullUrl = `${baseUrl}${path}`;
+
+    const ogTags: { property: string; content: string }[] = [
       { property: "og:title", content: title },
       { property: "og:description", content: description },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: `${baseUrl}${path}` },
+      { property: "og:url", content: fullUrl },
       { property: "og:image", content: `${baseUrl}/og-image.png` },
     ];
 
-    const created: HTMLMetaElement[] = [];
-    tags.forEach(({ property, content }) => {
+    const createdMeta: HTMLMetaElement[] = [];
+    ogTags.forEach(({ property, content }) => {
       const meta = document.createElement("meta");
       meta.setAttribute("property", property);
       meta.content = content;
       document.head.appendChild(meta);
-      created.push(meta);
+      createdMeta.push(meta);
     });
 
+    const canonical = document.createElement("link");
+    canonical.rel = "canonical";
+    canonical.href = fullUrl;
+    document.head.appendChild(canonical);
+
+    const articleSchema = document.createElement("script");
+    articleSchema.type = "application/ld+json";
+    const articleData: Record<string, unknown> = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": pageTitle,
+      "description": description,
+      "url": fullUrl,
+      "publisher": {
+        "@type": "Organization",
+        "name": "DivorceCalculatorUK",
+        "url": baseUrl,
+      },
+      "inLanguage": "en-GB",
+    };
+    articleSchema.textContent = JSON.stringify(articleData);
+    document.head.appendChild(articleSchema);
+
+    let breadcrumbScript: HTMLScriptElement | null = null;
+    if (breadcrumbs && breadcrumbs.length > 0) {
+      breadcrumbScript = document.createElement("script");
+      breadcrumbScript.type = "application/ld+json";
+      const breadcrumbData = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": breadcrumbs.map((bc, i) => ({
+          "@type": "ListItem",
+          "position": i + 1,
+          "name": bc.name,
+          "item": `${baseUrl}${bc.href}`,
+        })),
+      };
+      breadcrumbScript.textContent = JSON.stringify(breadcrumbData);
+      document.head.appendChild(breadcrumbScript);
+    }
+
     return () => {
-      created.forEach((meta) => {
+      createdMeta.forEach((meta) => {
         if (meta.parentNode) meta.parentNode.removeChild(meta);
       });
+      if (canonical.parentNode) canonical.parentNode.removeChild(canonical);
+      if (articleSchema.parentNode) articleSchema.parentNode.removeChild(articleSchema);
+      if (breadcrumbScript?.parentNode) breadcrumbScript.parentNode.removeChild(breadcrumbScript);
     };
-  }, [title, description, path]);
+  }, [title, description, path, pageTitle, breadcrumbs]);
 }
 
 export function ContentPageLayout({
@@ -58,6 +110,7 @@ export function ContentPageLayout({
   metaDescription,
   relatedPages,
   children,
+  breadcrumbs,
 }: ContentPageLayoutProps) {
   useDocumentTitle(documentTitle);
   const [location, setLocation] = useLocation();
@@ -81,7 +134,13 @@ export function ContentPageLayout({
     };
   }, [metaDescription]);
 
-  useOgMeta(documentTitle, metaDescription, location);
+  const defaultBreadcrumbs = breadcrumbs || [
+    { name: "Home", href: "/" },
+    { name: "Guides", href: "/divorce-financial-modelling" },
+    { name: title, href: location },
+  ];
+
+  useSeoMeta(documentTitle, metaDescription, location, title, defaultBreadcrumbs);
 
   return (
     <div className="min-h-screen bg-background font-sans">
@@ -189,6 +248,30 @@ export function ContentPageLayout({
       </footer>
     </div>
   );
+}
+
+export function useFaqJsonLd(faqItems: { question: string; answer: string }[]) {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    const faqData = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqItems.map((item) => ({
+        "@type": "Question",
+        "name": item.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.answer,
+        },
+      })),
+    };
+    script.textContent = JSON.stringify(faqData);
+    document.head.appendChild(script);
+    return () => {
+      if (script.parentNode) script.parentNode.removeChild(script);
+    };
+  }, [faqItems]);
 }
 
 interface ExternalLinkButtonProps {

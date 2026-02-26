@@ -16,12 +16,15 @@ import {
   ShieldQuestion,
   Banknote,
   CheckCircle,
+  Landmark,
+  Users,
 } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
   InlineCTA,
   ExternalLinkButton,
+  useFaqJsonLd,
 } from "@/components/content-page-layout";
 
 const relatedPages = [
@@ -70,8 +73,24 @@ const complexityReasons = [
   { icon: Banknote, text: "They have long-term income implications" },
 ];
 
+const FAQ_SCHEMA_ITEMS = [
+  {
+    question: "How are pensions divided in divorce in the UK?",
+    answer: "There are three main approaches: pension sharing (transferring a percentage to the other party), offsetting (retaining pension in exchange for other assets), and attachment orders (redirecting future pension income). The approach depends on individual circumstances.",
+  },
+  {
+    question: "What is pension sharing in divorce?",
+    answer: "Pension sharing transfers a percentage of one party's pension fund into the other party's name, creating independent pension rights. This provides a clean break for retirement planning but may reduce other capital available for division.",
+  },
+  {
+    question: "Why are pensions complex in divorce?",
+    answer: "Pensions differ from other assets because they are not immediately accessible, their value may fluctuate, they are subject to retirement age rules, and they have long-term income implications. Equal capital division does not always result in equal retirement income.",
+  },
+];
+
 export default function FAQPensionsDivided() {
   const [, setLocation] = useLocation();
+  useFaqJsonLd(FAQ_SCHEMA_ITEMS);
 
   return (
     <ContentPageLayout
@@ -132,6 +151,46 @@ export default function FAQPensionsDivided() {
       </ContentSection>
 
       <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-state-pension-heading">
+          State Pension Considerations
+        </h2>
+        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+          An important distinction exists between the State Pension and private or workplace pensions in the context of divorce. The State Pension cannot be shared or split as part of a divorce financial order. Pension sharing orders apply only to private and occupational pensions.
+        </p>
+        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+          However, State Pension entitlement may still be a relevant consideration in the overall financial picture. Each party's National Insurance contribution record determines their State Pension amount. Where one party has a significantly reduced contribution record — for example, due to time spent as a primary carer — this may affect their retirement income and could be a factor in the overall settlement assessment.
+        </p>
+        <Card className="bg-muted/40" data-testid="card-state-pension">
+          <CardContent className="pt-5 pb-4">
+            <div className="flex items-start gap-3">
+              <Landmark className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Key Points</h3>
+                <ul className="space-y-1.5 text-xs text-muted-foreground leading-relaxed mt-1">
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5 shrink-0">-</span>
+                    State Pension cannot be subject to a pension sharing order
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5 shrink-0">-</span>
+                    National Insurance credits (including credits for caring responsibilities) affect entitlement
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5 shrink-0">-</span>
+                    Disparities in State Pension entitlement may be relevant to the overall financial settlement
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5 shrink-0">-</span>
+                    The full new State Pension requires 35 qualifying years of National Insurance contributions
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </ContentSection>
+
+      <ContentSection muted>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-practice-heading">
           What This Means in Practice
         </h2>
@@ -211,6 +270,31 @@ export default function FAQPensionsDivided() {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-2" data-testid="text-actuary-heading">
+          The Role of a Pension Actuary
+        </h2>
+        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+          In cases involving significant pension assets — particularly defined benefit (final salary) schemes — actuarial expertise may be warranted to provide a more accurate assessment of pension value and the implications of different division approaches.
+        </p>
+        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+          A Pension on Divorce Expert (PODE) is a specialist actuary who provides reports for use in divorce proceedings. These reports typically assess the value of pensions for the purpose of division, analyse the impact of different sharing percentages, and may calculate the pension share needed to equalise retirement income rather than simply equalising capital values. The distinction between equalising capital and equalising income can be significant, particularly where one party holds a defined benefit scheme and the other holds defined contribution pensions.
+        </p>
+        <Card className="bg-muted/40" data-testid="card-actuary-when">
+          <CardContent className="pt-5 pb-4">
+            <div className="flex items-start gap-3">
+              <Users className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">When Actuarial Involvement May Be Warranted</h3>
+                <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                  Actuarial reports may be particularly relevant where there are defined benefit pensions with substantial CETVs, where there is a significant disparity in pension values between the parties, where pension assets form a large proportion of the overall marital estate, or where the parties are close to retirement age and the income implications of sharing are more immediate. Simplified modelling can illustrate general scenarios, but actuarial analysis provides the precision needed for formal proceedings.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </ContentSection>
 
       <ContentSection>
