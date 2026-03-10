@@ -154,7 +154,7 @@ export default function PreviewPage() {
                   A single professional consultation can cost {"\u00A3"}250{"\u2013"}{"\u00A3"}400 per hour.
                 </p>
                 <p className="text-sm font-medium">
-                  Structured financial clarity: {"\u00A3"}59 launch phase access.
+                  Structured financial clarity for {"\u00A3"}79 — one-time payment.
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Includes 6 months unlimited scenario modelling. No subscription. No recurring fees.
@@ -166,7 +166,7 @@ export default function PreviewPage() {
           <div className="text-center space-y-4">
             <Button size="lg" className="px-8" onClick={() => navigate('/unlock')} data-testid="button-unlock-cta">
               <Lock className="w-4 h-4 mr-2" />
-              Unlock Full Analysis — {"\u00A3"}59
+              Unlock Full Analysis — {"\u00A3"}79
             </Button>
             <p className="text-xs text-muted-foreground">
               Immediate access. Private. No subscription. 6-month access included.
@@ -193,7 +193,7 @@ export default function PreviewPage() {
 
           <Card className="border-primary/30" data-testid="card-tier-full">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium">Full Structured Brief ({"\u00A3"}59)</CardTitle>
+              <CardTitle className="text-sm font-medium">Full Structured Brief ({"\u00A3"}79)</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="flex items-start gap-2">

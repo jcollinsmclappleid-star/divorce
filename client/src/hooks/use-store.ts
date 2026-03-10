@@ -79,6 +79,13 @@ export interface Scenarios {
   S4_Joint_Then_Sell: { enabled: boolean; params: Record<string, any> };
 }
 
+export interface Profile {
+  partyAName: string;
+  partyBName: string;
+  processStage: string;
+  mainPriority: string;
+}
+
 export interface StoreState {
   assets: Asset[];
   liabilities: Liability[];
@@ -88,6 +95,7 @@ export interface StoreState {
   scenarios: Scenarios;
   assumptions: Assumptions;
   children: Children;
+  profile: Profile;
 }
 
 const initialState: StoreState = {
@@ -121,7 +129,13 @@ const initialState: StoreState = {
     childAges: [],
     nightsWithA: 182,
     nightsWithB: 183,
-  }
+  },
+  profile: {
+    partyAName: "",
+    partyBName: "",
+    processStage: "",
+    mainPriority: "",
+  },
 };
 
 interface AppActions {
@@ -145,6 +159,7 @@ interface AppActions {
   toggleScenario: (type: keyof Scenarios, enabled: boolean) => void;
   updateAssumptions: (assumptions: Partial<Assumptions>) => void;
   updateChildren: (children: Partial<Children>) => void;
+  updateProfile: (profile: Partial<Profile>) => void;
 
   reset: () => void;
   loadState: (state: StoreState) => void;
@@ -220,6 +235,9 @@ export const useAppStore = create<StoreState & AppActions>()(
         }
         return { children: merged };
       }),
+      updateProfile: (updates) => set((state) => ({
+        profile: { ...state.profile, ...updates }
+      })),
 
       reset: () => set(initialState),
       loadState: (newState) => set(newState),
@@ -239,6 +257,9 @@ export const useAppStore = create<StoreState & AppActions>()(
           } else if (c.childAges.length < c.numChildren) {
             c.childAges = [...c.childAges, ...Array(c.numChildren - c.childAges.length).fill(5)];
           }
+        }
+        if (state && !state.profile) {
+          state.profile = { partyAName: "", partyBName: "", processStage: "", mainPriority: "" };
         }
       },
     }

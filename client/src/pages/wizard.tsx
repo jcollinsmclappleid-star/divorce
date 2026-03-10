@@ -214,50 +214,129 @@ function StepContent({ step, advancedMode, acknowledged, setAcknowledged }: { st
   }
 }
 
+const PROCESS_STAGES = [
+  { value: "early_thinking", label: "Just starting to think about it" },
+  { value: "in_discussions", label: "Currently in discussions" },
+  { value: "mediation", label: "In mediation" },
+  { value: "legal", label: "Working with a solicitor" },
+  { value: "court", label: "Awaiting a court date" },
+];
+
+const MAIN_PRIORITIES = [
+  { value: "understand_options", label: "Understanding what I might receive" },
+  { value: "keep_home", label: "Whether I can keep the home" },
+  { value: "protect_future", label: "Protecting my long-term finances" },
+  { value: "children", label: "Making sure the children are provided for" },
+  { value: "move_on", label: "Moving on as quickly as possible" },
+];
+
 function StepWelcome() {
+  const { profile, updateProfile } = useAppStore();
+
   return (
-    <div className="text-center py-8 space-y-6">
-      <div className="flex justify-center">
-        <Logo href="/" size="lg" />
-      </div>
-      <div className="space-y-3 max-w-lg mx-auto">
-        <h2 className="text-xl font-display font-bold">Welcome to your financial clarity tool</h2>
-        <p className="text-muted-foreground">
-          Going through a separation is difficult enough without the financial uncertainty.
-          This tool helps you explore different settlement options so you can have informed conversations
-          with your solicitor or mediator.
+    <div className="space-y-8">
+      <div className="text-center space-y-2 pb-2">
+        <h2 className="text-xl font-display font-bold">A few quick questions before we begin</h2>
+        <p className="text-sm text-muted-foreground max-w-md mx-auto">
+          All optional — skip anything you prefer not to answer. This helps us tailor the model to your situation.
         </p>
-        <div className="grid gap-3 text-left text-sm pt-4">
-          <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-md">
-            <Shield className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-            <div>
-              <span className="font-medium">Private &amp; secure</span>
-              <p className="text-muted-foreground text-xs mt-0.5">All calculations run in your browser. Your data never leaves your device.</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-md">
-            <Calculator className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-            <div>
-              <span className="font-medium">Best estimates are fine</span>
-              <p className="text-muted-foreground text-xs mt-0.5">You don't need exact figures. Approximate values will still give meaningful comparisons.</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-md">
-            <TrendingUp className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-            <div>
-              <span className="font-medium">Compare scenarios</span>
-              <p className="text-muted-foreground text-xs mt-0.5">See how selling, one party keeping the home, or deferring a sale would work out financially.</p>
-            </div>
-          </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label className="flex items-center gap-1.5">
+            <Users className="w-3.5 h-3.5 text-muted-foreground" />
+            What's your first name?
+          </Label>
+          <Input
+            value={profile.partyAName}
+            onChange={(e) => updateProfile({ partyAName: e.target.value })}
+            placeholder="e.g. Alex"
+            data-testid="input-party-a-name"
+          />
+          <p className="text-xs text-muted-foreground">Used to personalise your report</p>
+        </div>
+        <div className="space-y-2">
+          <Label className="flex items-center gap-1.5">
+            <Users className="w-3.5 h-3.5 text-muted-foreground" />
+            What would you like to call the other party?
+          </Label>
+          <Input
+            value={profile.partyBName}
+            onChange={(e) => updateProfile({ partyBName: e.target.value })}
+            placeholder="e.g. My ex, Sarah, My husband"
+            data-testid="input-party-b-name"
+          />
+          <p className="text-xs text-muted-foreground">Can be a name or description</p>
         </div>
       </div>
-      <p className="text-xs text-muted-foreground">Click Continue to get started</p>
+
+      <div className="space-y-3">
+        <Label className="flex items-center gap-1.5">
+          <Heart className="w-3.5 h-3.5 text-muted-foreground" />
+          Where are you in the process?
+        </Label>
+        <div className="flex flex-wrap gap-2">
+          {PROCESS_STAGES.map((stage) => (
+            <button
+              key={stage.value}
+              type="button"
+              onClick={() => updateProfile({ processStage: profile.processStage === stage.value ? "" : stage.value })}
+              className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
+                profile.processStage === stage.value
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+              }`}
+              data-testid={`button-stage-${stage.value}`}
+            >
+              {stage.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <Label className="flex items-center gap-1.5">
+          <Shield className="w-3.5 h-3.5 text-muted-foreground" />
+          What matters most to you right now?
+        </Label>
+        <div className="flex flex-wrap gap-2">
+          {MAIN_PRIORITIES.map((priority) => (
+            <button
+              key={priority.value}
+              type="button"
+              onClick={() => updateProfile({ mainPriority: profile.mainPriority === priority.value ? "" : priority.value })}
+              className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
+                profile.mainPriority === priority.value
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+              }`}
+              data-testid={`button-priority-${priority.value}`}
+            >
+              {priority.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid gap-3 text-sm pt-2 border-t pt-6">
+        <div className="flex items-start gap-3">
+          <Shield className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+          <p className="text-muted-foreground text-xs">All calculations run in your browser. Your data never leaves your device.</p>
+        </div>
+        <div className="flex items-start gap-3">
+          <Calculator className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+          <p className="text-muted-foreground text-xs">Best estimates are fine — approximate values still give meaningful comparisons.</p>
+        </div>
+      </div>
     </div>
   );
 }
 
 function StepSituation({ advancedMode }: { advancedMode: boolean }) {
-  const { children, updateChildren, assumptions, updateAssumptions } = useAppStore();
+  const { children, updateChildren, assumptions, updateAssumptions, profile } = useAppStore();
+  const nameA = profile?.partyAName || "Party A";
+  const nameB = profile?.partyBName || "Party B";
 
   return (
     <div className="space-y-6">
@@ -292,24 +371,25 @@ function StepSituation({ advancedMode }: { advancedMode: boolean }) {
                   min={1}
                   max={10}
                   value={children.numChildren}
-                  onChange={(e) => updateChildren({ numChildren: parseInt(e.target.value) || 1 })}
+                  onChange={(e) => { const v = parseInt(e.target.value); updateChildren({ numChildren: isNaN(v) || v < 1 ? 1 : v }); }}
                   data-testid="input-num-children"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-sm">Nights per year with Party A</Label>
+                <Label className="text-sm">Nights per year with {nameA}</Label>
                 <Input
                   type="number"
                   min={0}
                   max={365}
-                  value={children.nightsWithA}
+                  value={children.nightsWithA || ""}
                   onChange={(e) => {
-                    const n = parseInt(e.target.value) || 0;
-                    updateChildren({ nightsWithA: n, nightsWithB: Math.max(0, 365 - n) });
+                    const n = parseInt(e.target.value);
+                    const nights = isNaN(n) ? 0 : Math.max(0, Math.min(365, n));
+                    updateChildren({ nightsWithA: nights, nightsWithB: Math.max(0, 365 - nights) });
                   }}
                   data-testid="input-nights-a"
                 />
-                <p className="text-xs text-muted-foreground">{children.nightsWithB} nights with Party B</p>
+                <p className="text-xs text-muted-foreground">{children.nightsWithB} nights with {nameB}</p>
               </div>
             </div>
             <div className="space-y-2">
@@ -323,10 +403,11 @@ function StepSituation({ advancedMode }: { advancedMode: boolean }) {
                       type="number"
                       min={0}
                       max={18}
-                      value={age}
+                      value={age || ""}
                       onChange={(e) => {
                         const newAges = [...(children.childAges || [])];
-                        newAges[i] = Math.max(0, Math.min(18, parseInt(e.target.value) || 0));
+                        const v = parseInt(e.target.value);
+                        newAges[i] = isNaN(v) ? 0 : Math.max(0, Math.min(18, v));
                         updateChildren({ childAges: newAges });
                       }}
                       data-testid={`input-child-age-${i}`}
@@ -366,7 +447,9 @@ function StepSituation({ advancedMode }: { advancedMode: boolean }) {
 }
 
 function StepHome({ advancedMode }: { advancedMode: boolean }) {
-  const { assets, liabilities, addAsset, updateAsset, addLiability, updateLiability } = useAppStore();
+  const { assets, liabilities, addAsset, updateAsset, addLiability, updateLiability, profile } = useAppStore();
+  const nameA = profile?.partyAName || "Party A";
+  const nameB = profile?.partyBName || "Party B";
   const home = assets.find(a => a.category === "primary_home");
   const mortgage = liabilities.find(l => l.category === "mortgage");
 
@@ -408,8 +491,8 @@ function StepHome({ advancedMode }: { advancedMode: boolean }) {
           <Input
             type="number"
             className="pl-7"
-            value={home?.currentValue ?? ""}
-            onChange={(e) => setHomeValue(parseFloat(e.target.value) || 0)}
+            value={home?.currentValue || ""}
+            onChange={(e) => { const v = parseFloat(e.target.value); setHomeValue(isNaN(v) ? 0 : v); }}
             placeholder="e.g. 350000"
             data-testid="input-home-value"
           />
@@ -424,8 +507,8 @@ function StepHome({ advancedMode }: { advancedMode: boolean }) {
           <Input
             type="number"
             className="pl-7"
-            value={mortgage?.balance ?? ""}
-            onChange={(e) => setMortgageBalance(parseFloat(e.target.value) || 0)}
+            value={mortgage?.balance || ""}
+            onChange={(e) => { const v = parseFloat(e.target.value); setMortgageBalance(isNaN(v) ? 0 : v); }}
             placeholder="e.g. 180000"
             data-testid="input-mortgage-balance"
           />
@@ -457,8 +540,8 @@ function StepHome({ advancedMode }: { advancedMode: boolean }) {
                 <SelectTrigger data-testid="select-home-owner"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="joint">Joint</SelectItem>
-                  <SelectItem value="A">Party A</SelectItem>
-                  <SelectItem value="B">Party B</SelectItem>
+                  <SelectItem value="A">{nameA}</SelectItem>
+                  <SelectItem value="B">{nameB}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -500,7 +583,9 @@ const DEBT_SUGGESTIONS: { name: string; category: string; owner: string; hint: s
 ];
 
 function StepAssets({ advancedMode }: { advancedMode: boolean }) {
-  const { assets, liabilities, addAsset, updateAsset, removeAsset, addLiability, updateLiability, removeLiability } = useAppStore();
+  const { assets, liabilities, addAsset, updateAsset, removeAsset, addLiability, updateLiability, removeLiability, profile } = useAppStore();
+  const nameA = profile?.partyAName || "Party A";
+  const nameB = profile?.partyBName || "Party B";
   const [editingAsset, setEditingAsset] = useState<Asset | null>(null);
   const [editingLiability, setEditingLiability] = useState<Liability | null>(null);
   const [assetDialogOpen, setAssetDialogOpen] = useState(false);
@@ -736,7 +821,7 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
             </div>
             <div className="space-y-2">
               <Label>Value (£)</Label>
-              <Input type="number" value={assetForm.currentValue || ""} onChange={(e) => setAssetForm(f => ({ ...f, currentValue: parseFloat(e.target.value) || 0 }))} data-testid="input-asset-value" />
+              <Input type="number" value={assetForm.currentValue || ""} onChange={(e) => { const v = parseFloat(e.target.value); setAssetForm(f => ({ ...f, currentValue: isNaN(v) ? 0 : v })); }} data-testid="input-asset-value" />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -756,8 +841,8 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="joint">Joint</SelectItem>
-                    <SelectItem value="A">Party A</SelectItem>
-                    <SelectItem value="B">Party B</SelectItem>
+                    <SelectItem value="A">{nameA}</SelectItem>
+                    <SelectItem value="B">{nameB}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -782,7 +867,7 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
             </div>
             <div className="space-y-2">
               <Label>Balance (£)</Label>
-              <Input type="number" value={liabilityForm.balance || ""} onChange={(e) => setLiabilityForm(f => ({ ...f, balance: parseFloat(e.target.value) || 0 }))} data-testid="input-liability-balance" />
+              <Input type="number" value={liabilityForm.balance || ""} onChange={(e) => { const v = parseFloat(e.target.value); setLiabilityForm(f => ({ ...f, balance: isNaN(v) ? 0 : v })); }} data-testid="input-liability-balance" />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -802,8 +887,8 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="joint">Joint</SelectItem>
-                    <SelectItem value="A">Party A</SelectItem>
-                    <SelectItem value="B">Party B</SelectItem>
+                    <SelectItem value="A">{nameA}</SelectItem>
+                    <SelectItem value="B">{nameB}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -837,7 +922,9 @@ const INCOME_SUGGESTIONS: { name: string; owner: string; hint: string }[] = [
 ];
 
 function StepPensions({ advancedMode }: { advancedMode: boolean }) {
-  const { assets, addAsset, updateAsset, removeAsset } = useAppStore();
+  const { assets, addAsset, updateAsset, removeAsset, profile } = useAppStore();
+  const nameA = profile?.partyAName || "Party A";
+  const nameB = profile?.partyBName || "Party B";
   const pensions = assets.filter(a => a.category === "pension");
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -983,8 +1070,9 @@ function StepPensions({ advancedMode }: { advancedMode: boolean }) {
             <div className="space-y-2">
               <Label>CETV value (£)</Label>
               <Input type="number" value={form.cetv || ""} onChange={(e) => {
-                const v = parseFloat(e.target.value) || 0;
-                setForm(f => ({ ...f, cetv: v, currentValue: v }));
+                const v = parseFloat(e.target.value);
+                const val = isNaN(v) ? 0 : v;
+                setForm(f => ({ ...f, cetv: val, currentValue: val }));
               }} data-testid="input-pension-cetv" />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -993,8 +1081,8 @@ function StepPensions({ advancedMode }: { advancedMode: boolean }) {
                 <Select value={form.owner} onValueChange={(v) => setForm(f => ({ ...f, owner: v }))}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="A">Party A</SelectItem>
-                    <SelectItem value="B">Party B</SelectItem>
+                    <SelectItem value="A">{nameA}</SelectItem>
+                    <SelectItem value="B">{nameB}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -1045,7 +1133,9 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 function StepIncome({ advancedMode }: { advancedMode: boolean }) {
-  const { incomes, addIncome, updateIncome, removeIncome, assumptions, updateAssumptions } = useAppStore();
+  const { incomes, addIncome, updateIncome, removeIncome, assumptions, updateAssumptions, profile } = useAppStore();
+  const nameA = profile?.partyAName || "Party A";
+  const nameB = profile?.partyBName || "Party B";
   const [incomeDialogOpen, setIncomeDialogOpen] = useState(false);
   const [editingIncome, setEditingIncome] = useState<Income | null>(null);
 
@@ -1168,7 +1258,7 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
           </p>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label className="text-sm">Party A take-home ({"\u00A3"}/year)</Label>
+              <Label className="text-sm">{nameA} take-home ({"\u00A3"}/year)</Label>
               <Input
                 type="number"
                 min={0}
@@ -1182,7 +1272,7 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-sm">Party B take-home ({"\u00A3"}/year)</Label>
+              <Label className="text-sm">{nameB} take-home ({"\u00A3"}/year)</Label>
               <Input
                 type="number"
                 min={0}
@@ -1212,15 +1302,15 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
             </div>
             <div className="space-y-2">
               <Label>Annual gross ({"\u00A3"})</Label>
-              <Input type="number" value={incomeForm.amountAnnualGross || ""} onChange={(e) => setIncomeForm(f => ({ ...f, amountAnnualGross: parseFloat(e.target.value) || 0 }))} data-testid="input-income-amount" />
+              <Input type="number" value={incomeForm.amountAnnualGross || ""} onChange={(e) => { const v = parseFloat(e.target.value); setIncomeForm(f => ({ ...f, amountAnnualGross: isNaN(v) ? 0 : v })); }} data-testid="input-income-amount" />
             </div>
             <div className="space-y-2">
               <Label>Earner</Label>
               <Select value={incomeForm.owner} onValueChange={(v) => setIncomeForm(f => ({ ...f, owner: v }))}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="A">Party A</SelectItem>
-                  <SelectItem value="B">Party B</SelectItem>
+                  <SelectItem value="A">{nameA}</SelectItem>
+                  <SelectItem value="B">{nameB}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1235,7 +1325,9 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
 }
 
 function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
-  const { expenses, addExpense, updateExpense, removeExpense } = useAppStore();
+  const { expenses, addExpense, updateExpense, removeExpense, profile } = useAppStore();
+  const nameA = profile?.partyAName || "Party A";
+  const nameB = profile?.partyBName || "Party B";
   const [expenseDialogOpen, setExpenseDialogOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [expenseFrequency, setExpenseFrequency] = useState<"monthly" | "annual">("monthly");
@@ -1349,14 +1441,14 @@ function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
             <div className="flex flex-wrap gap-4 mt-3 text-xs">
               {totalAnnualA > 0 && (
                 <div className="flex items-center gap-1">
-                  <span className="text-muted-foreground">Party A total:</span>
+                  <span className="text-muted-foreground">{nameA} total:</span>
                   <span className="font-semibold">{formatCurrency(Math.round(totalAnnualA / 12))}/mo</span>
                   <span className="text-muted-foreground">({formatCurrency(totalAnnualA)}/yr)</span>
                 </div>
               )}
               {totalAnnualB > 0 && (
                 <div className="flex items-center gap-1">
-                  <span className="text-muted-foreground">Party B total:</span>
+                  <span className="text-muted-foreground">{nameB} total:</span>
                   <span className="font-semibold">{formatCurrency(Math.round(totalAnnualB / 12))}/mo</span>
                   <span className="text-muted-foreground">({formatCurrency(totalAnnualB)}/yr)</span>
                 </div>
@@ -1418,7 +1510,7 @@ function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
                 <Input
                   type="number"
                   value={expenseForm.amount || ""}
-                  onChange={(e) => setExpenseForm(f => ({ ...f, amount: parseFloat(e.target.value) || 0 }))}
+                  onChange={(e) => { const v = parseFloat(e.target.value); setExpenseForm(f => ({ ...f, amount: isNaN(v) ? 0 : v })); }}
                   placeholder={expenseForm.frequency === "monthly" ? "e.g. 850" : "e.g. 10200"}
                   className="flex-1"
                   data-testid="input-expense-amount"
@@ -1458,8 +1550,8 @@ function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
                 <Select value={expenseForm.owner} onValueChange={(v) => setExpenseForm(f => ({ ...f, owner: v }))}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="A">Party A</SelectItem>
-                    <SelectItem value="B">Party B</SelectItem>
+                    <SelectItem value="A">{nameA}</SelectItem>
+                    <SelectItem value="B">{nameB}</SelectItem>
                     <SelectItem value="shared">Both (split equally)</SelectItem>
                   </SelectContent>
                 </Select>
@@ -1532,7 +1624,7 @@ function StepSupport({ advancedMode }: { advancedMode: boolean }) {
                 type="number"
                 step={0.25}
                 value={(assumptions.mortgageAPR * 100).toFixed(2)}
-                onChange={(e) => updateAssumptions({ mortgageAPR: parseFloat(e.target.value) / 100 || 0.05 })}
+                onChange={(e) => { const v = parseFloat(e.target.value); updateAssumptions({ mortgageAPR: isNaN(v) ? 0.05 : v / 100 }); }}
                 data-testid="input-mortgage-apr"
               />
             </div>
@@ -1555,7 +1647,9 @@ function StepSupport({ advancedMode }: { advancedMode: boolean }) {
 }
 
 function StepAssumptions({ acknowledged, setAcknowledged }: { acknowledged: boolean; setAcknowledged: (v: boolean) => void }) {
-  const { assumptions, updateAssumptions } = useAppStore();
+  const { assumptions, updateAssumptions, profile } = useAppStore();
+  const nameA = profile?.partyAName || "Party A";
+  const nameB = profile?.partyBName || "Party B";
 
   const setPreset = (split: number, pension: number) => {
     updateAssumptions({ splitRatio: split, splitPensionToA: pension });
@@ -1616,8 +1710,8 @@ function StepAssumptions({ acknowledged, setAcknowledged }: { acknowledged: bool
           data-testid="slider-split-ratio"
         />
         <div className="flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">Party A: {Math.round(assumptions.splitRatio * 100)}%</span>
-          <span className="text-muted-foreground">Party B: {Math.round((1 - assumptions.splitRatio) * 100)}%</span>
+          <span className="text-muted-foreground">{nameA}: {Math.round(assumptions.splitRatio * 100)}%</span>
+          <span className="text-muted-foreground">{nameB}: {Math.round((1 - assumptions.splitRatio) * 100)}%</span>
         </div>
       </div>
 
@@ -1632,8 +1726,8 @@ function StepAssumptions({ acknowledged, setAcknowledged }: { acknowledged: bool
           data-testid="slider-pension-split"
         />
         <div className="flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">Party A: {Math.round(assumptions.splitPensionToA * 100)}%</span>
-          <span className="text-muted-foreground">Party B: {Math.round((1 - assumptions.splitPensionToA) * 100)}%</span>
+          <span className="text-muted-foreground">{nameA}: {Math.round(assumptions.splitPensionToA * 100)}%</span>
+          <span className="text-muted-foreground">{nameB}: {Math.round((1 - assumptions.splitPensionToA) * 100)}%</span>
         </div>
       </div>
 
@@ -1657,7 +1751,7 @@ function StepAssumptions({ acknowledged, setAcknowledged }: { acknowledged: bool
             type="number"
             step={0.5}
             value={(assumptions.inflationRate * 100).toFixed(1)}
-            onChange={(e) => updateAssumptions({ inflationRate: parseFloat(e.target.value) / 100 || 0.02 })}
+            onChange={(e) => { const v = parseFloat(e.target.value); updateAssumptions({ inflationRate: isNaN(v) ? 0.02 : v / 100 }); }}
             data-testid="input-inflation-rate"
           />
         </div>

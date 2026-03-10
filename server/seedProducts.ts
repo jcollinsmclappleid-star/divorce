@@ -22,12 +22,12 @@ async function seedProducts() {
 
   const price = await stripe.prices.create({
     product: product.id,
-    unit_amount: 5900,
+    unit_amount: 7900,
     currency: 'gbp',
   });
 
   console.log('Created product:', product.id);
-  console.log('Created price:', price.id, '- £59.00');
+  console.log('Created price:', price.id, '- £79.00');
 }
 
 seedProducts().catch(console.error);

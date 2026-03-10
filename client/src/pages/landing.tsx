@@ -107,11 +107,35 @@ function useLandingFaqJsonLd(faqItems: { q: string; a: string }[]) {
   }, [faqItems]);
 }
 
+const ANALYSIS_PREVIEW_FEATURES = [
+  {
+    icon: BarChart3,
+    title: "Scenario Comparison",
+    body: "See how selling, one party keeping the home, and deferred sale compare side-by-side across net positions and monthly costs.",
+  },
+  {
+    icon: Activity,
+    title: "Financial Sustainability Indicator",
+    body: "A model-based score that illustrates how sustainable each party's post-settlement finances look over a 5-year horizon.",
+  },
+  {
+    icon: TrendingUp,
+    title: "5-Year Capital Projection",
+    body: "Projects how liquid capital may change over time under each scenario, accounting for income, expenses, and mortgage payments.",
+  },
+];
+
 export default function LandingPage() {
   useDocumentTitle("Divorce Financial Settlement Calculator UK | DivorceCalculatorUK");
   useLandingFaqJsonLd(FAQ_ITEMS_LANDING);
   const [, setLocation] = useLocation();
   const loadState = useAppStore((s) => s.loadState);
+  const reset = useAppStore((s) => s.reset);
+
+  const startFresh = () => {
+    reset();
+    setLocation("/wizard");
+  };
 
   const loadExample = (index: number) => {
     const example = EXAMPLE_SCENARIOS[index];
@@ -133,7 +157,7 @@ export default function LandingPage() {
             <Link href="/divorce-financial-modelling" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-guides">Guides</Link>
           </div>
           <Button
-            onClick={() => setLocation("/wizard")}
+            onClick={startFresh}
             data-testid="button-nav-start"
           >
             Start Now <ArrowRight className="w-4 h-4 ml-1" />
@@ -143,40 +167,115 @@ export default function LandingPage() {
 
       <section className="relative overflow-hidden" data-testid="section-hero">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/3 pointer-events-none" />
-        <div className="container mx-auto px-4 pt-20 pb-24 md:pt-28 md:pb-32 relative">
-          <div className="max-w-2xl mx-auto text-center space-y-7">
-            <Badge variant="secondary" className="text-xs px-3 py-1">
-              UK 2025/26 Income Tax &amp; NI Rates
-            </Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight" data-testid="text-hero-headline">
-              Structured Financial Modelling for Separation & Divorce
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto">
-              Model how different settlement structures affect your liquidity, lending capacity, and long-term financial position &mdash; privately, before important conversations take place.
-            </p>
-            <p className="text-sm text-muted-foreground/80">
-              Illustrative financial modelling. Not legal, tax, or financial advice.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-              <Button
-                size="lg"
-                onClick={() => setLocation("/wizard")}
-                data-testid="button-hero-start"
-              >
-                Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => loadExample(0)}
-                data-testid="button-hero-example"
-              >
-                View Example Output <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
+        <div className="container mx-auto px-4 pt-16 pb-20 md:pt-24 md:pb-28 relative">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center max-w-6xl mx-auto">
+            <div className="space-y-6 text-center lg:text-left">
+              <Badge variant="secondary" className="text-xs px-3 py-1">
+                UK 2025/26 Income Tax &amp; NI Rates
+              </Badge>
+              <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight" data-testid="text-hero-headline">
+                UK Divorce Financial Settlement Calculator
+              </h1>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Structured financial modelling for separation and divorce. Compare settlement scenarios, model tax implications, and understand long-term sustainability &mdash; privately, before important conversations take place.
+              </p>
+              <p className="text-sm text-muted-foreground/80">
+                Illustrative modelling only. Not legal, tax, or financial advice.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3 pt-1">
+                <Button
+                  size="lg"
+                  onClick={startFresh}
+                  data-testid="button-hero-start"
+                >
+                  Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => loadExample(0)}
+                  data-testid="button-hero-example"
+                >
+                  View Example Output <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground/70">
+                Private. Structured. No sign-up required to explore.
+              </p>
             </div>
-            <p className="text-xs text-muted-foreground/70 pt-1">
-              Private. Structured. No sign-up required to explore.
-            </p>
+
+            <div className="relative" data-testid="div-dashboard-mockup">
+              <div className="rounded-xl border border-border/60 bg-background shadow-xl overflow-hidden">
+                <div className="bg-primary/8 border-b border-border/40 px-4 py-2.5 flex items-center gap-2">
+                  <div className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-green-400/70" />
+                  <span className="text-[10px] text-muted-foreground ml-2 font-mono">Settlement Analysis — Example</span>
+                </div>
+                <div className="p-4 space-y-4">
+                  <div>
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Financial Sustainability Indicator</p>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="text-xs text-muted-foreground w-28 truncate">Sell &amp; Split</span>
+                        <div className="flex-1 bg-muted rounded-full h-1.5">
+                          <div className="bg-green-500 h-1.5 rounded-full" style={{width: "82%"}} />
+                        </div>
+                        <span className="text-xs font-semibold text-green-600 w-20 text-right">82 · Higher</span>
+                      </div>
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="text-xs text-muted-foreground w-28 truncate">A Retains Home</span>
+                        <div className="flex-1 bg-muted rounded-full h-1.5">
+                          <div className="bg-amber-500 h-1.5 rounded-full" style={{width: "67%"}} />
+                        </div>
+                        <span className="text-xs font-semibold text-amber-600 w-20 text-right">67 · Moderate</span>
+                      </div>
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="text-xs text-muted-foreground w-28 truncate">B Retains Home</span>
+                        <div className="flex-1 bg-muted rounded-full h-1.5">
+                          <div className="bg-red-500 h-1.5 rounded-full" style={{width: "38%"}} />
+                        </div>
+                        <span className="text-xs font-semibold text-red-600 w-20 text-right">38 · Lower</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="border-t border-border/40 pt-3">
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Allocated Net Position</p>
+                    <div className="space-y-2">
+                      {[
+                        { label: "Sell & Split", a: 72, b: 68 },
+                        { label: "A Retains", a: 45, b: 88 },
+                        { label: "B Retains", a: 91, b: 31 },
+                      ].map(({ label, a, b }) => (
+                        <div key={label}>
+                          <div className="flex justify-between mb-0.5">
+                            <span className="text-[10px] text-muted-foreground">{label}</span>
+                          </div>
+                          <div className="flex gap-1 h-4">
+                            <div className="bg-primary rounded-sm" style={{ width: `${a}%` }} title="Party A" />
+                            <div className="bg-teal-500 rounded-sm" style={{ width: `${b}%` }} title="Party B" />
+                          </div>
+                        </div>
+                      ))}
+                      <div className="flex items-center gap-3 pt-1">
+                        <div className="flex items-center gap-1"><div className="h-2 w-4 bg-primary rounded-sm" /><span className="text-[10px] text-muted-foreground">You</span></div>
+                        <div className="flex items-center gap-1"><div className="h-2 w-4 bg-teal-500 rounded-sm" /><span className="text-[10px] text-muted-foreground">Other party</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="border-t border-border/40 pt-3">
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">5-Year Capital Projection</p>
+                    <svg viewBox="0 0 220 50" className="w-full h-12" fill="none">
+                      <polyline points="0,40 40,32 80,22 120,18 160,14 220,10" stroke="hsl(var(--primary))" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                      <polyline points="0,44 40,42 80,40 120,44 160,48 220,46" stroke="#14b8a6" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="4 2" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="border-t border-border/30 bg-muted/30 px-4 py-2">
+                  <p className="text-[10px] text-muted-foreground/60 text-center">Example output — illustrative figures only</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -218,6 +317,35 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-20" data-testid="section-analysis-preview">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10 max-w-xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-analysis-preview-headline">
+              What Your Analysis Includes
+            </h2>
+            <p className="text-sm text-muted-foreground mt-3">
+              Every model includes structured outputs across three core areas. All included in the full analysis.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3 max-w-4xl mx-auto">
+            {ANALYSIS_PREVIEW_FEATURES.map((feature, i) => (
+              <Card key={i} data-testid={`card-analysis-feature-${i}`}>
+                <CardContent className="pt-5 pb-5 space-y-3">
+                  <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center">
+                    <feature.icon className="w-4.5 h-4.5 text-primary" />
+                  </div>
+                  <h3 className="text-sm font-semibold">{feature.title}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{feature.body}</p>
+                  <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-primary border-primary/30">
+                    Included in full analysis
+                  </Badge>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -264,10 +392,10 @@ export default function LandingPage() {
       <section className="py-16 md:py-20 bg-muted/30" data-testid="section-pricing">
         <div className="container mx-auto px-4 max-w-2xl text-center space-y-6">
           <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-pricing-headline">
-            Structured Financial Modelling &mdash; &pound;59
+            Full Structured Analysis &mdash; &pound;79
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            A single professional consultation typically costs <span className="font-semibold text-foreground">&pound;250&ndash;&pound;400 per hour</span>. This platform provides structured modelling and scenario comparison for a <span className="font-semibold text-foreground">one-time &pound;59</span>, with six months of unlimited reruns.
+            A single professional consultation typically costs <span className="font-semibold text-foreground">&pound;250&ndash;&pound;400 per hour</span>. This platform provides structured modelling and scenario comparison for a <span className="font-semibold text-foreground">one-time &pound;79</span>, with six months of unlimited reruns.
           </p>
           <div className="grid grid-cols-3 gap-4 text-center max-w-md mx-auto py-4">
             <div>
@@ -315,7 +443,7 @@ export default function LandingPage() {
           </p>
           <Button
             size="lg"
-            onClick={() => setLocation("/wizard")}
+            onClick={startFresh}
             data-testid="button-cta-start"
           >
             Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />

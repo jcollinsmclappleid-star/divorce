@@ -73,7 +73,8 @@ export const EXAMPLE_SCENARIOS: ExampleScenario[] = [
         mortgageAPR: 0.048,
         mortgageTermYears: 18,
       },
-      children: { numChildren: 0, nightsWithA: 182, nightsWithB: 183 },
+      children: { numChildren: 0, childAges: [], nightsWithA: 182, nightsWithB: 183 },
+      profile: { partyAName: "", partyBName: "", processStage: "", mainPriority: "" },
     },
   },
   {
@@ -128,7 +129,8 @@ export const EXAMPLE_SCENARIOS: ExampleScenario[] = [
         mortgageAPR: 0.052,
         mortgageTermYears: 15,
       },
-      children: { numChildren: 2, nightsWithA: 104, nightsWithB: 261 },
+      children: { numChildren: 2, childAges: [8, 5], nightsWithA: 104, nightsWithB: 261 },
+      profile: { partyAName: "", partyBName: "", processStage: "", mainPriority: "" },
     },
   },
   {
@@ -185,7 +187,8 @@ export const EXAMPLE_SCENARIOS: ExampleScenario[] = [
         mortgageAPR: 0.039,
         mortgageTermYears: 5,
       },
-      children: { numChildren: 0, nightsWithA: 182, nightsWithB: 183 },
+      children: { numChildren: 0, childAges: [], nightsWithA: 182, nightsWithB: 183 },
+      profile: { partyAName: "", partyBName: "", processStage: "", mainPriority: "" },
     },
   },
 ];

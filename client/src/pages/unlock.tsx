@@ -43,7 +43,7 @@ const FAQ_ITEMS = [
   },
   {
     question: "How does this compare to a professional consultation?",
-    answer: "A single professional consultation typically costs £250–£400 per hour. This tool provides structured financial modelling for £59, allowing you to approach professional discussions with quantified assumptions already prepared.",
+    answer: "A single professional consultation typically costs £250–£400 per hour. This tool provides structured financial modelling for £79, allowing you to approach professional discussions with quantified assumptions already prepared.",
   },
 ];
 
@@ -122,11 +122,10 @@ export default function UnlockPage() {
               <CardContent className="pt-6 pb-6 space-y-5">
                 <div className="text-center">
                   <div className="inline-block bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full mb-2" data-testid="badge-access-duration">
-                    Launch Phase Access
+                    Six Months Unlimited Access
                   </div>
-                  <div className="text-4xl font-bold tracking-tight" data-testid="text-price">£59</div>
-                  <div className="text-sm text-muted-foreground mt-1">Six months unlimited access</div>
-                  <div className="text-xs text-muted-foreground/60 mt-0.5">Standard price: £79</div>
+                  <div className="text-4xl font-bold tracking-tight" data-testid="text-price">£79</div>
+                  <div className="text-sm text-muted-foreground mt-1">One-time payment. No subscription.</div>
                 </div>
 
                 <label className="flex items-start gap-2 text-xs text-muted-foreground cursor-pointer select-none" data-testid="label-terms-acceptance">
@@ -156,12 +155,12 @@ export default function UnlockPage() {
                       Redirecting to payment...
                     </>
                   ) : (
-                    "Unlock Full Analysis — £59"
+                    "Unlock Full Analysis — £79"
                   )}
                 </Button>
 
                 <div className="text-xs text-muted-foreground text-center space-y-1">
-                  <p>One-time payment. No subscription.</p>
+                  <p>Secure checkout via Stripe. No card details stored.</p>
                   <p>14-day cooling-off period under the Consumer Rights Act 2015. See <Link href="/terms" className="underline text-primary" data-testid="link-refund-terms">Terms</Link> for details.</p>
                   <p>
                     Already purchased? <Link href="/recover" className="underline text-primary" data-testid="link-recover">Recover your access</Link>
@@ -217,7 +216,7 @@ export default function UnlockPage() {
                 Redirecting to payment...
               </>
             ) : (
-              "Unlock Full Analysis — £59"
+              "Unlock Full Analysis — £79"
             )}
           </Button>
           {!termsAccepted && (

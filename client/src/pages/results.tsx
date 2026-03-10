@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useLocation, Link } from "wouter";
-import { useAppStore } from "@/hooks/use-store";
+import { useAppStore, StoreState } from "@/hooks/use-store";
 import { useEngine, ScenarioResult, ProjectionYear, RunwayResult } from "@/hooks/use-engine";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
@@ -328,8 +328,8 @@ export default function ResultsPage() {
                         <YAxis axisLine={false} tickLine={false} fontSize={12} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
                         <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
                         <Legend />
-                        <Bar dataKey="Party A" fill="#2563EB" radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="Party B" fill="#10B981" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="Party A" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="Party B" fill="#0d9488" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   </CardContent>
@@ -348,10 +348,10 @@ export default function ResultsPage() {
                   <CollapsibleSection title="12-Month Financial Position" subtitle="Projected capital position following 12 months under each scenario" icon={<Activity className="w-4 h-4" />} testId="collapsible-12-month">
                     <TwelveMonthSnapshot scenarios={displayScenarios} projections={engine.projections} engine={engine} />
                   </CollapsibleSection>
-                  <CollapsibleSection title="Sensitivity Analysis" subtitle="Ranked impact of assumption variations on financial outcomes" icon={<Activity className="w-4 h-4" />} testId="collapsible-sensitivity">
+                  <CollapsibleSection title="Sensitivity Analysis" subtitle="How outcomes shift if key figures such as property value or interest rates change" icon={<Activity className="w-4 h-4" />} testId="collapsible-sensitivity">
                     <SensitivityPanel scenarios={displayScenarios} engine={engine} store={store} />
                   </CollapsibleSection>
-                  <CollapsibleSection title="Sensitivity Snapshot" subtitle="Quick-reference impact of key assumption changes on financial outcomes" icon={<Activity className="w-4 h-4" />} testId="collapsible-sensitivity-snapshot">
+                  <CollapsibleSection title="Sensitivity Snapshot" subtitle="A quick look at how outcomes change if key assumptions shift" icon={<Activity className="w-4 h-4" />} testId="collapsible-sensitivity-snapshot">
                     <SensitivitySnapshotPanel engine={engine} store={store} />
                   </CollapsibleSection>
                   <CollapsibleSection title="Stress Test Modelling" subtitle="Model the impact of interest rate and expenditure variations on scenario viability" icon={<AlertTriangle className="w-4 h-4" />} testId="collapsible-stress-test">
@@ -763,7 +763,7 @@ function SensitivityPanel({
 }: {
   scenarios: ScenarioResult[];
   engine: ReturnType<typeof useEngine>;
-  store: ReturnType<typeof useAppStore>;
+  store: StoreState;
 }) {
   const { intermediate, budget } = engine;
   const scenario = scenarios[0];
@@ -851,7 +851,7 @@ function AssumptionReviewPrompts({
   store,
 }: {
   engine: ReturnType<typeof useEngine>;
-  store: ReturnType<typeof useAppStore>;
+  store: StoreState;
 }) {
   const { budget, intermediate } = engine;
   const assumptions = store.assumptions;
@@ -933,7 +933,7 @@ function ExecutiveTable({
   stabilityScores: Record<string, StabilityResult>;
   viewLens: ViewLens;
   engine: ReturnType<typeof useEngine>;
-  store: ReturnType<typeof useAppStore>;
+  store: StoreState;
   runways: Record<string, RunwayResult>;
 }) {
   return (
@@ -1145,7 +1145,7 @@ function StabilityBadge({ score, label, compact }: { score: number; label: strin
     ? "text-emerald-700 border-emerald-200 bg-emerald-50"
     : score >= 60
     ? "text-amber-700 border-amber-200 bg-amber-50"
-    : "text-slate-700 border-slate-200 bg-slate-50";
+    : "text-red-700 border-red-200 bg-red-50";
 
   const shortLabel = compact
     ? (score >= 80 ? "Higher Resilience" : score >= 60 ? "Moderate Resilience" : "Lower Resilience")
@@ -1275,7 +1275,7 @@ function ScenarioDetailCard({
   scenario: ScenarioResult;
   projection: ProjectionYear[] | null | undefined;
   engine: ReturnType<typeof useEngine>;
-  store: ReturnType<typeof useAppStore>;
+  store: StoreState;
   stabilityScore: StabilityResult;
   sellScenario?: ScenarioResult;
   sellProjection?: ProjectionYear[];
@@ -1443,7 +1443,7 @@ function ScenarioDetailCard({
 
         {housingFeasibility && (
           <DetailCollapsible
-            title="Housing Position"
+            title="Housing Feasibility"
             summary={
               <Badge variant="outline" className={housingFeasibility.withinBenchmarkThresholds ? "text-emerald-600 border-emerald-200 bg-emerald-50" : "text-amber-600 border-amber-200 bg-amber-50"}>
                 {housingFeasibility.classification}
@@ -1451,7 +1451,10 @@ function ScenarioDetailCard({
             }
             testId="detail-housing-position"
           >
-            <HousingFeasibilityPanel feasibility={housingFeasibility} scenarioId={scenario.id} />
+            <div>
+              <p className="text-xs text-muted-foreground mb-3">Whether each party's income is likely to support the mortgage obligations under this settlement structure, based on generalised lending capacity benchmarks (non-lender specific).</p>
+              <HousingFeasibilityPanel feasibility={housingFeasibility} scenarioId={scenario.id} />
+            </div>
           </DetailCollapsible>
         )}
 
@@ -1473,7 +1476,7 @@ function ScenarioDetailCard({
 
         {projection && projection.length > 1 && (
           <DetailCollapsible
-            title="Capital Projection (5-Year)"
+            title="5-Year Capital Projection"
             summary={
               <span className="tabular-nums">
                 Lowest capital — A: <span className={`font-medium ${lowestA < 0 ? "text-red-600" : ""}`}>{formatCurrency(lowestA)}</span>
@@ -1495,8 +1498,8 @@ function ScenarioDetailCard({
                     <YAxis axisLine={false} tickLine={false} fontSize={11} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
                     <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
                     <Legend />
-                    <Line type="monotone" dataKey="capitalA" name="Party A" stroke="#2563EB" strokeWidth={2} dot={false} />
-                    <Line type="monotone" dataKey="capitalB" name="Party B" stroke="#10B981" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="capitalA" name="Party A" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="capitalB" name="Party B" stroke="#0d9488" strokeWidth={2} dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -1839,6 +1842,15 @@ function CompositionChart({ scenario }: { scenario: ScenarioResult }) {
   );
 }
 
+function ScoreBar({ score }: { score: number }) {
+  const barColor = score >= 80 ? "bg-green-500" : score >= 60 ? "bg-amber-500" : "bg-red-500";
+  return (
+    <div className="bg-muted rounded-full h-2 mt-1">
+      <div className={`${barColor} h-2 rounded-full transition-all`} style={{ width: `${Math.min(100, score)}%` }} />
+    </div>
+  );
+}
+
 function StabilitySection({ score }: { score: StabilityResult }) {
   return (
     <div className="space-y-3" data-testid="section-stability">
@@ -1849,9 +1861,10 @@ function StabilitySection({ score }: { score: StabilityResult }) {
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-semibold text-blue-600 uppercase">Party A</span>
+            <span className="text-xs font-semibold text-primary uppercase">Party A</span>
             <StabilityBadge score={score.scoreA} label={score.labelA} />
           </div>
+          <ScoreBar score={score.scoreA} />
           <ul className="space-y-0.5">
             {score.reasonsA.map((r, i) => (
               <li key={i} className="text-xs flex items-center justify-between gap-2">
@@ -1872,9 +1885,10 @@ function StabilitySection({ score }: { score: StabilityResult }) {
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-semibold text-emerald-600 uppercase">Party B</span>
+            <span className="text-xs font-semibold text-teal-600 uppercase">Party B</span>
             <StabilityBadge score={score.scoreB} label={score.labelB} />
           </div>
+          <ScoreBar score={score.scoreB} />
           <ul className="space-y-0.5">
             {score.reasonsB.map((r, i) => (
               <li key={i} className="text-xs flex items-center justify-between gap-2">
@@ -2098,7 +2112,7 @@ function ComparisonDeltaPanel({ delta, scenarioId }: { delta: ComparisonDelta; s
   );
 }
 
-function SensitivitySnapshotPanel({ engine, store }: { engine: ReturnType<typeof useEngine>; store: ReturnType<typeof useAppStore> }) {
+function SensitivitySnapshotPanel({ engine, store }: { engine: ReturnType<typeof useEngine>; store: StoreState }) {
   const { assumptions } = store;
   const { intermediate, budget } = engine;
 
