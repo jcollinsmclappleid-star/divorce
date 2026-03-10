@@ -178,10 +178,10 @@ export default function SeoAssetDivisionPage() {
           <div className="text-center space-y-3">
             <p className="text-sm text-muted-foreground">Also see:</p>
             <div className="flex flex-wrap justify-center gap-3 text-sm">
-              <Link href="/how-much-does-divorce-cost-uk" className="text-primary hover:underline">Divorce costs guide</Link>
-              <Link href="/who-gets-house-divorce-uk" className="text-primary hover:underline">Who gets the house?</Link>
-              <Link href="/how-pensions-split-divorce-uk" className="text-primary hover:underline">How pensions are split</Link>
-              <Link href="/divorce-settlement-examples-uk" className="text-primary hover:underline">Settlement examples</Link>
+              <Link href="/how-much-does-divorce-cost-uk" onClick={scrollTop} className="text-primary hover:underline">Divorce costs guide</Link>
+              <Link href="/who-gets-house-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">Who gets the house?</Link>
+              <Link href="/how-pensions-split-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">How pensions are split</Link>
+              <Link href="/divorce-settlement-examples-uk" onClick={scrollTop} className="text-primary hover:underline">Settlement examples</Link>
             </div>
           </div>
         </div>
@@ -189,10 +189,10 @@ export default function SeoAssetDivisionPage() {
 
       <footer className="border-t py-6">
         <div className="container mx-auto px-4 text-center text-xs text-muted-foreground space-x-4">
-          <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
-          <Link href="/terms" className="hover:text-foreground">Terms</Link>
-          <Link href="/methodology" className="hover:text-foreground">Methodology</Link>
-          <Link href="/" className="hover:text-foreground">Home</Link>
+          <Link href="/privacy" onClick={scrollTop} className="hover:text-foreground">Privacy</Link>
+          <Link href="/terms" onClick={scrollTop} className="hover:text-foreground">Terms</Link>
+          <Link href="/methodology" onClick={scrollTop} className="hover:text-foreground">Methodology</Link>
+          <Link href="/" onClick={scrollTop} className="hover:text-foreground">Home</Link>
         </div>
       </footer>
     </div>

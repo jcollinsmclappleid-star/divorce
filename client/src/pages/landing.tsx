@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, Link } from "wouter";
+import { scrollTop } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -153,8 +154,8 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 h-12 flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-4">
             <Logo href="/" size="sm" showBrandName />
-            <Link href="/methodology" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-methodology">Methodology</Link>
-            <Link href="/divorce-financial-modelling" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-guides">Guides</Link>
+            <Link href="/methodology" onClick={scrollTop} className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-methodology">Methodology</Link>
+            <Link href="/divorce-financial-modelling" onClick={scrollTop} className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-guides">Guides</Link>
           </div>
           <Button
             onClick={startFresh}
@@ -210,7 +211,7 @@ export default function LandingPage() {
               <div className="flex items-center gap-3 text-xs text-muted-foreground/70">
                 <span>Private. Structured. No sign-up required.</span>
                 <span>·</span>
-                <Link href="/free-guide" className="underline underline-offset-2 hover:text-foreground transition-colors" data-testid="link-hero-free-guide">
+                <Link href="/free-guide" onClick={scrollTop} className="underline underline-offset-2 hover:text-foreground transition-colors" data-testid="link-hero-free-guide">
                   Free guide →
                 </Link>
               </div>
@@ -530,28 +531,28 @@ export default function LandingPage() {
             <Logo href="/" size="sm" showBrandName />
           </div>
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            <Link href="/free-guide" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-free-guide">
+            <Link href="/free-guide" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-free-guide">
               Free Guide
             </Link>
-            <Link href="/divorce-financial-modelling" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-guides">
+            <Link href="/divorce-financial-modelling" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-guides">
               Guides
             </Link>
-            <Link href="/how-much-does-divorce-cost-uk" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-divorce-costs">
+            <Link href="/how-much-does-divorce-cost-uk" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-divorce-costs">
               Divorce Costs
             </Link>
-            <Link href="/divorce-settlement-examples-uk" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-examples">
+            <Link href="/divorce-settlement-examples-uk" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-examples">
               Settlement Examples
             </Link>
-            <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-privacy">
+            <Link href="/privacy" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-privacy">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-terms">
+            <Link href="/terms" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-terms">
               Terms of Use
             </Link>
-            <Link href="/methodology" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-methodology">
+            <Link href="/methodology" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-methodology">
               Model Methodology
             </Link>
-            <Link href="/recover" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-recover">
+            <Link href="/recover" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-recover">
               Recover Access
             </Link>
           </div>

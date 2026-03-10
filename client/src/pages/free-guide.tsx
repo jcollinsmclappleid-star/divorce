@@ -370,10 +370,10 @@ export default function FreeGuidePage() {
 
       <footer className="border-t py-6">
         <div className="container mx-auto px-4 text-center text-xs text-muted-foreground space-x-4">
-          <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
-          <Link href="/terms" className="hover:text-foreground">Terms</Link>
-          <Link href="/methodology" className="hover:text-foreground">Methodology</Link>
-          <Link href="/" className="hover:text-foreground">Home</Link>
+          <Link href="/privacy" onClick={scrollTop} className="hover:text-foreground">Privacy</Link>
+          <Link href="/terms" onClick={scrollTop} className="hover:text-foreground">Terms</Link>
+          <Link href="/methodology" onClick={scrollTop} className="hover:text-foreground">Methodology</Link>
+          <Link href="/" onClick={scrollTop} className="hover:text-foreground">Home</Link>
         </div>
       </footer>
     </div>
