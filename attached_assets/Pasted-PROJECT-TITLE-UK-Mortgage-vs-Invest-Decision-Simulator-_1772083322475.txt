@@ -1,0 +1,212 @@
+PROJECT TITLE:
+UK Mortgage vs Invest Decision Simulator (Premium Financial Modelling Tool)
+
+OBJECTIVE:
+We are building a premium, technically credible UK-based financial decision simulator comparing:
+
+Scenario A: Mortgage Overpayment
+Scenario B: Investing (ISA or Pension)
+
+This must leverage the architecture of an existing two-scenario financial modelling engine (originally built for divorce asset comparison), including:
+
+- Dual scenario comparison structure
+- Real-time recalculation
+- Clean dashboard layout
+- Asset segmentation
+- Graph-based projection
+- Sensitivity toggles
+
+We are adapting that engine from “Party A vs Party B” to “Overpay vs Invest”.
+
+This product must feel:
+- Professional
+- Financially literate
+- Structured
+- Analytical
+- Worth paying for (£39 tier positioning)
+- Not like a generic online calculator
+
+TARGET USER:
+Financially literate UK homeowner (28–45).
+Understands tax bands, ISAs, pensions.
+Comfortable with modelling assumptions.
+Wants structured, data-driven clarity.
+
+TECH STACK:
+- React + Vite
+- TailwindCSS
+- Recharts (for visualisation)
+- All calculations client-side
+- No backend/database required for MVP
+- Architecture should allow Stripe gating later
+
+--------------------------------------------
+CORE PRODUCT STRUCTURE
+--------------------------------------------
+
+LAYOUT:
+Single-page dashboard.
+
+Left Panel = Inputs
+Right Panel = Results Dashboard
+
+--------------------------------------------
+INPUT MODULE
+--------------------------------------------
+
+SECTION 1: Mortgage Inputs
+- Outstanding mortgage balance (£)
+- Interest rate (% annual)
+- Remaining term (years)
+- Current monthly payment (£) (auto-calc option acceptable)
+- Monthly overpayment (£)
+- Optional one-time lump sum (£)
+
+SECTION 2: Investment Inputs
+- Monthly investment amount (£) (default = overpayment amount)
+- Investment wrapper toggle:
+    - ISA
+    - Pension
+- Expected annual return (%)
+- Inflation rate (%) default 2.5%
+- Tax band toggle:
+    - Basic (20%)
+    - Higher (40%)
+  (Only applies if Pension selected)
+
+SECTION 3: Comparison Horizon
+- Toggle:
+    - 5 years
+    - 10 years
+    - 20 years
+    - Until mortgage-free
+
+--------------------------------------------
+CALCULATION ENGINE REQUIREMENTS
+--------------------------------------------
+
+MORTGAGE ENGINE:
+- Monthly amortisation schedule
+- Interest calculated monthly
+- Apply overpayment each month
+- Stop when balance reaches zero
+- Output:
+    - Total interest baseline
+    - Total interest with overpay
+    - Interest saved
+    - Mortgage-free date
+    - Equity value over time
+
+INVESTMENT ENGINE:
+- Monthly compounding
+- Nominal return
+- Real return (inflation adjusted)
+- Wrapper logic:
+
+ISA:
+- No tax on growth
+
+PENSION:
+- Gross-up contribution:
+    - Basic rate: +25% uplift
+    - Higher rate: effective +66.7% uplift
+- Mark pension as "locked until access age" (no detailed withdrawal modelling required)
+
+REAL TERMS:
+- Calculate inflation-adjusted value at selected horizon.
+
+--------------------------------------------
+COMPARATIVE OUTPUTS
+--------------------------------------------
+
+TOP SUMMARY CARDS:
+- Mortgage-free date
+- Total interest saved
+- Investment nominal value
+- Investment real value
+- Net worth difference at selected horizon
+- Break-even investment return (%)
+
+BREAK-EVEN SOLVER:
+- Solve for annual investment return where:
+  Invest Net Worth = Overpay Net Worth
+- Use numerical approximation (binary search acceptable)
+
+LIQUIDITY SEGMENTATION TABLE:
+At selected horizon show:
+- Liquid capital (ISA)
+- Locked pension capital
+- Home equity
+- Total net worth
+
+--------------------------------------------
+VISUALISATIONS
+--------------------------------------------
+
+CHART 1:
+Line chart:
+- Overpay net worth over time
+- Invest net worth over time
+
+CHART 2:
+Bar comparison at selected horizon:
+- Total net worth
+- Liquid capital
+- Locked capital
+
+--------------------------------------------
+STRESS TEST TOGGLES
+--------------------------------------------
+
+Buttons:
+- Mortgage rate +2%
+- Investment return -2%
+- Combined stress
+
+Recalculate results dynamically when toggled.
+
+--------------------------------------------
+UX REQUIREMENTS
+--------------------------------------------
+
+- Clean, minimal, professional aesthetic
+- Corporate neutral colours
+- No gimmicky styling
+- Clear labelling
+- Tooltip explanations for each input
+- Clear disclaimer:
+  "This tool provides illustrative financial modelling only and does not constitute financial advice."
+
+--------------------------------------------
+NON-GOALS (DO NOT BUILD IN MVP)
+--------------------------------------------
+
+- No user accounts
+- No saved sessions
+- No subscription billing
+- No CGT modelling
+- No dividend tax modelling
+- No lender affordability engine
+- No ERC complexity
+
+Keep this lean but technically strong.
+
+--------------------------------------------
+DELIVERABLE
+--------------------------------------------
+
+Produce:
+- Full React project structure
+- Calculation logic in separate utility file
+- Clean component separation:
+    - InputPanel.jsx
+    - Dashboard.jsx
+    - Charts.jsx
+    - CalculationEngine.js
+- Mock default scenario values
+- Fully functional MVP ready to run locally
+
+Ensure code is clean, modular, and readable.
+
+This is a premium financial decision modelling product.
+It must feel serious, analytical, and technically competent.
