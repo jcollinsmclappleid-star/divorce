@@ -170,26 +170,34 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 pt-16 pb-20 md:pt-24 md:pb-28 relative">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center max-w-6xl mx-auto">
             <div className="space-y-6 text-center lg:text-left">
-              <Badge variant="secondary" className="text-xs px-3 py-1">
-                UK 2025/26 Income Tax &amp; NI Rates
-              </Badge>
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
+                <Badge variant="secondary" className="text-xs px-3 py-1">
+                  UK 2025/26 Tax &amp; NI Rates
+                </Badge>
+                <Badge variant="outline" className="text-xs px-3 py-1">
+                  England &amp; Wales only
+                </Badge>
+              </div>
               <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight" data-testid="text-hero-headline">
-                UK Divorce Financial Settlement Calculator
+                Before you spend thousands on legal fees, understand exactly what your financial position could look like.
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Structured financial modelling for separation and divorce. Compare settlement scenarios, model tax implications, and understand long-term sustainability &mdash; privately, before important conversations take place.
+                The UK's only divorce financial modelling tool that scores each settlement option for long-term sustainability — not just the numbers, but what they mean for your future.
               </p>
               <p className="text-sm text-muted-foreground/80">
                 Illustrative modelling only. Not legal, tax, or financial advice.
               </p>
               <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3 pt-1">
-                <Button
-                  size="lg"
-                  onClick={startFresh}
-                  data-testid="button-hero-start"
-                >
-                  Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
-                </Button>
+                <div className="flex flex-col items-center lg:items-start gap-1">
+                  <Button
+                    size="lg"
+                    onClick={startFresh}
+                    data-testid="button-hero-start"
+                  >
+                    Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
+                  </Button>
+                  <p className="text-xs text-muted-foreground/70">From £79 — one-time payment. No subscription.</p>
+                </div>
                 <Button
                   variant="outline"
                   size="lg"
@@ -199,9 +207,13 @@ export default function LandingPage() {
                   View Example Output <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground/70">
-                Private. Structured. No sign-up required to explore.
-              </p>
+              <div className="flex items-center gap-3 text-xs text-muted-foreground/70">
+                <span>Private. Structured. No sign-up required.</span>
+                <span>·</span>
+                <Link href="/free-guide" className="underline underline-offset-2 hover:text-foreground transition-colors" data-testid="link-hero-free-guide">
+                  Free guide →
+                </Link>
+              </div>
             </div>
 
             <div className="relative" data-testid="div-dashboard-mockup">
@@ -350,6 +362,48 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section className="py-16 md:py-20 bg-primary/5 border-y border-primary/10" data-testid="section-fsi-callout">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto grid gap-10 lg:grid-cols-2 items-center">
+            <div className="space-y-4">
+              <Badge className="text-xs px-3 py-1 bg-primary/10 text-primary border-primary/20" variant="outline">
+                Unique to this tool
+              </Badge>
+              <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-fsi-headline">
+                The only UK divorce tool that scores your financial sustainability — not just the numbers
+              </h2>
+              <p className="text-muted-foreground leading-relaxed text-sm">
+                Most calculators show you a number. The Financial Sustainability Indicator (FSI) shows you what that number <em>means</em> — scoring how viable each settlement option is for each party based on income, outgoings, housing costs, and capital position over a 5-year horizon.
+              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Scored 0–100. Green is sustainable. Amber warrants attention. Red indicates financial stress under current assumptions. Each score comes with plain-English driver explanations.
+              </p>
+              <Button onClick={startFresh} data-testid="button-fsi-cta">
+                See Your Sustainability Score <ArrowRight className="w-4 h-4 ml-1.5" />
+              </Button>
+            </div>
+            <div className="space-y-3">
+              {[
+                { label: "Sell & Split", score: 82, colour: "bg-green-500", text: "82 — Sustainable" },
+                { label: "You Retain Home", score: 67, colour: "bg-amber-500", text: "67 — Monitor closely" },
+                { label: "They Retain Home", score: 48, colour: "bg-red-500", text: "48 — Financial stress risk" },
+              ].map(row => (
+                <div key={row.label} className="p-3 rounded-md bg-background border border-border/50">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">{row.label}</span>
+                    <span className="text-xs font-semibold text-muted-foreground">{row.text}</span>
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-2">
+                    <div className={`${row.colour} h-2 rounded-full transition-all`} style={{ width: `${row.score}%` }} />
+                  </div>
+                </div>
+              ))}
+              <p className="text-xs text-muted-foreground/60 text-center pt-1">Illustrative example — your scores will be personalised to your figures</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 md:py-20" data-testid="section-examples">
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
@@ -476,8 +530,17 @@ export default function LandingPage() {
             <Logo href="/" size="sm" showBrandName />
           </div>
           <div className="flex items-center justify-center gap-4 flex-wrap">
+            <Link href="/free-guide" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-free-guide">
+              Free Guide
+            </Link>
             <Link href="/divorce-financial-modelling" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-guides">
               Guides
+            </Link>
+            <Link href="/how-much-does-divorce-cost-uk" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-divorce-costs">
+              Divorce Costs
+            </Link>
+            <Link href="/divorce-settlement-examples-uk" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-examples">
+              Settlement Examples
             </Link>
             <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-privacy">
               Privacy Policy

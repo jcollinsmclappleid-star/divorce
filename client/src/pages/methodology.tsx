@@ -65,7 +65,7 @@ export default function MethodologyPage() {
               <li>No judicial discretion modelling — courts exercise broad discretion under the Matrimonial Causes Act 1973; this model cannot replicate or predict judicial reasoning</li>
               <li>No lender-specific criteria — lending capacity benchmarks are generalised income multiple illustrations and do not reflect any specific lender's underwriting criteria, credit scoring, or affordability assessment methodology</li>
               <li>No actuarial pension adjustments — pension values are treated as nominal CETV figures without adjustment for pension type, annuity rates, tax on drawdown, or member-specific factors</li>
-              <li>No spousal maintenance modelling — periodical payments are not included in the financial model</li>
+              <li>Spousal maintenance — an optional user-entered estimate can be applied as an income transfer in monthly surplus/deficit calculations. This is illustrative only; actual maintenance orders are determined by courts based on individual circumstances and are not modelled predictively</li>
               <li>No forward legislation modelling — the model applies current published rates and does not anticipate changes in tax law, benefit entitlements, or regulatory frameworks</li>
             </ul>
 

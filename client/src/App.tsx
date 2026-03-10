@@ -25,6 +25,12 @@ import ClusterMediationChecklist from "@/pages/content/cluster-mediation-checkli
 import Faq5050Automatic from "@/pages/content/faq-5050-automatic";
 import FaqKeepHouse from "@/pages/content/faq-keep-house";
 import FaqPensionsDivided from "@/pages/content/faq-pensions-divided";
+import FreeGuidePage from "@/pages/free-guide";
+import SeoDivorceCostsPage from "@/pages/content/seo-divorce-costs";
+import SeoAssetDivisionPage from "@/pages/content/seo-asset-division";
+import SeoWhoGetsHousePage from "@/pages/content/seo-who-gets-house";
+import SeoPensionsPage from "@/pages/content/seo-pensions";
+import SeoSettlementExamplesPage from "@/pages/content/seo-settlement-examples";
 
 function Router() {
   return (
@@ -39,6 +45,7 @@ function Router() {
       <Route path="/methodology" component={MethodologyPage} />
       <Route path="/recover" component={RecoverPage} />
       <Route path="/admin" component={AdminPage} />
+      <Route path="/free-guide" component={FreeGuidePage} />
       <Route path="/divorce-financial-modelling" component={PillarPage} />
       <Route path="/divorce-50-50-split-calculator-uk" component={Cluster5050Split} />
       <Route path="/divorce-house-buyout-calculator-uk" component={ClusterHouseBuyout} />
@@ -48,6 +55,11 @@ function Router() {
       <Route path="/is-50-50-split-automatic-uk" component={Faq5050Automatic} />
       <Route path="/can-i-keep-the-house-after-divorce-uk" component={FaqKeepHouse} />
       <Route path="/how-are-pensions-divided-in-divorce-uk" component={FaqPensionsDivided} />
+      <Route path="/how-much-does-divorce-cost-uk" component={SeoDivorceCostsPage} />
+      <Route path="/divorce-financial-settlement-calculator-uk" component={SeoAssetDivisionPage} />
+      <Route path="/who-gets-house-divorce-uk" component={SeoWhoGetsHousePage} />
+      <Route path="/how-pensions-split-divorce-uk" component={SeoPensionsPage} />
+      <Route path="/divorce-settlement-examples-uk" component={SeoSettlementExamplesPage} />
       <Route path="/results">
         <AccessGate>
           <ResultsPage />

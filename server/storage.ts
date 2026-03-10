@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { sessions, purchases, type Session, type InsertSession, type Purchase, type InsertPurchase } from "@shared/schema";
+import { sessions, purchases, emailLeads, type Session, type InsertSession, type Purchase, type InsertPurchase, type EmailLead } from "@shared/schema";
 import { eq, and, sql, desc } from "drizzle-orm";
 
 export interface IStorage {
@@ -13,6 +13,9 @@ export interface IStorage {
   markPurchasePaid(id: string, paymentIntentId: string, email: string | null): Promise<Purchase>;
   getPaidPurchasesByEmail(email: string): Promise<Purchase[]>;
   extendPurchaseExpiry(purchaseId: string, months: number): Promise<Purchase>;
+
+  createEmailLead(email: string, firstName?: string, source?: string, assetPoolSnapshot?: string): Promise<EmailLead>;
+  getEmailLeadByEmail(email: string): Promise<EmailLead | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -112,6 +115,23 @@ export class DatabaseStorage implements IStorage {
       .where(eq(purchases.id, purchaseId))
       .returning();
     return updated;
+  }
+  async createEmailLead(email: string, firstName?: string, source?: string, assetPoolSnapshot?: string): Promise<EmailLead> {
+    const [lead] = await db.insert(emailLeads).values({
+      email: email.toLowerCase().trim(),
+      firstName: firstName ?? null,
+      source: source ?? "free_guide",
+      assetPoolSnapshot: assetPoolSnapshot ?? null,
+    }).returning();
+    return lead;
+  }
+
+  async getEmailLeadByEmail(email: string): Promise<EmailLead | undefined> {
+    const [lead] = await db
+      .select()
+      .from(emailLeads)
+      .where(eq(emailLeads.email, email.toLowerCase().trim()));
+    return lead;
   }
 }
 

@@ -246,6 +246,15 @@ export default function ResultsPage() {
                 The table below compares the allocated capital position for each party under each settlement scenario. Select the <span className="inline-flex items-center"><Info className="w-3 h-3 mx-0.5" /></span> information icons for supplementary definitions. Use the settlement ratio controls to model alternative distributions.
               </p>
             </div>
+
+            {store.maintenance?.included && store.maintenance.monthlyAmount > 0 && (
+              <div className="p-3 rounded-md border border-amber-200 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-800 flex items-start gap-2" data-testid="banner-maintenance">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <p className="text-xs text-amber-900 dark:text-amber-200 leading-relaxed">
+                  <span className="font-medium">Spousal maintenance included:</span> An estimated {store.maintenance.direction === "AtoB" ? (store.profile?.partyAName || "Party A") : (store.profile?.partyBName || "Party B")} pays {store.maintenance.direction === "AtoB" ? (store.profile?.partyBName || "Party B") : (store.profile?.partyAName || "Party A")} {new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 }).format(store.maintenance.monthlyAmount)}/month has been applied as an income transfer in the monthly surplus/deficit projections. This figure is illustrative only — maintenance orders are determined by courts and may differ significantly from this estimate.
+                </p>
+              </div>
+            )}
           </div>
 
           {displayScenarios.length > 0 ? (
@@ -413,7 +422,7 @@ export default function ResultsPage() {
                   </div>
                   <div className="mt-3 pt-2 border-t border-muted space-y-1">
                     <p className="text-xs font-medium text-muted-foreground">Other Exclusions & Assumptions:</p>
-                    <p className="text-xs text-muted-foreground">Early repayment charges, stamp duty, legal transfer fees, moving costs, and spousal maintenance are not separately modelled. Pension values are treated as nominal CETV figures without actuarial adjustment. No CGT liability is modelled — the principal private residence exemption is assumed for the family home.</p>
+                    <p className="text-xs text-muted-foreground">Early repayment charges, stamp duty, legal transfer fees, and moving costs are not separately modelled. Pension values are treated as nominal CETV figures without actuarial adjustment. No CGT liability is modelled — the principal private residence exemption is assumed for the family home. {!store.maintenance?.included && "Spousal maintenance is not included in this model."}</p>
                   </div>
                 </div>
               </CollapsibleSection>

@@ -24,6 +24,19 @@ export const purchases = pgTable("purchases", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const emailLeads = pgTable("email_leads", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull(),
+  firstName: text("first_name"),
+  source: text("source").default("free_guide"),
+  assetPoolSnapshot: text("asset_pool_snapshot"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertEmailLeadSchema = createInsertSchema(emailLeads).omit({ id: true, createdAt: true });
+export type EmailLead = typeof emailLeads.$inferSelect;
+export type InsertEmailLead = z.infer<typeof insertEmailLeadSchema>;
+
 export const insertSessionSchema = createInsertSchema(sessions);
 export const insertPurchaseSchema = createInsertSchema(purchases).omit({ id: true, createdAt: true });
 

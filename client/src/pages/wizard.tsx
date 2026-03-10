@@ -17,7 +17,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { AssetCategory, LiabilityCategory, Owner, ExpenseCategory } from "@shared/schema";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, scrollTop } from "@/lib/utils";
 import {
   ChevronLeft, ChevronRight, Heart, Home, Wallet, Landmark,
   Briefcase, Calculator, Plus, Trash2, Edit2, Check, Settings2,
@@ -86,6 +86,7 @@ export default function WizardPage() {
   const progress = ((currentStep) / (STEPS.length - 1)) * 100;
 
   const goNext = useCallback(() => {
+    scrollTop();
     if (currentStep === STEPS.length - 1) {
       setLocation("/preview");
     } else {
@@ -94,6 +95,7 @@ export default function WizardPage() {
   }, [currentStep, setLocation]);
 
   const goBack = useCallback(() => {
+    scrollTop();
     setCurrentStep(s => Math.max(s - 1, 0));
   }, []);
 
@@ -112,7 +114,7 @@ export default function WizardPage() {
               {STEPS.map((step, i) => (
                 <button
                   key={step.id}
-                  onClick={() => setCurrentStep(i)}
+                  onClick={() => { scrollTop(); setCurrentStep(i); }}
                   className={`flex items-center gap-1 text-xs px-1.5 py-1 rounded transition-colors ${
                     i === currentStep
                       ? "text-primary font-semibold"
@@ -153,8 +155,10 @@ export default function WizardPage() {
 
       <main className="flex-1 container mx-auto px-4 py-6 max-w-3xl">
         <div className="mb-6">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1 md:hidden">
-            Step {currentStep + 1} of {STEPS.length}
+          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1 md:hidden" data-testid="text-step-progress">
+            {currentStep === 0
+              ? "Let's get started — 9 steps to your model"
+              : `You're building your financial picture — ${currentStep + 1} of ${STEPS.length} complete`}
           </div>
           <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground" data-testid="text-step-title">
             {STEPS[currentStep].title}
@@ -340,6 +344,12 @@ function StepSituation({ advancedMode }: { advancedMode: boolean }) {
 
   return (
     <div className="space-y-6">
+      <div className="flex items-start gap-3 p-3 rounded-md bg-primary/5 border border-primary/10" data-testid="callout-privacy-step1">
+        <Shield className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          <span className="font-medium text-foreground">Your figures never leave your browser.</span> All calculations happen on your device. We store only a session reference — no financial data is transmitted to our servers.
+        </p>
+      </div>
       <div className="space-y-4">
         <div className="space-y-2">
           <Label>Do you have children together?</Label>
@@ -1133,7 +1143,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 function StepIncome({ advancedMode }: { advancedMode: boolean }) {
-  const { incomes, addIncome, updateIncome, removeIncome, assumptions, updateAssumptions, profile } = useAppStore();
+  const { incomes, addIncome, updateIncome, removeIncome, assumptions, updateAssumptions, profile, maintenance, updateMaintenance } = useAppStore();
   const nameA = profile?.partyAName || "Party A";
   const nameB = profile?.partyBName || "Party B";
   const [incomeDialogOpen, setIncomeDialogOpen] = useState(false);
@@ -1288,6 +1298,52 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
           </div>
         </div>
       )}
+
+      <div className="space-y-3 pt-2">
+        <Separator />
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">Spousal maintenance</Label>
+          <p className="text-xs text-muted-foreground">If one party is likely to pay the other ongoing maintenance, include an estimate here. This affects the monthly surplus/deficit figures in your analysis.</p>
+          <div className="flex items-center gap-3">
+            <Switch
+              checked={maintenance?.included ?? false}
+              onCheckedChange={(v) => updateMaintenance({ included: v })}
+              data-testid="switch-maintenance"
+            />
+            <Label className="text-sm">Is spousal maintenance likely to be part of this settlement?</Label>
+          </div>
+        </div>
+        {maintenance?.included && (
+          <div className="space-y-3 p-4 bg-muted/30 rounded-md">
+            <div className="space-y-2">
+              <Label className="text-sm">Estimated monthly maintenance amount (£)</Label>
+              <p className="text-xs text-muted-foreground">If you're unsure, use a rough estimate — you can re-run the model at any time.</p>
+              <Input
+                type="number"
+                min={0}
+                value={maintenance.monthlyAmount || ""}
+                onChange={(e) => { const v = parseFloat(e.target.value); updateMaintenance({ monthlyAmount: isNaN(v) ? 0 : v }); }}
+                data-testid="input-maintenance-amount"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm">Direction of payment</Label>
+              <Select
+                value={maintenance.direction}
+                onValueChange={(v: "AtoB" | "BtoA") => updateMaintenance({ direction: v })}
+              >
+                <SelectTrigger data-testid="select-maintenance-direction">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="AtoB">{nameA} pays {nameB}</SelectItem>
+                  <SelectItem value="BtoA">{nameB} pays {nameA}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        )}
+      </div>
 
       <Dialog open={incomeDialogOpen} onOpenChange={setIncomeDialogOpen}>
         <DialogContent>

@@ -108,12 +108,13 @@ export function useEngine(): EngineResult {
     return runEngine(state);
   }, [
     state.assets, state.liabilities, state.incomes, state.expenses,
-    state.assumptions, state.children, state.scenarios, state.config
+    state.assumptions, state.children, state.scenarios, state.config,
+    state.maintenance,
   ]);
 }
 
 function runEngine(state: StoreState): EngineResult {
-  const { assets, liabilities, incomes, expenses, assumptions, children, scenarios } = state;
+  const { assets, liabilities, incomes, expenses, assumptions, children, scenarios, maintenance } = state;
 
   const totalAssets = assets.reduce((s, a) => s + a.currentValue, 0);
   const totalLiabilities = liabilities.reduce((s, l) => s + l.balance, 0);
@@ -170,8 +171,14 @@ function runEngine(state: StoreState): EngineResult {
   const expenseB = expenses.filter(e => e.owner === 'B').reduce((s, e) => s + e.amountAnnual, 0);
   const expenseShared = expenses.filter(e => e.owner === 'shared').reduce((s, e) => s + e.amountAnnual, 0);
 
-  const surplusA = taxA.net - expenseA - (expenseShared / 2);
-  const surplusB = taxB.net - expenseB - (expenseShared / 2);
+  const maintenanceAnnual = (maintenance?.included && maintenance.monthlyAmount > 0)
+    ? maintenance.monthlyAmount * 12
+    : 0;
+  const maintenanceAtoB = maintenance?.direction === 'BtoA' ? 0 : maintenanceAnnual;
+  const maintenanceBtoA = maintenance?.direction === 'BtoA' ? maintenanceAnnual : 0;
+
+  const surplusA = taxA.net - expenseA - (expenseShared / 2) - maintenanceAtoB + maintenanceBtoA;
+  const surplusB = taxB.net - expenseB - (expenseShared / 2) - maintenanceBtoA + maintenanceAtoB;
 
   const hasOverrideCMS = assumptions.overrideCMSAnnual != null && assumptions.overrideCMSAnnual > 0;
   let cmsWeekly = 0;

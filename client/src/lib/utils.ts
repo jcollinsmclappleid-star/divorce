@@ -5,6 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function scrollTop() {
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
 export function formatCurrency(value: number): string {
   return new Intl.NumberFormat("en-GB", {
     style: "currency",

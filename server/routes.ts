@@ -244,6 +244,32 @@ export async function registerRoutes(
     }
   });
 
+  app.post('/api/leads', async (req, res) => {
+    try {
+      const ip = req.ip || 'unknown';
+      if (!rateLimit(`leads:${ip}`, 5, 60 * 60 * 1000)) {
+        return res.status(429).json({ message: 'Too many requests' });
+      }
+      const schema = z.object({
+        email: z.string().email(),
+        firstName: z.string().max(100).optional(),
+        source: z.string().max(50).optional(),
+        assetPoolSnapshot: z.string().max(50).optional(),
+      });
+      const { email, firstName, source, assetPoolSnapshot } = schema.parse(req.body);
+      const existing = await storage.getEmailLeadByEmail(email);
+      if (!existing) {
+        await storage.createEmailLead(email, firstName, source, assetPoolSnapshot);
+      }
+      return res.json({ success: true });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Valid email address required' });
+      }
+      return res.status(500).json({ message: 'Failed to save' });
+    }
+  });
+
   app.post(api.pdf.generate.path, async (req, res) => {
     try {
       console.log("Generating PDF for state:", req.body);

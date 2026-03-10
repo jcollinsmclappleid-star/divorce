@@ -65,6 +65,12 @@ export interface Assumptions {
   overrideCMSAnnual?: number | null;
 }
 
+export interface Maintenance {
+  included: boolean;
+  monthlyAmount: number;
+  direction: "AtoB" | "BtoA";
+}
+
 export interface Children {
   numChildren: number;
   childAges: number[];
@@ -96,6 +102,7 @@ export interface StoreState {
   assumptions: Assumptions;
   children: Children;
   profile: Profile;
+  maintenance: Maintenance;
 }
 
 const initialState: StoreState = {
@@ -136,6 +143,11 @@ const initialState: StoreState = {
     processStage: "",
     mainPriority: "",
   },
+  maintenance: {
+    included: false,
+    monthlyAmount: 0,
+    direction: "AtoB",
+  },
 };
 
 interface AppActions {
@@ -160,6 +172,7 @@ interface AppActions {
   updateAssumptions: (assumptions: Partial<Assumptions>) => void;
   updateChildren: (children: Partial<Children>) => void;
   updateProfile: (profile: Partial<Profile>) => void;
+  updateMaintenance: (maintenance: Partial<Maintenance>) => void;
 
   reset: () => void;
   loadState: (state: StoreState) => void;
@@ -238,6 +251,9 @@ export const useAppStore = create<StoreState & AppActions>()(
       updateProfile: (updates) => set((state) => ({
         profile: { ...state.profile, ...updates }
       })),
+      updateMaintenance: (updates) => set((state) => ({
+        maintenance: { ...state.maintenance, ...updates }
+      })),
 
       reset: () => set(initialState),
       loadState: (newState) => set(newState),
@@ -260,6 +276,9 @@ export const useAppStore = create<StoreState & AppActions>()(
         }
         if (state && !state.profile) {
           state.profile = { partyAName: "", partyBName: "", processStage: "", mainPriority: "" };
+        }
+        if (state && !state.maintenance) {
+          state.maintenance = { included: false, monthlyAmount: 0, direction: "AtoB" };
         }
       },
     }
