@@ -54,7 +54,6 @@ export default function UnlockPage() {
   const sessionToken = useSessionToken();
   const { hasAccess, isLoading } = useAccess();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [termsAccepted, setTermsAccepted] = useState(false);
 
   useEffect(() => {
     if (!isLoading && hasAccess) {
@@ -128,25 +127,17 @@ export default function UnlockPage() {
                   <div className="text-sm text-muted-foreground mt-1">One-time payment. No subscription.</div>
                 </div>
 
-                <label className="flex items-start gap-2 text-xs text-muted-foreground cursor-pointer select-none" data-testid="label-terms-acceptance">
-                  <input
-                    type="checkbox"
-                    checked={termsAccepted}
-                    onChange={(e) => setTermsAccepted(e.target.checked)}
-                    className="mt-0.5 shrink-0"
-                    data-testid="checkbox-terms-acceptance"
-                  />
-                  <span className="leading-relaxed">
-                    I understand this tool provides illustrative financial modelling only and does not constitute legal, tax, or financial advice. I have read and accept the{" "}
-                    <Link href="/terms" className="underline text-primary">Terms of Use</Link>.
-                  </span>
-                </label>
+                <p className="text-xs text-muted-foreground leading-relaxed border-t pt-3">
+                  This tool provides illustrative financial modelling only and does not constitute legal, tax, or financial advice. See our{" "}
+                  <Link href="/terms" className="underline text-primary">Terms of Use</Link>{" "}
+                  for full details.
+                </p>
 
                 <Button
                   className="w-full"
                   size="lg"
                   onClick={handleCheckout}
-                  disabled={checkoutLoading || !termsAccepted}
+                  disabled={checkoutLoading}
                   data-testid="button-checkout"
                 >
                   {checkoutLoading ? (
@@ -211,7 +202,7 @@ export default function UnlockPage() {
           <Button
             size="lg"
             onClick={handleCheckout}
-            disabled={checkoutLoading || !termsAccepted}
+            disabled={checkoutLoading}
             data-testid="button-checkout-secondary"
           >
             {checkoutLoading ? (
@@ -223,9 +214,6 @@ export default function UnlockPage() {
               "Unlock Full Analysis — £79"
             )}
           </Button>
-          {!termsAccepted && (
-            <p className="text-xs text-muted-foreground/60">Accept the terms above to proceed</p>
-          )}
         </section>
       </main>
 
