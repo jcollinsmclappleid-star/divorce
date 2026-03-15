@@ -180,23 +180,23 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      <section className="relative overflow-hidden" data-testid="section-hero">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/3 pointer-events-none" />
+      <section className="relative overflow-hidden bg-primary" data-testid="section-hero">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsl(220_60%_35%),_transparent_60%)] pointer-events-none" />
         <div className="container mx-auto px-4 pt-16 pb-20 md:pt-24 md:pb-28 relative">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center max-w-6xl mx-auto">
             <div className="space-y-6 text-center lg:text-left">
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
-                <Badge variant="secondary" className="text-xs px-3 py-1">
+                <Badge variant="outline" className="text-xs px-3 py-1 border-gold/50 text-gold bg-gold/10">
                   UK 2025/26 Tax &amp; NI Rates
                 </Badge>
               </div>
-              <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight" data-testid="text-hero-headline">
+              <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight text-white" data-testid="text-hero-headline">
                 Before you spend thousands on legal fees, understand exactly what your financial position could look like.
               </h1>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className="text-lg text-white/70 leading-relaxed">
                 The UK's divorce financial modelling tool that scores each settlement option for long-term sustainability — not just the numbers, but what they mean for your future.
               </p>
-              <p className="text-sm text-muted-foreground/80">
+              <p className="text-sm text-white/45">
                 Illustrative modelling only. Not legal, tax, or financial advice.
               </p>
               <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3 pt-1">
@@ -205,10 +205,11 @@ export default function LandingPage() {
                     size="lg"
                     onClick={startFresh}
                     data-testid="button-hero-start"
+                    className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
                   >
                     Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
                   </Button>
-                  <p className="text-xs text-muted-foreground/70">From £79 — one-time payment. No subscription.</p>
+                  <p className="text-xs text-white/45">From £79 — one-time payment. No subscription.</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2">
                   <Button
@@ -216,6 +217,7 @@ export default function LandingPage() {
                     size="lg"
                     onClick={() => loadExample(0)}
                     data-testid="button-hero-example"
+                    className="border-white/25 text-white hover:bg-white/10 hover:text-white bg-transparent"
                   >
                     View Example Output <ChevronRight className="w-4 h-4 ml-1" />
                   </Button>
@@ -227,22 +229,23 @@ export default function LandingPage() {
                       setLocation("/unlock");
                     }}
                     data-testid="button-hero-buy-now"
+                    className="border-white/25 text-white hover:bg-white/10 hover:text-white bg-transparent"
                   >
                     Buy Now <ArrowRight className="w-4 h-4 ml-1" />
                   </Button>
                 </div>
               </div>
-              <div className="flex items-center gap-3 text-xs text-muted-foreground/70">
+              <div className="flex items-center gap-3 text-xs text-white/45">
                 <span>Private. Structured. No sign-up required.</span>
                 <span>·</span>
-                <Link href="/free-guide" onClick={scrollTop} className="underline underline-offset-2 hover:text-foreground transition-colors" data-testid="link-hero-free-guide">
+                <Link href="/free-guide" onClick={scrollTop} className="underline underline-offset-2 text-white/55 hover:text-white transition-colors" data-testid="link-hero-free-guide">
                   Free guide →
                 </Link>
               </div>
             </div>
 
             <div className="relative" data-testid="div-dashboard-mockup">
-              <div className="rounded-xl border border-border/60 bg-background shadow-xl overflow-hidden">
+              <div className="rounded-xl border border-white/15 bg-background shadow-2xl overflow-hidden ring-1 ring-white/10">
                 <div className="bg-primary/8 border-b border-border/40 px-4 py-2.5 flex items-center gap-2">
                   <div className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
                   <div className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
@@ -317,7 +320,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-muted/30" data-testid="section-features">
+      <section className="py-16 md:py-20 bg-background" data-testid="section-features">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="grid gap-12 lg:gap-16 lg:grid-cols-2">
@@ -370,14 +373,14 @@ export default function LandingPage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-3 max-w-4xl mx-auto">
             {ANALYSIS_PREVIEW_FEATURES.map((feature, i) => (
-              <Card key={i} data-testid={`card-analysis-feature-${i}`}>
+              <Card key={i} data-testid={`card-analysis-feature-${i}`} className="shadow-sm hover:shadow-md transition-shadow border-border/60">
                 <CardContent className="pt-5 pb-5 space-y-3">
                   <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center">
                     <feature.icon className="w-4.5 h-4.5 text-primary" />
                   </div>
                   <h3 className="text-sm font-semibold">{feature.title}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{feature.body}</p>
-                  <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-primary border-primary/30">
+                  <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">
                     Included in full analysis
                   </Badge>
                 </CardContent>
@@ -387,7 +390,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-primary/5 border-y border-primary/10" data-testid="section-fsi-callout">
+      <section className="py-16 md:py-20 bg-primary/6 border-y border-primary/15" data-testid="section-fsi-callout">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto grid gap-10 lg:grid-cols-2 items-center">
             <div className="space-y-4">
@@ -403,7 +406,7 @@ export default function LandingPage() {
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Scored 0–100. Green is sustainable. Amber warrants attention. Red indicates financial stress under current assumptions. Each score comes with plain-English driver explanations.
               </p>
-              <Button onClick={startFresh} data-testid="button-fsi-cta">
+              <Button onClick={startFresh} data-testid="button-fsi-cta" className="bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/20">
                 See Your Sustainability Score <ArrowRight className="w-4 h-4 ml-1.5" />
               </Button>
             </div>
@@ -468,29 +471,51 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-muted/30" data-testid="section-pricing">
+      <section className="py-16 md:py-20 bg-primary" data-testid="section-pricing">
         <div className="container mx-auto px-4 max-w-2xl text-center space-y-6">
-          <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-pricing-headline">
-            Full Structured Analysis &mdash; &pound;79
+          <div className="inline-flex items-center gap-2 bg-gold/15 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full mb-2">
+            One-time payment · No subscription
+          </div>
+          <h2 className="text-2xl md:text-3xl font-display font-bold text-white" data-testid="text-pricing-headline">
+            Full Structured Analysis &mdash; <span className="text-gold">&pound;79</span>
           </h2>
-          <p className="text-muted-foreground leading-relaxed">
-            A single professional consultation typically costs <span className="font-semibold text-foreground">&pound;250&ndash;&pound;400 per hour</span>. This platform provides structured modelling and scenario comparison for a <span className="font-semibold text-foreground">one-time &pound;79</span>, with six months of unlimited reruns.
+          <p className="text-white/65 leading-relaxed">
+            A single professional consultation could cost <span className="font-semibold text-white">&pound;250&ndash;&pound;400 per hour</span>. This platform provides structured modelling and scenario comparison for a <span className="font-semibold text-gold">one-time &pound;79</span>, with six months of unlimited reruns.
           </p>
-          <div className="grid grid-cols-3 gap-4 text-center max-w-md mx-auto py-4">
+          <div className="grid grid-cols-3 gap-4 text-center max-w-md mx-auto py-6 border-y border-white/10">
             <div>
-              <p className="text-lg font-bold text-foreground">15 min</p>
-              <p className="text-xs text-muted-foreground">First model complete</p>
+              <p className="text-2xl font-bold text-gold">15 min</p>
+              <p className="text-xs text-white/55 mt-1">First model complete</p>
             </div>
             <div>
-              <p className="text-lg font-bold text-foreground">6 months</p>
-              <p className="text-xs text-muted-foreground">Unlimited reruns</p>
+              <p className="text-2xl font-bold text-gold">6 months</p>
+              <p className="text-xs text-white/55 mt-1">Unlimited reruns</p>
             </div>
             <div>
-              <p className="text-lg font-bold text-foreground">100%</p>
-              <p className="text-xs text-muted-foreground">Private &amp; secure</p>
+              <p className="text-2xl font-bold text-gold">100%</p>
+              <p className="text-xs text-white/55 mt-1">Private &amp; secure</p>
             </div>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground/70">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+            <Button
+              size="lg"
+              onClick={startFresh}
+              data-testid="button-pricing-start"
+              className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
+            >
+              Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => { scrollTop(); setLocation("/unlock"); }}
+              data-testid="button-pricing-buy"
+              className="border-white/25 text-white hover:bg-white/10 hover:text-white bg-transparent"
+            >
+              Buy Now — £79 <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-white/40 pt-2">
             <div className="flex items-center gap-1.5">
               <Lock className="w-3.5 h-3.5" />
               <span>All calculations in-browser</span>
@@ -506,13 +531,10 @@ export default function LandingPage() {
               <span>Stripe-secured payments</span>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground/60">
-            No subscription. No recurring fees. No sign-up required to explore.
-          </p>
         </div>
       </section>
 
-      <section className="py-16 md:py-24" data-testid="section-cta">
+      <section className="py-16 md:py-24 bg-background" data-testid="section-cta">
         <div className="container mx-auto px-4 max-w-lg text-center space-y-6">
           <h2 className="text-3xl md:text-4xl font-display font-bold" data-testid="text-cta-headline">
             Start with structure.
@@ -525,6 +547,7 @@ export default function LandingPage() {
               size="lg"
               onClick={startFresh}
               data-testid="button-cta-start"
+              className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
             >
               Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
             </Button>
@@ -562,41 +585,43 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="border-t border-border/40 py-8 bg-muted/20" data-testid="section-footer">
-        <div className="container mx-auto px-4 text-center space-y-3">
+      <footer className="py-10 bg-primary" data-testid="section-footer">
+        <div className="container mx-auto px-4 text-center space-y-4">
           <div className="flex items-center justify-center">
-            <Logo href="/" size="sm" showBrandName />
+            <Link href="/" onClick={scrollTop} className="flex items-center gap-2 group">
+              <span className="font-display font-bold text-white text-sm tracking-tight group-hover:text-gold transition-colors">DivorceCalculatorUK</span>
+            </Link>
           </div>
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            <Link href="/free-guide" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-free-guide">
+            <Link href="/free-guide" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-free-guide">
               Free Guide
             </Link>
-            <Link href="/divorce-financial-modelling" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-guides">
+            <Link href="/divorce-financial-modelling" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-guides">
               Guides
             </Link>
-            <Link href="/how-much-does-divorce-cost-uk" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-divorce-costs">
+            <Link href="/how-much-does-divorce-cost-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-divorce-costs">
               Divorce Costs
             </Link>
-            <Link href="/divorce-settlement-examples-uk" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-examples">
+            <Link href="/divorce-settlement-examples-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-examples">
               Settlement Examples
             </Link>
-            <Link href="/privacy" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-privacy">
+            <Link href="/privacy" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-privacy">
               Privacy Policy
             </Link>
-            <Link href="/terms" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-terms">
+            <Link href="/terms" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-terms">
               Terms of Use
             </Link>
-            <Link href="/methodology" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-methodology">
+            <Link href="/methodology" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-methodology">
               Model Methodology
             </Link>
-            <Link href="/recover" onClick={scrollTop} className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-recover">
+            <Link href="/recover" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-recover">
               Recover Access
             </Link>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-white/35">
             Illustrative financial modelling only. This tool does not provide legal, tax, or financial advice.
           </p>
-          <p className="text-xs text-muted-foreground/60">
+          <p className="text-xs text-white/25">
             &copy; {new Date().getFullYear()} DivorceCalculatorUK
           </p>
         </div>

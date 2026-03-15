@@ -43,7 +43,7 @@ const FAQ_ITEMS = [
   },
   {
     question: "How does this compare to a professional consultation?",
-    answer: "A single professional consultation typically costs £250–£400 per hour. This tool provides structured financial modelling for £79, allowing you to approach professional discussions with quantified assumptions already prepared.",
+    answer: "A single professional consultation could cost £250–£400 per hour. This tool provides structured financial modelling for £79, allowing you to approach professional discussions with quantified assumptions already prepared.",
   },
 ];
 
@@ -117,24 +117,35 @@ export default function UnlockPage() {
               </ul>
             </div>
 
-            <Card data-testid="section-pricing">
-              <CardContent className="pt-6 pb-6 space-y-5">
-                <div className="text-center">
-                  <div className="inline-block bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full mb-2" data-testid="badge-access-duration">
-                    Six Months Unlimited Access
+            <div
+              className="rounded-xl bg-primary border border-white/10 shadow-2xl overflow-hidden"
+              data-testid="section-pricing"
+            >
+              <div className="px-6 pt-6 pb-2 text-center border-b border-white/10 space-y-2">
+                <div className="inline-flex items-center gap-1.5 bg-gold/15 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full" data-testid="badge-access-duration">
+                  Six Months · Unlimited Access
+                </div>
+                <div className="text-5xl font-bold tracking-tight text-gold pt-1" data-testid="text-price">£79</div>
+                <div className="text-sm text-white/55 pb-2">One-time payment. No subscription.</div>
+              </div>
+              <div className="px-6 py-5 space-y-4">
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="bg-white/5 rounded-lg py-2.5">
+                    <p className="text-sm font-bold text-white">15 min</p>
+                    <p className="text-[10px] text-white/45 mt-0.5">First model</p>
                   </div>
-                  <div className="text-4xl font-bold tracking-tight" data-testid="text-price">£79</div>
-                  <div className="text-sm text-muted-foreground mt-1">One-time payment. No subscription.</div>
+                  <div className="bg-white/5 rounded-lg py-2.5">
+                    <p className="text-sm font-bold text-white">6 months</p>
+                    <p className="text-[10px] text-white/45 mt-0.5">Reruns</p>
+                  </div>
+                  <div className="bg-white/5 rounded-lg py-2.5">
+                    <p className="text-sm font-bold text-white">100%</p>
+                    <p className="text-[10px] text-white/45 mt-0.5">Private</p>
+                  </div>
                 </div>
 
-                <p className="text-xs text-muted-foreground leading-relaxed border-t pt-3">
-                  This tool provides illustrative financial modelling only and does not constitute legal, tax, or financial advice. See our{" "}
-                  <Link href="/terms" className="underline text-primary">Terms of Use</Link>{" "}
-                  for full details.
-                </p>
-
                 <Button
-                  className="w-full"
+                  className="w-full bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/30 text-base font-semibold"
                   size="lg"
                   onClick={handleCheckout}
                   disabled={checkoutLoading}
@@ -150,18 +161,18 @@ export default function UnlockPage() {
                   )}
                 </Button>
 
-                <p className="text-xs text-muted-foreground text-center">
-                  Apple Pay, Google Pay, or card
+                <p className="text-xs text-white/40 text-center">
+                  Apple Pay, Google Pay, or card · Secured by Stripe
                 </p>
 
-                <div className="text-xs text-muted-foreground text-center space-y-1">
-                  <p className="text-muted-foreground/80">14-day cooling-off period under the Consumer Rights Act 2015. See <Link href="/terms" className="underline text-primary" data-testid="link-refund-terms">Terms</Link>.</p>
+                <div className="text-xs text-white/35 text-center space-y-1 border-t border-white/10 pt-3">
+                  <p>Illustrative modelling only. Not legal or financial advice. See <Link href="/terms" className="underline text-white/55 hover:text-white transition-colors" data-testid="link-refund-terms">Terms</Link>.</p>
                   <p>
-                    Already purchased? <Link href="/recover" className="underline text-primary" data-testid="link-recover">Recover your access</Link>
+                    Already purchased? <Link href="/recover" className="underline text-white/55 hover:text-white transition-colors" data-testid="link-recover">Recover your access</Link>
                   </p>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </section>
 
