@@ -169,7 +169,7 @@ export default function WizardPage() {
 
         <Card className="mb-6">
           <CardContent className="pt-6">
-            <StepContent step={currentStep} advancedMode={advancedMode} acknowledged={acknowledged} setAcknowledged={setAcknowledged} />
+            <StepContent step={currentStep} advancedMode={advancedMode} />
           </CardContent>
         </Card>
 
@@ -190,7 +190,7 @@ export default function WizardPage() {
 
           <Button
             onClick={goNext}
-            disabled={currentStep === STEPS.length - 1 && !acknowledged}
+            disabled={false}
             data-testid="button-continue"
           >
             {currentStep === STEPS.length - 1 ? "View Full Results" : "Continue"}
@@ -202,7 +202,7 @@ export default function WizardPage() {
   );
 }
 
-function StepContent({ step, advancedMode, acknowledged, setAcknowledged }: { step: number; advancedMode: boolean; acknowledged: boolean; setAcknowledged: (v: boolean) => void }) {
+function StepContent({ step, advancedMode }: { step: number; advancedMode: boolean }) {
   switch (step) {
     case 0: return <StepWelcome />;
     case 1: return <StepSituation advancedMode={advancedMode} />;
@@ -212,7 +212,7 @@ function StepContent({ step, advancedMode, acknowledged, setAcknowledged }: { st
     case 5: return <StepIncome advancedMode={advancedMode} />;
     case 6: return <StepExpenses advancedMode={advancedMode} />;
     case 7: return <StepSupport advancedMode={advancedMode} />;
-    case 8: return <StepAssumptions acknowledged={acknowledged} setAcknowledged={setAcknowledged} />;
+    case 8: return <StepAssumptions />;
     default: return null;
   }
 }
@@ -1701,7 +1701,7 @@ function StepSupport({ advancedMode }: { advancedMode: boolean }) {
   );
 }
 
-function StepAssumptions({ acknowledged, setAcknowledged }: { acknowledged: boolean; setAcknowledged: (v: boolean) => void }) {
+function StepAssumptions() {
   const { assumptions, updateAssumptions, profile } = useAppStore();
   const nameA = profile?.partyAName || "Party A";
   const nameB = profile?.partyBName || "Party B";
