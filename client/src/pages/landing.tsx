@@ -189,9 +189,6 @@ export default function LandingPage() {
                 <Badge variant="secondary" className="text-xs px-3 py-1">
                   UK 2025/26 Tax &amp; NI Rates
                 </Badge>
-                <Badge variant="outline" className="text-xs px-3 py-1">
-                  England &amp; Wales only
-                </Badge>
               </div>
               <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight" data-testid="text-hero-headline">
                 Before you spend thousands on legal fees, understand exactly what your financial position could look like.
@@ -398,7 +395,7 @@ export default function LandingPage() {
                 Unique to this tool
               </Badge>
               <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-fsi-headline">
-                The only UK divorce tool that scores your financial sustainability — not just the numbers
+                The UK divorce tool that scores your financial sustainability — not just the numbers
               </h2>
               <p className="text-muted-foreground leading-relaxed text-sm">
                 Most calculators show you a number. The Financial Sustainability Indicator (FSI) shows you what that number <em>means</em> — scoring how viable each settlement option is for each party based on income, outgoings, housing costs, and capital position over a 5-year horizon.

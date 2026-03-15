@@ -80,7 +80,6 @@ export default function WizardPage() {
   useNoIndex();
   const [currentStep, setCurrentStep] = useState(0);
   const [advancedMode, setAdvancedMode] = useState(false);
-  const [acknowledged, setAcknowledged] = useState(false);
   const [, setLocation] = useLocation();
 
   const progress = ((currentStep) / (STEPS.length - 1)) * 100;
@@ -88,7 +87,7 @@ export default function WizardPage() {
   const goNext = useCallback(() => {
     scrollTop();
     if (currentStep === STEPS.length - 1) {
-      setLocation("/preview");
+      setLocation("/results");
     } else {
       setCurrentStep(s => Math.min(s + 1, STEPS.length - 1));
     }
@@ -1813,23 +1812,6 @@ function StepAssumptions({ acknowledged, setAcknowledged }: { acknowledged: bool
         </div>
       </div>
 
-      <Separator />
-
-      <div className="p-4 bg-muted/50 rounded-md space-y-3">
-        <p className="text-sm font-medium text-foreground">Before generating results</p>
-        <label className="flex items-start gap-3 cursor-pointer" data-testid="label-acknowledgement">
-          <input
-            type="checkbox"
-            checked={acknowledged}
-            onChange={(e) => setAcknowledged(e.target.checked)}
-            className="mt-0.5 h-4 w-4 rounded border-border accent-primary shrink-0"
-            data-testid="checkbox-acknowledgement"
-          />
-          <span className="text-sm text-muted-foreground leading-snug">
-            I understand that this tool provides illustrative financial modelling only. It does not constitute legal, tax, or financial advice, and does not predict court outcomes or settlement entitlements. Independent professional advice may be warranted before making decisions based on these outputs.
-          </span>
-        </label>
-      </div>
     </div>
   );
 }
