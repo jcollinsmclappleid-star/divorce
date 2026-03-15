@@ -338,7 +338,7 @@ export default function PreviewPage() {
               >
                 Unlock Full Analysis — £79
               </Button>
-              <p className="text-xs text-white/40 text-center">Apple Pay, Google Pay, or card</p>
+              <p className="text-xs text-white/40 text-center">Secured by Stripe</p>
             </div>
           </div>
         </section>

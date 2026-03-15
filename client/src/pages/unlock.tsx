@@ -167,7 +167,7 @@ export default function UnlockPage() {
                 </Button>
 
                 <p className="text-xs text-white/40 text-center">
-                  Apple Pay, Google Pay, or card · Secured by Stripe
+                  Secured by Stripe
                 </p>
 
                 <div className="text-xs text-white/35 text-center space-y-1 border-t border-white/10 pt-3">
