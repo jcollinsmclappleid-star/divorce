@@ -68,7 +68,7 @@ export async function registerRoutes(
       }
 
       const checkoutSession = await stripe.checkout.sessions.create({
-        automatic_payment_methods: { enabled: true },
+        payment_method_types: ['card'],
         line_items: [{ price: priceId, quantity: 1 }],
         mode: 'payment',
         success_url: `${baseUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`,

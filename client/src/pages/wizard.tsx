@@ -109,12 +109,12 @@ export default function WizardPage() {
           <Logo size="md" />
 
           <div className="flex-1 max-w-lg mx-auto hidden md:block">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
               {STEPS.map((step, i) => (
                 <button
                   key={step.id}
                   onClick={() => { scrollTop(); setCurrentStep(i); }}
-                  className={`flex items-center gap-1 text-xs px-1.5 py-1 rounded transition-colors ${
+                  className={`flex items-center gap-1.5 text-xs px-1.5 py-1 rounded transition-colors ${
                     i === currentStep
                       ? "text-primary font-semibold"
                       : i < currentStep
@@ -123,7 +123,7 @@ export default function WizardPage() {
                   }`}
                   data-testid={`stepper-step-${i}`}
                 >
-                  <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border ${
+                  <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border shrink-0 ${
                     i < currentStep
                       ? "bg-primary text-primary-foreground border-primary"
                       : i === currentStep
@@ -132,7 +132,9 @@ export default function WizardPage() {
                   }`}>
                     {i < currentStep ? <Check className="w-3 h-3" /> : i + 1}
                   </div>
-                  <span className="hidden lg:inline">{step.title}</span>
+                  {i === currentStep && (
+                    <span className="hidden lg:inline truncate max-w-[90px]">{step.title}</span>
+                  )}
                 </button>
               ))}
             </div>
@@ -1754,8 +1756,15 @@ function StepAssumptions() {
         </div>
       </div>
 
-      <div className="space-y-3">
-        <Label className="text-sm">Overall asset split (A : B)</Label>
+      <div className="space-y-4 p-4 bg-muted/30 rounded-lg border border-border/50">
+        <div className="flex items-center justify-between">
+          <Label className="text-sm font-medium">Overall asset split</Label>
+          <div className="flex items-center gap-3 text-sm font-semibold">
+            <span className="text-primary">{nameA}: {Math.round(assumptions.splitRatio * 100)}%</span>
+            <span className="text-muted-foreground/40">·</span>
+            <span className="text-foreground/70">{nameB}: {Math.round((1 - assumptions.splitRatio) * 100)}%</span>
+          </div>
+        </div>
         <Slider
           value={[assumptions.splitRatio * 100]}
           onValueChange={([v]) => updateAssumptions({ splitRatio: v / 100 })}
@@ -1763,15 +1772,24 @@ function StepAssumptions() {
           max={90}
           step={5}
           data-testid="slider-split-ratio"
+          className="mt-2"
         />
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">{nameA}: {Math.round(assumptions.splitRatio * 100)}%</span>
-          <span className="text-muted-foreground">{nameB}: {Math.round((1 - assumptions.splitRatio) * 100)}%</span>
+        <div className="flex justify-between text-[11px] text-muted-foreground/60 -mt-1">
+          <span>All to {nameB}</span>
+          <span>Equal</span>
+          <span>All to {nameA}</span>
         </div>
       </div>
 
-      <div className="space-y-3">
-        <Label className="text-sm">Pension split (A : B)</Label>
+      <div className="space-y-4 p-4 bg-muted/30 rounded-lg border border-border/50">
+        <div className="flex items-center justify-between">
+          <Label className="text-sm font-medium">Pension split</Label>
+          <div className="flex items-center gap-3 text-sm font-semibold">
+            <span className="text-primary">{nameA}: {Math.round(assumptions.splitPensionToA * 100)}%</span>
+            <span className="text-muted-foreground/40">·</span>
+            <span className="text-foreground/70">{nameB}: {Math.round((1 - assumptions.splitPensionToA) * 100)}%</span>
+          </div>
+        </div>
         <Slider
           value={[assumptions.splitPensionToA * 100]}
           onValueChange={([v]) => updateAssumptions({ splitPensionToA: v / 100 })}
@@ -1779,10 +1797,12 @@ function StepAssumptions() {
           max={100}
           step={5}
           data-testid="slider-pension-split"
+          className="mt-2"
         />
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">{nameA}: {Math.round(assumptions.splitPensionToA * 100)}%</span>
-          <span className="text-muted-foreground">{nameB}: {Math.round((1 - assumptions.splitPensionToA) * 100)}%</span>
+        <div className="flex justify-between text-[11px] text-muted-foreground/60 -mt-1">
+          <span>All to {nameB}</span>
+          <span>Equal</span>
+          <span>All to {nameA}</span>
         </div>
       </div>
 
