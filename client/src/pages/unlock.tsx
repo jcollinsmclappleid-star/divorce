@@ -101,7 +101,7 @@ export default function UnlockPage() {
               Your Financial Position Has Been Modelled.
             </h1>
             <p className="text-muted-foreground max-w-lg mx-auto text-sm leading-relaxed">
-              Unlock the complete structured analysis to compare settlement scenarios and assess indicative sustainability.
+              Unlock the complete structured analysis to compare settlement scenarios and assess indicative sustainability. Your data is already entered — instant access after payment.
             </p>
           </div>
 
@@ -159,9 +159,12 @@ export default function UnlockPage() {
                   )}
                 </Button>
 
+                <p className="text-xs text-muted-foreground text-center">
+                  Apple Pay, Google Pay, or card
+                </p>
+
                 <div className="text-xs text-muted-foreground text-center space-y-1">
-                  <p>Secure checkout via Stripe. No card details stored.</p>
-                  <p>14-day cooling-off period under the Consumer Rights Act 2015. See <Link href="/terms" className="underline text-primary" data-testid="link-refund-terms">Terms</Link> for details.</p>
+                  <p className="text-muted-foreground/80">14-day cooling-off period under the Consumer Rights Act 2015. See <Link href="/terms" className="underline text-primary" data-testid="link-refund-terms">Terms</Link>.</p>
                   <p>
                     Already purchased? <Link href="/recover" className="underline text-primary" data-testid="link-recover">Recover your access</Link>
                   </p>
@@ -171,7 +174,7 @@ export default function UnlockPage() {
           </div>
         </section>
 
-        <section className="flex justify-center" data-testid="section-trust-signals">
+        <section className="flex justify-center py-4 border-y" data-testid="section-trust-signals">
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             {TRUST_SIGNALS.map((signal, i) => (
               <div key={i} className="flex items-center gap-2" data-testid={`text-trust-signal-${i}`}>
@@ -201,8 +204,9 @@ export default function UnlockPage() {
         </section>
 
         <section className="text-center space-y-4 pb-8" data-testid="section-reinforcement">
+          <p className="text-sm font-medium">Ready to see your scenarios?</p>
           <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-            Your assumptions are already entered. Unlock now to review the complete financial model while your inputs are current.
+            Unlock now to review all settlement scenarios side-by-side with 5-year projections. Your inputs are saved — access expires in 6 months.
           </p>
           <Button
             size="lg"
