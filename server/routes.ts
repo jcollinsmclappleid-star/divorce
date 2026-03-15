@@ -47,12 +47,14 @@ export async function registerRoutes(
 
       const products = await stripe.products.search({ query: "name:'Structured Financial Analysis'" });
       if (products.data.length === 0) {
-        return res.status(500).json({ message: 'Product not configured' });
+        console.error('Stripe product not found. Create product "Structured Financial Analysis" in Stripe Dashboard');
+        return res.status(500).json({ message: 'Payment product not configured. Please contact support.' });
       }
 
       const prices = await stripe.prices.list({ product: products.data[0].id, active: true });
       if (prices.data.length === 0) {
-        return res.status(500).json({ message: 'Price not configured' });
+        console.error('No active price found for product. Create a price in Stripe Dashboard');
+        return res.status(500).json({ message: 'Payment price not configured. Please contact support.' });
       }
 
       const priceId = prices.data[0].id;
@@ -77,8 +79,8 @@ export async function registerRoutes(
 
       res.json({ url: checkoutSession.url });
     } catch (err: any) {
-      console.error('Checkout error:', err);
-      res.status(500).json({ message: 'Failed to create checkout session' });
+      console.error('Checkout error:', err?.message || err);
+      res.status(500).json({ message: err?.message || 'Failed to create checkout session' });
     }
   });
 

@@ -199,7 +199,7 @@ export default function LandingPage() {
               <p className="text-sm text-white/45">
                 Illustrative modelling only. Not legal, tax, or financial advice.
               </p>
-              <div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3 pt-1">
+              <div className="flex flex-col items-center lg:items-start justify-center lg:justify-start gap-3 pt-1">
                 <div className="flex flex-col items-center lg:items-start gap-1">
                   <Button
                     size="lg"
@@ -211,27 +211,26 @@ export default function LandingPage() {
                   </Button>
                   <p className="text-xs text-white/45">From £79 — one-time payment. No subscription.</p>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-2">
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto justify-center lg:justify-start">
                   <Button
                     variant="outline"
-                    size="lg"
+                    size="sm"
                     onClick={() => loadExample(0)}
                     data-testid="button-hero-example"
                     className="border-white/25 text-white hover:bg-white/10 hover:text-white bg-transparent"
                   >
-                    View Example Output <ChevronRight className="w-4 h-4 ml-1" />
+                    View Example <ChevronRight className="w-3.5 h-3.5 ml-1" />
                   </Button>
                   <Button
-                    variant="outline"
-                    size="lg"
+                    size="sm"
                     onClick={() => {
                       scrollTop();
                       setLocation("/unlock");
                     }}
                     data-testid="button-hero-buy-now"
-                    className="border-white/25 text-white hover:bg-white/10 hover:text-white bg-transparent"
+                    className="bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/25"
                   >
-                    Buy Now <ArrowRight className="w-4 h-4 ml-1" />
+                    Buy Now — £79 <ArrowRight className="w-3.5 h-3.5 ml-1" />
                   </Button>
                 </div>
               </div>

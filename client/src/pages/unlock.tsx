@@ -70,11 +70,16 @@ export default function UnlockPage() {
         body: JSON.stringify({ sessionToken }),
       });
       const data = await res.json();
-      if (data.url) {
+      if (res.ok && data.url) {
         window.location.href = data.url;
+      } else {
+        console.error('Checkout failed:', data.message || 'Unknown error');
+        alert('Payment page failed to load. Please try again.');
+        setCheckoutLoading(false);
       }
     } catch (err) {
       console.error('Checkout error:', err);
+      alert('An error occurred. Please try again.');
       setCheckoutLoading(false);
     }
   }

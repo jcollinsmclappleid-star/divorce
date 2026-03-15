@@ -305,6 +305,44 @@ export default function PreviewPage() {
           </Card>
         </section>
 
+        {/* Pricing card CTA */}
+        <section>
+          <div className="rounded-xl bg-primary border border-white/10 shadow-2xl overflow-hidden">
+            <div className="px-6 pt-6 pb-2 text-center border-b border-white/10 space-y-2">
+              <div className="inline-flex items-center gap-1.5 bg-gold/15 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full">
+                Six Months · Unlimited Access
+              </div>
+              <div className="text-5xl font-bold tracking-tight text-gold pt-1">£79</div>
+              <div className="text-sm text-white/55 pb-2">One-time payment. No subscription.</div>
+            </div>
+            <div className="px-6 py-5 space-y-4">
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div className="bg-white/5 rounded-lg py-2.5">
+                  <p className="text-sm font-bold text-white">15 min</p>
+                  <p className="text-[10px] text-white/45 mt-0.5">First model</p>
+                </div>
+                <div className="bg-white/5 rounded-lg py-2.5">
+                  <p className="text-sm font-bold text-white">6 months</p>
+                  <p className="text-[10px] text-white/45 mt-0.5">Reruns</p>
+                </div>
+                <div className="bg-white/5 rounded-lg py-2.5">
+                  <p className="text-sm font-bold text-white">100%</p>
+                  <p className="text-[10px] text-white/45 mt-0.5">Private</p>
+                </div>
+              </div>
+              <Button
+                className="w-full bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/30 text-base font-semibold"
+                size="lg"
+                onClick={() => { scrollTop(); navigate("/unlock"); }}
+                data-testid="button-unlock-pricing"
+              >
+                Unlock Full Analysis — £79
+              </Button>
+              <p className="text-xs text-white/40 text-center">Apple Pay, Google Pay, or card</p>
+            </div>
+          </div>
+        </section>
+
         {/* Email lead capture */}
         <section>
           <Card className="border-primary/20" data-testid="card-email-capture">
