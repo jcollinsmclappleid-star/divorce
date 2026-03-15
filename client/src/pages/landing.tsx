@@ -158,12 +158,25 @@ export default function LandingPage() {
             <Link href="/methodology" onClick={scrollTop} className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-methodology">Methodology</Link>
             <Link href="/divorce-financial-modelling" onClick={scrollTop} className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-guides">Guides</Link>
           </div>
-          <Button
-            onClick={startFresh}
-            data-testid="button-nav-start"
-          >
-            Start Now <ArrowRight className="w-4 h-4 ml-1" />
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                scrollTop();
+                setLocation("/unlock");
+              }}
+              data-testid="button-nav-buy-now"
+            >
+              Buy Now
+            </Button>
+            <Button
+              onClick={startFresh}
+              data-testid="button-nav-start"
+            >
+              Start Now <ArrowRight className="w-4 h-4 ml-1" />
+            </Button>
+          </div>
         </div>
       </nav>
 
@@ -200,14 +213,27 @@ export default function LandingPage() {
                   </Button>
                   <p className="text-xs text-muted-foreground/70">From £79 — one-time payment. No subscription.</p>
                 </div>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => loadExample(0)}
-                  data-testid="button-hero-example"
-                >
-                  View Example Output <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={() => loadExample(0)}
+                    data-testid="button-hero-example"
+                  >
+                    View Example Output <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={() => {
+                      scrollTop();
+                      setLocation("/unlock");
+                    }}
+                    data-testid="button-hero-buy-now"
+                  >
+                    Buy Now <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </div>
               </div>
               <div className="flex items-center gap-3 text-xs text-muted-foreground/70">
                 <span>Private. Structured. No sign-up required.</span>
@@ -497,13 +523,26 @@ export default function LandingPage() {
           <p className="text-muted-foreground max-w-md mx-auto leading-relaxed">
             Seeing the numbers clearly, before conversations begin, changes the nature of those conversations entirely.
           </p>
-          <Button
-            size="lg"
-            onClick={startFresh}
-            data-testid="button-cta-start"
-          >
-            Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              size="lg"
+              onClick={startFresh}
+              data-testid="button-cta-start"
+            >
+              Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => {
+                scrollTop();
+                setLocation("/unlock");
+              }}
+              data-testid="button-cta-buy-now"
+            >
+              Buy Now <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+          </div>
           <p className="text-xs text-muted-foreground">
             Private and secure. All calculations run in your browser.
           </p>
