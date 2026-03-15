@@ -22,9 +22,10 @@ export default function ContactPage() {
         <h1 className="text-3xl font-display font-bold mb-2" data-testid="text-contact-title">
           Contact &amp; Support
         </h1>
-        <p className="text-muted-foreground mb-10">
-          We're a small team and we read every message. We aim to reply within one working day.
+        <p className="text-muted-foreground mb-2">
+          All support messages are read and replied to directly. We aim to respond within one working day.
         </p>
+        <p className="text-sm text-muted-foreground mb-10">UK-based support.</p>
 
         <div className="rounded-xl border border-border bg-card p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-10" data-testid="card-email-contact">
           <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
