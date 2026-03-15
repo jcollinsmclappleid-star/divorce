@@ -60,12 +60,22 @@ export async function registerRoutes(
       const priceId = prices.data[0].id;
 
       const baseUrl = `${req.protocol}://${req.get('host')}`;
+
+      const logoUrl = 'https://divorcecalculatoruk.co.uk/og-image.png';
+      const product = products.data[0];
+      if (!product.images || product.images.length === 0) {
+        await stripe.products.update(product.id, { images: [logoUrl] });
+      }
+
       const checkoutSession = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
+        automatic_payment_methods: { enabled: true },
         line_items: [{ price: priceId, quantity: 1 }],
         mode: 'payment',
         success_url: `${baseUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${baseUrl}/unlock`,
+        custom_text: {
+          submit: { message: 'You\'ll get instant access for 6 months. All calculations remain private in your browser.' },
+        },
         metadata: {
           sessionToken,
         },
