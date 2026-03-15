@@ -56,6 +56,7 @@ Technical SEO is implemented for `divorcecalculatoruk.co.uk` with dynamic page t
 - `/is-50-50-split-automatic-uk`, `/can-i-keep-the-house-after-divorce-uk`, `/how-are-pensions-divided-in-divorce-uk` — FAQ pages
 - `/how-much-does-divorce-cost-uk`, `/divorce-financial-settlement-calculator-uk`, `/who-gets-house-divorce-uk`, `/how-pensions-split-divorce-uk`, `/divorce-settlement-examples-uk` — 5 SEO authority pages (added 2026)
 - `/free-guide` — Free UK Divorce Finances Guide (5 chapters, email capture, inline CTAs)
+- `/contact` — Contact & Support page (support@divorcecalculatoruk.co.uk, quick-help paths, non-advisory disclaimer)
 
 ### Access Management
 

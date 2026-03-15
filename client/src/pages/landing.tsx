@@ -616,6 +616,9 @@ export default function LandingPage() {
             <Link href="/recover" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-recover">
               Recover Access
             </Link>
+            <Link href="/contact" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-contact">
+              Contact
+            </Link>
           </div>
           <p className="text-xs text-white/35">
             Illustrative financial modelling only. This tool does not provide legal, tax, or financial advice.
