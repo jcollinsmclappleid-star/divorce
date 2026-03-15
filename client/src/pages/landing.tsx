@@ -134,6 +134,7 @@ export default function LandingPage() {
   const reset = useAppStore((s) => s.reset);
 
   const startFresh = () => {
+    scrollTop();
     reset();
     setLocation("/wizard");
   };
@@ -183,7 +184,7 @@ export default function LandingPage() {
                 Before you spend thousands on legal fees, understand exactly what your financial position could look like.
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                The UK's only divorce financial modelling tool that scores each settlement option for long-term sustainability — not just the numbers, but what they mean for your future.
+                The UK's divorce financial modelling tool that scores each settlement option for long-term sustainability — not just the numbers, but what they mean for your future.
               </p>
               <p className="text-sm text-muted-foreground/80">
                 Illustrative modelling only. Not legal, tax, or financial advice.
