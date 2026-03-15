@@ -57,6 +57,7 @@ Technical SEO is implemented for `divorcecalculatoruk.co.uk` with dynamic page t
 - `/how-much-does-divorce-cost-uk`, `/divorce-financial-settlement-calculator-uk`, `/who-gets-house-divorce-uk`, `/how-pensions-split-divorce-uk`, `/divorce-settlement-examples-uk` — 5 SEO authority pages (added 2026)
 - `/free-guide` — Free UK Divorce Finances Guide (5 chapters, email capture, inline CTAs)
 - `/contact` — Contact & Support page (support@divorcecalculatoruk.co.uk, quick-help paths, non-advisory disclaimer)
+- `/refund-policy` — Standalone Refund Policy page (UK Consumer Contracts Regulations 2013, Consumer Rights Act 2015, billing errors, technical issues, refund process via support email)
 
 ### Access Management
 

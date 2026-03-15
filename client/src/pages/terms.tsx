@@ -107,20 +107,25 @@ export default function TermsPage() {
               <li>A limited preview of modelling results is available free of charge</li>
               <li>Full access to the structured financial analysis requires a one-time payment of £79</li>
               <li>Full access is valid for 6 months from the date of purchase</li>
-              <li>Access is linked to your browser session token, which is stored locally on your device. Clearing browser data, switching devices, or using private/incognito browsing may result in loss of access. We are unable to recover or transfer session tokens</li>
+              <li>Access is linked to your browser session token, which is stored locally on your device. Clearing browser data, switching devices, or using private/incognito browsing may result in loss of access. If you lose your access link, you can recover it via the <Link href="/recover" className="underline text-primary">Recover Access</Link> page using the email address provided at checkout</li>
               <li>Payments are processed securely by Stripe. DivorceCalculatorUK does not store or have access to your payment card details</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground">8. Cancellation and Refund Policy</h2>
-            <p>Under the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013:</p>
-            <ul className="list-disc pl-6 space-y-1">
-              <li>You have a 14-day cooling-off period from the date of purchase during which you may cancel and receive a full refund</li>
-              <li>By proceeding to access the full analysis within the cooling-off period, you expressly consent to the immediate supply of digital content and acknowledge that you will lose your statutory right to cancel once the digital content has been accessed</li>
-              <li>Where you have provided explicit consent via the terms acceptance checkbox on the payment page, this consent is deemed to have been given at the time of purchase</li>
-            </ul>
-            <p>Under the Consumer Rights Act 2015, if the digital content is not of satisfactory quality, not fit for a particular purpose, or not as described, you may be entitled to a repair, replacement, or refund. Nothing in these terms affects your statutory rights.</p>
+            <h2 className="text-xl font-semibold text-foreground">8. Cancellation and Refunds</h2>
+            <p>
+              Our full <Link href="/refund-policy" className="underline text-primary">Refund Policy</Link> is
+              published separately and sets out your rights in detail, including the 14-day cooling-off period
+              under the Consumer Contracts Regulations 2013 and your rights under the Consumer Rights Act 2015.
+              Nothing in these Terms of Use limits your statutory rights as a consumer.
+            </p>
+            <p>
+              To request a refund or raise a billing query, contact us at{" "}
+              <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline text-primary">
+                support@divorcecalculatoruk.co.uk
+              </a>.
+            </p>
           </section>
 
           <section>

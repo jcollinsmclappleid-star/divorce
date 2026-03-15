@@ -610,6 +610,9 @@ export default function LandingPage() {
             <Link href="/terms" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-terms">
               Terms of Use
             </Link>
+            <Link href="/refund-policy" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-refund-policy">
+              Refund Policy
+            </Link>
             <Link href="/methodology" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-methodology">
               Model Methodology
             </Link>
