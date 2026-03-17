@@ -167,19 +167,20 @@ export default function LandingPage() {
           </div>
           <div className="flex gap-2">
             <Button
-              variant="outline"
               size="sm"
               onClick={() => {
                 scrollTop();
                 setLocation("/unlock");
               }}
               data-testid="button-nav-buy-now"
+              className="bg-gold hover:bg-gold/90 text-white border-0"
             >
               Buy Now
             </Button>
             <Button
               onClick={startFresh}
               data-testid="button-nav-start"
+              className="bg-gold hover:bg-gold/90 text-white border-0"
             >
               Start Now <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
