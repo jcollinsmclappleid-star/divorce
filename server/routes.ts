@@ -59,7 +59,8 @@ export async function registerRoutes(
         return res.status(500).json({ message: 'Payment price not configured. Please contact support.' });
       }
 
-      const priceId = prices.data[0].id;
+      // Use the £79 price specifically
+      const priceId = 'price_1TBKqaDv8IzJrrwISpwdyA32';
 
       const baseUrl = `${req.protocol}://${req.get('host')}`;
 
