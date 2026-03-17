@@ -6,6 +6,7 @@ import { z } from "zod";
 import crypto from "crypto";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { seedDatabase } from "./seed";
+import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail } from "./email";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 function rateLimit(key: string, maxAttempts: number, windowMs: number): boolean {
@@ -109,11 +110,16 @@ export async function registerRoutes(
       if (session.payment_status === 'paid') {
         const purchase = await storage.getPurchaseByCheckoutSessionId(checkoutSessionId);
         if (purchase && purchase.status !== 'paid') {
+          const email = session.customer_details?.email ?? null;
           await storage.markPurchasePaid(
             purchase.id,
             session.payment_intent as string,
-            session.customer_details?.email ?? null
+            email
           );
+          if (email) {
+            const updatedForEmail = await storage.getPurchaseByCheckoutSessionId(checkoutSessionId);
+            sendPurchaseConfirmationEmail(email, purchase.sessionToken, updatedForEmail?.expiresAt ?? null).catch(() => {});
+          }
         }
         const updatedPurchase = await storage.getPurchaseByCheckoutSessionId(checkoutSessionId);
         res.json({ 
@@ -173,11 +179,12 @@ export async function registerRoutes(
         return res.json({ found: true, expired: true });
       }
 
+      sendAccessRecoveryEmail(email, validPurchase.sessionToken, validPurchase.expiresAt).catch(() => {});
+
       return res.json({
         found: true,
         expired: false,
-        sessionToken: validPurchase.sessionToken,
-        expiresAt: validPurchase.expiresAt,
+        emailSent: true,
       });
     } catch (err) {
       if (err instanceof z.ZodError) {

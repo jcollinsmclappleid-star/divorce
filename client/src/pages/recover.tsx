@@ -5,14 +5,13 @@ import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Mail, CheckCircle, AlertTriangle, Loader2 } from "lucide-react";
 import { Logo } from "@/components/logo";
 
 type RecoverState =
   | { status: "idle" }
   | { status: "loading" }
-  | { status: "recovered"; expiresAt: string }
+  | { status: "sent"; email: string }
   | { status: "expired" }
   | { status: "not_found" }
   | { status: "error"; message: string };
@@ -53,8 +52,7 @@ export default function RecoverPage() {
       } else if (data.expired) {
         setState({ status: "expired" });
       } else {
-        localStorage.setItem("dfm-session-token", data.sessionToken);
-        setState({ status: "recovered", expiresAt: data.expiresAt });
+        setState({ status: "sent", email: email.trim() });
       }
     } catch {
       setState({ status: "error", message: "Connection error. Please try again." });
@@ -80,31 +78,24 @@ export default function RecoverPage() {
             </div>
             <CardTitle className="text-xl font-display" data-testid="text-recover-title">Recover Your Access</CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              Enter the email address you used when you purchased access. We'll restore your session.
+              Enter the email address you used when you purchased access. We'll send you a link to get straight back in.
             </p>
           </CardHeader>
           <CardContent>
-            {state.status === "recovered" ? (
+            {state.status === "sent" ? (
               <div className="text-center space-y-4" data-testid="section-recovery-success">
                 <div className="mx-auto w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center">
                   <CheckCircle className="w-6 h-6 text-emerald-600" />
                 </div>
                 <div>
-                  <p className="font-semibold text-foreground">Access Restored</p>
+                  <p className="font-semibold text-foreground">Check your inbox</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Your access has been recovered. It is valid until{" "}
-                    <span className="font-medium text-foreground">
-                      {new Date(state.expiresAt).toLocaleDateString("en-GB", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </span>.
+                    We've sent an access link to <span className="font-medium text-foreground">{state.email}</span>. Click the link in the email to restore your access.
                   </p>
                 </div>
-                <Button onClick={() => setLocation("/results")} className="w-full" data-testid="button-go-to-results">
-                  Go to My Results
-                </Button>
+                <p className="text-xs text-muted-foreground/70 leading-relaxed">
+                  Can't find it? Check your spam or junk folder. The email comes from noreply@divorcecalculatoruk.co.uk.
+                </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -124,7 +115,7 @@ export default function RecoverPage() {
                   <div className="flex items-start gap-2 p-3 rounded-md bg-muted" data-testid="message-not-found">
                     <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
                     <p className="text-sm text-muted-foreground">
-                      We couldn't find a purchase linked to that email address. Please check the email you used during checkout, or contact us if you need help.
+                      We couldn't find a purchase linked to that email. Please check the email you used during checkout, or <a href="/contact" className="underline">contact support</a> if you need help.
                     </p>
                   </div>
                 )}
@@ -152,14 +143,14 @@ export default function RecoverPage() {
                   data-testid="button-recover-submit"
                 >
                   {state.status === "loading" ? (
-                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Looking up...</>
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Looking up…</>
                   ) : (
-                    "Recover Access"
+                    "Send Access Link"
                   )}
                 </Button>
 
                 <p className="text-[10px] text-muted-foreground/70 text-center leading-relaxed">
-                  We only use your email to look up your existing purchase. No data is stored from this form. See our{" "}
+                  We only use your email to look up your existing purchase and send you an access link. See our{" "}
                   <a href="/privacy" className="underline">Privacy Policy</a>.
                 </p>
               </form>

@@ -33,6 +33,7 @@ import SeoPensionsPage from "@/pages/content/seo-pensions";
 import SeoSettlementExamplesPage from "@/pages/content/seo-settlement-examples";
 import ContactPage from "@/pages/contact";
 import RefundPolicyPage from "@/pages/refund-policy";
+import AccessPage from "@/pages/access";
 
 function Router() {
   return (
@@ -62,6 +63,7 @@ function Router() {
       <Route path="/who-gets-house-divorce-uk" component={SeoWhoGetsHousePage} />
       <Route path="/how-pensions-split-divorce-uk" component={SeoPensionsPage} />
       <Route path="/divorce-settlement-examples-uk" component={SeoSettlementExamplesPage} />
+      <Route path="/access" component={AccessPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/refund-policy" component={RefundPolicyPage} />
       <Route path="/results">
