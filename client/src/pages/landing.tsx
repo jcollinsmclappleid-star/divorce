@@ -8,7 +8,7 @@ import {
   Calculator, Shield, ArrowRight, ChevronRight,
   BarChart3, Lock,
   FileText, TrendingUp, Activity,
-  Check
+  Check, Scale
 } from "lucide-react";
 import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
 import { useAppStore } from "@/hooks/use-store";
@@ -587,6 +587,39 @@ export default function LandingPage() {
                 <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-14 md:py-16 bg-background border-t border-border/40" data-testid="section-popular-guides">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <h2 className="text-xl md:text-2xl font-display font-bold text-center mb-2">Popular Guides</h2>
+          <p className="text-sm text-muted-foreground text-center mb-8">Understand the key topics before you model your position.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Link href="/divorce-financial-settlement-calculator-uk" onClick={scrollTop} data-testid="link-guide-settlement-calc" className="group block p-5 rounded-lg border border-border hover:border-primary/40 hover:shadow-md transition-all bg-background">
+              <div className="w-8 h-8 rounded-md bg-primary/8 flex items-center justify-center mb-3 group-hover:bg-primary/12 transition-colors">
+                <Scale className="w-4 h-4 text-primary" />
+              </div>
+              <h3 className="text-sm font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">How Assets Are Divided</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">How UK courts approach divorce financial settlements — and what drives the outcome.</p>
+              <span className="inline-flex items-center gap-1 mt-3 text-xs font-medium text-primary">Read guide <ChevronRight className="w-3 h-3" /></span>
+            </Link>
+            <Link href="/how-much-does-divorce-cost-uk" onClick={scrollTop} data-testid="link-guide-divorce-costs" className="group block p-5 rounded-lg border border-border hover:border-primary/40 hover:shadow-md transition-all bg-background">
+              <div className="w-8 h-8 rounded-md bg-primary/8 flex items-center justify-center mb-3 group-hover:bg-primary/12 transition-colors">
+                <TrendingUp className="w-4 h-4 text-primary" />
+              </div>
+              <h3 className="text-sm font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">How Much Does Divorce Cost?</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">A breakdown of typical legal fees, court costs, and financial advice costs in the UK.</p>
+              <span className="inline-flex items-center gap-1 mt-3 text-xs font-medium text-primary">Read guide <ChevronRight className="w-3 h-3" /></span>
+            </Link>
+            <Link href="/who-gets-house-divorce-uk" onClick={scrollTop} data-testid="link-guide-who-gets-house" className="group block p-5 rounded-lg border border-border hover:border-primary/40 hover:shadow-md transition-all bg-background">
+              <div className="w-8 h-8 rounded-md bg-primary/8 flex items-center justify-center mb-3 group-hover:bg-primary/12 transition-colors">
+                <FileText className="w-4 h-4 text-primary" />
+              </div>
+              <h3 className="text-sm font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">Who Gets the House?</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">The factors that determine what happens to the family home when a marriage ends.</p>
+              <span className="inline-flex items-center gap-1 mt-3 text-xs font-medium text-primary">Read guide <ChevronRight className="w-3 h-3" /></span>
+            </Link>
           </div>
         </div>
       </section>
