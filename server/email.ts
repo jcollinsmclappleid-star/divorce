@@ -1,16 +1,25 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
-let resend: Resend | null = null;
+let transporter: nodemailer.Transporter | null = null;
 
-function getResend(): Resend | null {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return null;
-  if (!resend) resend = new Resend(apiKey);
-  return resend;
+function getTransporter(): nodemailer.Transporter | null {
+  const email = process.env.EMAIL_USER;
+  const password = process.env.EMAIL_PASSWORD;
+
+  if (!email || !password) return null;
+  if (!transporter) {
+    transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: email,
+        pass: password,
+      },
+    });
+  }
+  return transporter;
 }
 
-const REPLY_TO = 'support@divorcecalculatoruk.co.uk';
-const FROM = process.env.EMAIL_FROM || 'DivorceCalculatorUK <onboarding@resend.dev>';
+const FROM = process.env.EMAIL_USER || 'noreply@divorcecalculatoruk.co.uk';
 
 function formatDate(date: Date | string | null): string {
   if (!date) return 'unknown';
@@ -66,9 +75,9 @@ export async function sendPurchaseConfirmationEmail(
   sessionToken: string,
   expiresAt: Date | string | null
 ): Promise<void> {
-  const client = getResend();
-  if (!client) {
-    console.warn('[email] RESEND_API_KEY not set — skipping purchase confirmation email');
+  const transport = getTransporter();
+  if (!transport) {
+    console.warn('[email] EMAIL_USER/EMAIL_PASSWORD not set — skipping purchase confirmation email');
     return;
   }
 
@@ -107,10 +116,9 @@ export async function sendPurchaseConfirmationEmail(
   `);
 
   try {
-    await client.emails.send({
+    await transport.sendMail({
       from: FROM,
       to: email,
-      replyTo: REPLY_TO,
       subject: 'Your DivorceCalculatorUK access is ready',
       html,
     });
@@ -125,9 +133,9 @@ export async function sendAccessRecoveryEmail(
   sessionToken: string,
   expiresAt: Date | string | null
 ): Promise<void> {
-  const client = getResend();
-  if (!client) {
-    console.warn('[email] RESEND_API_KEY not set — skipping recovery email');
+  const transport = getTransporter();
+  if (!transport) {
+    console.warn('[email] EMAIL_USER/EMAIL_PASSWORD not set — skipping recovery email');
     return;
   }
 
@@ -166,10 +174,9 @@ export async function sendAccessRecoveryEmail(
   `);
 
   try {
-    await client.emails.send({
+    await transport.sendMail({
       from: FROM,
       to: email,
-      replyTo: REPLY_TO,
       subject: 'Your DivorceCalculatorUK access link',
       html,
     });
