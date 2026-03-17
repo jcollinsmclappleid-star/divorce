@@ -1,0 +1,97 @@
+I need you to improve my live website for Google indexing and SEO readiness without breaking the design, payment flow, or existing functionality.
+
+Project:
+- Domain: https://divorcecalculatoruk.co.uk
+- Product: UK divorce financial calculator / settlement modelling tool
+- Goal: make the site technically SEO-ready, generate sitemap/robots, improve metadata, and strengthen homepage search relevance
+- Important: do not change the premium look and feel, do not break Stripe checkout, do not remove existing content unless replaced with stronger SEO-aligned wording
+
+Tasks to complete:
+
+1) Technical SEO foundation
+- Create a valid /robots.txt file with:
+  - User-agent: *
+  - Allow: /
+  - Sitemap: https://divorcecalculatoruk.co.uk/sitemap.xml
+- Create a valid /sitemap.xml file that includes:
+  - homepage
+  - calculator page
+  - terms page
+  - privacy page
+  - disclaimer page
+  - any existing SEO/content pages
+- Ensure all public pages return proper 200 status codes
+- Ensure canonical tags are added on all key pages
+- Use the canonical domain as:
+  - https://divorcecalculatoruk.co.uk
+- Ensure there is no duplicate-indexing issue between www/non-www if configurable in app logic
+
+2) Homepage SEO
+Update the homepage SEO metadata:
+- Title tag:
+  Divorce Calculator UK (2026) | Financial Settlement Tool
+- Meta description:
+  Estimate your UK divorce settlement with a structured financial modelling tool. Compare scenarios, assess sustainability, and understand long-term outcomes.
+- Add an H1 that is strong for SEO but still premium in tone:
+  Divorce Financial Calculator UK
+- Add supporting copy near the hero or above the fold that naturally includes:
+  - divorce calculator UK
+  - divorce financial settlement
+  - model different settlement scenarios
+  - long-term financial outcomes
+Do not make it spammy. Keep it elegant and conversion-focused.
+
+3) Structured data
+Add JSON-LD schema markup where appropriate:
+- WebSite schema
+- WebApplication or SoftwareApplication schema for the calculator
+Include:
+- name
+- url
+- description
+- applicationCategory if relevant
+- operatingSystem = Web
+Do not invent ratings or reviews.
+
+4) Trust and quality pages
+Ensure these pages exist and are linked in footer/navigation if not already:
+- Privacy Policy
+- Terms
+- Disclaimer
+- Contact
+- About
+If any are missing, create clean placeholder pages with professional copy aligned to a UK informational financial-modelling tool.
+Important:
+- Clearly state this is informational modelling only
+- Not legal or financial advice
+- Keep language credible and polished
+
+5) Internal linking
+- Add internal links from homepage and content sections to the main calculator page using natural anchor text such as:
+  - use the calculator
+  - model your outcome
+  - compare settlement scenarios
+- Add footer links to all trust pages
+- If blog/content pages exist, add contextual links back to the calculator
+
+6) Performance and crawlability
+- Review images and assets for obvious optimisation opportunities without reducing visible quality too much
+- Ensure pages are mobile-friendly
+- Ensure there are no obvious render-blocking or broken-script issues
+- Ensure the site can be crawled and metadata is rendered correctly
+
+7) Output required
+After making changes, provide:
+- a list of files created or updated
+- the final page titles and meta descriptions used
+- the URLs included in sitemap.xml
+- any follow-up actions I should take in Google Search Console
+
+Important guardrails:
+- Do not touch Stripe configuration or price IDs
+- Do not alter payment behaviour
+- Do not introduce dummy content that sounds robotic
+- Keep all copy premium, trustworthy, and UK-relevant
+- Preserve current styling as much as possible
+
+If the project structure prevents any of the above, explain exactly what is blocked and propose the safest implementation path.

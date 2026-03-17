@@ -1,10 +1,15 @@
 import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useMetaTags } from "@/hooks/use-meta-tags";
 import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 export default function MethodologyPage() {
   useDocumentTitle("Model Methodology & Limitations | DivorceCalculatorUK");
+  useMetaTags({
+    description: "How DivorceCalculatorUK calculates divorce financial settlement scenarios. UK 2025/26 income tax and National Insurance rates, scope, assumptions, and limitations explained.",
+    canonical: "https://divorcecalculatoruk.co.uk/methodology",
+  });
   const [, setLocation] = useLocation();
 
   return (

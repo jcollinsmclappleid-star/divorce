@@ -1,10 +1,15 @@
 import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useMetaTags } from "@/hooks/use-meta-tags";
 import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 export default function PrivacyPage() {
   useDocumentTitle("Privacy Policy | DivorceCalculatorUK");
+  useMetaTags({
+    description: "DivorceCalculatorUK privacy policy. How we collect, use, and protect your personal data in accordance with UK GDPR and the Data Protection Act 2018.",
+    canonical: "https://divorcecalculatoruk.co.uk/privacy",
+  });
   const [, setLocation] = useLocation();
 
   return (

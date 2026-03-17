@@ -13,6 +13,7 @@ import {
 import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
 import { useAppStore } from "@/hooks/use-store";
 import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useMetaTags } from "@/hooks/use-meta-tags";
 import { Logo } from "@/components/logo";
 
 const WHAT_YOU_GET = [
@@ -127,7 +128,13 @@ const ANALYSIS_PREVIEW_FEATURES = [
 ];
 
 export default function LandingPage() {
-  useDocumentTitle("Divorce Financial Settlement Calculator UK | DivorceCalculatorUK");
+  useDocumentTitle("Divorce Calculator UK (2026) | Financial Settlement Tool");
+  useMetaTags({
+    description: "Estimate your UK divorce settlement with a structured financial modelling tool. Compare scenarios, assess sustainability, and understand long-term financial outcomes. UK 2025/26 tax rules.",
+    canonical: "https://divorcecalculatoruk.co.uk/",
+    ogTitle: "Divorce Calculator UK (2026) | Financial Settlement Tool",
+    ogDescription: "Model different divorce financial settlement scenarios with UK 2025/26 tax rules applied. Compare sell vs retain options and understand long-term outcomes.",
+  });
   useLandingFaqJsonLd(FAQ_ITEMS_LANDING);
   const [, setLocation] = useLocation();
   const loadState = useAppStore((s) => s.loadState);
@@ -194,7 +201,7 @@ export default function LandingPage() {
                 Divorce Calculator UK — Understand your financial position before spending thousands on legal fees.
               </h1>
               <p className="text-lg text-white/70 leading-relaxed">
-                The UK's divorce financial modelling tool that scores each settlement option for long-term sustainability — not just the numbers, but what they mean for your future.
+                Model different divorce financial settlement scenarios with UK 2025/26 tax and National Insurance rates applied. Understand the long-term financial outcomes of each option — not just the numbers, but what they mean for your future.
               </p>
               <p className="text-sm text-white/45">
                 Illustrative modelling only. Not legal, tax, or financial advice.
@@ -584,51 +591,57 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="py-10 bg-primary" data-testid="section-footer">
-        <div className="container mx-auto px-4 text-center space-y-4">
-          <div className="flex items-center justify-center">
-            <Link href="/" onClick={scrollTop} className="flex items-center gap-2 group">
-              <span className="font-display font-bold text-white text-sm tracking-tight group-hover:text-gold transition-colors">DivorceCalculatorUK</span>
-            </Link>
+      <footer className="pt-12 pb-8 bg-primary" data-testid="section-footer">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+            <div>
+              <Link href="/" onClick={scrollTop} className="inline-block mb-3 group">
+                <span className="font-display font-bold text-white text-sm tracking-tight group-hover:text-gold transition-colors">DivorceCalculatorUK</span>
+              </Link>
+              <p className="text-xs text-white/40 leading-relaxed">
+                Illustrative financial modelling for separation and divorce in England &amp; Wales.
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">Guides &amp; Resources</p>
+              <ul className="space-y-2">
+                <li><Link href="/free-guide" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-free-guide">Free UK Divorce Guide</Link></li>
+                <li><Link href="/divorce-financial-modelling" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-guides">Divorce Financial Modelling</Link></li>
+                <li><Link href="/how-much-does-divorce-cost-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-divorce-costs">Divorce Costs UK</Link></li>
+                <li><Link href="/divorce-financial-settlement-calculator-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-settlement-calc">Settlement Calculator</Link></li>
+                <li><Link href="/divorce-settlement-examples-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-examples">Settlement Examples</Link></li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">Specialist Topics</p>
+              <ul className="space-y-2">
+                <li><Link href="/divorce-50-50-split-calculator-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-5050">50/50 Split</Link></li>
+                <li><Link href="/divorce-house-buyout-calculator-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-house-buyout">House Buyout</Link></li>
+                <li><Link href="/divorce-pension-split-calculator-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-pension-split">Pension Split</Link></li>
+                <li><Link href="/who-gets-house-divorce-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-who-gets-house">Who Gets the House?</Link></li>
+                <li><Link href="/how-pensions-split-divorce-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-how-pensions">How Pensions Are Split</Link></li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">Legal &amp; Support</p>
+              <ul className="space-y-2">
+                <li><Link href="/methodology" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-methodology">Model Methodology</Link></li>
+                <li><Link href="/privacy" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-privacy">Privacy Policy</Link></li>
+                <li><Link href="/terms" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-terms">Terms of Use</Link></li>
+                <li><Link href="/refund-policy" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-refund-policy">Refund Policy</Link></li>
+                <li><Link href="/contact" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-contact">Contact &amp; Support</Link></li>
+                <li><Link href="/recover" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-recover">Recover Access</Link></li>
+              </ul>
+            </div>
           </div>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
-            <Link href="/free-guide" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-free-guide">
-              Free Guide
-            </Link>
-            <Link href="/divorce-financial-modelling" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-guides">
-              Guides
-            </Link>
-            <Link href="/how-much-does-divorce-cost-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-divorce-costs">
-              Divorce Costs
-            </Link>
-            <Link href="/divorce-settlement-examples-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-examples">
-              Settlement Examples
-            </Link>
-            <Link href="/privacy" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-privacy">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-terms">
-              Terms of Use
-            </Link>
-            <Link href="/refund-policy" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-refund-policy">
-              Refund Policy
-            </Link>
-            <Link href="/methodology" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-methodology">
-              Model Methodology
-            </Link>
-            <Link href="/recover" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-recover">
-              Recover Access
-            </Link>
-            <Link href="/contact" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-contact">
-              Contact
-            </Link>
+          <div className="border-t border-white/10 pt-6 space-y-2 text-center">
+            <p className="text-xs text-white/35">
+              Illustrative financial modelling only. This tool does not provide legal, tax, or financial advice.
+            </p>
+            <p className="text-xs text-white/25">
+              &copy; {new Date().getFullYear()} DivorceCalculatorUK
+            </p>
           </div>
-          <p className="text-xs text-white/35">
-            Illustrative financial modelling only. This tool does not provide legal, tax, or financial advice.
-          </p>
-          <p className="text-xs text-white/25">
-            &copy; {new Date().getFullYear()} DivorceCalculatorUK
-          </p>
         </div>
       </footer>
     </div>

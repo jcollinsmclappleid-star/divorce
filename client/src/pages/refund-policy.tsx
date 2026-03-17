@@ -1,10 +1,15 @@
 import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useMetaTags } from "@/hooks/use-meta-tags";
 import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 export default function RefundPolicyPage() {
   useDocumentTitle("Refund Policy | DivorceCalculatorUK");
+  useMetaTags({
+    description: "DivorceCalculatorUK refund policy. Details of your rights under UK Consumer Contracts Regulations 2013 and how to request a refund.",
+    canonical: "https://divorcecalculatoruk.co.uk/refund-policy",
+  });
   const [, setLocation] = useLocation();
 
   return (

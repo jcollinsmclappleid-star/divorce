@@ -1,10 +1,15 @@
 import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useMetaTags } from "@/hooks/use-meta-tags";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Mail, RefreshCw, BookOpen, CreditCard, AlertCircle } from "lucide-react";
 
 export default function ContactPage() {
   useDocumentTitle("Contact & Support | DivorceCalculatorUK");
+  useMetaTags({
+    description: "Get support with DivorceCalculatorUK. Contact us for help with access, billing, technical issues, or general enquiries about our divorce financial modelling tool.",
+    canonical: "https://divorcecalculatoruk.co.uk/contact",
+  });
   const [, setLocation] = useLocation();
 
   return (

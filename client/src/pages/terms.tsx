@@ -1,10 +1,15 @@
 import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useMetaTags } from "@/hooks/use-meta-tags";
 import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 export default function TermsPage() {
   useDocumentTitle("Terms of Use | DivorceCalculatorUK");
+  useMetaTags({
+    description: "Terms of use for DivorceCalculatorUK. Conditions governing access to our divorce financial modelling tool, disclaimers, and limitations of liability.",
+    canonical: "https://divorcecalculatoruk.co.uk/terms",
+  });
   const [, setLocation] = useLocation();
 
   return (

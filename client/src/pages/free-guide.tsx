@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation, Link } from "wouter";
 import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useMetaTags } from "@/hooks/use-meta-tags";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -198,6 +199,10 @@ function ChapterSection({ chapter, expanded, onToggle }: {
 
 export default function FreeGuidePage() {
   useDocumentTitle("Free UK Divorce Finances Guide | DivorceCalculatorUK");
+  useMetaTags({
+    description: "A free guide to UK divorce finances covering assets, pensions, property, income, and financial settlements. Five chapters to help you prepare for separation.",
+    canonical: "https://divorcecalculatoruk.co.uk/free-guide",
+  });
   const [, setLocation] = useLocation();
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");

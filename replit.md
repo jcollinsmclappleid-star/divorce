@@ -46,7 +46,12 @@ A freemium model requires a one-time payment for full access. A `/preview` page 
 
 ### SEO Foundation
 
-Technical SEO is implemented for `divorcecalculatoruk.co.uk` with dynamic page titles, meta tags, OG tags, canonical links, and JSON-LD structured data. `robots.txt` and `sitemap.xml` are configured. Dynamic pages are `noindex, nofollow`. Content pages follow specific layouts and include relevant disclaimers and regulatory compliance information.
+Technical SEO is fully implemented for `divorcecalculatoruk.co.uk`:
+- **index.html**: Title, meta description, OG tags, Twitter cards, geo tags, canonical. Three JSON-LD schemas: `WebSite` (with SearchAction), `WebApplication` (with Offer), and `Organization`.
+- **Per-page meta**: `useDocumentTitle` sets `<title>`. `useMetaTags` hook sets meta description, canonical, OG title/description dynamically per page. `ContentPageLayout` handles meta for all content/cluster/FAQ/pillar pages. All trust pages (privacy, terms, methodology, contact, refund-policy, free-guide) have canonicals.
+- **robots.txt** and **sitemap.xml** in `client/public/`. Sitemap covers 22 URLs with lastmod dates and priority scores.
+- **Footer**: Four-column layout linking to all content pages — Guides & Resources, Specialist Topics, Legal & Support columns. Full internal linking coverage.
+- Dynamic pages (`/results`, `/report`, `/wizard`, `/preview`, `/unlock`, `/admin`, etc.) are `noindex, nofollow`.
 
 **Content pages (public, indexed):**
 - `/methodology` — Model methodology and limitations
