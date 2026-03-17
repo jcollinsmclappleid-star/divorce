@@ -1,5 +1,4 @@
 import { Link } from "wouter";
-import logoImage from "@assets/IMG_0336_1773713450202.png";
 
 interface LogoProps {
   href?: string;
@@ -9,15 +8,15 @@ interface LogoProps {
 }
 
 const sizeMap = {
-  sm: "h-10",
-  md: "h-14",
-  lg: "h-20",
+  sm: "text-lg",
+  md: "text-2xl",
+  lg: "text-4xl",
 };
 
-const brandTextSize = {
-  sm: "text-sm",
-  md: "text-lg",
-  lg: "text-2xl",
+const iconSizeMap = {
+  sm: "w-8 h-8",
+  md: "w-10 h-10",
+  lg: "w-14 h-14",
 };
 
 const brandSubSize = {
@@ -28,20 +27,17 @@ const brandSubSize = {
 
 export function Logo({ href = "/", size = "md", className = "", showBrandName = false }: LogoProps) {
   const content = (
-    <div className="flex items-center gap-3 shrink-0">
-      <img
-        src={logoImage}
-        alt="DivorceCalculatorUK"
-        className={`${sizeMap[size]} w-auto object-contain ${className}`}
-        data-testid="img-logo"
-      />
+    <div className="flex items-center gap-2 shrink-0">
+      <div className={`flex items-center justify-center ${iconSizeMap[size]} bg-primary rounded-lg`} data-testid="img-logo">
+        <span className="text-gold font-display font-bold" style={{ fontSize: size === "sm" ? "14px" : size === "md" ? "18px" : "24px" }}>£</span>
+      </div>
       {showBrandName && (
         <div className="flex flex-col" data-testid="text-brand-name">
-          <span className={`font-display font-bold tracking-tight leading-tight ${brandTextSize[size]}`}>
+          <span className={`font-display font-bold tracking-tight leading-tight ${sizeMap[size]}`}>
             DivorceCalculatorUK
           </span>
           <span className={`text-muted-foreground tracking-wide uppercase leading-tight ${brandSubSize[size]}`}>
-            Structured Financial Modelling
+            Financial Modelling
           </span>
         </div>
       )}
@@ -61,11 +57,14 @@ export function Logo({ href = "/", size = "md", className = "", showBrandName = 
 
 export function LogoPrint({ className = "" }: { className?: string }) {
   return (
-    <img
-      src={logoImage}
-      alt="DivorceCalculatorUK"
-      className={`h-12 w-auto object-contain ${className}`}
-      data-testid="img-logo-print"
-    />
+    <div className={`flex items-center gap-2 ${className}`} data-testid="img-logo-print">
+      <div className="flex items-center justify-center w-10 h-10 bg-primary rounded-lg">
+        <span className="text-gold font-display font-bold text-lg">£</span>
+      </div>
+      <div className="flex flex-col">
+        <span className="font-display font-bold text-lg">DivorceCalculatorUK</span>
+        <span className="text-muted-foreground text-xs uppercase">Financial Modelling</span>
+      </div>
+    </div>
   );
 }
