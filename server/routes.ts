@@ -59,14 +59,12 @@ export async function registerRoutes(
 
       let priceId = prices.data[0].id;
       
-      // If STRIPE_PRICE_ID env var is set, use that specific price (allows easy testing of different prices)
-      if (process.env.STRIPE_PRICE_ID) {
-        const specificPrice = prices.data.find(p => p.id === process.env.STRIPE_PRICE_ID);
-        if (specificPrice) {
-          priceId = specificPrice.id;
-        } else {
-          console.warn(`STRIPE_PRICE_ID=${process.env.STRIPE_PRICE_ID} not found in active prices, using first price instead`);
-        }
+      // Temporarily use £1 test price — remove the override to revert to first active price
+      const TEST_PRICE_ID = 'price_1TBlDIDv8IzJrrwI5o96EySx'; // £1 test price
+      const testPrice = prices.data.find(p => p.id === TEST_PRICE_ID);
+      if (testPrice) {
+        priceId = testPrice.id;
+        console.log('Using test price: £1');
       }
 
       const baseUrl = `${req.protocol}://${req.get('host')}`;
