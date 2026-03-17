@@ -28,6 +28,11 @@ export async function registerRoutes(
 
   seedDatabase().catch(console.error);
 
+  app.get('/sitemap.xml', (_req, res) => {
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.sendFile('client/public/sitemap.xml');
+  });
+
   app.get('/api/stripe/publishable-key', async (_req, res) => {
     try {
       const key = await getStripePublishableKey();
