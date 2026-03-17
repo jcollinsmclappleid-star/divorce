@@ -57,7 +57,17 @@ export async function registerRoutes(
         return res.status(500).json({ message: 'Payment price not configured. Please contact support.' });
       }
 
-      const priceId = prices.data[0].id;
+      let priceId = prices.data[0].id;
+      
+      // If STRIPE_PRICE_ID env var is set, use that specific price (allows easy testing of different prices)
+      if (process.env.STRIPE_PRICE_ID) {
+        const specificPrice = prices.data.find(p => p.id === process.env.STRIPE_PRICE_ID);
+        if (specificPrice) {
+          priceId = specificPrice.id;
+        } else {
+          console.warn(`STRIPE_PRICE_ID=${process.env.STRIPE_PRICE_ID} not found in active prices, using first price instead`);
+        }
+      }
 
       const baseUrl = `${req.protocol}://${req.get('host')}`;
 
