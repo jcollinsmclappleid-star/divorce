@@ -57,15 +57,7 @@ export async function registerRoutes(
         return res.status(500).json({ message: 'Payment price not configured. Please contact support.' });
       }
 
-      let priceId = prices.data[0].id;
-      
-      // Temporarily use £1 test price — remove the override to revert to first active price
-      const TEST_PRICE_ID = 'price_1TBlDIDv8IzJrrwI5o96EySx'; // £1 test price
-      const testPrice = prices.data.find(p => p.id === TEST_PRICE_ID);
-      if (testPrice) {
-        priceId = testPrice.id;
-        console.log('Using test price: £1');
-      }
+      const priceId = prices.data[0].id;
 
       const baseUrl = `${req.protocol}://${req.get('host')}`;
 
