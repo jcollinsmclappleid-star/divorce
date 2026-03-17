@@ -207,16 +207,27 @@ export default function LandingPage() {
                 Illustrative modelling only. Not legal, tax, or financial advice.
               </p>
               <div className="flex flex-col items-center lg:items-start justify-center lg:justify-start gap-3 pt-1">
-                <div className="flex flex-col items-center lg:items-start gap-1">
+                <div className="flex flex-col gap-2 items-center lg:items-start w-full sm:w-auto">
                   <Button
                     size="lg"
                     onClick={startFresh}
                     data-testid="button-hero-start"
-                    className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
+                    className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 w-full sm:w-auto"
                   >
                     Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
                   </Button>
-                  <p className="text-xs text-white/45">From £79 — one-time payment. No subscription.</p>
+                  <Button
+                    size="lg"
+                    onClick={() => {
+                      scrollTop();
+                      setLocation("/unlock");
+                    }}
+                    data-testid="button-hero-buy-now"
+                    className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 w-full sm:w-auto"
+                  >
+                    Buy Now — £79 <ArrowRight className="w-4 h-4 ml-1.5" />
+                  </Button>
+                  <p className="text-xs text-white/45">One-time payment. No subscription.</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto justify-center lg:justify-start">
                   <Button
@@ -227,17 +238,6 @@ export default function LandingPage() {
                     className="border-white/25 text-white hover:bg-white/10 hover:text-white bg-transparent"
                   >
                     View Example <ChevronRight className="w-3.5 h-3.5 ml-1" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    onClick={() => {
-                      scrollTop();
-                      setLocation("/unlock");
-                    }}
-                    data-testid="button-hero-buy-now"
-                    className="bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/25"
-                  >
-                    Buy Now — £79 <ArrowRight className="w-3.5 h-3.5 ml-1" />
                   </Button>
                 </div>
               </div>

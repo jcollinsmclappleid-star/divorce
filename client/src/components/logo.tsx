@@ -28,19 +28,16 @@ const brandSubSize = {
 export function Logo({ href = "/", size = "md", className = "", showBrandName = false }: LogoProps) {
   const content = (
     <div className="flex items-center gap-2 shrink-0">
-      <div className={`flex items-center justify-center ${iconSizeMap[size]} bg-primary rounded-lg`} data-testid="img-logo">
-        <span className="text-gold font-display font-bold" style={{ fontSize: size === "sm" ? "14px" : size === "md" ? "18px" : "24px" }}>£</span>
-      </div>
-      {showBrandName && (
-        <div className="flex flex-col" data-testid="text-brand-name">
-          <span className={`font-display font-bold tracking-tight leading-tight ${sizeMap[size]}`}>
-            DivorceCalculatorUK
-          </span>
+      <div className="flex flex-col" data-testid="text-brand-name">
+        <span className={`font-display font-bold tracking-tight leading-tight ${sizeMap[size]}`}>
+          Divorce Calculator UK
+        </span>
+        {showBrandName && (
           <span className={`text-muted-foreground tracking-wide uppercase leading-tight ${brandSubSize[size]}`}>
             Financial Modelling
           </span>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 
@@ -58,11 +55,8 @@ export function Logo({ href = "/", size = "md", className = "", showBrandName = 
 export function LogoPrint({ className = "" }: { className?: string }) {
   return (
     <div className={`flex items-center gap-2 ${className}`} data-testid="img-logo-print">
-      <div className="flex items-center justify-center w-10 h-10 bg-primary rounded-lg">
-        <span className="text-gold font-display font-bold text-lg">£</span>
-      </div>
       <div className="flex flex-col">
-        <span className="font-display font-bold text-lg">DivorceCalculatorUK</span>
+        <span className="font-display font-bold text-lg">Divorce Calculator UK</span>
         <span className="text-muted-foreground text-xs uppercase">Financial Modelling</span>
       </div>
     </div>
