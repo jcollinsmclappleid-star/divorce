@@ -1,5 +1,7 @@
 import type { Express } from "express";
 import type { Server } from "http";
+import fs from "fs";
+import path from "path";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
@@ -27,6 +29,14 @@ export async function registerRoutes(
 ): Promise<Server> {
 
   seedDatabase().catch(console.error);
+
+  app.get('/sitemap.xml', (_req, res) => {
+    const filePath = path.join(process.cwd(), 'client', 'public', 'sitemap.xml');
+    const xml = fs.readFileSync(filePath, 'utf8');
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.send(xml);
+  });
 
   app.get('/api/stripe/publishable-key', async (_req, res) => {
     try {
