@@ -191,7 +191,7 @@ export default function LandingPage() {
                 </Badge>
               </div>
               <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight text-white" data-testid="text-hero-headline">
-                Before you spend thousands on legal fees, understand exactly what your financial position could look like.
+                Divorce Calculator UK — Understand your financial position before spending thousands on legal fees.
               </h1>
               <p className="text-lg text-white/70 leading-relaxed">
                 The UK's divorce financial modelling tool that scores each settlement option for long-term sustainability — not just the numbers, but what they mean for your future.
