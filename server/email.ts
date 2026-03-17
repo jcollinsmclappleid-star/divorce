@@ -9,7 +9,8 @@ function getResend(): Resend | null {
   return resend;
 }
 
-const FROM = 'DivorceCalculatorUK <noreply@divorcecalculatoruk.co.uk>';
+const REPLY_TO = 'support@divorcecalculatoruk.co.uk';
+const FROM = process.env.EMAIL_FROM || 'DivorceCalculatorUK <onboarding@resend.dev>';
 
 function formatDate(date: Date | string | null): string {
   if (!date) return 'unknown';
@@ -109,6 +110,7 @@ export async function sendPurchaseConfirmationEmail(
     await client.emails.send({
       from: FROM,
       to: email,
+      replyTo: REPLY_TO,
       subject: 'Your DivorceCalculatorUK access is ready',
       html,
     });
@@ -167,6 +169,7 @@ export async function sendAccessRecoveryEmail(
     await client.emails.send({
       from: FROM,
       to: email,
+      replyTo: REPLY_TO,
       subject: 'Your DivorceCalculatorUK access link',
       html,
     });
