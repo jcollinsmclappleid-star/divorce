@@ -44,14 +44,15 @@ export default function PrivacyPage() {
             <p className="font-medium mt-2">Data processed and stored on our servers:</p>
             <ul className="list-disc pl-6 space-y-1">
               <li><strong>Session tokens:</strong> Anonymised, randomly generated identifiers stored in your browser's localStorage and transmitted to our server to verify access entitlements. Session tokens do not contain personal financial data and cannot be used to identify you personally.</li>
-              <li><strong>Payment records:</strong> When you make a purchase, we store a record of the transaction including: Stripe checkout session ID, payment status, purchase timestamp, and access expiry date. We do not receive, process, or store your payment card number, CVV, or bank account details — these are processed exclusively by Stripe.</li>
+              <li><strong>Email address:</strong> We collect and store your email address in the following circumstances: (1) When you make a purchase, Stripe provides your email address from the checkout form; (2) When you use the access recovery page and enter your email to regain access. Your email is stored with your purchase record and used solely for sending transactional emails (purchase confirmation, access recovery links, and access expiry notifications).</li>
+              <li><strong>Payment records:</strong> When you make a purchase, we store a record of the transaction including: Stripe checkout session ID, payment status, purchase timestamp, access expiry date, and your email address. We do not receive, process, or store your payment card number, CVV, or bank account details — these are processed exclusively by Stripe.</li>
               <li><strong>Server access logs:</strong> Standard web server logs including IP address, browser user agent string, pages accessed, referring URL, and access timestamps. These are collected automatically for security monitoring, fraud prevention, and operational purposes.</li>
             </ul>
 
             <p className="font-medium mt-2">Data we do not collect:</p>
             <ul className="list-disc pl-6 space-y-1">
-              <li>We do not collect your name, email address, telephone number, or postal address</li>
-              <li>We do not require account registration</li>
+              <li>We do not collect your name, telephone number, or postal address (unless you choose to include them in emails to us)</li>
+              <li>We do not require account registration or login</li>
               <li>We do not use tracking cookies, advertising cookies, or third-party analytics services</li>
               <li>We do not collect biometric data, location data, or device identifiers beyond standard server logs</li>
             </ul>
@@ -61,7 +62,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-semibold text-foreground">3. Lawful Basis for Processing</h2>
             <p>Under Article 6 of the UK GDPR, we process your personal data on the following lawful bases:</p>
             <ul className="list-disc pl-6 space-y-1">
-              <li><strong>Contract (Article 6(1)(b)):</strong> Processing of session tokens and payment records is necessary for the performance of our contract with you — specifically, to provide and manage access to the Service following your purchase.</li>
+              <li><strong>Contract (Article 6(1)(b)):</strong> Processing of session tokens, payment records, and email addresses is necessary for the performance of our contract with you — specifically, to provide and manage access to the Service following your purchase, send transactional emails (confirmations, recovery links, expiry notifications), and support your access recovery requests.</li>
               <li><strong>Legitimate interests (Article 6(1)(f)):</strong> Processing of server access logs is necessary for our legitimate interests in maintaining the security, stability, and integrity of the Service, and for fraud prevention. We have assessed that this processing does not override your rights and freedoms given the limited and non-identifying nature of the data collected.</li>
               <li><strong>Legal obligation (Article 6(1)(c)):</strong> We may retain certain records (such as payment transaction records) where required to comply with applicable tax, accounting, or regulatory obligations.</li>
             </ul>
@@ -80,10 +81,12 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-6 space-y-1">
               <li><strong>Service delivery:</strong> To verify your access entitlement and provide the financial modelling functionality you have purchased</li>
               <li><strong>Payment processing:</strong> To record and manage your purchase transaction via Stripe</li>
+              <li><strong>Transactional emails:</strong> To send you purchase confirmation, access recovery links, and access expiry notifications at the email address you provide or which is provided by Stripe during checkout</li>
+              <li><strong>Access recovery:</strong> To store and verify your email address when you request access recovery, enabling you to regain access to your purchase across devices</li>
               <li><strong>Security and fraud prevention:</strong> To monitor for unauthorised access, abuse, or fraudulent activity using server access logs</li>
               <li><strong>Legal and regulatory compliance:</strong> To retain records where required by applicable law</li>
             </ul>
-            <p>We do not use your data for marketing, profiling, or any purpose not listed above.</p>
+            <p>We do not use your data for marketing, profiling, or any purpose not listed above. We do not send marketing emails or newsletters.</p>
             <p><strong>Automated decision-making:</strong> The Service does not carry out automated decision-making or profiling that produces legal or similarly significant effects on you, as defined under Article 22 of the UK GDPR. All financial modelling calculations are performed locally in your browser and do not involve any server-side automated processing of your personal data.</p>
           </section>
 
@@ -91,8 +94,9 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-semibold text-foreground">6. Data Sharing and Third Parties</h2>
             <p>We do not sell, rent, trade, or otherwise share your personal data with third parties for their own purposes. Your data is shared only in the following limited circumstances:</p>
             <ul className="list-disc pl-6 space-y-1">
-              <li><strong>Stripe (payment processor):</strong> When you make a payment, your payment card details are submitted directly from your browser to Stripe. We do not receive or handle your card details. Stripe processes your payment data as an independent data controller under its own <a href="https://stripe.com/gb/privacy" target="_blank" rel="noopener noreferrer" className="underline text-primary">Privacy Policy</a>.</li>
-              <li><strong>Hosting infrastructure:</strong> The Service is hosted on cloud infrastructure. Our hosting provider processes server access logs as a data processor acting on our instructions. They do not have independent access to or use of your data.</li>
+              <li><strong>Stripe (payment processor):</strong> When you make a payment, your payment card details and email address are submitted directly from your browser to Stripe. We do not receive or handle your card details. Stripe processes your payment data as an independent data controller under its own <a href="https://stripe.com/gb/privacy" target="_blank" rel="noopener noreferrer" className="underline text-primary">Privacy Policy</a>.</li>
+              <li><strong>Resend (email service provider):</strong> To send you transactional emails (purchase confirmations and access recovery links), we share your email address with Resend, a third-party email service provider. Resend processes your email address solely for the purpose of delivering transactional emails and does not use it for marketing or other purposes. Resend acts as a data processor under their <a href="https://resend.com/privacy" target="_blank" rel="noopener noreferrer" className="underline text-primary">Privacy Policy</a>.</li>
+              <li><strong>Hosting infrastructure:</strong> The Service is hosted on cloud infrastructure. Our hosting provider processes server access logs and other data as a data processor acting on our instructions. They do not have independent access to or use of your data.</li>
               <li><strong>Legal requirements:</strong> We may disclose personal data where required to do so by law, regulation, legal process, or enforceable governmental request, or to protect our rights, property, or safety, or the rights, property, or safety of others.</li>
             </ul>
           </section>
@@ -112,6 +116,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-semibold text-foreground">8. Data Retention</h2>
             <p>We retain personal data only for as long as necessary for the purposes for which it was collected:</p>
             <ul className="list-disc pl-6 space-y-1">
+              <li><strong>Email addresses:</strong> Retained for the duration of your access period (6 months from purchase) plus 6 years thereafter for accounting purposes. After your access expires, we retain your email address in encrypted form to enable access recovery if you repurchase. You may request deletion of your email address at any time by contacting us at privacy@divorcecalculatoruk.co.uk.</li>
               <li><strong>Payment records:</strong> Retained for the duration of your access period (6 months from purchase) plus 6 years thereafter, as required for UK tax and accounting obligations under HMRC record-keeping requirements.</li>
               <li><strong>Session tokens:</strong> Retained on our server for the duration of the access period. The corresponding token in your browser persists until you clear your browser data.</li>
               <li><strong>Server access logs:</strong> Retained for up to 90 days for security monitoring purposes, after which they are automatically deleted.</li>
