@@ -45,13 +45,15 @@ export async function registerRoutes(
 
       const stripe = await getUncachableStripeClient();
 
-      const products = await stripe.products.search({ query: "name:'Structured Financial Analysis'" });
-      if (products.data.length === 0) {
-        console.error('Stripe product not found. Create product "Structured Financial Analysis" in Stripe Dashboard');
+      // Use product ID directly for reliability
+      const productId = 'prod_U08zTEPeHZJAOf';
+      const product = await stripe.products.retrieve(productId);
+      if (!product || product.deleted) {
+        console.error('Stripe product not found');
         return res.status(500).json({ message: 'Payment product not configured. Please contact support.' });
       }
 
-      const prices = await stripe.prices.list({ product: products.data[0].id, active: true });
+      const prices = await stripe.prices.list({ product: productId, active: true });
       if (prices.data.length === 0) {
         console.error('No active price found for product. Create a price in Stripe Dashboard');
         return res.status(500).json({ message: 'Payment price not configured. Please contact support.' });
@@ -62,9 +64,8 @@ export async function registerRoutes(
       const baseUrl = `${req.protocol}://${req.get('host')}`;
 
       const logoUrl = 'https://divorcecalculatoruk.co.uk/og-image.png';
-      const product = products.data[0];
       if (!product.images || product.images.length === 0) {
-        await stripe.products.update(product.id, { images: [logoUrl] });
+        await stripe.products.update(productId, { images: [logoUrl] });
       }
 
       const checkoutSession = await stripe.checkout.sessions.create({
