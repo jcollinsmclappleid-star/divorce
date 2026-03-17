@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage -->
+
+  <!-- ======================================================
+       TIER 1 — Homepage (priority 1.0, weekly)
+       ====================================================== -->
   <url>
     <loc>https://divorcecalculatoruk.co.uk/</loc>
     <lastmod>2026-03-17</lastmod>
@@ -8,38 +11,45 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Core content pillar -->
+  <!-- ======================================================
+       TIER 2 — Core calculator & pillar pages (priority 0.9, weekly)
+       These pages are closest to the tool itself and carry
+       the highest commercial and topical authority.
+       ====================================================== -->
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-financial-modelling</loc>
     <lastmod>2026-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
-  <!-- SEO authority pages -->
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-financial-settlement-calculator-uk</loc>
     <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
+
+  <!-- ======================================================
+       TIER 3 — Key financial content pages (priority 0.7, monthly)
+       High-traffic SEO authority pages and core cluster content.
+       ====================================================== -->
   <url>
     <loc>https://divorcecalculatoruk.co.uk/how-much-does-divorce-cost-uk</loc>
     <lastmod>2026-03-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/who-gets-house-divorce-uk</loc>
     <lastmod>2026-03-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/how-pensions-split-divorce-uk</loc>
     <lastmod>2026-03-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-settlement-examples-uk</loc>
@@ -47,8 +57,6 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-
-  <!-- Cluster pages -->
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-50-50-split-calculator-uk</loc>
     <lastmod>2026-03-17</lastmod>
@@ -67,76 +75,81 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+
+  <!-- ======================================================
+       TIER 4 — Supporting content pages (priority 0.5, monthly)
+       FAQ pages, niche cluster pages, and free guide.
+       ====================================================== -->
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-mortgage-affordability-after-separation</loc>
     <lastmod>2026-03-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-financial-checklist-before-mediation</loc>
     <lastmod>2026-03-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
-
-  <!-- FAQ pages -->
   <url>
     <loc>https://divorcecalculatoruk.co.uk/is-50-50-split-automatic-uk</loc>
     <lastmod>2026-03-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/can-i-keep-the-house-after-divorce-uk</loc>
     <lastmod>2026-03-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/how-are-pensions-divided-in-divorce-uk</loc>
     <lastmod>2026-03-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
-
-  <!-- Free guide -->
   <url>
     <loc>https://divorcecalculatoruk.co.uk/free-guide</loc>
     <lastmod>2026-03-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
 
-  <!-- Trust & legal pages -->
+  <!-- ======================================================
+       TIER 5 — Legal & trust pages (priority 0.3, yearly)
+       Stable pages. Updated infrequently.
+       ====================================================== -->
   <url>
     <loc>https://divorcecalculatoruk.co.uk/methodology</loc>
     <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/privacy</loc>
     <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/terms</loc>
     <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/contact</loc>
     <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/refund-policy</loc>
     <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.2</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
+
 </urlset>
