@@ -1,0 +1,166 @@
+🔧 1. CLEANED SITEMAP (use this version)
+
+This removes duplication, clarifies priority, and sets hierarchy.
+
+👉 Replace your current sitemap with this:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+<!-- CORE -->
+<url>
+<loc>https://divorcecalculatoruk.co.uk/</loc>
+<priority>1.0</priority>
+</url>
+
+<url>
+<loc>https://divorcecalculatoruk.co.uk/divorce-financial-settlement-calculator-uk</loc>
+<priority>0.9</priority>
+</url>
+
+<url>
+<loc>https://divorcecalculatoruk.co.uk/divorce-financial-guides</loc>
+<priority>0.8</priority>
+</url>
+
+<!-- HIGH VALUE ARTICLES -->
+<url>
+<loc>https://divorcecalculatoruk.co.uk/how-much-does-divorce-cost-uk</loc>
+<priority>0.8</priority>
+</url>
+
+<url>
+<loc>https://divorcecalculatoruk.co.uk/can-i-keep-the-house-after-divorce-uk</loc>
+<priority>0.8</priority>
+</url>
+
+<url>
+<loc>https://divorcecalculatoruk.co.uk/how-are-pensions-divided-in-divorce-uk</loc>
+<priority>0.8</priority>
+</url>
+
+<url>
+<loc>https://divorcecalculatoruk.co.uk/divorce-settlement-examples-uk</loc>
+<priority>0.7</priority>
+</url>
+
+<!-- SUPPORTING -->
+<url>
+<loc>https://divorcecalculatoruk.co.uk/divorce-mortgage-affordability-after-separation</loc>
+<priority>0.6</priority>
+</url>
+
+<url>
+<loc>https://divorcecalculatoruk.co.uk/divorce-financial-checklist-before-mediation</loc>
+<priority>0.6</priority>
+</url>
+
+<url>
+<loc>https://divorcecalculatoruk.co.uk/is-50-50-split-automatic-uk</loc>
+<priority>0.6</priority>
+</url>
+
+<!-- SECONDARY TOOLS -->
+<url>
+<loc>https://divorcecalculatoruk.co.uk/divorce-50-50-split-calculator-uk</loc>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://divorcecalculatoruk.co.uk/divorce-house-buyout-calculator-uk</loc>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://divorcecalculatoruk.co.uk/divorce-pension-split-calculator-uk</loc>
+<priority>0.5</priority>
+</url>
+
+<!-- TRUST PAGES -->
+<url>
+<loc>https://divorcecalculatoruk.co.uk/methodology</loc>
+<priority>0.4</priority>
+</url>
+
+<url>
+<loc>https://divorcecalculatoruk.co.uk/privacy</loc>
+<priority>0.3</priority>
+</url>
+
+<url>
+<loc>https://divorcecalculatoruk.co.uk/terms</loc>
+<priority>0.3</priority>
+</url>
+
+</urlset>
+🚨 2. IMPORTANT — DELETE OR MERGE THESE
+
+You MUST remove duplication or Google will stall indexing.
+
+❌ Remove or redirect:
+
+/who-gets-house-divorce-uk
+👉 keep: /can-i-keep-the-house-after-divorce-uk
+
+/how-pensions-split-divorce-uk
+👉 keep: /how-are-pensions-divided-in-divorce-uk
+
+🧱 3. CREATE THIS PAGE (HIGH IMPACT)
+👉 /divorce-financial-guides
+
+Paste this structure into Replit:
+
+Title:
+
+Divorce Financial Guides UK
+
+Intro:
+
+Understand how finances are divided in a UK divorce, including property, pensions, and settlement outcomes. Use the guides below to navigate each stage.
+
+Sections:
+Divorce Costs
+
+How much does divorce cost UK → link
+
+Property & Housing
+
+Can I keep the house after divorce → link
+
+Mortgage affordability after separation → link
+
+Pensions & Assets
+
+How are pensions divided → link
+
+Settlements
+
+Divorce settlement examples → link
+
+Is 50/50 split automatic → link
+
+Tools
+
+Divorce calculator → link
+
+Pension split calculator → link
+
+House buyout calculator → link
+
+👉 This page becomes your SEO authority hub
+
+🔗 4. INTERNAL LINKING (THIS IS YOUR BIGGEST WIN)
+
+Add this to EVERY article:
+
+Top:
+
+Use our Divorce Calculator to estimate your financial split
+
+Bottom:
+
+Related:
+
+link to 2–3 other articles
+
+link to calculator

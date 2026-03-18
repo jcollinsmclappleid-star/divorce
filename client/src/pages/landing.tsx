@@ -613,7 +613,7 @@ export default function LandingPage() {
               <p className="text-xs text-muted-foreground leading-relaxed">A breakdown of typical legal fees, court costs, and financial advice costs in the UK.</p>
               <span className="inline-flex items-center gap-1 mt-3 text-xs font-medium text-primary">Read guide <ChevronRight className="w-3 h-3" /></span>
             </Link>
-            <Link href="/who-gets-house-divorce-uk" onClick={scrollTop} data-testid="link-guide-who-gets-house" className="group block p-5 rounded-lg border border-border hover:border-primary/40 hover:shadow-md transition-all bg-background">
+            <Link href="/can-i-keep-the-house-after-divorce-uk" onClick={scrollTop} data-testid="link-guide-who-gets-house" className="group block p-5 rounded-lg border border-border hover:border-primary/40 hover:shadow-md transition-all bg-background">
               <div className="w-8 h-8 rounded-md bg-primary/8 flex items-center justify-center mb-3 group-hover:bg-primary/12 transition-colors">
                 <FileText className="w-4 h-4 text-primary" />
               </div>
@@ -640,6 +640,7 @@ export default function LandingPage() {
               <p className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">Guides &amp; Resources</p>
               <ul className="space-y-2">
                 <li><Link href="/free-guide" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-free-guide">Free UK Divorce Guide</Link></li>
+                <li><Link href="/divorce-financial-guides" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-guides-hub">All Financial Guides</Link></li>
                 <li><Link href="/divorce-financial-modelling" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-guides">Divorce Financial Modelling</Link></li>
                 <li><Link href="/how-much-does-divorce-cost-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-divorce-costs">Divorce Costs UK</Link></li>
                 <li><Link href="/divorce-financial-settlement-calculator-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-settlement-calc">Settlement Calculator</Link></li>
@@ -652,8 +653,8 @@ export default function LandingPage() {
                 <li><Link href="/divorce-50-50-split-calculator-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-5050">50/50 Split</Link></li>
                 <li><Link href="/divorce-house-buyout-calculator-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-house-buyout">House Buyout</Link></li>
                 <li><Link href="/divorce-pension-split-calculator-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-pension-split">Pension Split</Link></li>
-                <li><Link href="/who-gets-house-divorce-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-who-gets-house">Who Gets the House?</Link></li>
-                <li><Link href="/how-pensions-split-divorce-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-how-pensions">How Pensions Are Split</Link></li>
+                <li><Link href="/can-i-keep-the-house-after-divorce-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-who-gets-house">Who Gets the House?</Link></li>
+                <li><Link href="/how-are-pensions-divided-in-divorce-uk" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-how-pensions">How Pensions Are Split</Link></li>
               </ul>
             </div>
             <div>

@@ -31,6 +31,7 @@ import SeoAssetDivisionPage from "@/pages/content/seo-asset-division";
 import SeoWhoGetsHousePage from "@/pages/content/seo-who-gets-house";
 import SeoPensionsPage from "@/pages/content/seo-pensions";
 import SeoSettlementExamplesPage from "@/pages/content/seo-settlement-examples";
+import DivorceFinancialGuidesPage from "@/pages/content/divorce-financial-guides";
 import ContactPage from "@/pages/contact";
 import RefundPolicyPage from "@/pages/refund-policy";
 import AccessPage from "@/pages/access";
@@ -60,8 +61,9 @@ function Router() {
       <Route path="/how-are-pensions-divided-in-divorce-uk" component={FaqPensionsDivided} />
       <Route path="/how-much-does-divorce-cost-uk" component={SeoDivorceCostsPage} />
       <Route path="/divorce-financial-settlement-calculator-uk" component={SeoAssetDivisionPage} />
-      <Route path="/who-gets-house-divorce-uk" component={SeoWhoGetsHousePage} />
-      <Route path="/how-pensions-split-divorce-uk" component={SeoPensionsPage} />
+      <Route path="/who-gets-house-divorce-uk"><Redirect to="/can-i-keep-the-house-after-divorce-uk" /></Route>
+      <Route path="/how-pensions-split-divorce-uk"><Redirect to="/how-are-pensions-divided-in-divorce-uk" /></Route>
+      <Route path="/divorce-financial-guides" component={DivorceFinancialGuidesPage} />
       <Route path="/divorce-settlement-examples-uk" component={SeoSettlementExamplesPage} />
       <Route path="/access" component={AccessPage} />
       <Route path="/contact" component={ContactPage} />

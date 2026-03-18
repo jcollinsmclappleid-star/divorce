@@ -28,7 +28,7 @@ export default function SeoPensionsPage() {
   useDocumentTitle("How Are Pensions Split in a UK Divorce? | DivorceCalculatorUK");
   useMetaTags({
     description: "A plain-English guide to pension division in UK divorce — pension sharing orders, offsetting, earmarking, CETV, and Defined Benefit vs Defined Contribution pensions.",
-    canonical: "https://divorcecalculatoruk.co.uk/how-pensions-split-divorce-uk",
+    canonical: "https://divorcecalculatoruk.co.uk/how-are-pensions-divided-in-divorce-uk",
   });
   const [, setLocation] = useLocation();
 
@@ -183,7 +183,7 @@ export default function SeoPensionsPage() {
             <div className="flex flex-wrap justify-center gap-3 text-sm">
               <Link href="/how-much-does-divorce-cost-uk" onClick={scrollTop} className="text-primary hover:underline">Divorce costs</Link>
               <Link href="/divorce-financial-settlement-calculator-uk" onClick={scrollTop} className="text-primary hover:underline">How assets are divided</Link>
-              <Link href="/who-gets-house-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">Who gets the house?</Link>
+              <Link href="/can-i-keep-the-house-after-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">Who gets the house?</Link>
               <Link href="/divorce-settlement-examples-uk" onClick={scrollTop} className="text-primary hover:underline">Settlement examples</Link>
             </div>
           </div>

@@ -171,8 +171,8 @@ export default function SeoDivorceCostsPage() {
             <p className="text-sm text-muted-foreground">Also see:</p>
             <div className="flex flex-wrap justify-center gap-3 text-sm">
               <Link href="/divorce-financial-settlement-calculator-uk" onClick={scrollTop} className="text-primary hover:underline">Financial settlement guide</Link>
-              <Link href="/who-gets-house-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">Who gets the house?</Link>
-              <Link href="/how-pensions-split-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">How pensions are split</Link>
+              <Link href="/can-i-keep-the-house-after-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">Who gets the house?</Link>
+              <Link href="/how-are-pensions-divided-in-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">How pensions are split</Link>
               <Link href="/divorce-settlement-examples-uk" onClick={scrollTop} className="text-primary hover:underline">Settlement examples</Link>
               <Link href="/free-guide" onClick={scrollTop} className="text-primary hover:underline">Free divorce finances guide</Link>
             </div>

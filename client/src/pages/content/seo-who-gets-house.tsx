@@ -28,7 +28,7 @@ export default function SeoWhoGetsHousePage() {
   useDocumentTitle("Who Gets the House in a UK Divorce? | DivorceCalculatorUK");
   useMetaTags({
     description: "Can you keep the family home after divorce in the UK? A plain-English guide to your four main options — sell, buyout, Mesher order, or transfer — and how courts decide.",
-    canonical: "https://divorcecalculatoruk.co.uk/who-gets-house-divorce-uk",
+    canonical: "https://divorcecalculatoruk.co.uk/can-i-keep-the-house-after-divorce-uk",
   });
   const [, setLocation] = useLocation();
 
@@ -185,7 +185,7 @@ export default function SeoWhoGetsHousePage() {
             <div className="flex flex-wrap justify-center gap-3 text-sm">
               <Link href="/how-much-does-divorce-cost-uk" onClick={scrollTop} className="text-primary hover:underline">Divorce costs</Link>
               <Link href="/divorce-financial-settlement-calculator-uk" onClick={scrollTop} className="text-primary hover:underline">How assets are divided</Link>
-              <Link href="/how-pensions-split-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">How pensions are split</Link>
+              <Link href="/how-are-pensions-divided-in-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">How pensions are split</Link>
               <Link href="/divorce-settlement-examples-uk" onClick={scrollTop} className="text-primary hover:underline">Settlement examples</Link>
             </div>
           </div>
