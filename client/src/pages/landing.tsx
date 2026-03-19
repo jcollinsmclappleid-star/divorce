@@ -8,7 +8,7 @@ import {
   Calculator, Shield, ArrowRight, ChevronRight,
   BarChart3, Lock,
   FileText, TrendingUp, Activity,
-  Check, Scale
+  Check, X, Scale
 } from "lucide-react";
 import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
 import { useAppStore } from "@/hooks/use-store";
@@ -215,7 +215,7 @@ export default function LandingPage() {
                     data-testid="button-hero-start"
                     className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 w-full sm:w-auto"
                   >
-                    Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
+                    Start My Free Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
                   </Button>
                   <Button
                     size="lg"
@@ -414,7 +414,7 @@ export default function LandingPage() {
                 Scored 0–100. Green is sustainable. Amber warrants attention. Red indicates financial stress under current assumptions. Each score comes with plain-English driver explanations.
               </p>
               <Button onClick={startFresh} data-testid="button-fsi-cta" className="bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/20">
-                See Your Sustainability Score <ArrowRight className="w-4 h-4 ml-1.5" />
+                Start My Free Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
               </Button>
             </div>
             <div className="space-y-3">
@@ -478,6 +478,104 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section className="py-16 md:py-20 bg-muted/30 border-y border-border/40" data-testid="section-comparison">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-comparison-headline">
+              Free to start. Unlock the full picture.
+            </h2>
+            <p className="text-sm text-muted-foreground mt-3 max-w-lg mx-auto">
+              Enter your figures at no cost. Pay once to unlock the complete structured analysis.
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-border/60 overflow-hidden shadow-sm bg-background">
+            <div className="grid grid-cols-3 bg-primary/6 border-b border-border/40">
+              <div className="py-4 px-5 col-span-1 flex items-center">
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">What you get</span>
+              </div>
+              <div className="py-4 px-4 text-center border-l border-border/40">
+                <span className="text-sm font-semibold text-foreground">Free Preview</span>
+                <p className="text-[11px] text-muted-foreground mt-0.5">No payment needed</p>
+              </div>
+              <div className="py-4 px-4 text-center border-l border-border/40 bg-gold/8">
+                <span className="text-sm font-bold text-foreground">Full Analysis</span>
+                <p className="text-[11px] text-gold font-semibold mt-0.5">£79 one-time</p>
+              </div>
+            </div>
+
+            {[
+              { feature: "9-step financial wizard", free: true, paid: true },
+              { feature: "Enter assets, debts, income & pensions", free: true, paid: true },
+              { feature: "Asset pool ring chart (total marital pot)", free: true, paid: true },
+              { feature: "Preview of settlement scenarios (blurred)", free: true, paid: false, freeNote: "Preview only" },
+              { feature: "Full scenario comparison — Sell & Split, retain, deferred sale", free: false, paid: true },
+              { feature: "Net position per party for each scenario", free: false, paid: true },
+              { feature: "Monthly surplus / deficit analysis", free: false, paid: true },
+              { feature: "Financial Sustainability Indicator (0–100 score)", free: false, paid: true },
+              { feature: "5-year capital sustainability projections", free: false, paid: true },
+              { feature: "Interest rate & expense stress testing", free: false, paid: true },
+              { feature: "UK 2025/26 income tax & NI applied", free: false, paid: true },
+              { feature: "Downloadable Structured Financial Brief (PDF)", free: false, paid: true },
+              { feature: "Access duration", free: false, paid: true, freeLabel: "—", paidLabel: "6 months unlimited" },
+            ].map((row, i) => (
+              <div
+                key={i}
+                className={`grid grid-cols-3 border-b border-border/30 last:border-b-0 ${i % 2 === 0 ? "" : "bg-muted/20"}`}
+                data-testid={`row-comparison-${i}`}
+              >
+                <div className="py-3 px-5 col-span-1 flex items-center">
+                  <span className="text-xs text-foreground leading-snug">{row.feature}</span>
+                </div>
+                <div className="py-3 px-4 flex items-center justify-center border-l border-border/30">
+                  {row.freeLabel ? (
+                    <span className="text-xs text-muted-foreground">{row.freeLabel}</span>
+                  ) : row.freeNote ? (
+                    <span className="text-[11px] text-amber-600 font-medium">{row.freeNote}</span>
+                  ) : row.free ? (
+                    <Check className="w-4 h-4 text-green-600" />
+                  ) : (
+                    <X className="w-4 h-4 text-muted-foreground/40" />
+                  )}
+                </div>
+                <div className="py-3 px-4 flex items-center justify-center border-l border-border/30 bg-gold/5">
+                  {row.paidLabel ? (
+                    <span className="text-xs text-gold font-semibold">{row.paidLabel}</span>
+                  ) : row.paid ? (
+                    <Check className="w-4 h-4 text-gold" />
+                  ) : (
+                    <X className="w-4 h-4 text-muted-foreground/40" />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
+            <Button
+              size="lg"
+              onClick={startFresh}
+              data-testid="button-comparison-free"
+              className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
+            >
+              Start My Free Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => { scrollTop(); setLocation("/unlock"); }}
+              data-testid="button-comparison-buy"
+              className="border-border"
+            >
+              Unlock Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+          </div>
+          <p className="text-center text-xs text-muted-foreground mt-4">
+            Start for free · No account needed · Pay only when you want the full analysis
+          </p>
+        </div>
+      </section>
+
       <section className="py-16 md:py-20 bg-primary" data-testid="section-pricing">
         <div className="container mx-auto px-4 max-w-2xl text-center space-y-6">
           <div className="inline-flex items-center gap-2 bg-gold/15 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full mb-2">
@@ -510,7 +608,7 @@ export default function LandingPage() {
               data-testid="button-pricing-start"
               className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
             >
-              Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
+              Start My Free Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
             </Button>
             <Button
               size="lg"
@@ -556,7 +654,7 @@ export default function LandingPage() {
               data-testid="button-cta-start"
               className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
             >
-              Start My Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
+              Start My Free Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
             </Button>
             <Button
               size="lg"
