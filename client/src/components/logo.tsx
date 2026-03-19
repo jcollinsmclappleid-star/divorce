@@ -28,6 +28,7 @@ const brandSubSize = {
 export function Logo({ href = "/", size = "md", className = "", showBrandName = false }: LogoProps) {
   const content = (
     <div className="flex items-center gap-2 shrink-0">
+      <img src="/favicon.png" alt="DivorceCalculatorUK logo" className={iconSizeMap[size]} data-testid="img-logo-icon" />
       <div className="flex flex-col" data-testid="text-brand-name">
         <span className={`font-display font-bold tracking-tight leading-tight ${sizeMap[size]}`}>
           Divorce Calculator UK
@@ -55,6 +56,7 @@ export function Logo({ href = "/", size = "md", className = "", showBrandName = 
 export function LogoPrint({ className = "" }: { className?: string }) {
   return (
     <div className={`flex items-center gap-2 ${className}`} data-testid="img-logo-print">
+      <img src="/favicon.png" alt="DivorceCalculatorUK logo" className="w-8 h-8" />
       <div className="flex flex-col">
         <span className="font-display font-bold text-lg">Divorce Calculator UK</span>
         <span className="text-muted-foreground text-xs uppercase">Financial Modelling</span>
