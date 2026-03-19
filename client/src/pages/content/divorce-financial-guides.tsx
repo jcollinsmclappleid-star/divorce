@@ -22,8 +22,7 @@ export default function DivorceFinancialGuidesPage() {
       icon: Home,
       title: "Property & Housing",
       links: [
-        { href: "/who-gets-house-divorce-uk", label: "Who gets the house in a UK divorce?", desc: "The four main options for the family home and the financial factors that determine which is viable." },
-        { href: "/can-i-keep-the-house-after-divorce-uk", label: "Can I keep the house after divorce?", desc: "Your options — sell, buyout, Mesher order, or transfer — and how courts weigh affordability and children's needs." },
+        { href: "/can-i-keep-the-house-after-divorce-uk", label: "Who gets the house — and can I keep it?", desc: "The four main options for the family home — sell, buyout, Mesher order, or transfer — and how courts weigh affordability." },
         { href: "/how-is-property-divided-in-divorce-uk", label: "How is property divided in divorce?", desc: "The legal principles and process for dividing the family home and any other property in England and Wales." },
         { href: "/divorce-house-buyout-calculator-uk", label: "House buyout calculator", desc: "Model the equity split and financial implications of one party retaining the family home." },
         { href: "/both-names-on-mortgage-divorce-uk", label: "Both names on the mortgage — what happens?", desc: "Your options when the mortgage is in joint names and you are separating." },

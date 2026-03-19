@@ -238,7 +238,7 @@ export async function registerRoutes(
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/mediation-vs-court-divorce-uk-costs</loc>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/consent-order-vs-clean-break-order-uk</loc>
