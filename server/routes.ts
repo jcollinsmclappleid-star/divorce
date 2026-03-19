@@ -276,6 +276,18 @@ export async function registerRoutes(
     <loc>https://divorcecalculatoruk.co.uk/timeline-of-divorce-and-financial-settlement-uk</loc>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-pension-offsetting-uk</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/spousal-maintenance-after-divorce-uk</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/transfer-of-equity-divorce-uk</loc>
+    <priority>0.7</priority>
+  </url>
 </urlset>`;
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
     res.send(xml);

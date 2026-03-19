@@ -75,6 +75,9 @@ import RefuseSettlementPage from "@/pages/content/can-i-refuse-divorce-financial
 import HowLongFinancialSettlementPage from "@/pages/content/how-long-does-divorce-financial-settlement-take-uk";
 import MediationProcessPage from "@/pages/content/divorce-mediation-process-uk";
 import DivorceTimelinePage from "@/pages/content/timeline-of-divorce-and-financial-settlement-uk";
+import PensionOffsettingPage from "@/pages/content/divorce-pension-offsetting-uk";
+import SpousalMaintenancePage from "@/pages/content/spousal-maintenance-after-divorce-uk";
+import TransferOfEquityPage from "@/pages/content/transfer-of-equity-divorce-uk";
 
 function Router() {
   return (
@@ -148,6 +151,9 @@ function Router() {
       <Route path="/how-long-does-divorce-financial-settlement-take-uk" component={HowLongFinancialSettlementPage} />
       <Route path="/divorce-mediation-process-uk" component={MediationProcessPage} />
       <Route path="/timeline-of-divorce-and-financial-settlement-uk" component={DivorceTimelinePage} />
+      <Route path="/divorce-pension-offsetting-uk" component={PensionOffsettingPage} />
+      <Route path="/spousal-maintenance-after-divorce-uk" component={SpousalMaintenancePage} />
+      <Route path="/transfer-of-equity-divorce-uk" component={TransferOfEquityPage} />
       <Route path="/results">
         <AccessGate>
           <ResultsPage />

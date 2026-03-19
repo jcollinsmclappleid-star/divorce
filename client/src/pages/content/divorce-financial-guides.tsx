@@ -37,6 +37,7 @@ export default function DivorceFinancialGuidesPage() {
         { href: "/can-i-force-sale-of-house-after-divorce-uk", label: "Can I force the sale of the house?", desc: "When a court can order a property to be sold — and how long it takes." },
         { href: "/who-pays-mortgage-during-divorce-uk", label: "Who pays the mortgage during divorce?", desc: "How courts typically handle the mortgage during separation proceedings." },
         { href: "/buying-partner-out-of-house-divorce-uk", label: "Buying your partner out of the house", desc: "How a transfer of equity works, the costs involved, and mortgage considerations." },
+        { href: "/transfer-of-equity-divorce-uk", label: "Transfer of equity in divorce", desc: "The legal process for transferring the family home from joint names to sole ownership." },
         { href: "/unmarried-separating-house-uk", label: "Unmarried couples separating — property rights", desc: "How property is handled differently for cohabiting couples without marriage protections." },
         { href: "/divorce-mortgage-affordability-after-separation", label: "Mortgage affordability after separation", desc: "What lenders look at when one party wants to buy out the other or buy a new home." },
         { href: "/divorce-house-buyout-calculator-uk", label: "House buyout calculator", desc: "Model the equity split and stamp duty implications of a buyout." },
@@ -48,6 +49,7 @@ export default function DivorceFinancialGuidesPage() {
       links: [
         { href: "/how-are-pensions-divided-in-divorce-uk", label: "How are pensions divided in divorce?", desc: "Pension sharing orders, offsetting, CETV, and defined benefit vs defined contribution." },
         { href: "/divorce-pension-split-calculator-uk", label: "Pension split calculator", desc: "Model pension sharing assumptions alongside your other assets." },
+        { href: "/divorce-pension-offsetting-uk", label: "Pension offsetting vs pension sharing", desc: "The three approaches to dividing pensions — sharing orders, attachment orders, and offsetting." },
         { href: "/how-are-savings-split-in-divorce-uk", label: "How are savings split in divorce?", desc: "How courts approach joint and sole savings accounts in financial settlements." },
         { href: "/how-are-investments-divided-in-divorce-uk", label: "How are investments divided in divorce?", desc: "Shares, ISAs, bonds, and other investment assets — the treatment in UK divorce." },
         { href: "/joint-bank-accounts-after-divorce-uk", label: "Joint bank accounts after divorce", desc: "What happens to joint accounts and how to protect yourself during the process." },
@@ -109,6 +111,7 @@ export default function DivorceFinancialGuidesPage() {
         { href: "/who-pays-what-after-divorce-with-children-uk", label: "Who pays what after divorce with children?", desc: "The allocation of ongoing financial responsibilities for housing, bills, and child costs." },
         { href: "/does-having-children-change-divorce-settlement-uk", label: "Does having children change the settlement?", desc: "Precisely how children influence asset division, housing, and maintenance decisions." },
         { href: "/how-much-maintenance-after-divorce-uk", label: "How much maintenance after divorce?", desc: "How courts calculate spousal maintenance — the factors, the range, and how long it lasts." },
+        { href: "/spousal-maintenance-after-divorce-uk", label: "Spousal maintenance — a complete guide", desc: "How spousal maintenance is calculated, how long it lasts, and what a clean break alternative looks like." },
       ],
     },
     {
