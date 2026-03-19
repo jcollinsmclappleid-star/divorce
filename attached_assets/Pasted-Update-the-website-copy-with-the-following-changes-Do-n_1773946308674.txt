@@ -1,0 +1,149 @@
+Update the website copy with the following changes. Do not change any calculator functionality, pricing, or technical features. Only update visible text content, headings, subheadings, CTAs and descriptive copy throughout the site.
+
+BRAND VOICE AND POSITIONING
+The site is a clarity platform, not a calculator tool. The through-line for all copy is:
+"Financial clarity when everything else is uncertain."
+Every section should describe what the user discovers or becomes, not what the tool calculates.
+
+---
+
+HERO SECTION
+
+Headline:
+"Stop negotiating your divorce blind."
+
+Sub-headline:
+"In 20 minutes, see exactly what each settlement option means for your financial future — which ones are sustainable, which leave you stretched, and what your money looks like in five years under each scenario. Free to start. No sign-up."
+
+Recognition statement (appears above or below the sub-headline, before the CTA):
+"If you're here, you're probably trying to make sense of a situation that feels financially overwhelming. You're not sure what you're entitled to, you're worried about the house, and you don't know whether you can afford to keep it. That's exactly what this is for."
+
+Primary CTA button:
+"Get My Financial Picture — Free"
+
+Trust line beneath the CTA button:
+"No sign-up. No data stored. Used by people who want to walk into their solicitor's office knowing their numbers."
+
+---
+
+DIFFERENTIATORS SECTION
+
+Section heading:
+"Why this isn't just another calculator"
+
+Opening line:
+"Most divorce calculators show you a split. This one shows you what that split means for your life."
+
+Feature descriptions — replace current feature language with the following outcome language:
+
+FEATURE 1
+Current label (whatever it says about scenarios)
+New heading: "Four settlement structures. One clear comparison."
+New description: "See Sell and Split, you keep the house, they keep the house, and deferred sale — side by side. Know which works for you before the negotiation starts."
+
+FEATURE 2
+Current label (whatever it says about FSI / sustainability score)
+New heading: "Can you actually afford to keep the house?"
+New description: "The Financial Sustainability Indicator gives each scenario a score from 0 to 100 — with a plain-English explanation of exactly what's driving it. Not a number. An answer."
+
+FEATURE 3
+Current label (whatever it says about projections)
+New heading: "See where your money goes over the next five years."
+New description: "Does your settlement leave you financially stable or quietly stretched? The 5-year projection shows you — under each option — before you commit to anything."
+
+FEATURE 4
+Current label (whatever it says about tax / HMRC)
+New heading: "Built on real UK numbers."
+New description: "Every calculation applies 2025/26 HMRC income tax and National Insurance rates. Not estimates. Not approximations. The actual figures that will affect your take-home income after divorce."
+
+FEATURE 5
+Current label (whatever it says about PDF / report)
+New heading: "Your financial brief. Ready to take anywhere."
+New description: "Download a structured PDF summary of your full analysis — clear enough to discuss with a solicitor, detailed enough to inform your own decisions."
+
+FEATURE 6 (if there is a privacy / data feature listed)
+New heading: "Your data never leaves your device."
+New description: "Everything you enter is processed entirely in your browser. Nothing is transmitted to any server. Your financial situation stays completely private."
+
+---
+
+COST / VALUE SECTION
+
+If there is a section comparing cost to solicitors, replace with:
+
+Heading:
+"Your solicitor's first meeting costs £250 to £400. It shapes everything that follows."
+
+Body:
+"Most people arrive at that meeting with no financial picture prepared. They leave having paid for an hour of confusion. Divorce Calculator UK gives you the numbers before you walk in — so every professional conversation you have is informed, not exploratory."
+
+Contrast line:
+"Average UK divorce legal fees: £12,000 to £15,000. This: free to start, £79 for the full picture."
+
+---
+
+URGENCY SECTION
+
+Add this block as a standalone section or callout, positioned before the upgrade CTA:
+
+Heading:
+"Every week without a financial picture is a week you're negotiating on guesswork."
+
+Body:
+"Your ex may already have a clear financial picture of this settlement. Most people who get the best outcomes are the ones who arrive already knowing their position — before the first offer, before the first meeting, before anything is signed."
+
+CTA:
+"Get My Financial Picture — Free"
+
+---
+
+UPGRADE / PREMIUM CTA SECTION
+
+Heading:
+"The full picture. £79. Yours for 12 months."
+
+Body:
+"The free version shows you the shape of your settlement. The full analysis shows you whether you can live on it."
+
+What's included — rewrite as outcome statements:
+- "Full scenario comparison — see all four settlement structures scored and ranked"
+- "Financial Sustainability Indicator — know which option is genuinely sustainable for your income and outgoings"
+- "5-year capital projections — see where your money is in 2030 under each scenario"
+- "Stress testing — what happens if interest rates rise, or your income changes"
+- "Downloadable PDF Structured Financial Brief — your complete financial picture in a format you can use"
+- "12 months unlimited access — run new scenarios as your situation develops"
+
+Pre-CTA line (most important conversion line on the page):
+"Your ex may already have a clear financial picture of this settlement. Do you?"
+
+CTA button:
+"Unlock My Full Analysis — £79"
+
+---
+
+ABOUT / BRAND STATEMENT SECTION
+
+If there is an about section or brand description anywhere on the site, replace with:
+
+"Divorce is already one of the hardest things a person goes through. The financial side shouldn't also be a mystery. We built Divorce Calculator UK because most people arrive at the most important financial negotiation of their lives with nothing but anxiety and guesswork. We think that's wrong. You deserve to know your numbers — before the first meeting, before the first offer, before you sign anything. That's what this is for."
+
+---
+
+GENERAL COPY RULES — apply throughout
+
+Replace all instances of:
+"model" or "modelling" → "see" or "understand"
+"calculate" or "calculator" → "picture" or "analysis" where it fits naturally
+"tool" → "platform" or remove entirely
+"scenario" used alone → "settlement option" where it refers to outcomes
+"financial settlement calculator" in body copy → "financial clarity platform"
+
+The tone throughout should be:
+- Direct and calm, not clinical
+- Empathetic but not soft — these people need confidence, not sympathy
+- Specific rather than general — name the real fears (the house, the pension, running out of money)
+- Never salesy — state true things plainly and let them land
+
+Do not change: pricing amounts, feature functionality, legal disclaimers, methodology page, or any calculator input/output labels.
+
+After making all copy changes, confirm which sections were updated.

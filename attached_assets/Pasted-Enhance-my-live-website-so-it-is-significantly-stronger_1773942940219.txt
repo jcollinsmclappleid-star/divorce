@@ -1,0 +1,217 @@
+Enhance my live website so it is significantly stronger for LLM visibility, AI search visibility, and traditional SEO, without changing the core product or breaking existing functionality.
+
+SITE CONTEXT
+This is a UK divorce financial settlement calculator website for England and Wales. The site already positions itself around a calculator plus supporting educational content. I want the site to become more understandable, quotable, and trustworthy to LLMs and search engines.
+
+PRIMARY GOAL
+Improve what is visible and understandable in the rendered HTML so that:
+1. LLMs can clearly interpret the site as an authoritative knowledge source, not just a tool
+2. Search engines can crawl more useful text directly from the page
+3. The site exposes more structured, answer-first content in the body HTML
+4. My unique differentiators are explicitly described in plain text
+5. The site gains stronger trust, topical authority, and extractable summaries
+
+DO NOT
+- Do not remove or weaken the calculator
+- Do not break current styling, payment flow, forms, or existing pages
+- Do not hide important text inside accordions that may reduce visible rendered content
+- Do not rely only on JavaScript-generated content if it can be rendered directly in HTML
+- Do not add fake reviews, fake credentials, fake author names, or misleading claims
+- Do not make legal advice claims
+- Do not mention Scottish law except where clarifying jurisdiction limits
+- Do not change pricing unless required by current config
+
+IMPLEMENT THE FOLLOWING IMPROVEMENTS
+
+1) HOMEPAGE: ADD LLM-FRIENDLY ANSWER-FIRST CONTENT
+Add a highly visible static HTML section near the top of the homepage, below the hero and above or near the calculator, with a heading like:
+
+“How divorce financial settlements are assessed in England and Wales”
+
+This section must be plain rendered HTML text, not canvas text, not image text.
+
+Include:
+- A short 2–3 sentence plain-English explanation of what the site does
+- A concise explanation that divorce settlements in England and Wales are not always 50/50 and are typically influenced by needs, housing, children, income, pensions, debts, and overall fairness
+- A clear statement that this calculator is designed to help users model possible settlement outcomes using English and Welsh family law principles
+- A statement that results are informational only and not legal advice
+
+Then add a sub-section:
+“Key factors that often affect a divorce settlement”
+Use a clean bullet list covering:
+- family home and property equity
+- pensions
+- savings and investments
+- debts and liabilities
+- income and earning capacity
+- childcare and housing needs
+- marriage length and overall financial circumstances
+
+2) EXPOSE THE DIFFERENTIATORS IN TEXT
+Create a homepage section titled:
+“What makes this calculator different”
+
+This must describe in direct text:
+- four settlement scenarios
+- financial sustainability indicator / FSI
+- 5-year capital projections
+- stress testing
+- downloadable structured financial brief
+- free basic results and paid full analysis
+
+Write these as clear explanatory paragraphs plus a bullet list of features.
+Make the wording easy for an LLM to quote.
+
+3) ADD EXTRACTABLE SUMMARY BLOCKS
+On the homepage and key articles, add short sections with headings exactly like:
+- “In short”
+- “Key takeaway”
+- “Who this is for”
+- “What you get”
+
+Each section should be rendered as visible HTML text and contain concise summary statements.
+Keep these blocks easy to parse and quote.
+
+4) ADD A STRONG JURISDICTION + DISCLAIMER BLOCK
+Create a visible section titled:
+“Important legal context”
+
+Include plain text stating:
+- this tool is intended for divorce and separation financial modelling in England and Wales
+- it is based on general family law principles and tax assumptions
+- it does not predict court decisions
+- it is not legal or financial advice
+- Scottish divorce law is different and is not covered by this tool
+
+Keep this human-readable and professional.
+
+5) ADD STRUCTURED FAQ CONTENT TO HOMEPAGE
+Add a visible FAQ section with at least 8 high-value question-and-answer pairs in rendered HTML.
+Use questions such as:
+- Is divorce always split 50/50 in the UK?
+- How is the family home treated in divorce?
+- Are pensions included in a divorce settlement?
+- What debts are considered in divorce?
+- What is a clean break order?
+- Can I keep the house after divorce?
+- How long can a financial settlement take?
+- Is this calculator legal advice?
+
+Each answer should be concise but substantive, around 60–120 words, and clearly written for England and Wales.
+Also add matching FAQ structured data schema.
+
+6) IMPROVE INTERNAL LINKING
+Across the homepage and article pages:
+- Add contextual internal links to related articles
+- Add contextual internal links back to the calculator
+- Add a “Related guides” section near the end of each article
+- Add breadcrumb navigation where appropriate
+- Ensure anchor text is descriptive, not generic “click here”
+
+7) ADD ARTICLE PAGE TEMPLATE IMPROVEMENTS
+For all educational pages, update the page structure to include:
+- H1 with exact user-intent topic
+- short intro paragraph answering the query immediately
+- “In short” summary box near top
+- main explanatory sections with H2/H3 headings
+- practical examples or scenarios where relevant
+- “Key takeaway” section near the end
+- links to related pages
+- CTA to use calculator after the educational content
+
+The article content should be answer-first, not fluffy.
+Write for both human readers and AI extraction.
+
+8) ADD TRUST / TRANSPARENCY CONTENT
+Without inventing credentials, add a visible section such as:
+“How this calculator works”
+Explain in simple terms that the tool models settlement scenarios using user-entered financial data and applies general principles relevant to England and Wales, including assets, pensions, debts, income, and future sustainability.
+Also explain what the full report includes.
+
+If appropriate, add a lightweight methodology page and link it from homepage/footer.
+
+9) IMPROVE HTML SEMANTICS
+Refactor page markup so major content areas use semantic HTML:
+- header
+- nav
+- main
+- section
+- article
+- aside where appropriate
+- footer
+
+Use proper heading hierarchy:
+- one H1 per page
+- logical H2/H3 structure
+Ensure important text is not buried in div soup if avoidable.
+
+10) ADD STRUCTURED DATA
+Implement and validate schema where appropriate:
+- FAQPage
+- WebPage
+- Article for article pages
+- BreadcrumbList
+- Organization or WebSite if appropriate and truthful
+- SoftwareApplication only if appropriate to the calculator and accurately described
+
+Do not add misleading schema.
+
+11) ENSURE RENDERED CONTENT IS PRESENT IN THE HTML
+Where possible, make important explanatory content server-rendered or at least available in initial HTML output so crawlers and LLM parsers can read it easily.
+Do not depend entirely on client-side hydration for critical text.
+
+12) CREATE A BETTER FOOTER FOR CRAWLERS
+Enhance the footer with crawlable text links to:
+- calculator
+- methodology / how it works
+- FAQ
+- privacy policy
+- terms
+- disclaimer
+- key article categories / top guides
+
+13) PRESERVE UX AND VISUAL QUALITY
+Keep design premium, modern, and credible.
+The new sections should feel polished and consistent with the current brand, not spammy or keyword-stuffed.
+
+CONTENT STYLE RULES
+- English and Wales focus only
+- Clear, neutral, authoritative tone
+- No sensationalism
+- No fake expertise
+- No overclaiming
+- Use concise paragraphs and bullets
+- Write content that can be quoted easily by AI systems
+- Prioritise direct answers to user questions
+- Make differentiators explicit in normal text
+
+SEO / LLM RULES
+- Improve visible topical relevance for divorce settlement, house division, pensions, debts, spousal maintenance, clean break orders, consent orders, mediation, and financial modelling
+- Avoid keyword stuffing
+- Add strong descriptive meta titles and meta descriptions where missing
+- Ensure each key page has unique metadata
+- Ensure canonical tags are correct
+- Improve on-page copy so the site reads as a knowledge platform plus calculator, not only a tool
+
+OUTPUT REQUIRED
+1. Implement the homepage enhancements
+2. Update article template structure
+3. Add FAQ section plus FAQ schema
+4. Add internal linking improvements
+5. Add semantic HTML improvements
+6. Add any required supporting components/pages
+7. Show me a summary of all files changed
+8. Show me the exact new homepage section copy added
+9. Flag any areas where current site architecture prevents best-practice implementation
+
+SUCCESS CRITERIA
+When complete, the site should more clearly communicate in visible HTML:
+- what the calculator does
+- who it is for
+- how it works
+- what makes it different
+- what legal context applies
+- what questions the site answers
+- how articles relate to the calculator
+
+Make the site materially stronger for LLM extraction, AI search summaries, and conventional SEO while preserving conversion intent.
