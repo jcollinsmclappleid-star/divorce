@@ -1,0 +1,53 @@
+Do two things:
+
+1. Fix the broken HTML structure in index.html. The <hreflang> tag 
+wrapping the body content is invalid HTML. Replace it with a proper 
+<link> tag in the <head>:
+<link rel="alternate" hreflang="en-GB" href="https://divorcecalculatoruk.co.uk/" />
+Remove the <hreflang>...</hreflang> wrapper from the body entirely.
+
+2. Add this static content block directly before </body>, after the 
+<div id="root"></div>:
+
+<div id="seo-content" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+  <h1>UK Divorce Financial Settlement Calculator</h1>
+  <p>Divorce Calculator UK is a free financial settlement calculator for 
+  people going through divorce or separation in England and Wales. Enter 
+  your assets, property, pensions, savings and debts to model how a court 
+  would likely divide your finances under the Matrimonial Causes Act 1973.</p>
+  
+  <h2>What does this calculator cover?</h2>
+  <ul>
+    <li>Property and house division including mortgage buyout calculations</li>
+    <li>Pension sharing and pension offsetting</li>
+    <li>Savings, investments and joint accounts</li>
+    <li>Debts, loans and credit cards</li>
+    <li>Spousal maintenance and clean break orders</li>
+    <li>Income assessment using 2025/26 HMRC tax and National Insurance rates</li>
+    <li>Financial Sustainability Indicator showing 5-year post-divorce projections</li>
+  </ul>
+
+  <h2>How does it work?</h2>
+  <ol>
+    <li>Enter your financial details — assets, debts, property, pensions and income</li>
+    <li>The calculator applies English and Welsh family law principles to model likely outcomes</li>
+    <li>View your free basic results instantly, or upgrade for full scenario comparison and PDF report</li>
+  </ol>
+
+  <h2>Is it free?</h2>
+  <p>Yes. The basic calculation is completely free with no account required. 
+  A full analysis including scenario comparison, stress testing, 5-year 
+  financial projections and a downloadable PDF Structured Financial Brief 
+  is available for £79 with 12 months unlimited access.</p>
+
+  <h2>Who is this for?</h2>
+  <p>Anyone going through divorce or separation in England and Wales who 
+  wants to understand their financial position before consulting a solicitor, 
+  negotiate a fair settlement, or reduce legal costs by arriving at 
+  consultations already informed.</p>
+
+  <h2>Is this legal advice?</h2>
+  <p>No. This tool provides financial modelling based on general principles 
+  of English and Welsh family law. It is not legal advice. For advice 
+  specific to your situation, consult a qualified family law solicitor.</p>
+</div>
