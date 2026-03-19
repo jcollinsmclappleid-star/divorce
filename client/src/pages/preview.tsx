@@ -310,7 +310,7 @@ export default function PreviewPage() {
           <div className="rounded-xl bg-primary border border-white/10 shadow-2xl overflow-hidden">
             <div className="px-6 pt-6 pb-2 text-center border-b border-white/10 space-y-2">
               <div className="inline-flex items-center gap-1.5 bg-gold/15 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full">
-                Six Months · Unlimited Access
+                Twelve Months · Unlimited Access
               </div>
               <div className="text-5xl font-bold tracking-tight text-gold pt-1">£79</div>
               <div className="text-sm text-white/55 pb-2">One-time payment. No subscription.</div>
@@ -322,7 +322,7 @@ export default function PreviewPage() {
                   <p className="text-[10px] text-white/45 mt-0.5">First model</p>
                 </div>
                 <div className="bg-white/5 rounded-lg py-2.5">
-                  <p className="text-sm font-bold text-white">6 months</p>
+                  <p className="text-sm font-bold text-white">12 months</p>
                   <p className="text-[10px] text-white/45 mt-0.5">Reruns</p>
                 </div>
                 <div className="bg-white/5 rounded-lg py-2.5">
@@ -393,7 +393,7 @@ export default function PreviewPage() {
                 This tool doesn't tell you what to do. It shows you the numbers so you can make your own informed decisions — before a solicitor's clock starts running.
               </p>
               <p className="text-xs text-muted-foreground">
-                One-time payment. 6 months unlimited access. No subscription.
+                One-time payment. 12 months unlimited access. No subscription.
               </p>
             </CardContent>
           </Card>
@@ -404,7 +404,7 @@ export default function PreviewPage() {
               Unlock Full Analysis — £79
             </Button>
             <p className="text-xs text-muted-foreground">
-              Immediate access. Private. No subscription. 6-month access included.
+              Immediate access. Private. No subscription. 12-month access included.
             </p>
           </div>
         </section>
@@ -439,7 +439,7 @@ export default function PreviewPage() {
                 "Housing feasibility benchmark",
                 "Sensitivity stress-test sliders",
                 "Downloadable professional PDF",
-                "Unlimited re-runs for 6 months",
+                "Unlimited re-runs for 12 months",
               ].map(item => (
                 <div key={item} className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />

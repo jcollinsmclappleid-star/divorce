@@ -13,7 +13,7 @@ async function seedProducts() {
 
   const product = await stripe.products.create({
     name: 'Structured Financial Analysis',
-    description: 'Full structured financial modelling analysis for UK divorce proceedings. Includes scenario comparison, stability scoring, sensitivity testing, 12-month snapshots, 5-year projections, and downloadable Structured Financial Brief (PDF). Unlimited re-runs for 6 months.',
+    description: 'Full structured financial modelling analysis for UK divorce proceedings. Includes scenario comparison, stability scoring, sensitivity testing, 12-month snapshots, 5-year projections, and downloadable Structured Financial Brief (PDF). Unlimited re-runs for 12 months.',
     metadata: {
       type: 'one_time_access',
       duration_months: '6',

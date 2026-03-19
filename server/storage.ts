@@ -67,7 +67,7 @@ export class DatabaseStorage implements IStorage {
   async markPurchasePaid(id: string, paymentIntentId: string, email: string | null): Promise<Purchase> {
     const now = new Date();
     const expiresAt = new Date(now);
-    expiresAt.setMonth(expiresAt.getMonth() + 6);
+    expiresAt.setMonth(expiresAt.getMonth() + 12);
 
     const [updated] = await db
       .update(purchases)

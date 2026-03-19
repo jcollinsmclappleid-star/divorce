@@ -111,7 +111,7 @@ export default function TermsPage() {
             <ul className="list-disc pl-6 space-y-1">
               <li>A limited preview of modelling results is available free of charge</li>
               <li>Full access to the structured financial analysis requires a one-time payment of £79</li>
-              <li>Full access is valid for 6 months from the date of purchase</li>
+              <li>Full access is valid for 12 months from the date of purchase</li>
               <li>Access is linked to your browser session token, which is stored locally on your device. Clearing browser data, switching devices, or using private/incognito browsing may result in loss of access. If you lose your access link, you can recover it via the <Link href="/recover" className="underline text-primary">Recover Access</Link> page using the email address provided at checkout</li>
               <li>Payments are processed securely by Stripe. DivorceCalculatorUK does not store or have access to your payment card details</li>
             </ul>

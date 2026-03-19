@@ -19,7 +19,7 @@ const INCLUDES_ITEMS = [
   "Monthly financial position snapshot per scenario",
   "Sensitivity analysis — see which assumptions matter most",
   "Downloadable Structured Financial Brief (PDF)",
-  "6 months unlimited access to update and re-run",
+  "12 months unlimited access to update and re-run",
 ];
 
 const TRUST_SIGNALS = [
@@ -31,7 +31,7 @@ const TRUST_SIGNALS = [
 const FAQ_ITEMS = [
   {
     question: "What happens after I pay?",
-    answer: "You'll get immediate access to your full financial analysis, including all scenarios, projections, charts, and a downloadable report. Your access lasts 6 months.",
+    answer: "You'll get immediate access to your full financial analysis, including all scenarios, projections, charts, and a downloadable report. Your access lasts 12 months.",
   },
   {
     question: "Is my data safe?",
@@ -39,7 +39,7 @@ const FAQ_ITEMS = [
   },
   {
     question: "Can I update my figures later?",
-    answer: "Yes. During your 6-month access period, you can update your inputs and re-run the analysis as many times as you need.",
+    answer: "Yes. During your 12-month access period, you can update your inputs and re-run the analysis as many times as you need.",
   },
   {
     question: "How does this compare to a professional consultation?",
@@ -128,7 +128,7 @@ export default function UnlockPage() {
             >
               <div className="px-6 pt-6 pb-2 text-center border-b border-white/10 space-y-2">
                 <div className="inline-flex items-center gap-1.5 bg-gold/15 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full" data-testid="badge-access-duration">
-                  Six Months · Unlimited Access
+                  Twelve Months · Unlimited Access
                 </div>
                 <div className="text-5xl font-bold tracking-tight text-gold pt-1" data-testid="text-price">£79</div>
                 <div className="text-sm text-white/55 pb-2">One-time payment. No subscription.</div>
@@ -140,7 +140,7 @@ export default function UnlockPage() {
                     <p className="text-[10px] text-white/45 mt-0.5">First model</p>
                   </div>
                   <div className="bg-white/5 rounded-lg py-2.5">
-                    <p className="text-sm font-bold text-white">6 months</p>
+                    <p className="text-sm font-bold text-white">12 months</p>
                     <p className="text-[10px] text-white/45 mt-0.5">Reruns</p>
                   </div>
                   <div className="bg-white/5 rounded-lg py-2.5">
@@ -213,7 +213,7 @@ export default function UnlockPage() {
         <section className="text-center space-y-4 pb-8" data-testid="section-reinforcement">
           <p className="text-sm font-medium">Ready to see your scenarios?</p>
           <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-            Unlock now to review all settlement scenarios side-by-side with 5-year projections. Your inputs are saved — access expires in 6 months.
+            Unlock now to review all settlement scenarios side-by-side with 5-year projections. Your inputs are saved — access lasts 12 months.
           </p>
           <Button
             size="lg"

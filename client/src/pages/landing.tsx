@@ -517,7 +517,7 @@ export default function LandingPage() {
               { feature: "Interest rate & expense stress testing", free: false, paid: true },
               { feature: "UK 2025/26 income tax & NI applied", free: false, paid: true },
               { feature: "Downloadable Structured Financial Brief (PDF)", free: false, paid: true },
-              { feature: "Access duration", free: false, paid: true, freeLabel: "—", paidLabel: "6 months unlimited" },
+              { feature: "Access duration", free: false, paid: true, freeLabel: "—", paidLabel: "12 months unlimited" },
             ].map((row, i) => (
               <div
                 key={i}
@@ -585,7 +585,7 @@ export default function LandingPage() {
             Full Structured Analysis &mdash; <span className="text-gold">&pound;79</span>
           </h2>
           <p className="text-white/65 leading-relaxed">
-            A single professional consultation could cost <span className="font-semibold text-white">&pound;250&ndash;&pound;400 per hour</span>. This platform provides structured modelling and scenario comparison for a <span className="font-semibold text-gold">one-time &pound;79</span>, with six months of unlimited reruns.
+            A single professional consultation could cost <span className="font-semibold text-white">&pound;250&ndash;&pound;400 per hour</span>. This platform provides structured modelling and scenario comparison for a <span className="font-semibold text-gold">one-time &pound;79</span>, with twelve months of unlimited reruns.
           </p>
           <div className="grid grid-cols-3 gap-4 text-center max-w-md mx-auto py-6 border-y border-white/10">
             <div>
@@ -593,7 +593,7 @@ export default function LandingPage() {
               <p className="text-xs text-white/55 mt-1">First model complete</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-gold">6 months</p>
+              <p className="text-2xl font-bold text-gold">12 months</p>
               <p className="text-xs text-white/55 mt-1">Unlimited reruns</p>
             </div>
             <div>

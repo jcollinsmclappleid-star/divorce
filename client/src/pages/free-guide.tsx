@@ -363,7 +363,7 @@ export default function FreeGuidePage() {
             >
               Start financial modelling <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-            <p className="text-xs text-muted-foreground">From £79 · One-time · 6-month access</p>
+            <p className="text-xs text-muted-foreground">From £79 · One-time · 12-month access</p>
           </div>
 
           <div className="p-4 rounded-md bg-muted/30 border text-xs text-muted-foreground leading-relaxed">

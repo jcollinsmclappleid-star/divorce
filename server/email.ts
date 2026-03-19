@@ -85,7 +85,7 @@ export async function sendPurchaseConfirmationEmail(
     </div>
 
     <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6;">
-      Click the button below to open your analysis. Save this email so you can return at any time — this link will work for 6 months on the same device, or you can use it to restore access on a new device.
+      Click the button below to open your analysis. Save this email so you can return at any time — this link will work for 12 months on the same device, or you can use it to restore access on a new device.
     </p>
 
     <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">

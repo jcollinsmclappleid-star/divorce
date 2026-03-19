@@ -68,7 +68,7 @@ export default function PaymentSuccessPage() {
               <CheckCircle className="w-14 h-14 text-green-600 mx-auto" />
               <h2 className="text-xl font-semibold" data-testid="text-payment-confirmed">Payment Confirmed</h2>
               <p className="text-muted-foreground text-sm leading-relaxed">
-                Your full structured analysis is now unlocked. You have unlimited access for 6 months to model and adjust your financial scenarios.
+                Your full structured analysis is now unlocked. You have unlimited access for 12 months to model and adjust your financial scenarios.
               </p>
               <Button
                 className="w-full"

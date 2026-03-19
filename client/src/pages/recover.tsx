@@ -124,7 +124,7 @@ export default function RecoverPage() {
                   <div className="flex items-start gap-2 p-3 rounded-md bg-muted" data-testid="message-expired">
                     <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
                     <p className="text-sm text-muted-foreground">
-                      We found your purchase, but your 6-month access period has expired. You can purchase a new access period to continue using the full analysis.
+                      We found your purchase, but your 12-month access period has expired. You can purchase a new access period to continue using the full analysis.
                     </p>
                   </div>
                 )}

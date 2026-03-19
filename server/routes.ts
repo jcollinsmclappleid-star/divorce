@@ -338,7 +338,7 @@ export async function registerRoutes(
         success_url: `${baseUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${baseUrl}/unlock`,
         custom_text: {
-          submit: { message: 'You\'ll get instant access for 6 months. All calculations remain private in your browser.' },
+          submit: { message: 'You\'ll get instant access for 12 months. All calculations remain private in your browser.' },
         },
         metadata: {
           sessionToken,
