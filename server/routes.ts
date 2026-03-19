@@ -32,104 +32,160 @@ export async function registerRoutes(
   app.get('/sitemap.xml', (_req, res) => {
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- ═══════════════════════════════════════════════
+       TIER 1 (1.0) — Homepage
+       ═══════════════════════════════════════════════ -->
   <url>
     <loc>https://divorcecalculatoruk.co.uk/</loc>
     <priority>1.0</priority>
   </url>
+
+  <!-- ═══════════════════════════════════════════════
+       TIER 2 (0.9) — Primary tool + highest-volume head terms
+       ═══════════════════════════════════════════════ -->
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-financial-settlement-calculator-uk</loc>
     <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/how-much-does-divorce-cost-uk</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/can-i-keep-the-house-after-divorce-uk</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/how-are-pensions-divided-in-divorce-uk</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- ═══════════════════════════════════════════════
+       TIER 3 (0.8) — Hub, pillar, calculators + popular articles
+       ═══════════════════════════════════════════════ -->
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-financial-modelling</loc>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-financial-guides</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://divorcecalculatoruk.co.uk/how-much-does-divorce-cost-uk</loc>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-50-50-split-calculator-uk</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://divorcecalculatoruk.co.uk/can-i-keep-the-house-after-divorce-uk</loc>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-house-buyout-calculator-uk</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://divorcecalculatoruk.co.uk/how-are-pensions-divided-in-divorce-uk</loc>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-pension-split-calculator-uk</loc>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-settlement-examples-uk</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/divorce-mortgage-affordability-after-separation</loc>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/divorce-financial-checklist-before-mediation</loc>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/is-50-50-split-automatic-uk</loc>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/divorce-50-50-split-calculator-uk</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/divorce-house-buyout-calculator-uk</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/divorce-pension-split-calculator-uk</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/methodology</loc>
-    <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/privacy</loc>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/terms</loc>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/divorce-financial-modelling</loc>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/free-guide</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/contact</loc>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/refund-policy</loc>
-    <priority>0.3</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/how-is-property-divided-in-divorce-uk</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/what-happens-to-debts-in-divorce-uk</loc>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/what-is-a-consent-order-uk-divorce</loc>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/what-is-a-clean-break-order-uk</loc>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/financial-disclosure-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-with-children-financial-settlement-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/mediation-vs-court-divorce-uk-costs</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/how-long-does-divorce-financial-settlement-take-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/buying-partner-out-of-house-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-mortgage-affordability-after-separation</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-financial-checklist-before-mediation</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/is-50-50-split-automatic-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-where-one-earns-more-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/child-maintenance-vs-spousal-maintenance-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/how-much-maintenance-after-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/spousal-maintenance-after-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/timeline-of-divorce-and-financial-settlement-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/can-i-hide-assets-in-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/spouse-refuses-financial-disclosure-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/can-i-divorce-without-financial-settlement-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/can-i-reopen-divorce-settlement-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-pension-offsetting-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/transfer-of-equity-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ═══════════════════════════════════════════════
+       TIER 4 (0.7) — Supporting quality articles (minimum floor)
+       ═══════════════════════════════════════════════ -->
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/what-happens-to-debts-in-divorce-uk</loc>
     <priority>0.7</priority>
   </url>
   <url>
@@ -146,7 +202,7 @@ export async function registerRoutes(
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/joint-bank-accounts-after-divorce-uk</loc>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/can-ex-claim-inheritance-uk-divorce</loc>
@@ -166,10 +222,6 @@ export async function registerRoutes(
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/who-pays-mortgage-during-divorce-uk</loc>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/buying-partner-out-of-house-divorce-uk</loc>
     <priority>0.7</priority>
   </url>
   <url>
@@ -178,50 +230,22 @@ export async function registerRoutes(
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-settlement-no-assets-uk</loc>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/divorce-with-children-financial-settlement-uk</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/divorce-where-one-earns-more-uk</loc>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/how-does-child-custody-affect-financial-settlement-uk</loc>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/child-maintenance-vs-spousal-maintenance-uk</loc>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/who-pays-what-after-divorce-with-children-uk</loc>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/does-having-children-change-divorce-settlement-uk</loc>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/can-i-hide-assets-in-divorce-uk</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/spouse-refuses-financial-disclosure-uk</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/can-i-divorce-without-financial-settlement-uk</loc>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/ex-doesnt-agree-settlement-uk</loc>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/can-i-reopen-divorce-settlement-uk</loc>
     <priority>0.7</priority>
   </url>
   <url>
@@ -234,10 +258,6 @@ export async function registerRoutes(
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/steps-after-final-order-finances-uk</loc>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/mediation-vs-court-divorce-uk-costs</loc>
     <priority>0.7</priority>
   </url>
   <url>
@@ -253,37 +273,38 @@ export async function registerRoutes(
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://divorcecalculatoruk.co.uk/how-much-maintenance-after-divorce-uk</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://divorcecalculatoruk.co.uk/can-i-refuse-divorce-financial-settlement-uk</loc>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/how-long-does-divorce-financial-settlement-take-uk</loc>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-mediation-process-uk</loc>
     <priority>0.7</priority>
   </url>
+
+  <!-- ═══════════════════════════════════════════════
+       TIER 5 (0.5) — Support & legal (trust pages, not ranked)
+       ═══════════════════════════════════════════════ -->
   <url>
-    <loc>https://divorcecalculatoruk.co.uk/timeline-of-divorce-and-financial-settlement-uk</loc>
-    <priority>0.7</priority>
+    <loc>https://divorcecalculatoruk.co.uk/methodology</loc>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://divorcecalculatoruk.co.uk/divorce-pension-offsetting-uk</loc>
-    <priority>0.7</priority>
+    <loc>https://divorcecalculatoruk.co.uk/contact</loc>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://divorcecalculatoruk.co.uk/spousal-maintenance-after-divorce-uk</loc>
-    <priority>0.7</priority>
+    <loc>https://divorcecalculatoruk.co.uk/privacy</loc>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://divorcecalculatoruk.co.uk/transfer-of-equity-divorce-uk</loc>
-    <priority>0.7</priority>
+    <loc>https://divorcecalculatoruk.co.uk/terms</loc>
+    <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/refund-policy</loc>
+    <priority>0.5</priority>
+  </url>
+
 </urlset>`;
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
     res.send(xml);
