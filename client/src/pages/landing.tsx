@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, Link } from "wouter";
 import { scrollTop } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  Calculator, Shield, ArrowRight, ChevronRight,
+  Calculator, Shield, ArrowRight, ChevronRight, ChevronLeft,
   BarChart3, Lock,
   FileText, TrendingUp, Activity,
   Check, X, Scale
@@ -151,6 +151,241 @@ const ANALYSIS_PREVIEW_FEATURES = [
   },
 ];
 
+const FEATURE_SLIDES = [
+  { id: 0, label: "Sustainability Score", badge: "Key insight" },
+  { id: 1, label: "Settlement Comparison", badge: "4 options" },
+  { id: 2, label: "5-Year Projection", badge: "Long-term" },
+  { id: 3, label: "Monthly Cashflow", badge: "Month by month" },
+  { id: 4, label: "Stress Testing", badge: "What-if" },
+  { id: 5, label: "Financial Brief", badge: "Downloadable" },
+];
+
+function FeatureShowcase() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const scrollTo = (index: number) => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const card = container.children[index] as HTMLElement;
+    if (card) card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+  };
+
+  const handleScroll = () => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const scrollLeft = container.scrollLeft;
+    const cardWidth = container.offsetWidth;
+    const index = Math.round(scrollLeft / cardWidth);
+    setActiveSlide(Math.min(index, FEATURE_SLIDES.length - 1));
+  };
+
+  return (
+    <div className="relative" data-testid="div-dashboard-mockup">
+      <div className="rounded-xl border border-white/15 bg-background shadow-2xl overflow-hidden ring-1 ring-white/10">
+        <div className="bg-primary/8 border-b border-border/40 px-4 py-2.5 flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <div className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
+            <div className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
+            <div className="h-2.5 w-2.5 rounded-full bg-green-400/70" />
+            <span className="text-[10px] text-muted-foreground ml-2 font-mono">
+              {FEATURE_SLIDES[activeSlide]?.label} — Full Analysis
+            </span>
+          </div>
+          <div className="flex items-center gap-1 text-white/30">
+            <ChevronLeft className="w-3 h-3" />
+            <span className="text-[9px]">swipe</span>
+            <ChevronRight className="w-3 h-3" />
+          </div>
+        </div>
+
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+        >
+          <div className="min-w-full snap-start p-4 space-y-3">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Financial Sustainability Indicator</p>
+              <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">Full analysis</Badge>
+            </div>
+            {[
+              { label: "Sell & Split", score: 82, colour: "bg-green-500", text: "82", verdict: "Sustainable", textCol: "text-green-600" },
+              { label: "You keep home", score: 67, colour: "bg-amber-500", text: "67", verdict: "Monitor closely", textCol: "text-amber-600" },
+              { label: "They keep home", score: 38, colour: "bg-red-500", text: "38", verdict: "Financial stress risk", textCol: "text-red-600" },
+              { label: "Deferred sale", score: 74, colour: "bg-green-400", text: "74", verdict: "Sustainable", textCol: "text-green-600" },
+            ].map(row => (
+              <div key={row.label} className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] text-muted-foreground font-medium">{row.label}</span>
+                  <span className={`text-[10px] font-bold ${row.textCol}`}>{row.text} · {row.verdict}</span>
+                </div>
+                <div className="w-full bg-muted rounded-full h-2">
+                  <div className={`${row.colour} h-2 rounded-full`} style={{ width: `${row.score}%` }} />
+                </div>
+              </div>
+            ))}
+            <p className="text-[9px] text-muted-foreground/50 text-center pt-1">Scored 0–100 · Illustrative example</p>
+          </div>
+
+          <div className="min-w-full snap-start p-4 space-y-3">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Settlement Comparison</p>
+              <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">4 options</Badge>
+            </div>
+            {[
+              { label: "Sell & Split", you: 52, them: 48, youK: "£187k", themK: "£172k" },
+              { label: "You keep home", you: 30, them: 70, youK: "£108k", themK: "£251k" },
+              { label: "They keep home", you: 65, them: 35, youK: "£233k", themK: "£126k" },
+              { label: "Deferred sale", you: 50, them: 50, youK: "£179k", themK: "£179k" },
+            ].map(row => (
+              <div key={row.label} className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] text-muted-foreground font-medium">{row.label}</span>
+                  <div className="flex gap-2 text-[10px]">
+                    <span className="text-primary font-semibold">{row.youK}</span>
+                    <span className="text-muted-foreground/50">/</span>
+                    <span className="text-teal-600 font-semibold">{row.themK}</span>
+                  </div>
+                </div>
+                <div className="flex gap-0.5 h-3 rounded overflow-hidden">
+                  <div className="bg-primary rounded-l-sm" style={{ width: `${row.you}%` }} />
+                  <div className="bg-teal-500 rounded-r-sm" style={{ width: `${row.them}%` }} />
+                </div>
+              </div>
+            ))}
+            <div className="flex items-center gap-3 pt-1">
+              <div className="flex items-center gap-1"><div className="h-2 w-3 bg-primary rounded-sm" /><span className="text-[9px] text-muted-foreground">You</span></div>
+              <div className="flex items-center gap-1"><div className="h-2 w-3 bg-teal-500 rounded-sm" /><span className="text-[9px] text-muted-foreground">Other party</span></div>
+            </div>
+          </div>
+
+          <div className="min-w-full snap-start p-4 space-y-3">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">5-Year Capital Projection</p>
+              <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">Long-term</Badge>
+            </div>
+            <svg viewBox="0 0 220 70" className="w-full h-20" fill="none">
+              <text x="0" y="10" className="text-[6px]" fill="hsl(var(--muted-foreground))" fontSize="6">Year 1</text>
+              <text x="50" y="10" className="text-[6px]" fill="hsl(var(--muted-foreground))" fontSize="6">Year 2</text>
+              <text x="100" y="10" className="text-[6px]" fill="hsl(var(--muted-foreground))" fontSize="6">Year 3</text>
+              <text x="150" y="10" className="text-[6px]" fill="hsl(var(--muted-foreground))" fontSize="6">Year 4</text>
+              <text x="195" y="10" className="text-[6px]" fill="hsl(var(--muted-foreground))" fontSize="6">Year 5</text>
+              <polyline points="0,65 55,55 110,42 165,32 220,20" stroke="hsl(var(--primary))" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              <polyline points="0,68 55,65 110,62 165,66 220,64" stroke="#14b8a6" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="4 2" />
+              <polyline points="0,62 55,58 110,52 165,48 220,42" stroke="#C9A84C" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 3" opacity="0.6" />
+            </svg>
+            <div className="flex items-center gap-4 text-[9px] text-muted-foreground">
+              <span className="flex items-center gap-1"><span className="inline-block w-4 h-0.5 bg-primary rounded" /> Sell &amp; Split</span>
+              <span className="flex items-center gap-1"><span className="inline-block w-4 h-0.5 bg-teal-500 rounded" style={{backgroundImage:"repeating-linear-gradient(to right,#14b8a6 0,#14b8a6 4px,transparent 4px,transparent 8px)"}} /> You retain</span>
+              <span className="flex items-center gap-1"><span className="inline-block w-4 h-0.5 bg-gold rounded opacity-60" /> Deferred</span>
+            </div>
+            <p className="text-[9px] text-muted-foreground/50 text-center">Under each settlement option · Illustrative</p>
+          </div>
+
+          <div className="min-w-full snap-start p-4 space-y-3">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Monthly Cashflow After Divorce</p>
+              <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">Per party</Badge>
+            </div>
+            {[
+              { option: "Sell & Split", youNet: "+£680/mo", themNet: "+£420/mo", youGreen: true, themGreen: true },
+              { option: "You keep home", youNet: "−£240/mo", themNet: "+£850/mo", youGreen: false, themGreen: true },
+              { option: "They keep home", youNet: "+£920/mo", themNet: "−£110/mo", youGreen: true, themGreen: false },
+              { option: "Deferred sale", youNet: "+£310/mo", themNet: "+£290/mo", youGreen: true, themGreen: true },
+            ].map(row => (
+              <div key={row.option} className="flex items-center justify-between py-1 border-b border-border/30 last:border-0">
+                <span className="text-[10px] text-muted-foreground font-medium truncate pr-2">{row.option}</span>
+                <div className="flex gap-3 shrink-0">
+                  <span className={`text-[10px] font-bold ${row.youGreen ? "text-green-600" : "text-red-500"}`}>{row.youNet}</span>
+                  <span className={`text-[10px] font-bold ${row.themGreen ? "text-teal-600" : "text-red-500"}`}>{row.themNet}</span>
+                </div>
+              </div>
+            ))}
+            <div className="flex items-center gap-3 pt-1">
+              <div className="flex items-center gap-1"><div className="h-2 w-3 bg-primary rounded-sm" /><span className="text-[9px] text-muted-foreground">Your surplus</span></div>
+              <div className="flex items-center gap-1"><div className="h-2 w-3 bg-teal-500 rounded-sm" /><span className="text-[9px] text-muted-foreground">Their surplus</span></div>
+            </div>
+          </div>
+
+          <div className="min-w-full snap-start p-4 space-y-3">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Stress Test — What If?</p>
+              <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">Sensitivity</Badge>
+            </div>
+            <p className="text-[10px] text-muted-foreground">Adjusting: Interest rates +2%</p>
+            {[
+              { label: "Sell & Split", before: 82, after: 74, beforeCol: "bg-green-500", afterCol: "bg-green-400" },
+              { label: "You keep home", before: 67, after: 41, beforeCol: "bg-amber-500", afterCol: "bg-red-500" },
+              { label: "They keep home", before: 38, after: 22, beforeCol: "bg-red-500", afterCol: "bg-red-600" },
+              { label: "Deferred sale", before: 74, after: 68, beforeCol: "bg-green-400", afterCol: "bg-amber-500" },
+            ].map(row => (
+              <div key={row.label} className="space-y-0.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-muted-foreground font-medium">{row.label}</span>
+                  <span className="text-[10px] text-muted-foreground">{row.before} → <span className="font-bold text-foreground">{row.after}</span></span>
+                </div>
+                <div className="relative w-full bg-muted rounded-full h-2">
+                  <div className={`${row.beforeCol} h-2 rounded-full opacity-30`} style={{ width: `${row.before}%` }} />
+                  <div className={`${row.afterCol} h-2 rounded-full absolute top-0 left-0`} style={{ width: `${row.after}%` }} />
+                </div>
+              </div>
+            ))}
+            <p className="text-[9px] text-muted-foreground/50 text-center">Grey = original · Colour = stress-tested · Illustrative</p>
+          </div>
+
+          <div className="min-w-full snap-start p-4 space-y-3">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Downloadable Financial Brief</p>
+              <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">PDF</Badge>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 p-3 space-y-2">
+              <div className="flex items-center gap-2 pb-2 border-b border-border/30">
+                <FileText className="w-4 h-4 text-primary" />
+                <span className="text-[11px] font-semibold text-foreground">Structured Financial Brief</span>
+              </div>
+              {[
+                "Total asset pool & allocation",
+                "Net position per party · all 4 options",
+                "Financial Sustainability Indicator scores",
+                "Monthly surplus / deficit breakdown",
+                "5-year capital projections",
+                "Stress test sensitivity summary",
+                "UK tax & NI applied throughout",
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <Check className="w-3 h-3 text-green-500 shrink-0" />
+                  <span className="text-[10px] text-muted-foreground">{item}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-[9px] text-muted-foreground/50 text-center">Generated from your figures · Take to any professional conversation</p>
+          </div>
+        </div>
+
+        <div className="border-t border-border/30 bg-muted/20 px-4 py-2.5 flex items-center justify-between">
+          <div className="flex gap-1.5">
+            {FEATURE_SLIDES.map((slide, i) => (
+              <button
+                key={slide.id}
+                onClick={() => scrollTo(i)}
+                data-testid={`dot-feature-${i}`}
+                className={`rounded-full transition-all duration-200 ${
+                  activeSlide === i
+                    ? "w-4 h-1.5 bg-gold"
+                    : "w-1.5 h-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/60"
+                }`}
+                aria-label={`View ${slide.label}`}
+              />
+            ))}
+          </div>
+          <p className="text-[9px] text-muted-foreground/50">Illustrative figures only</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function LandingPage() {
   useDocumentTitle("Divorce Calculator UK (2026) | Financial Settlement Tool");
   useMetaTags({
@@ -275,78 +510,7 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="relative" data-testid="div-dashboard-mockup">
-              <div className="rounded-xl border border-white/15 bg-background shadow-2xl overflow-hidden ring-1 ring-white/10">
-                <div className="bg-primary/8 border-b border-border/40 px-4 py-2.5 flex items-center gap-2">
-                  <div className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
-                  <div className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-400/70" />
-                  <span className="text-[10px] text-muted-foreground ml-2 font-mono">Settlement Analysis — Example</span>
-                </div>
-                <div className="p-4 space-y-4">
-                  <div>
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Financial Sustainability Indicator</p>
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="text-xs text-muted-foreground w-28 truncate">Sell &amp; Split</span>
-                        <div className="flex-1 bg-muted rounded-full h-1.5">
-                          <div className="bg-green-500 h-1.5 rounded-full" style={{width: "82%"}} />
-                        </div>
-                        <span className="text-xs font-semibold text-green-600 w-20 text-right">82 · Higher</span>
-                      </div>
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="text-xs text-muted-foreground w-28 truncate">A Retains Home</span>
-                        <div className="flex-1 bg-muted rounded-full h-1.5">
-                          <div className="bg-amber-500 h-1.5 rounded-full" style={{width: "67%"}} />
-                        </div>
-                        <span className="text-xs font-semibold text-amber-600 w-20 text-right">67 · Moderate</span>
-                      </div>
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="text-xs text-muted-foreground w-28 truncate">B Retains Home</span>
-                        <div className="flex-1 bg-muted rounded-full h-1.5">
-                          <div className="bg-red-500 h-1.5 rounded-full" style={{width: "38%"}} />
-                        </div>
-                        <span className="text-xs font-semibold text-red-600 w-20 text-right">38 · Lower</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="border-t border-border/40 pt-3">
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Allocated Net Position</p>
-                    <div className="space-y-2">
-                      {[
-                        { label: "Sell & Split", a: 72, b: 68 },
-                        { label: "A Retains", a: 45, b: 88 },
-                        { label: "B Retains", a: 91, b: 31 },
-                      ].map(({ label, a, b }) => (
-                        <div key={label}>
-                          <div className="flex justify-between mb-0.5">
-                            <span className="text-[10px] text-muted-foreground">{label}</span>
-                          </div>
-                          <div className="flex gap-1 h-4">
-                            <div className="bg-primary rounded-sm" style={{ width: `${a}%` }} title="Party A" />
-                            <div className="bg-teal-500 rounded-sm" style={{ width: `${b}%` }} title="Party B" />
-                          </div>
-                        </div>
-                      ))}
-                      <div className="flex items-center gap-3 pt-1">
-                        <div className="flex items-center gap-1"><div className="h-2 w-4 bg-primary rounded-sm" /><span className="text-[10px] text-muted-foreground">You</span></div>
-                        <div className="flex items-center gap-1"><div className="h-2 w-4 bg-teal-500 rounded-sm" /><span className="text-[10px] text-muted-foreground">Other party</span></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="border-t border-border/40 pt-3">
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">5-Year Capital Projection</p>
-                    <svg viewBox="0 0 220 50" className="w-full h-12" fill="none">
-                      <polyline points="0,40 40,32 80,22 120,18 160,14 220,10" stroke="hsl(var(--primary))" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                      <polyline points="0,44 40,42 80,40 120,44 160,48 220,46" stroke="#14b8a6" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="4 2" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="border-t border-border/30 bg-muted/30 px-4 py-2">
-                  <p className="text-[10px] text-muted-foreground/60 text-center">Example output — illustrative figures only</p>
-                </div>
-              </div>
-            </div>
+            <FeatureShowcase />
           </div>
         </div>
       </section>
