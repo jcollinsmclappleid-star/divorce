@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Logo } from "@/components/logo";
 import { scrollTop } from "@/lib/utils";
-import { ArrowRight, PoundSterling, Home, BookOpen, Scale, Calculator, TrendingUp } from "lucide-react";
+import { ArrowRight, PoundSterling, Home, BookOpen, Scale, Calculator, TrendingUp, Users, FileText, Clock } from "lucide-react";
 
 export default function DivorceFinancialGuidesPage() {
   useDocumentTitle("Divorce Financial Guides UK | DivorceCalculatorUK");
@@ -20,9 +20,11 @@ export default function DivorceFinancialGuidesPage() {
   const sections = [
     {
       icon: PoundSterling,
-      title: "Divorce Costs",
+      title: "Costs & Process",
       links: [
         { href: "/how-much-does-divorce-cost-uk", label: "How much does divorce cost in the UK?", desc: "Court fees, solicitor costs, mediation, and how financial preparation reduces spend." },
+        { href: "/timeline-of-divorce-and-financial-settlement-uk", label: "Timeline of divorce and financial settlement", desc: "The complete timeline from separation through conditional order, consent order, and final order." },
+        { href: "/how-long-does-divorce-financial-settlement-take-uk", label: "How long does a financial settlement take?", desc: "Typical timelines by route — agreed settlement, FDR, and contested final hearing." },
       ],
     },
     {
@@ -30,6 +32,12 @@ export default function DivorceFinancialGuidesPage() {
       title: "Property & Housing",
       links: [
         { href: "/can-i-keep-the-house-after-divorce-uk", label: "Can I keep the house after divorce?", desc: "Your four main options — sell, buyout, Mesher order, or transfer — and how courts decide." },
+        { href: "/how-is-property-divided-in-divorce-uk", label: "How is property divided in divorce?", desc: "The legal principles and process for dividing the family home and other property." },
+        { href: "/both-names-on-mortgage-divorce-uk", label: "Both names on the mortgage — what happens?", desc: "Your options when the mortgage is in joint names and you are separating." },
+        { href: "/can-i-force-sale-of-house-after-divorce-uk", label: "Can I force the sale of the house?", desc: "When a court can order a property to be sold — and how long it takes." },
+        { href: "/who-pays-mortgage-during-divorce-uk", label: "Who pays the mortgage during divorce?", desc: "How courts typically handle the mortgage during separation proceedings." },
+        { href: "/buying-partner-out-of-house-divorce-uk", label: "Buying your partner out of the house", desc: "How a transfer of equity works, the costs involved, and mortgage considerations." },
+        { href: "/unmarried-separating-house-uk", label: "Unmarried couples separating — property rights", desc: "How property is handled differently for cohabiting couples without marriage protections." },
         { href: "/divorce-mortgage-affordability-after-separation", label: "Mortgage affordability after separation", desc: "What lenders look at when one party wants to buy out the other or buy a new home." },
         { href: "/divorce-house-buyout-calculator-uk", label: "House buyout calculator", desc: "Model the equity split and stamp duty implications of a buyout." },
       ],
@@ -40,17 +48,67 @@ export default function DivorceFinancialGuidesPage() {
       links: [
         { href: "/how-are-pensions-divided-in-divorce-uk", label: "How are pensions divided in divorce?", desc: "Pension sharing orders, offsetting, CETV, and defined benefit vs defined contribution." },
         { href: "/divorce-pension-split-calculator-uk", label: "Pension split calculator", desc: "Model pension sharing assumptions alongside your other assets." },
+        { href: "/how-are-savings-split-in-divorce-uk", label: "How are savings split in divorce?", desc: "How courts approach joint and sole savings accounts in financial settlements." },
+        { href: "/how-are-investments-divided-in-divorce-uk", label: "How are investments divided in divorce?", desc: "Shares, ISAs, bonds, and other investment assets — the treatment in UK divorce." },
+        { href: "/joint-bank-accounts-after-divorce-uk", label: "Joint bank accounts after divorce", desc: "What happens to joint accounts and how to protect yourself during the process." },
+        { href: "/can-ex-claim-inheritance-uk-divorce", label: "Can my ex claim my inheritance in divorce?", desc: "The legal treatment of inheritance in UK divorce — and when courts include it in the pot." },
+        { href: "/is-inheritance-included-in-divorce-settlement-uk", label: "Is inheritance included in the divorce settlement?", desc: "The key factors courts consider when one party has received an inheritance." },
         { href: "/divorce-financial-settlement-calculator-uk", label: "How assets are divided in a UK divorce", desc: "A full overview of the financial settlement process — from disclosure to consent order." },
       ],
     },
     {
       icon: Scale,
-      title: "Settlements",
+      title: "Settlements & Agreements",
       links: [
         { href: "/divorce-settlement-examples-uk", label: "UK divorce settlement examples", desc: "Four real-world style examples showing how assets, pensions, and maintenance are typically structured." },
         { href: "/is-50-50-split-automatic-uk", label: "Is a 50/50 split automatic in UK divorce?", desc: "Why equal division is the starting point — but not always the outcome." },
         { href: "/divorce-50-50-split-calculator-uk", label: "50/50 split calculator", desc: "Model an equal split and compare it against other settlement structures." },
+        { href: "/divorce-settlement-no-assets-uk", label: "Divorce settlement with no assets", desc: "What happens when there are few or no assets to divide — and what courts focus on instead." },
+        { href: "/what-is-a-consent-order-uk-divorce", label: "What is a consent order?", desc: "How to make a financial agreement legally binding with a court-approved consent order." },
+        { href: "/what-is-a-clean-break-order-uk", label: "What is a clean break order?", desc: "A clean break ends all future financial claims — when it is used and when it is not appropriate." },
+        { href: "/consent-order-vs-clean-break-order-uk", label: "Consent order vs clean break order", desc: "The key differences and when to use each type of financial order." },
+        { href: "/when-is-divorce-financial-settlement-legally-binding-uk", label: "When is a financial settlement legally binding?", desc: "Why informal agreements are not enough — and what makes a settlement enforceable." },
+        { href: "/can-i-reopen-divorce-settlement-uk", label: "Can I reopen a divorce settlement?", desc: "The limited circumstances where a court may revisit a previously agreed financial order." },
+        { href: "/how-long-after-divorce-can-financial-claims-be-made-uk", label: "How long after divorce can claims be made?", desc: "The time limits on financial claims — and why a clean break order is important." },
+        { href: "/can-i-refuse-divorce-financial-settlement-uk", label: "Can I refuse a financial settlement?", desc: "What happens if you disagree with the proposed terms — and when courts impose an outcome." },
+      ],
+    },
+    {
+      icon: FileText,
+      title: "Disclosure & Legal Process",
+      links: [
+        { href: "/financial-disclosure-divorce-uk", label: "Financial disclosure in divorce", desc: "What you are legally required to disclose — and the consequences of non-disclosure." },
+        { href: "/financial-remedy-proceedings-uk", label: "Financial remedy proceedings", desc: "The three-stage court process: FDA, FDR, and Final Hearing — and what happens at each stage." },
+        { href: "/can-i-hide-assets-in-divorce-uk", label: "Can I hide assets in divorce?", desc: "Why hiding assets in divorce is a serious legal offence — and how courts detect it." },
+        { href: "/spouse-refuses-financial-disclosure-uk", label: "Spouse refuses financial disclosure", desc: "What you can do when the other party refuses to provide financial information." },
+        { href: "/can-i-divorce-without-financial-settlement-uk", label: "Can I divorce without a financial settlement?", desc: "The risks of not obtaining a financial order — and when it is acceptable not to." },
+        { href: "/ex-doesnt-agree-settlement-uk", label: "My ex doesn't agree with the settlement", desc: "What to do when one party refuses to negotiate or accept reasonable proposals." },
+        { href: "/steps-after-final-order-finances-uk", label: "Steps after the final order — finances", desc: "What to do after the divorce is finalised — implementing your financial settlement." },
+        { href: "/what-happens-to-debts-in-divorce-uk", label: "What happens to debts in divorce?", desc: "How joint and sole debts are handled in the financial settlement process." },
+      ],
+    },
+    {
+      icon: Clock,
+      title: "Routes to Settlement",
+      links: [
+        { href: "/mediation-vs-court-divorce-uk-costs", label: "Mediation vs court — costs compared", desc: "The dramatic cost difference between mediation (£1,500–£5,000) and contested court proceedings (£20,000–£100,000+)." },
+        { href: "/divorce-solicitor-vs-mediation-uk", label: "Solicitor vs mediation — which to use?", desc: "When each approach is appropriate — and when you need both." },
+        { href: "/settling-out-of-court-vs-court-divorce-uk", label: "Settling out of court vs court proceedings", desc: "The full comparison of time, cost, stress, and outcome control." },
+        { href: "/divorce-mediation-process-uk", label: "The divorce mediation process — step by step", desc: "The full mediation process from MIAM through to Memorandum of Understanding and consent order." },
         { href: "/divorce-financial-checklist-before-mediation", label: "Financial checklist before mediation", desc: "Everything you need to gather before your first mediation session." },
+      ],
+    },
+    {
+      icon: Users,
+      title: "Specific Situations",
+      links: [
+        { href: "/divorce-with-children-financial-settlement-uk", label: "Divorce with children — financial settlement", desc: "How children's needs affect the overall financial settlement." },
+        { href: "/divorce-where-one-earns-more-uk", label: "Divorce where one earns more", desc: "How income inequality is handled in the financial settlement — spousal maintenance, duration, and the clean break." },
+        { href: "/how-does-child-custody-affect-financial-settlement-uk", label: "How does child custody affect the financial settlement?", desc: "The link between living arrangements for children and the housing/income settlement." },
+        { href: "/child-maintenance-vs-spousal-maintenance-uk", label: "Child maintenance vs spousal maintenance", desc: "The key differences between CMS child support and court-ordered spousal maintenance." },
+        { href: "/who-pays-what-after-divorce-with-children-uk", label: "Who pays what after divorce with children?", desc: "The allocation of ongoing financial responsibilities for housing, bills, and child costs." },
+        { href: "/does-having-children-change-divorce-settlement-uk", label: "Does having children change the settlement?", desc: "Precisely how children influence asset division, housing, and maintenance decisions." },
+        { href: "/how-much-maintenance-after-divorce-uk", label: "How much maintenance after divorce?", desc: "How courts calculate spousal maintenance — the factors, the range, and how long it lasts." },
       ],
     },
     {
@@ -58,6 +116,7 @@ export default function DivorceFinancialGuidesPage() {
       title: "Tools",
       links: [
         { href: "/", label: "Divorce Calculator UK", desc: "Model different settlement scenarios based on your actual figures — property, pensions, income, and debts." },
+        { href: "/free-guide", label: "Free UK Divorce Finances Guide", desc: "Five chapters covering the full financial process — from disclosure to implementation." },
       ],
     },
   ];

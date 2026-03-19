@@ -35,6 +35,46 @@ import DivorceFinancialGuidesPage from "@/pages/content/divorce-financial-guides
 import ContactPage from "@/pages/contact";
 import RefundPolicyPage from "@/pages/refund-policy";
 import AccessPage from "@/pages/access";
+import HowPropertyDividedPage from "@/pages/content/how-is-property-divided-in-divorce-uk";
+import WhatHappensToDebtsPage from "@/pages/content/what-happens-to-debts-in-divorce-uk";
+import ConsentOrderPage from "@/pages/content/what-is-a-consent-order-uk-divorce";
+import CleanBreakOrderPage from "@/pages/content/what-is-a-clean-break-order-uk";
+import FinancialDisclosurePage from "@/pages/content/financial-disclosure-divorce-uk";
+import FinancialRemedyPage from "@/pages/content/financial-remedy-proceedings-uk";
+import SavingsSplitPage from "@/pages/content/how-are-savings-split-in-divorce-uk";
+import InvestmentsDividedPage from "@/pages/content/how-are-investments-divided-in-divorce-uk";
+import JointBankAccountsPage from "@/pages/content/joint-bank-accounts-after-divorce-uk";
+import InheritanceClaimPage from "@/pages/content/can-ex-claim-inheritance-uk-divorce";
+import InheritanceSettlementPage from "@/pages/content/is-inheritance-included-in-divorce-settlement-uk";
+import BothNamesOnMortgagePage from "@/pages/content/both-names-on-mortgage-divorce-uk";
+import ForceSaleHousePage from "@/pages/content/can-i-force-sale-of-house-after-divorce-uk";
+import MortgageDuringDivorcePage from "@/pages/content/who-pays-mortgage-during-divorce-uk";
+import BuyingPartnerOutPage from "@/pages/content/buying-partner-out-of-house-divorce-uk";
+import UnmarriedSeparatingHousePage from "@/pages/content/unmarried-separating-house-uk";
+import DivorceNoAssetsPage from "@/pages/content/divorce-settlement-no-assets-uk";
+import DivorceWithChildrenPage from "@/pages/content/divorce-with-children-financial-settlement-uk";
+import DivorceIncomeInequalityPage from "@/pages/content/divorce-where-one-earns-more-uk";
+import CustodyFinancialSettlementPage from "@/pages/content/how-does-child-custody-affect-financial-settlement-uk";
+import ChildVsSpousalMaintenancePage from "@/pages/content/child-maintenance-vs-spousal-maintenance-uk";
+import WhoPaysAfterDivorcePage from "@/pages/content/who-pays-what-after-divorce-with-children-uk";
+import ChildrenChangeSettlementPage from "@/pages/content/does-having-children-change-divorce-settlement-uk";
+import HideAssetsPage from "@/pages/content/can-i-hide-assets-in-divorce-uk";
+import SpouseRefusesDisclosurePage from "@/pages/content/spouse-refuses-financial-disclosure-uk";
+import DivorceWithoutFinancialSettlementPage from "@/pages/content/can-i-divorce-without-financial-settlement-uk";
+import ExDoesntAgreeSettlementPage from "@/pages/content/ex-doesnt-agree-settlement-uk";
+import ReopenDivorceSettlementPage from "@/pages/content/can-i-reopen-divorce-settlement-uk";
+import FinancialClaimsAfterDivorcePage from "@/pages/content/how-long-after-divorce-can-financial-claims-be-made-uk";
+import LegallyBindingSettlementPage from "@/pages/content/when-is-divorce-financial-settlement-legally-binding-uk";
+import StepsAfterFinalOrderPage from "@/pages/content/steps-after-final-order-finances-uk";
+import MediationVsCourtPage from "@/pages/content/mediation-vs-court-divorce-uk-costs";
+import ConsentVsCleanBreakPage from "@/pages/content/consent-order-vs-clean-break-order-uk";
+import SolicitorVsMediationPage from "@/pages/content/divorce-solicitor-vs-mediation-uk";
+import SettlingOutOfCourtPage from "@/pages/content/settling-out-of-court-vs-court-divorce-uk";
+import MaintenanceAmountPage from "@/pages/content/how-much-maintenance-after-divorce-uk";
+import RefuseSettlementPage from "@/pages/content/can-i-refuse-divorce-financial-settlement-uk";
+import HowLongFinancialSettlementPage from "@/pages/content/how-long-does-divorce-financial-settlement-take-uk";
+import MediationProcessPage from "@/pages/content/divorce-mediation-process-uk";
+import DivorceTimelinePage from "@/pages/content/timeline-of-divorce-and-financial-settlement-uk";
 
 function Router() {
   return (
@@ -68,6 +108,46 @@ function Router() {
       <Route path="/access" component={AccessPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/refund-policy" component={RefundPolicyPage} />
+      <Route path="/how-is-property-divided-in-divorce-uk" component={HowPropertyDividedPage} />
+      <Route path="/what-happens-to-debts-in-divorce-uk" component={WhatHappensToDebtsPage} />
+      <Route path="/what-is-a-consent-order-uk-divorce" component={ConsentOrderPage} />
+      <Route path="/what-is-a-clean-break-order-uk" component={CleanBreakOrderPage} />
+      <Route path="/financial-disclosure-divorce-uk" component={FinancialDisclosurePage} />
+      <Route path="/financial-remedy-proceedings-uk" component={FinancialRemedyPage} />
+      <Route path="/how-are-savings-split-in-divorce-uk" component={SavingsSplitPage} />
+      <Route path="/how-are-investments-divided-in-divorce-uk" component={InvestmentsDividedPage} />
+      <Route path="/joint-bank-accounts-after-divorce-uk" component={JointBankAccountsPage} />
+      <Route path="/can-ex-claim-inheritance-uk-divorce" component={InheritanceClaimPage} />
+      <Route path="/is-inheritance-included-in-divorce-settlement-uk" component={InheritanceSettlementPage} />
+      <Route path="/both-names-on-mortgage-divorce-uk" component={BothNamesOnMortgagePage} />
+      <Route path="/can-i-force-sale-of-house-after-divorce-uk" component={ForceSaleHousePage} />
+      <Route path="/who-pays-mortgage-during-divorce-uk" component={MortgageDuringDivorcePage} />
+      <Route path="/buying-partner-out-of-house-divorce-uk" component={BuyingPartnerOutPage} />
+      <Route path="/unmarried-separating-house-uk" component={UnmarriedSeparatingHousePage} />
+      <Route path="/divorce-settlement-no-assets-uk" component={DivorceNoAssetsPage} />
+      <Route path="/divorce-with-children-financial-settlement-uk" component={DivorceWithChildrenPage} />
+      <Route path="/divorce-where-one-earns-more-uk" component={DivorceIncomeInequalityPage} />
+      <Route path="/how-does-child-custody-affect-financial-settlement-uk" component={CustodyFinancialSettlementPage} />
+      <Route path="/child-maintenance-vs-spousal-maintenance-uk" component={ChildVsSpousalMaintenancePage} />
+      <Route path="/who-pays-what-after-divorce-with-children-uk" component={WhoPaysAfterDivorcePage} />
+      <Route path="/does-having-children-change-divorce-settlement-uk" component={ChildrenChangeSettlementPage} />
+      <Route path="/can-i-hide-assets-in-divorce-uk" component={HideAssetsPage} />
+      <Route path="/spouse-refuses-financial-disclosure-uk" component={SpouseRefusesDisclosurePage} />
+      <Route path="/can-i-divorce-without-financial-settlement-uk" component={DivorceWithoutFinancialSettlementPage} />
+      <Route path="/ex-doesnt-agree-settlement-uk" component={ExDoesntAgreeSettlementPage} />
+      <Route path="/can-i-reopen-divorce-settlement-uk" component={ReopenDivorceSettlementPage} />
+      <Route path="/how-long-after-divorce-can-financial-claims-be-made-uk" component={FinancialClaimsAfterDivorcePage} />
+      <Route path="/when-is-divorce-financial-settlement-legally-binding-uk" component={LegallyBindingSettlementPage} />
+      <Route path="/steps-after-final-order-finances-uk" component={StepsAfterFinalOrderPage} />
+      <Route path="/mediation-vs-court-divorce-uk-costs" component={MediationVsCourtPage} />
+      <Route path="/consent-order-vs-clean-break-order-uk" component={ConsentVsCleanBreakPage} />
+      <Route path="/divorce-solicitor-vs-mediation-uk" component={SolicitorVsMediationPage} />
+      <Route path="/settling-out-of-court-vs-court-divorce-uk" component={SettlingOutOfCourtPage} />
+      <Route path="/how-much-maintenance-after-divorce-uk" component={MaintenanceAmountPage} />
+      <Route path="/can-i-refuse-divorce-financial-settlement-uk" component={RefuseSettlementPage} />
+      <Route path="/how-long-does-divorce-financial-settlement-take-uk" component={HowLongFinancialSettlementPage} />
+      <Route path="/divorce-mediation-process-uk" component={MediationProcessPage} />
+      <Route path="/timeline-of-divorce-and-financial-settlement-uk" component={DivorceTimelinePage} />
       <Route path="/results">
         <AccessGate>
           <ResultsPage />

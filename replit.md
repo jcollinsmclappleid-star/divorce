@@ -59,10 +59,23 @@ Technical SEO is fully implemented for `divorcecalculatoruk.co.uk`:
 - `/divorce-financial-modelling` — Pillar page
 - `/divorce-50-50-split-calculator-uk`, `/divorce-house-buyout-calculator-uk`, `/divorce-pension-split-calculator-uk`, `/divorce-mortgage-affordability-after-separation`, `/divorce-financial-checklist-before-mediation` — Cluster pages
 - `/is-50-50-split-automatic-uk`, `/can-i-keep-the-house-after-divorce-uk`, `/how-are-pensions-divided-in-divorce-uk` — FAQ pages
-- `/how-much-does-divorce-cost-uk`, `/divorce-financial-settlement-calculator-uk`, `/who-gets-house-divorce-uk`, `/how-pensions-split-divorce-uk`, `/divorce-settlement-examples-uk` — 5 SEO authority pages (added 2026)
+- `/how-much-does-divorce-cost-uk`, `/divorce-financial-settlement-calculator-uk`, `/who-gets-house-divorce-uk`, `/how-pensions-split-divorce-uk`, `/divorce-settlement-examples-uk` — 5 SEO authority pages
 - `/free-guide` — Free UK Divorce Finances Guide (5 chapters, email capture, inline CTAs)
 - `/contact` — Contact & Support page (support@divorcecalculatoruk.co.uk, quick-help paths, non-advisory disclaimer)
 - `/refund-policy` — Standalone Refund Policy page (UK Consumer Contracts Regulations 2013, Consumer Rights Act 2015, billing errors, technical issues, refund process via support email)
+
+**38 expanded SEO content pages (all use ContentPageLayout):**
+- **Original 7**: `/how-is-property-divided-in-divorce-uk`, `/what-happens-to-debts-in-divorce-uk`, `/what-is-a-consent-order-uk-divorce`, `/what-is-a-clean-break-order-uk`, `/financial-disclosure-divorce-uk`, `/financial-remedy-proceedings-uk`, `/how-are-savings-split-in-divorce-uk`
+- **Assets**: `/how-are-investments-divided-in-divorce-uk`, `/joint-bank-accounts-after-divorce-uk`, `/can-ex-claim-inheritance-uk-divorce`, `/is-inheritance-included-in-divorce-settlement-uk`
+- **Property**: `/both-names-on-mortgage-divorce-uk`, `/can-i-force-sale-of-house-after-divorce-uk`, `/who-pays-mortgage-during-divorce-uk`, `/buying-partner-out-of-house-divorce-uk`, `/unmarried-separating-house-uk`
+- **Situations**: `/divorce-settlement-no-assets-uk`, `/divorce-where-one-earns-more-uk`
+- **Children**: `/divorce-with-children-financial-settlement-uk`, `/how-does-child-custody-affect-financial-settlement-uk`, `/child-maintenance-vs-spousal-maintenance-uk`, `/who-pays-what-after-divorce-with-children-uk`, `/does-having-children-change-divorce-settlement-uk`
+- **Disclosure/hiding**: `/can-i-hide-assets-in-divorce-uk`, `/spouse-refuses-financial-disclosure-uk`
+- **Process**: `/can-i-divorce-without-financial-settlement-uk`, `/ex-doesnt-agree-settlement-uk`, `/can-i-reopen-divorce-settlement-uk`, `/how-long-after-divorce-can-financial-claims-be-made-uk`, `/when-is-divorce-financial-settlement-legally-binding-uk`, `/steps-after-final-order-finances-uk`, `/can-i-refuse-divorce-financial-settlement-uk`
+- **Routes**: `/mediation-vs-court-divorce-uk-costs`, `/consent-order-vs-clean-break-order-uk`, `/divorce-solicitor-vs-mediation-uk`, `/settling-out-of-court-vs-court-divorce-uk`, `/divorce-mediation-process-uk`
+- **Maintenance/timing**: `/how-much-maintenance-after-divorce-uk`, `/how-long-does-divorce-financial-settlement-take-uk`, `/timeline-of-divorce-and-financial-settlement-uk`
+
+All content pages are linked from `/divorce-financial-guides` hub and included in the sitemap in `server/routes.ts`.
 
 ### Access Management
 
