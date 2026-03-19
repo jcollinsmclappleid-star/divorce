@@ -181,18 +181,19 @@ function FeatureShowcase() {
   };
 
   return (
-    <div className="relative" data-testid="div-dashboard-mockup">
+    <div className="w-full overflow-hidden" data-testid="div-dashboard-mockup">
       <div className="rounded-xl border border-white/15 bg-background shadow-2xl overflow-hidden ring-1 ring-white/10">
+
         <div className="bg-primary/8 border-b border-border/40 px-4 py-2.5 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <div className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
-            <div className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
-            <div className="h-2.5 w-2.5 rounded-full bg-green-400/70" />
-            <span className="text-[10px] text-muted-foreground ml-2 font-mono">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <div className="h-2.5 w-2.5 rounded-full bg-red-400/70 shrink-0" />
+            <div className="h-2.5 w-2.5 rounded-full bg-amber-400/70 shrink-0" />
+            <div className="h-2.5 w-2.5 rounded-full bg-green-400/70 shrink-0" />
+            <span className="text-[10px] text-muted-foreground ml-2 font-mono truncate">
               {FEATURE_SLIDES[activeSlide]?.label} — Full Analysis
             </span>
           </div>
-          <div className="flex items-center gap-1 text-white/30">
+          <div className="flex items-center gap-0.5 text-muted-foreground/40 shrink-0 ml-2">
             <ChevronLeft className="w-3 h-3" />
             <span className="text-[9px]">swipe</span>
             <ChevronRight className="w-3 h-3" />
@@ -202,35 +203,38 @@ function FeatureShowcase() {
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className="flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full"
+          style={{ touchAction: "pan-x" }}
         >
-          <div className="min-w-full snap-start p-4 space-y-3">
+          {/* Slide 1 — Financial Sustainability Indicator */}
+          <div className="w-full flex-none snap-start p-4 space-y-3">
             <div className="flex items-center justify-between mb-1">
-              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Financial Sustainability Indicator</p>
-              <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">Full analysis</Badge>
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Sustainability Score</p>
+              <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">All 4 options</Badge>
             </div>
             {[
               { label: "Sell & Split", score: 82, colour: "bg-green-500", text: "82", verdict: "Sustainable", textCol: "text-green-600" },
-              { label: "You keep home", score: 67, colour: "bg-amber-500", text: "67", verdict: "Monitor closely", textCol: "text-amber-600" },
-              { label: "They keep home", score: 38, colour: "bg-red-500", text: "38", verdict: "Financial stress risk", textCol: "text-red-600" },
+              { label: "You keep home", score: 67, colour: "bg-amber-500", text: "67", verdict: "Monitor", textCol: "text-amber-600" },
+              { label: "They keep home", score: 38, colour: "bg-red-500", text: "38", verdict: "Stress risk", textCol: "text-red-600" },
               { label: "Deferred sale", score: 74, colour: "bg-green-400", text: "74", verdict: "Sustainable", textCol: "text-green-600" },
             ].map(row => (
               <div key={row.label} className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-muted-foreground font-medium">{row.label}</span>
-                  <span className={`text-[10px] font-bold ${row.textCol}`}>{row.text} · {row.verdict}</span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[11px] text-muted-foreground font-medium truncate">{row.label}</span>
+                  <span className={`text-[10px] font-bold shrink-0 ${row.textCol}`}>{row.text} · {row.verdict}</span>
                 </div>
-                <div className="w-full bg-muted rounded-full h-2">
-                  <div className={`${row.colour} h-2 rounded-full`} style={{ width: `${row.score}%` }} />
+                <div className="w-full bg-muted rounded-full h-2.5">
+                  <div className={`${row.colour} h-2.5 rounded-full`} style={{ width: `${row.score}%` }} />
                 </div>
               </div>
             ))}
             <p className="text-[9px] text-muted-foreground/50 text-center pt-1">Scored 0–100 · Illustrative example</p>
           </div>
 
-          <div className="min-w-full snap-start p-4 space-y-3">
+          {/* Slide 2 — Settlement Comparison */}
+          <div className="w-full flex-none snap-start p-4 space-y-3">
             <div className="flex items-center justify-between mb-1">
-              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Settlement Comparison</p>
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Asset Split Comparison</p>
               <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">4 options</Badge>
             </div>
             {[
@@ -240,131 +244,150 @@ function FeatureShowcase() {
               { label: "Deferred sale", you: 50, them: 50, youK: "£179k", themK: "£179k" },
             ].map(row => (
               <div key={row.label} className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-muted-foreground font-medium">{row.label}</span>
-                  <div className="flex gap-2 text-[10px]">
-                    <span className="text-primary font-semibold">{row.youK}</span>
-                    <span className="text-muted-foreground/50">/</span>
-                    <span className="text-teal-600 font-semibold">{row.themK}</span>
+                <div className="flex items-center justify-between gap-1">
+                  <span className="text-[10px] text-muted-foreground font-medium truncate">{row.label}</span>
+                  <div className="flex gap-1.5 text-[10px] shrink-0">
+                    <span className="text-primary font-bold">{row.youK}</span>
+                    <span className="text-muted-foreground/40">/</span>
+                    <span className="text-teal-600 font-bold">{row.themK}</span>
                   </div>
                 </div>
-                <div className="flex gap-0.5 h-3 rounded overflow-hidden">
-                  <div className="bg-primary rounded-l-sm" style={{ width: `${row.you}%` }} />
-                  <div className="bg-teal-500 rounded-r-sm" style={{ width: `${row.them}%` }} />
+                <div className="flex h-3 w-full rounded overflow-hidden">
+                  <div className="bg-primary" style={{ width: `${row.you}%` }} />
+                  <div className="bg-teal-500" style={{ width: `${row.them}%` }} />
                 </div>
               </div>
             ))}
-            <div className="flex items-center gap-3 pt-1">
-              <div className="flex items-center gap-1"><div className="h-2 w-3 bg-primary rounded-sm" /><span className="text-[9px] text-muted-foreground">You</span></div>
-              <div className="flex items-center gap-1"><div className="h-2 w-3 bg-teal-500 rounded-sm" /><span className="text-[9px] text-muted-foreground">Other party</span></div>
+            <div className="flex items-center gap-4 pt-1">
+              <div className="flex items-center gap-1"><div className="h-2 w-4 bg-primary rounded-sm" /><span className="text-[9px] text-muted-foreground">You</span></div>
+              <div className="flex items-center gap-1"><div className="h-2 w-4 bg-teal-500 rounded-sm" /><span className="text-[9px] text-muted-foreground">Other party</span></div>
             </div>
           </div>
 
-          <div className="min-w-full snap-start p-4 space-y-3">
+          {/* Slide 3 — 5-Year Capital Projection */}
+          <div className="w-full flex-none snap-start p-4 space-y-2">
             <div className="flex items-center justify-between mb-1">
               <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">5-Year Capital Projection</p>
               <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">Long-term</Badge>
             </div>
-            <svg viewBox="0 0 220 70" className="w-full h-20" fill="none">
-              <text x="0" y="10" className="text-[6px]" fill="hsl(var(--muted-foreground))" fontSize="6">Year 1</text>
-              <text x="50" y="10" className="text-[6px]" fill="hsl(var(--muted-foreground))" fontSize="6">Year 2</text>
-              <text x="100" y="10" className="text-[6px]" fill="hsl(var(--muted-foreground))" fontSize="6">Year 3</text>
-              <text x="150" y="10" className="text-[6px]" fill="hsl(var(--muted-foreground))" fontSize="6">Year 4</text>
-              <text x="195" y="10" className="text-[6px]" fill="hsl(var(--muted-foreground))" fontSize="6">Year 5</text>
-              <polyline points="0,65 55,55 110,42 165,32 220,20" stroke="hsl(var(--primary))" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-              <polyline points="0,68 55,65 110,62 165,66 220,64" stroke="#14b8a6" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="4 2" />
-              <polyline points="0,62 55,58 110,52 165,48 220,42" stroke="#C9A84C" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 3" opacity="0.6" />
-            </svg>
-            <div className="flex items-center gap-4 text-[9px] text-muted-foreground">
-              <span className="flex items-center gap-1"><span className="inline-block w-4 h-0.5 bg-primary rounded" /> Sell &amp; Split</span>
-              <span className="flex items-center gap-1"><span className="inline-block w-4 h-0.5 bg-teal-500 rounded" style={{backgroundImage:"repeating-linear-gradient(to right,#14b8a6 0,#14b8a6 4px,transparent 4px,transparent 8px)"}} /> You retain</span>
-              <span className="flex items-center gap-1"><span className="inline-block w-4 h-0.5 bg-gold rounded opacity-60" /> Deferred</span>
+            <div className="w-full bg-muted/30 rounded-lg p-2">
+              <svg viewBox="0 0 200 80" className="w-full h-24" fill="none" preserveAspectRatio="xMidYMid meet">
+                <line x1="0" y1="18" x2="200" y2="18" stroke="currentColor" strokeWidth="0.3" opacity="0.15" />
+                <line x1="0" y1="40" x2="200" y2="40" stroke="currentColor" strokeWidth="0.3" opacity="0.15" />
+                <line x1="0" y1="62" x2="200" y2="62" stroke="currentColor" strokeWidth="0.3" opacity="0.15" />
+                <text x="1" y="76" fill="hsl(var(--muted-foreground))" fontSize="7" opacity="0.6">Now</text>
+                <text x="44" y="76" fill="hsl(var(--muted-foreground))" fontSize="7" opacity="0.6">Yr 1</text>
+                <text x="94" y="76" fill="hsl(var(--muted-foreground))" fontSize="7" opacity="0.6">Yr 2</text>
+                <text x="144" y="76" fill="hsl(var(--muted-foreground))" fontSize="7" opacity="0.6">Yr 3</text>
+                <text x="182" y="76" fill="hsl(var(--muted-foreground))" fontSize="7" opacity="0.6">Yr 5</text>
+                <polyline points="0,60 50,50 100,38 150,26 200,16" stroke="hsl(var(--primary))" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                <polyline points="0,60 50,63 100,61 150,65 200,62" stroke="#14b8a6" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="5 3" />
+                <polyline points="0,60 50,57 100,52 150,47 200,40" stroke="#C9A84C" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 4" opacity="0.8" />
+                <text x="202" y="18" fill="hsl(var(--primary))" fontSize="6" opacity="0.9">↑</text>
+              </svg>
             </div>
-            <p className="text-[9px] text-muted-foreground/50 text-center">Under each settlement option · Illustrative</p>
+            <div className="flex items-center gap-3 flex-wrap text-[9px] text-muted-foreground">
+              <span className="flex items-center gap-1"><span className="inline-block w-5 h-0.5 bg-primary rounded" />Sell &amp; Split</span>
+              <span className="flex items-center gap-1"><span className="inline-block w-5 border-t-2 border-teal-500 border-dashed" />You retain</span>
+              <span className="flex items-center gap-1"><span className="inline-block w-5 border-t-2 border-gold border-dotted opacity-80" />Deferred</span>
+            </div>
+            <p className="text-[9px] text-muted-foreground/50 text-center">Illustrative capital position per option</p>
           </div>
 
-          <div className="min-w-full snap-start p-4 space-y-3">
+          {/* Slide 4 — Monthly Cashflow */}
+          <div className="w-full flex-none snap-start p-4 space-y-2">
             <div className="flex items-center justify-between mb-1">
-              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Monthly Cashflow After Divorce</p>
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Monthly Cashflow</p>
               <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">Per party</Badge>
             </div>
+            <div className="grid grid-cols-3 gap-x-2 mb-1">
+              <span className="text-[9px] text-muted-foreground/60 uppercase tracking-wide">Option</span>
+              <span className="text-[9px] text-muted-foreground/60 uppercase tracking-wide text-center">You</span>
+              <span className="text-[9px] text-muted-foreground/60 uppercase tracking-wide text-right">Them</span>
+            </div>
             {[
-              { option: "Sell & Split", youNet: "+£680/mo", themNet: "+£420/mo", youGreen: true, themGreen: true },
-              { option: "You keep home", youNet: "−£240/mo", themNet: "+£850/mo", youGreen: false, themGreen: true },
-              { option: "They keep home", youNet: "+£920/mo", themNet: "−£110/mo", youGreen: true, themGreen: false },
-              { option: "Deferred sale", youNet: "+£310/mo", themNet: "+£290/mo", youGreen: true, themGreen: true },
+              { option: "Sell & Split", youNet: "+£680", themNet: "+£420", youGreen: true, themGreen: true },
+              { option: "You keep home", youNet: "−£240", themNet: "+£850", youGreen: false, themGreen: true },
+              { option: "They keep", youNet: "+£920", themNet: "−£110", youGreen: true, themGreen: false },
+              { option: "Deferred sale", youNet: "+£310", themNet: "+£290", youGreen: true, themGreen: true },
             ].map(row => (
-              <div key={row.option} className="flex items-center justify-between py-1 border-b border-border/30 last:border-0">
-                <span className="text-[10px] text-muted-foreground font-medium truncate pr-2">{row.option}</span>
-                <div className="flex gap-3 shrink-0">
-                  <span className={`text-[10px] font-bold ${row.youGreen ? "text-green-600" : "text-red-500"}`}>{row.youNet}</span>
-                  <span className={`text-[10px] font-bold ${row.themGreen ? "text-teal-600" : "text-red-500"}`}>{row.themNet}</span>
-                </div>
+              <div key={row.option} className="grid grid-cols-3 gap-x-2 items-center py-1.5 border-b border-border/20 last:border-0">
+                <span className="text-[10px] text-muted-foreground font-medium truncate">{row.option}</span>
+                <span className={`text-[10px] font-bold text-center ${row.youGreen ? "text-green-600" : "text-red-500"}`}>{row.youNet}<span className="text-[8px] font-normal opacity-70">/mo</span></span>
+                <span className={`text-[10px] font-bold text-right ${row.themGreen ? "text-teal-600" : "text-red-500"}`}>{row.themNet}<span className="text-[8px] font-normal opacity-70">/mo</span></span>
               </div>
             ))}
-            <div className="flex items-center gap-3 pt-1">
-              <div className="flex items-center gap-1"><div className="h-2 w-3 bg-primary rounded-sm" /><span className="text-[9px] text-muted-foreground">Your surplus</span></div>
-              <div className="flex items-center gap-1"><div className="h-2 w-3 bg-teal-500 rounded-sm" /><span className="text-[9px] text-muted-foreground">Their surplus</span></div>
-            </div>
+            <p className="text-[9px] text-muted-foreground/50 text-center pt-1">After tax, mortgage &amp; living costs · Illustrative</p>
           </div>
 
-          <div className="min-w-full snap-start p-4 space-y-3">
+          {/* Slide 5 — Stress Testing */}
+          <div className="w-full flex-none snap-start p-4 space-y-3">
             <div className="flex items-center justify-between mb-1">
               <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Stress Test — What If?</p>
               <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">Sensitivity</Badge>
             </div>
-            <p className="text-[10px] text-muted-foreground">Adjusting: Interest rates +2%</p>
+            <div className="flex items-center gap-2 bg-amber-50 dark:bg-amber-950/20 rounded-md px-2.5 py-1.5 border border-amber-200/50">
+              <Activity className="w-3 h-3 text-amber-600 shrink-0" />
+              <span className="text-[10px] text-amber-800 dark:text-amber-400 font-medium">Applying: interest rates +2%</span>
+            </div>
             {[
-              { label: "Sell & Split", before: 82, after: 74, beforeCol: "bg-green-500", afterCol: "bg-green-400" },
-              { label: "You keep home", before: 67, after: 41, beforeCol: "bg-amber-500", afterCol: "bg-red-500" },
-              { label: "They keep home", before: 38, after: 22, beforeCol: "bg-red-500", afterCol: "bg-red-600" },
-              { label: "Deferred sale", before: 74, after: 68, beforeCol: "bg-green-400", afterCol: "bg-amber-500" },
+              { label: "Sell & Split", before: 82, after: 74, delta: "−8", deltaCol: "text-amber-600" },
+              { label: "You keep home", before: 67, after: 41, delta: "−26", deltaCol: "text-red-600" },
+              { label: "They keep home", before: 38, after: 22, delta: "−16", deltaCol: "text-red-600" },
+              { label: "Deferred sale", before: 74, after: 68, delta: "−6", deltaCol: "text-amber-600" },
             ].map(row => (
-              <div key={row.label} className="space-y-0.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-muted-foreground font-medium">{row.label}</span>
-                  <span className="text-[10px] text-muted-foreground">{row.before} → <span className="font-bold text-foreground">{row.after}</span></span>
+              <div key={row.label} className="space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[10px] text-muted-foreground font-medium truncate">{row.label}</span>
+                  <span className="text-[10px] text-muted-foreground shrink-0">
+                    {row.before} → <span className="font-bold text-foreground">{row.after}</span>
+                    <span className={`ml-1 font-semibold ${row.deltaCol}`}>({row.delta})</span>
+                  </span>
                 </div>
-                <div className="relative w-full bg-muted rounded-full h-2">
-                  <div className={`${row.beforeCol} h-2 rounded-full opacity-30`} style={{ width: `${row.before}%` }} />
-                  <div className={`${row.afterCol} h-2 rounded-full absolute top-0 left-0`} style={{ width: `${row.after}%` }} />
+                <div className="relative w-full bg-muted rounded-full h-2.5">
+                  <div className="bg-muted-foreground/20 h-2.5 rounded-full" style={{ width: `${row.before}%` }} />
+                  <div className={`h-2.5 rounded-full absolute top-0 left-0 ${row.after >= 70 ? "bg-green-500" : row.after >= 50 ? "bg-amber-500" : "bg-red-500"}`} style={{ width: `${row.after}%` }} />
                 </div>
               </div>
             ))}
-            <p className="text-[9px] text-muted-foreground/50 text-center">Grey = original · Colour = stress-tested · Illustrative</p>
+            <p className="text-[9px] text-muted-foreground/50 text-center">Faded = original · Solid = stress-tested · Illustrative</p>
           </div>
 
-          <div className="min-w-full snap-start p-4 space-y-3">
+          {/* Slide 6 — Downloadable Financial Brief */}
+          <div className="w-full flex-none snap-start p-4 space-y-3">
             <div className="flex items-center justify-between mb-1">
               <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Downloadable Financial Brief</p>
               <Badge variant="outline" className="text-[9px] px-1.5 py-0 text-gold border-gold/40 bg-gold/5">PDF</Badge>
             </div>
             <div className="rounded-lg border border-border/60 bg-muted/20 p-3 space-y-2">
               <div className="flex items-center gap-2 pb-2 border-b border-border/30">
-                <FileText className="w-4 h-4 text-primary" />
-                <span className="text-[11px] font-semibold text-foreground">Structured Financial Brief</span>
+                <FileText className="w-4 h-4 text-primary shrink-0" />
+                <div>
+                  <p className="text-[11px] font-semibold text-foreground">Structured Financial Brief</p>
+                  <p className="text-[9px] text-muted-foreground">Your personal figures · UK 2025/26</p>
+                </div>
               </div>
               {[
-                "Total asset pool & allocation",
-                "Net position per party · all 4 options",
-                "Financial Sustainability Indicator scores",
-                "Monthly surplus / deficit breakdown",
-                "5-year capital projections",
-                "Stress test sensitivity summary",
-                "UK tax & NI applied throughout",
+                "Total asset pool — £359,000",
+                "Net position: all 4 settlement options",
+                "Sustainability scores per option",
+                "Monthly cashflow per party",
+                "5-year capital projection chart",
+                "Stress test: rates +2%, income −15%",
+                "UK income tax &amp; NI applied",
               ].map((item) => (
                 <div key={item} className="flex items-center gap-2">
                   <Check className="w-3 h-3 text-green-500 shrink-0" />
-                  <span className="text-[10px] text-muted-foreground">{item}</span>
+                  <span className="text-[10px] text-muted-foreground" dangerouslySetInnerHTML={{ __html: item }} />
                 </div>
               ))}
             </div>
-            <p className="text-[9px] text-muted-foreground/50 text-center">Generated from your figures · Take to any professional conversation</p>
+            <p className="text-[9px] text-muted-foreground/50 text-center">Generated from your figures · Take to any solicitor meeting</p>
           </div>
         </div>
 
         <div className="border-t border-border/30 bg-muted/20 px-4 py-2.5 flex items-center justify-between">
-          <div className="flex gap-1.5">
+          <div className="flex gap-1.5 items-center">
             {FEATURE_SLIDES.map((slide, i) => (
               <button
                 key={slide.id}
@@ -372,8 +395,8 @@ function FeatureShowcase() {
                 data-testid={`dot-feature-${i}`}
                 className={`rounded-full transition-all duration-200 ${
                   activeSlide === i
-                    ? "w-4 h-1.5 bg-gold"
-                    : "w-1.5 h-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/60"
+                    ? "w-5 h-1.5 bg-gold"
+                    : "w-1.5 h-1.5 bg-muted-foreground/25 hover:bg-muted-foreground/50"
                 }`}
                 aria-label={`View ${slide.label}`}
               />
