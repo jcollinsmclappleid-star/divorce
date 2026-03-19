@@ -758,6 +758,7 @@ export default function LandingPage() {
             <div>
               <p className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">Legal &amp; Support</p>
               <ul className="space-y-2">
+                <li><Link href="/about" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-about">About This Tool</Link></li>
                 <li><Link href="/methodology" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-methodology">Model Methodology</Link></li>
                 <li><Link href="/privacy" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-privacy">Privacy Policy</Link></li>
                 <li><Link href="/terms" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-terms">Terms of Use</Link></li>
