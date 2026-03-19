@@ -25,7 +25,7 @@ const brandSubSize = {
   lg: "text-sm",
 };
 
-function ScalesIcon({ className = "" }: { className?: string }) {
+function CalcIcon({ className = "" }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 40 40"
@@ -35,18 +35,14 @@ function ScalesIcon({ className = "" }: { className?: string }) {
       aria-hidden="true"
     >
       <rect width="40" height="40" rx="8" fill="#1a3357" />
-      <g transform="translate(6, 5)">
-        <circle cx="14" cy="4.5" r="1.8" fill="#C9A84C" />
-        <rect x="13.25" y="4.5" width="1.5" height="17" rx="0.75" fill="#C9A84C" />
-        <rect x="3" y="8" width="22" height="1.4" rx="0.7" fill="#C9A84C" />
-        <line x1="5" y1="9.4" x2="3" y2="16" stroke="#C9A84C" strokeWidth="1.1" strokeLinecap="round" />
-        <line x1="9" y1="9.4" x2="11" y2="16" stroke="#C9A84C" strokeWidth="1.1" strokeLinecap="round" />
-        <path d="M2 16 Q7 19.5 12 16" stroke="#C9A84C" strokeWidth="1.3" fill="none" strokeLinecap="round" />
-        <line x1="17" y1="9.4" x2="19" y2="16" stroke="#C9A84C" strokeWidth="1.1" strokeLinecap="round" />
-        <line x1="23" y1="9.4" x2="21" y2="16" stroke="#C9A84C" strokeWidth="1.1" strokeLinecap="round" />
-        <path d="M16 16 Q21 19.5 26 16" stroke="#C9A84C" strokeWidth="1.3" fill="none" strokeLinecap="round" />
-        <rect x="10" y="21.5" width="8" height="1.3" rx="0.65" fill="#C9A84C" />
-      </g>
+      <rect x="9" y="8" width="22" height="24" rx="3" fill="none" stroke="#C9A84C" strokeWidth="1.5" />
+      <rect x="12" y="11" width="16" height="5" rx="1.5" fill="#C9A84C" opacity="0.9" />
+      <rect x="12" y="20" width="4.5" height="4" rx="1" fill="#C9A84C" opacity="0.7" />
+      <rect x="17.75" y="20" width="4.5" height="4" rx="1" fill="#C9A84C" opacity="0.7" />
+      <rect x="23.5" y="20" width="4.5" height="4" rx="1" fill="#C9A84C" opacity="0.7" />
+      <rect x="12" y="26" width="4.5" height="4" rx="1" fill="#C9A84C" opacity="0.7" />
+      <rect x="17.75" y="26" width="4.5" height="4" rx="1" fill="#C9A84C" opacity="0.7" />
+      <rect x="23.5" y="26" width="4.5" height="4" rx="1" fill="#C9A84C" />
     </svg>
   );
 }
@@ -54,7 +50,7 @@ function ScalesIcon({ className = "" }: { className?: string }) {
 export function Logo({ href = "/", size = "md", className = "", showBrandName = false }: LogoProps) {
   const content = (
     <div className="flex items-center gap-2.5 shrink-0">
-      <ScalesIcon className={iconSizeMap[size]} />
+      <CalcIcon className={iconSizeMap[size]} />
       <div className="flex flex-col" data-testid="text-brand-name">
         <span className={`font-display font-bold tracking-tight leading-tight ${sizeMap[size]}`}>
           Divorce Calculator UK
@@ -82,7 +78,7 @@ export function Logo({ href = "/", size = "md", className = "", showBrandName = 
 export function LogoPrint({ className = "" }: { className?: string }) {
   return (
     <div className={`flex items-center gap-2.5 ${className}`} data-testid="img-logo-print">
-      <ScalesIcon className="w-7 h-7" />
+      <CalcIcon className="w-7 h-7" />
       <div className="flex flex-col">
         <span className="font-display font-bold text-lg">Divorce Calculator UK</span>
         <span className="text-muted-foreground text-xs uppercase">Financial Modelling</span>
