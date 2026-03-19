@@ -26,6 +26,18 @@ const relatedPages = [
     href: "/divorce-house-buyout-calculator-uk",
     badge: "Property",
   },
+  {
+    title: "Pension Offsetting in Divorce",
+    description: "Trading pension value against other assets — how offsetting works in practice.",
+    href: "/pension-offsetting-divorce-uk",
+    badge: "Pensions",
+  },
+  {
+    title: "How Pensions Are Divided in Divorce",
+    description: "Sharing, offsetting, and attachment — explained in plain English.",
+    href: "/how-pensions-split-divorce-uk",
+    badge: "Guide",
+  },
 ];
 
 export default function ClusterPensionSplit() {

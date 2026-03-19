@@ -32,6 +32,18 @@ const relatedPages = [
     href: "/divorce-pension-split-calculator-uk",
     badge: "Pensions",
   },
+  {
+    title: "Is a 50/50 Split Automatic in UK Divorce?",
+    description: "The legal reality behind equal division — what courts actually consider.",
+    href: "/is-50-50-split-automatic-uk",
+    badge: "FAQ",
+  },
+  {
+    title: "Divorce Where One Partner Earns More",
+    description: "How income disparity and needs typically shape financial outcomes.",
+    href: "/divorce-where-one-earns-more-uk",
+    badge: "Situations",
+  },
 ];
 
 export default function Cluster5050Split() {

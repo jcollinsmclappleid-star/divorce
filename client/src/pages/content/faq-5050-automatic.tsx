@@ -50,6 +50,18 @@ const relatedPages = [
     href: "/divorce-house-buyout-calculator-uk",
     badge: "Property",
   },
+  {
+    title: "Divorce Where One Partner Earns More",
+    description: "How courts approach cases where income or assets are unequal.",
+    href: "/divorce-where-one-earns-more-uk",
+    badge: "Situations",
+  },
+  {
+    title: "Divorce Settlement Examples",
+    description: "Illustrative worked examples of different settlement structures.",
+    href: "/divorce-settlement-examples-uk",
+    badge: "Examples",
+  },
 ];
 
 const practiceItems = [

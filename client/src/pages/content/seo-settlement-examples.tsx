@@ -74,6 +74,9 @@ export default function SeoSettlementExamplesPage() {
 
       <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl">
         <div className="space-y-8">
+          <div className="mb-2">
+            <Link href="/divorce-financial-guides" onClick={scrollTop} className="text-sm text-primary hover:underline flex items-center gap-1" data-testid="link-all-guides">← All guides</Link>
+          </div>
           <div className="space-y-3">
             <Badge variant="outline" className="text-primary border-primary/30">England & Wales · Illustrative only</Badge>
             <h1 className="text-3xl md:text-4xl font-display font-bold tracking-tight leading-tight" data-testid="text-page-title">
@@ -234,6 +237,23 @@ export default function SeoSettlementExamplesPage() {
               </p>
             </CardContent>
           </Card>
+
+          <section className="space-y-4 pt-4 border-t" data-testid="section-related-articles">
+            <h2 className="text-lg font-semibold text-foreground">Related guides</h2>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {[
+                { href: "/divorce-financial-settlement-calculator-uk", label: "How assets are divided in divorce", desc: "The legal principles courts apply when splitting assets." },
+                { href: "/divorce-where-one-earns-more-uk", label: "Divorce where one partner earns more", desc: "How income disparity affects settlement outcomes." },
+                { href: "/divorce-with-children-financial-settlement-uk", label: "Settlement when there are children", desc: "How children's needs shape the financial division." },
+                { href: "/consent-order-vs-clean-break-order-uk", label: "Consent order vs clean break order", desc: "Which type of order is right for your situation?" },
+              ].map((link) => (
+                <Link key={link.href} href={link.href} onClick={scrollTop} className="block group p-3 rounded-lg border hover:border-primary/40 hover:bg-primary/5 transition-all" data-testid={`link-related-${link.href.replace(/\//g, "")}`}>
+                  <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">{link.label}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{link.desc}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
 
           <div className="text-center space-y-3">
             <p className="text-sm text-muted-foreground">Also see:</p>

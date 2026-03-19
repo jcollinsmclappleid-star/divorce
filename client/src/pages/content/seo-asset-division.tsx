@@ -43,6 +43,9 @@ export default function SeoAssetDivisionPage() {
 
       <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl">
         <div className="space-y-8">
+          <div className="mb-2">
+            <Link href="/divorce-financial-guides" onClick={scrollTop} className="text-sm text-primary hover:underline flex items-center gap-1" data-testid="link-all-guides">← All guides</Link>
+          </div>
           <div className="space-y-3">
             <Badge variant="outline" className="text-primary border-primary/30">England & Wales · 2025/26</Badge>
             <h1 className="text-3xl md:text-4xl font-display font-bold tracking-tight leading-tight" data-testid="text-page-title">
@@ -174,6 +177,23 @@ export default function SeoAssetDivisionPage() {
               </p>
             </CardContent>
           </Card>
+
+          <section className="space-y-4 pt-4 border-t" data-testid="section-related-articles">
+            <h2 className="text-lg font-semibold text-foreground">Related guides</h2>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {[
+                { href: "/what-is-a-consent-order-uk-divorce", label: "What is a consent order?", desc: "How to make a financial agreement legally binding." },
+                { href: "/what-is-a-clean-break-order-uk", label: "What is a clean break order?", desc: "How to end all future financial claims between parties." },
+                { href: "/financial-disclosure-divorce-uk", label: "Financial disclosure in divorce", desc: "What you are legally required to disclose." },
+                { href: "/how-are-savings-split-in-divorce-uk", label: "How are savings split in divorce?", desc: "How courts approach joint and sole savings accounts." },
+              ].map((link) => (
+                <Link key={link.href} href={link.href} onClick={scrollTop} className="block group p-3 rounded-lg border hover:border-primary/40 hover:bg-primary/5 transition-all" data-testid={`link-related-${link.href.replace(/\//g, "")}`}>
+                  <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">{link.label}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{link.desc}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
 
           <div className="text-center space-y-3">
             <p className="text-sm text-muted-foreground">Also see:</p>

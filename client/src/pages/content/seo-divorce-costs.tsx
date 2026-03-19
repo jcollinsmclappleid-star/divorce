@@ -43,6 +43,9 @@ export default function SeoDivorceCostsPage() {
 
       <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl">
         <div className="space-y-8">
+          <div className="mb-2">
+            <Link href="/divorce-financial-guides" onClick={scrollTop} className="text-sm text-primary hover:underline flex items-center gap-1" data-testid="link-all-guides">← All guides</Link>
+          </div>
           <div className="space-y-3">
             <Badge variant="outline" className="text-primary border-primary/30">England & Wales · 2025/26</Badge>
             <h1 className="text-3xl md:text-4xl font-display font-bold tracking-tight leading-tight" data-testid="text-page-title">
@@ -166,6 +169,23 @@ export default function SeoDivorceCostsPage() {
               </p>
             </CardContent>
           </Card>
+
+          <section className="space-y-4 pt-4 border-t" data-testid="section-related-articles">
+            <h2 className="text-lg font-semibold text-foreground">Related guides</h2>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {[
+                { href: "/mediation-vs-court-divorce-uk-costs", label: "Mediation vs court — costs compared", desc: "The real cost difference between the two main routes to settlement." },
+                { href: "/timeline-of-divorce-and-financial-settlement-uk", label: "Timeline of divorce and financial settlement", desc: "From separation to final order — the full process mapped out." },
+                { href: "/how-long-does-divorce-financial-settlement-take-uk", label: "How long does a financial settlement take?", desc: "Typical timelines for agreed, FDR, and contested cases." },
+                { href: "/settling-out-of-court-vs-court-divorce-uk", label: "Settling out of court vs court proceedings", desc: "Compare the time, cost, and outcome control of each route." },
+              ].map((link) => (
+                <Link key={link.href} href={link.href} onClick={scrollTop} className="block group p-3 rounded-lg border hover:border-primary/40 hover:bg-primary/5 transition-all" data-testid={`link-related-${link.href.replace(/\//g, "")}`}>
+                  <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">{link.label}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{link.desc}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
 
           <div className="text-center space-y-3">
             <p className="text-sm text-muted-foreground">Also see:</p>

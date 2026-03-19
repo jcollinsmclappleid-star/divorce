@@ -31,6 +31,18 @@ const relatedPages = [
     href: "/divorce-financial-checklist-before-mediation",
     badge: "Preparation",
   },
+  {
+    title: "Who Pays the Mortgage During Divorce?",
+    description: "What happens to mortgage payments while proceedings are ongoing.",
+    href: "/who-pays-mortgage-during-divorce-uk",
+    badge: "Property",
+  },
+  {
+    title: "Both Names on the Mortgage — What Happens?",
+    description: "Your options when the mortgage is in joint names and you separate.",
+    href: "/both-names-on-mortgage-divorce-uk",
+    badge: "Property",
+  },
 ];
 
 export default function ClusterMortgageAffordability() {

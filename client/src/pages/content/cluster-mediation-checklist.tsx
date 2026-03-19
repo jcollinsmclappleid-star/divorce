@@ -26,6 +26,18 @@ const relatedPages = [
     href: "/divorce-mortgage-affordability-after-separation",
     badge: "Affordability",
   },
+  {
+    title: "Mediation vs Court — Costs Compared",
+    description: "The real cost difference between the two main routes to financial settlement.",
+    href: "/mediation-vs-court-divorce-uk-costs",
+    badge: "Process",
+  },
+  {
+    title: "Divorce Mediation Process UK",
+    description: "What happens in mediation — the sessions, timelines, and what to bring.",
+    href: "/divorce-mediation-process-uk",
+    badge: "Process",
+  },
 ];
 
 const checklistItems = [

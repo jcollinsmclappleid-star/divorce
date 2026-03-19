@@ -32,6 +32,18 @@ const relatedPages = [
     href: "/divorce-mortgage-affordability-after-separation",
     badge: "Affordability",
   },
+  {
+    title: "Can I Keep the House After Divorce?",
+    description: "The four main options for the family home — and the factors that determine which is viable.",
+    href: "/can-i-keep-the-house-after-divorce-uk",
+    badge: "FAQ",
+  },
+  {
+    title: "Transfer of Equity in Divorce",
+    description: "The legal process for moving the family home into sole ownership.",
+    href: "/transfer-of-equity-divorce-uk",
+    badge: "Property",
+  },
 ];
 
 export default function ClusterHouseBuyout() {

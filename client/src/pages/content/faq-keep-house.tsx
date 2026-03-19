@@ -43,6 +43,18 @@ const relatedPages = [
     href: "/divorce-mortgage-affordability-after-separation",
     badge: "Affordability",
   },
+  {
+    title: "Buying Your Partner Out of the House",
+    description: "How a buyout works — equity, mortgage transfer, and costs involved.",
+    href: "/buying-partner-out-of-house-divorce-uk",
+    badge: "Property",
+  },
+  {
+    title: "Can I Force the Sale of the House?",
+    description: "When and how a court can order a jointly owned property to be sold.",
+    href: "/can-i-force-sale-of-house-after-divorce-uk",
+    badge: "Property",
+  },
 ];
 
 const keyFactors = [

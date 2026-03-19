@@ -46,6 +46,18 @@ const relatedPages = [
     href: "/divorce-50-50-split-calculator-uk",
     badge: "Calculator",
   },
+  {
+    title: "Pension Offsetting in Divorce",
+    description: "Trading pension for other assets — how offsetting is structured and valued.",
+    href: "/pension-offsetting-divorce-uk",
+    badge: "Pensions",
+  },
+  {
+    title: "How Are Pensions Split in a UK Divorce?",
+    description: "A comprehensive plain-English guide to pension division options.",
+    href: "/how-pensions-split-divorce-uk",
+    badge: "Guide",
+  },
 ];
 
 const approaches = [
