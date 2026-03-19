@@ -154,7 +154,7 @@ const ANALYSIS_PREVIEW_FEATURES = [
 export default function LandingPage() {
   useDocumentTitle("Divorce Calculator UK (2026) | Financial Settlement Tool");
   useMetaTags({
-    description: "Estimate your UK divorce settlement with a structured financial modelling tool. Compare scenarios, assess sustainability, and understand long-term financial outcomes. UK 2025/26 tax rules.",
+    description: "See what every divorce settlement option means for your financial future. Compare Sell & Split, retain, and deferred sale — with sustainability scores and 5-year projections. England and Wales. Free to start.",
     canonical: "https://divorcecalculatoruk.co.uk/",
     ogTitle: "Divorce Calculator UK (2026) | Financial Settlement Tool",
     ogDescription: "Model different divorce financial settlement scenarios with UK 2025/26 tax rules applied. Compare sell vs retain options and understand long-term outcomes.",
@@ -250,7 +250,7 @@ export default function LandingPage() {
                     data-testid="button-hero-buy-now"
                     className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 w-full sm:w-auto"
                   >
-                    Unlock Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" />
+                    Unlock My Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" />
                   </Button>
                   <p className="text-xs text-white/45">No sign-up. No data stored. Used by people who want to walk into their solicitor's office knowing their numbers.</p>
                 </div>
@@ -530,7 +530,7 @@ export default function LandingPage() {
               Example Output
             </h2>
             <p className="text-sm text-muted-foreground mt-3 max-w-lg mx-auto">
-              Load a sample scenario to explore the full structured analysis. No sign-up required.
+              Load a sample settlement to explore the full structured analysis. No sign-up required.
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
@@ -592,9 +592,9 @@ export default function LandingPage() {
               { feature: "9-step financial wizard", free: true, paid: true },
               { feature: "Enter assets, debts, income & pensions", free: true, paid: true },
               { feature: "Asset pool ring chart (total marital pot)", free: true, paid: true },
-              { feature: "Preview of settlement scenarios (blurred)", free: true, paid: false, freeNote: "Preview only" },
-              { feature: "Full scenario comparison — Sell & Split, retain, deferred sale", free: false, paid: true },
-              { feature: "Net position per party for each scenario", free: false, paid: true },
+              { feature: "Preview of settlement options (blurred)", free: true, paid: false, freeNote: "Preview only" },
+              { feature: "Full settlement comparison — Sell & Split, retain, deferred sale", free: false, paid: true },
+              { feature: "Net position per party for each settlement option", free: false, paid: true },
               { feature: "Monthly surplus / deficit analysis", free: false, paid: true },
               { feature: "Financial Sustainability Indicator (0–100 score)", free: false, paid: true },
               { feature: "5-year capital sustainability projections", free: false, paid: true },
@@ -775,7 +775,7 @@ export default function LandingPage() {
           <div className="space-y-3">
             <ul className="text-sm text-muted-foreground space-y-2 text-left max-w-sm mx-auto">
               {[
-                "Full scenario comparison — all four settlement structures scored and ranked",
+                "Full settlement comparison — all four options scored and ranked",
                 "Financial Sustainability Indicator — know which option is genuinely viable",
                 "5-year capital projections — see where your money is in 2030 under each option",
                 "Stress testing — what happens if interest rates rise or your income changes",
@@ -804,7 +804,7 @@ export default function LandingPage() {
               onClick={startFresh}
               data-testid="button-cta-start"
             >
-              Start Free First <ArrowRight className="w-4 h-4 ml-1.5" />
+              Start Free — No Sign-Up <ArrowRight className="w-4 h-4 ml-1.5" />
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
