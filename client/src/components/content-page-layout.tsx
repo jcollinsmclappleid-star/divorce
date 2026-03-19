@@ -136,7 +136,7 @@ export function ContentPageLayout({
 
   const defaultBreadcrumbs = breadcrumbs || [
     { name: "Home", href: "/" },
-    { name: "Guides", href: "/divorce-financial-modelling" },
+    { name: "Guides", href: "/divorce-financial-guides" },
     { name: title, href: location },
   ];
 
@@ -163,15 +163,25 @@ export function ContentPageLayout({
 
       <section className="py-12 md:py-16" data-testid="section-content-hero">
         <div className="container mx-auto px-4 max-w-3xl">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setLocation("/")}
-            className="mb-6 -ml-2"
-            data-testid="button-back-home"
-          >
-            <ArrowLeft className="w-4 h-4 mr-1.5" /> Home
-          </Button>
+          <div className="mb-6 flex items-center gap-3 -ml-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setLocation("/")}
+              data-testid="button-back-home"
+            >
+              <ArrowLeft className="w-4 h-4 mr-1.5" /> Home
+            </Button>
+            <span className="text-muted-foreground text-sm">/</span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setLocation("/divorce-financial-guides")}
+              data-testid="button-back-guides"
+            >
+              All Guides
+            </Button>
+          </div>
           <h1 className="text-3xl md:text-4xl font-display font-bold leading-tight" data-testid="text-content-title">
             {title}
           </h1>
