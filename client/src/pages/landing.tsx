@@ -206,7 +206,7 @@ export default function LandingPage() {
               data-testid="button-nav-start"
               className="bg-gold hover:bg-gold/90 text-white border-0"
             >
-              Start Now <ArrowRight className="w-4 h-4 ml-1" />
+              Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </div>
         </div>

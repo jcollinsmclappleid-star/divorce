@@ -33,7 +33,7 @@ export default function AboutPage() {
             <Link href="/divorce-financial-guides" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">Guides</Link>
           </div>
           <Button size="sm" onClick={() => { scrollTop(); setLocation("/wizard"); }} data-testid="button-nav-start" className="bg-gold hover:bg-gold/90 text-white border-0">
-            Get My Financial Picture <ArrowRight className="w-3.5 h-3.5 ml-1" />
+            Get My Financial Picture — Free <ArrowRight className="w-3.5 h-3.5 ml-1" />
           </Button>
         </div>
       </nav>
