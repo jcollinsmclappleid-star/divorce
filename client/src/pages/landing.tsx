@@ -804,7 +804,7 @@ export default function LandingPage() {
               onClick={startFresh}
               data-testid="button-cta-start"
             >
-              Start Free — No Sign-Up <ArrowRight className="w-4 h-4 ml-1.5" />
+              Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1.5" />
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
