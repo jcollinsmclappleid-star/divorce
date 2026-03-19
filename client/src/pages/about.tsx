@@ -52,13 +52,25 @@ export default function AboutPage() {
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4 max-w-3xl space-y-10">
 
-          <div className="space-y-4">
-            <h2 className="text-2xl font-display font-bold">What this tool is</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Divorce Calculator UK is a free financial modelling tool for people navigating separation and divorce in England and Wales. It applies the principles of English and Welsh family law — primarily the Matrimonial Causes Act 1973 — to model how assets, property, pensions, savings and debts might be divided across different settlement structures.
+          <div className="space-y-4 p-6 rounded-xl bg-primary/5 border border-primary/15">
+            <p className="text-foreground leading-relaxed">
+              Divorce is already one of the hardest things a person goes through. The financial side shouldn't also be a mystery.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              The tool applies UK 2025/26 HMRC income tax and National Insurance rates to post-settlement income scenarios, models mortgage affordability against indicative income multiples, and projects how capital positions may change over five years under each settlement option. All calculations run in your browser — no financial data is transmitted to our servers.
+              We built Divorce Calculator UK because most people arrive at the most important financial negotiation of their lives with nothing but anxiety and guesswork. They don't know what they're entitled to. They don't know whether they can keep the house. They don't know what each settlement option actually means for their monthly income, their capital position, or their financial stability in five years. We think that's wrong.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              You deserve to know your numbers — before the first meeting, before the first offer, before you sign anything. That's what this platform is for.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-2xl font-display font-bold">What this platform is</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              Divorce Calculator UK is a financial clarity platform for people navigating separation and divorce in England and Wales. It applies the principles of English and Welsh family law — primarily the Matrimonial Causes Act 1973 — to show how assets, property, pensions, savings and debts might be divided across different settlement structures, and what each one means for your financial future.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              Every calculation applies UK 2025/26 HMRC income tax and National Insurance rates. It models mortgage affordability against indicative income multiples, and projects how capital positions may change over five years under each settlement option. All calculations run entirely in your browser — no financial data is ever transmitted to our servers.
             </p>
           </div>
 
@@ -150,7 +162,7 @@ export default function AboutPage() {
               data-testid="button-about-start"
               className="bg-gold hover:bg-gold/90 text-white border-0"
             >
-              Start My Free Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
+              Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1.5" />
             </Button>
             <Button variant="outline" asChild>
               <Link href="/divorce-financial-guides" onClick={scrollTop} data-testid="link-about-guides">
