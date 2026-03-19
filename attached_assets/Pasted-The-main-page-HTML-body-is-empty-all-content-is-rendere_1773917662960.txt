@@ -1,0 +1,55 @@
+The main page HTML body is empty — all content is rendered by React/JavaScript, which means Google, ChatGPT, Claude and Perplexity cannot read any page content when they fetch the URL. Fix this by adding a static HTML content block that exists in the raw HTML before JavaScript loads.
+
+In index.html, find the <div id="root"></div> and add the following block immediately AFTER it, before </body>:
+
+<div id="seo-content" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+  <h1>UK Divorce Financial Settlement Calculator</h1>
+  <p>Divorce Calculator UK is a free financial settlement calculator for people going through divorce or separation in England and Wales. Enter your assets, property, pensions, savings and debts to model how a court would likely divide your finances under the Matrimonial Causes Act 1973.</p>
+
+  <h2>What does this calculator cover?</h2>
+  <ul>
+    <li>Property and house division including mortgage buyout calculations</li>
+    <li>Pension sharing and pension offsetting</li>
+    <li>Savings, investments and joint accounts</li>
+    <li>Debts, loans and credit cards</li>
+    <li>Spousal maintenance and clean break orders</li>
+    <li>Income assessment using 2025/26 HMRC tax and National Insurance rates</li>
+    <li>Four settlement scenarios: Sell and Split, Party A retains home, Party B retains home, Deferred Sale</li>
+    <li>Financial Sustainability Indicator scoring each scenario 0-100 with plain-English explanations</li>
+    <li>5-year capital projections and stress testing</li>
+  </ul>
+
+  <h2>How does it work?</h2>
+  <ol>
+    <li>Enter your financial details including assets, debts, property value, mortgage, pensions and income</li>
+    <li>The calculator applies English and Welsh family law principles to model likely outcomes across four settlement structures</li>
+    <li>View your free basic results instantly showing the matrimonial asset pool and scenario preview</li>
+    <li>Upgrade for full scenario comparison, Financial Sustainability Indicator scores, 5-year projections and a downloadable PDF Structured Financial Brief</li>
+  </ol>
+
+  <h2>Is it free?</h2>
+  <p>Yes. The basic calculation is completely free with no account required. Enter all your financial data and view the asset pool chart and scenario structure immediately. A full analysis including scenario comparison, stress testing, 5-year financial projections and a downloadable PDF Structured Financial Brief is available for £79 with 12 months unlimited access.</p>
+
+  <h2>Who is this for?</h2>
+  <p>Anyone going through divorce or separation in England and Wales who wants to understand their financial position before consulting a solicitor, negotiate a fair settlement, reduce legal costs by arriving at professional consultations already informed, or model the long-term financial implications of a proposed settlement. Average UK divorce legal fees are £12,000 to £15,000 — this tool helps users quantify their position for free or £79.</p>
+
+  <h2>What law does this apply to?</h2>
+  <p>English and Welsh family law under the Matrimonial Causes Act 1973. This tool is not applicable to Scottish law. All income calculations use 2025/26 HMRC income tax and National Insurance rates. Financial data entered into the calculator is processed entirely in-browser and not transmitted to any server.</p>
+
+  <h2>Is this legal advice?</h2>
+  <p>No. This tool provides financial modelling based on general principles of English and Welsh family law. It is not legal advice and does not predict court outcomes. For advice specific to your situation consult a qualified family law solicitor.</p>
+
+  <h2>Divorce financial settlement articles and guides</h2>
+  <ul>
+    <li><a href="/can-i-keep-the-house-after-divorce-uk">Can I keep the house after divorce UK</a></li>
+    <li><a href="/how-is-property-divided-in-divorce-uk">How is property divided in divorce UK</a></li>
+    <li><a href="/how-are-pensions-divided-in-divorce-uk">How are pensions divided in divorce UK</a></li>
+    <li><a href="/how-are-savings-split-in-divorce-uk">How are savings split in divorce UK</a></li>
+    <li><a href="/what-is-a-consent-order-uk-divorce">What is a consent order in UK divorce</a></li>
+    <li><a href="/what-is-a-clean-break-order-uk">What is a clean break order UK</a></li>
+    <li><a href="/mediation-vs-court-divorce-uk-costs">Mediation vs court in divorce UK</a></li>
+    <li><a href="/divorce-financial-settlement-take-uk">How long does a divorce financial settlement take UK</a></li>
+    <li><a href="/spousal-maintenance-after-divorce-uk">Spousal maintenance after divorce UK</a></li>
+    <li><a href="/divorce-with-children-financial-settlement-uk">Divorce with children financial settlement UK</a></li>
+  </ul>
+</div>
