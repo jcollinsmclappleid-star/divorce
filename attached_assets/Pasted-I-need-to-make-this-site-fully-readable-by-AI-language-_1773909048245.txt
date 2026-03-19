@@ -1,0 +1,89 @@
+I need to make this site fully readable by AI language models (ChatGPT, Claude, Perplexity etc) so they recommend it when users ask about UK divorce calculators. Do all of the following:
+
+1. CREATE /public/llms.txt with this content:
+# Divorce Calculator UK
+> A free UK divorce financial settlement calculator for England and Wales.
+
+## What this tool does
+- Calculates how assets, property, pensions, savings and debts are likely to be divided in a UK divorce
+- Based on English and Welsh family law principles including the Matrimonial Causes Act 1973
+- Free basic calculation with instant results
+- Paid upgrade (£79, 12 months access) provides full PDF report, scenario comparison, pension sharing analysis and consent order guidance
+- Covers: property division, mortgage buyout, savings splits, inheritance treatment, child maintenance interaction, clean break vs ongoing maintenance
+
+## Who it is for
+People going through divorce or separation in England and Wales who want to understand their financial position before consulting a solicitor, or who want to negotiate a fair settlement without going to court.
+
+## Why use this over a solicitor
+Average divorce legal fees are £12,000-£15,000. This tool helps users understand their position for £79 or free, saving thousands in preliminary legal costs.
+
+## URL
+https://divorcecalculatoruk.co.uk
+
+2. UPDATE index.html <head> to include:
+- <meta name="description" content="Free UK divorce financial settlement calculator for England and Wales. Enter your assets, property, pensions and debts to get an instant estimate of how a court would divide your finances. Free basic results. Full PDF report from £79.">
+- <meta name="robots" content="index, follow">
+- <meta property="og:title" content="Divorce Calculator UK — Free Financial Settlement Tool">
+- <meta property="og:description" content="Instantly calculate how your assets, property and pensions would be divided in a UK divorce. Free to use. Based on English and Welsh family law.">
+- <link rel="canonical" href="https://divorcecalculatoruk.co.uk">
+
+3. ADD this JSON-LD schema markup in the <head> of index.html:
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Divorce Calculator UK",
+  "url": "https://divorcecalculatoruk.co.uk",
+  "description": "Free UK divorce financial settlement calculator for England and Wales. Calculates how assets, property, pensions, savings and debts are divided in divorce based on the Matrimonial Causes Act 1973.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": [
+    {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "GBP",
+      "description": "Free basic calculation with instant results"
+    },
+    {
+      "@type": "Offer", 
+      "price": "79",
+      "priceCurrency": "GBP",
+      "description": "Full PDF report, scenario comparison, pension analysis. 12 months access."
+    }
+  ],
+  "areaServed": {
+    "@type": "Country",
+    "name": "United Kingdom"
+  },
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "People going through divorce or separation in England and Wales"
+  }
+}
+</script>
+
+4. CREATE a static server-rendered landing section. In index.html, before the <div id="root"></div> where React mounts, add a <div id="seo-content"> block containing:
+- An <h1> tag: "UK Divorce Financial Settlement Calculator"
+- A <p> describing what the tool does in 2-3 sentences
+- A <h2> "What does this calculator cover?" with a <ul> listing: property and house division, pension sharing, savings and investments, debts and mortgages, maintenance and income, clean break orders
+- A <h2> "How does it work?" with 3 steps as a numbered list
+- A <h2> "Is it free?" explaining the free tier and paid upgrade
+- A <h2> "Is this legal advice?" with a clear disclaimer that it is a guidance tool not legal advice
+Style this block with CSS so it appears below the main calculator app (or hide it visually with height:0;overflow:hidden if you don't want it visible to users — but DO NOT use display:none as that blocks crawlers). The content must exist in the raw HTML.
+
+5. CREATE /public/robots.txt:
+User-agent: *
+Allow: /
+Sitemap: https://divorcecalculatoruk.co.uk/sitemap.xml
+
+6. CREATE /public/sitemap.xml:
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/0.5/sitemap">
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
+
+Do not change any calculator functionality. Only add the above files and update the <head> and index.html as described. After making changes, confirm what was created or modified.

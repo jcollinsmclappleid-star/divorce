@@ -78,6 +78,7 @@ import DivorceTimelinePage from "@/pages/content/timeline-of-divorce-and-financi
 import PensionOffsettingPage from "@/pages/content/divorce-pension-offsetting-uk";
 import SpousalMaintenancePage from "@/pages/content/spousal-maintenance-after-divorce-uk";
 import TransferOfEquityPage from "@/pages/content/transfer-of-equity-divorce-uk";
+import AboutPage from "@/pages/about";
 
 function Router() {
   return (
@@ -154,6 +155,7 @@ function Router() {
       <Route path="/divorce-pension-offsetting-uk" component={PensionOffsettingPage} />
       <Route path="/spousal-maintenance-after-divorce-uk" component={SpousalMaintenancePage} />
       <Route path="/transfer-of-equity-divorce-uk" component={TransferOfEquityPage} />
+      <Route path="/about" component={AboutPage} />
       <Route path="/results">
         <AccessGate>
           <ResultsPage />

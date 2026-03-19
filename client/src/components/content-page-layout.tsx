@@ -66,10 +66,18 @@ function useSeoMeta(title: string, description: string, path: string, pageTitle:
       "url": fullUrl,
       "publisher": {
         "@type": "Organization",
-        "name": "DivorceCalculatorUK",
+        "name": "Divorce Calculator UK",
         "url": baseUrl,
       },
       "inLanguage": "en-GB",
+      "about": {
+        "@type": "Thing",
+        "name": "Divorce financial settlement",
+        "description": "Financial division of assets, property, pensions and debts in UK divorce proceedings under the Matrimonial Causes Act 1973"
+      },
+      "mentions": [
+        { "@type": "Legislation", "name": "Matrimonial Causes Act 1973" }
+      ]
     };
     articleSchema.textContent = JSON.stringify(articleData);
     document.head.appendChild(articleSchema);
@@ -161,9 +169,9 @@ export function ContentPageLayout({
         </div>
       </nav>
 
-      <section className="py-12 md:py-16" data-testid="section-content-hero">
+      <header className="py-12 md:py-16" data-testid="section-content-hero">
         <div className="container mx-auto px-4 max-w-3xl">
-          <div className="mb-6 flex items-center gap-3 -ml-2">
+          <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-3 -ml-2">
             <Button
               variant="ghost"
               size="sm"
@@ -181,7 +189,7 @@ export function ContentPageLayout({
             >
               All Guides
             </Button>
-          </div>
+          </nav>
           <h1 className="text-3xl md:text-4xl font-display font-bold leading-tight" data-testid="text-content-title">
             {title}
           </h1>
@@ -196,11 +204,31 @@ export function ContentPageLayout({
             Start Modelling <ArrowRight className="w-4 h-4 ml-1.5" />
           </Button>
         </div>
-      </section>
+      </header>
 
-      <div data-testid="section-content-body">
+      <article data-testid="section-content-body">
         {children}
-      </div>
+      </article>
+
+      <section className="py-10 md:py-12 bg-primary/6 border-y border-primary/15" data-testid="section-calculator-cta">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <p className="text-sm font-semibold">Model this for your own situation</p>
+              <p className="text-xs text-muted-foreground leading-relaxed max-w-md">
+                Divorce Calculator UK lets you enter your actual figures and see how different settlement options compare — free to start, with a full analysis available for £79.
+              </p>
+            </div>
+            <Button
+              onClick={() => setLocation("/wizard")}
+              className="bg-gold hover:bg-gold/90 text-white border-0 shadow-sm shrink-0"
+              data-testid="button-article-cta"
+            >
+              Start My Free Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+          </div>
+        </div>
+      </section>
 
       {relatedPages.length > 0 && (
         <section className="py-12 md:py-16 bg-muted/30" data-testid="section-related-pages">
@@ -243,6 +271,7 @@ export function ContentPageLayout({
           </div>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <Link href="/divorce-financial-modelling" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-footer-guides">Guides</Link>
+            <Link href="/about" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-footer-about">About</Link>
             <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-footer-privacy">Privacy Policy</Link>
             <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-footer-terms">Terms of Use</Link>
             <Link href="/methodology" className="text-xs text-muted-foreground hover:text-foreground transition-colors" data-testid="link-footer-methodology">Model Methodology</Link>
@@ -252,7 +281,7 @@ export function ContentPageLayout({
             Illustrative financial modelling only. This tool does not provide legal, tax, or financial advice.
           </p>
           <p className="text-xs text-muted-foreground/60">
-            &copy; {new Date().getFullYear()} DivorceCalculatorUK
+            &copy; {new Date().getFullYear()} Divorce Calculator UK
           </p>
         </div>
       </footer>

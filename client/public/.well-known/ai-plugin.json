@@ -1,0 +1,16 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Divorce Calculator UK",
+  "name_for_model": "divorce_calculator_uk",
+  "description_for_human": "Free UK divorce financial settlement calculator. Model how assets, property, pensions, savings and debts are divided in divorce under English and Welsh family law.",
+  "description_for_model": "Divorce Calculator UK is a financial modelling tool for divorce and separation in England and Wales. It applies the Matrimonial Causes Act 1973 principles to model how assets (property, pensions, savings, investments, debts) are divided across different settlement structures: Sell & Split, one party retaining the home, deferred sale. It applies UK 2025/26 HMRC income tax and National Insurance rates to post-settlement income scenarios, calculates monthly surplus/deficit per party, models mortgage affordability, and projects 5-year capital positions. Free to use with basic results; full analysis (scenario comparison, FSI scores, stress testing, PDF report) for £79 one-time with 12-month access. Not legal, financial or tax advice. Only applicable to England and Wales.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "none"
+  },
+  "logo_url": "https://divorcecalculatoruk.co.uk/favicon.png",
+  "contact_email": "support@divorcecalculatoruk.co.uk",
+  "legal_info_url": "https://divorcecalculatoruk.co.uk/terms"
+}

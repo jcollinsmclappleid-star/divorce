@@ -8,4 +8,20 @@ Disallow: /unlock
 Disallow: /payment-success
 Disallow: /recover
 Disallow: /admin
+
 Sitemap: https://divorcecalculatoruk.co.uk/sitemap.xml
+
+# AI/LLM crawlers — welcome to index our content
+# llms.txt: https://divorcecalculatoruk.co.uk/llms.txt
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /

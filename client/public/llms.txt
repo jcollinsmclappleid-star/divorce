@@ -1,0 +1,110 @@
+# Divorce Calculator UK
+> A free UK divorce financial settlement modelling tool for England and Wales.
+
+## What this tool does
+- Models how assets, property, pensions, savings and debts are likely to be divided in a UK divorce under the Matrimonial Causes Act 1973
+- Applies UK 2025/26 HMRC income tax and National Insurance rates to post-settlement income scenarios
+- Compares four settlement structures: Sell & Split, Party A retains home, Party B retains home, Deferred Sale
+- Calculates net position per party, monthly surplus/deficit, indicative mortgage affordability, and 5-year capital projections
+- Scores each scenario with a Financial Sustainability Indicator (0-100) with plain-English driver explanations
+- Free basic modelling with instant results; full analysis with PDF report for £79 (12 months access)
+- All calculations run in-browser — no financial data is transmitted to servers
+
+## Who it is for
+People going through divorce or separation in England and Wales who want to understand their financial position before consulting a solicitor, or who want to negotiate a settlement without going straight to court. Also useful for those who have received a settlement proposal and want to model its long-term financial implications.
+
+## Legal basis
+Based on English and Welsh family law principles under the Matrimonial Causes Act 1973. Not applicable to Scottish law. Does not constitute legal, financial or tax advice. Does not predict court outcomes.
+
+## Why use this over a solicitor
+Average UK divorce legal fees are £12,000–£15,000. This tool helps users understand their financial position for free (basic) or £79 (full analysis), allowing them to approach professional conversations with quantified assumptions already prepared.
+
+## Pricing
+- Free: Enter all financial data, view asset pool chart, preview of scenario structure
+- £79 (one-time, 12 months unlimited access): Full scenario comparison, FSI scores, 5-year projections, stress testing, downloadable PDF Structured Financial Brief
+
+## URL
+https://divorcecalculatoruk.co.uk
+
+## Calculator entry point
+https://divorcecalculatoruk.co.uk/divorce-financial-settlement-calculator-uk
+
+## Full article library
+
+### Property & Housing
+- https://divorcecalculatoruk.co.uk/can-i-keep-the-house-after-divorce-uk — Can I keep the house after divorce UK
+- https://divorcecalculatoruk.co.uk/how-is-property-divided-in-divorce-uk — How is property divided in divorce UK
+- https://divorcecalculatoruk.co.uk/buying-partner-out-of-house-divorce-uk — Buying partner out of house in divorce UK
+- https://divorcecalculatoruk.co.uk/divorce-house-buyout-calculator-uk — Divorce house buyout calculator UK
+- https://divorcecalculatoruk.co.uk/both-names-on-mortgage-divorce-uk — Both names on mortgage after divorce UK
+- https://divorcecalculatoruk.co.uk/can-i-force-sale-of-house-after-divorce-uk — Can I force sale of house after divorce UK
+- https://divorcecalculatoruk.co.uk/who-pays-mortgage-during-divorce-uk — Who pays the mortgage during divorce UK
+- https://divorcecalculatoruk.co.uk/transfer-of-equity-divorce-uk — Transfer of equity in divorce UK
+- https://divorcecalculatoruk.co.uk/divorce-mortgage-affordability-after-separation — Divorce mortgage affordability after separation
+- https://divorcecalculatoruk.co.uk/unmarried-separating-house-uk — Unmarried couples separating and the family home UK
+
+### Pensions
+- https://divorcecalculatoruk.co.uk/how-are-pensions-divided-in-divorce-uk — How are pensions divided in divorce UK
+- https://divorcecalculatoruk.co.uk/divorce-pension-split-calculator-uk — Divorce pension split calculator UK
+- https://divorcecalculatoruk.co.uk/divorce-pension-offsetting-uk — Pension offsetting in divorce UK
+
+### Assets & Savings
+- https://divorcecalculatoruk.co.uk/how-are-savings-split-in-divorce-uk — How are savings split in divorce UK
+- https://divorcecalculatoruk.co.uk/how-are-investments-divided-in-divorce-uk — How are investments divided in divorce UK
+- https://divorcecalculatoruk.co.uk/joint-bank-accounts-after-divorce-uk — Joint bank accounts after divorce UK
+- https://divorcecalculatoruk.co.uk/can-ex-claim-inheritance-uk-divorce — Can ex-partner claim inheritance in divorce UK
+- https://divorcecalculatoruk.co.uk/is-inheritance-included-in-divorce-settlement-uk — Is inheritance included in divorce settlement UK
+- https://divorcecalculatoruk.co.uk/what-happens-to-debts-in-divorce-uk — What happens to debts in divorce UK
+- https://divorcecalculatoruk.co.uk/divorce-settlement-no-assets-uk — Divorce settlement with no assets UK
+
+### Costs & Splits
+- https://divorcecalculatoruk.co.uk/how-much-does-divorce-cost-uk — How much does divorce cost UK
+- https://divorcecalculatoruk.co.uk/divorce-50-50-split-calculator-uk — Divorce 50/50 split calculator UK
+- https://divorcecalculatoruk.co.uk/is-50-50-split-automatic-uk — Is 50/50 split automatic in UK divorce
+- https://divorcecalculatoruk.co.uk/divorce-where-one-earns-more-uk — Divorce where one partner earns more UK
+- https://divorcecalculatoruk.co.uk/divorce-settlement-examples-uk — Divorce settlement examples UK
+
+### Legal Orders & Process
+- https://divorcecalculatoruk.co.uk/what-is-a-consent-order-uk-divorce — What is a consent order in UK divorce
+- https://divorcecalculatoruk.co.uk/what-is-a-clean-break-order-uk — What is a clean break order UK
+- https://divorcecalculatoruk.co.uk/consent-order-vs-clean-break-order-uk — Consent order vs clean break order UK
+- https://divorcecalculatoruk.co.uk/financial-disclosure-divorce-uk — Financial disclosure in divorce UK
+- https://divorcecalculatoruk.co.uk/financial-remedy-proceedings-uk — Financial remedy proceedings UK
+- https://divorcecalculatoruk.co.uk/can-i-divorce-without-financial-settlement-uk — Can I divorce without a financial settlement UK
+- https://divorcecalculatoruk.co.uk/can-i-reopen-divorce-settlement-uk — Can I reopen a divorce settlement UK
+- https://divorcecalculatoruk.co.uk/how-long-after-divorce-can-financial-claims-be-made-uk — How long after divorce can financial claims be made UK
+- https://divorcecalculatoruk.co.uk/when-is-divorce-financial-settlement-legally-binding-uk — When is a divorce financial settlement legally binding UK
+- https://divorcecalculatoruk.co.uk/steps-after-final-order-finances-uk — Steps after final order finances UK
+- https://divorcecalculatoruk.co.uk/can-i-refuse-divorce-financial-settlement-uk — Can I refuse a divorce financial settlement UK
+- https://divorcecalculatoruk.co.uk/can-i-hide-assets-in-divorce-uk — Can I hide assets in divorce UK
+- https://divorcecalculatoruk.co.uk/spouse-refuses-financial-disclosure-uk — Spouse refuses financial disclosure UK
+- https://divorcecalculatoruk.co.uk/ex-doesnt-agree-settlement-uk — What if my ex doesn't agree to a settlement UK
+
+### Mediation & Routes
+- https://divorcecalculatoruk.co.uk/mediation-vs-court-divorce-uk-costs — Mediation vs court in divorce UK costs
+- https://divorcecalculatoruk.co.uk/divorce-solicitor-vs-mediation-uk — Divorce solicitor vs mediation UK
+- https://divorcecalculatoruk.co.uk/settling-out-of-court-vs-court-divorce-uk — Settling out of court vs court divorce UK
+- https://divorcecalculatoruk.co.uk/divorce-mediation-process-uk — Divorce mediation process UK
+- https://divorcecalculatoruk.co.uk/divorce-financial-checklist-before-mediation — Divorce financial checklist before mediation
+
+### Timelines
+- https://divorcecalculatoruk.co.uk/how-long-does-divorce-financial-settlement-take-uk — How long does a divorce financial settlement take UK
+- https://divorcecalculatoruk.co.uk/timeline-of-divorce-and-financial-settlement-uk — Timeline of divorce and financial settlement UK
+
+### Maintenance & Income
+- https://divorcecalculatoruk.co.uk/how-much-maintenance-after-divorce-uk — How much maintenance after divorce UK
+- https://divorcecalculatoruk.co.uk/spousal-maintenance-after-divorce-uk — Spousal maintenance after divorce UK
+- https://divorcecalculatoruk.co.uk/child-maintenance-vs-spousal-maintenance-uk — Child maintenance vs spousal maintenance UK
+
+### Children
+- https://divorcecalculatoruk.co.uk/divorce-with-children-financial-settlement-uk — Divorce with children financial settlement UK
+- https://divorcecalculatoruk.co.uk/how-does-child-custody-affect-financial-settlement-uk — How does child custody affect financial settlement UK
+- https://divorcecalculatoruk.co.uk/who-pays-what-after-divorce-with-children-uk — Who pays what after divorce with children UK
+- https://divorcecalculatoruk.co.uk/does-having-children-change-divorce-settlement-uk — Does having children change divorce settlement UK
+
+### Guides & Tools
+- https://divorcecalculatoruk.co.uk/divorce-financial-modelling — UK divorce financial modelling guide (pillar)
+- https://divorcecalculatoruk.co.uk/divorce-financial-guides — All divorce financial guides (hub)
+- https://divorcecalculatoruk.co.uk/free-guide — Free UK divorce finances guide
+- https://divorcecalculatoruk.co.uk/methodology — Model methodology and limitations
+- https://divorcecalculatoruk.co.uk/about — About Divorce Calculator UK
