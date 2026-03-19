@@ -14,9 +14,9 @@ const sizeMap = {
 };
 
 const iconSizeMap = {
-  sm: "w-7 h-7",
-  md: "w-9 h-9",
-  lg: "w-12 h-12",
+  sm: "w-9 h-9",
+  md: "w-12 h-12",
+  lg: "w-16 h-16",
 };
 
 const brandSubSize = {
@@ -98,7 +98,7 @@ export function Logo({ href = "/", size = "md", className = "", showBrandName = 
 export function LogoPrint({ className = "" }: { className?: string }) {
   return (
     <div className={`flex items-center gap-2.5 ${className}`} data-testid="img-logo-print">
-      <ChartIcon className="w-7 h-7" />
+      <ChartIcon className="w-9 h-9" />
       <div className="flex flex-col">
         <span className="font-display font-bold text-lg">Divorce Calculator UK</span>
         <span className="text-muted-foreground text-xs uppercase">Financial Modelling</span>
