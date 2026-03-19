@@ -186,7 +186,7 @@ export default function SeoPensionsPage() {
             <div className="grid sm:grid-cols-2 gap-3">
               {[
                 { href: "/how-are-pensions-divided-in-divorce-uk", label: "How pensions are divided — FAQ", desc: "Answers to the most common pension-sharing questions." },
-                { href: "/pension-offsetting-divorce-uk", label: "Pension offsetting explained", desc: "Trading pension value against other assets — how it works." },
+                { href: "/divorce-pension-offsetting-uk", label: "Pension offsetting explained", desc: "Trading pension value against other assets — how it works." },
                 { href: "/divorce-pension-split-calculator-uk", label: "Pension split calculator guide", desc: "Model different pension split assumptions in our tool." },
                 { href: "/how-are-investments-divided-in-divorce-uk", label: "How are investments divided?", desc: "ISAs, shares, and investment accounts in divorce." },
               ].map((link) => (

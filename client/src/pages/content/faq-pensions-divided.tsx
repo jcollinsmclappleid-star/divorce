@@ -49,14 +49,14 @@ const relatedPages = [
   {
     title: "Pension Offsetting in Divorce",
     description: "Trading pension for other assets — how offsetting is structured and valued.",
-    href: "/pension-offsetting-divorce-uk",
+    href: "/divorce-pension-offsetting-uk",
     badge: "Pensions",
   },
   {
-    title: "How Are Pensions Split in a UK Divorce?",
-    description: "A comprehensive plain-English guide to pension division options.",
-    href: "/how-pensions-split-divorce-uk",
-    badge: "Guide",
+    title: "How Are Savings Split in Divorce?",
+    description: "How courts approach joint and sole savings accounts alongside pension assets.",
+    href: "/how-are-savings-split-in-divorce-uk",
+    badge: "Assets",
   },
 ];
 

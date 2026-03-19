@@ -74,15 +74,15 @@ export async function registerRoutes(
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-50-50-split-calculator-uk</loc>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-house-buyout-calculator-uk</loc>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-pension-split-calculator-uk</loc>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/methodology</loc>
@@ -111,10 +111,6 @@ export async function registerRoutes(
   <url>
     <loc>https://divorcecalculatoruk.co.uk/refund-policy</loc>
     <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/can-i-keep-the-house-after-divorce-uk</loc>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/how-is-property-divided-in-divorce-uk</loc>

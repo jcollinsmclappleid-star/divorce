@@ -29,14 +29,14 @@ const relatedPages = [
   {
     title: "Pension Offsetting in Divorce",
     description: "Trading pension value against other assets — how offsetting works in practice.",
-    href: "/pension-offsetting-divorce-uk",
+    href: "/divorce-pension-offsetting-uk",
     badge: "Pensions",
   },
   {
     title: "How Pensions Are Divided in Divorce",
     description: "Sharing, offsetting, and attachment — explained in plain English.",
-    href: "/how-pensions-split-divorce-uk",
-    badge: "Guide",
+    href: "/how-are-pensions-divided-in-divorce-uk",
+    badge: "FAQ",
   },
 ];
 
