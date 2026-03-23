@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Logo } from "@/components/logo";
+import { SiteNav } from "@/components/site-nav";
 import { scrollTop } from "@/lib/utils";
 import { ArrowRight, Info, AlertTriangle } from "lucide-react";
 
@@ -65,12 +65,7 @@ export default function SeoSettlementExamplesPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b border-border/40 bg-background/95">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Logo size="md" />
-          <Button variant="ghost" size="sm" onClick={() => { scrollTop(); setLocation("/"); }} data-testid="button-nav-home">Home</Button>
-        </div>
-      </header>
+      <SiteNav />
 
       <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl">
         <div className="space-y-8">

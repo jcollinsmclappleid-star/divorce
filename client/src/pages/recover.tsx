@@ -5,8 +5,8 @@ import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Mail, CheckCircle, AlertTriangle, Loader2 } from "lucide-react";
-import { Logo } from "@/components/logo";
+import { Mail, CheckCircle, AlertTriangle, Loader2 } from "lucide-react";
+import { SiteNav } from "@/components/site-nav";
 
 type RecoverState =
   | { status: "idle" }
@@ -61,14 +61,7 @@ export default function RecoverPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b py-3 px-4">
-        <div className="container mx-auto flex items-center justify-between gap-2 flex-wrap">
-          <Logo href="/" size="sm" />
-          <Button variant="ghost" onClick={() => setLocation("/")} data-testid="button-back-home">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
-          </Button>
-        </div>
-      </header>
+      <SiteNav />
 
       <main className="flex-1 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
