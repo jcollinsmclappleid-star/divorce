@@ -283,17 +283,17 @@ export default function ResultsPage() {
                       <button
                         key={s.id}
                         type="button"
-                        className={`text-left p-4 rounded-lg border-2 transition-all overflow-hidden relative ${isActive ? "border-primary bg-primary/5 shadow-md" : "border-border hover:border-primary/40 hover:shadow-sm"}`}
+                        className={`text-left p-4 pl-5 rounded-lg border transition-all overflow-hidden relative ${isActive ? "border-border bg-white shadow-md" : "border-border bg-white hover:shadow-sm"}`}
+                        style={{ borderLeftWidth: isActive ? 4 : 4, borderLeftColor: isActive ? meta?.color : "transparent" }}
                         onClick={() => setActiveTab(isActive ? null : s.id)}
                         data-testid={`button-tab-${s.id}`}
                       >
-                        <div className="absolute top-0 left-0 right-0 h-1 rounded-t-md" style={{ backgroundColor: meta?.color }} />
-                        <div className="flex items-center gap-2 mb-1 mt-1">
+                        <div className="flex items-center gap-2 mb-1">
                           <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: meta?.color }} />
                           <span className="text-sm font-semibold">{meta?.label ?? s.name}</span>
                         </div>
                         <p className="text-xs text-muted-foreground">{meta?.description}</p>
-                        {isActive && <p className="text-xs text-primary font-medium mt-2">Showing breakdown below ↓</p>}
+                        {isActive && <p className="text-xs font-medium mt-2" style={{ color: meta?.color }}>Showing breakdown below ↓</p>}
                       </button>
                     );
                   })}

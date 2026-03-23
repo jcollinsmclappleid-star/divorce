@@ -20,6 +20,7 @@ import type {
 } from "@/lib/insights";
 import type { StabilityDriver } from "@/lib/insights/computeStabilityScore";
 import { LogoPrint } from "@/components/logo";
+import { FsiGauge } from "@/components/fsi-gauge";
 
 const SCENARIO_META: Record<string, { label: string; shortLabel: string; color: string }> = {
   S1: { label: "Sell & Split", shortLabel: "Sell & Split", color: "#2563EB" },
@@ -435,14 +436,12 @@ export default function ReportPage() {
               </ReportCollapsible>
 
               <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Financial Sustainability Indicator (Illustrative Model Output)</h4>
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Financial Sustainability Indicator (Illustrative Model Output)</h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-gray-500 mb-0.5">Party A</p>
-                    <div className="text-xl font-bold tabular-nums" style={{ color: stability.scoreA >= 60 ? "#10B981" : stability.scoreA >= 35 ? "#D97706" : "#64748B" }}>
-                      {stability.scoreA}/100 <span className="text-xs font-normal text-gray-400">{stability.labelA}</span>
-                    </div>
-                    <div className="text-xs text-gray-500 mt-0.5">
+                    <p className="text-xs text-gray-500 mb-1">Party A</p>
+                    <FsiGauge score={stability.scoreA} size={100} />
+                    <div className="text-xs text-gray-500 mt-2">
                       {stability.reasonsA.slice(0, 3).map((r: { label: string; points: number }, i: number) => (
                         <span key={i} className="block">{r.label}: {r.points > 0 ? "+" : ""}{r.points} pts</span>
                       ))}
@@ -458,11 +457,9 @@ export default function ReportPage() {
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-0.5">Party B</p>
-                    <div className="text-xl font-bold tabular-nums" style={{ color: stability.scoreB >= 60 ? "#10B981" : stability.scoreB >= 35 ? "#D97706" : "#64748B" }}>
-                      {stability.scoreB}/100 <span className="text-xs font-normal text-gray-400">{stability.labelB}</span>
-                    </div>
-                    <div className="text-xs text-gray-500 mt-0.5">
+                    <p className="text-xs text-gray-500 mb-1">Party B</p>
+                    <FsiGauge score={stability.scoreB} size={100} />
+                    <div className="text-xs text-gray-500 mt-2">
                       {stability.reasonsB.slice(0, 3).map((r: { label: string; points: number }, i: number) => (
                         <span key={i} className="block">{r.label}: {r.points > 0 ? "+" : ""}{r.points} pts</span>
                       ))}
