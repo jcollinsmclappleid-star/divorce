@@ -220,7 +220,7 @@ export default function FaqPage() {
               <div key={ci} data-testid={`faq-category-${ci}`}>
                 <h2 className="text-base font-semibold text-foreground mb-1">{cat.category}</h2>
                 <p className="text-xs text-muted-foreground mb-4">{cat.items.length} questions</p>
-                <div className="rounded-xl border border-border/50 bg-muted/20 px-5">
+                <div className="rounded-xl border border-border px-5">
                   {cat.items.map((item) => {
                     const idx = globalIndex++;
                     return (
@@ -232,7 +232,7 @@ export default function FaqPage() {
             ))}
           </div>
 
-          <div className="mt-12 p-6 rounded-xl bg-primary/6 border border-primary/20 text-center space-y-4">
+          <div className="mt-12 p-6 rounded-xl bg-muted/30 border border-border text-center space-y-4">
             <p className="text-sm font-semibold text-foreground">Still have a question?</p>
             <p className="text-xs text-muted-foreground">
               Contact us at{" "}
