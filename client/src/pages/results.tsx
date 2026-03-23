@@ -18,7 +18,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { formatCurrency } from "@/lib/utils";
 import {
-  ResponsiveContainer, BarChart, Bar, LineChart, Line,
+  ResponsiveContainer, BarChart, Bar, LineChart, Line, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend
 } from "recharts";
 import {
@@ -347,7 +347,12 @@ export default function ResultsPage() {
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
                         <XAxis dataKey="name" axisLine={false} tickLine={false} fontSize={12} />
                         <YAxis axisLine={false} tickLine={false} fontSize={12} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
-                        <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
+                        <RechartsTooltip
+                          formatter={(value: number) => formatCurrency(value)}
+                          contentStyle={{ background: "hsl(220,52%,22%)", border: "none", borderRadius: 8, color: "#fff", fontSize: 12 }}
+                          itemStyle={{ color: "#fff" }}
+                          labelStyle={{ color: "rgba(255,255,255,0.6)", marginBottom: 4 }}
+                        />
                         <Legend />
                         <Bar dataKey="Party A" fill="url(#gradA)" radius={[4, 4, 0, 0]} />
                         <Bar dataKey="Party B" fill="url(#gradB)" radius={[4, 4, 0, 0]} />
@@ -1058,7 +1063,7 @@ function ExecutiveTable({
                   const st = stabilityScores[s.id];
                   return (
                     <TableCell key={s.id} className="text-center">
-                      <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Higher Resilience (Modelled)"} />
+                      <FsiGauge score={st?.scoreA ?? 100} size={80} />
                     </TableCell>
                   );
                 })}
@@ -1069,7 +1074,7 @@ function ExecutiveTable({
                   const st = stabilityScores[s.id];
                   return (
                     <TableCell key={s.id} className="text-center">
-                      <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Higher Resilience (Modelled)"} />
+                      <FsiGauge score={st?.scoreB ?? 100} size={80} />
                     </TableCell>
                   );
                 })}
@@ -1124,12 +1129,12 @@ function ExecutiveTable({
                       : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]">Yr {rw?.partyB.depletionYear}</Badge>}
                   </div>
                   <div className="min-w-0">
-                    <span className="text-muted-foreground block">Sustainability — A</span>
-                    <StabilityBadge score={st?.scoreA ?? 100} label={st?.labelA ?? "Higher Resilience"} compact />
+                    <span className="text-muted-foreground block mb-1">Sustainability — A</span>
+                    <FsiGauge score={st?.scoreA ?? 100} size={72} />
                   </div>
                   <div className="min-w-0">
-                    <span className="text-muted-foreground block">Sustainability — B</span>
-                    <StabilityBadge score={st?.scoreB ?? 100} label={st?.labelB ?? "Higher Resilience"} compact />
+                    <span className="text-muted-foreground block mb-1">Sustainability — B</span>
+                    <FsiGauge score={st?.scoreB ?? 100} size={72} />
                   </div>
                   {(s.fundingGap ?? 0) > 0 && (
                     <div className="col-span-2">
@@ -1377,9 +1382,15 @@ function ScenarioDetailCard({
             </CardTitle>
             <CardDescription className="mt-1">{SCENARIO_META[scenario.id]?.description}</CardDescription>
           </div>
-          <div className="flex gap-2 flex-wrap">
-            <StabilityBadge score={stabilityScore.scoreA} label={`A: ${stabilityScore.labelA}`} />
-            <StabilityBadge score={stabilityScore.scoreB} label={`B: ${stabilityScore.labelB}`} />
+          <div className="flex gap-3 flex-wrap items-center">
+            <div className="flex flex-col items-center">
+              <span className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">A FSI</span>
+              <FsiGauge score={stabilityScore.scoreA} size={64} />
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">B FSI</span>
+              <FsiGauge score={stabilityScore.scoreB} size={64} />
+            </div>
           </div>
         </div>
       </CardHeader>
@@ -1513,15 +1524,30 @@ function ScenarioDetailCard({
               </p>
               <div className="h-[260px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={projection}>
+                  <AreaChart data={projection}>
+                    <defs>
+                      <linearGradient id="projGradA" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="hsl(220,52%,22%)" stopOpacity={0.15} />
+                        <stop offset="95%" stopColor="hsl(220,52%,22%)" stopOpacity={0} />
+                      </linearGradient>
+                      <linearGradient id="projGradB" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#0d9488" stopOpacity={0.15} />
+                        <stop offset="95%" stopColor="#0d9488" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
                     <XAxis dataKey="year" axisLine={false} tickLine={false} fontSize={11} />
                     <YAxis axisLine={false} tickLine={false} fontSize={11} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
-                    <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
+                    <RechartsTooltip
+                      formatter={(value: number) => formatCurrency(value)}
+                      contentStyle={{ background: "hsl(220,52%,22%)", border: "none", borderRadius: 8, color: "#fff", fontSize: 12 }}
+                      itemStyle={{ color: "#fff" }}
+                      labelStyle={{ color: "rgba(255,255,255,0.6)", marginBottom: 4 }}
+                    />
                     <Legend />
-                    <Line type="monotone" dataKey="capitalA" name="Party A" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-                    <Line type="monotone" dataKey="capitalB" name="Party B" stroke="#0d9488" strokeWidth={2} dot={false} />
-                  </LineChart>
+                    <Area type="monotone" dataKey="capitalA" name="Party A" stroke="hsl(220,52%,22%)" strokeWidth={2.5} fill="url(#projGradA)" dot={false} />
+                    <Area type="monotone" dataKey="capitalB" name="Party B" stroke="#0d9488" strokeWidth={2.5} fill="url(#projGradB)" dot={false} />
+                  </AreaChart>
                 </ResponsiveContainer>
               </div>
               <CapitalRunwaySection runway={runway} />
@@ -1851,7 +1877,12 @@ function CompositionChart({ scenario }: { scenario: ScenarioResult }) {
             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="hsl(var(--border))" />
             <XAxis type="number" axisLine={false} tickLine={false} fontSize={11} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
             <YAxis type="category" dataKey="name" axisLine={false} tickLine={false} fontSize={12} width={60} />
-            <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
+            <RechartsTooltip
+              formatter={(value: number) => formatCurrency(value)}
+              contentStyle={{ background: "hsl(220,52%,22%)", border: "none", borderRadius: 8, color: "#fff", fontSize: 12 }}
+              itemStyle={{ color: "#fff" }}
+              labelStyle={{ color: "rgba(255,255,255,0.6)", marginBottom: 4 }}
+            />
             <Legend />
             <Bar dataKey="Liquid" stackId="a" fill="#3B82F6" radius={[0, 0, 0, 0]} />
             <Bar dataKey="Home Equity" stackId="a" fill="#F59E0B" radius={[0, 0, 0, 0]} />
@@ -1883,7 +1914,7 @@ function StabilitySection({ score }: { score: StabilityResult }) {
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-semibold text-primary uppercase">Party A</span>
-            <StabilityBadge score={score.scoreA} label={score.labelA} />
+            <FsiGauge score={score.scoreA} size={80} />
           </div>
           <ScoreBar score={score.scoreA} />
           <ul className="space-y-0.5">
@@ -1907,7 +1938,7 @@ function StabilitySection({ score }: { score: StabilityResult }) {
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-semibold text-teal-600 uppercase">Party B</span>
-            <StabilityBadge score={score.scoreB} label={score.labelB} />
+            <FsiGauge score={score.scoreB} size={80} />
           </div>
           <ScoreBar score={score.scoreB} />
           <ul className="space-y-0.5">

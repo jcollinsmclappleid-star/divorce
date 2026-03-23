@@ -21,11 +21,11 @@ import type {
 import type { StabilityDriver } from "@/lib/insights/computeStabilityScore";
 import { LogoPrint } from "@/components/logo";
 
-const SCENARIO_META: Record<string, { label: string; color: string }> = {
-  S1: { label: "Sell & Split", color: "#2563EB" },
-  S2: { label: "A Keeps House", color: "#10B981" },
-  S3: { label: "B Keeps House", color: "#8B5CF6" },
-  S4: { label: "Deferred Sale", color: "#F59E0B" },
+const SCENARIO_META: Record<string, { label: string; shortLabel: string; color: string }> = {
+  S1: { label: "Sell & Split", shortLabel: "Sell & Split", color: "#2563EB" },
+  S2: { label: "A Keeps House", shortLabel: "A Keeps", color: "#10B981" },
+  S3: { label: "B Keeps House", shortLabel: "B Keeps", color: "#8B5CF6" },
+  S4: { label: "Deferred Sale", shortLabel: "Deferred", color: "#F59E0B" },
 };
 
 function fmt(v: number) { return formatCurrency(v); }
@@ -350,11 +350,14 @@ export default function ReportPage() {
           </p>
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b-2 border-gray-300">
-                <th className="text-left py-2 text-xs font-semibold uppercase tracking-wider text-gray-500">Metric</th>
+              <tr className="bg-primary">
+                <th className="text-left py-2 px-2 text-xs font-semibold uppercase tracking-wider text-white/60">Metric</th>
                 {allScenarios.map(sc => (
-                  <th key={sc.id} className="text-right py-2 text-xs font-semibold uppercase tracking-wider" style={{ color: SCENARIO_META[sc.id]?.color }}>
-                    {SCENARIO_META[sc.id]?.label ?? sc.name}
+                  <th key={sc.id} className="text-right py-2 px-2 text-xs font-semibold uppercase tracking-wider text-white">
+                    <span className="flex items-center justify-end gap-1.5">
+                      <span className="w-2 h-2 rounded-full inline-block border border-white/30" style={{ backgroundColor: SCENARIO_META[sc.id]?.color }} />
+                      {SCENARIO_META[sc.id]?.shortLabel ?? sc.id}
+                    </span>
                   </th>
                 ))}
               </tr>
@@ -724,7 +727,9 @@ export default function ReportPage() {
 function ReportSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-8 break-inside-avoid" data-testid={`section-report-${title.toLowerCase().replace(/\s+/g, "-")}`}>
-      <h2 className="text-lg font-bold text-gray-900 mb-3 pb-1 border-b border-gray-200">{title}</h2>
+      <div className="bg-primary px-4 py-2 rounded-md mb-4">
+        <h2 className="text-sm font-bold text-white uppercase tracking-wider">{title}</h2>
+      </div>
       {children}
     </section>
   );
