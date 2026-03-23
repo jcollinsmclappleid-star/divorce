@@ -42,6 +42,18 @@ export async function registerRoutes(
   </url>
 
   <!-- ═══════════════════════════════════════════════
+       TIER 1.5 (0.8) — Platform navigation pages
+       ═══════════════════════════════════════════════ -->
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/how-it-works</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/faq</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ═══════════════════════════════════════════════
        TIER 2 (0.9) — Tool, hub, pillar + all quality articles
        ═══════════════════════════════════════════════ -->
   <url>
