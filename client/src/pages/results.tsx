@@ -18,7 +18,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { formatCurrency } from "@/lib/utils";
 import {
-  ResponsiveContainer, BarChart, Bar, LineChart, Line, AreaChart, Area,
+  ResponsiveContainer, BarChart, Bar, AreaChart, Area,
   XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend
 } from "recharts";
 import {
@@ -49,6 +49,12 @@ const SCENARIO_META: Record<string, { label: string; shortLabel: string; color: 
   S2: { label: "A Keeps House", shortLabel: "A Keeps House", color: "#10B981", description: "Party A retains the family property" },
   S3: { label: "B Keeps House", shortLabel: "B Keeps House", color: "#8B5CF6", description: "Party B retains the family property" },
   S4: { label: "Deferred Sale", shortLabel: "Deferred", color: "#F59E0B", description: "Property sale deferred to a future date" },
+};
+
+const CHART_TOOLTIP_STYLE = {
+  contentStyle: { background: "hsl(220,52%,22%)", border: "none", borderRadius: 8, color: "#fff", fontSize: 12 },
+  itemStyle: { color: "#fff" },
+  labelStyle: { color: "rgba(255,255,255,0.6)", marginBottom: 4 },
 };
 
 function InfoTip({ text }: { text: string }) {
@@ -347,12 +353,7 @@ export default function ResultsPage() {
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
                         <XAxis dataKey="name" axisLine={false} tickLine={false} fontSize={12} />
                         <YAxis axisLine={false} tickLine={false} fontSize={12} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
-                        <RechartsTooltip
-                          formatter={(value: number) => formatCurrency(value)}
-                          contentStyle={{ background: "hsl(220,52%,22%)", border: "none", borderRadius: 8, color: "#fff", fontSize: 12 }}
-                          itemStyle={{ color: "#fff" }}
-                          labelStyle={{ color: "rgba(255,255,255,0.6)", marginBottom: 4 }}
-                        />
+                        <RechartsTooltip formatter={(value: number) => formatCurrency(value)} {...CHART_TOOLTIP_STYLE} />
                         <Legend />
                         <Bar dataKey="Party A" fill="url(#gradA)" radius={[4, 4, 0, 0]} />
                         <Bar dataKey="Party B" fill="url(#gradB)" radius={[4, 4, 0, 0]} />
@@ -1166,24 +1167,6 @@ function ExecutiveTable({
   );
 }
 
-function StabilityBadge({ score, label, compact }: { score: number; label: string; compact?: boolean }) {
-  const colorClass = score >= 80
-    ? "text-emerald-700 border-emerald-200 bg-emerald-50"
-    : score >= 60
-    ? "text-amber-700 border-amber-200 bg-amber-50"
-    : "text-red-700 border-red-200 bg-red-50";
-
-  const shortLabel = compact
-    ? (score >= 80 ? "Higher Resilience" : score >= 60 ? "Moderate Resilience" : "Lower Resilience")
-    : label;
-
-  return (
-    <Badge variant="outline" className={`${colorClass} max-w-full whitespace-nowrap`} data-testid={`badge-stability-${score}`}>
-      <Shield className="w-3 h-3 mr-1 shrink-0" />
-      <span className="truncate">{score} {compact ? shortLabel.replace("Resilience", "Res.") : shortLabel}</span>
-    </Badge>
-  );
-}
 
 function generateScenarioConsiderations(
   scenario: ScenarioResult,
@@ -1538,12 +1521,7 @@ function ScenarioDetailCard({
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
                     <XAxis dataKey="year" axisLine={false} tickLine={false} fontSize={11} />
                     <YAxis axisLine={false} tickLine={false} fontSize={11} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
-                    <RechartsTooltip
-                      formatter={(value: number) => formatCurrency(value)}
-                      contentStyle={{ background: "hsl(220,52%,22%)", border: "none", borderRadius: 8, color: "#fff", fontSize: 12 }}
-                      itemStyle={{ color: "#fff" }}
-                      labelStyle={{ color: "rgba(255,255,255,0.6)", marginBottom: 4 }}
-                    />
+                    <RechartsTooltip formatter={(value: number) => formatCurrency(value)} {...CHART_TOOLTIP_STYLE} />
                     <Legend />
                     <Area type="monotone" dataKey="capitalA" name="Party A" stroke="hsl(220,52%,22%)" strokeWidth={2.5} fill="url(#projGradA)" dot={false} />
                     <Area type="monotone" dataKey="capitalB" name="Party B" stroke="#0d9488" strokeWidth={2.5} fill="url(#projGradB)" dot={false} />
@@ -1877,16 +1855,25 @@ function CompositionChart({ scenario }: { scenario: ScenarioResult }) {
             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="hsl(var(--border))" />
             <XAxis type="number" axisLine={false} tickLine={false} fontSize={11} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
             <YAxis type="category" dataKey="name" axisLine={false} tickLine={false} fontSize={12} width={60} />
-            <RechartsTooltip
-              formatter={(value: number) => formatCurrency(value)}
-              contentStyle={{ background: "hsl(220,52%,22%)", border: "none", borderRadius: 8, color: "#fff", fontSize: 12 }}
-              itemStyle={{ color: "#fff" }}
-              labelStyle={{ color: "rgba(255,255,255,0.6)", marginBottom: 4 }}
-            />
+            <defs>
+              <linearGradient id="compGradLiquid" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#2563EB" stopOpacity={1} />
+                <stop offset="100%" stopColor="#3B82F6" stopOpacity={0.85} />
+              </linearGradient>
+              <linearGradient id="compGradEquity" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#D97706" stopOpacity={1} />
+                <stop offset="100%" stopColor="#F59E0B" stopOpacity={0.85} />
+              </linearGradient>
+              <linearGradient id="compGradPension" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#7C3AED" stopOpacity={1} />
+                <stop offset="100%" stopColor="#8B5CF6" stopOpacity={0.85} />
+              </linearGradient>
+            </defs>
+            <RechartsTooltip formatter={(value: number) => formatCurrency(value)} {...CHART_TOOLTIP_STYLE} />
             <Legend />
-            <Bar dataKey="Liquid" stackId="a" fill="#3B82F6" radius={[0, 0, 0, 0]} />
-            <Bar dataKey="Home Equity" stackId="a" fill="#F59E0B" radius={[0, 0, 0, 0]} />
-            <Bar dataKey="Pension" stackId="a" fill="#8B5CF6" radius={[0, 4, 4, 0]} />
+            <Bar dataKey="Liquid" stackId="a" fill="url(#compGradLiquid)" radius={[0, 0, 0, 0]} />
+            <Bar dataKey="Home Equity" stackId="a" fill="url(#compGradEquity)" radius={[0, 0, 0, 0]} />
+            <Bar dataKey="Pension" stackId="a" fill="url(#compGradPension)" radius={[0, 4, 4, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
