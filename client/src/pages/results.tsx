@@ -7,6 +7,7 @@ import { useNoIndex } from "@/hooks/use-noindex";
 import { useAccess } from "@/hooks/use-access";
 import { Logo } from "@/components/logo";
 import { FsiGauge } from "@/components/fsi-gauge";
+import { PREMIUM_TOOLTIP_STYLE } from "@/components/premium-tooltip";
 import { calcMortgagePayment } from "@/lib/engine/calc/mortgage";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -51,11 +52,6 @@ const SCENARIO_META: Record<string, { label: string; shortLabel: string; color: 
   S4: { label: "Deferred Sale", shortLabel: "Deferred", color: "#F59E0B", description: "Property sale deferred to a future date" },
 };
 
-const CHART_TOOLTIP_STYLE = {
-  contentStyle: { background: "hsl(220,52%,22%)", border: "none", borderRadius: 8, color: "#fff", fontSize: 12 },
-  itemStyle: { color: "#fff" },
-  labelStyle: { color: "rgba(255,255,255,0.6)", marginBottom: 4 },
-};
 
 function InfoTip({ text }: { text: string }) {
   const [open, setOpen] = useState(false);
@@ -289,8 +285,8 @@ export default function ResultsPage() {
                       <button
                         key={s.id}
                         type="button"
-                        className={`text-left p-4 pl-5 rounded-lg border transition-all overflow-hidden relative ${isActive ? "border-border bg-white shadow-md" : "border-border bg-white hover:shadow-sm"}`}
-                        style={{ borderLeftWidth: isActive ? 4 : 4, borderLeftColor: isActive ? meta?.color : "transparent" }}
+                        className={`text-left p-4 pl-5 rounded-lg border transition-all overflow-hidden relative bg-white ${isActive ? "border-border shadow-md" : "border-border hover:shadow-sm"}`}
+                        style={{ borderLeftWidth: 4, borderLeftColor: isActive ? meta?.color : "transparent" }}
                         onClick={() => setActiveTab(isActive ? null : s.id)}
                         data-testid={`button-tab-${s.id}`}
                       >
@@ -353,7 +349,7 @@ export default function ResultsPage() {
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
                         <XAxis dataKey="name" axisLine={false} tickLine={false} fontSize={12} />
                         <YAxis axisLine={false} tickLine={false} fontSize={12} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
-                        <RechartsTooltip formatter={(value: number) => formatCurrency(value)} {...CHART_TOOLTIP_STYLE} />
+                        <RechartsTooltip formatter={(value: number) => formatCurrency(value)} {...PREMIUM_TOOLTIP_STYLE} />
                         <Legend />
                         <Bar dataKey="Party A" fill="url(#gradA)" radius={[4, 4, 0, 0]} />
                         <Bar dataKey="Party B" fill="url(#gradB)" radius={[4, 4, 0, 0]} />
@@ -975,13 +971,13 @@ function ExecutiveTable({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="hidden lg:block overflow-x-auto">
+        <div className="hidden lg:block overflow-x-auto max-h-[520px]">
           <Table>
-            <TableHeader>
+            <TableHeader className="sticky top-0 z-10">
               <TableRow className="bg-primary hover:bg-primary">
-                <TableHead className="min-w-[180px] text-primary-foreground/70"></TableHead>
+                <TableHead className="min-w-[180px] text-primary-foreground/70 bg-primary"></TableHead>
                 {scenarios.map(s => (
-                  <TableHead key={s.id} className="text-center min-w-[130px] text-primary-foreground">
+                  <TableHead key={s.id} className="text-center min-w-[130px] text-primary-foreground bg-primary">
                     <div className="flex items-center justify-center gap-1.5">
                       <div className="w-2.5 h-2.5 rounded-full border border-white/30" style={{ backgroundColor: SCENARIO_META[s.id]?.color }} />
                       <span className="font-semibold">{SCENARIO_META[s.id]?.shortLabel ?? s.name}</span>
@@ -1521,7 +1517,7 @@ function ScenarioDetailCard({
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
                     <XAxis dataKey="year" axisLine={false} tickLine={false} fontSize={11} />
                     <YAxis axisLine={false} tickLine={false} fontSize={11} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
-                    <RechartsTooltip formatter={(value: number) => formatCurrency(value)} {...CHART_TOOLTIP_STYLE} />
+                    <RechartsTooltip formatter={(value: number) => formatCurrency(value)} {...PREMIUM_TOOLTIP_STYLE} />
                     <Legend />
                     <Area type="monotone" dataKey="capitalA" name="Party A" stroke="hsl(220,52%,22%)" strokeWidth={2.5} fill="url(#projGradA)" dot={false} />
                     <Area type="monotone" dataKey="capitalB" name="Party B" stroke="#0d9488" strokeWidth={2.5} fill="url(#projGradB)" dot={false} />
@@ -1869,7 +1865,7 @@ function CompositionChart({ scenario }: { scenario: ScenarioResult }) {
                 <stop offset="100%" stopColor="#8B5CF6" stopOpacity={0.85} />
               </linearGradient>
             </defs>
-            <RechartsTooltip formatter={(value: number) => formatCurrency(value)} {...CHART_TOOLTIP_STYLE} />
+            <RechartsTooltip formatter={(value: number) => formatCurrency(value)} {...PREMIUM_TOOLTIP_STYLE} />
             <Legend />
             <Bar dataKey="Liquid" stackId="a" fill="url(#compGradLiquid)" radius={[0, 0, 0, 0]} />
             <Bar dataKey="Home Equity" stackId="a" fill="url(#compGradEquity)" radius={[0, 0, 0, 0]} />
