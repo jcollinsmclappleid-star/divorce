@@ -351,14 +351,15 @@ export default function ReportPage() {
           </p>
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-primary">
-                <th className="text-left py-2 px-2 text-xs font-semibold uppercase tracking-wider text-white/60">Metric</th>
+              <tr>
+                <th className="text-left py-2 px-2 text-xs font-semibold uppercase tracking-wider text-gray-500 bg-gray-50">Metric</th>
                 {allScenarios.map(sc => (
-                  <th key={sc.id} className="text-right py-2 px-2 text-xs font-semibold uppercase tracking-wider text-white">
-                    <span className="flex items-center justify-end gap-1.5">
-                      <span className="w-2 h-2 rounded-full inline-block border border-white/30" style={{ backgroundColor: SCENARIO_META[sc.id]?.color }} />
-                      {SCENARIO_META[sc.id]?.shortLabel ?? sc.id}
-                    </span>
+                  <th
+                    key={sc.id}
+                    className="text-right py-2 px-2 text-xs font-bold uppercase tracking-wider text-white"
+                    style={{ backgroundColor: SCENARIO_META[sc.id]?.color }}
+                  >
+                    {SCENARIO_META[sc.id]?.shortLabel ?? sc.id}
                   </th>
                 ))}
               </tr>
@@ -409,7 +410,7 @@ export default function ReportPage() {
 
         {scenarioData.map(({ sc, narrative, sourceOfFunds, stability, snapshot, comparison, housing }, idx) => (
           <ReportSection key={sc.id} title={`${5 + idx}. ${SCENARIO_META[sc.id]?.label ?? sc.name} — Detail`}>
-            <div className="space-y-5">
+            <div className="space-y-5 pl-3 border-l-4" style={{ borderLeftColor: SCENARIO_META[sc.id]?.color }}>
               <div>
                 <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Executive Narrative Summary</h4>
                 <p className="text-sm text-gray-700 leading-relaxed">{narrative.headline}</p>
@@ -805,10 +806,10 @@ function FundsColumn({ label, funds, color }: { label: string; funds: { rows: { 
 
 function ComparisonRow({ label, values, bold }: { label: string; values: number[]; bold?: boolean }) {
   return (
-    <tr className={`border-b border-gray-100 ${bold ? "font-semibold" : ""}`}>
-      <td className="py-1 text-gray-600">{label}</td>
+    <tr className={`border-b border-gray-100 premium-table-row-alt ${bold ? "font-semibold bg-gray-50" : ""}`}>
+      <td className="py-1.5 px-2 text-gray-600 text-xs">{label}</td>
       {values.map((v, i) => (
-        <td key={i} className={`py-1 text-right tabular-nums ${v < 0 ? "text-red-500" : ""}`}>
+        <td key={i} className={`py-1.5 px-2 text-right tabular-nums text-xs ${v < 0 ? "text-red-500" : v > 0 ? "text-gray-800" : "text-gray-400"}`}>
           {v === 0 ? "—" : v < 0 ? `(${fmt(Math.abs(v))})` : fmt(v)}
         </td>
       ))}
