@@ -193,7 +193,7 @@ export function ContentPageLayout({
             onClick={() => setLocation("/wizard")}
             data-testid="button-hero-cta"
           >
-            Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1.5" />
+            Start Modelling <ArrowRight className="w-4 h-4 ml-1.5" />
           </Button>
         </div>
       </header>
