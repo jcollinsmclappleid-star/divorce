@@ -42,7 +42,7 @@ export default function AboutPage() {
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4 max-w-3xl space-y-10">
 
-          <div className="space-y-4 p-6 rounded-xl bg-primary/5 border border-primary/15">
+          <div className="space-y-4 p-6 rounded-xl bg-muted/30 border border-border">
             <p className="text-foreground leading-relaxed">
               Divorce is already one of the hardest things a person goes through. The financial side shouldn't also be a mystery.
             </p>

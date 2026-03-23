@@ -159,39 +159,41 @@ export function ContentPageLayout({
 
       <SiteNav />
 
-      <header className="py-12 md:py-16" data-testid="section-content-hero">
+      <header className="bg-primary py-12 md:py-16" data-testid="section-content-hero">
         <div className="container mx-auto px-4 max-w-3xl">
           <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-3 -ml-2">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setLocation("/")}
+              className="text-white/70 hover:text-white hover:bg-white/10"
               data-testid="button-back-home"
             >
               <ArrowLeft className="w-4 h-4 mr-1.5" /> Home
             </Button>
-            <span className="text-muted-foreground text-sm">/</span>
+            <span className="text-white/30 text-sm">/</span>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setLocation("/divorce-financial-guides")}
+              className="text-white/70 hover:text-white hover:bg-white/10"
               data-testid="button-back-guides"
             >
               All Guides
             </Button>
           </nav>
-          <h1 className="text-3xl md:text-4xl font-display font-bold leading-tight" data-testid="text-content-title">
+          <h1 className="text-3xl md:text-4xl font-display font-bold leading-tight text-white" data-testid="text-content-title">
             {title}
           </h1>
-          <p className="text-muted-foreground mt-3 text-lg leading-relaxed max-w-2xl" data-testid="text-content-subtitle">
+          <p className="text-white/70 mt-3 text-lg leading-relaxed max-w-2xl" data-testid="text-content-subtitle">
             {subtitle}
           </p>
           <Button
-            className="mt-6"
+            className="mt-6 bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
             onClick={() => setLocation("/wizard")}
             data-testid="button-hero-cta"
           >
-            Start Modelling <ArrowRight className="w-4 h-4 ml-1.5" />
+            Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1.5" />
           </Button>
         </div>
       </header>

@@ -162,10 +162,10 @@ export default function HowItWorksPage() {
             ))}
           </div>
 
-          <div className="mt-8 p-4 rounded-lg bg-primary/6 border border-primary/20 flex items-start gap-3">
+          <div className="mt-8 p-4 rounded-lg bg-muted/40 border border-border flex items-start gap-3">
             <Shield className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-primary/80 leading-relaxed">
-              <strong className="text-primary">Privacy by design.</strong> All calculations happen in your browser. The financial data you enter is never transmitted to our servers. You may save your session token to return later without re-entering your figures.
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              <strong className="text-foreground">Privacy by design.</strong> All calculations happen in your browser. The financial data you enter is never transmitted to our servers. You may save your session token to return later without re-entering your figures.
             </p>
           </div>
         </div>
