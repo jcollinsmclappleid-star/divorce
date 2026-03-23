@@ -215,20 +215,28 @@ export default function ReportPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-8 py-10 print:px-0 print:py-0" data-testid="report-content">
-        <header className="mb-10 pb-6 border-b-2 border-gray-800">
-          <div className="flex items-center justify-between mb-4">
-            <LogoPrint className="h-14" />
+        <header className="mb-10" data-testid="report-header">
+          <div className="bg-primary rounded-xl px-8 py-7 mb-6 print:rounded-none print:px-0">
+            <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
+              <div>
+                <span className="font-display font-bold text-xl text-white tracking-tight">Divorce Calculator UK</span>
+                <p className="text-xs text-white/50 uppercase tracking-wider mt-0.5">Financial Modelling</p>
+              </div>
+              <div className="text-right">
+                <p className="text-[10px] text-white/50 uppercase tracking-wider">Generated</p>
+                <p className="text-sm text-white/80 font-medium">{new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p>
+              </div>
+            </div>
+            <div className="border-t border-white/15 pt-4">
+              <h1 className="text-3xl font-bold tracking-tight text-white" data-testid="text-report-title">Structured Financial Brief</h1>
+              <p className="text-sm text-white/60 mt-1">UK {store.config.taxYear} Tax Rules &middot; Scenario Modelling Summary</p>
+              <p className="text-xs text-white/40 mt-3 italic">
+                Illustrative modelling only. This is not legal, tax or financial advice.
+              </p>
+            </div>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight" data-testid="text-report-title">Structured Financial Brief</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Generated {new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })} &middot; UK {store.config.taxYear} Tax Rules
-          </p>
-          <p className="text-xs text-gray-500 mt-0.5">Scenario Modelling Summary</p>
-          <p className="text-xs text-gray-400 mt-3 italic">
-            Illustrative modelling only. This is not legal, tax or financial advice. All figures are estimates based on the inputs provided and current UK tax/NI rules.
-          </p>
-          <div className="mt-4 p-3 border border-gray-300 rounded text-xs text-gray-600 leading-relaxed">
-            <p className="font-semibold text-gray-700 mb-1">IMPORTANT</p>
+          <div className="p-4 border border-amber-200 bg-amber-50 rounded-lg text-xs text-amber-900 leading-relaxed">
+            <p className="font-semibold text-amber-800 mb-1">IMPORTANT</p>
             <p>
               This document provides illustrative financial modelling only and does not constitute legal, tax, or financial advice. All figures are estimates based on the information entered and standard assumptions. Lending capacity benchmarks are generalised income multiple illustrations and do not constitute a lending assessment, mortgage advice, or credit approval indication. Independent professional review may be warranted before making any financial decisions.
             </p>

@@ -6,49 +6,15 @@ import { formatCurrency, scrollTop } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Lock, Check, Shield, ChevronRight } from "lucide-react";
+import { Lock, Check, Shield, ChevronRight, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { Logo } from "@/components/logo";
+import { FsiGaugeLocked } from "@/components/fsi-gauge";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
-function ScoreBar({ score }: { score: number }) {
-  const colour = score >= 80 ? "bg-green-500" : score >= 60 ? "bg-amber-500" : "bg-red-500";
-  return (
-    <div className="w-full bg-muted rounded-full h-1.5 mt-1">
-      <div className={`${colour} h-1.5 rounded-full`} style={{ width: `${score}%` }} />
-    </div>
-  );
-}
-
-function FsiDial() {
-  const radius = 40;
-  const circumference = 2 * Math.PI * radius;
-  return (
-    <div className="flex flex-col items-center gap-3">
-      <div className="relative w-28 h-28 flex items-center justify-center">
-        <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90 opacity-30">
-          <circle cx="50" cy="50" r={radius} fill="none" stroke="currentColor" strokeWidth="8" className="text-muted-foreground/20" />
-          <circle cx="50" cy="50" r={radius} fill="none" stroke="currentColor" strokeWidth="8"
-            className="text-primary"
-            strokeDasharray={circumference}
-            strokeDashoffset={circumference * 0.35}
-            strokeLinecap="round" />
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <Lock className="w-5 h-5 text-muted-foreground" />
-        </div>
-      </div>
-      <p className="text-sm font-medium text-center">Your sustainability score has been calculated</p>
-      <p className="text-xs text-muted-foreground text-center max-w-xs">
-        The Financial Sustainability Indicator scores how viable each settlement option is for each party — taking income, outgoings, housing costs, and capital into account.
-      </p>
-    </div>
-  );
-}
-
-const CHART_COLOURS = ["hsl(220,50%,25%)", "#0d9488", "#64748b"];
+const CHART_COLOURS = ["hsl(220,52%,22%)", "#0d9488", "#64748b"];
 
 export default function PreviewPage() {
   useDocumentTitle("Your Divorce Financial Overview | DivorceCalculatorUK");
@@ -100,27 +66,31 @@ export default function PreviewPage() {
   const scenarios = [
     {
       id: "S1",
-      name: "Scenario 1 — Sell & Split",
+      name: "Sell & Split",
       desc: "Property sold, net equity divided. Both parties receive a cash allocation.",
       lockedLabel: `${nameA} capital position`,
+      color: "#2563EB",
     },
     {
       id: "S2a",
-      name: `Scenario 2 — ${nameA} Retains Home`,
+      name: `${nameA} Retains Home`,
       desc: `${nameA} buys out ${nameB}'s share. Remaining assets rebalanced.`,
       lockedLabel: "Monthly surplus / deficit",
+      color: "#10B981",
     },
     {
       id: "S2b",
-      name: `Scenario 3 — ${nameB} Retains Home`,
+      name: `${nameB} Retains Home`,
       desc: `${nameB} buys out ${nameA}'s share. Remaining assets rebalanced.`,
       lockedLabel: "Housing feasibility benchmark",
+      color: "#8B5CF6",
     },
     {
       id: "S4",
-      name: "Scenario 4 — Deferred Sale",
+      name: "Deferred Sale",
       desc: "Property retained jointly then sold at a future date (Mesher-style arrangement).",
       lockedLabel: "5-year capital projection",
+      color: "#F59E0B",
     },
   ];
 
@@ -161,7 +131,7 @@ export default function PreviewPage() {
             Your Financial Position Has Been Calculated.
           </h1>
           <p className="text-muted-foreground text-sm max-w-xl mx-auto leading-relaxed">
-            Your assets, liabilities, and income have been modelled. Unlock the full structured analysis to review every settlement scenario, sustainability scores, and 5-year projections.
+            Your assets, liabilities, and income have been modelled. Unlock the full structured analysis to review every settlement option, sustainability scores, and 5-year projections.
           </p>
         </div>
 
@@ -241,22 +211,35 @@ export default function PreviewPage() {
           </p>
         </div>
 
-        {/* Four scenario name cards with one locked metric */}
+        {/* Four scenario cards with blurred locked metrics */}
         <section className="space-y-3">
-          <h2 className="text-lg font-semibold">Four Settlement Scenarios — Modelled for Your Figures</h2>
-          <p className="text-sm text-muted-foreground">Your full analysis includes a detailed breakdown of each scenario below. Unlock to view all outputs.</p>
+          <h2 className="text-lg font-semibold">Four Settlement Options — Modelled for Your Figures</h2>
+          <p className="text-sm text-muted-foreground">Your full analysis includes a detailed breakdown of each option below. Unlock to view all outputs.</p>
           <div className="grid gap-3 sm:grid-cols-2">
             {scenarios.map(sc => (
-              <Card key={sc.id} className="border-border/60" data-testid={`card-scenario-${sc.id}`}>
-                <CardContent className="pt-4 pb-4">
-                  <p className="text-sm font-semibold text-foreground mb-1">{sc.name}</p>
-                  <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{sc.desc}</p>
-                  <div className="flex items-center gap-2 text-muted-foreground/60 text-xs border-t border-border/40 pt-3">
-                    <Lock className="w-3.5 h-3.5 shrink-0" />
-                    <span>{sc.lockedLabel}: <span className="font-medium">unlock to view</span></span>
+              <div key={sc.id} className="relative rounded-xl border border-border/60 bg-white overflow-hidden" data-testid={`card-scenario-${sc.id}`}>
+                <div className="absolute top-0 left-0 right-0 h-1 rounded-t-xl" style={{ background: sc.color }} />
+                <div className="pt-5 pb-4 px-4">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: sc.color }} />
+                    <p className="text-sm font-semibold text-foreground">{sc.name}</p>
                   </div>
-                </CardContent>
-              </Card>
+                  <p className="text-xs text-muted-foreground mb-3 leading-relaxed pl-[18px]">{sc.desc}</p>
+                  <div className="pl-[18px]">
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground/60 mb-1">{sc.lockedLabel}</p>
+                    <div className="relative">
+                      <p className="text-base font-bold tabular-nums blur-[5px] select-none text-foreground">
+                        {sc.id === "S4" ? "£12,400 / yr" : sc.id === "S2b" ? "Feasible" : "£" + Math.round(combinedPool * 0.48 / 1000) + "k"}
+                      </p>
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground bg-background/90 border border-border/60 rounded px-1.5 py-0.5">
+                          <Lock className="w-2.5 h-2.5" /> unlock to view
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </section>
@@ -267,7 +250,12 @@ export default function PreviewPage() {
             <CardContent className="py-8">
               <div className="text-center space-y-4">
                 <h2 className="text-base font-semibold">Financial Sustainability Indicator</h2>
-                <FsiDial />
+                <div className="flex justify-center">
+                  <FsiGaugeLocked size={140} />
+                </div>
+                <p className="text-xs text-muted-foreground max-w-xs mx-auto">
+                  The Financial Sustainability Indicator scores how viable each settlement option is for each party — taking income, outgoings, housing costs, and capital into account.
+                </p>
                 <Button variant="outline" size="sm" onClick={() => { scrollTop(); navigate("/unlock"); }} data-testid="button-unlock-fsi">
                   Unlock to View Your Score <ChevronRight className="w-3.5 h-3.5 ml-1" />
                 </Button>
@@ -287,11 +275,11 @@ export default function PreviewPage() {
               <div className="space-y-3">
                 {poolBand === "£300k–£500k" || poolBand === "under £300k" ? (
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    "Users with a combined asset pool between £300k–£500k typically see a sustainability score difference of 15–25 points between the Sell & Split and Retain scenarios, driven by mortgage affordability on a single income."
+                    "Users with a combined asset pool between £300k–£500k typically see a sustainability score difference of 15–25 points between the Sell & Split and Retain options, driven by mortgage affordability on a single income."
                   </p>
                 ) : (
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    "Users with a combined pool over £500k most commonly find that the Retain scenario produces a materially higher capital position for one party, while the Sell & Split scenario delivers the most balanced short-term liquidity split."
+                    "Users with a combined pool over £500k most commonly find that the Retain option produces a materially higher capital position for one party, while the Sell & Split option delivers the most balanced short-term liquidity split."
                   </p>
                 )}
                 <p className="text-sm text-muted-foreground leading-relaxed">
@@ -307,7 +295,7 @@ export default function PreviewPage() {
 
         {/* Pricing card CTA */}
         <section>
-          <div className="rounded-xl bg-primary border border-white/10 shadow-2xl overflow-hidden">
+          <div className="rounded-xl bg-primary border border-white/10 shadow-2xl overflow-hidden" data-testid="card-pricing-cta">
             <div className="px-6 pt-6 pb-2 text-center border-b border-white/10 space-y-2">
               <div className="inline-flex items-center gap-1.5 bg-gold/15 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full">
                 Twelve Months · Unlimited Access
@@ -318,7 +306,7 @@ export default function PreviewPage() {
             <div className="px-6 py-5 space-y-4">
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div className="bg-white/5 rounded-lg py-2.5">
-                  <p className="text-sm font-bold text-white">15 min</p>
+                  <p className="text-sm font-bold text-white">20 min</p>
                   <p className="text-[10px] text-white/45 mt-0.5">First model</p>
                 </div>
                 <div className="bg-white/5 rounded-lg py-2.5">
@@ -330,15 +318,29 @@ export default function PreviewPage() {
                   <p className="text-[10px] text-white/45 mt-0.5">Private</p>
                 </div>
               </div>
+              <div className="space-y-2">
+                {[
+                  "Full settlement comparison — all four options scored",
+                  "Financial Sustainability Indicator per party",
+                  "5-year capital projections",
+                  "Stress testing — rate & income changes",
+                  "Downloadable Structured Financial Brief (PDF)",
+                ].map(item => (
+                  <div key={item} className="flex items-center gap-2 text-xs text-white/70">
+                    <Check className="w-3.5 h-3.5 text-gold shrink-0" />
+                    {item}
+                  </div>
+                ))}
+              </div>
               <Button
                 className="w-full bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/30 text-base font-semibold"
                 size="lg"
                 onClick={() => { scrollTop(); navigate("/unlock"); }}
                 data-testid="button-unlock-pricing"
               >
-                Unlock Full Analysis — £79
+                Unlock Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" />
               </Button>
-              <p className="text-xs text-white/40 text-center">Secured by Stripe</p>
+              <p className="text-xs text-white/40 text-center">Secured by Stripe · Instant access</p>
             </div>
           </div>
         </section>
@@ -382,33 +384,6 @@ export default function PreviewPage() {
           </Card>
         </section>
 
-        {/* Primary CTA */}
-        <section className="space-y-4">
-          <Card className="border-primary/30 bg-primary/5">
-            <CardContent className="py-6 text-center space-y-2">
-              <p className="text-sm text-muted-foreground leading-relaxed max-w-lg mx-auto">
-                A single professional consultation can cost £250–£400 per hour.
-              </p>
-              <p className="text-sm font-medium">
-                This tool doesn't tell you what to do. It shows you the numbers so you can make your own informed decisions — before a solicitor's clock starts running.
-              </p>
-              <p className="text-xs text-muted-foreground">
-                One-time payment. 12 months unlimited access. No subscription.
-              </p>
-            </CardContent>
-          </Card>
-
-          <div className="text-center space-y-3">
-            <Button size="lg" className="px-8" onClick={() => { scrollTop(); navigate("/unlock"); }} data-testid="button-unlock-cta">
-              <Lock className="w-4 h-4 mr-2" />
-              Unlock Full Analysis — £79
-            </Button>
-            <p className="text-xs text-muted-foreground">
-              Immediate access. Private. No subscription. 12-month access included.
-            </p>
-          </div>
-        </section>
-
         {/* Feature comparison */}
         <div className="grid sm:grid-cols-2 gap-4">
           <Card data-testid="card-tier-free">
@@ -416,7 +391,7 @@ export default function PreviewPage() {
               <CardTitle className="text-sm font-medium">Free Preview</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              {["Net property equity and asset pool", "Asset breakdown by category", "Four scenario names and structure"].map(item => (
+              {["Net property equity and asset pool", "Asset breakdown by category", "Four settlement option names and structure"].map(item => (
                 <div key={item} className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
                   <span className="text-sm text-muted-foreground">{item}</span>
@@ -431,9 +406,9 @@ export default function PreviewPage() {
             </CardHeader>
             <CardContent className="space-y-2">
               {[
-                "Capital allocation under all 4 scenarios",
+                "Capital allocation under all 4 options",
                 "Net monthly income per party (post-tax)",
-                "Surplus / deficit per scenario",
+                "Surplus / deficit per option",
                 "Financial Sustainability Indicator scores",
                 "5-year capital projection charts",
                 "Housing feasibility benchmark",
@@ -453,7 +428,7 @@ export default function PreviewPage() {
         {/* Disclaimer */}
         <div className="py-4">
           <p className="text-xs text-muted-foreground text-center max-w-lg mx-auto leading-relaxed" data-testid="text-disclaimer-preview">
-            This tool provides structured financial modelling and does not replace legal or regulated financial advice. All outputs are illustrative, based on your inputs and standard assumptions. It is designed to help you approach professional discussions with clarity.
+            This platform provides structured financial modelling and does not replace legal or regulated financial advice. All outputs are illustrative, based on your inputs and standard assumptions. It is designed to help you approach professional discussions with clarity.
           </p>
         </div>
       </main>

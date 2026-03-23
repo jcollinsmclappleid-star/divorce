@@ -6,6 +6,7 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { useAccess } from "@/hooks/use-access";
 import { Logo } from "@/components/logo";
+import { FsiGauge } from "@/components/fsi-gauge";
 import { calcMortgagePayment } from "@/lib/engine/calc/mortgage";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -282,16 +283,17 @@ export default function ResultsPage() {
                       <button
                         key={s.id}
                         type="button"
-                        className={`text-left p-4 rounded-md border-2 transition-colors ${isActive ? "border-primary bg-primary/5" : "border-border hover-elevate"}`}
+                        className={`text-left p-4 rounded-lg border-2 transition-all overflow-hidden relative ${isActive ? "border-primary bg-primary/5 shadow-md" : "border-border hover:border-primary/40 hover:shadow-sm"}`}
                         onClick={() => setActiveTab(isActive ? null : s.id)}
                         data-testid={`button-tab-${s.id}`}
                       >
-                        <div className="flex items-center gap-2 mb-1">
-                          <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: meta?.color }} />
+                        <div className="absolute top-0 left-0 right-0 h-1 rounded-t-md" style={{ backgroundColor: meta?.color }} />
+                        <div className="flex items-center gap-2 mb-1 mt-1">
+                          <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: meta?.color }} />
                           <span className="text-sm font-semibold">{meta?.label ?? s.name}</span>
                         </div>
                         <p className="text-xs text-muted-foreground">{meta?.description}</p>
-                        {isActive && <p className="text-xs text-primary font-medium mt-2">Showing breakdown below</p>}
+                        {isActive && <p className="text-xs text-primary font-medium mt-2">Showing breakdown below ↓</p>}
                       </button>
                     );
                   })}
@@ -332,13 +334,23 @@ export default function ResultsPage() {
                           'Party B': sc.totalB,
                         }))}
                       >
+                        <defs>
+                          <linearGradient id="gradA" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="hsl(220,52%,22%)" stopOpacity={1} />
+                            <stop offset="100%" stopColor="hsl(220,52%,32%)" stopOpacity={0.8} />
+                          </linearGradient>
+                          <linearGradient id="gradB" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#0d9488" stopOpacity={1} />
+                            <stop offset="100%" stopColor="#14b8a6" stopOpacity={0.8} />
+                          </linearGradient>
+                        </defs>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
                         <XAxis dataKey="name" axisLine={false} tickLine={false} fontSize={12} />
                         <YAxis axisLine={false} tickLine={false} fontSize={12} tickFormatter={(v) => v >= 1000000 ? `\u00A3${(v / 1000000).toFixed(1)}m` : `\u00A3${(v / 1000).toFixed(0)}k`} />
                         <RechartsTooltip formatter={(value: number) => formatCurrency(value)} />
                         <Legend />
-                        <Bar dataKey="Party A" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="Party B" fill="#0d9488" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="Party A" fill="url(#gradA)" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="Party B" fill="url(#gradB)" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   </CardContent>
@@ -498,13 +510,13 @@ function TwelveMonthSnapshot({
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead className="min-w-[180px]"></TableHead>
+              <TableRow className="bg-primary hover:bg-primary">
+                <TableHead className="min-w-[180px] text-primary-foreground/70"></TableHead>
                 {scenarios.map(s => (
-                  <TableHead key={s.id} className="text-center min-w-[130px]">
+                  <TableHead key={s.id} className="text-center min-w-[130px] text-primary-foreground">
                     <div className="flex items-center justify-center gap-1.5">
-                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: SCENARIO_META[s.id]?.color }} />
-                      <span className="text-xs">{SCENARIO_META[s.id]?.shortLabel ?? s.name}</span>
+                      <div className="w-2 h-2 rounded-full border border-white/30" style={{ backgroundColor: SCENARIO_META[s.id]?.color }} />
+                      <span className="text-xs font-semibold">{SCENARIO_META[s.id]?.shortLabel ?? s.name}</span>
                     </div>
                   </TableHead>
                 ))}
@@ -669,13 +681,13 @@ function ScenarioStructureTable({
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead className="min-w-[180px]">Feature</TableHead>
+              <TableRow className="bg-primary hover:bg-primary">
+                <TableHead className="min-w-[180px] text-primary-foreground/70">Feature</TableHead>
                 {scenarios.map(s => (
-                  <TableHead key={s.id} className="text-center min-w-[120px]">
+                  <TableHead key={s.id} className="text-center min-w-[120px] text-primary-foreground">
                     <div className="flex items-center justify-center gap-1.5">
-                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: SCENARIO_META[s.id]?.color }} />
-                      <span className="text-xs">{SCENARIO_META[s.id]?.shortLabel ?? s.name}</span>
+                      <div className="w-2 h-2 rounded-full border border-white/30" style={{ backgroundColor: SCENARIO_META[s.id]?.color }} />
+                      <span className="text-xs font-semibold">{SCENARIO_META[s.id]?.shortLabel ?? s.name}</span>
                     </div>
                   </TableHead>
                 ))}
@@ -960,13 +972,13 @@ function ExecutiveTable({
         <div className="hidden lg:block overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead className="min-w-[180px]"></TableHead>
+              <TableRow className="bg-primary hover:bg-primary">
+                <TableHead className="min-w-[180px] text-primary-foreground/70"></TableHead>
                 {scenarios.map(s => (
-                  <TableHead key={s.id} className="text-center min-w-[130px]">
+                  <TableHead key={s.id} className="text-center min-w-[130px] text-primary-foreground">
                     <div className="flex items-center justify-center gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: SCENARIO_META[s.id]?.color }} />
-                      <span>{SCENARIO_META[s.id]?.shortLabel ?? s.name}</span>
+                      <div className="w-2.5 h-2.5 rounded-full border border-white/30" style={{ backgroundColor: SCENARIO_META[s.id]?.color }} />
+                      <span className="font-semibold">{SCENARIO_META[s.id]?.shortLabel ?? s.name}</span>
                     </div>
                   </TableHead>
                 ))}
@@ -1377,14 +1389,14 @@ function ScenarioDetailCard({
         <div className="space-y-4 p-4 bg-muted/20 rounded-md" data-testid="block-financial-sustainability">
           <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Financial Sustainability Indicator</h3>
           
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-xs text-muted-foreground">Party A Index</span>
-              <StabilityBadge score={stabilityScore.scoreA} label={stabilityScore.labelA} />
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div className="flex flex-col items-center gap-1">
+              <p className="text-xs text-muted-foreground mb-1">Party A</p>
+              <FsiGauge score={stabilityScore.scoreA} size={110} />
             </div>
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-xs text-muted-foreground">Party B Index</span>
-              <StabilityBadge score={stabilityScore.scoreB} label={stabilityScore.labelB} />
+            <div className="flex flex-col items-center gap-1">
+              <p className="text-xs text-muted-foreground mb-1">Party B</p>
+              <FsiGauge score={stabilityScore.scoreB} size={110} />
             </div>
           </div>
 
