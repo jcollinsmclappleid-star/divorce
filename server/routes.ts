@@ -194,16 +194,6 @@ export async function registerRoutes(
     <priority>0.9</priority>
   </url>
 
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/how-it-works</loc>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://divorcecalculatoruk.co.uk/faq</loc>
-    <priority>0.9</priority>
-  </url>
-
   <!-- ═══════════════════════════════════════════════
        TIER 3 (0.8) — Supporting articles
        ═══════════════════════════════════════════════ -->
