@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, ArrowLeft, ExternalLink } from "lucide-react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { Logo } from "@/components/logo";
+import { SiteNav } from "@/components/site-nav";
 
 interface RelatedPage {
   title: string;
@@ -156,18 +157,7 @@ export function ContentPageLayout({
         Illustrative modelling only. Not legal, tax or financial advice.
       </div>
 
-      <nav className="sticky top-0 z-[100] w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60" data-testid="nav-content-page">
-        <div className="container mx-auto px-4 h-12 flex items-center justify-between gap-2 flex-wrap">
-          <div className="flex items-center gap-4">
-            <Logo href="/" size="sm" showBrandName />
-            <Link href="/methodology" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-methodology">Methodology</Link>
-            <Link href="/divorce-financial-modelling" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-guides">Guides</Link>
-          </div>
-          <Button size="sm" onClick={() => setLocation("/wizard")} data-testid="button-nav-start">
-            Start Now <ArrowRight className="w-3.5 h-3.5 ml-1" />
-          </Button>
-        </div>
-      </nav>
+      <SiteNav />
 
       <header className="py-12 md:py-16" data-testid="section-content-hero">
         <div className="container mx-auto px-4 max-w-3xl">

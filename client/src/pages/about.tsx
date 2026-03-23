@@ -7,6 +7,7 @@ import { useMetaTags } from "@/hooks/use-meta-tags";
 import { Logo } from "@/components/logo";
 import { scrollTop } from "@/lib/utils";
 import { useLocation } from "wouter";
+import { SiteNav } from "@/components/site-nav";
 
 export default function AboutPage() {
   useDocumentTitle("About Divorce Calculator UK | Financial Modelling Tool");
@@ -25,18 +26,7 @@ export default function AboutPage() {
         Illustrative modelling only. Not legal, tax or financial advice.
       </div>
 
-      <nav className="sticky top-0 z-[100] w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 h-12 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-4">
-            <Logo href="/" size="sm" showBrandName />
-            <Link href="/methodology" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">Methodology</Link>
-            <Link href="/divorce-financial-guides" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">Guides</Link>
-          </div>
-          <Button size="sm" onClick={() => { scrollTop(); setLocation("/wizard"); }} data-testid="button-nav-start" className="bg-gold hover:bg-gold/90 text-white border-0">
-            Get My Financial Picture — Free <ArrowRight className="w-3.5 h-3.5 ml-1" />
-          </Button>
-        </div>
-      </nav>
+      <SiteNav />
 
       <section className="py-14 md:py-20 bg-primary">
         <div className="container mx-auto px-4 max-w-3xl text-center space-y-5">

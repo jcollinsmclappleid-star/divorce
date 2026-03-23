@@ -79,11 +79,15 @@ import PensionOffsettingPage from "@/pages/content/divorce-pension-offsetting-uk
 import SpousalMaintenancePage from "@/pages/content/spousal-maintenance-after-divorce-uk";
 import TransferOfEquityPage from "@/pages/content/transfer-of-equity-divorce-uk";
 import AboutPage from "@/pages/about";
+import HowItWorksPage from "@/pages/how-it-works";
+import FaqPage from "@/pages/faq";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={LandingPage} />
+      <Route path="/how-it-works" component={HowItWorksPage} />
+      <Route path="/faq" component={FaqPage} />
       <Route path="/wizard" component={WizardPage} />
       <Route path="/preview" component={PreviewPage} />
       <Route path="/unlock" component={UnlockPage} />

@@ -13,6 +13,7 @@ import {
 import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
 import { useAppStore } from "@/hooks/use-store";
 import { useDocumentTitle } from "@/hooks/use-document-title";
+import { SiteNav } from "@/components/site-nav";
 import { useMetaTags } from "@/hooks/use-meta-tags";
 import { Logo } from "@/components/logo";
 
@@ -440,35 +441,7 @@ export default function LandingPage() {
         Illustrative modelling only. Not legal, tax or financial advice.
       </div>
 
-      <nav className="sticky top-0 z-[100] w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 h-12 flex items-center justify-between gap-2 flex-wrap">
-          <div className="flex items-center gap-4">
-            <Logo href="/" size="sm" showBrandName />
-            <Link href="/methodology" onClick={scrollTop} className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-methodology">Methodology</Link>
-            <Link href="/divorce-financial-modelling" onClick={scrollTop} className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline" data-testid="link-nav-guides">Guides</Link>
-          </div>
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              onClick={() => {
-                scrollTop();
-                setLocation("/unlock");
-              }}
-              data-testid="button-nav-buy-now"
-              className="bg-gold hover:bg-gold/90 text-white border-0"
-            >
-              Buy Now
-            </Button>
-            <Button
-              onClick={startFresh}
-              data-testid="button-nav-start"
-              className="bg-gold hover:bg-gold/90 text-white border-0"
-            >
-              Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1" />
-            </Button>
-          </div>
-        </div>
-      </nav>
+      <SiteNav onStartClick={startFresh} />
 
       <section className="relative overflow-hidden bg-primary" data-testid="section-hero">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsl(220_60%_35%),_transparent_60%)] pointer-events-none" />
@@ -1009,12 +982,23 @@ export default function LandingPage() {
             <p className="text-sm text-muted-foreground mt-3">Answers that are direct, specific, and written for England and Wales.</p>
           </div>
           <div className="space-y-6">
-            {FAQ_ITEMS_LANDING.map((item, i) => (
+            {FAQ_ITEMS_LANDING.slice(0, 5).map((item, i) => (
               <div key={i} data-testid={`faq-item-${i}`}>
                 <h3 className="text-sm font-semibold text-foreground mb-1.5">{item.q}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
               </div>
             ))}
+          </div>
+          <div className="text-center mt-10">
+            <Link
+              href="/faq"
+              onClick={scrollTop}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+              data-testid="link-faq-see-all"
+            >
+              View all frequently asked questions
+              <ChevronRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
@@ -1087,7 +1071,9 @@ export default function LandingPage() {
             <div>
               <p className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">Legal &amp; Support</p>
               <ul className="space-y-2">
-                <li><Link href="/about" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-about">About This Tool</Link></li>
+                <li><Link href="/how-it-works" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-how-it-works">How It Works</Link></li>
+                <li><Link href="/faq" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-faq">FAQ</Link></li>
+                <li><Link href="/about" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-about">About This Platform</Link></li>
                 <li><Link href="/methodology" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-methodology">Model Methodology</Link></li>
                 <li><Link href="/privacy" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-privacy">Privacy Policy</Link></li>
                 <li><Link href="/terms" onClick={scrollTop} className="text-xs text-white/50 hover:text-white transition-colors" data-testid="link-terms">Terms of Use</Link></li>

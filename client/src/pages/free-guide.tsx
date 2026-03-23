@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { Logo } from "@/components/logo";
+import { SiteNav } from "@/components/site-nav";
 import { scrollTop } from "@/lib/utils";
 import {
   BookOpen, ChevronRight, CheckCircle2, ArrowRight,
@@ -234,14 +234,7 @@ export default function FreeGuidePage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b border-border/40 bg-background/95">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Logo size="md" />
-          <Button variant="ghost" size="sm" onClick={() => { scrollTop(); setLocation("/"); }} data-testid="button-nav-home">
-            Home
-          </Button>
-        </div>
-      </header>
+      <SiteNav />
 
       <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl">
         <div className="space-y-10">
