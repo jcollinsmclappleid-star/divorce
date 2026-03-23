@@ -525,31 +525,31 @@ function TwelveMonthSnapshot({
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
+              <TableRow className="even:bg-muted/30">
                 <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-a"><>Party A — Liquid Capital at Month 12<InfoTip text="Starting liquid capital (cash, savings, investments allocated to Party A) minus 12 months of net outgoings (monthly expenses plus any mortgage payments, minus net monthly income after tax and NI). A negative figure indicates projected outgoings exceed available liquid reserves within the first year." /></></TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr1 = proj && proj.length > 1 ? proj[1] : null;
                   return (
-                    <TableCell key={s.id} className="text-center tabular-nums text-sm" data-testid={`value-yr1-liquid-a-${s.id}`}>
+                    <TableCell key={s.id} className="text-right tabular-nums text-sm" data-testid={`value-yr1-liquid-a-${s.id}`}>
                       {yr1 ? <span className={yr1.capitalA < 0 ? "text-red-600 font-semibold" : "text-blue-600 font-semibold"}>{formatCurrency(yr1.capitalA)}</span> : <span className="text-muted-foreground">—</span>}
                     </TableCell>
                   );
                 })}
               </TableRow>
-              <TableRow>
+              <TableRow className="even:bg-muted/30">
                 <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-liquid-b"><>Party B — Liquid Capital at Month 12<InfoTip text="Starting liquid capital (cash, savings, investments allocated to Party B) minus 12 months of net outgoings (monthly expenses plus any mortgage payments, minus net monthly income after tax and NI). A negative figure indicates projected outgoings exceed available liquid reserves within the first year." /></></TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
                   const yr1 = proj && proj.length > 1 ? proj[1] : null;
                   return (
-                    <TableCell key={s.id} className="text-center tabular-nums text-sm" data-testid={`value-yr1-liquid-b-${s.id}`}>
+                    <TableCell key={s.id} className="text-right tabular-nums text-sm" data-testid={`value-yr1-liquid-b-${s.id}`}>
                       {yr1 ? <span className={yr1.capitalB < 0 ? "text-red-600 font-semibold" : "text-emerald-600 font-semibold"}>{formatCurrency(yr1.capitalB)}</span> : <span className="text-muted-foreground">—</span>}
                     </TableCell>
                   );
                 })}
               </TableRow>
-              <TableRow>
+              <TableRow className="even:bg-muted/30">
                 <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-a"><>Party A — Monthly Surplus / (Deficit)<InfoTip text="The difference between net monthly income (after tax/NI) and total monthly outgoings (living expenses plus mortgage). A surplus means income exceeds outgoings; a deficit means outgoings exceed income, drawing down liquid reserves each month." /></></TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
@@ -558,13 +558,13 @@ function TwelveMonthSnapshot({
                   const annualCashFlow = yr1Capital - yr0Capital;
                   const surplus = Math.round(annualCashFlow / 12);
                   return (
-                    <TableCell key={s.id} className="text-center tabular-nums text-sm" data-testid={`value-yr1-surplus-a-${s.id}`}>
+                    <TableCell key={s.id} className="text-right tabular-nums text-sm" data-testid={`value-yr1-surplus-a-${s.id}`}>
                       <span className={surplus < 0 ? "text-red-600" : "text-emerald-600"}>{surplus < 0 ? `(${formatCurrency(Math.abs(surplus))})` : formatCurrency(surplus)}/mo</span>
                     </TableCell>
                   );
                 })}
               </TableRow>
-              <TableRow>
+              <TableRow className="even:bg-muted/30">
                 <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-surplus-b"><>Party B — Monthly Surplus / (Deficit)<InfoTip text="The difference between net monthly income (after tax/NI) and total monthly outgoings (living expenses plus mortgage). A surplus means income exceeds outgoings; a deficit means outgoings exceed income, drawing down liquid reserves each month." /></></TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
@@ -573,13 +573,13 @@ function TwelveMonthSnapshot({
                   const annualCashFlow = yr1Capital - yr0Capital;
                   const surplus = Math.round(annualCashFlow / 12);
                   return (
-                    <TableCell key={s.id} className="text-center tabular-nums text-sm" data-testid={`value-yr1-surplus-b-${s.id}`}>
+                    <TableCell key={s.id} className="text-right tabular-nums text-sm" data-testid={`value-yr1-surplus-b-${s.id}`}>
                       <span className={surplus < 0 ? "text-red-600" : "text-emerald-600"}>{surplus < 0 ? `(${formatCurrency(Math.abs(surplus))})` : formatCurrency(surplus)}/mo</span>
                     </TableCell>
                   );
                 })}
               </TableRow>
-              <TableRow>
+              <TableRow className="even:bg-muted/30">
                 <TableCell className="text-sm text-muted-foreground" data-testid="label-yr1-buffer-a"><>Party A — Months of Reserves Remaining<InfoTip text="If Party A has a monthly deficit, this shows how many months their starting liquid capital would last at that rate of drawdown. 99+ means income covers outgoings with no drawdown required. Below 12 months indicates limited financial buffer." /></></TableCell>
                 {scenarios.map(s => {
                   const proj = projections[s.id];
@@ -590,7 +590,7 @@ function TwelveMonthSnapshot({
                   const bufferMonths = monthlyBurn > 0 ? Math.round(yr0Cap / monthlyBurn) : yr0Cap > 0 ? 99 : 0;
                   const displayBuffer = Math.min(bufferMonths, 99);
                   return (
-                    <TableCell key={s.id} className="text-center tabular-nums text-sm" data-testid={`value-yr1-buffer-a-${s.id}`}>
+                    <TableCell key={s.id} className="text-right tabular-nums text-sm" data-testid={`value-yr1-buffer-a-${s.id}`}>
                       <span className={displayBuffer < 6 ? "text-red-600" : displayBuffer < 12 ? "text-amber-600" : "text-emerald-600"}>
                         {displayBuffer >= 99 ? "99+" : displayBuffer} months
                       </span>
@@ -696,7 +696,7 @@ function ScenarioStructureTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
+              <TableRow className="even:bg-muted/30">
                 <TableCell className="text-sm text-muted-foreground">Immediate Liquidity [cash available on completion]</TableCell>
                 {scenarios.map(s => {
                   const label = getImmediateLiquidity(s);
@@ -707,7 +707,7 @@ function ScenarioStructureTable({
                   );
                 })}
               </TableRow>
-              <TableRow>
+              <TableRow className="even:bg-muted/30">
                 <TableCell className="text-sm text-muted-foreground">Mortgage Obligation Required</TableCell>
                 {scenarios.map(s => (
                   <TableCell key={s.id} className="text-center text-sm">
@@ -717,7 +717,7 @@ function ScenarioStructureTable({
                   </TableCell>
                 ))}
               </TableRow>
-              <TableRow>
+              <TableRow className="even:bg-muted/30">
                 <TableCell className="text-sm text-muted-foreground">Property Concentration [% of net worth held in property]</TableCell>
                 {scenarios.map(s => {
                   const conc = propertyConcentration(s);
@@ -730,7 +730,7 @@ function ScenarioStructureTable({
                   );
                 })}
               </TableRow>
-              <TableRow>
+              <TableRow className="even:bg-muted/30">
                 <TableCell className="text-sm text-muted-foreground">Pension Concentration [% of net worth held in pension]</TableCell>
                 {scenarios.map(s => {
                   const totalA = s.totalA || 1;
@@ -744,7 +744,7 @@ function ScenarioStructureTable({
                   );
                 })}
               </TableRow>
-              <TableRow>
+              <TableRow className="even:bg-muted/30">
                 <TableCell className="text-sm text-muted-foreground">Steps to Complete<InfoTip text="How many legal and financial steps are needed to put this scenario into effect. Factors include property transfers, mortgage obligations, buyout payments, pension sharing orders, and deferred arrangements. Low: 0-1 steps | Medium: 2-3 steps | High: 4+ steps" /></TableCell>
                 {scenarios.map(s => {
                   const comp = getComplexity(s);
@@ -987,48 +987,48 @@ function ExecutiveTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
+              <TableRow className={`even:bg-muted/30 ${viewLens === "liquidity" ? "!bg-primary/5" : ""}`}>
                 <TableCell className="font-medium text-muted-foreground"><>Liquid Capital — Party A<InfoTip text="Liquid capital represents funds Party A can access immediately — bank accounts, savings, ISAs, and realisable investments." /></></TableCell>
                 {scenarios.map(s => (
-                  <TableCell key={s.id} className="text-center tabular-nums font-semibold text-blue-600">{formatCurrency(s.liquidStartA)}</TableCell>
+                  <TableCell key={s.id} className="text-right tabular-nums font-semibold text-blue-600">{formatCurrency(s.liquidStartA)}</TableCell>
                 ))}
               </TableRow>
-              <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
+              <TableRow className={`even:bg-muted/30 ${viewLens === "liquidity" ? "!bg-primary/5" : ""}`}>
                 <TableCell className="font-medium text-muted-foreground"><>Liquid Capital — Party B<InfoTip text="Liquid capital represents funds Party B can access immediately — bank accounts, savings, ISAs, and realisable investments." /></></TableCell>
                 {scenarios.map(s => (
-                  <TableCell key={s.id} className="text-center tabular-nums font-semibold text-emerald-600">{formatCurrency(s.liquidStartB)}</TableCell>
+                  <TableCell key={s.id} className="text-right tabular-nums font-semibold text-emerald-600">{formatCurrency(s.liquidStartB)}</TableCell>
                 ))}
               </TableRow>
-              <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
+              <TableRow className={`even:bg-muted/30 ${viewLens === "risk" ? "!bg-primary/5" : ""}`}>
                 <TableCell className="font-medium text-muted-foreground"><>Equity Transfer Obligation<InfoTip text="The lump sum payable by the party retaining the property to compensate the departing party for their share of net equity." /></></TableCell>
                 {scenarios.map(s => (
-                  <TableCell key={s.id} className="text-center tabular-nums">
+                  <TableCell key={s.id} className="text-right tabular-nums">
                     {s.buyoutAmount != null && s.buyoutAmount > 0 ? formatCurrency(s.buyoutAmount) : <span className="text-muted-foreground">N/A</span>}
                   </TableCell>
                 ))}
               </TableRow>
-              <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
+              <TableRow className={`even:bg-muted/30 ${viewLens === "risk" ? "!bg-primary/5" : ""}`}>
                 <TableCell className="font-medium text-muted-foreground"><>Funding Requirement<InfoTip text="Where the retaining party's liquid capital is insufficient to meet the equity transfer obligation, this represents the additional capital required — typically funded through an increased mortgage." /></></TableCell>
                 {scenarios.map(s => (
-                  <TableCell key={s.id} className="text-center tabular-nums">
+                  <TableCell key={s.id} className="text-right tabular-nums">
                     {s.fundingGap != null && s.fundingGap > 0
                       ? <span className="text-amber-600 font-semibold">{formatCurrency(s.fundingGap)}</span>
                       : s.fundingGap != null ? <span className="text-emerald-600">None</span> : <span className="text-muted-foreground">N/A</span>}
                   </TableCell>
                 ))}
               </TableRow>
-              <TableRow>
+              <TableRow className="even:bg-muted/30">
                 <TableCell className="font-medium text-muted-foreground"><>Annual Mortgage Obligation<InfoTip text="Total annual mortgage repayments. In property retention scenarios, this may include an increased mortgage to fund the equity transfer." /></></TableCell>
                 {scenarios.map(s => {
                   const annual = ((s.mortgageMonthlyA ?? 0) + (s.mortgageMonthlyB ?? 0)) * 12;
                   return (
-                    <TableCell key={s.id} className="text-center tabular-nums">
+                    <TableCell key={s.id} className="text-right tabular-nums">
                       {annual > 0 ? <span className="text-amber-600">{formatCurrency(annual)}/yr</span> : <span className="text-muted-foreground">None</span>}
                     </TableCell>
                   );
                 })}
               </TableRow>
-              <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
+              <TableRow className={`even:bg-muted/30 ${viewLens === "liquidity" ? "!bg-primary/5" : ""}`}>
                 <TableCell className="font-medium text-muted-foreground"><>5-Year Reserves — Party A<InfoTip text="Whether Party A's liquid capital is projected to sustain their outgoings for at least 5 years based on current income, expenditure, and mortgage obligations." /></></TableCell>
                 {scenarios.map(s => {
                   const rw = runways[s.id];
@@ -1041,7 +1041,7 @@ function ExecutiveTable({
                   );
                 })}
               </TableRow>
-              <TableRow className={viewLens === "liquidity" ? "bg-primary/5" : ""}>
+              <TableRow className={`even:bg-muted/30 ${viewLens === "liquidity" ? "!bg-primary/5" : ""}`}>
                 <TableCell className="font-medium text-muted-foreground"><>5-Year Reserves — Party B<InfoTip text="Whether Party B's liquid capital is projected to sustain their outgoings for at least 5 years based on current income, expenditure, and mortgage obligations." /></></TableCell>
                 {scenarios.map(s => {
                   const rw = runways[s.id];
@@ -1054,7 +1054,7 @@ function ExecutiveTable({
                   );
                 })}
               </TableRow>
-              <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
+              <TableRow className={`even:bg-muted/30 ${viewLens === "risk" ? "!bg-primary/5" : ""}`}>
                 <TableCell className="font-medium text-muted-foreground"><>Financial Sustainability — Party A<InfoTip text="Illustrative model output for Party A — incorporating cash buffer adequacy, monthly surplus/deficit, lending capacity benchmark, and reserve duration projection. This is not a suitability or lending assessment." /></></TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
@@ -1065,7 +1065,7 @@ function ExecutiveTable({
                   );
                 })}
               </TableRow>
-              <TableRow className={viewLens === "risk" ? "bg-primary/5" : ""}>
+              <TableRow className={`even:bg-muted/30 ${viewLens === "risk" ? "!bg-primary/5" : ""}`}>
                 <TableCell className="font-medium text-muted-foreground"><>Financial Sustainability — Party B<InfoTip text="Illustrative model output for Party B — incorporating cash buffer adequacy, monthly surplus/deficit, lending capacity benchmark, and reserve duration projection. This is not a suitability or lending assessment." /></></TableCell>
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
@@ -1076,16 +1076,16 @@ function ExecutiveTable({
                   );
                 })}
               </TableRow>
-              <TableRow className={`font-bold ${viewLens === "networth" ? "bg-primary/5" : ""}`}>
+              <TableRow className={`font-bold border-t-2 border-border ${viewLens === "networth" ? "!bg-primary/5" : ""}`}>
                 <TableCell className="text-foreground"><>Total Net Asset Position — Party A<InfoTip text="Party A's combined net asset position — comprising liquid capital, allocated property equity, and pension valuations. Not all components are immediately realisable." /></></TableCell>
                 {scenarios.map(s => (
-                  <TableCell key={s.id} className="text-center tabular-nums text-blue-600 text-base">{formatCurrency(s.totalA)}</TableCell>
+                  <TableCell key={s.id} className="text-right tabular-nums text-blue-600 text-base">{formatCurrency(s.totalA)}</TableCell>
                 ))}
               </TableRow>
-              <TableRow className={`font-bold ${viewLens === "networth" ? "bg-primary/5" : ""}`}>
+              <TableRow className={`font-bold even:bg-muted/30 ${viewLens === "networth" ? "!bg-primary/5" : ""}`}>
                 <TableCell className="text-foreground"><>Total Net Asset Position — Party B<InfoTip text="Party B's combined net asset position — comprising liquid capital, allocated property equity, and pension valuations. Not all components are immediately realisable." /></></TableCell>
                 {scenarios.map(s => (
-                  <TableCell key={s.id} className="text-center tabular-nums text-emerald-600 text-base">{formatCurrency(s.totalB)}</TableCell>
+                  <TableCell key={s.id} className="text-right tabular-nums text-emerald-600 text-base">{formatCurrency(s.totalB)}</TableCell>
                 ))}
               </TableRow>
             </TableBody>

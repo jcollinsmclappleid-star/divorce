@@ -106,8 +106,8 @@ export default function HowItWorksPage() {
                 title: "Preview your asset pool",
                 desc: "See your total marital asset pool as a ring chart, the basic shape of your settlement options, and a preview of the financial indicators — with full detail locked.",
                 tag: "Free · Instant results",
-                color: "bg-amber-50 border-amber-200/60",
-                tagColor: "text-amber-700 bg-amber-100",
+                color: "bg-background border-border",
+                tagColor: "text-primary bg-primary/10",
               },
               {
                 step: "03",

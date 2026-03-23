@@ -95,13 +95,13 @@ export function Logo({ href = "/", size = "md", className = "", showBrandName = 
   return content;
 }
 
-export function LogoPrint({ className = "" }: { className?: string }) {
+export function LogoPrint({ className = "", white = false }: { className?: string; white?: boolean }) {
   return (
     <div className={`flex items-center gap-2.5 ${className}`} data-testid="img-logo-print">
       <ChartIcon className="w-9 h-9" />
       <div className="flex flex-col">
-        <span className="font-display font-bold text-lg">Divorce Calculator UK</span>
-        <span className="text-muted-foreground text-xs uppercase">Financial Modelling</span>
+        <span className={`font-display font-bold text-lg ${white ? "text-white" : ""}`}>Divorce Calculator UK</span>
+        <span className={`text-xs uppercase ${white ? "text-white/50" : "text-muted-foreground"}`}>Financial Modelling</span>
       </div>
     </div>
   );

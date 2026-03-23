@@ -220,8 +220,7 @@ export default function ReportPage() {
           <div className="bg-primary rounded-xl px-8 py-7 mb-6 print:rounded-none print:px-0">
             <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
               <div>
-                <span className="font-display font-bold text-xl text-white tracking-tight">Divorce Calculator UK</span>
-                <p className="text-xs text-white/50 uppercase tracking-wider mt-0.5">Financial Modelling</p>
+                <LogoPrint white />
               </div>
               <div className="text-right">
                 <p className="text-[10px] text-white/50 uppercase tracking-wider">Generated</p>
