@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +13,8 @@ import { Menu, ArrowRight, LogIn, LogOut, BarChart3 } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { scrollTop } from "@/lib/utils";
 import { useAppStore } from "@/hooks/use-store";
+
+const SESSION_KEY = "dfm-session-token";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -29,12 +31,16 @@ interface SiteNavProps {
 export function SiteNav({ onStartClick }: SiteNavProps) {
   const [open, setOpen] = useState(false);
   const [, setLocation] = useLocation();
+  const [hasSession, setHasSession] = useState(false);
 
-  const assets = useAppStore((s) => s.assets);
-  const incomes = useAppStore((s) => s.incomes);
   const reset = useAppStore((s) => s.reset);
 
-  const hasSession = assets.length > 0 || incomes.length > 0;
+  useEffect(() => {
+    const check = () => setHasSession(!!localStorage.getItem(SESSION_KEY));
+    check();
+    window.addEventListener("storage", check);
+    return () => window.removeEventListener("storage", check);
+  }, []);
 
   const handleStart = () => {
     setOpen(false);
@@ -48,7 +54,8 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
 
   const handleSignOut = () => {
     reset();
-    localStorage.removeItem("dfm-session-token");
+    localStorage.removeItem(SESSION_KEY);
+    setHasSession(false);
     setOpen(false);
     setLocation("/");
   };
@@ -135,7 +142,10 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
               </Button>
             </SheetTrigger>
 
-            <SheetContent side="right" className="w-[280px] flex flex-col p-0">
+            <SheetContent
+              side="right"
+              className="w-full max-w-full sm:max-w-full flex flex-col p-0 inset-0 h-full md:hidden"
+            >
               <SheetHeader className="px-5 pt-5 pb-4 border-b border-border/40 text-left">
                 <SheetTitle asChild>
                   <div>
@@ -150,7 +160,7 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
                     <Link
                       href={link.href}
                       onClick={handleNavClick}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium text-foreground hover:bg-muted transition-colors"
+                      className="flex items-center gap-2 px-3 py-3 rounded-md text-base font-medium text-foreground hover:bg-muted transition-colors"
                       data-testid={`link-mobile-nav-${link.label.toLowerCase().replace(/\s+/g, "-")}`}
                     >
                       {link.label}
@@ -158,26 +168,26 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
                   </SheetClose>
                 ))}
 
-                <div className="border-t border-border/40 my-2 mx-0" />
+                <div className="border-t border-border/40 my-3 mx-0" />
 
                 {hasSession ? (
                   <>
                     <SheetClose asChild>
                       <Link
                         href="/results"
-                        className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium text-primary hover:bg-primary/5 transition-colors"
+                        className="flex items-center gap-2 px-3 py-3 rounded-md text-base font-medium text-primary hover:bg-primary/5 transition-colors"
                         data-testid="link-mobile-my-analysis"
                       >
-                        <BarChart3 className="w-4 h-4" />
+                        <BarChart3 className="w-5 h-5" />
                         My Analysis
                       </Link>
                     </SheetClose>
                     <button
                       onClick={handleSignOut}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium text-muted-foreground hover:bg-muted transition-colors text-left w-full"
+                      className="flex items-center gap-2 px-3 py-3 rounded-md text-base font-medium text-muted-foreground hover:bg-muted transition-colors text-left w-full"
                       data-testid="button-mobile-sign-out"
                     >
-                      <LogOut className="w-4 h-4" />
+                      <LogOut className="w-5 h-5" />
                       Sign Out
                     </button>
                   </>
@@ -185,21 +195,21 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
                   <SheetClose asChild>
                     <Link
                       href="/recover"
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-md text-sm font-medium text-muted-foreground hover:bg-muted transition-colors"
+                      className="flex items-center gap-2 px-3 py-3 rounded-md text-base font-medium text-muted-foreground hover:bg-muted transition-colors"
                       data-testid="link-mobile-sign-in"
                     >
-                      <LogIn className="w-4 h-4" />
+                      <LogIn className="w-5 h-5" />
                       Sign In
                     </Link>
                   </SheetClose>
                 )}
               </nav>
 
-              <div className="px-5 py-4 border-t border-border/40 mt-auto">
+              <div className="px-5 py-5 border-t border-border/40 mt-auto">
                 <Button
                   onClick={handleStart}
                   data-testid="button-mobile-cta"
-                  className="w-full bg-gold hover:bg-gold/90 text-white border-0"
+                  className="w-full bg-gold hover:bg-gold/90 text-white border-0 h-12 text-base"
                 >
                   Get My Financial Picture — Free
                   <ArrowRight className="w-4 h-4 ml-1.5" />

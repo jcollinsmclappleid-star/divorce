@@ -4,12 +4,12 @@ import { useAccess, useSessionToken } from "@/hooks/use-access";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
-  ArrowLeft, CheckCircle, Loader2, Check,
+  CheckCircle, Loader2, Check,
   Shield, Lock, Zap
 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useDocumentTitle } from "@/hooks/use-document-title";
-import { Logo } from "@/components/logo";
+import { SiteNav } from "@/components/site-nav";
 import { useNoIndex } from "@/hooks/use-noindex";
 
 const INCLUDES_ITEMS = [
@@ -86,17 +86,7 @@ export default function UnlockPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b bg-background">
-        <div className="max-w-4xl mx-auto flex items-center justify-between px-4 py-3">
-          <Logo size="sm" />
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/preview" data-testid="button-back-to-preview">
-              <ArrowLeft className="w-4 h-4 mr-1" />
-              Back to Preview
-            </Link>
-          </Button>
-        </div>
-      </header>
+      <SiteNav />
 
       <main className="max-w-3xl mx-auto px-4 py-10 space-y-12">
         <section className="space-y-8" data-testid="section-hero">
