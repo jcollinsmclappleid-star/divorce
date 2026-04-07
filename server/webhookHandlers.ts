@@ -15,24 +15,19 @@ export class WebhookHandlers {
     await sync.processWebhook(payload, signature);
 
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-    let rawEvent: any;
 
-    if (webhookSecret) {
-      try {
-        const stripe = await getUncachableStripeClient();
-        const event = stripe.webhooks.constructEvent(payload, signature, webhookSecret);
-        rawEvent = event;
-      } catch (err: any) {
-        console.error('[webhook] Signature verification failed:', err.message);
-        throw new Error('Webhook signature verification failed');
-      }
-    } else {
-      try {
-        rawEvent = JSON.parse(payload.toString());
-      } catch (err: any) {
-        console.error('[webhook] Failed to parse raw event payload:', err.message);
-        throw new Error('Failed to parse webhook payload');
-      }
+    if (!webhookSecret) {
+      console.warn('[webhook] STRIPE_WEBHOOK_SECRET not set — app-level purchase fulfillment is disabled. Set this secret to enable server-side payment confirmation.');
+      return;
+    }
+
+    let rawEvent: any;
+    try {
+      const stripe = await getUncachableStripeClient();
+      rawEvent = stripe.webhooks.constructEvent(payload, signature, webhookSecret);
+    } catch (err: any) {
+      console.error('[webhook] Signature verification failed:', err.message);
+      throw new Error('Webhook signature verification failed');
     }
 
     try {

@@ -624,6 +624,56 @@ export async function registerRoutes(
     }
   });
 
+  app.post('/api/webhooks/stripe', async (req, res) => {
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      console.error('[webhook] /api/webhooks/stripe: STRIPE_WEBHOOK_SECRET is not set — endpoint is disabled');
+      return res.status(503).json({ error: 'Webhook endpoint not configured. Set STRIPE_WEBHOOK_SECRET.' });
+    }
+
+    const signature = req.headers['stripe-signature'];
+    if (!signature) {
+      return res.status(400).json({ error: 'Missing stripe-signature header' });
+    }
+
+    const rawBody = (req as any).rawBody;
+    if (!Buffer.isBuffer(rawBody)) {
+      console.error('[webhook] /api/webhooks/stripe: raw body not available');
+      return res.status(500).json({ error: 'Webhook processing error' });
+    }
+
+    let event: any;
+    try {
+      const stripe = await getUncachableStripeClient();
+      const sig = Array.isArray(signature) ? signature[0] : signature;
+      event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
+    } catch (err: any) {
+      console.error('[webhook] Signature verification failed:', err.message);
+      return res.status(400).json({ error: 'Webhook signature verification failed' });
+    }
+
+    try {
+      if (event.type === 'checkout.session.completed') {
+        const session = event.data?.object;
+        if (session?.id && session?.payment_status === 'paid') {
+          const purchase = await storage.getPurchaseByCheckoutSessionId(session.id);
+          if (purchase && purchase.status !== 'paid') {
+            await storage.markPurchasePaid(
+              purchase.id,
+              session.payment_intent as string || '',
+              session.customer_details?.email ?? null
+            );
+            console.log('[webhook] Purchase marked paid');
+          }
+        }
+      }
+      return res.status(200).json({ received: true });
+    } catch (err: any) {
+      console.error('[webhook] Handler error:', err.message);
+      return res.status(500).json({ error: 'Webhook handler error' });
+    }
+  });
+
   app.post(api.pdf.generate.path, async (req, res) => {
     try {
       console.log("Generating PDF for state:", req.body);
