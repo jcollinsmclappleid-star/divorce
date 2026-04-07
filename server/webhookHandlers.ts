@@ -14,21 +14,28 @@ export class WebhookHandlers {
     const sync = await getStripeSync();
     await sync.processWebhook(payload, signature);
 
-    try {
-      const stripe = await getUncachableStripeClient();
-      const event = stripe.webhooks.constructEvent(
-        payload,
-        signature,
-        '' // managed webhook handles signature verification
-      );
-    } catch {
-      // Signature verification may fail without webhook secret
-      // Parse the raw event directly for our app logic
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    let rawEvent: any;
+
+    if (webhookSecret) {
+      try {
+        const stripe = await getUncachableStripeClient();
+        const event = stripe.webhooks.constructEvent(payload, signature, webhookSecret);
+        rawEvent = event;
+      } catch (err: any) {
+        console.error('[webhook] Signature verification failed:', err.message);
+        throw new Error('Webhook signature verification failed');
+      }
+    } else {
+      try {
+        rawEvent = JSON.parse(payload.toString());
+      } catch (err: any) {
+        console.error('[webhook] Failed to parse raw event payload:', err.message);
+        throw new Error('Failed to parse webhook payload');
+      }
     }
 
     try {
-      const rawEvent = JSON.parse(payload.toString());
-      
       if (rawEvent.type === 'checkout.session.completed') {
         const session = rawEvent.data?.object;
         if (session?.id && session?.payment_status === 'paid') {
@@ -39,12 +46,12 @@ export class WebhookHandlers {
               session.payment_intent as string || '',
               session.customer_details?.email ?? null
             );
-            console.log(`Purchase ${purchase.id} marked paid via webhook`);
+            console.log('[webhook] Purchase marked paid via webhook');
           }
         }
       }
     } catch (err: any) {
-      console.error('App webhook handler error:', err.message);
+      console.error('[webhook] App handler error:', err.message);
     }
   }
 }

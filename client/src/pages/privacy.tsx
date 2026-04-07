@@ -3,6 +3,64 @@ import { useMetaTags } from "@/hooks/use-meta-tags";
 import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
+
+function DataDeletionForm() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState('');
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/gdpr/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setStatus('success');
+        setMessage(data.message || 'Your data has been removed.');
+        setEmail('');
+      } else {
+        setStatus('error');
+        setMessage(data.message || 'Something went wrong. Please try again.');
+      }
+    } catch {
+      setStatus('error');
+      setMessage('Unable to process your request. Please try again or email privacy@divorcecalculatoruk.co.uk.');
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="mt-4 space-y-3 bg-muted/40 border border-border rounded-lg p-4">
+      <p className="text-sm font-medium text-foreground">Request data deletion</p>
+      <p className="text-sm text-muted-foreground">Enter your email address and we will permanently delete all personal data we hold for that address.</p>
+      {status === 'success' ? (
+        <p className="text-sm text-green-700 font-medium" data-testid="text-gdpr-success">{message}</p>
+      ) : (
+        <>
+          <input
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="your@email.com"
+            required
+            disabled={status === 'loading'}
+            className="w-full border border-border rounded px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+            data-testid="input-gdpr-email"
+          />
+          {status === 'error' && <p className="text-sm text-destructive" data-testid="text-gdpr-error">{message}</p>}
+          <Button type="submit" variant="outline" size="sm" disabled={status === 'loading'} data-testid="button-gdpr-submit">
+            {status === 'loading' ? 'Processing…' : 'Delete my data'}
+          </Button>
+        </>
+      )}
+    </form>
+  );
+}
 
 export default function PrivacyPage() {
   useDocumentTitle("Privacy Policy | DivorceCalculatorUK");
@@ -155,6 +213,7 @@ export default function PrivacyPage() {
             </ul>
             <p>To exercise any of these rights, please contact us using the details provided in Section 14. We will respond to your request within one month, as required by UK GDPR. In complex cases, we may extend this period by up to two further months, in which case we will inform you of the extension and the reasons for it.</p>
             <p>There is no fee for exercising your rights in most circumstances. If your request is manifestly unfounded or excessive, we may charge a reasonable fee or refuse to act on the request, in accordance with Article 12(5) of the UK GDPR.</p>
+            <DataDeletionForm />
           </section>
 
           <section>

@@ -7,7 +7,7 @@ import { z } from "zod";
 import crypto from "crypto";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { seedDatabase } from "./seed";
-import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail } from "./email";
+import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail } from "./email";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 function rateLimit(key: string, maxAttempts: number, windowMs: number): boolean {
@@ -489,7 +489,7 @@ export async function registerRoutes(
     }
   });
 
-  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || process.env.SESSION_SECRET || '';
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 
   function requireAdmin(req: any, res: any, next: any) {
     const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
@@ -575,7 +575,9 @@ export async function registerRoutes(
       const { email, firstName, source, assetPoolSnapshot } = schema.parse(req.body);
       const existing = await storage.getEmailLeadByEmail(email);
       if (!existing) {
-        await storage.createEmailLead(email, firstName, source, assetPoolSnapshot);
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+        await storage.createEmailLead(email, firstName, source, assetPoolSnapshot, verificationToken);
+        await sendEmailVerificationEmail(email, verificationToken);
       }
       return res.json({ success: true });
     } catch (err) {
@@ -583,6 +585,42 @@ export async function registerRoutes(
         return res.status(400).json({ message: 'Valid email address required' });
       }
       return res.status(500).json({ message: 'Failed to save' });
+    }
+  });
+
+  app.get('/api/leads/verify', async (req, res) => {
+    try {
+      const token = z.string().min(1).parse(req.query.token);
+      const lead = await storage.getEmailLeadByVerificationToken(token);
+      if (!lead) {
+        return res.redirect('/?verified=invalid');
+      }
+      await storage.verifyEmailLead(lead.id);
+      return res.redirect('/?verified=true');
+    } catch (err) {
+      return res.redirect('/?verified=invalid');
+    }
+  });
+
+  app.post('/api/gdpr/delete', async (req, res) => {
+    try {
+      const ip = req.ip || 'unknown';
+      if (!rateLimit(`gdpr:${ip}`, 3, 60 * 60 * 1000)) {
+        return res.status(429).json({ message: 'Too many requests. Please try again later.' });
+      }
+      const schema = z.object({ email: z.string().email() });
+      const { email } = schema.parse(req.body);
+
+      await storage.anonymisePurchasesByEmail(email);
+      await storage.deleteEmailLeadByEmail(email);
+
+      console.log('[gdpr] Data deletion request processed');
+      return res.json({ success: true, message: 'All personal data for this email has been removed.' });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Valid email address required' });
+      }
+      return res.status(500).json({ message: 'Failed to process deletion request' });
     }
   });
 

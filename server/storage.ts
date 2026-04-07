@@ -14,8 +14,12 @@ export interface IStorage {
   getPaidPurchasesByEmail(email: string): Promise<Purchase[]>;
   extendPurchaseExpiry(purchaseId: string, months: number): Promise<Purchase>;
 
-  createEmailLead(email: string, firstName?: string, source?: string, assetPoolSnapshot?: string): Promise<EmailLead>;
+  createEmailLead(email: string, firstName?: string, source?: string, assetPoolSnapshot?: string, verificationToken?: string): Promise<EmailLead>;
   getEmailLeadByEmail(email: string): Promise<EmailLead | undefined>;
+  getEmailLeadByVerificationToken(token: string): Promise<EmailLead | undefined>;
+  verifyEmailLead(id: string): Promise<EmailLead>;
+  anonymisePurchasesByEmail(email: string): Promise<void>;
+  deleteEmailLeadByEmail(email: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -116,12 +120,14 @@ export class DatabaseStorage implements IStorage {
       .returning();
     return updated;
   }
-  async createEmailLead(email: string, firstName?: string, source?: string, assetPoolSnapshot?: string): Promise<EmailLead> {
+  async createEmailLead(email: string, firstName?: string, source?: string, assetPoolSnapshot?: string, verificationToken?: string): Promise<EmailLead> {
     const [lead] = await db.insert(emailLeads).values({
       email: email.toLowerCase().trim(),
       firstName: firstName ?? null,
       source: source ?? "free_guide",
       assetPoolSnapshot: assetPoolSnapshot ?? null,
+      verified: false,
+      verificationToken: verificationToken ?? null,
     }).returning();
     return lead;
   }
@@ -132,6 +138,36 @@ export class DatabaseStorage implements IStorage {
       .from(emailLeads)
       .where(eq(emailLeads.email, email.toLowerCase().trim()));
     return lead;
+  }
+
+  async getEmailLeadByVerificationToken(token: string): Promise<EmailLead | undefined> {
+    const [lead] = await db
+      .select()
+      .from(emailLeads)
+      .where(eq(emailLeads.verificationToken, token));
+    return lead;
+  }
+
+  async verifyEmailLead(id: string): Promise<EmailLead> {
+    const [updated] = await db
+      .update(emailLeads)
+      .set({ verified: true, verificationToken: null })
+      .where(eq(emailLeads.id, id))
+      .returning();
+    return updated;
+  }
+
+  async anonymisePurchasesByEmail(email: string): Promise<void> {
+    await db
+      .update(purchases)
+      .set({ email: null })
+      .where(eq(purchases.email, email.toLowerCase().trim()));
+  }
+
+  async deleteEmailLeadByEmail(email: string): Promise<void> {
+    await db
+      .delete(emailLeads)
+      .where(eq(emailLeads.email, email.toLowerCase().trim()));
   }
 }
 

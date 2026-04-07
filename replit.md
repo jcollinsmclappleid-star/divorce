@@ -99,6 +99,17 @@ Key additions beyond base state:
 - `maintenance: { included: boolean; monthlyAmount: number; direction: "AtoB" | "BtoA" }` — spousal maintenance toggle
 - `profile.partyAName`, `profile.partyBName` — custom party names throughout the app
 
+## Security
+
+- **HTTP security headers**: Applied via `helmet` in `server/index.ts`. Includes CSP (allowing Stripe.js, self-hosted fonts), HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy. CSP is more permissive in dev (allows unsafe-eval/unsafe-inline for Vite HMR).
+- **Email FROM domain**: `noreply@divorcecalculatoruk.co.uk` — must be verified in Resend dashboard with SPF/DKIM DNS records to deliver correctly.
+- **Double opt-in for email leads**: `POST /api/leads` sends a verification email; `GET /api/leads/verify?token=...` confirms and marks the lead as verified. Schema has `verified` (boolean) and `verification_token` (varchar) columns.
+- **GDPR data deletion**: `POST /api/gdpr/delete` accepts an email, rate-limited (3/hour/IP), anonymises purchases (nullifies email) and hard-deletes email_leads. Form is embedded in the Privacy Policy page.
+- **Stripe webhook verification**: `STRIPE_WEBHOOK_SECRET` env var enables signature verification in `server/webhookHandlers.ts`. Falls back to raw JSON parsing if the secret is not set (managed webhook handles verification via stripe-replit-sync).
+- **Admin password**: `ADMIN_PASSWORD` env var only — `SESSION_SECRET` fallback was removed.
+- **Self-hosted fonts**: Inter + Playfair Display WOFF2 files in `client/public/fonts/`. Google Fonts CDN removed from both `client/index.html` and `client/src/index.css`.
+- **Dependencies**: `npm audit fix` applied — 0 known vulnerabilities.
+
 ## External Dependencies
 
 - **PostgreSQL**: Primary data store.
@@ -111,6 +122,7 @@ Key additions beyond base state:
 - **shadcn/ui** (Radix UI primitives): UI component library.
 - **wouter**: Lightweight client-side router.
 - **stripe** + **stripe-replit-sync**: Payment processing and webhook sync.
+- **helmet**: HTTP security headers middleware.
 - **Vite**: Frontend bundling.
 - **esbuild**: Server bundling.
 - **tsx**: TypeScript execution.

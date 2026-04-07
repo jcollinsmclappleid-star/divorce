@@ -9,8 +9,19 @@ function getResend(): Resend | null {
   return resend;
 }
 
-const FROM = 'DivorceCalculatorUK <onboarding@resend.dev>';
+// NOTE: noreply@divorcecalculatoruk.co.uk must be verified in Resend dashboard
+// with SPF and DKIM DNS records before this will deliver correctly.
+const FROM = 'DivorceCalculatorUK <noreply@divorcecalculatoruk.co.uk>';
 const REPLY_TO = 'support@divorcecalculatoruk.co.uk';
+
+function htmlEscape(str: string): string {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
 function formatDate(date: Date | string | null): string {
   if (!date) return 'unknown';
@@ -72,8 +83,8 @@ export async function sendPurchaseConfirmationEmail(
     return;
   }
 
-  const accessUrl = `https://divorcecalculatoruk.co.uk/access?token=${sessionToken}`;
-  const expiryText = formatDate(expiresAt);
+  const accessUrl = `https://divorcecalculatoruk.co.uk/access?token=${htmlEscape(sessionToken)}`;
+  const expiryText = htmlEscape(formatDate(expiresAt));
 
   const html = emailWrapper(`
     <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">Your access is ready</h1>
@@ -114,7 +125,7 @@ export async function sendPurchaseConfirmationEmail(
       subject: 'Your DivorceCalculatorUK access is ready',
       html,
     });
-    console.log(`[email] Purchase confirmation sent to ${email}`);
+    console.log('[email] Purchase confirmation sent');
   } catch (err) {
     console.error('[email] Failed to send purchase confirmation:', err);
   }
@@ -131,8 +142,8 @@ export async function sendAccessRecoveryEmail(
     return;
   }
 
-  const accessUrl = `https://divorcecalculatoruk.co.uk/access?token=${sessionToken}`;
-  const expiryText = formatDate(expiresAt);
+  const accessUrl = `https://divorcecalculatoruk.co.uk/access?token=${htmlEscape(sessionToken)}`;
+  const expiryText = htmlEscape(formatDate(expiresAt));
 
   const html = emailWrapper(`
     <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">Here's your access link</h1>
@@ -173,8 +184,56 @@ export async function sendAccessRecoveryEmail(
       subject: 'Your DivorceCalculatorUK access link',
       html,
     });
-    console.log(`[email] Recovery email sent to ${email}`);
+    console.log('[email] Recovery email sent');
   } catch (err) {
     console.error('[email] Failed to send recovery email:', err);
+  }
+}
+
+export async function sendEmailVerificationEmail(
+  email: string,
+  verificationToken: string
+): Promise<void> {
+  const client = getResend();
+  if (!client) {
+    console.warn('[email] RESEND_API_KEY not set — skipping verification email');
+    return;
+  }
+
+  const verifyUrl = `https://divorcecalculatoruk.co.uk/api/leads/verify?token=${htmlEscape(verificationToken)}`;
+
+  const html = emailWrapper(`
+    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">Confirm your email address</h1>
+    <p style="margin:0 0 24px;color:#64748b;font-size:15px;">You signed up to receive our free UK Divorce Finances Guide. Please confirm your email address to receive it.</p>
+
+    <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+      <tr>
+        <td style="background:#c49b2a;border-radius:6px;">
+          <a href="${verifyUrl}" style="display:inline-block;padding:14px 28px;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;border-radius:6px;">Confirm my email</a>
+        </td>
+      </tr>
+    </table>
+
+    <p style="margin:0 0 8px;color:#94a3b8;font-size:12px;">Or copy this link into your browser:</p>
+    <p style="margin:0;color:#0f1e3c;font-size:12px;word-break:break-all;background:#f1f5f9;padding:10px 12px;border-radius:4px;font-family:monospace;">${verifyUrl}</p>
+
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
+
+    <p style="margin:0;color:#64748b;font-size:13px;line-height:1.6;">
+      If you did not sign up for this, you can safely ignore this email. No further action is required.
+    </p>
+  `);
+
+  try {
+    await client.emails.send({
+      from: FROM,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: 'Please confirm your email — DivorceCalculatorUK',
+      html,
+    });
+    console.log('[email] Verification email sent');
+  } catch (err) {
+    console.error('[email] Failed to send verification email:', err);
   }
 }

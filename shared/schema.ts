@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, jsonb, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, jsonb, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { DivorceModelInputsSchema, Party, AssetCategory, LiabilityCategory, ExpenseCategory } from "./divorce_types";
@@ -30,6 +30,8 @@ export const emailLeads = pgTable("email_leads", {
   firstName: text("first_name"),
   source: text("source").default("free_guide"),
   assetPoolSnapshot: text("asset_pool_snapshot"),
+  verified: boolean("verified").notNull().default(false),
+  verificationToken: varchar("verification_token"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

@@ -1,4 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
+import helmet from "helmet";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
@@ -8,6 +9,44 @@ import { WebhookHandlers } from "./webhookHandlers";
 
 const app = express();
 const httpServer = createServer(app);
+
+const isDev = process.env.NODE_ENV !== "production";
+
+const cspDirectives: Record<string, any> = {
+  defaultSrc: ["'self'"],
+  scriptSrc: [
+    "'self'",
+    "https://js.stripe.com",
+    "https://checkout.stripe.com",
+    ...(isDev ? ["'unsafe-eval'", "'unsafe-inline'"] : []),
+  ],
+  styleSrc: ["'self'", "'unsafe-inline'"],
+  fontSrc: ["'self'"],
+  imgSrc: ["'self'", "data:", "https:"],
+  connectSrc: [
+    "'self'",
+    "https://api.stripe.com",
+    "https://checkout.stripe.com",
+    ...(isDev ? ["ws:", "wss:"] : []),
+  ],
+  frameSrc: ["https://js.stripe.com", "https://hooks.stripe.com"],
+  frameAncestors: ["'none'"],
+};
+
+if (!isDev) {
+  cspDirectives.upgradeInsecureRequests = [];
+}
+
+app.use(helmet({
+  contentSecurityPolicy: { directives: cspDirectives },
+  crossOriginEmbedderPolicy: false,
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true,
+  },
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+}));
 
 declare module "http" {
   interface IncomingMessage {
