@@ -51,7 +51,7 @@ const STEP_META = [
 const STEP_COPY = [
   {
     prompt: "Let's build your financial picture together.",
-    reassurance: "All calculations happen privately in your browser — your data never leaves your device. Best estimates are fine throughout. You can refine figures as you go."
+    reassurance: "All core calculations happen privately in your browser. Best estimates are fine throughout. You can refine figures as you go."
   },
   {
     prompt: "A few baseline details to shape your model.",
@@ -443,10 +443,10 @@ function StepWelcome() {
             Let's build your financial picture.
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">
-            Answer a few questions about your situation. All calculations happen privately in your browser — your data never leaves your device.
+            Answer a few questions about your situation. All core calculations happen privately in your browser.
           </p>
           <div className="flex flex-wrap gap-4 mt-4 text-xs text-muted-foreground/70">
-            <span className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-emerald-500" /> 100% private</span>
+            <span className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-emerald-500" /> Privately calculated</span>
             <span className="flex items-center gap-1.5"><Calculator className="w-3.5 h-3.5 text-cyan-500" /> Best estimates are fine</span>
             <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-gold" /> Under 5 minutes</span>
           </div>

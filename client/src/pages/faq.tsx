@@ -94,7 +94,7 @@ const FAQ_CATEGORIES = [
     items: [
       {
         q: "Is my data safe?",
-        a: "All financial calculations are performed locally in your web browser. The financial data you enter is never transmitted to our servers. Your session is stored in your browser's local storage. Payment processing is handled securely by Stripe — we never store card details.",
+        a: "All core financial calculations are performed locally in your web browser. No names or contact details are ever included in any processing. Your session is stored in your browser's local storage. Payment processing is handled securely by Stripe — we never store card details.",
       },
       {
         q: "How do I access my analysis again after closing my browser?",

@@ -112,7 +112,7 @@ export default function AboutPage() {
             Divorce Calculator UK is a financial clarity platform for people navigating separation and divorce in England and Wales. It is structured around general principles of English and Welsh family law — with reference to factors courts commonly consider under the Matrimonial Causes Act 1973 — to illustrate how assets, property, pensions, savings and debts might be divided across different settlement structures, and what each could mean for your financial future. It does not apply the law, predict court outcomes, or constitute legal advice.
           </p>
           <p className="text-muted-foreground leading-relaxed">
-            Every calculation applies UK 2026/27 HMRC income tax and National Insurance rates as illustrative estimates. It models mortgage affordability against indicative income multiples, and projects how capital positions may change over five years under each settlement option. All calculations run entirely in your browser — no financial data is ever transmitted to our servers.
+            Every calculation applies UK 2026/27 HMRC income tax and National Insurance rates as illustrative estimates. It models mortgage affordability against indicative income multiples, and projects how capital positions may change over five years under each settlement option. Core calculations run entirely in your browser. No names or contact details are ever included in any processing.
           </p>
         </div>
       </section>
@@ -229,7 +229,7 @@ export default function AboutPage() {
             <div className="space-y-2">
               <h2 className="text-lg font-display font-bold text-emerald-900">Privacy &amp; your data</h2>
               <p className="text-sm text-emerald-800/80 leading-relaxed">
-                All financial calculations run entirely in your browser. The financial data you enter is never transmitted to our servers. Your session is stored only in your browser's local storage. Payment processing is handled securely by Stripe. See the{" "}
+                Core financial calculations run entirely in your browser. No names or contact details are ever included in any processing. Your session is stored only in your browser's local storage. Payment processing is handled securely by Stripe. See the{" "}
                 <Link href="/privacy" className="underline font-medium">Privacy Policy</Link> for full details.
               </p>
               <div className="flex flex-wrap gap-3 pt-1 text-xs text-emerald-700/70 font-medium">

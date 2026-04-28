@@ -135,7 +135,7 @@ export default function MethodologyPage() {
 
           <section>
             <h2 className="text-xl font-semibold text-foreground">7. Client-Side Architecture</h2>
-            <p>All financial calculations are performed in the user's web browser using client-side JavaScript. No financial data is transmitted to or stored on the server. This architecture is designed to preserve user privacy, but it also means that the model operator cannot audit, verify, or correct individual outputs.</p>
+            <p>All core financial calculations are performed in the user's web browser using client-side JavaScript. No names or contact details are transmitted to or stored on the server as part of the core modelling engine. This architecture is designed to preserve user privacy, but it also means that the model operator cannot audit, verify, or correct individual outputs.</p>
           </section>
 
           <section>

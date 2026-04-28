@@ -35,7 +35,7 @@ const FAQ_ITEMS = [
   },
   {
     question: "Is my data safe?",
-    answer: "All financial calculations happen in your browser. Your sensitive financial data is never sent to or stored on our servers.",
+    answer: "All core financial calculations happen in your browser. No names or contact details are ever included in any processing.",
   },
   {
     question: "Can I update my figures later?",

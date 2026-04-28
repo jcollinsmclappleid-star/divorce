@@ -1127,11 +1127,11 @@ function ExecutiveTable({
                     </div>
                     <div className="min-w-0 space-y-1">
                       <span className="text-muted-foreground block">Reserves — {nameA}</span>
-                      {reserveLabel(rw?.partyA.depletionYear, rw?.partyA.sustained)}
+                      {reserveLabel(rw?.partyA.depletionYear ?? undefined, rw?.partyA.sustained)}
                     </div>
                     <div className="min-w-0 space-y-1">
                       <span className="text-muted-foreground block">Reserves — {nameB}</span>
-                      {reserveLabel(rw?.partyB.depletionYear, rw?.partyB.sustained)}
+                      {reserveLabel(rw?.partyB.depletionYear ?? undefined, rw?.partyB.sustained)}
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-2 pt-1 border-t">

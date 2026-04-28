@@ -349,7 +349,7 @@ export async function registerRoutes(
       // Use product ID directly for reliability
       const productId = 'prod_U08zTEPeHZJAOf';
       const product = await stripe.products.retrieve(productId);
-      if (!product || product.deleted) {
+      if (!product) {
         console.error('Stripe product not found');
         return res.status(500).json({ message: 'Payment product not configured. Please contact support.' });
       }

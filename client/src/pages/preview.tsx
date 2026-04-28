@@ -336,7 +336,7 @@ export default function PreviewPage() {
         <div className="flex items-start gap-3 p-4 bg-emerald-50 rounded-md border border-emerald-200/60" data-testid="card-privacy-preview">
           <Shield className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
           <p className="text-xs text-emerald-800 leading-relaxed">
-            <span className="font-semibold">Your figures never leave your browser.</span> All calculations happen on your device. We store only a session reference — no financial data is transmitted to our servers.
+            <span className="font-semibold">Your privacy is protected.</span> All core calculations happen privately in your browser. No names, addresses or contact details are included in any processing.
           </p>
         </div>
 

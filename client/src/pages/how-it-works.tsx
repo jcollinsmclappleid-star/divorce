@@ -56,7 +56,7 @@ const RESULTS_FEATURES = [
 ];
 
 const TRUST_ITEMS = [
-  { icon: Lock, title: "Private by design", desc: "Your financial data never leaves your browser.", bg: "bg-emerald-50", iconColor: "text-emerald-600" },
+  { icon: Lock, title: "Private by design", desc: "Core calculations stay private in your browser. No names or contact details are ever included in any processing.", bg: "bg-emerald-50", iconColor: "text-emerald-600" },
   { icon: Shield, title: "No financial advice", desc: "Illustrative modelling only. Always seek independent advice for decisions.", bg: "bg-amber-50", iconColor: "text-amber-600" },
   { icon: BarChart3, title: "Illustrative income tax model", desc: "UK 2026/27 income tax and Class 1 NI rates applied as indicative estimates to all income figures.", bg: "bg-cyan-50", iconColor: "text-cyan-600" },
 ];
@@ -217,7 +217,7 @@ export default function HowItWorksPage() {
           <div className="mt-8 p-4 rounded-xl bg-emerald-50 border border-emerald-200/60 flex items-start gap-3">
             <Shield className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
             <p className="text-xs text-emerald-900/70 leading-relaxed">
-              <strong className="text-emerald-900">Privacy by design.</strong> All calculations happen in your browser. The financial data you enter is never transmitted to our servers. You may save your session token to return later without re-entering your figures.
+              <strong className="text-emerald-900">Privacy by design.</strong> Core calculations happen in your browser. No names or contact details are ever included in any processing. You may save your session token to return later without re-entering your figures.
             </p>
           </div>
         </div>
