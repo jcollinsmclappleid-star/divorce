@@ -173,9 +173,12 @@ export default function PricingPage() {
                 <ArrowRight className="w-4 h-4 ml-1.5" />
               </Button>
 
-              <div className="flex items-center justify-center gap-1.5 text-xs text-green-300/80">
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>7-day money-back guarantee</span>
+              <div className="flex flex-col items-center gap-1 text-xs text-green-300/80">
+                <div className="flex items-center gap-1.5">
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>7-day money-back guarantee</span>
+                </div>
+                <span className="text-white/40">Email <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline hover:text-white/60 transition-colors">support@divorcecalculatoruk.co.uk</a> for any refund</span>
               </div>
 
               <p className="text-xs text-white/40 text-center">

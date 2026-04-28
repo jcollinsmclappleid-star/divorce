@@ -49,26 +49,37 @@ export default function RefundPolicyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground">2. Your Right to Cancel — 14-Day Cooling-Off Period</h2>
+            <h2 className="text-xl font-semibold text-foreground">2. Your Right to Cancel</h2>
             <p>
-              Under the Consumer Contracts (Information, Cancellation and Additional Charges)
-              Regulations 2013, you have the right to cancel your purchase within 14 days of
-              buying and receive a full refund, without giving any reason.
-            </p>
-            <p>
-              <strong className="text-foreground">Important:</strong> This right does not apply once you have accessed the full
-              analysis. By proceeding through the payment page and accessing the results, you
-              consent to the immediate supply of digital content and acknowledge that your
-              14-day right to cancel is waived from that point. This is standard practice for
-              immediately delivered digital products under UK consumer law.
-            </p>
-            <p>
-              If you pay but do not access the results within the 14-day window, your right to
-              cancel remains intact. To request a cancellation refund, email us at{" "}
+              <strong className="text-foreground">7-Day Money-Back Guarantee:</strong> We offer a full
+              no-questions-asked refund within 7 days of purchase. Email{" "}
               <a href="mailto:support@divorcecalculatoruk.co.uk" className="text-primary underline underline-offset-2">
                 support@divorcecalculatoruk.co.uk
               </a>{" "}
-              within 14 days of purchase, before accessing the full analysis.
+              with your purchase details and we will process the refund promptly.
+            </p>
+            <p>
+              In addition to our commercial guarantee, you have statutory rights under the
+              Consumer Contracts (Information, Cancellation and Additional Charges) Regulations
+              2013. These provide a right to cancel a distance purchase and receive a full
+              refund, without giving any reason.
+            </p>
+            <p>
+              <strong className="text-foreground">Important:</strong> The statutory cancellation
+              right does not apply once you have accessed the full digital analysis. By
+              proceeding through payment and accessing the results, you consent to the immediate
+              supply of digital content and acknowledge that the statutory right to cancel is
+              waived at that point — consistent with standard practice for immediately delivered
+              digital products under UK consumer law. Our 7-day commercial guarantee applies
+              regardless.
+            </p>
+            <p>
+              If you pay but do not access the results, your statutory cancellation right
+              remains intact. Contact us at{" "}
+              <a href="mailto:support@divorcecalculatoruk.co.uk" className="text-primary underline underline-offset-2">
+                support@divorcecalculatoruk.co.uk
+              </a>{" "}
+              before accessing the full analysis to request a cancellation.
             </p>
           </section>
 

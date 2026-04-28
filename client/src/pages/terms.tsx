@@ -121,8 +121,8 @@ export default function TermsPage() {
             <h2 className="text-xl font-semibold text-foreground">8. Cancellation and Refunds</h2>
             <p>
               Our full <Link href="/refund-policy" className="underline text-primary">Refund Policy</Link> is
-              published separately and sets out your rights in detail, including the 14-day cooling-off period
-              under the Consumer Contracts Regulations 2013 and your rights under the Consumer Rights Act 2015.
+              published separately and sets out your rights in detail, including our 7-day money-back guarantee,
+              your statutory right to cancel under the Consumer Contracts Regulations 2013, and your rights under the Consumer Rights Act 2015.
               Nothing in these Terms of Use limits your statutory rights as a consumer.
             </p>
             <p>

@@ -438,7 +438,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="text-sm font-semibold text-white">Questions before you start?</h3>
-              <p className="text-xs text-white/55 mt-1">We're here to help — get in touch any time.</p>
+              <p className="text-xs text-white/55 mt-1">We're here to help — get in touch any time. <span className="text-gold/70">7-day money-back guarantee on all purchases.</span></p>
             </div>
             <div className="flex flex-wrap items-center gap-4 shrink-0">
               <a
