@@ -115,7 +115,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "Can I get a refund?",
-        a: "Refunds are considered in accordance with the UK Consumer Contracts Regulations 2013 and the Consumer Rights Act 2015. Please contact us at support@divorcecalculatoruk.co.uk within 14 days of purchase if you believe you are entitled to a refund. Full details are on the Refund Policy page.",
+        a: "Yes. If you're not satisfied, contact us at support@divorcecalculatoruk.co.uk within 7 days of purchase and we'll issue a full refund — no questions asked. Full details are on the Refund Policy page.",
       },
     ],
   },
