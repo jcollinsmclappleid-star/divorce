@@ -1,0 +1,482 @@
+Act as a senior full-stack product engineer, UK divorce-finance product designer, legal-risk-aware UX writer, and PDF/report generation specialist.
+
+I have a browser-based divorce financial modelling tool for England and Wales. It already produces a structured financial report with scenario modelling, income/tax outputs, settlement scenarios, sustainability indicators, mortgage benchmark checks, assumptions and methodology.
+
+I want you to enhance the product by adding a safe AI-powered interpretation layer called:
+
+Smart Report Notes
+
+Important product boundary:
+This tool must NOT provide legal advice, financial advice, tax advice, mortgage advice, settlement recommendations, court outcome predictions, or suitability recommendations.
+
+The AI layer must only:
+- explain the model outputs in plain English
+- highlight pressure points shown by the figures
+- identify missing information or assumptions that could affect the model
+- generate neutral questions to ask a solicitor, mediator, mortgage broker, pension expert or tax adviser
+- help the user understand what their own numbers show
+- avoid telling the user what to do
+
+The deterministic calculation engine must remain the source of truth. Do not use AI to calculate tax, NI, mortgage payments, child maintenance, asset division, pension splits, surplus/deficit, sustainability scores, or projections. AI should only digest already-calculated outputs.
+
+Core objective:
+Upgrade the existing dashboard/report experience so it feels like a premium guided financial interpretation report, while keeping the product safe, neutral and non-advisory.
+
+Please inspect the current codebase and implement the following enhancements.
+
+====================================================
+1. ADD “SMART REPORT NOTES” SECTION
+====================================================
+
+Add a new report/dashboard section called:
+
+Smart Report Notes
+
+Subheading:
+
+Plain-English explanations, pressure points and questions to raise — generated from your financial model.
+
+This section should appear:
+- near the top of the paid/full report, after the disclaimer and before detailed technical tables
+- in the dashboard after the scenario comparison
+- in the PDF export as its own clearly labelled section
+
+If the AI provider is unavailable or not configured, fall back to deterministic template-based notes so the report still works.
+
+====================================================
+2. SMART REPORT NOTES OUTPUT BLOCKS
+====================================================
+
+The AI output should be structured into these blocks:
+
+A. Plain-English Overview
+
+Purpose:
+Explain the overall financial picture in simple, neutral language.
+
+Example tone:
+“This model shows that most of the household wealth is tied up in the family home. The main pressure point is not only the total net worth, but whether either party can retain the home while maintaining enough monthly cashflow and liquid capital.”
+
+Rules:
+- Do not recommend a scenario
+- Do not say what is fair
+- Do not say what a court would do
+- Do not say either party should accept/reject anything
+
+B. What Stands Out
+
+Generate 4–6 bullet points based on the calculated model.
+
+Examples:
+- The family home is the largest asset in the model.
+- One party has materially higher income than the other.
+- A keep-home scenario creates higher mortgage pressure.
+- A party may have limited liquid capital after an equity buyout.
+- Pension figures are included, but pension type and actuarial treatment are not assessed.
+- Some costs, such as moving costs or legal fees, may not be included.
+
+C. Scenario Interpretation
+
+For each available scenario, create:
+- one short “scenario in one sentence”
+- one short explanatory paragraph
+- specific references to calculated figures where available
+
+Scenarios may include:
+- Sell & Split
+- Party A Keeps Home
+- Party B Keeps Home
+- Deferred Sale
+
+Rules:
+- Use “from a cashflow perspective only” where comparing affordability
+- Use “based on the figures entered”
+- Use “may be a point to discuss”
+- Do not identify any scenario as “best”, “recommended”, “fairest”, or “most suitable”
+
+D. Pressure Points
+
+Generate 3–6 pressure points from the model.
+
+Pressure point types may include:
+- mortgage affordability pressure
+- low liquid capital after buyout
+- high asset concentration in property
+- income disparity
+- pension imbalance
+- missing children/maintenance assumptions
+- missing transaction costs
+- sensitivity to interest rate increases
+- reliance on one party’s income
+
+Each pressure point must be written neutrally.
+
+Example:
+“Mortgage pressure: In the Party B Keeps Home scenario, the model shows that the mortgage payment takes a high share of Party B’s net monthly income. This may be a useful point to discuss with a mortgage broker or solicitor.”
+
+E. Questions to Ask Professionals
+
+Generate separate question lists for:
+
+1. Solicitor or mediator
+2. Mortgage broker
+3. Pension expert / financial adviser
+4. Tax adviser, if tax complexity is flagged
+
+Questions must be framed as questions, not recommendations.
+
+Examples:
+- “How would pension sharing or pension offsetting normally be considered where CETV values differ?”
+- “If one party keeps the family home, what protections may be needed around mortgage responsibility and equity transfer?”
+- “Could either party refinance the mortgage in their sole name based on income and debt levels?”
+- “Would stamp duty, capital gains tax or investment disposal costs need to be considered?”
+
+F. Missing Information & Model Confidence
+
+Create a model confidence label:
+- High
+- Medium
+- Low
+
+This should be based on completeness of inputs, not certainty of outcome.
+
+Use rule-based logic where possible. For example:
+
+High:
+- core income, property value, mortgage balance, main assets, liabilities and pensions provided
+- child/spousal maintenance either not applicable or entered
+- major housing costs included
+
+Medium:
+- core figures provided but some relevant assumptions missing
+- examples: missing pension CETV for one party, missing childcare costs, missing interest rate, missing transaction costs
+
+Low:
+- significant missing information
+- examples: missing income for one party, missing mortgage balance, missing major assets, missing pension information where likely relevant
+
+The AI can write the explanation, but the confidence label should be determined by rule-based logic if possible.
+
+Example:
+“Model confidence: Medium. The model includes income, property and mortgage figures, but confidence is reduced because Party B pension CETV, childcare costs and transaction costs are missing.”
+
+G. Suggested Preparation Steps
+
+Generate a short checklist of 5–8 preparation steps.
+
+Use wording:
+“Suggested preparation steps”
+not:
+“Recommended actions”
+
+Examples:
+- Confirm current mortgage balance and any early repayment charge.
+- Obtain current pension CETV figures.
+- Add estimated rent or onward purchase costs for each party.
+- Add legal, moving and transfer costs.
+- Test the model at higher mortgage rates.
+- Take the scenario comparison to a solicitor, mediator or mortgage broker.
+
+====================================================
+3. SAFETY AND WORDING RULES
+====================================================
+
+Hard-block the following phrases or concepts from AI output:
+
+- “you should”
+- “you must”
+- “we recommend”
+- “recommended settlement”
+- “best option”
+- “best scenario”
+- “fair settlement”
+- “fairest”
+- “entitled to”
+- “court would”
+- “court will”
+- “likely court outcome”
+- “accept this”
+- “reject this”
+- “legal advice”
+- “financial advice”
+- “tax advice”
+- “mortgage advice”
+- “suitable for you”
+- “right choice”
+
+If generated output contains these phrases, either:
+- regenerate once with stricter instructions, or
+- sanitise the wording into neutral language.
+
+Preferred safe phrases:
+- “based on the figures entered”
+- “from a cashflow perspective only”
+- “may be a point to discuss”
+- “could be relevant to review”
+- “this model shows”
+- “this scenario illustrates”
+- “professional advice may be needed before making decisions”
+- “this does not assess legal fairness or suitability”
+
+Add a visible note to Smart Report Notes:
+
+“These notes explain the model outputs in plain English. They are not legal, financial, tax or mortgage advice, and they do not recommend what either party should do.”
+
+====================================================
+4. DATA PRIVACY REQUIREMENTS
+====================================================
+
+The current product’s strongest trust angle is private browser-based modelling.
+
+Therefore:
+- Do not send names to the AI provider.
+- Do not send property addresses to the AI provider.
+- Do not send emails, phone numbers, uploaded files, free-text personal history, bank statements or solicitor letters.
+- Replace names with Party A and Party B.
+- Round figures where practical, unless exact figures are needed for clarity.
+- Send only calculated model outputs and missing input flags.
+
+Create a clean AI payload like:
+
+{
+  "jurisdiction": "England and Wales",
+  "parties": ["Party A", "Party B"],
+  "report_context": {
+    "purpose": "plain-English explanation and professional preparation questions",
+    "not_advice": true
+  },
+  "financial_snapshot": {
+    "total_assets": 843000,
+    "total_liabilities": 590000,
+    "net_worth": 253000,
+    "property_value": 675000,
+    "mortgage_balance": 590000,
+    "net_equity": 64750,
+    "pension_total": 60000
+  },
+  "income_summary": {
+    "party_a_gross": 126000,
+    "party_a_net_monthly": 6547,
+    "party_b_gross": 60009,
+    "party_b_net_monthly": 3780
+  },
+  "scenarios": {
+    "sell_and_split": {
+      "party_a_liquid_capital": 120925,
+      "party_b_liquid_capital": 51825,
+      "party_a_monthly_surplus": 5547,
+      "party_b_monthly_surplus": 3780,
+      "party_a_score": 100,
+      "party_b_score": 100
+    },
+    "a_keeps_home": {
+      "party_a_liquid_capital": 43225,
+      "party_b_liquid_capital": 64775,
+      "party_a_mortgage_payment": 3449,
+      "party_a_monthly_surplus": 2098,
+      "party_b_monthly_surplus": 3780,
+      "party_a_score": 70,
+      "party_b_score": 100,
+      "flags": ["mortgage benchmark exceeded", "reduced liquidity"]
+    },
+    "b_keeps_home": {
+      "party_a_liquid_capital": 107975,
+      "party_b_liquid_capital": 25,
+      "party_b_mortgage_payment": 3449,
+      "party_a_monthly_surplus": 5547,
+      "party_b_monthly_surplus": 331,
+      "party_a_score": 100,
+      "party_b_score": 60,
+      "flags": ["mortgage benchmark exceeded", "low liquidity", "high mortgage-to-income ratio"]
+    }
+  },
+  "missing_inputs": [
+    "child maintenance not included",
+    "spousal maintenance not included",
+    "transaction costs not fully modelled",
+    "pension type not assessed"
+  ],
+  "methodology_limits": [
+    "illustrative modelling only",
+    "simplified tax model",
+    "not a lending assessment",
+    "not a legal fairness assessment"
+  ]
+}
+
+====================================================
+5. AI PROMPT TO USE INTERNALLY
+====================================================
+
+Create a server-side prompt similar to this:
+
+SYSTEM:
+You are a neutral financial modelling explainer for a divorce/separation calculator for England and Wales. You do not provide legal advice, financial advice, tax advice, mortgage advice, suitability recommendations, settlement recommendations, or court outcome predictions. You explain calculated model outputs in plain English, identify pressure points, identify missing information, and generate neutral questions the user may raise with qualified professionals.
+
+You must not tell either party what to do. You must not say what is fair, best, recommended, suitable, or likely in court. You must not say either party is entitled to anything. You must only refer to the numbers as illustrative model outputs based on user-entered figures.
+
+USER:
+Given the following calculated report data, produce Smart Report Notes in strict JSON format with these fields:
+
+{
+  "plainEnglishOverview": string,
+  "whatStandsOut": string[],
+  "scenarioInterpretations": {
+    "[scenario_key]": {
+      "oneSentenceSummary": string,
+      "explanation": string
+    }
+  },
+  "pressurePoints": [
+    {
+      "title": string,
+      "detail": string,
+      "professionalToDiscussWith": string
+    }
+  ],
+  "questionsForProfessionals": {
+    "solicitorOrMediator": string[],
+    "mortgageBroker": string[],
+    "pensionExpertOrFinancialAdviser": string[],
+    "taxAdviser": string[]
+  },
+  "missingInformationAndModelConfidence": {
+    "confidenceLabel": "High" | "Medium" | "Low",
+    "explanation": string,
+    "missingItems": string[]
+  },
+  "suggestedPreparationSteps": string[]
+}
+
+Rules:
+- Use Party A and Party B only.
+- Do not use names.
+- Do not mention property address.
+- Do not recommend any scenario.
+- Do not say “best”, “fairest”, “entitled”, “court would”, “accept”, “reject”, or “you should”.
+- Use neutral phrases such as “based on the figures entered”, “this scenario illustrates”, “may be a point to discuss”, and “from a cashflow perspective only”.
+- Keep the tone clear, calm, professional and plain English.
+- Output valid JSON only.
+
+DATA:
+{{sanitisedCalculatedReportJson}}
+
+====================================================
+6. DASHBOARD UI ENHANCEMENTS
+====================================================
+
+Add the following UI components:
+
+A. Smart Report Notes Card
+- placed after scenario comparison
+- collapsed by default on free preview if needed
+- fully visible for paid report
+
+B. Key Takeaways
+- 4–6 bullets
+- visually prominent
+- plain English
+
+C. Scenario Interpretation Cards
+Each scenario card should show:
+- headline metric chips: liquid capital, monthly surplus/deficit, mortgage obligation, score
+- one sentence AI summary
+- explanation toggle
+
+D. Pressure Points Panel
+Use neutral warning styling.
+Do not use alarming legal-risk language.
+
+E. Professional Questions Panel
+Tabs or grouped lists:
+- solicitor/mediator
+- mortgage broker
+- pension/financial adviser
+- tax adviser
+
+F. Missing Information / Confidence Panel
+Show:
+- confidence label
+- missing information list
+- “add missing information” CTA where possible
+
+G. PDF Export Integration
+Include Smart Report Notes in the PDF.
+Make sure the notes are formatted cleanly and do not break page layout.
+
+====================================================
+7. FREEMIUM / PAID ACCESS BEHAVIOUR
+====================================================
+
+Free preview:
+- may show a blurred or shortened Smart Report Notes preview
+- can show 2–3 generic “what this report can explain” bullets
+- should encourage upgrade
+
+Paid report:
+- full Smart Report Notes
+- full scenario interpretation
+- full professional questions
+- PDF export
+
+Suggested upgrade copy:
+“Unlock Smart Report Notes: plain-English explanations, pressure points and questions to raise with a solicitor, mediator or mortgage broker.”
+
+====================================================
+8. FALLBACK NON-AI MODE
+====================================================
+
+Create a deterministic fallback if AI is unavailable.
+
+Fallback should generate:
+- basic overview from thresholds
+- scenario summaries from known outputs
+- pressure points from flags
+- professional questions from a template library
+- missing information checklist from validation flags
+
+Example deterministic pressure flags:
+- mortgage payment >35% of net income
+- mortgage requirement >4.5x gross income
+- liquid capital below £5,000
+- property concentration above 70%
+- one party has income >1.75x the other
+- pension CETV missing for either party
+- child maintenance excluded where children are present
+- spousal maintenance excluded where selected as applicable
+- transaction costs excluded
+
+====================================================
+9. TESTING REQUIREMENTS
+====================================================
+
+Add tests or validation checks for:
+
+- AI payload excludes names and address
+- AI output is valid JSON
+- blocked advisory phrases are detected
+- sanitisation replaces unsafe wording
+- fallback notes render when AI fails
+- PDF includes Smart Report Notes
+- dashboard renders with and without AI output
+- free preview does not expose paid full notes
+- confidence label logic works for High, Medium and Low cases
+
+====================================================
+10. FINAL ACCEPTANCE CRITERIA
+====================================================
+
+The enhancement is complete when:
+
+1. The dashboard includes a Smart Report Notes section.
+2. The PDF export includes Smart Report Notes.
+3. The AI receives only sanitised calculated outputs, not names or addresses.
+4. The AI does not calculate financial figures.
+5. The AI does not recommend any scenario or settlement.
+6. Unsafe advisory language is blocked or sanitised.
+7. Missing data and confidence are clearly displayed.
+8. Professional questions are generated neutrally.
+9. The product still works without AI via deterministic fallback notes.
+10. The report feels more premium, clearer, and more useful to a non-financial user.
+
+Please implement this carefully, inspect the existing architecture first, reuse existing report/scenario data structures where possible, and avoid unnecessary rewrites.
