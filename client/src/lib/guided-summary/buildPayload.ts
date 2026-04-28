@@ -25,16 +25,6 @@ const LIABILITY_CATEGORY_LABELS: Record<string, string> = {
   other: "Other liability",
 };
 
-const INCOME_CATEGORY_LABELS: Record<string, string> = {
-  employment: "Employment income",
-  self_employment: "Self-employment income",
-  rental: "Rental income",
-  pension_income: "Pension income",
-  benefits: "State benefits",
-  investment: "Investment income",
-  other: "Other income",
-};
-
 function assetCategoryLabel(category: string): string {
   return ASSET_CATEGORY_LABELS[category] ?? "Other asset";
 }
@@ -94,7 +84,15 @@ export function buildPayload(
     .filter((a) => a.category === "pension")
     .reduce((s, p) => s + (p.cetv ?? p.currentValue), 0);
 
-  // Scenarios with runway data
+  // Individual pension CETVs by owner (joint pensions counted for both)
+  const pensionCETVPartyA = store.assets
+    .filter((a) => a.category === "pension" && (a.owner === "A" || a.owner === "joint"))
+    .reduce((s, p) => s + (p.cetv ?? p.currentValue), 0);
+  const pensionCETVPartyB = store.assets
+    .filter((a) => a.category === "pension" && (a.owner === "B" || a.owner === "joint"))
+    .reduce((s, p) => s + (p.cetv ?? p.currentValue), 0);
+
+  // Scenarios with runway data + monthly mortgage from engine
   const scenarioPayloads = engine.scenarios.map((sc) => {
     const runway = engine.runways[sc.id];
     return {
@@ -109,6 +107,8 @@ export function buildPayload(
       totalB: sc.totalB,
       affordable: sc.affordable,
       fundingGap: sc.fundingGap,
+      monthlyMortgageA: sc.mortgageMonthlyA ?? 0,
+      monthlyMortgageB: sc.mortgageMonthlyB ?? 0,
       runwayA: {
         sustained: runway?.partyA?.sustained ?? true,
         depletionYear: runway?.partyA?.depletionYear ?? null,
@@ -126,6 +126,8 @@ export function buildPayload(
     totalAssets: store.assets.reduce((s, a) => s + a.currentValue, 0),
     totalLiabilities: store.liabilities.reduce((s, l) => s + l.balance, 0),
     totalLiquid: engine.intermediate.totalLiquid,
+    propertyValue: engine.intermediate.homeValue,
+    mortgageBalance: engine.intermediate.totalMortgage,
     assets,
     liabilities,
     incomes: { partyA: incomesA, partyB: incomesB },
@@ -134,6 +136,8 @@ export function buildPayload(
     ),
     hasPension,
     pensionTotalCETV,
+    pensionCETVPartyA,
+    pensionCETVPartyB,
     childrenCount: store.children.numChildren,
     cmsWeeklyEstimate:
       store.assumptions.includeCMSEstimate && engine.cmsWeekly > 0
@@ -144,8 +148,8 @@ export function buildPayload(
     maintenanceDirection: store.maintenance.direction,
     scenarios: scenarioPayloads,
     budget: {
-      surplusA: engine.budget.surplusA,
-      surplusB: engine.budget.surplusB,
+      monthlyA: Math.round(engine.budget.surplusA / 12),
+      monthlyB: Math.round(engine.budget.surplusB / 12),
     },
     confidence,
   };

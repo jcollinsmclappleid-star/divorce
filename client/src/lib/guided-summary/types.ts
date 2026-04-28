@@ -28,6 +28,8 @@ export interface GuidedSummaryPayload {
   totalAssets: number;
   totalLiabilities: number;
   totalLiquid: number;
+  propertyValue: number;
+  mortgageBalance: number;
   assets: Array<{ category: string; value: number }>;
   liabilities: Array<{ category: string; balance: number }>;
   incomes: {
@@ -37,6 +39,8 @@ export interface GuidedSummaryPayload {
   hasProperty: boolean;
   hasPension: boolean;
   pensionTotalCETV: number;
+  pensionCETVPartyA: number;
+  pensionCETVPartyB: number;
   childrenCount: number;
   cmsWeeklyEstimate: number | null;
   maintenanceIncluded: boolean;
@@ -54,12 +58,14 @@ export interface GuidedSummaryPayload {
     totalB: number;
     affordable?: boolean;
     fundingGap?: number;
+    monthlyMortgageA: number;
+    monthlyMortgageB: number;
     runwayA: { sustained: boolean; depletionYear: number | null };
     runwayB: { sustained: boolean; depletionYear: number | null };
   }>;
   budget: {
-    surplusA: number;
-    surplusB: number;
+    monthlyA: number;
+    monthlyB: number;
   };
   confidence: "High" | "Medium" | "Low";
 }

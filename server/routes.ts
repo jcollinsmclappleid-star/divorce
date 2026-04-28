@@ -787,6 +787,8 @@ export async function registerRoutes(
       totalAssets: z.number(),
       totalLiabilities: z.number(),
       totalLiquid: z.number(),
+      propertyValue: z.number().default(0),
+      mortgageBalance: z.number().default(0),
       assets: z.array(z.object({
         category: z.string().max(60),
         value: z.number(),
@@ -810,6 +812,8 @@ export async function registerRoutes(
       hasProperty: z.boolean(),
       hasPension: z.boolean(),
       pensionTotalCETV: z.number(),
+      pensionCETVPartyA: z.number().default(0),
+      pensionCETVPartyB: z.number().default(0),
       childrenCount: z.number().int().min(0),
       cmsWeeklyEstimate: z.number().nullable(),
       maintenanceIncluded: z.boolean(),
@@ -827,12 +831,14 @@ export async function registerRoutes(
         totalB: z.number(),
         affordable: z.boolean().optional(),
         fundingGap: z.number().optional(),
+        monthlyMortgageA: z.number().default(0),
+        monthlyMortgageB: z.number().default(0),
         runwayA: z.object({ sustained: z.boolean(), depletionYear: z.number().nullable() }),
         runwayB: z.object({ sustained: z.boolean(), depletionYear: z.number().nullable() }),
       })),
       budget: z.object({
-        surplusA: z.number(),
-        surplusB: z.number(),
+        monthlyA: z.number(),
+        monthlyB: z.number(),
       }),
       confidence: z.enum(["High", "Medium", "Low"]),
     }),
@@ -862,6 +868,17 @@ export async function registerRoutes(
         return res.status(429).json({ message: 'You have generated too many summaries recently. Please try again in an hour.' });
       }
 
+      // Derived metrics for the user prompt
+      const grossA = payload.incomes.partyA.reduce((s, i) => s + i.grossAnnual, 0);
+      const grossB = payload.incomes.partyB.reduce((s, i) => s + i.grossAnnual, 0);
+      const netAnnualA = payload.incomes.partyA.reduce((s, i) => s + i.netAnnual, 0);
+      const netAnnualB = payload.incomes.partyB.reduce((s, i) => s + i.netAnnual, 0);
+      const ltv = payload.hasProperty && payload.propertyValue > 0
+        ? Math.round((payload.mortgageBalance / payload.propertyValue) * 100)
+        : null;
+      const borrowCapA = grossA > 0 ? Math.round(grossA * 4) : null;
+      const borrowCapB = grossB > 0 ? Math.round(grossB * 4) : null;
+
       // Build the user prompt from the validated payload
       const userPrompt = `Here is the financial model data for this case. Generate a Guided Report Summary.
 
@@ -869,7 +886,10 @@ SPLIT RATIO: ${Math.round(payload.splitRatio * 100)}% to Party A, ${Math.round((
 TOTAL ASSETS: £${payload.totalAssets.toLocaleString('en-GB')}
 TOTAL LIABILITIES: £${payload.totalLiabilities.toLocaleString('en-GB')}
 NET EQUITY (home after sale costs): £${payload.netEquity.toLocaleString('en-GB')}
-TOTAL LIQUID ASSETS: £${payload.totalLiquid.toLocaleString('en-GB')}
+TOTAL LIQUID ASSETS (distributable pool): £${payload.totalLiquid.toLocaleString('en-GB')}
+${payload.hasProperty && payload.propertyValue > 0 ? `PROPERTY VALUE: £${payload.propertyValue.toLocaleString('en-GB')}
+OUTSTANDING MORTGAGE BALANCE: £${payload.mortgageBalance.toLocaleString('en-GB')}
+LOAN TO VALUE (LTV): ${ltv}%` : ''}
 
 ASSETS:
 ${payload.assets.map(a => `- ${a.category}: £${a.value.toLocaleString('en-GB')}`).join('\n')}
@@ -878,29 +898,42 @@ LIABILITIES:
 ${payload.liabilities.length > 0 ? payload.liabilities.map(l => `- ${l.category}: £${l.balance.toLocaleString('en-GB')}`).join('\n') : '- None entered'}
 
 INCOME — PARTY A:
-${payload.incomes.partyA.length > 0 ? payload.incomes.partyA.map(i => `- ${i.type}: £${i.grossAnnual.toLocaleString('en-GB')} gross / £${i.netAnnual.toLocaleString('en-GB')} net per year`).join('\n') : '- No income entered'}
+${payload.incomes.partyA.length > 0 ? payload.incomes.partyA.map(i => `- ${i.type}: £${i.grossAnnual.toLocaleString('en-GB')} gross / £${i.netAnnual.toLocaleString('en-GB')} net per year (≈ £${Math.round(i.netAnnual / 12).toLocaleString('en-GB')}/mo net)`).join('\n') : '- No income entered'}
+${grossA > 0 ? `PARTY A TOTAL GROSS: £${grossA.toLocaleString('en-GB')} / NET ANNUAL: £${netAnnualA.toLocaleString('en-GB')} / NET MONTHLY: £${Math.round(netAnnualA / 12).toLocaleString('en-GB')}` : ''}
+${borrowCapA !== null && payload.hasProperty ? `PARTY A ESTIMATED SOLO BORROWING CAPACITY (4x gross income): ~£${borrowCapA.toLocaleString('en-GB')}` : ''}
 
 INCOME — PARTY B:
-${payload.incomes.partyB.length > 0 ? payload.incomes.partyB.map(i => `- ${i.type}: £${i.grossAnnual.toLocaleString('en-GB')} gross / £${i.netAnnual.toLocaleString('en-GB')} net per year`).join('\n') : '- No income entered'}
+${payload.incomes.partyB.length > 0 ? payload.incomes.partyB.map(i => `- ${i.type}: £${i.grossAnnual.toLocaleString('en-GB')} gross / £${i.netAnnual.toLocaleString('en-GB')} net per year (≈ £${Math.round(i.netAnnual / 12).toLocaleString('en-GB')}/mo net)`).join('\n') : '- No income entered'}
+${grossB > 0 ? `PARTY B TOTAL GROSS: £${grossB.toLocaleString('en-GB')} / NET ANNUAL: £${netAnnualB.toLocaleString('en-GB')} / NET MONTHLY: £${Math.round(netAnnualB / 12).toLocaleString('en-GB')}` : ''}
+${borrowCapB !== null && payload.hasProperty ? `PARTY B ESTIMATED SOLO BORROWING CAPACITY (4x gross income): ~£${borrowCapB.toLocaleString('en-GB')}` : ''}
 
-MONTHLY BUDGET SURPLUS: Party A £${payload.budget.surplusA.toLocaleString('en-GB', { maximumFractionDigits: 0 })}, Party B £${payload.budget.surplusB.toLocaleString('en-GB', { maximumFractionDigits: 0 })}
+BASE MONTHLY BUDGET SURPLUS (before mortgage, pre-scenario):
+  Party A: £${payload.budget.monthlyA.toLocaleString('en-GB')}/mo
+  Party B: £${payload.budget.monthlyB.toLocaleString('en-GB')}/mo
 
 HAS PROPERTY: ${payload.hasProperty ? 'Yes' : 'No'}
-HAS PENSION: ${payload.hasPension ? 'Yes' : 'No'}${payload.hasPension ? ` (Total CETV: £${payload.pensionTotalCETV.toLocaleString('en-GB')})` : ''}
+HAS PENSION: ${payload.hasPension ? 'Yes' : 'No'}
+${payload.hasPension ? `PENSION CETVs:
+  Party A pension CETV: £${payload.pensionCETVPartyA.toLocaleString('en-GB')}
+  Party B pension CETV: £${payload.pensionCETVPartyB.toLocaleString('en-GB')}
+  Combined pension CETV: £${payload.pensionTotalCETV.toLocaleString('en-GB')}` : ''}
 CHILDREN COUNT: ${payload.childrenCount}
 ${payload.cmsWeeklyEstimate !== null ? `CHILD MAINTENANCE ESTIMATE: £${payload.cmsWeeklyEstimate.toLocaleString('en-GB', { maximumFractionDigits: 2 })} per week` : 'CHILD MAINTENANCE: Not modelled'}
 ${payload.maintenanceIncluded ? `SPOUSAL MAINTENANCE: £${payload.maintenanceMonthlyAmount.toLocaleString('en-GB')} per month, direction: ${payload.maintenanceDirection === 'AtoB' ? 'Party A → Party B' : 'Party B → Party A'}` : 'SPOUSAL MAINTENANCE: Not included'}
 
 SCENARIOS MODELLED:
-${payload.scenarios.filter(s => s.enabled).map(s => `
+${payload.scenarios.filter(s => s.enabled).map(s => {
+  const mtgA = s.monthlyMortgageA > 0 ? `\n  Monthly mortgage (Party A): £${Math.round(s.monthlyMortgageA).toLocaleString('en-GB')}/mo` : '';
+  const mtgB = s.monthlyMortgageB > 0 ? `\n  Monthly mortgage (Party B): £${Math.round(s.monthlyMortgageB).toLocaleString('en-GB')}/mo` : '';
+  const gap = s.fundingGap !== undefined && s.fundingGap > 0 ? `\n  Funding gap to cover buyout: £${s.fundingGap.toLocaleString('en-GB')}` : '';
+  const afford = s.affordable !== undefined ? `\n  Mortgage within solo lending capacity: ${s.affordable ? 'Yes' : 'No'}` : '';
+  return `
 Scenario: ${s.name}
-  Party A receives: £${s.liquidStartA.toLocaleString('en-GB')} liquid + £${s.pensionA.toLocaleString('en-GB')} pension = £${s.totalA.toLocaleString('en-GB')} total
+  Party A receives: £${s.liquidStartA.toLocaleString('en-GB')} liquid + £${s.pensionA.toLocaleString('en-GB')} pension = £${s.totalA.toLocaleString('en-GB')} total${mtgA}${mtgB}${afford}${gap}
   Party B receives: £${s.liquidStartB.toLocaleString('en-GB')} liquid + £${s.pensionB.toLocaleString('en-GB')} pension = £${s.totalB.toLocaleString('en-GB')} total
-  ${s.affordable !== undefined ? `Mortgage affordable: ${s.affordable ? 'Yes' : 'No'}` : ''}
-  ${s.fundingGap !== undefined && s.fundingGap > 0 ? `Funding gap: £${s.fundingGap.toLocaleString('en-GB')}` : ''}
   Party A 10-year runway: ${s.runwayA.sustained ? 'Sustained' : `Depletes in year ${s.runwayA.depletionYear}`}
-  Party B 10-year runway: ${s.runwayB.sustained ? 'Sustained' : `Depletes in year ${s.runwayB.depletionYear}`}
-`).join('\n')}
+  Party B 10-year runway: ${s.runwayB.sustained ? 'Sustained' : `Depletes in year ${s.runwayB.depletionYear}`}`;
+}).join('\n')}
 
 MODEL CONFIDENCE: ${payload.confidence}
 
