@@ -179,7 +179,7 @@ export default function PreviewPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <UnlockButton label="Unlock Full Analysis — £79" />
-              <p className="text-xs text-white/40 self-center">Secured by Stripe · 7-day guarantee · Instant access</p>
+              <p className="text-xs text-white/40 self-center">Secured by Stripe · Instant access · Questions? We'll help</p>
             </div>
           </div>
         </section>
@@ -455,7 +455,7 @@ export default function PreviewPage() {
                 ))}
               </div>
               <UnlockButton className="w-full text-base font-semibold" />
-              <p className="text-xs text-white/40 text-center">Secured by Stripe · Instant access · 7-day guarantee</p>
+              <p className="text-xs text-white/40 text-center">Secured by Stripe · Instant access · Questions? We'll help</p>
               <p className="text-xs text-white/35 text-center">
                 Already purchased?{" "}
                 <Link href="/recover" className="underline underline-offset-2 hover:text-white transition-colors" data-testid="link-recover-access-preview">

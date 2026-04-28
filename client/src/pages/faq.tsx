@@ -114,8 +114,8 @@ const FAQ_CATEGORIES = [
         a: "The free version includes the full 9-step financial wizard, entry of all assets and liabilities, and a preview of your total marital asset pool as a ring chart. The full settlement analysis — including FSI scores, monthly cashflow, stress testing, projections, and the PDF brief — requires a one-time payment of £79.",
       },
       {
-        q: "Can I get a refund?",
-        a: "Yes. If you're not satisfied, contact us at support@divorcecalculatoruk.co.uk within 7 days of purchase and we'll issue a full refund — no questions asked. Full details are on the Refund Policy page.",
+        q: "What support do I get after purchase?",
+        a: "If you have questions about your results or how to interpret your analysis, email support@divorcecalculatoruk.co.uk within 7 days of purchase and we'll help you get the most from your model. For billing queries or technical issues that prevent access, contact the same address and we'll resolve them promptly.",
       },
     ],
   },

@@ -156,9 +156,9 @@ export default function UnlockPage() {
                   )}
                 </Button>
 
-                <div className="flex items-center justify-center gap-1.5 text-xs text-green-300/80">
+                <div className="flex items-center justify-center gap-1.5 text-xs text-white/50">
                   <CheckCircle className="w-3.5 h-3.5" />
-                  <span>7-day money-back guarantee — email <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline">support@divorcecalculatoruk.co.uk</a></span>
+                  <span>Questions about your results? Email <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline">support@divorcecalculatoruk.co.uk</a> — we'll help within 7 days</span>
                 </div>
 
                 <p className="text-xs text-white/40 text-center">

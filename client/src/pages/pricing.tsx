@@ -2,7 +2,7 @@ import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Check, X, Shield, Lock, Zap, ArrowRight, RotateCcw } from "lucide-react";
+import { Check, X, Shield, Lock, Zap, ArrowRight, CheckCircle } from "lucide-react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useMetaTags } from "@/hooks/use-meta-tags";
 import { SiteNav } from "@/components/site-nav";
@@ -46,8 +46,8 @@ const FAQ_ITEMS = [
     a: "You can update your inputs and re-run the analysis as many times as you need within your 12-month access period. The model re-calculates instantly.",
   },
   {
-    q: "Is there a refund if it doesn't work for me?",
-    a: "Yes. If you're not satisfied within 7 days of purchase, contact us at support@divorcecalculatoruk.co.uk and we'll issue a full refund. See our full Refund Policy for details.",
+    q: "What if I have questions about my results?",
+    a: "Email support@divorcecalculatoruk.co.uk within 7 days of purchase and we'll help you understand your analysis and get the most from it. For technical access issues, contact the same address and we'll resolve them promptly.",
   },
 ];
 
@@ -165,12 +165,12 @@ export default function PricingPage() {
                 <ArrowRight className="w-4 h-4 ml-1.5" />
               </Button>
 
-              <div className="flex flex-col items-center gap-1 text-xs text-green-300/80">
+              <div className="flex flex-col items-center gap-1 text-xs text-white/50">
                 <div className="flex items-center gap-1.5">
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>7-day money-back guarantee</span>
+                  <CheckCircle className="w-3.5 h-3.5" />
+                  <span>Questions about your results?</span>
                 </div>
-                <span className="text-white/40">Email <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline hover:text-white/60 transition-colors">support@divorcecalculatoruk.co.uk</a> for any refund</span>
+                <span className="text-white/40">Email <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline hover:text-white/60 transition-colors">support@divorcecalculatoruk.co.uk</a> — we'll help within 7 days</span>
               </div>
 
               <p className="text-xs text-white/40 text-center">

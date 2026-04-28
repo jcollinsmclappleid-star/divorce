@@ -120,57 +120,130 @@ export default function LandingPage() {
             <rect width="100%" height="100%" fill="url(#hero-dot-grid)" />
           </svg>
         </div>
-        <div className="container mx-auto px-4 pt-16 pb-20 md:pt-24 md:pb-28 relative">
-          <div className="max-w-2xl mx-auto text-center space-y-6">
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              <Badge variant="outline" className="text-xs px-3 py-1 border-gold/50 text-gold bg-gold/10">
-                UK 2026/27 Tax &amp; NI Rates
-              </Badge>
+        <div className="container mx-auto px-4 pt-14 pb-20 md:pt-20 md:pb-28 relative">
+          <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+
+            {/* Left — copy */}
+            <div className="space-y-5">
+              <div>
+                <Badge variant="outline" className="text-xs px-3 py-1 border-gold/50 text-gold bg-gold/10">
+                  England &amp; Wales · HMRC 2026/27 rates
+                </Badge>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight text-white" data-testid="text-hero-headline">
+                Stop negotiating your divorce{" "}
+                <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">blind.</span>
+              </h1>
+              <p className="text-base md:text-lg text-white/70 leading-relaxed">
+                In 20 minutes, see what each settlement option means for your financial future — which are sustainable, which leave you stretched, and where your money stands in 5 years. Free to start. No sign-up.
+              </p>
+              <p className="text-sm text-white/50 leading-relaxed border-l-2 border-gold/40 pl-3">
+                If you're here, you're worried about the house, your finances, and what comes next. This shows you exactly where you stand — in numbers.
+              </p>
+
+              {/* Trust pills */}
+              <div className="flex flex-wrap gap-2 pt-1">
+                {[
+                  { text: "HMRC-sourced tax rate bands" },
+                  { text: "Your figures never leave your browser" },
+                  { text: "Questions? We'll help within 7 days" },
+                ].map((pill, i) => (
+                  <span key={i} className="flex items-center gap-1.5 text-[11px] text-white/50 bg-white/5 border border-white/10 rounded-full px-3 py-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-gold/60 flex-shrink-0" />
+                    {pill.text}
+                  </span>
+                ))}
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-col gap-3 pt-1">
+                <Button
+                  size="lg"
+                  onClick={startFresh}
+                  data-testid="button-hero-start"
+                  className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 btn-shimmer w-full sm:w-auto"
+                >
+                  Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1.5" />
+                </Button>
+                <div className="flex flex-wrap items-center gap-4 text-xs text-white/40">
+                  <button
+                    onClick={() => { scrollTop(); setLocation("/unlock"); }}
+                    data-testid="button-hero-buy-now"
+                    className="underline underline-offset-2 text-white/45 hover:text-white/70 transition-colors"
+                  >
+                    Already modelled? Unlock full analysis — £79 →
+                  </button>
+                  <span className="hidden sm:inline">·</span>
+                  <button
+                    onClick={loadExample}
+                    className="underline underline-offset-2 text-white/45 hover:text-white/70 transition-colors"
+                    data-testid="button-hero-example"
+                  >
+                    View example →
+                  </button>
+                  <span className="hidden sm:inline">·</span>
+                  <Link href="/free-guide" onClick={scrollTop} className="underline underline-offset-2 text-white/45 hover:text-white/70 transition-colors" data-testid="link-hero-free-guide">
+                    Free guide →
+                  </Link>
+                </div>
+              </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight text-white" data-testid="text-hero-headline">
-              Stop negotiating your divorce{" "}
-              <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">blind.</span>
-            </h1>
-            <p className="text-lg text-white/70 leading-relaxed">
-              In 20 minutes, see exactly what each settlement option means for your financial future — which ones are sustainable, which leave you stretched, and what your money looks like in five years under each. Free to start. No sign-up.
-            </p>
-            <p className="text-sm text-white/50 leading-relaxed border-l-2 border-gold/40 pl-3 text-left">
-              If you're here, you're probably trying to make sense of a situation that feels financially overwhelming. You're not sure what you're entitled to, you're worried about the house, and you don't know whether you can afford to keep it. That's exactly what this is for.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-1">
-              <Button
-                size="lg"
-                onClick={startFresh}
-                data-testid="button-hero-start"
-                className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 btn-shimmer"
-              >
-                Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1.5" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => { scrollTop(); setLocation("/unlock"); }}
-                data-testid="button-hero-buy-now"
-                className="border-white/25 text-white hover:bg-white/10 hover:text-white bg-transparent"
-              >
-                Unlock My Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" />
-              </Button>
+
+            {/* Right — product preview (desktop only) */}
+            <div className="hidden md:block" aria-hidden="true">
+              <div className="rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-sm overflow-hidden shadow-2xl shadow-black/40">
+                {/* Window chrome */}
+                <div className="flex items-center gap-1.5 px-4 py-2.5 bg-white/[0.04] border-b border-white/10">
+                  <div className="w-2.5 h-2.5 rounded-full bg-white/15" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-white/15" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-white/15" />
+                  <span className="text-[10px] text-white/25 ml-2 font-mono">Full analysis — 4 scenarios</span>
+                </div>
+                {/* Content */}
+                <div className="p-5 space-y-4">
+                  {/* Scenario rows */}
+                  <div className="space-y-2.5">
+                    <p className="text-[10px] text-white/30 uppercase tracking-wider font-medium">Settlement scenario comparison</p>
+                    {[
+                      { name: "Sell & Split", equity: "£187,500", bar: 78, color: "bg-cyan-400", tag: "Balanced", tagCls: "text-cyan-300 bg-cyan-400/15" },
+                      { name: "A Keeps Home", equity: "£215,000", bar: 91, color: "bg-emerald-400", tag: "Sustainable", tagCls: "text-emerald-300 bg-emerald-400/15" },
+                      { name: "B Keeps Home", equity: "£142,000", bar: 58, color: "bg-amber-400", tag: "Stretched", tagCls: "text-amber-300 bg-amber-400/15" },
+                      { name: "Deferred Sale", equity: "£198,000", bar: 73, color: "bg-violet-400", tag: "Complex", tagCls: "text-violet-300 bg-violet-400/15" },
+                    ].map((s, i) => (
+                      <div key={i} className="flex items-center gap-2.5">
+                        <span className="text-[10px] text-white/45 w-22 flex-shrink-0 truncate" style={{ width: "5.5rem" }}>{s.name}</span>
+                        <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                          <div className={`h-full rounded-full ${s.color} opacity-75 transition-all`} style={{ width: `${s.bar}%` }} />
+                        </div>
+                        <span className="text-[10px] font-mono text-white/60 flex-shrink-0 w-16 text-right">{s.equity}</span>
+                        <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 ${s.tagCls}`}>{s.tag}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Stats row */}
+                  <div className="border-t border-white/10 pt-3 grid grid-cols-3 gap-2">
+                    <div className="text-center">
+                      <p className="text-sm font-bold text-emerald-400">+£847</p>
+                      <p className="text-[9px] text-white/30 mt-0.5">Best mo. surplus</p>
+                    </div>
+                    <div className="text-center border-x border-white/10">
+                      <p className="text-sm font-bold text-gold">78/100</p>
+                      <p className="text-[9px] text-white/30 mt-0.5">Sustainability</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-bold text-violet-300">+£23k</p>
+                      <p className="text-[9px] text-white/30 mt-0.5">5-yr capital gain</p>
+                    </div>
+                  </div>
+                  {/* Locked banner */}
+                  <div className="bg-gold/8 border border-gold/25 rounded-lg px-3 py-2 flex items-center gap-2">
+                    <Lock className="w-3 h-3 text-gold/60 flex-shrink-0" />
+                    <p className="text-[10px] text-gold/70">Full analysis: stress tests · PDF report · sustainability scores</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-white/40 pt-1">
-              <span>Private. All calculations run in your browser.</span>
-              <span>·</span>
-              <button
-                onClick={loadExample}
-                className="underline underline-offset-2 text-white/55 hover:text-white transition-colors"
-                data-testid="button-hero-example"
-              >
-                View example →
-              </button>
-              <span>·</span>
-              <Link href="/free-guide" onClick={scrollTop} className="underline underline-offset-2 text-white/55 hover:text-white transition-colors" data-testid="link-hero-free-guide">
-                Free guide →
-              </Link>
-            </div>
+
           </div>
         </div>
       </section>
@@ -184,7 +257,7 @@ export default function LandingPage() {
               { icon: Shield, text: "HMRC 2026/27 tax rates", iconColor: "text-cyan-600", bg: "bg-cyan-50" },
               { icon: TrendingUp, text: "England & Wales", iconColor: "text-violet-600", bg: "bg-violet-50" },
               { icon: ArrowRight, text: "No sign-up to start", iconColor: "text-sky-600", bg: "bg-sky-50" },
-              { icon: Check, text: "7-day money-back guarantee", iconColor: "text-emerald-600", bg: "bg-emerald-50" },
+              { icon: Check, text: "Questions? We'll help within 7 days", iconColor: "text-emerald-600", bg: "bg-emerald-50" },
             ].map((badge, i) => (
               <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/50 bg-background shadow-sm" data-testid={`badge-trust-${i}`}>
                 <div className={`w-5 h-5 rounded-full ${badge.bg} flex items-center justify-center flex-shrink-0`}>
@@ -355,7 +428,7 @@ export default function LandingPage() {
               <div className="flex flex-wrap gap-2 justify-center md:justify-end text-xs text-muted-foreground">
                 <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Free preview included</span>
                 <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Full analysis £79 one-time</span>
-                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> 7-day guarantee</span>
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Email support included</span>
               </div>
               <Link href="/pricing" onClick={scrollTop} className="text-xs text-primary hover:underline block" data-testid="link-see-full-pricing">
                 See full pricing &amp; what's included →
@@ -500,7 +573,7 @@ export default function LandingPage() {
             </div>
             <div>
               <p className="font-semibold text-muted-foreground/80 mb-1">Contact &amp; support</p>
-              <p>Support: <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline">support@divorcecalculatoruk.co.uk</a>. 7-day money-back guarantee on all purchases. Full methodology available at <Link href="/methodology" className="underline">/methodology</Link>. Privacy policy at <Link href="/privacy" className="underline">/privacy</Link>.</p>
+              <p>Support: <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline">support@divorcecalculatoruk.co.uk</a>. Questions about your results? Email us and we'll help. Full methodology available at <Link href="/methodology" className="underline">/methodology</Link>. Privacy policy at <Link href="/privacy" className="underline">/privacy</Link>.</p>
             </div>
           </div>
         </div>
@@ -512,7 +585,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="text-sm font-semibold text-white">Questions before you start?</h3>
-              <p className="text-xs text-white/55 mt-1">We're here to help — get in touch any time. <span className="text-gold/70">7-day money-back guarantee on all purchases.</span></p>
+              <p className="text-xs text-white/55 mt-1">We're here to help — get in touch any time. Questions about your results? Email us and we'll help.</p>
             </div>
             <div className="flex flex-wrap items-center gap-4 shrink-0">
               <a

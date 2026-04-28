@@ -212,7 +212,7 @@ export default function AboutPage() {
             </div>
           </div>
           <p className="text-sm text-muted-foreground mt-4 leading-relaxed">
-            Average UK divorce legal fees are £12,000–£15,000 per person. This tool is designed to help you prepare before those conversations begin — not to replace them. 7-day money-back guarantee on all purchases.
+            Average UK divorce legal fees are £12,000–£15,000 per person. This tool is designed to help you prepare before those conversations begin — not to replace them. Questions about your results? Email support@divorcecalculatoruk.co.uk within 7 days and we'll help.
           </p>
         </div>
       </section>
