@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import {
   Lock, Check, Shield, ArrowRight, Loader2,
   TrendingUp, AlertCircle, Eye, ChevronRight,
+  BarChart3, Sparkles,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
@@ -144,7 +145,7 @@ export default function PreviewPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
           <Logo size="sm" />
@@ -486,15 +487,46 @@ export default function PreviewPage() {
         {/* ── Pricing CTA ── */}
         <section>
           <div className="rounded-2xl bg-primary border border-white/10 shadow-2xl overflow-hidden" data-testid="card-pricing-cta">
-            <div className="px-6 pt-6 pb-3 text-center border-b border-white/10 space-y-2">
+
+            {/* Price hero */}
+            <div className="px-6 pt-6 pb-4 text-center border-b border-white/10 space-y-1.5">
               <div className="inline-flex items-center gap-1.5 bg-gold/15 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full">
-                Twelve Months · Unlimited Access
+                Two products · One price · 12 months access
               </div>
               <div className="text-5xl font-bold tracking-tight text-gold pt-1" data-testid="text-price">£79</div>
-              <div className="text-sm text-white/55 pb-1">One-time payment. No subscription.</div>
-              <p className="text-xs text-white/40 italic">A single solicitor hour costs £250–£400. This gives you the clarity to walk in prepared.</p>
+              <div className="text-sm text-white/55">One-time payment. No subscription.</div>
+              <p className="text-xs text-white/35 italic">A single solicitor hour costs £250–£400. This gives you the clarity to walk in prepared.</p>
             </div>
+
+            {/* Two product blocks */}
+            <div className="px-5 pt-4 pb-3 space-y-2.5 border-b border-white/10">
+              <div className="flex gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
+                <div className="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                  <BarChart3 className="w-4 h-4 text-cyan-300" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-white">Settlement Analyser</p>
+                  <p className="text-[10px] text-white/45 mt-0.5 leading-relaxed">Four scenarios fully modelled — CRI scores, 5-year projections, mortgage checks and stress testing.</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 border-t border-dashed border-white/15" />
+                <span className="text-sm font-bold text-white/30">+</span>
+                <div className="flex-1 border-t border-dashed border-white/15" />
+              </div>
+              <div className="flex gap-3 p-3 rounded-xl bg-gold/8 border border-gold/20">
+                <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center shrink-0 mt-0.5">
+                  <Sparkles className="w-4 h-4 text-gold" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-white">Guided Intelligence Report</p>
+                  <p className="text-[10px] text-white/45 mt-0.5 leading-relaxed">Plain-English interpretation — what stands out, where the pressure points are, and tailored questions for your solicitor, broker and pension adviser.</p>
+                </div>
+              </div>
+            </div>
+
             <div className="px-6 py-5 space-y-4">
+              {/* Stat strip */}
               <div className="grid grid-cols-3 gap-2 text-center">
                 {[
                   { stat: "20 min", label: "First model" },
@@ -507,6 +539,7 @@ export default function PreviewPage() {
                   </div>
                 ))}
               </div>
+              {/* Feature bullets */}
               <div className="space-y-2">
                 {[
                   "Full settlement comparison — all four options modelled and scored",

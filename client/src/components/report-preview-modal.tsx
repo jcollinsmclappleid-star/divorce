@@ -111,9 +111,9 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
               <div className="border-t border-white/15 pt-5">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-1 h-6 bg-gold rounded-full" />
-                  <h1 className="text-2xl font-bold text-white tracking-tight">Divorce Financial Report</h1>
+                  <h1 className="text-2xl font-bold text-white tracking-tight">Structured Financial Brief</h1>
                 </div>
-                <p className="text-sm text-white/50 ml-3">Illustrative financial modelling · England & Wales · 4 scenarios analysed</p>
+                <p className="text-sm text-white/50 ml-3">Illustrative modelling · England & Wales · 4 scenarios analysed</p>
               </div>
               <div className="mt-5 grid grid-cols-3 gap-3">
                 {[
@@ -127,6 +127,15 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                   </div>
                 ))}
               </div>
+              {/* Two-product badge strip */}
+              <div className="mt-5 flex flex-wrap gap-2">
+                <div className="flex items-center gap-1.5 bg-cyan-400/15 border border-cyan-400/25 text-cyan-300 text-[10px] font-semibold px-3 py-1 rounded-full">
+                  <BookOpen className="w-3 h-3" /> Settlement Analyser
+                </div>
+                <div className="flex items-center gap-1.5 bg-gold/15 border border-gold/25 text-gold text-[10px] font-semibold px-3 py-1 rounded-full">
+                  <FileSearch className="w-3 h-3" /> Guided Intelligence Report
+                </div>
+              </div>
             </div>
           </div>
 
@@ -134,6 +143,14 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
           <div className="p-4 border border-amber-200 bg-amber-50 rounded-xl text-xs text-amber-900 leading-relaxed flex items-start gap-3">
             <span className="text-amber-600 font-bold shrink-0 mt-0.5 text-[10px] uppercase tracking-wider">Sample</span>
             <p>This report uses entirely fictional figures for illustration. It does not constitute legal, tax, or financial advice. Independent professional review is recommended before making any financial decisions.</p>
+          </div>
+
+          {/* Product 1 label */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 bg-cyan-50 border border-cyan-200 text-cyan-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+              <BookOpen className="w-3 h-3" /> Settlement Analyser
+            </div>
+            <div className="flex-1 border-t border-dashed border-gray-200" />
           </div>
 
           {/* 1. Financial Position */}
@@ -459,19 +476,28 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
             </div>
           </section>
 
+          {/* Product 2 label */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 border-t border-dashed border-gray-200" />
+            <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+              <Sparkles className="w-3 h-3" /> Guided Intelligence Report
+            </div>
+            <div className="flex-1 border-t border-dashed border-gray-200" />
+          </div>
+
           {/* Guided Intelligence Report */}
           <section>
-            <div className="bg-gradient-to-r from-[hsl(220_52%_22%)] to-[hsl(220_52%_16%)] rounded-xl px-5 py-4 mb-5 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-[hsl(220_52%_22%)] to-[hsl(220_52%_16%)] rounded-xl px-5 py-4 mb-5 flex items-center justify-between flex-wrap gap-3">
               <div className="flex items-center gap-3">
                 <div className="w-7 h-7 rounded-lg bg-gold/20 flex items-center justify-center shrink-0">
                   <Sparkles className="w-4 h-4 text-gold" />
                 </div>
                 <div>
                   <h3 className="text-xs font-bold text-white uppercase tracking-widest">Guided Intelligence Report</h3>
-                  <p className="text-[10px] text-white/40 mt-0.5">Intelligently generated plain-English interpretation from this scenario's figures</p>
+                  <p className="text-[10px] text-white/40 mt-0.5">Intelligently generated plain-English interpretation of your figures</p>
                 </div>
               </div>
-              <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">Confidence: Medium</span>
+              <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full shrink-0">Confidence: Medium</span>
             </div>
 
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-5">

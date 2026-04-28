@@ -169,7 +169,7 @@ export default function ResultsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col font-sans">
+    <div className="min-h-screen bg-background flex flex-col font-sans overflow-x-hidden">
       <div className="bg-primary/10 text-primary px-4 py-1.5 text-xs text-center font-medium border-b border-primary/20 flex items-center justify-center gap-3 flex-wrap" data-testid="text-disclaimer">
         <span>Illustrative modelling only. Not legal, tax or financial advice.</span>
         <AccessExpiryNotice />
