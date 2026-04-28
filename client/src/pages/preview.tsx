@@ -440,7 +440,7 @@ export default function PreviewPage() {
                     <span className="text-gold text-sm font-bold">✦</span>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-white">Guided Report Summary</p>
+                    <p className="text-sm font-semibold text-white">Guided Intelligence Report</p>
                     <p className="text-[10px] text-white/45 mt-0.5">Plain-English interpretation of your figures</p>
                   </div>
                 </div>
@@ -514,7 +514,7 @@ export default function PreviewPage() {
                   "Monthly cashflow view — income, housing costs, surplus/deficit",
                   "5-year capital projections with charts",
                   "Mortgage pressure checks and affordability benchmarks",
-                  "Guided Report Summary — plain-English takeaways and questions for professionals",
+                  "Guided Intelligence Report — plain-English takeaways and questions for professionals",
                   "Downloadable Structured Financial Brief (PDF)",
                   "12 months' access — unlimited re-runs as negotiations progress",
                 ].map(item => (
@@ -607,7 +607,7 @@ export default function PreviewPage() {
                 "Cashflow Resilience Indicator scores",
                 "5-year capital projection charts",
                 "Housing feasibility benchmark",
-                "Guided Report Summary — plain-English takeaways",
+                "Guided Intelligence Report — plain-English takeaways and tailored questions",
                 "Sensitivity stress-test sliders",
                 "Downloadable professional PDF",
                 "12 months' access — unlimited re-runs",

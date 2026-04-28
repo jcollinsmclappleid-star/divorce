@@ -101,12 +101,12 @@ export default function PrivacyPage() {
 
             <p className="font-medium mt-2">Data processed locally in your browser (not transmitted to our servers):</p>
             <ul className="list-disc pl-6 space-y-1">
-              <li><strong>Financial modelling data:</strong> Asset values, liabilities, income figures, expense figures, property details, pension values, and other financial information you enter into the modelling tool. This data is processed entirely within your web browser using client-side JavaScript and is stored in your browser's localStorage. It is not transmitted to, received by, or stored on our servers unless you choose to use the optional Guided Report Summary feature (see below).</li>
+              <li><strong>Financial modelling data:</strong> Asset values, liabilities, income figures, expense figures, property details, pension values, and other financial information you enter into the modelling tool. This data is processed entirely within your web browser using client-side JavaScript and is stored in your browser's localStorage. It is not transmitted to, received by, or stored on our servers unless you choose to use the optional Guided Intelligence Report feature (see below).</li>
             </ul>
 
             <p className="font-medium mt-2">Data processed and stored on our servers:</p>
             <ul className="list-disc pl-6 space-y-1">
-              <li><strong>Guided Report Summary request data (optional):</strong> When you choose to generate a Guided Report Summary, selected de-identified model figures are securely transmitted to our server and forwarded to OpenAI for processing. Only calculated numerical outputs are included — no names, contact details, addresses, employer information, documents, messages, or free-text content of any kind. This transmission occurs only when you explicitly click the "Generate Guided Summary" button. See Section 8 for full details.</li>
+              <li><strong>Guided Intelligence Report request data (optional):</strong> When you choose to generate a Guided Intelligence Report, selected de-identified model figures are securely transmitted to our server and forwarded to OpenAI for processing. Only calculated numerical outputs are included — no names, contact details, addresses, employer information, documents, messages, or free-text content of any kind. This transmission occurs only when you explicitly click the "Generate Guided Summary" button. See Section 8 for full details.</li>
               <li><strong>Session tokens:</strong> Anonymised, randomly generated identifiers stored in your browser's localStorage and transmitted to our server to verify access entitlements. Session tokens do not contain personal financial data and cannot be used to identify you personally.</li>
               <li><strong>Email address:</strong> We collect and store your email address in the following circumstances: (1) When you make a purchase, Stripe provides your email address from the checkout form; (2) When you use the access recovery page and enter your email to regain access. Your email is stored with your purchase record and used solely for sending transactional emails (purchase confirmation, access recovery links, and access expiry notifications).</li>
               <li><strong>Payment records:</strong> When you make a purchase, we store a record of the transaction including: Stripe checkout session ID, payment status, purchase timestamp, access expiry date, and your email address. We do not receive, process, or store your payment card number, CVV, or bank account details — these are processed exclusively by Stripe.</li>
@@ -127,7 +127,7 @@ export default function PrivacyPage() {
             <p>Under Article 6 of the UK GDPR, we process your personal data on the following lawful bases:</p>
             <ul className="list-disc pl-6 space-y-1">
               <li><strong>Contract (Article 6(1)(b)):</strong> Processing of session tokens, payment records, and email addresses is necessary for the performance of our contract with you — specifically, to provide and manage access to the Service following your purchase, send transactional emails (confirmations, recovery links, expiry notifications), and support your access recovery requests.</li>
-              <li><strong>Consent (Article 6(1)(a)):</strong> When you choose to use the optional Guided Report Summary feature, the transmission of de-identified model figures to our server and to our third-party language model sub-processor is based on your explicit consent, given by clicking the "Generate Guided Summary" button after being shown a clear notice of what will be processed. You may withdraw this consent at any time by not using the feature — any previously generated summary is stored locally in your browser only and is not retained by us.</li>
+              <li><strong>Consent (Article 6(1)(a)):</strong> When you choose to use the optional Guided Intelligence Report feature, the transmission of de-identified model figures to our server and to our third-party language model sub-processor is based on your explicit consent, given by clicking the "Generate Guided Summary" button after being shown a clear notice of what will be processed. You may withdraw this consent at any time by not using the feature — any previously generated summary is stored locally in your browser only and is not retained by us.</li>
               <li><strong>Legitimate interests (Article 6(1)(f)):</strong> Processing of server access logs is necessary for our legitimate interests in maintaining the security, stability, and integrity of the Service, and for fraud prevention. We have assessed that this processing does not override your rights and freedoms given the limited and non-identifying nature of the data collected.</li>
               <li><strong>Legal obligation (Article 6(1)(c)):</strong> We may retain certain records (such as payment transaction records) where required to comply with applicable tax, accounting, or regulatory obligations.</li>
             </ul>
@@ -137,7 +137,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-semibold text-foreground">4. Client-Side Processing</h2>
             <p>All core financial modelling calculations are performed entirely within your web browser. The financial data you enter — including income, assets, liabilities, expenses, and property details — is processed using client-side JavaScript and stored in your browser's localStorage.</p>
             <p>This data is not transmitted to or stored on our servers as part of the core modelling tool. You may delete this data at any time by clearing your browser's localStorage or site data for this website.</p>
-            <p><strong>Exception — Guided Report Summary (optional):</strong> If you choose to use the Guided Report Summary feature, selected de-identified model figures are transmitted to our server and processed by a third-party language model service. No names, addresses, or identifying information are included in this transmission. This occurs only when you explicitly activate the feature. See Section 8 for full details including the third-party sub-processor involved and the safeguards applied.</p>
+            <p><strong>Exception — Guided Intelligence Report (optional):</strong> If you choose to use the Guided Intelligence Report feature, selected de-identified model figures are transmitted to our server and processed by a third-party language model service. No names, addresses, or identifying information are included in this transmission. This occurs only when you explicitly activate the feature. See Section 8 for full details including the third-party sub-processor involved and the safeguards applied.</p>
           </section>
 
           <section>
@@ -161,7 +161,7 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-6 space-y-1">
               <li><strong>Stripe (payment processor):</strong> When you make a payment, your payment card details and email address are submitted directly from your browser to Stripe. We do not receive or handle your card details. Stripe processes your payment data as an independent data controller under its own <a href="https://stripe.com/gb/privacy" target="_blank" rel="noopener noreferrer" className="underline text-primary">Privacy Policy</a>.</li>
               <li><strong>Resend (email service provider):</strong> To send you transactional emails (purchase confirmations and access recovery links), we share your email address with Resend, a third-party email service provider. Resend processes your email address solely for the purpose of delivering transactional emails and does not use it for marketing or other purposes. Resend acts as a data processor under their <a href="https://resend.com/privacy" target="_blank" rel="noopener noreferrer" className="underline text-primary">Privacy Policy</a>.</li>
-              <li><strong>OpenAI (Guided Report Summary sub-processor):</strong> When you choose to use the optional Guided Report Summary feature, selected de-identified model figures are forwarded to OpenAI for processing. OpenAI acts as a data processor under a data processing agreement. The figures transmitted contain no names, contact details, addresses, or free-text personal information. OpenAI does not use API-submitted data to train its models under its standard API data processing terms. See Section 8 for full details.</li>
+              <li><strong>OpenAI (Guided Intelligence Report sub-processor):</strong> When you choose to use the optional Guided Intelligence Report feature, selected de-identified model figures are forwarded to OpenAI for processing. OpenAI acts as a data processor under a data processing agreement. The figures transmitted contain no names, contact details, addresses, or free-text personal information. OpenAI does not use API-submitted data to train its models under its standard API data processing terms. See Section 8 for full details.</li>
               <li><strong>Hosting infrastructure:</strong> The Service is hosted on cloud infrastructure. Our hosting provider processes server access logs and other data as a data processor acting on our instructions. They do not have independent access to or use of your data.</li>
               <li><strong>Legal requirements:</strong> We may disclose personal data where required to do so by law, regulation, legal process, or enforceable governmental request, or to protect our rights, property, or safety, or the rights, property, or safety of others.</li>
             </ul>
@@ -169,7 +169,7 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-xl font-semibold text-foreground">7. International Data Transfers</h2>
-            <p>Our hosting infrastructure, payment processor (Stripe), and — where you use the optional Guided Report Summary feature — our language model sub-processor (OpenAI, based in the United States) may process data outside the United Kingdom. Where personal data is transferred outside the UK, we ensure that appropriate safeguards are in place in accordance with Chapter V of the UK GDPR. These safeguards may include:</p>
+            <p>Our hosting infrastructure, payment processor (Stripe), and — where you use the optional Guided Intelligence Report feature — our language model sub-processor (OpenAI, based in the United States) may process data outside the United Kingdom. Where personal data is transferred outside the UK, we ensure that appropriate safeguards are in place in accordance with Chapter V of the UK GDPR. These safeguards may include:</p>
             <ul className="list-disc pl-6 space-y-1">
               <li>Transfers to countries subject to a UK adequacy decision</li>
               <li>International Data Transfer Agreements (IDTAs) or standard contractual clauses approved by the ICO</li>
@@ -179,8 +179,8 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground">8. Guided Report Summary & Third-Party Processing</h2>
-            <p>The Guided Report Summary is an optional feature available to paid users. When you choose to generate a Guided Report Summary, the following applies:</p>
+            <h2 className="text-xl font-semibold text-foreground">8. Guided Intelligence Report & Third-Party Processing</h2>
+            <p>The Guided Intelligence Report is an optional feature available to paid users. When you choose to generate a Guided Intelligence Report, the following applies:</p>
 
             <p className="font-medium mt-3">What is sent:</p>
             <ul className="list-disc pl-6 space-y-1">
@@ -216,7 +216,7 @@ export default function PrivacyPage() {
             </ul>
 
             <p className="font-medium mt-3">Retention:</p>
-            <p>We do not store the Guided Report Summary response on our servers. Once generated, the summary is returned to your browser and stored locally in your browser's localStorage alongside your other modelling data. It is not retained by us or by OpenAI beyond the processing of that single request.</p>
+            <p>We do not store the Guided Intelligence Report response on our servers. Once generated, the report is returned to your browser and stored locally in your browser's localStorage alongside your other modelling data. It is not retained by us or by OpenAI beyond the processing of that single request.</p>
           </section>
 
           <section>

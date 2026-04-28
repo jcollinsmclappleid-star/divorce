@@ -459,16 +459,16 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
             </div>
           </section>
 
-          {/* Guided Report Summary */}
+          {/* Guided Intelligence Report */}
           <section>
             <div className="bg-gradient-to-r from-[hsl(220_52%_22%)] to-[hsl(220_52%_16%)] rounded-xl px-5 py-4 mb-5 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-7 h-7 rounded-lg bg-gold/20 flex items-center justify-center shrink-0">
-                  <BookOpen className="w-4 h-4 text-gold" />
+                  <Sparkles className="w-4 h-4 text-gold" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-white uppercase tracking-widest">Guided Report Summary</h3>
-                  <p className="text-[10px] text-white/40 mt-0.5">Plain-English interpretation generated from this scenario's figures</p>
+                  <h3 className="text-xs font-bold text-white uppercase tracking-widest">Guided Intelligence Report</h3>
+                  <p className="text-[10px] text-white/40 mt-0.5">Intelligently generated plain-English interpretation from this scenario's figures</p>
                 </div>
               </div>
               <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">Confidence: Medium</span>

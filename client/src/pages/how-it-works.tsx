@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   ArrowRight, Check, Shield, Lock, BarChart3,
   ClipboardList, Home, PoundSterling, Scale,
-  TrendingUp, FileText, Activity, Users,
+  TrendingUp, FileText, Activity, Users, Sparkles, HelpCircle,
 } from "lucide-react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useMetaTags } from "@/hooks/use-meta-tags";
@@ -37,22 +37,19 @@ const STEP_CATS = [
   { bg: "bg-amber-50", border: "border-amber-300", iconColor: "text-amber-600", lbl: "bg-amber-100 text-amber-700", lineColor: "#F59E0B", label: "Scenarios" },
 ];
 
-const FEATURE_COLORS = [
-  { bg: "bg-rose-50", icon: "text-rose-600" },
-  { bg: "bg-cyan-50", icon: "text-cyan-600" },
-  { bg: "bg-emerald-50", icon: "text-emerald-600" },
-  { bg: "bg-violet-50", icon: "text-violet-600" },
-  { bg: "bg-amber-50", icon: "text-amber-600" },
-  { bg: "bg-blue-50", icon: "text-blue-600" },
+
+const ANALYSER_FEATURES = [
+  { icon: BarChart3, title: "Cashflow Resilience Indicator (CRI)", desc: "A 0–100 score for each settlement option reflecting its five-year viability based on income, outgoings, and capital.", color: { bg: "bg-rose-50", icon: "text-rose-600" } },
+  { icon: Scale, title: "4 settlement options side by side", desc: "Sell & Split, Party A keeps the home, Party B keeps the home, and a Deferred Sale — each showing the full net position.", color: { bg: "bg-cyan-50", icon: "text-cyan-600" } },
+  { icon: PoundSterling, title: "Monthly cashflow for each party", desc: "Net income after tax and NI, minus living costs and housing payments — showing monthly surplus or deficit.", color: { bg: "bg-violet-50", icon: "text-violet-600" } },
+  { icon: TrendingUp, title: "5-year capital projections", desc: "How the capital position of each settlement evolves over five years under your assumptions.", color: { bg: "bg-emerald-50", icon: "text-emerald-600" } },
+  { icon: Activity, title: "Stress testing & sensitivity analysis", desc: "Adjust interest rates, expenses, or house prices to see how resilient each settlement option is to change.", color: { bg: "bg-amber-50", icon: "text-amber-600" } },
 ];
 
-const RESULTS_FEATURES = [
-  { icon: BarChart3, title: "Cashflow Resilience Indicator", desc: "A 0–100 score for each settlement option reflecting its five-year viability based on income, outgoings, and capital." },
-  { icon: Scale, title: "4 settlement options side by side", desc: "Sell & Split, Party A keeps the home, Party B keeps the home, and a Deferred Sale — each showing the full net position." },
-  { icon: PoundSterling, title: "Monthly cashflow for each party", desc: "Net income after tax and NI, minus living costs and housing payments — showing monthly surplus or deficit." },
-  { icon: TrendingUp, title: "5-year capital projections", desc: "How the capital position of each settlement evolves over five years under your assumptions." },
-  { icon: Activity, title: "Stress testing", desc: "Adjust interest rates, expenses, or house prices to see how resilient each settlement option is to change." },
-  { icon: FileText, title: "Downloadable Financial Brief", desc: "A structured PDF summary of your full analysis — useful for solicitors, mediators, or your own records." },
+const REPORT_FEATURES = [
+  { icon: Sparkles, title: "Intelligently generated plain-English narrative", desc: "Our analysis engine reads your figures and produces a commentary — what stands out, where the financial pressure points are, and what to watch out for.", color: { bg: "bg-gold/10", icon: "text-gold" } },
+  { icon: HelpCircle, title: "Tailored professional questions", desc: "Bespoke questions to raise with your solicitor, mortgage broker, and pension adviser — produced from your specific numbers so you walk into every consultation prepared.", color: { bg: "bg-rose-50", icon: "text-rose-500" } },
+  { icon: FileText, title: "Downloadable Structured Financial Brief", desc: "A print-ready PDF of your full analysis — useful for professional meetings, your own records, or sharing with a mediator.", color: { bg: "bg-blue-50", icon: "text-blue-600" } },
 ];
 
 const TRUST_ITEMS = [
@@ -148,8 +145,8 @@ export default function HowItWorksPage() {
               },
               {
                 step: "03",
-                title: "Unlock your full analysis",
-                desc: "One payment of £79 unlocks 12 months of access to the complete analysis: CRI scores, monthly cashflow, stress testing, five-year projections, and a downloadable brief.",
+                title: "Unlock both products",
+                desc: "One payment of £79 unlocks two products for 12 months: your Settlement Analyser (CRI scores, cashflow, stress testing, 5-year projections) and your Guided Intelligence Report — an intelligently generated plain-English analysis with tailored professional questions.",
                 tag: "£79 · 12-month access",
                 color: "bg-amber-50 border-amber-200",
                 tagColor: "text-amber-700 bg-amber-100 font-semibold",
@@ -227,31 +224,72 @@ export default function HowItWorksPage() {
       <section className="py-16 md:py-20 bg-background" data-testid="section-results-features">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-display font-bold">What your full analysis includes</h2>
+            <h2 className="text-2xl md:text-3xl font-display font-bold">What both products include</h2>
             <p className="text-muted-foreground mt-3 text-sm max-w-xl mx-auto">
-              Once unlocked, the full analysis stays available for twelve months. Download, revisit, and stress test as many times as you need.
+              Once unlocked, both products stay available for twelve months — revisit and re-run as many times as you need.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-5">
-            {RESULTS_FEATURES.map((feature, i) => {
-              const fc = FEATURE_COLORS[i];
-              return (
+          {/* Product 1: Settlement Analyser */}
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-7 h-7 rounded-lg bg-cyan-100 flex items-center justify-center">
+                <BarChart3 className="w-4 h-4 text-cyan-600" />
+              </div>
+              <h3 className="text-sm font-bold text-foreground uppercase tracking-wide">Settlement Analyser</h3>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {ANALYSER_FEATURES.map((feature, i) => (
                 <div
                   key={i}
-                  className="flex gap-4 p-5 rounded-xl border border-border/50 bg-background hover:shadow-card-hover hover:border-border transition-all"
-                  data-testid={`card-result-feature-${i}`}
+                  className="flex gap-4 p-4 rounded-xl border border-border/50 bg-background hover:shadow-sm hover:border-border transition-all"
+                  data-testid={`card-analyser-feature-${i}`}
                 >
-                  <div className={`w-9 h-9 rounded-lg ${fc.bg} flex items-center justify-center flex-shrink-0`}>
-                    <feature.icon className={`w-4 h-4 ${fc.icon}`} />
+                  <div className={`w-9 h-9 rounded-lg ${feature.color.bg} flex items-center justify-center flex-shrink-0`}>
+                    <feature.icon className={`w-4 h-4 ${feature.color.icon}`} />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-foreground">{feature.title}</p>
                     <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{feature.desc}</p>
                   </div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="flex items-center gap-4 mb-8">
+            <div className="flex-1 border-t border-dashed border-border/50" />
+            <span className="text-xl font-bold text-muted-foreground/40">+</span>
+            <div className="flex-1 border-t border-dashed border-border/50" />
+          </div>
+
+          {/* Product 2: Guided Intelligence Report */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-7 h-7 rounded-lg bg-gold/15 flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-gold" />
+              </div>
+              <h3 className="text-sm font-bold text-foreground uppercase tracking-wide">Guided Intelligence Report</h3>
+              <span className="text-[10px] font-semibold text-gold bg-gold/10 border border-gold/20 px-2 py-0.5 rounded-full ml-1">Intelligently generated</span>
+            </div>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {REPORT_FEATURES.map((feature, i) => (
+                <div
+                  key={i}
+                  className="flex gap-4 p-4 rounded-xl border border-gold/20 bg-gold/5 hover:shadow-sm transition-all"
+                  data-testid={`card-report-feature-${i}`}
+                >
+                  <div className={`w-9 h-9 rounded-lg ${feature.color.bg} flex items-center justify-center flex-shrink-0`}>
+                    <feature.icon className={`w-4 h-4 ${feature.color.icon}`} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">{feature.title}</p>
+                    <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{feature.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -259,16 +297,16 @@ export default function HowItWorksPage() {
       {/* ── Pricing ── */}
       <section className="py-14 md:py-16 bg-muted/30 border-y border-border/40" data-testid="section-hiw-pricing">
         <div className="container mx-auto px-4 max-w-2xl text-center space-y-5">
-          <h2 className="text-2xl md:text-3xl font-display font-bold">One payment. Twelve months. No subscription.</h2>
+          <h2 className="text-2xl md:text-3xl font-display font-bold">Two products. One payment. No subscription.</h2>
           <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-xl mx-auto">
-            The free analysis shows you the shape of your settlement. The full picture — for £79, once — shows you whether you can afford to live in it.
+            Free to start. £79 unlocks your <strong>Settlement Analyser</strong> and your <strong>Guided Intelligence Report</strong> — both for 12 months.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
             {[
-              "4 settlement options modelled",
-              "UK tax & NI applied",
-              "Stress testing included",
-              "PDF download",
+              "4 settlement options fully modelled",
+              "Cashflow Resilience Indicator (CRI) scores",
+              "5-year projections & stress testing",
+              "Guided Intelligence Report",
               "12 months unlimited access",
             ].map((item) => (
               <span key={item} className="flex items-center gap-1.5 text-foreground">

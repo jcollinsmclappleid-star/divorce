@@ -555,7 +555,7 @@ function StepSituation({ advancedMode }: { advancedMode: boolean }) {
       <div className="flex items-start gap-3 p-3 rounded-md bg-primary/5 border border-primary/10" data-testid="callout-privacy-step1">
         <Shield className="w-4 h-4 text-primary mt-0.5 shrink-0" />
         <p className="text-xs text-muted-foreground leading-relaxed">
-          <span className="font-medium text-foreground">Your privacy is protected.</span> All core calculations happen privately in your browser. If you choose to generate the Guided Report Summary later, only selected model figures are securely processed — no names, addresses or contact details are included.
+          <span className="font-medium text-foreground">Your privacy is protected.</span> All core calculations happen privately in your browser. If you choose to generate the Guided Intelligence Report later, only selected de-identified model figures are securely processed — no names, addresses or contact details are included.
         </p>
       </div>
       <div className="space-y-4">

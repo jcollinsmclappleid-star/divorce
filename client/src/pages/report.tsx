@@ -7,7 +7,7 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Printer, ChevronDown, List, TrendingUp, Wallet, Users, Home } from "lucide-react";
+import { ArrowLeft, Printer, ChevronDown, List, TrendingUp, Wallet, Users, Home, Sparkles } from "lucide-react";
 import {
   generateScenarioNarrative,
   buildSourceOfFunds,
@@ -838,11 +838,11 @@ function GuidedSummaryReportSection({ summary }: { summary: GuidedSummary }) {
       <div className="bg-gradient-to-r from-[hsl(220_52%_22%)] to-[hsl(220_52%_16%)] rounded-xl px-5 py-4 mb-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-7 h-7 rounded-lg bg-gold/20 flex items-center justify-center shrink-0">
-            <span className="text-gold text-sm font-bold">✦</span>
+            <Sparkles className="w-4 h-4 text-gold" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-white uppercase tracking-widest">Guided Report Summary</h2>
-            <p className="text-[10px] text-white/45 mt-0.5">Plain-English analysis of your modelled figures</p>
+            <h2 className="text-sm font-bold text-white uppercase tracking-widest">Guided Intelligence Report</h2>
+            <p className="text-[10px] text-white/45 mt-0.5">Intelligently generated plain-English analysis of your modelled figures</p>
           </div>
         </div>
         <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-full border ${confidenceStyle}`}>
@@ -917,7 +917,7 @@ function ReportTOC({
     { id: "section-assumption-review", num: `${5 + scenarioCount}.`, label: "Assumption Review" },
     { id: "section-methodology",       num: `${6 + scenarioCount}.`, label: "Assumptions & Methodology" },
     { id: "section-glossary",          num: "",                       label: "Glossary" },
-    ...(hasGuidedSummary ? [{ id: "section-guided-summary", num: "", label: "Guided Report Summary" }] : []),
+    ...(hasGuidedSummary ? [{ id: "section-guided-summary", num: "", label: "Guided Intelligence Report" }] : []),
   ];
   const allItems = [...fixed, ...scenarioItems, ...tail];
 

@@ -199,8 +199,8 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
       <div className="mt-8" data-testid="section-guided-summary-locked">
         <div className="bg-gradient-to-r from-primary to-[hsl(220_52%_28%)] rounded-xl px-5 py-4 mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-gold" />
-            <h2 className="text-base font-semibold text-white">Guided Report Summary</h2>
+            <Sparkles className="w-4 h-4 text-gold" />
+            <h2 className="text-base font-semibold text-white">Guided Intelligence Report</h2>
             <ConfidenceBadge level={confidence} size="sm" />
           </div>
         </div>
@@ -208,7 +208,7 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
           <CardContent className="p-0">
             <div className="p-4 bg-muted/20 border-b border-border/40">
               <p className="text-sm text-muted-foreground">
-                Guided Report Summary turns your calculated results into plain-English takeaways, pressure points, missing-information checks and questions to raise with professionals.
+                The Guided Intelligence Report turns your calculated results into plain-English takeaways, pressure points, missing-information checks and tailored questions to raise with your solicitor, mortgage broker, and pension adviser.
               </p>
             </div>
             <div className="relative">
@@ -220,7 +220,7 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/80 backdrop-blur-sm rounded-b-lg">
                 <Lock className="w-5 h-5 text-muted-foreground" />
                 <p className="text-sm font-medium text-foreground text-center px-4">
-                  Unlock full access to generate your Guided Report Summary
+                  Unlock full access to generate your Guided Intelligence Report
                 </p>
                 <Link href="/unlock">
                   <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90" data-testid="button-unlock-guided-summary">
@@ -245,8 +245,8 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-semibold text-white">Guided Report Summary</h2>
-              <span className="text-[10px] text-white/50 bg-white/10 px-2 py-0.5 rounded-full font-medium">Intelligent summary</span>
+              <h2 className="text-base font-semibold text-white">Guided Intelligence Report</h2>
+              <span className="text-[10px] text-white/50 bg-white/10 px-2 py-0.5 rounded-full font-medium">Intelligently generated</span>
             </div>
             <p className="text-xs text-white/50 mt-0.5">Plain-English analysis of your modelled figures</p>
           </div>
