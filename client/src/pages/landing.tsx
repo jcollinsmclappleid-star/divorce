@@ -142,7 +142,7 @@ export default function LandingPage() {
                 In under 5 minutes, see what each settlement option means for your financial future — which are sustainable, which leave you stretched, and where your money stands in 5 years. Free to start. No sign-up.
               </p>
               <p className="text-sm text-white/50 leading-relaxed border-l-2 border-gold/40 pl-3">
-                Unlock the full report and get a plain-English Guided Summary of your figures — including tailored questions to raise with your solicitor, mortgage broker, and pension adviser — so you walk into every conversation prepared.
+                Unlock your Settlement Analyser and Guided Intelligence Report — a plain-English analysis of your figures, plus tailored questions to raise with your solicitor, mortgage broker, and pension adviser.
               </p>
 
               {/* Trust pills */}
@@ -243,7 +243,7 @@ export default function LandingPage() {
                   {/* Locked banner */}
                   <div className="bg-gold/8 border border-gold/25 rounded-lg px-3 py-2 flex items-center gap-2">
                     <Lock className="w-3 h-3 text-gold/60 flex-shrink-0" />
-                    <p className="text-[10px] text-gold/70">Guided Report Summary · stress tests · PDF · sustainability scores</p>
+                    <p className="text-[10px] text-gold/70">Guided Intelligence Report · stress tests · PDF · sustainability scores</p>
                   </div>
                 </div>
               </div>
@@ -507,80 +507,109 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-10 space-y-3" data-reveal>
             <div className="inline-flex items-center gap-2 bg-gold/10 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full">
-              Full financial report · £79 one-time
+              Two products · £79 one-time · 12 months access
             </div>
-            <h2 className="text-2xl md:text-3xl font-display font-bold">What your full report includes</h2>
+            <h2 className="text-2xl md:text-3xl font-display font-bold">Two products in one purchase</h2>
             <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              Every section is built from the figures you enter — modelled privately in your browser, then unlocked for 12 months.
+              Your <strong>Settlement Analyser</strong> models every scenario from your figures. Your <strong>Guided Intelligence Report</strong> explains what they mean — in plain English.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              {
-                icon: LayoutDashboard,
-                title: "Financial Snapshot",
-                body: "See your assets, debts, property equity, pensions and net financial position in one structured view.",
-                iconBg: "bg-cyan-50", iconColor: "text-cyan-600", accent: "border-t-cyan-400",
-                delay: "0",
-              },
-              {
-                icon: TrendingUp,
-                title: "Settlement Scenario Comparison",
-                body: "Compare what happens if the home is sold, one party keeps it, or a deferred sale is considered. All four options, side by side.",
-                iconBg: "bg-emerald-50", iconColor: "text-emerald-600", accent: "border-t-emerald-400",
-                delay: "50",
-              },
-              {
-                icon: DollarSign,
-                title: "Monthly Cashflow View",
-                body: "Understand estimated take-home pay, housing costs, surplus or deficit under each scenario — for both parties.",
-                iconBg: "bg-violet-50", iconColor: "text-violet-600", accent: "border-t-violet-400",
-                delay: "100",
-              },
-              {
-                icon: Home,
-                title: "Mortgage Pressure Checks",
-                body: "See whether a keep-home scenario may create high mortgage pressure based on income multiples and payment-to-income benchmarks.",
-                iconBg: "bg-amber-50", iconColor: "text-amber-600", accent: "border-t-amber-400",
-                delay: "150",
-              },
-              {
-                icon: Sparkles,
-                title: "Guided Report Summary",
-                body: "Plain-English takeaways, pressure points and questions to raise with your solicitor, mediator, mortgage broker or pension specialist.",
-                iconBg: "bg-gold/10", iconColor: "text-gold", accent: "border-t-gold",
-                delay: "200",
-                highlight: true,
-              },
-              {
-                icon: Download,
-                title: "Downloadable Report",
-                body: "Keep a structured financial brief for your own records — or share it to support conversations with a solicitor or mediator.",
-                iconBg: "bg-rose-50", iconColor: "text-rose-600", accent: "border-t-rose-400",
-                delay: "250",
-              },
-            ].map((card, i) => (
-              <div
-                key={i}
-                className={`rounded-xl border-2 border-t-4 ${card.accent} ${card.highlight ? "border-gold/30 bg-gold/5" : "border-border/50 bg-white"} p-5 space-y-3 shadow-sm hover:shadow-md transition-shadow`}
-                data-testid={`card-report-includes-${i}`}
-                data-reveal
-                data-reveal-delay={card.delay}
-              >
-                <div className={`w-10 h-10 rounded-xl ${card.iconBg} flex items-center justify-center`}>
-                  <card.icon className={`w-5 h-5 ${card.iconColor}`} />
-                </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-foreground mb-1">{card.title}</h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{card.body}</p>
-                </div>
-                {card.highlight && (
-                  <div className="flex items-center gap-1.5 text-[10px] text-gold font-semibold">
-                    <Sparkles className="w-3 h-3" /> Included in paid report
-                  </div>
-                )}
+
+          {/* Settlement Analyser cards — 4 in a 2×2 / 2×2 grid */}
+          <div className="mb-3" data-reveal>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-6 h-6 rounded-md bg-cyan-100 flex items-center justify-center">
+                <BarChart3 className="w-3.5 h-3.5 text-cyan-600" />
               </div>
-            ))}
+              <p className="text-xs font-bold text-foreground uppercase tracking-wide">Settlement Analyser</p>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {[
+                {
+                  icon: LayoutDashboard,
+                  title: "Financial Snapshot",
+                  body: "Assets, debts, property equity, pensions and net financial position in one structured view.",
+                  iconBg: "bg-cyan-50", iconColor: "text-cyan-600", accent: "border-t-cyan-400",
+                },
+                {
+                  icon: TrendingUp,
+                  title: "Settlement Scenario Comparison",
+                  body: "All four options — Sell & Split, A Keeps, B Keeps, Deferred Sale — modelled and scored side by side.",
+                  iconBg: "bg-emerald-50", iconColor: "text-emerald-600", accent: "border-t-emerald-400",
+                },
+                {
+                  icon: DollarSign,
+                  title: "Monthly Cashflow View",
+                  body: "Estimated take-home pay, housing costs, surplus or deficit under each scenario — for both parties.",
+                  iconBg: "bg-violet-50", iconColor: "text-violet-600", accent: "border-t-violet-400",
+                },
+                {
+                  icon: Home,
+                  title: "Mortgage Pressure Checks",
+                  body: "See whether a keep-home scenario creates high mortgage pressure based on income multiples.",
+                  iconBg: "bg-amber-50", iconColor: "text-amber-600", accent: "border-t-amber-400",
+                },
+              ].map((card, i) => (
+                <div
+                  key={i}
+                  className={`rounded-xl border-2 border-t-4 ${card.accent} border-border/50 bg-white p-4 space-y-2.5 shadow-sm hover:shadow-md transition-shadow`}
+                  data-testid={`card-report-includes-${i}`}
+                  data-reveal
+                  data-reveal-delay={String(i * 50)}
+                >
+                  <div className={`w-9 h-9 rounded-xl ${card.iconBg} flex items-center justify-center`}>
+                    <card.icon className={`w-4.5 h-4.5 ${card.iconColor}`} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-foreground mb-1">{card.title}</h3>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed">{card.body}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Guided Intelligence Report — full-width elevated banner */}
+          <div
+            className="rounded-2xl border-2 border-gold/30 bg-gradient-to-br from-gold/8 via-gold/5 to-amber-50/50 p-6 md:p-8 shadow-md"
+            data-testid="card-report-includes-4"
+            data-reveal
+            data-reveal-delay="200"
+          >
+            <div className="flex flex-col md:flex-row md:items-start gap-6">
+              <div className="flex-1 space-y-3">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div className="w-10 h-10 rounded-xl bg-gold/15 flex items-center justify-center shrink-0">
+                    <Sparkles className="w-5 h-5 text-gold" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="text-base font-bold text-foreground">Guided Intelligence Report</h3>
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-gold bg-gold/15 border border-gold/25 px-2 py-0.5 rounded-full uppercase tracking-wide">
+                        <Sparkles className="w-2.5 h-2.5" /> Intelligently generated
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-0.5">Produced by our analysis engine — not a generic template</p>
+                  </div>
+                </div>
+                <p className="text-sm text-foreground/75 leading-relaxed">
+                  Once your Settlement Analyser runs, our analysis engine reads your figures and produces a plain-English report: what each scenario means financially, where the pressure points are, and which questions to bring to your solicitor, mortgage broker, and pension adviser.
+                </p>
+              </div>
+              <div className="md:w-52 shrink-0 space-y-2">
+                {[
+                  { icon: Check, text: "Plain-English financial narrative" },
+                  { icon: Check, text: "Pressure point commentary" },
+                  { icon: Check, text: "Tailored questions per professional" },
+                  { icon: Download, text: "Downloadable as PDF" },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs text-foreground/70">
+                    <item.icon className="w-3.5 h-3.5 text-gold shrink-0" />
+                    {item.text}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
           <div className="text-center mt-10 space-y-3" data-reveal>
             <p className="text-sm text-muted-foreground italic">
@@ -610,76 +639,166 @@ export default function LandingPage() {
       </section>
 
       {/* ── Pricing ── */}
-      <section className="py-16 md:py-20 bg-primary" data-testid="section-pricing">
-        <div className="container mx-auto px-4 max-w-2xl text-center space-y-6">
-          <div className="inline-flex items-center gap-2 bg-gold/15 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full">
-            One-time payment · No subscription
+      <section className="py-16 md:py-20 bg-slate-50 border-y border-border/30" data-testid="section-pricing">
+        <div className="container mx-auto px-4 max-w-3xl">
+
+          {/* Section heading */}
+          <div className="text-center mb-10 space-y-2" data-reveal>
+            <div className="inline-flex items-center gap-2 bg-gold/10 text-gold border border-gold/20 text-xs font-semibold px-3 py-1 rounded-full">
+              One-time payment · No subscription
+            </div>
+            <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-pricing-headline">
+              Two products. One price.
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-lg mx-auto leading-relaxed">
+              The free version shows you the shape of your settlement. £79 unlocks both products — your Settlement Analyser and your Guided Intelligence Report.
+            </p>
           </div>
-          <h2 className="text-2xl md:text-3xl font-display font-bold text-white" data-testid="text-pricing-headline">
-            The full picture. <span className="text-gold">&pound;79</span>. Yours for 12 months.
-          </h2>
-          <p className="text-white/65 leading-relaxed">
-            The free version shows you the shape of your settlement. The full analysis shows you whether you can live on it. Twelve months of unlimited re-runs — so you can revisit as your situation develops.
-          </p>
-          <div className="grid grid-cols-3 gap-4 text-center max-w-md mx-auto py-6 border-y border-white/10">
-            <div>
-              <p className="text-2xl font-bold text-cyan-400">5 min</p>
-              <p className="text-xs text-white/55 mt-1">First analysis complete</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-violet-400">12 months</p>
-              <p className="text-xs text-white/55 mt-1">Unlimited re-runs</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-emerald-400">100%</p>
-              <p className="text-xs text-white/55 mt-1">Private &amp; secure</p>
-            </div>
-          </div>
-          <div className="space-y-2.5">
-            {[
-              "Full settlement comparison — all four options modelled and scored",
-              "Cashflow Resilience Indicator — understand the financial resilience of each option",
-              "5-year capital projections — see where your money stands under each option",
-              "Mortgage pressure checks — affordability benchmarks for keep-home scenarios",
-              "Guided Report Summary — plain-English takeaways and questions for professionals",
-              "Downloadable Structured Financial Brief (PDF)",
-              "12 months' access — revisit and update as your situation develops",
-            ].map((item) => (
-              <div key={item} className="flex items-center gap-2 justify-center text-left">
-                <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-                <span className="text-sm text-white/75">{item}</span>
+
+          {/* Main pricing card */}
+          <div className="bg-white rounded-2xl shadow-xl border border-border/30 overflow-hidden max-w-2xl mx-auto" data-reveal>
+
+            {/* Two products as bundle */}
+            <div className="p-6 md:p-8 space-y-4 border-b border-border/20">
+
+              {/* Product 1 */}
+              <div className="flex gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
+                <div className="w-10 h-10 rounded-xl bg-cyan-100 flex items-center justify-center shrink-0">
+                  <BarChart3 className="w-5 h-5 text-cyan-600" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="text-sm font-bold text-foreground">Settlement Analyser</h3>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-muted-foreground font-medium">Included</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">Four settlement scenarios modelled side-by-side — with CRI scores, 5-year projections, mortgage pressure checks and stress-testing.</p>
+                </div>
               </div>
-            ))}
+
+              {/* Plus */}
+              <div className="flex items-center gap-3">
+                <div className="flex-1 border-t border-dashed border-border/40" />
+                <span className="text-lg font-bold text-muted-foreground/50">+</span>
+                <div className="flex-1 border-t border-dashed border-border/40" />
+              </div>
+
+              {/* Product 2 */}
+              <div className="flex gap-4 p-4 rounded-xl bg-gold/5 border border-gold/20">
+                <div className="w-10 h-10 rounded-xl bg-gold/15 flex items-center justify-center shrink-0">
+                  <Sparkles className="w-5 h-5 text-gold" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="text-sm font-bold text-foreground">Guided Intelligence Report</h3>
+                    <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-gold/10 text-gold border border-gold/20 font-semibold">
+                      <Sparkles className="w-2.5 h-2.5" /> Intelligently generated
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">A plain-English analysis of your figures — what stands out, where the financial pressure lies, and tailored questions for your solicitor, broker and pension adviser.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Price hero */}
+            <div className="bg-primary px-6 md:px-8 py-6 text-center space-y-1">
+              <p className="text-white/55 text-xs tracking-wide">Both products, bundled together for</p>
+              <div className="text-6xl font-bold text-gold font-mono tracking-tight" data-testid="text-price-hero">£79</div>
+              <p className="text-white/50 text-sm">One-time payment · No subscription · 12 months access</p>
+            </div>
+
+            {/* Free vs Full comparison */}
+            <div className="px-6 md:px-8 py-5 border-b border-border/20">
+              <div className="grid grid-cols-2 gap-4 text-xs">
+                <div className="space-y-2">
+                  <p className="font-bold text-muted-foreground uppercase tracking-widest text-[10px]">Free</p>
+                  {["Settlement scenario overview", "Asset pool summary", "Basic scenario comparison"].map(item => (
+                    <div key={item} className="flex items-center gap-1.5 text-muted-foreground">
+                      <Check className="w-3 h-3 text-muted-foreground/50 shrink-0" />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="space-y-2 border-l border-border/20 pl-4">
+                  <p className="font-bold text-primary uppercase tracking-widest text-[10px]">Full — £79</p>
+                  {["All 4 scenarios fully modelled", "CRI scores & sustainability ratings", "5-year capital projections", "Stress tests & mortgage checks", "Guided Intelligence Report"].map(item => (
+                    <div key={item} className="flex items-center gap-1.5 text-foreground/80">
+                      <Check className="w-3 h-3 text-emerald-500 shrink-0" />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Full feature checklist */}
+            <div className="px-6 md:px-8 py-5 space-y-2.5 border-b border-border/20">
+              {[
+                "Full settlement comparison — all four options modelled and scored",
+                "Cashflow Resilience Indicator — understand the financial resilience of each option",
+                "5-year capital projections — see where your money stands under each option",
+                "Mortgage pressure checks — affordability benchmarks for keep-home scenarios",
+                "Guided Intelligence Report — plain-English takeaways and tailored professional questions",
+                "Downloadable Structured Financial Brief (PDF)",
+                "12 months' access — revisit and update as your situation develops",
+              ].map((item) => (
+                <div key={item} className="flex items-start gap-2.5">
+                  <Check className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm text-foreground/75">{item}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Stat strip */}
+            <div className="grid grid-cols-3 divide-x divide-border/20 border-b border-border/20 text-center">
+              <div className="py-4">
+                <p className="text-base font-bold text-cyan-600">5 min</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">First analysis complete</p>
+              </div>
+              <div className="py-4">
+                <p className="text-base font-bold text-violet-600">12 months</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">Unlimited re-runs</p>
+              </div>
+              <div className="py-4 flex flex-col items-center">
+                <div className="flex items-center gap-1">
+                  <Shield className="w-3.5 h-3.5 text-emerald-500" />
+                  <p className="text-base font-bold text-emerald-600">Private</p>
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-0.5">Core calcs in-browser</p>
+              </div>
+            </div>
+
+            {/* CTAs */}
+            <div className="px-6 md:px-8 py-6 space-y-3">
+              <p className="text-xs text-muted-foreground/70 italic text-center">One hour of professional advice can cost more than this full report. Use it to understand your numbers before expensive conversations.</p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  size="lg"
+                  onClick={startFresh}
+                  data-testid="button-pricing-start"
+                  className="flex-1 bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
+                >
+                  Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1.5" />
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  onClick={() => { scrollTop(); setLocation("/unlock"); }}
+                  data-testid="button-pricing-buy"
+                  className="flex-1 border-primary/30 text-primary hover:bg-primary/5"
+                >
+                  Unlock Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" />
+                </Button>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground/60 pt-1">
+                <div className="flex items-center gap-1.5"><Lock className="w-3.5 h-3.5" /><span>All calculations in-browser</span></div>
+                <span>&middot;</span>
+                <div className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5" /><span>No names or contact details processed</span></div>
+                <span>&middot;</span>
+                <div className="flex items-center gap-1.5"><TrendingUp className="w-3.5 h-3.5" /><span>Stripe-secured payments</span></div>
+              </div>
+            </div>
           </div>
-          <p className="text-xs text-white/45 italic">
-            One hour of professional advice can cost more than this full financial report. Use this tool to understand your numbers before expensive conversations.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-            <Button
-              size="lg"
-              onClick={startFresh}
-              data-testid="button-pricing-start"
-              className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
-            >
-              Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1.5" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => { scrollTop(); setLocation("/unlock"); }}
-              data-testid="button-pricing-buy"
-              className="border-white/25 text-white hover:bg-white/10 hover:text-white bg-transparent"
-            >
-              Unlock My Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" />
-            </Button>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-white/40 pt-2">
-            <div className="flex items-center gap-1.5"><Lock className="w-3.5 h-3.5" /><span>All calculations in-browser</span></div>
-            <span>&middot;</span>
-            <div className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5" /><span>No names or contact details processed</span></div>
-            <span>&middot;</span>
-            <div className="flex items-center gap-1.5"><TrendingUp className="w-3.5 h-3.5" /><span>Stripe-secured payments</span></div>
-          </div>
+
         </div>
       </section>
 
@@ -702,7 +821,7 @@ export default function LandingPage() {
             </div>
             <div>
               <p className="font-semibold text-muted-foreground/80 mb-1">Legal basis</p>
-              <p>Modelling reflects principles of the Matrimonial Causes Act 1973 (England and Wales). Not applicable to Scottish law. Core calculations run privately in your browser. If you use the optional Guided Report Summary, only selected model figures are processed — no names or contact details are included.</p>
+              <p>Modelling reflects principles of the Matrimonial Causes Act 1973 (England and Wales). Not applicable to Scottish law. Core calculations run privately in your browser. If you use the optional Guided Intelligence Report, only selected model figures are processed — no names or contact details are included.</p>
             </div>
             <div>
               <p className="font-semibold text-muted-foreground/80 mb-1">Limitations</p>
@@ -767,7 +886,7 @@ export default function LandingPage() {
                 <li className="text-xs text-white/40">Scenario comparison (all 4)</li>
                 <li className="text-xs text-white/40">Monthly cashflow & surplus/deficit</li>
                 <li className="text-xs text-white/40">Mortgage pressure checks</li>
-                <li className="text-xs text-white/40">Guided Report Summary</li>
+                <li className="text-xs text-white/40">Guided Intelligence Report</li>
                 <li className="text-xs text-white/40">5-year capital projections</li>
                 <li className="text-xs text-white/40">Downloadable brief (PDF)</li>
                 <li className="text-xs text-white/40">12 months' access to re-run</li>

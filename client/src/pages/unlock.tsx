@@ -13,7 +13,7 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { SiteNav } from "@/components/site-nav";
 import { useNoIndex } from "@/hooks/use-noindex";
 
-const FEATURE_GROUPS = [
+const ANALYSER_FEATURES = [
   {
     icon: BarChart3,
     iconBg: "bg-cyan-500/10",
@@ -36,22 +36,6 @@ const FEATURE_GROUPS = [
     desc: "Adjust interest rate assumptions and re-run instantly. See which scenarios hold up and which are fragile.",
   },
   {
-    icon: Sparkles,
-    iconBg: "bg-gold/10",
-    iconColor: "text-gold",
-    title: "Guided Report Summary",
-    desc: "An intelligent plain-English analysis of your figures — what stands out, where the financial pressure points are, and what to watch out for.",
-    highlight: true,
-  },
-  {
-    icon: HelpCircle,
-    iconBg: "bg-rose-500/10",
-    iconColor: "text-rose-500",
-    title: "Tailored professional questions",
-    desc: "Bespoke questions to raise with your solicitor, mortgage broker, and pension adviser — so you walk into every consultation prepared.",
-    highlight: true,
-  },
-  {
     icon: FileText,
     iconBg: "bg-primary/10",
     iconColor: "text-primary",
@@ -60,20 +44,37 @@ const FEATURE_GROUPS = [
   },
 ];
 
+const REPORT_FEATURES = [
+  {
+    icon: Sparkles,
+    iconBg: "bg-gold/10",
+    iconColor: "text-gold",
+    title: "Intelligently generated narrative",
+    desc: "Your figures run through our analysis engine and come back as a plain-English commentary — what stands out, where the financial pressure points are, and what to watch out for.",
+  },
+  {
+    icon: HelpCircle,
+    iconBg: "bg-rose-500/10",
+    iconColor: "text-rose-500",
+    title: "Tailored professional questions",
+    desc: "Bespoke questions to raise with your solicitor, mortgage broker, and pension adviser — produced from your specific numbers so you walk into every consultation prepared.",
+  },
+];
+
 const STEPS = [
   { n: "1", label: "Pay once — £79", sub: "Stripe-secured. Instant." },
-  { n: "2", label: "Unlock all four scenarios", sub: "Access immediately, no sign-up." },
-  { n: "3", label: "Generate your Guided Summary", sub: "Plain-English analysis + professional questions." },
+  { n: "2", label: "Unlock your Settlement Analyser", sub: "All four scenarios. Access immediately." },
+  { n: "3", label: "Generate your Guided Intelligence Report", sub: "Intelligently produced from your figures." },
 ];
 
 const FAQ_ITEMS = [
   {
     question: "What happens after I pay?",
-    answer: "You get immediate access to the full analysis — all four scenarios, 5-year projections, sustainability scores, stress-testing, and the Guided Report Summary. Your access lasts 12 months.",
+    answer: "You get immediate access to both products — the Settlement Analyser (all four scenarios, 5-year projections, sustainability scores, stress-testing) and the Guided Intelligence Report. Your access lasts 12 months.",
   },
   {
     question: "Is my data safe?",
-    answer: "Core financial calculations run entirely in your browser. When you choose to generate the Guided Report Summary, only anonymous model figures are sent to our analysis engine — no names, addresses, or contact details are ever included.",
+    answer: "Core financial calculations run entirely in your browser. When you choose to generate the Guided Intelligence Report, only anonymous model figures are sent to our analysis engine — no names, addresses, or contact details are ever included.",
   },
   {
     question: "Can I update my figures later?",
@@ -139,14 +140,14 @@ export default function UnlockPage() {
         </div>
         <div className="relative container mx-auto px-4 py-12 md:py-16 max-w-4xl text-center space-y-5">
           <Badge variant="outline" className="text-xs px-3 py-1 border-gold/50 text-gold bg-gold/10">
-            Your figures are entered · Instant access after payment
+            Your figures are entered · Both products unlock instantly
           </Badge>
           <h1 className="text-3xl md:text-4xl font-display font-bold text-white leading-tight" data-testid="text-hero-headline">
-            Your financial analysis is<br />
+            Your financial picture is<br />
             <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">ready to unlock.</span>
           </h1>
           <p className="text-white/65 max-w-xl mx-auto text-sm leading-relaxed">
-            See all four settlement scenarios compared side-by-side, with 5-year projections, sustainability scores, and a plain-English Guided Summary — including tailored questions to take to your solicitor, broker, and pension adviser.
+            One payment unlocks two products: your <span className="text-white/85 font-medium">Settlement Analyser</span> — four scenarios modelled side-by-side with 5-year projections — and your <span className="text-white/85 font-medium">Guided Intelligence Report</span>, intelligently produced from your figures in plain English.
           </p>
 
           {/* 3-step timeline */}
@@ -189,34 +190,74 @@ export default function UnlockPage() {
       <main className="max-w-4xl mx-auto px-4 py-12 space-y-14">
 
         {/* ── What you unlock ── */}
-        <section data-testid="section-value-proposition">
-          <div className="text-center mb-8 space-y-2">
-            <h2 className="text-xl md:text-2xl font-display font-bold">What you unlock for £79</h2>
-            <p className="text-sm text-muted-foreground max-w-md mx-auto">Everything you need to understand your financial position before negotiating — or sitting down with a professional.</p>
+        <section data-testid="section-value-proposition" className="space-y-8">
+          <div className="text-center space-y-2">
+            <h2 className="text-xl md:text-2xl font-display font-bold">Two products. One £79 payment.</h2>
+            <p className="text-sm text-muted-foreground max-w-md mx-auto">Unlock both instantly and revisit for 12 months — no subscription.</p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FEATURE_GROUPS.map((f, i) => (
-              <div
-                key={i}
-                className={`rounded-xl border p-4 space-y-2.5 transition-all ${
-                  f.highlight
-                    ? "border-gold/30 bg-gold/5 shadow-sm"
-                    : "border-border/60 bg-muted/20"
-                }`}
-                data-testid={`card-feature-${i}`}
-              >
-                {f.highlight && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-gold bg-gold/10 border border-gold/20 px-2 py-0.5 rounded-full uppercase tracking-wide">
-                    <Sparkles className="w-2.5 h-2.5" /> Key USP
-                  </span>
-                )}
-                <div className={`w-9 h-9 rounded-lg ${f.iconBg} flex items-center justify-center`}>
-                  <f.icon className={`w-4.5 h-4.5 ${f.iconColor}`} />
-                </div>
-                <h3 className="text-sm font-semibold text-foreground leading-snug">{f.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
+
+          {/* Product 1: Settlement Analyser */}
+          <div className="rounded-2xl border border-border/60 bg-muted/10 overflow-hidden">
+            <div className="flex items-center gap-3 px-5 py-4 border-b border-border/40 bg-muted/20">
+              <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center shrink-0">
+                <BarChart3 className="w-4 h-4 text-cyan-500" />
               </div>
-            ))}
+              <div>
+                <p className="text-sm font-bold text-foreground">Settlement Analyser</p>
+                <p className="text-[11px] text-muted-foreground">Financial modelling engine — all four settlement scenarios</p>
+              </div>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-3 p-4">
+              {ANALYSER_FEATURES.map((f, i) => (
+                <div key={i} className="flex gap-3 p-3 rounded-xl border border-border/40 bg-background" data-testid={`card-analyser-${i}`}>
+                  <div className={`w-8 h-8 rounded-lg ${f.iconBg} flex items-center justify-center shrink-0`}>
+                    <f.icon className={`w-4 h-4 ${f.iconColor}`} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-foreground leading-snug">{f.title}</h3>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">{f.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Plus connector */}
+          <div className="flex items-center gap-4">
+            <div className="flex-1 border-t border-dashed border-border/50" />
+            <span className="text-2xl font-bold text-muted-foreground/40">+</span>
+            <div className="flex-1 border-t border-dashed border-border/50" />
+          </div>
+
+          {/* Product 2: Guided Intelligence Report */}
+          <div className="rounded-2xl border border-gold/30 bg-gold/5 overflow-hidden shadow-sm">
+            <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-gold/20 bg-gold/10">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center shrink-0">
+                  <Sparkles className="w-4 h-4 text-gold" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-foreground">Guided Intelligence Report</p>
+                  <p className="text-[11px] text-muted-foreground">Intelligently produced from your figures by our analysis engine</p>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-gold bg-gold/15 border border-gold/30 px-2 py-0.5 rounded-full uppercase tracking-wide shrink-0">
+                <Sparkles className="w-2.5 h-2.5" /> Included
+              </span>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-3 p-4">
+              {REPORT_FEATURES.map((f, i) => (
+                <div key={i} className="flex gap-3 p-3 rounded-xl border border-gold/20 bg-white/60" data-testid={`card-report-${i}`}>
+                  <div className={`w-8 h-8 rounded-lg ${f.iconBg} flex items-center justify-center shrink-0`}>
+                    <f.icon className={`w-4 h-4 ${f.iconColor}`} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-semibold text-foreground leading-snug">{f.title}</h3>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">{f.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -323,7 +364,7 @@ export default function UnlockPage() {
         <section className="text-center space-y-4 pb-6" data-testid="section-reinforcement">
           <h2 className="text-lg font-display font-bold">Ready to see your full picture?</h2>
           <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-            Your figures are saved. Unlock now and see all four settlement scenarios, 5-year projections, and your Guided Summary — ready in seconds.
+            Your figures are saved. Unlock your Settlement Analyser and Guided Intelligence Report now — both ready in seconds.
           </p>
           <Button
             size="lg"
