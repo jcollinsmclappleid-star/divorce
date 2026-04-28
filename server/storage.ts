@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { sessions, purchases, emailLeads, type Session, type InsertSession, type Purchase, type InsertPurchase, type EmailLead } from "@shared/schema";
+import { sessions, purchases, emailLeads, magicLinks, type Session, type InsertSession, type Purchase, type InsertPurchase, type EmailLead, type MagicLink } from "@shared/schema";
 import { eq, and, sql, desc } from "drizzle-orm";
 
 export interface IStorage {
@@ -20,6 +20,11 @@ export interface IStorage {
   verifyEmailLead(id: string): Promise<EmailLead>;
   anonymisePurchasesByEmail(email: string): Promise<void>;
   deleteEmailLeadByEmail(email: string): Promise<void>;
+
+  createMagicLink(email: string, token: string, expiresAt: Date): Promise<MagicLink>;
+  getMagicLinkByToken(token: string): Promise<MagicLink | undefined>;
+  useMagicLink(id: string): Promise<MagicLink>;
+  deleteMagicLinksByEmail(email: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -168,6 +173,33 @@ export class DatabaseStorage implements IStorage {
     await db
       .delete(emailLeads)
       .where(eq(emailLeads.email, email.toLowerCase().trim()));
+  }
+
+  async createMagicLink(email: string, token: string, expiresAt: Date): Promise<MagicLink> {
+    const [link] = await db.insert(magicLinks).values({
+      email: email.toLowerCase().trim(),
+      token,
+      expiresAt,
+    }).returning();
+    return link;
+  }
+
+  async getMagicLinkByToken(token: string): Promise<MagicLink | undefined> {
+    const [link] = await db.select().from(magicLinks).where(eq(magicLinks.token, token));
+    return link;
+  }
+
+  async useMagicLink(id: string): Promise<MagicLink> {
+    const [updated] = await db
+      .update(magicLinks)
+      .set({ usedAt: new Date() })
+      .where(eq(magicLinks.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteMagicLinksByEmail(email: string): Promise<void> {
+    await db.delete(magicLinks).where(eq(magicLinks.email, email.toLowerCase().trim()));
   }
 }
 

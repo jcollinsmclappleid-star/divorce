@@ -15,8 +15,6 @@ import { scrollTop } from "@/lib/utils";
 import { useAppStore } from "@/hooks/use-store";
 import { useAccess } from "@/hooks/use-access";
 
-const SESSION_KEY = "dfm-session-token";
-
 const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "How It Works", href: "/how-it-works" },
@@ -45,18 +43,16 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
   const reset = useAppStore((s) => s.reset);
   const assets = useAppStore((s) => s.assets);
   const incomes = useAppStore((s) => s.incomes);
-  const { hasAccess } = useAccess();
+  const { hasAccess, isAuthenticated, email, logout } = useAccess();
 
   const hasModelData = assets.length > 0 || incomes.length > 0;
 
   const myAnalysisHref = hasAccess ? "/results" : hasModelData ? "/preview" : "/wizard";
 
   useEffect(() => {
-    const check = () => setHasSession(!!localStorage.getItem(SESSION_KEY));
+    const check = () => setHasSession(!!(isAuthenticated || localStorage.getItem('dfm-session-token')));
     check();
-    window.addEventListener("storage", check);
-    return () => window.removeEventListener("storage", check);
-  }, []);
+  }, [isAuthenticated]);
 
   const handleStart = () => {
     setOpen(false);
@@ -68,9 +64,9 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
     }
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    await logout();
     reset();
-    localStorage.removeItem(SESSION_KEY);
     setHasSession(false);
     setOpen(false);
     setLocation("/");
@@ -117,9 +113,15 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
                   onClick={handleSignOut}
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap flex items-center gap-1"
                   data-testid="button-nav-sign-out"
+                  title={isAuthenticated && email ? `Signed in as ${email}` : undefined}
                 >
                   <LogOut className="w-3.5 h-3.5" />
-                  Sign Out
+                  {isAuthenticated && email ? (
+                    <span className="flex items-center gap-1">
+                      <span className="max-w-[140px] truncate text-xs text-muted-foreground/80">{email}</span>
+                      <span>·</span>Sign Out
+                    </span>
+                  ) : "Sign Out"}
                 </button>
               </>
             ) : hasSession ? (

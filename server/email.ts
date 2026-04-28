@@ -253,6 +253,61 @@ export async function sendProgressSummaryEmail(
   }
 }
 
+export async function sendMagicLinkEmail(
+  email: string,
+  magicToken: string,
+  baseUrl: string
+): Promise<void> {
+  const client = getResend();
+  if (!client) {
+    console.warn('[email] RESEND_API_KEY not set — skipping magic link email');
+    return;
+  }
+
+  const signInUrl = `${baseUrl}/api/auth/verify?token=${encodeURIComponent(magicToken)}`;
+
+  const html = emailWrapper(`
+    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">Your sign-in link</h1>
+    <p style="margin:0 0 24px;color:#64748b;font-size:15px;">Click the button below to sign in and access your financial analysis. No password needed — this link works on any device.</p>
+
+    <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+      <tr>
+        <td style="background:#c49b2a;border-radius:6px;">
+          <a href="${htmlEscape(signInUrl)}" style="display:inline-block;padding:14px 28px;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;border-radius:6px;">Sign In to My Analysis</a>
+        </td>
+      </tr>
+    </table>
+
+    <div style="background:#fefce8;border:1px solid #fde68a;border-radius:6px;padding:14px 18px;margin-bottom:20px;">
+      <p style="margin:0;color:#92400e;font-size:13px;line-height:1.6;">
+        <strong>This link expires in 1 hour</strong> and can only be used once. If you didn't request this, no action is needed — your account is secure.
+      </p>
+    </div>
+
+    <p style="margin:0 0 8px;color:#94a3b8;font-size:12px;">Or copy this link into your browser:</p>
+    <p style="margin:0;color:#0f1e3c;font-size:12px;word-break:break-all;background:#f1f5f9;padding:10px 12px;border-radius:4px;font-family:monospace;">${htmlEscape(signInUrl)}</p>
+
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
+
+    <p style="margin:0;color:#64748b;font-size:13px;line-height:1.6;">
+      After clicking the link you'll be signed in automatically and taken straight to your analysis. The link is single-use — if it expires, visit <a href="${baseUrl}/recover" style="color:#0f1e3c;">${baseUrl.replace(/^https?:\/\//, '')}/recover</a> to request a new one.
+    </p>
+  `);
+
+  try {
+    await client.emails.send({
+      from: FROM,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: 'Sign in to DivorceCalculatorUK — your one-click link',
+      html,
+    });
+    console.log('[email] Magic link email sent');
+  } catch (err) {
+    console.error('[email] Failed to send magic link email:', err);
+  }
+}
+
 export async function sendEmailVerificationEmail(
   email: string,
   verificationToken: string

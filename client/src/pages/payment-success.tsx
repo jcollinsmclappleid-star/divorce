@@ -68,8 +68,14 @@ export default function PaymentSuccessPage() {
               <CheckCircle className="w-14 h-14 text-green-600 mx-auto" />
               <h2 className="text-xl font-semibold" data-testid="text-payment-confirmed">Payment Confirmed</h2>
               <p className="text-muted-foreground text-sm leading-relaxed">
-                Your full structured analysis is now unlocked. You have unlimited access for 12 months to model and adjust your financial scenarios.
+                Your full structured analysis is now unlocked. You have 12 months of access to model and adjust your financial scenarios.
               </p>
+              <div className="text-left bg-muted/50 rounded-lg p-3 space-y-1.5">
+                <p className="text-xs font-medium text-foreground">Accessing from another device later?</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  A confirmation email is on its way with a sign-in link. You can also visit <strong>/recover</strong> at any time and enter your checkout email to receive a fresh one-click sign-in link — no password ever needed.
+                </p>
+              </div>
               <Button
                 className="w-full"
                 onClick={() => navigate('/results')}

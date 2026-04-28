@@ -7,7 +7,7 @@ import { z } from "zod";
 import crypto from "crypto";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { seedDatabase } from "./seed";
-import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail } from "./email";
+import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail, sendMagicLinkEmail } from "./email";
 import OpenAI from "openai";
 import { GUIDED_SUMMARY_SYSTEM_PROMPT } from "./guided-summary/prompt";
 
@@ -535,6 +535,129 @@ export async function registerRoutes(
       res.status(500).json({ message: 'Failed to recover access' });
     }
   });
+
+  // ─── Magic Link / Auth routes ────────────────────────────────────────────────
+
+  app.post('/api/auth/send-link', async (req, res) => {
+    try {
+      const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
+      if (!rateLimit(`magic-link:${clientIp}`, 5, 60 * 60 * 1000)) {
+        return res.status(429).json({ message: 'Too many attempts. Please try again in an hour.' });
+      }
+
+      const schema = z.object({ email: z.string().email() });
+      const parsed = schema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: 'A valid email address is required.' });
+      }
+      const email = parsed.data.email.toLowerCase().trim();
+
+      const purchases = await storage.getPaidPurchasesByEmail(email);
+      const validPurchase = purchases.find(p => p.expiresAt && new Date(p.expiresAt) > new Date());
+
+      if (!validPurchase) {
+        // Always return success to prevent email enumeration
+        return res.json({ sent: true });
+      }
+
+      const token = crypto.randomBytes(48).toString('hex');
+      const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+      await storage.createMagicLink(email, token, expiresAt);
+
+      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      sendMagicLinkEmail(email, token, baseUrl).catch(console.error);
+
+      return res.json({ sent: true });
+    } catch (err) {
+      console.error('[auth] send-link error:', err);
+      res.status(500).json({ message: 'Something went wrong. Please try again.' });
+    }
+  });
+
+  app.get('/api/auth/verify', async (req, res) => {
+    try {
+      const token = req.query.token as string | undefined;
+      if (!token) {
+        return res.redirect('/recover?error=invalid_link');
+      }
+
+      const magicLink = await storage.getMagicLinkByToken(token);
+
+      if (!magicLink) {
+        return res.redirect('/recover?error=invalid_link');
+      }
+
+      if (magicLink.usedAt) {
+        return res.redirect('/recover?error=link_used');
+      }
+
+      if (new Date() > new Date(magicLink.expiresAt)) {
+        return res.redirect('/recover?error=link_expired');
+      }
+
+      // Mark as used
+      await storage.useMagicLink(magicLink.id);
+
+      // Set server-side session
+      req.session.email = magicLink.email;
+      await new Promise<void>((resolve, reject) => req.session.save(err => err ? reject(err) : resolve()));
+
+      // Find the most recent valid purchase session token for this email
+      const purchases = await storage.getPaidPurchasesByEmail(magicLink.email);
+      const validPurchase = purchases.find(p => p.expiresAt && new Date(p.expiresAt) > new Date());
+
+      if (!validPurchase) {
+        // Signed in but no active purchase — redirect to unlock
+        return res.redirect('/unlock?signed_in=1');
+      }
+
+      // Redirect to /access which will set the localStorage token and go to /results
+      return res.redirect(`/access?token=${encodeURIComponent(validPurchase.sessionToken)}`);
+    } catch (err) {
+      console.error('[auth] verify error:', err);
+      return res.redirect('/recover?error=server_error');
+    }
+  });
+
+  app.get('/api/auth/me', async (req, res) => {
+    try {
+      const email = req.session?.email;
+      if (!email) {
+        return res.json({ authenticated: false, hasAccess: false });
+      }
+
+      const purchases = await storage.getPaidPurchasesByEmail(email);
+      const validPurchase = purchases.find(p => p.expiresAt && new Date(p.expiresAt) > new Date());
+
+      if (!validPurchase) {
+        return res.json({ authenticated: true, email, hasAccess: false });
+      }
+
+      return res.json({
+        authenticated: true,
+        email,
+        hasAccess: true,
+        expiresAt: validPurchase.expiresAt,
+        purchasedAt: validPurchase.purchasedAt,
+      });
+    } catch (err) {
+      console.error('[auth] me error:', err);
+      res.status(500).json({ message: 'Failed to fetch session' });
+    }
+  });
+
+  app.post('/api/auth/logout', (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('[auth] session destroy error:', err);
+        return res.status(500).json({ message: 'Logout failed' });
+      }
+      res.clearCookie('dfm.sid');
+      res.json({ success: true });
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────────
 
   const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 

@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearch } from "wouter";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Mail, CheckCircle, AlertTriangle, Loader2, Receipt, LogOut, ShieldCheck } from "lucide-react";
+import { Mail, CheckCircle, AlertTriangle, Loader2, Receipt, LogOut, ShieldCheck, Smartphone } from "lucide-react";
 import { SiteNav } from "@/components/site-nav";
+import { useAccess } from "@/hooks/use-access";
+import { useAppStore } from "@/hooks/use-store";
 
 type RecoverMode = "email" | "order";
 
@@ -18,9 +21,19 @@ type RecoverState =
   | { status: "no_email" }
   | { status: "error"; message: string };
 
+const ERROR_MESSAGES: Record<string, string> = {
+  invalid_link: "That sign-in link isn't valid. It may have already been used or was entered incorrectly.",
+  link_used: "That link has already been used. Sign-in links are single-use — request a new one below.",
+  link_expired: "That link has expired (links are valid for 1 hour). Request a fresh one below.",
+  server_error: "Something went wrong on our end. Please try again.",
+};
+
 export default function RecoverPage() {
-  useDocumentTitle("Recover Access | DivorceCalculatorUK");
+  useDocumentTitle("Sign In | DivorceCalculatorUK");
   useNoIndex();
+  const search = useSearch();
+  const { logout } = useAccess();
+  const reset = useAppStore((s) => s.reset);
 
   const [mode, setMode] = useState<RecoverMode>("email");
   const [email, setEmail] = useState("");
@@ -29,8 +42,17 @@ export default function RecoverPage() {
   const [showLogout, setShowLogout] = useState(false);
   const [loggedOut, setLoggedOut] = useState(false);
 
-  function handleClearSession() {
-    localStorage.removeItem("dfm-session-token");
+  useEffect(() => {
+    const params = new URLSearchParams(search);
+    const error = params.get("error");
+    if (error && ERROR_MESSAGES[error]) {
+      setState({ status: "error", message: ERROR_MESSAGES[error] });
+    }
+  }, [search]);
+
+  async function handleClearSession() {
+    await logout();
+    reset();
     setLoggedOut(true);
     setShowLogout(false);
   }
@@ -41,14 +63,15 @@ export default function RecoverPage() {
     setState({ status: "loading" });
 
     try {
-      const res = await fetch("/api/access/recover", {
+      const res = await fetch("/api/auth/send-link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email: email.trim() }),
       });
 
       if (res.status === 429) {
-        setState({ status: "error", message: "Too many attempts. Please wait a while before trying again." });
+        setState({ status: "error", message: "Too many attempts. Please wait an hour before trying again." });
         return;
       }
       if (!res.ok) {
@@ -56,14 +79,8 @@ export default function RecoverPage() {
         return;
       }
 
-      const data = await res.json();
-      if (!data.found) {
-        setState({ status: "not_found" });
-      } else if (data.expired) {
-        setState({ status: "expired" });
-      } else {
-        setState({ status: "sent", email: email.trim() });
-      }
+      // Always show "sent" — server never reveals whether email exists (privacy)
+      setState({ status: "sent", email: email.trim() });
     } catch {
       setState({ status: "error", message: "Connection error. Please try again." });
     }
@@ -111,11 +128,6 @@ export default function RecoverPage() {
   }
 
   const isLoading = state.status === "loading";
-  const isDone =
-    state.status === "sent" ||
-    state.status === "expired" ||
-    state.status === "not_found" ||
-    state.status === "no_email";
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -124,12 +136,18 @@ export default function RecoverPage() {
       <main className="flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-md space-y-4">
 
-          {/* How access works — context panel */}
+          {/* How sign-in works */}
           <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/60 border border-border/60 text-sm text-muted-foreground">
             <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0 text-primary" />
-            <p>
-              <strong className="text-foreground">No password needed.</strong> Access is tied to your browser. If you've switched devices or cleared your browser data, use one of the options below to receive a one-click access link by email.
-            </p>
+            <div className="space-y-1">
+              <p>
+                <strong className="text-foreground">No password needed.</strong> Enter the email address you used at checkout. We'll send you a one-click sign-in link — it works on any device, in any browser.
+              </p>
+              <p className="flex items-center gap-1.5 text-xs text-muted-foreground/80">
+                <Smartphone className="w-3 h-3 shrink-0" />
+                Paid on your laptop? Sign in from your phone using the same email.
+              </p>
+            </div>
           </div>
 
           <Card className="w-full">
@@ -137,9 +155,9 @@ export default function RecoverPage() {
               <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
                 <Mail className="w-6 h-6 text-primary" />
               </div>
-              <CardTitle className="text-xl font-display" data-testid="text-recover-title">Recover Your Access</CardTitle>
+              <CardTitle className="text-xl font-display" data-testid="text-recover-title">Sign In to Your Analysis</CardTitle>
               <CardDescription>
-                We'll send an instant access link to your email address.
+                We'll send a one-click sign-in link to your inbox — no password required.
               </CardDescription>
             </CardHeader>
 
@@ -163,7 +181,7 @@ export default function RecoverPage() {
                 >
                   <span className="flex items-center justify-center gap-1.5">
                     <Receipt className="w-3.5 h-3.5" />
-                    By order ID
+                    By order reference
                   </span>
                 </button>
               </div>
@@ -178,16 +196,25 @@ export default function RecoverPage() {
                     <p className="font-semibold text-foreground">Check your inbox</p>
                     <p className="text-sm text-muted-foreground mt-1">
                       {state.maskedEmail
-                        ? <>We've sent an access link to <span className="font-medium text-foreground">{state.maskedEmail}</span>.</>
-                        : <>We've sent an access link to <span className="font-medium text-foreground">{state.email}</span>.</>
-                      } Click the link to restore your access instantly.
+                        ? <>We've sent a sign-in link to <span className="font-medium text-foreground">{state.maskedEmail}</span>.</>
+                        : <>If we have a purchase linked to <span className="font-medium text-foreground">{state.email}</span>, a sign-in link is on its way.</>
+                      }
                     </p>
                   </div>
-                  <p className="text-xs text-muted-foreground/70 leading-relaxed">
-                    Can't find it? Check your spam or junk folder. The email comes from noreply@divorcecalculatoruk.co.uk.
-                  </p>
+                  <div className="text-left space-y-2 bg-muted/50 rounded-lg p-3">
+                    <p className="text-xs font-medium text-foreground">What to expect:</p>
+                    <ul className="text-xs text-muted-foreground space-y-1 list-none">
+                      <li>• The link arrives within a minute or two</li>
+                      <li>• Click it on <strong>any device</strong> — phone, tablet, or laptop</li>
+                      <li>• It's single-use and expires after <strong>1 hour</strong></li>
+                      <li>• Check spam or junk if it doesn't arrive</li>
+                    </ul>
+                    <p className="text-xs text-muted-foreground/70">
+                      Email comes from <span className="font-mono">noreply@divorcecalculatoruk.co.uk</span>
+                    </p>
+                  </div>
                   <Button variant="outline" className="w-full text-sm" onClick={() => { setState({ status: "idle" }); setEmail(""); setOrderId(""); }}>
-                    Try a different method
+                    Try a different email
                   </Button>
                 </div>
               )}
@@ -212,7 +239,7 @@ export default function RecoverPage() {
                 <div className="flex items-start gap-2 p-3 rounded-md bg-muted" data-testid="section-no-email">
                   <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
                   <p className="text-sm text-muted-foreground">
-                    We found your order, but no email address was recorded. Please <a href="/contact" className="underline">contact support</a> and quote your order reference — we'll restore your access manually.
+                    We found your order, but no email address was recorded at checkout. Please <a href="/contact" className="underline">contact support</a> with your order reference — we'll restore your access manually.
                   </p>
                 </div>
               )}
@@ -239,20 +266,20 @@ export default function RecoverPage() {
                         <div className="flex items-start gap-2 p-3 rounded-md bg-muted" data-testid="message-not-found">
                           <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
                           <p className="text-sm text-muted-foreground">
-                            We couldn't find a purchase linked to that email. Try a different email, or use your <button type="button" onClick={() => switchMode("order")} className="underline font-medium">order reference</button> instead.
+                            No purchase found for that email. Try a different email address, or use your <button type="button" onClick={() => switchMode("order")} className="underline font-medium">order reference</button> instead.
                           </p>
                         </div>
                       )}
 
                       {state.status === "error" && (
-                        <div className="flex items-start gap-2 p-3 rounded-md bg-destructive/10" data-testid="message-error">
-                          <AlertTriangle className="w-4 h-4 text-destructive mt-0.5 shrink-0" />
-                          <p className="text-sm text-destructive">{state.message}</p>
+                        <div className="flex items-start gap-2 p-3 rounded-md bg-amber-50 border border-amber-200" data-testid="message-error">
+                          <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
+                          <p className="text-sm text-amber-800">{state.message}</p>
                         </div>
                       )}
 
                       <Button type="submit" className="w-full" disabled={isLoading || !email.trim()} data-testid="button-recover-submit">
-                        {isLoading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Looking up…</> : "Send Access Link"}
+                        {isLoading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending link…</> : "Send Sign-In Link"}
                       </Button>
                     </form>
                   ) : (
@@ -268,7 +295,7 @@ export default function RecoverPage() {
                           data-testid="input-recover-order"
                         />
                         <p className="text-xs text-muted-foreground mt-1.5">
-                          Find your order reference in the Stripe payment confirmation email, or in the URL on the page you saw after payment (starts with <code className="bg-muted px-1 rounded text-[11px]">cs_</code>).
+                          Your order reference is in your Stripe payment receipt, or in the URL after payment (starts with <code className="bg-muted px-1 rounded text-[11px]">cs_</code>).
                         </p>
                       </div>
 
@@ -276,15 +303,15 @@ export default function RecoverPage() {
                         <div className="flex items-start gap-2 p-3 rounded-md bg-muted" data-testid="message-not-found-order">
                           <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
                           <p className="text-sm text-muted-foreground">
-                            We couldn't match that order reference. Check the format (it should start with <code className="bg-muted-foreground/10 px-1 rounded text-[11px]">cs_</code>), or try recovering <button type="button" onClick={() => switchMode("email")} className="underline font-medium">by email</button> instead.
+                            We couldn't match that reference. Check the format (starts with <code className="bg-muted-foreground/10 px-1 rounded text-[11px]">cs_</code>), or try signing in <button type="button" onClick={() => switchMode("email")} className="underline font-medium">by email</button> instead.
                           </p>
                         </div>
                       )}
 
                       {state.status === "error" && (
-                        <div className="flex items-start gap-2 p-3 rounded-md bg-destructive/10" data-testid="message-error-order">
-                          <AlertTriangle className="w-4 h-4 text-destructive mt-0.5 shrink-0" />
-                          <p className="text-sm text-destructive">{state.message}</p>
+                        <div className="flex items-start gap-2 p-3 rounded-md bg-amber-50 border border-amber-200" data-testid="message-error-order">
+                          <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
+                          <p className="text-sm text-amber-800">{state.message}</p>
                         </div>
                       )}
 
@@ -295,7 +322,7 @@ export default function RecoverPage() {
                   )}
 
                   <p className="text-[10px] text-muted-foreground/70 text-center leading-relaxed mt-3">
-                    We only use your details to look up your existing purchase and send an access link. See our{" "}
+                    We only use your details to look up your existing purchase and send a sign-in link. See our{" "}
                     <a href="/privacy" className="underline">Privacy Policy</a>.
                   </p>
                 </>
@@ -309,16 +336,16 @@ export default function RecoverPage() {
               {loggedOut ? (
                 <div className="flex items-center gap-2 text-sm text-emerald-700">
                   <CheckCircle className="w-4 h-4 shrink-0" />
-                  <span>Session cleared. Your browser no longer has access saved. Use recovery above to sign in again.</span>
+                  <span>Signed out successfully. Your data has been cleared from this browser. Use the form above to sign back in.</span>
                 </div>
               ) : showLogout ? (
                 <div className="space-y-3">
                   <p className="text-sm text-muted-foreground">
-                    This will remove your saved access from this browser only. Your purchase record is safely stored — you can recover access any time using your email or order reference.
+                    This will sign you out and remove your saved data from this browser. Your purchase is safely stored — sign back in at any time using the form above.
                   </p>
                   <div className="flex gap-2">
                     <Button size="sm" variant="destructive" className="flex-1" onClick={handleClearSession} data-testid="button-confirm-logout">
-                      Yes, clear this browser
+                      Yes, sign out
                     </Button>
                     <Button size="sm" variant="outline" className="flex-1" onClick={() => setShowLogout(false)}>
                       Cancel
@@ -332,7 +359,7 @@ export default function RecoverPage() {
                   data-testid="button-sign-out"
                 >
                   <LogOut className="w-4 h-4 shrink-0" />
-                  Sign out of this browser / clear saved access
+                  Sign out and clear data from this browser
                 </button>
               )}
             </CardContent>

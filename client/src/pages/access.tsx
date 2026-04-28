@@ -79,10 +79,10 @@ export default function AccessPage() {
                 Link not valid
               </h1>
               <p className="text-sm text-muted-foreground">
-                This link may have expired or already been used. Enter your email below to get a fresh link.
+                This link may have expired or already been used. Sign-in links are valid for 1 hour and can only be clicked once. Request a fresh one below.
               </p>
               <Button onClick={() => setLocation("/recover")} className="w-full" data-testid="button-go-recover">
-                Get a new link
+                Send a new sign-in link
               </Button>
             </>
           )}

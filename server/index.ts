@@ -1,11 +1,19 @@
 import express, { type Request, Response, NextFunction } from "express";
 import helmet from "helmet";
+import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
 import { runMigrations } from 'stripe-replit-sync';
 import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
+
+declare module "express-session" {
+  interface SessionData {
+    email?: string;
+  }
+}
 
 const app = express();
 const httpServer = createServer(app);
@@ -130,6 +138,25 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: false }));
+
+const PgSession = connectPgSimple(session);
+app.use(session({
+  store: new PgSession({
+    conString: process.env.DATABASE_URL,
+    createTableIfMissing: true,
+    tableName: 'user_sessions',
+  }),
+  secret: process.env.SESSION_SECRET || 'dfm-dev-secret',
+  resave: false,
+  saveUninitialized: false,
+  name: 'dfm.sid',
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 12 * 30 * 24 * 60 * 60 * 1000,
+    sameSite: 'lax',
+  },
+}));
 
 app.use((req, res, next) => {
   const start = Date.now();

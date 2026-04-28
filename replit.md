@@ -30,11 +30,26 @@ A **deterministic, pure-function based, and fully testable** financial engine re
 
 ### Data Layer
 
-PostgreSQL is used as the database via Drizzle ORM. Tables include `sessions` (stores `AppState` as JSONB), `purchases` (Stripe payments), and `email_leads` (captured email addresses). Client-side state persistence is handled by Zustand with localStorage.
+PostgreSQL is used as the database via Drizzle ORM. Tables include `sessions` (stores `AppState` as JSONB), `purchases` (Stripe payments), `email_leads` (captured email addresses), `magic_links` (single-use sign-in tokens with 1-hour expiry), and `user_sessions` (server-side session store managed by connect-pg-simple). Client-side state persistence is handled by Zustand with localStorage.
 
 ### Premium Access Flow
 
-A freemium model requires a one-time payment for full access. A `/preview` page shows limited data and prompts users to an `/unlock` page for Stripe Checkout. Successful payment at `/payment-success` grants 6-month access. Access to `/results` and `/report` is controlled by an `AccessGate` component.
+A freemium model requires a one-time payment for full access. A `/preview` page shows limited data and prompts users to an `/unlock` page for Stripe Checkout. Successful payment at `/payment-success` grants 12-month access. Access to `/results` and `/report` is controlled by an `AccessGate` component.
+
+### Authentication — Magic Link System
+
+Users sign in via magic link emails — no password required. The flow:
+
+1. User visits `/recover` (labelled "Sign In") and enters their checkout email.
+2. `POST /api/auth/send-link` creates a 48-byte random token, stores it in `magic_links` (1-hour TTL), and sends a sign-in email via Resend.
+3. User clicks the link → `GET /api/auth/verify?token=xxx` validates the token (single-use, expiry check), sets an **HttpOnly session cookie** (`dfm.sid`) via express-session backed by PostgreSQL, then redirects to `/access?token=PURCHASE_SESSION_TOKEN`.
+4. The `/access` page sets `localStorage['dfm-session-token']` for backward compat and redirects to `/results`.
+5. `GET /api/auth/me` returns `{ authenticated, email, hasAccess, expiresAt }` from the server session cookie.
+6. `POST /api/auth/logout` destroys the server session and clears the cookie.
+
+The `useAccess` hook checks both the server session (`/api/auth/me`) and the localStorage token (`/api/access/:token`) in parallel, granting access if either passes. Sign-out calls server logout + clears localStorage + resets Zustand store.
+
+The `/recover` page also retains the order-reference fallback (`POST /api/access/recover-by-order`) for users who don't have email on record.
 
 ### Key Design Decisions
 
@@ -45,10 +60,11 @@ A freemium model requires a one-time payment for full access. A `/preview` page 
 5.  **Freemium access model**: Preview limited data, full analysis requires payment.
 6.  **Email lead capture**: Captures emails from preview page, wizard, and free guide, with a double opt-in for the free guide.
 7.  **Spousal maintenance toggle**: Optional feature in the wizard, applying an income transfer between parties in calculations.
+8.  **Magic link auth**: No passwords. Server-side session via HttpOnly cookie. Cross-device access. Single-use tokens with 1-hour expiry. Email enumeration prevented (always returns `{ sent: true }`).
 
 ### Security
 
-HTTP security headers are applied via `helmet` including CSP (allowing Stripe.js, self-hosted fonts), HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy. Email FROM domains are verified (Resend with SPF/DKIM). Double opt-in is implemented for email leads. GDPR data deletion (`POST /api/gdpr/delete`) anonymises purchases and deletes email leads. Stripe webhook verification uses `STRIPE_WEBHOOK_SECRET`. Admin access is password-protected. Self-hosted fonts are used, and dependencies are regularly audited.
+HTTP security headers are applied via `helmet` including CSP (allowing Stripe.js, self-hosted fonts), HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy. Email FROM domains are verified (Resend with SPF/DKIM). Double opt-in is implemented for email leads. GDPR data deletion (`POST /api/gdpr/delete`) anonymises purchases and deletes email leads. Stripe webhook verification uses `STRIPE_WEBHOOK_SECRET`. Admin access is password-protected. Self-hosted fonts are used, and dependencies are regularly audited. Magic link tokens are single-use, 1-hour expiry, 96 hex characters (48 bytes). Server sessions stored in PostgreSQL via connect-pg-simple.
 
 ## External Dependencies
 
