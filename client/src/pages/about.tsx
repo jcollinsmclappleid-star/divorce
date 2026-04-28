@@ -90,7 +90,7 @@ export default function AboutPage() {
               Divorce is already one of the hardest things a person goes through. The financial side shouldn't also be a mystery.
             </p>
             <p className="text-muted-foreground leading-relaxed text-sm">
-              We built Divorce Calculator UK because most people arrive at the most important financial negotiation of their lives with nothing but anxiety and guesswork. They don't know what they're entitled to. They don't know whether they can keep the house. They don't know what each settlement option means for their monthly income, their capital position, or their financial stability in five years. We think that's wrong.
+              We built Divorce Calculator UK because most people arrive at the most important financial negotiation of their lives with nothing but anxiety and guesswork. They don't know where they stand financially. They don't know whether they can afford to keep the house. They don't know what each settlement option means for their monthly income, their capital position, or their financial stability in five years. We think that's wrong.
             </p>
             <p className="text-muted-foreground leading-relaxed text-sm">
               You deserve to know your numbers — before the first meeting, before the first offer, before you sign anything.

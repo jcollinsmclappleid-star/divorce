@@ -77,7 +77,7 @@ The family home is often the most emotionally charged asset in a divorce — and
 
 **Option 4: Transfer to one party with no buyout.** Sometimes one party receives the home in lieu of other assets (e.g., the other party retains the pension). This requires careful modelling — the property may not be liquid when needed, and pensions have their own access rules.
 
-The right option depends on income levels, mortgage capacity, other assets, children's needs, and each party's long-term financial situation. Modelling the numbers — rather than negotiating from position — often reveals which options are genuinely viable.
+The right option depends on income levels, mortgage capacity, other assets, children's needs, and each party's long-term financial situation. Modelling the numbers — rather than negotiating from position — often reveals which options are financially workable and which are not.
     `,
   },
   {
