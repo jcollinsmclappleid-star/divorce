@@ -170,7 +170,7 @@ export default function PricingPage() {
               </Button>
 
               <p className="text-center text-xs text-white/40 italic">
-                A single hour with a solicitor typically costs £250–£400. This covers your entire financial picture.
+                Understand your divorce finances before paying hourly fees. Model your property, income, pensions, debts and maintenance scenarios for £79 — privately, in your browser.
               </p>
 
               <div className="flex flex-col items-center gap-1 text-xs text-white/50">

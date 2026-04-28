@@ -367,7 +367,7 @@ export default function LandingPage() {
                 Start entering your figures at no cost — no sign-up, no card required. Pay once to see the full breakdown.
               </p>
               <p className="text-xs text-muted-foreground/70 italic">
-                A single hour with a solicitor costs more. This covers your entire financial picture.
+                One hour of family-law advice can cost more than this full financial report. Use it to organise your figures and compare scenarios — privately, in your browser.
               </p>
             </div>
             <div className="text-center md:text-right space-y-2 shrink-0">
