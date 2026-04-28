@@ -16,6 +16,8 @@ The project uses a **monorepo** with `client/` for the React frontend, `server/`
 
 A React 18 Single Page Application (TypeScript, Vite) uses Wouter for routing, Zustand for state management with localStorage persistence, and shadcn/ui (New York style) with Radix UI and Tailwind CSS for the UI. Data fetching uses TanStack React Query, and Recharts for visualizations. Forms are managed with React Hook Form and Zod for validation. Key features include a multi-step wizard, a landing page, and a comprehensive results page with decision-support tools, scenario cards, stress test sliders, projection charts, a decision lens toggle, and downloadable reports. User personalization uses `partyAName` and `partyBName` to dynamically update display names. The logo component displays "Divorce Calculator UK" text branding.
 
+Landing page includes: hero with dual CTA (start free + preview sample report), "What your full report includes" 6-card feature section, updated pricing with 7 bullet points, and a sample report modal (`report-preview-modal.tsx`). Preview/paywall page shows a personalised hero with asset pool badge, Guided Summary locked teaser, and free/paid comparison. Report page uses premium gradient section headers, scenario stat strips, and color-coded tax tables. Guided Summary Panel uses colored left-border blocks per section type with collapsible sections.
+
 The design features a signature gold accent (`#C9A84C`) for primary CTAs and branding, complemented by a multi-color palette for interactive elements (teal/cyan), assets (violet), income (rose), sustainability (emerald), and scenarios (amber). Scroll-triggered fade-in animations are used for UI elements.
 
 ### Backend (`server/`)

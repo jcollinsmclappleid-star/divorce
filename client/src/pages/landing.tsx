@@ -9,7 +9,9 @@ import {
   HelpCircle, BookOpen, FileText,
   Lock, Shield, TrendingUp, Check,
   Eye, Gauge, Calendar, Activity,
+  LayoutDashboard, DollarSign, Home, PieChart, Sparkles, Download,
 } from "lucide-react";
+import { ReportPreviewModal } from "@/components/report-preview-modal";
 import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
 import { useAppStore } from "@/hooks/use-store";
 import { useDocumentTitle } from "@/hooks/use-document-title";
@@ -83,6 +85,7 @@ export default function LandingPage() {
   const reset = useAppStore((s) => s.reset);
 
   const startFresh = () => { scrollTop(); reset(); setLocation("/wizard"); };
+  const [sampleReportOpen, setSampleReportOpen] = useState(false);
 
   const loadExample = () => {
     const example = EXAMPLE_SCENARIOS[0];
@@ -239,7 +242,7 @@ export default function LandingPage() {
                   {/* Locked banner */}
                   <div className="bg-gold/8 border border-gold/25 rounded-lg px-3 py-2 flex items-center gap-2">
                     <Lock className="w-3 h-3 text-gold/60 flex-shrink-0" />
-                    <p className="text-[10px] text-gold/70">Full analysis: stress tests · PDF report · sustainability scores</p>
+                    <p className="text-[10px] text-gold/70">Guided Report Summary · stress tests · PDF · sustainability scores</p>
                   </div>
                 </div>
               </div>
@@ -299,14 +302,23 @@ export default function LandingPage() {
             Sample figures shown. Your analysis reflects your actual inputs — recalculated instantly in your browser.
           </p>
 
-          <div className="text-center mt-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
             <Button
               size="lg"
               onClick={startFresh}
               data-testid="button-explainer-start"
               className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
             >
-              Start your financial model — free <ArrowRight className="w-4 h-4 ml-1.5" />
+              Start my financial report — free <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => setSampleReportOpen(true)}
+              data-testid="button-preview-sample-report"
+              className="border-white/25 text-white hover:bg-white/10 hover:text-white bg-transparent"
+            >
+              <Eye className="w-4 h-4 mr-2" /> Preview sample report
             </Button>
           </div>
         </div>
@@ -487,6 +499,113 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── What your full report includes ── */}
+      <section className="py-16 md:py-20 bg-background" data-testid="section-report-includes">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center mb-10 space-y-3" data-reveal>
+            <div className="inline-flex items-center gap-2 bg-gold/10 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full">
+              Full financial report · £79 one-time
+            </div>
+            <h2 className="text-2xl md:text-3xl font-display font-bold">What your full report includes</h2>
+            <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
+              Every section is built from the figures you enter — modelled privately in your browser, then unlocked for 12 months.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              {
+                icon: LayoutDashboard,
+                title: "Financial Snapshot",
+                body: "See your assets, debts, property equity, pensions and net financial position in one structured view.",
+                iconBg: "bg-cyan-50", iconColor: "text-cyan-600", accent: "border-t-cyan-400",
+                delay: "0",
+              },
+              {
+                icon: TrendingUp,
+                title: "Settlement Scenario Comparison",
+                body: "Compare what happens if the home is sold, one party keeps it, or a deferred sale is considered. All four options, side by side.",
+                iconBg: "bg-emerald-50", iconColor: "text-emerald-600", accent: "border-t-emerald-400",
+                delay: "50",
+              },
+              {
+                icon: DollarSign,
+                title: "Monthly Cashflow View",
+                body: "Understand estimated take-home pay, housing costs, surplus or deficit under each scenario — for both parties.",
+                iconBg: "bg-violet-50", iconColor: "text-violet-600", accent: "border-t-violet-400",
+                delay: "100",
+              },
+              {
+                icon: Home,
+                title: "Mortgage Pressure Checks",
+                body: "See whether a keep-home scenario may create high mortgage pressure based on income multiples and payment-to-income benchmarks.",
+                iconBg: "bg-amber-50", iconColor: "text-amber-600", accent: "border-t-amber-400",
+                delay: "150",
+              },
+              {
+                icon: Sparkles,
+                title: "Guided Report Summary",
+                body: "Plain-English takeaways, pressure points and questions to raise with your solicitor, mediator, mortgage broker or pension specialist.",
+                iconBg: "bg-gold/10", iconColor: "text-gold", accent: "border-t-gold",
+                delay: "200",
+                highlight: true,
+              },
+              {
+                icon: Download,
+                title: "Downloadable Report",
+                body: "Keep a structured financial brief for your own records — or share it to support conversations with a solicitor or mediator.",
+                iconBg: "bg-rose-50", iconColor: "text-rose-600", accent: "border-t-rose-400",
+                delay: "250",
+              },
+            ].map((card, i) => (
+              <div
+                key={i}
+                className={`rounded-xl border-2 border-t-4 ${card.accent} ${card.highlight ? "border-gold/30 bg-gold/5" : "border-border/50 bg-white"} p-5 space-y-3 shadow-sm hover:shadow-md transition-shadow`}
+                data-testid={`card-report-includes-${i}`}
+                data-reveal
+                data-reveal-delay={card.delay}
+              >
+                <div className={`w-10 h-10 rounded-xl ${card.iconBg} flex items-center justify-center`}>
+                  <card.icon className={`w-5 h-5 ${card.iconColor}`} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground mb-1">{card.title}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{card.body}</p>
+                </div>
+                {card.highlight && (
+                  <div className="flex items-center gap-1.5 text-[10px] text-gold font-semibold">
+                    <Sparkles className="w-3 h-3" /> Included in paid report
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-10 space-y-3" data-reveal>
+            <p className="text-sm text-muted-foreground italic">
+              One hour of professional advice can cost more than this full report. Use it to understand your numbers before expensive conversations.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Button
+                size="lg"
+                onClick={startFresh}
+                data-testid="button-report-includes-start"
+                className="bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/20"
+              >
+                Start my financial report — free <ArrowRight className="w-4 h-4 ml-1.5" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => setSampleReportOpen(true)}
+                data-testid="button-report-includes-preview"
+              >
+                <Eye className="w-4 h-4 mr-2" /> Preview sample report
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground/70">No names or addresses needed · Core calculations run in your browser</p>
+          </div>
+        </div>
+      </section>
+
       {/* ── Pricing ── */}
       <section className="py-16 md:py-20 bg-primary" data-testid="section-pricing">
         <div className="container mx-auto px-4 max-w-2xl text-center space-y-6">
@@ -518,8 +637,10 @@ export default function LandingPage() {
               "Full settlement comparison — all four options modelled and scored",
               "Financial Sustainability Indicator — understand the financial resilience of each option",
               "5-year capital projections — see where your money stands under each option",
-              "Stress testing — what happens if interest rates rise or income changes",
+              "Mortgage pressure checks — affordability benchmarks for keep-home scenarios",
+              "Guided Report Summary — plain-English takeaways and questions for professionals",
               "Downloadable Structured Financial Brief (PDF)",
+              "12 months' access — revisit and update as your situation develops",
             ].map((item) => (
               <div key={item} className="flex items-center gap-2 justify-center text-left">
                 <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
@@ -527,6 +648,9 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+          <p className="text-xs text-white/45 italic">
+            One hour of professional advice can cost more than this full financial report. Use this tool to understand your numbers before expensive conversations.
+          </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <Button
               size="lg"
@@ -636,12 +760,14 @@ export default function LandingPage() {
             <div>
               <p className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">What's included</p>
               <ul className="space-y-2">
+                <li className="text-xs text-white/40">Financial snapshot & asset summary</li>
                 <li className="text-xs text-white/40">Scenario comparison (all 4)</li>
-                <li className="text-xs text-white/40">Financial Sustainability Index</li>
+                <li className="text-xs text-white/40">Monthly cashflow & surplus/deficit</li>
+                <li className="text-xs text-white/40">Mortgage pressure checks</li>
+                <li className="text-xs text-white/40">Guided Report Summary</li>
                 <li className="text-xs text-white/40">5-year capital projections</li>
-                <li className="text-xs text-white/40">Monthly cash position</li>
-                <li className="text-xs text-white/40">Sensitivity analysis</li>
                 <li className="text-xs text-white/40">Downloadable brief (PDF)</li>
+                <li className="text-xs text-white/40">12 months' access to re-run</li>
               </ul>
             </div>
             <div>
@@ -689,6 +815,9 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+      {/* ── Sample Report Modal ── */}
+      <ReportPreviewModal open={sampleReportOpen} onClose={() => setSampleReportOpen(false)} />
+
       {/* ── Sticky mobile CTA ── */}
       {location !== "/wizard" && (
         <div

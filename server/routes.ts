@@ -858,7 +858,7 @@ export async function registerRoutes(
 
       // Rate limit: max 5 calls per session per hour
       const rlKey = `guided-summary:${sessionToken}`;
-      if (!rateLimit(rlKey, 5, 60 * 60 * 1000)) {
+      if (!rateLimit(rlKey, 3, 60 * 60 * 1000)) {
         return res.status(429).json({ message: 'You have generated too many summaries recently. Please try again in an hour.' });
       }
 

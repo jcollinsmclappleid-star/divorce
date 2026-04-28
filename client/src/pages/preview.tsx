@@ -160,26 +160,41 @@ export default function PreviewPage() {
       <main className="max-w-5xl mx-auto px-4 py-8 space-y-10">
 
         {/* ── Hero ── */}
-        <section className="rounded-2xl bg-primary text-white px-6 py-8 relative overflow-hidden">
-          {/* Decorative blobs */}
+        <section className="rounded-2xl bg-gradient-to-br from-primary via-[hsl(220_52%_22%)] to-[hsl(220_52%_16%)] text-white px-6 py-8 relative overflow-hidden">
           <div className="absolute -top-10 -right-10 w-56 h-56 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-violet-400/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-gold/[0.07] rounded-full blur-3xl pointer-events-none" />
           <div className="relative">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex flex-wrap items-center gap-2 mb-4">
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-3 py-1 rounded-full">
                 <Check className="w-3 h-3" /> Analysis complete
               </span>
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold bg-gold/15 text-gold border border-gold/30 px-3 py-1 rounded-full">
+                {combinedPool > 0 ? `Pool: ${formatCurrency(combinedPool)}` : "Your figures loaded"}
+              </span>
             </div>
             <h1 className="text-2xl md:text-3xl font-display font-bold text-white leading-tight mb-2" data-testid="text-preview-title">
-              Your financial picture is ready.<br className="hidden sm:block" />
-              <span className="text-gold">One step away from the full picture.</span>
+              Your personalised financial report is ready.
             </h1>
-            <p className="text-white/65 text-sm max-w-xl leading-relaxed mb-6">
-              You've entered your assets, income, and situation. Your combined pool has been calculated. Unlock the full structured analysis to see every settlement option modelled, scored, and projected over 5 years.
+            <p className="text-white/65 text-sm max-w-xl leading-relaxed mb-5">
+              Every settlement option has been modelled from the figures you entered. Unlock the full structured analysis — scored, projected, and explained in plain English.
             </p>
+            {/* What's waiting strip */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+              {[
+                { label: "Scenarios", value: "4", sub: "modelled" },
+                { label: "Projections", value: "5yr", sub: "capital view" },
+                { label: "Guidance", value: "Plain", sub: "English summary" },
+                { label: "Access", value: "12m", sub: "unlimited reruns" },
+              ].map(({ label, value, sub }) => (
+                <div key={label} className="bg-white/8 border border-white/10 rounded-xl px-3 py-2 text-center">
+                  <p className="text-base font-bold text-white tabular-nums">{value}</p>
+                  <p className="text-[9px] text-white/40 uppercase tracking-wide mt-0.5">{sub}</p>
+                </div>
+              ))}
+            </div>
             <div className="flex flex-col sm:flex-row gap-3">
               <UnlockButton label="Unlock Full Analysis — £79" />
-              <p className="text-xs text-white/40 self-center">Secured by Stripe · Instant access · Questions? We'll help</p>
+              <p className="text-xs text-white/40 self-center">Secured by Stripe · Instant access</p>
             </div>
           </div>
         </section>
@@ -415,6 +430,59 @@ export default function PreviewPage() {
           </Card>
         </section>
 
+        {/* ── Guided Summary locked teaser ── */}
+        <section>
+          <Card className="border-2 border-dashed border-gold/30 overflow-hidden" data-testid="card-guided-summary-locked">
+            <CardContent className="p-0">
+              <div className="bg-gradient-to-r from-[hsl(220_52%_20%)] to-[hsl(220_52%_16%)] px-5 py-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-7 h-7 rounded-lg bg-gold/20 flex items-center justify-center shrink-0">
+                    <span className="text-gold text-sm font-bold">✦</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white">Guided Report Summary</p>
+                    <p className="text-[10px] text-white/45 mt-0.5">Plain-English interpretation of your figures</p>
+                  </div>
+                </div>
+                <span className="inline-flex items-center gap-1 text-xs bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-medium shrink-0">
+                  <Lock className="w-3 h-3" /> Included in full report
+                </span>
+              </div>
+              <div className="p-5 space-y-4">
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Once unlocked, you can generate a plain-English summary of your results — identifying what stands out, where the financial pressure points are, and specific questions to raise with your solicitor, mortgage broker, or pension specialist.
+                </p>
+                <div className="relative">
+                  <div className="blur-[4px] select-none pointer-events-none space-y-2">
+                    {[
+                      "The combined estate is concentrated in property, which drives settlement complexity.",
+                      "There is a material income disparity between the two parties which affects post-settlement sustainability.",
+                      "Scenario S2 (A Keeps Home) may create affordability pressure based on income multiple assumptions.",
+                    ].map((line, i) => (
+                      <div key={i} className="flex gap-2 text-sm text-muted-foreground">
+                        <span className="text-primary/50 shrink-0 mt-0.5">•</span>
+                        <span>{line}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <button
+                      onClick={handleCheckout}
+                      disabled={checkoutLoading}
+                      className="flex items-center gap-2 bg-white/90 backdrop-blur border border-border shadow-lg rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-white transition-all"
+                      data-testid="button-unlock-guided-summary-preview"
+                    >
+                      <Lock className="w-4 h-4 text-gold" />
+                      Unlock to read your Guided Summary
+                      <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
         {/* ── Pricing CTA ── */}
         <section>
           <div className="rounded-2xl bg-primary border border-white/10 shadow-2xl overflow-hidden" data-testid="card-pricing-cta">
@@ -443,10 +511,12 @@ export default function PreviewPage() {
                 {[
                   "Full settlement comparison — all four options modelled and scored",
                   "Financial Sustainability Indicator per party",
+                  "Monthly cashflow view — income, housing costs, surplus/deficit",
                   "5-year capital projections with charts",
-                  "Stress testing — rate & income changes",
+                  "Mortgage pressure checks and affordability benchmarks",
+                  "Guided Report Summary — plain-English takeaways and questions for professionals",
                   "Downloadable Structured Financial Brief (PDF)",
-                  "Unlimited re-runs — update as negotiations progress",
+                  "12 months' access — unlimited re-runs as negotiations progress",
                 ].map(item => (
                   <div key={item} className="flex items-center gap-2 text-xs text-white/75">
                     <Check className="w-3.5 h-3.5 text-gold shrink-0" />
@@ -537,9 +607,10 @@ export default function PreviewPage() {
                 "Financial Sustainability Indicator scores",
                 "5-year capital projection charts",
                 "Housing feasibility benchmark",
+                "Guided Report Summary — plain-English takeaways",
                 "Sensitivity stress-test sliders",
                 "Downloadable professional PDF",
-                "Unlimited re-runs for 12 months",
+                "12 months' access — unlimited re-runs",
               ].map(item => (
                 <div key={item} className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-gold mt-0.5 shrink-0" />

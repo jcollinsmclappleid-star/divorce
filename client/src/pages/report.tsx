@@ -201,43 +201,64 @@ export default function ReportPage() {
     );
   }
 
+  const totalAssets = store.assets.reduce((s, a) => s + a.currentValue, 0);
+  const netWorthTotal = engine.netWorth.total;
+
   return (
-    <div className="min-h-screen bg-white text-gray-900">
-      <div className="print:hidden sticky top-0 z-50 bg-white border-b border-gray-200 px-4 py-3">
+    <div className="min-h-screen bg-[#f8f9fb] text-gray-900">
+      <div className="print:hidden sticky top-0 z-50 bg-white border-b border-gray-200 px-4 py-3 shadow-sm">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-4 flex-wrap">
           <Link href="/results">
             <Button variant="outline" size="sm" data-testid="button-back-results">
               <ArrowLeft className="w-4 h-4 mr-1" /> Back to Results
             </Button>
           </Link>
-          <Button onClick={() => window.print()} data-testid="button-print-report">
+          <Button onClick={() => window.print()} className="bg-primary text-white hover:bg-primary/90" data-testid="button-print-report">
             <Printer className="w-4 h-4 mr-1" /> Download / Print
           </Button>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-8 py-10 print:px-0 print:py-0" data-testid="report-content">
+      <div className="max-w-4xl mx-auto px-6 py-10 print:px-0 print:py-0" data-testid="report-content">
         <header className="mb-10" data-testid="report-header">
-          <div className="bg-primary rounded-xl px-8 py-7 mb-6 print:rounded-none print:px-0">
-            <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
-              <div>
+          {/* Cover header */}
+          <div className="bg-gradient-to-br from-primary via-[hsl(220_52%_22%)] to-[hsl(220_52%_16%)] rounded-2xl px-8 py-8 mb-4 print:rounded-none print:px-0 overflow-hidden relative">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-white/[0.03] rounded-full -translate-y-12 translate-x-12" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-gold/[0.06] rounded-full translate-y-10 -translate-x-8" />
+            <div className="relative">
+              <div className="flex items-start justify-between gap-4 flex-wrap mb-5">
                 <LogoPrint white />
+                <div className="text-right">
+                  <p className="text-[10px] text-white/40 uppercase tracking-widest">Report generated</p>
+                  <p className="text-sm text-white/80 font-medium mt-0.5">{new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p>
+                  <p className="text-[10px] text-white/30 mt-1">UK {store.config.taxYear} Tax Rules</p>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="text-[10px] text-white/50 uppercase tracking-wider">Generated</p>
-                <p className="text-sm text-white/80 font-medium">{new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p>
+              <div className="border-t border-white/15 pt-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-1 h-6 bg-gold rounded-full" />
+                  <h1 className="text-3xl font-bold tracking-tight text-white" data-testid="text-report-title">Divorce Financial Report</h1>
+                </div>
+                <p className="text-sm text-white/55 ml-3">Illustrative financial modelling · England & Wales · {allScenarios.length} scenarios analysed</p>
               </div>
-            </div>
-            <div className="border-t border-white/15 pt-4">
-              <h1 className="text-3xl font-bold tracking-tight text-white" data-testid="text-report-title">Structured Financial Brief</h1>
-              <p className="text-sm text-white/60 mt-1">UK {store.config.taxYear} Tax Rules &middot; Scenario Modelling Summary</p>
-              <p className="text-xs text-white/40 mt-3 italic">
-                Illustrative modelling only. This is not legal, tax or financial advice.
-              </p>
+              {/* Key stats strip */}
+              <div className="mt-6 grid grid-cols-3 gap-3">
+                {[
+                  { label: "Total Assets", value: fmt(totalAssets), color: "text-cyan-300" },
+                  { label: "Combined Net Worth", value: fmt(netWorthTotal), color: "text-gold" },
+                  { label: "Scenarios Modelled", value: String(allScenarios.length), color: "text-emerald-300" },
+                ].map(({ label, value, color }) => (
+                  <div key={label} className="bg-white/8 border border-white/10 rounded-xl px-4 py-3">
+                    <p className="text-[10px] text-white/40 uppercase tracking-wider mb-1">{label}</p>
+                    <p className={`text-lg font-bold tabular-nums ${color}`}>{value}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="p-4 border border-amber-200 bg-amber-50 rounded-lg text-xs text-amber-900 leading-relaxed">
-            <p className="font-semibold text-amber-800 mb-1">IMPORTANT</p>
+          {/* Disclaimer */}
+          <div className="p-4 border border-amber-200 bg-amber-50 rounded-xl text-xs text-amber-900 leading-relaxed flex items-start gap-3">
+            <span className="text-amber-600 font-bold shrink-0 mt-0.5 text-[10px] uppercase tracking-wider">Important</span>
             <p>
               This document provides illustrative financial modelling only and does not constitute legal, tax, or financial advice. All figures are estimates based on the information entered and standard assumptions. Lending capacity benchmarks are generalised income multiple illustrations and do not constitute a lending assessment, mortgage advice, or credit approval indication. Independent professional review may be warranted before making any financial decisions.
             </p>
@@ -409,8 +430,22 @@ export default function ReportPage() {
         </ReportSection>
 
         {scenarioData.map(({ sc, narrative, sourceOfFunds, stability, snapshot, comparison, housing }, idx) => (
-          <ReportSection key={sc.id} title={`${5 + idx}. ${SCENARIO_META[sc.id]?.label ?? sc.name} — Detail`}>
-            <div className="space-y-5 pl-3 border-l-4" style={{ borderLeftColor: SCENARIO_META[sc.id]?.color }}>
+          <ReportSection key={sc.id} title={`${5 + idx}. ${SCENARIO_META[sc.id]?.label ?? sc.name} — Detail`} accentColor={SCENARIO_META[sc.id]?.color}>
+            <div className="space-y-5">
+              {/* Scenario stat strip */}
+              <div className="rounded-lg p-3 flex flex-wrap gap-4 mb-1" style={{ background: `${SCENARIO_META[sc.id]?.color}12`, borderLeft: `3px solid ${SCENARIO_META[sc.id]?.color}` }}>
+                {[
+                  { label: "A Starting Position", value: fmt(sc.liquidStartA) },
+                  { label: "B Starting Position", value: fmt(sc.liquidStartB) },
+                  { label: "A FSI", value: `${stability.scoreA}/100` },
+                  { label: "B FSI", value: `${stability.scoreB}/100` },
+                ].map(({ label, value }) => (
+                  <div key={label}>
+                    <p className="text-[9px] text-gray-400 uppercase tracking-wider">{label}</p>
+                    <p className="text-sm font-bold text-gray-800 tabular-nums">{value}</p>
+                  </div>
+                ))}
+              </div>
               <div>
                 <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Executive Narrative Summary</h4>
                 <p className="text-sm text-gray-700 leading-relaxed">{narrative.headline}</p>
@@ -730,62 +765,71 @@ function GuidedSummaryReportSection({ summary }: { summary: GuidedSummary }) {
   const hasProperty = summary.questions_for_professionals.mortgage_broker?.length > 0;
   const hasPension = summary.questions_for_professionals.pension_expert?.length > 0;
 
-  const confidenceColour =
+  const confidenceStyle =
     summary.confidence === "High"
-      ? "#059669"
+      ? "border-emerald-400 text-emerald-700 bg-emerald-50"
       : summary.confidence === "Medium"
-      ? "#D97706"
-      : "#E11D48";
+      ? "border-amber-400 text-amber-700 bg-amber-50"
+      : "border-rose-400 text-rose-700 bg-rose-50";
 
-  const blocks = [
-    { title: "Plain-English Overview", content: summary.overview },
-    { title: "What Stands Out", content: summary.what_stands_out },
-    { title: "Scenario Interpretation", content: summary.scenario_interpretation },
-    { title: "Pressure Points", content: summary.pressure_points },
-    { title: "Missing Information & Model Confidence", content: summary.missing_information },
+  const GSBLOCKS = [
+    { title: "Plain-English Overview",   content: summary.overview,               border: "border-l-blue-800/40" },
+    { title: "What Stands Out",          content: summary.what_stands_out,        border: "border-l-yellow-500/50" },
+    { title: "Scenario Interpretation",  content: summary.scenario_interpretation, border: "border-l-cyan-500/50" },
+    { title: "Pressure Points",          content: summary.pressure_points,        border: "border-l-rose-400/60" },
+    { title: "Missing Information & Model Confidence", content: summary.missing_information, border: "border-l-amber-400/60" },
   ];
 
   const proGroups = [
     { label: "Solicitor / Mediator", questions: summary.questions_for_professionals.solicitor_mediator, show: true },
-    { label: "Mortgage Broker", questions: summary.questions_for_professionals.mortgage_broker, show: hasProperty && (summary.questions_for_professionals.mortgage_broker?.length ?? 0) > 0 },
-    { label: "Pension Expert", questions: summary.questions_for_professionals.pension_expert, show: hasPension && (summary.questions_for_professionals.pension_expert?.length ?? 0) > 0 },
+    { label: "Mortgage Broker",       questions: summary.questions_for_professionals.mortgage_broker,    show: hasProperty && (summary.questions_for_professionals.mortgage_broker?.length ?? 0) > 0 },
+    { label: "Pension Expert",        questions: summary.questions_for_professionals.pension_expert,     show: hasPension  && (summary.questions_for_professionals.pension_expert?.length  ?? 0) > 0 },
   ].filter(g => g.show);
 
   return (
     <section className="mb-8 break-inside-avoid" data-testid="section-report-guided-summary">
-      <div className="bg-primary px-4 py-2 rounded-md mb-4 flex items-center justify-between">
-        <h2 className="text-sm font-bold text-white uppercase tracking-wider">Guided Report Summary</h2>
-        <span className="text-[10px] text-white/70">Intelligent summary</span>
-      </div>
-
-      <div className="flex items-center gap-2 mb-4">
-        <span className="text-xs font-medium text-gray-600">Model confidence:</span>
-        <span className="text-xs font-semibold px-2 py-0.5 rounded-full border" style={{ color: confidenceColour, borderColor: confidenceColour }}>
-          {summary.confidence}
+      {/* Premium header */}
+      <div className="bg-gradient-to-r from-[hsl(220_52%_22%)] to-[hsl(220_52%_16%)] rounded-xl px-5 py-4 mb-5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-7 h-7 rounded-lg bg-gold/20 flex items-center justify-center shrink-0">
+            <span className="text-gold text-sm font-bold">✦</span>
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-white uppercase tracking-widest">Guided Report Summary</h2>
+            <p className="text-[10px] text-white/45 mt-0.5">Plain-English analysis of your modelled figures</p>
+          </div>
+        </div>
+        <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-full border ${confidenceStyle}`}>
+          Confidence: {summary.confidence}
         </span>
       </div>
 
-      <div className="space-y-4">
-        {blocks.map(b => (
-          <div key={b.title}>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">{b.title}</h4>
-            <div className="text-sm text-gray-700 space-y-1">
+      <div className="space-y-4 bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
+        {GSBLOCKS.map(b => (
+          <div key={b.title} className={`border-l-4 ${b.border} pl-4 py-1`}>
+            <h4 className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-1.5">{b.title}</h4>
+            <div className="text-sm text-gray-700 space-y-1.5 leading-relaxed">
               {b.content.split("\n").filter(Boolean).map((line, i) => (
-                <p key={i}>{line.replace(/^[-•]\s*/, "")}</p>
+                <p key={i}>{line.startsWith("- ") || line.startsWith("• ") ? (
+                  <span className="flex gap-2"><span className="text-gray-400 shrink-0 mt-0.5">•</span><span>{line.replace(/^[-•]\s*/, "")}</span></span>
+                ) : line}</p>
               ))}
             </div>
           </div>
         ))}
 
-        <div>
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Questions for Professionals</h4>
-          <div className="space-y-3">
+        <div className="border-l-4 border-l-cyan-400/50 pl-4 py-1">
+          <h4 className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-2">Questions for Professionals</h4>
+          <div className="space-y-4">
             {proGroups.map(g => (
               <div key={g.label}>
-                <p className="text-xs font-semibold text-gray-600 mb-1">{g.label}</p>
-                <ol className="list-decimal list-inside space-y-0.5">
+                <p className="text-xs font-semibold text-gray-600 mb-1.5 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary/40 inline-block" />
+                  {g.label}
+                </p>
+                <ol className="list-decimal list-inside space-y-1">
                   {(g.questions ?? []).map((q, i) => (
-                    <li key={i} className="text-sm text-gray-700">{q}</li>
+                    <li key={i} className="text-sm text-gray-700 leading-relaxed">{q}</li>
                   ))}
                 </ol>
               </div>
@@ -794,7 +838,7 @@ function GuidedSummaryReportSection({ summary }: { summary: GuidedSummary }) {
         </div>
       </div>
 
-      <p className="text-[10px] text-gray-400 italic mt-4">
+      <p className="text-[10px] text-gray-400 italic mt-3">
         This guided summary is illustrative and generated from the figures entered. It is not legal, tax, or financial advice.
         Generated: {new Date(summary.generatedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.
       </p>
@@ -802,13 +846,18 @@ function GuidedSummaryReportSection({ summary }: { summary: GuidedSummary }) {
   );
 }
 
-function ReportSection({ title, children }: { title: string; children: React.ReactNode }) {
+function ReportSection({ title, children, accentColor }: { title: string; children: React.ReactNode; accentColor?: string }) {
   return (
     <section className="mb-8 break-inside-avoid" data-testid={`section-report-${title.toLowerCase().replace(/\s+/g, "-")}`}>
-      <div className="bg-primary px-4 py-2 rounded-md mb-4">
-        <h2 className="text-sm font-bold text-white uppercase tracking-wider">{title}</h2>
+      <div className="flex items-stretch gap-0 mb-5 rounded-lg overflow-hidden shadow-sm">
+        <div className="w-1.5 shrink-0" style={{ background: accentColor ?? "#1e3a5f" }} />
+        <div className="flex-1 bg-gradient-to-r from-[hsl(220_52%_20%)] to-[hsl(220_52%_16%)] px-5 py-3 flex items-center justify-between">
+          <h2 className="text-sm font-bold text-white uppercase tracking-widest">{title}</h2>
+        </div>
       </div>
-      {children}
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+        {children}
+      </div>
     </section>
   );
 }
@@ -836,16 +885,33 @@ function ReportCollapsible({ title, children }: { title: string; children: React
 function TaxSummaryColumn({ label, tax }: { label: string; tax: { gross: number; personalAllowance: number; incomeTax: number; nationalInsurance: number; net: number } }) {
   return (
     <div>
-      <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">{label}</h4>
-      <table className="w-full text-sm">
-        <tbody>
-          <tr className="border-b border-gray-100"><td className="py-1 text-gray-600">Gross Annual Income</td><td className="py-1 text-right tabular-nums">{fmt(tax.gross)}</td></tr>
-          <tr className="border-b border-gray-100"><td className="py-1 text-gray-600">Personal Allowance</td><td className="py-1 text-right tabular-nums">{fmt(tax.personalAllowance)}</td></tr>
-          <tr className="border-b border-gray-100"><td className="py-1 text-gray-600">Income Tax Liability</td><td className="py-1 text-right tabular-nums text-red-600">({fmt(tax.incomeTax)})</td></tr>
-          <tr className="border-b border-gray-100"><td className="py-1 text-gray-600">National Insurance Contributions</td><td className="py-1 text-right tabular-nums text-red-600">({fmt(tax.nationalInsurance)})</td></tr>
-          <tr className="font-semibold"><td className="py-1">Net Annual Income [take-home pay]</td><td className="py-1 text-right tabular-nums">{fmt(tax.net)}</td></tr>
-        </tbody>
-      </table>
+      <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">{label}</h4>
+      <div className="bg-gray-50 rounded-lg border border-gray-100 overflow-hidden">
+        <table className="w-full text-sm">
+          <tbody>
+            <tr className="border-b border-gray-100">
+              <td className="py-2 px-3 text-gray-600">Gross Annual Income</td>
+              <td className="py-2 px-3 text-right tabular-nums font-medium text-gray-800">{fmt(tax.gross)}</td>
+            </tr>
+            <tr className="border-b border-gray-100 bg-white">
+              <td className="py-2 px-3 text-gray-500">Personal Allowance</td>
+              <td className="py-2 px-3 text-right tabular-nums text-gray-600">{fmt(tax.personalAllowance)}</td>
+            </tr>
+            <tr className="border-b border-gray-100">
+              <td className="py-2 px-3 text-gray-500">Income Tax Liability</td>
+              <td className="py-2 px-3 text-right tabular-nums text-rose-600 font-medium">({fmt(tax.incomeTax)})</td>
+            </tr>
+            <tr className="border-b border-gray-100 bg-white">
+              <td className="py-2 px-3 text-gray-500">National Insurance</td>
+              <td className="py-2 px-3 text-right tabular-nums text-rose-600 font-medium">({fmt(tax.nationalInsurance)})</td>
+            </tr>
+            <tr className="bg-primary/5 border-t-2 border-primary/20">
+              <td className="py-2.5 px-3 font-semibold text-gray-800">Take-Home Pay (annual)</td>
+              <td className="py-2.5 px-3 text-right tabular-nums font-bold text-emerald-700">{fmt(tax.net)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
