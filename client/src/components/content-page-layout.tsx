@@ -159,8 +159,12 @@ export function ContentPageLayout({
 
       <SiteNav />
 
-      <header className="bg-primary py-12 md:py-16" data-testid="section-content-hero">
-        <div className="container mx-auto px-4 max-w-3xl">
+      <header className="relative overflow-hidden bg-primary py-12 md:py-16" data-testid="section-content-hero">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-12 -left-12 w-64 h-64 rounded-full bg-cyan-500/8 blur-3xl" />
+          <div className="absolute top-4 right-8 w-48 h-48 rounded-full bg-violet-500/8 blur-3xl" />
+        </div>
+        <div className="relative container mx-auto px-4 max-w-3xl">
           <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-3 -ml-2">
             <Button
               variant="ghost"
@@ -189,7 +193,7 @@ export function ContentPageLayout({
             {subtitle}
           </p>
           <Button
-            className="mt-6 bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
+            className="mt-6 bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 btn-shimmer"
             onClick={() => setLocation("/wizard")}
             data-testid="button-hero-cta"
           >
@@ -202,18 +206,18 @@ export function ContentPageLayout({
         {children}
       </article>
 
-      <section className="py-10 md:py-12 bg-primary/6 border-y border-primary/15" data-testid="section-calculator-cta">
+      <section className="py-10 md:py-12 bg-primary border-y border-white/10" data-testid="section-calculator-cta">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
-              <p className="text-sm font-semibold">Model this for your own situation</p>
-              <p className="text-xs text-muted-foreground leading-relaxed max-w-md">
+              <p className="text-sm font-semibold text-white">Model this for your own situation</p>
+              <p className="text-xs text-white/55 leading-relaxed max-w-md">
                 Divorce Calculator UK lets you enter your actual figures and see how different settlement options compare — free to start, with a full analysis available for £79.
               </p>
             </div>
             <Button
               onClick={() => setLocation("/wizard")}
-              className="bg-gold hover:bg-gold/90 text-white border-0 shadow-sm shrink-0"
+              className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 shrink-0 btn-shimmer"
               data-testid="button-article-cta"
             >
               Start My Free Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />

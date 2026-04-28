@@ -7,6 +7,15 @@ import { SiteNav } from "@/components/site-nav";
 import { scrollTop } from "@/lib/utils";
 import { ArrowRight, Home, Scale, PiggyBank, Users, TrendingUp, BookOpen, Calculator } from "lucide-react";
 
+const SECTION_ACCENTS: Record<string, { iconBg: string; iconColor: string; pillBg: string; pillText: string; hoverBorder: string }> = {
+  "Property & Housing": { iconBg: "bg-cyan-100", iconColor: "text-cyan-600", pillBg: "bg-cyan-100", pillText: "text-cyan-700", hoverBorder: "hover:border-cyan-300 hover:bg-cyan-50/40" },
+  "Legal Orders & Process": { iconBg: "bg-violet-100", iconColor: "text-violet-600", pillBg: "bg-violet-100", pillText: "text-violet-700", hoverBorder: "hover:border-violet-300 hover:bg-violet-50/40" },
+  "Assets & Savings": { iconBg: "bg-amber-100", iconColor: "text-amber-600", pillBg: "bg-amber-100", pillText: "text-amber-700", hoverBorder: "hover:border-amber-300 hover:bg-amber-50/40" },
+  "Children": { iconBg: "bg-rose-100", iconColor: "text-rose-500", pillBg: "bg-rose-100", pillText: "text-rose-700", hoverBorder: "hover:border-rose-300 hover:bg-rose-50/40" },
+  "Income & Earnings": { iconBg: "bg-emerald-100", iconColor: "text-emerald-600", pillBg: "bg-emerald-100", pillText: "text-emerald-700", hoverBorder: "hover:border-emerald-300 hover:bg-emerald-50/40" },
+  "Tools & Resources": { iconBg: "bg-blue-100", iconColor: "text-blue-600", pillBg: "bg-blue-100", pillText: "text-blue-700", hoverBorder: "hover:border-blue-300 hover:bg-blue-50/40" },
+};
+
 export default function DivorceFinancialGuidesPage() {
   useDocumentTitle("Divorce Financial Guides UK | DivorceCalculatorUK");
   useMetaTags({
@@ -117,47 +126,51 @@ export default function DivorceFinancialGuidesPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <SiteNav />
 
+      {/* Hero */}
+      <div className="relative overflow-hidden bg-primary py-12 md:py-16">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-16 -left-16 w-72 h-72 rounded-full bg-cyan-500/10 blur-3xl" />
+          <div className="absolute top-0 right-0 w-56 h-56 rounded-full bg-violet-500/10 blur-3xl" />
+          <div className="absolute bottom-0 left-1/2 w-80 h-24 rounded-full bg-amber-500/5 blur-3xl" />
+        </div>
+        <div className="relative container mx-auto px-4 max-w-3xl space-y-4">
+          <div className="flex flex-wrap gap-2">
+            <span className="inline-flex items-center bg-white/10 text-white/70 text-xs font-semibold px-2.5 py-1 rounded-full border border-white/15">England &amp; Wales · 2026/27</span>
+            <span className="inline-flex items-center bg-white/10 text-white/70 text-xs font-semibold px-2.5 py-1 rounded-full border border-white/15">50+ guides</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-display font-bold text-white leading-tight" data-testid="text-page-title">
+            Divorce Financial Guides
+          </h1>
+          <p className="text-white/65 text-lg leading-relaxed max-w-2xl">
+            Understand how finances are divided in a UK divorce — property, pensions, costs, and settlement outcomes. Use the guides below to navigate every stage.
+          </p>
+          <Button
+            size="sm"
+            onClick={() => { scrollTop(); setLocation("/wizard"); }}
+            data-testid="button-cta-hero"
+            className="bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/25 btn-shimmer"
+          >
+            Start my financial model — free <ArrowRight className="w-3.5 h-3.5 ml-1" />
+          </Button>
+        </div>
+      </div>
+
       <main className="flex-1 container mx-auto px-4 py-12 max-w-3xl">
         <div className="space-y-10">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-primary" />
-              <span className="text-sm font-medium text-primary">England & Wales · 2026/27</span>
-            </div>
-            <h1 className="text-3xl md:text-4xl font-display font-bold tracking-tight leading-tight" data-testid="text-page-title">
-              Divorce Financial Guides
-            </h1>
-            <p className="text-muted-foreground text-lg leading-relaxed">
-              Understand how finances are divided in a UK divorce — including property, pensions, and settlement outcomes. Use the guides below to navigate each stage.
-            </p>
-          </div>
-
-          <Card className="bg-primary text-white border-0">
-            <CardContent className="pt-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div>
-                <p className="font-semibold text-white text-sm">Use our Divorce Calculator to estimate your financial split</p>
-                <p className="text-xs text-white/70 mt-0.5">Model different scenarios based on your actual figures — property, pensions, income, and debts.</p>
-              </div>
-              <Button
-                size="sm"
-                onClick={() => { scrollTop(); setLocation("/wizard"); }}
-                data-testid="button-cta-top"
-                className="bg-gold hover:bg-gold/90 text-white border-0 shrink-0"
-              >
-                Start modelling <ArrowRight className="w-3.5 h-3.5 ml-1" />
-              </Button>
-            </CardContent>
-          </Card>
 
           {sections.map((section) => {
             const Icon = section.icon;
+            const accent = SECTION_ACCENTS[section.title] ?? { iconBg: "bg-primary/10", iconColor: "text-primary", pillBg: "bg-primary/10", pillText: "text-primary", hoverBorder: "hover:border-primary/30 hover:bg-primary/5" };
             return (
-              <section key={section.title} className="space-y-4">
-                <div className="flex items-center gap-2 pb-2 border-b border-border">
-                  <Icon className="w-5 h-5 text-primary" />
+              <section key={section.title} className="space-y-3">
+                <div className="flex items-center gap-3 pb-3 border-b border-border">
+                  <div className={`w-8 h-8 rounded-lg ${accent.iconBg} flex items-center justify-center shrink-0`}>
+                    <Icon className={`w-4 h-4 ${accent.iconColor}`} />
+                  </div>
                   <h2 className="text-xl font-semibold text-foreground">{section.title}</h2>
+                  <span className={`ml-auto text-[11px] font-semibold px-2 py-0.5 rounded-full ${accent.pillBg} ${accent.pillText}`}>{section.links.length} guides</span>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {section.links.map((link) => (
                     <Link
                       key={link.href}
@@ -166,13 +179,13 @@ export default function DivorceFinancialGuidesPage() {
                       className="block group"
                       data-testid={`link-guide-${link.href.replace(/\//g, "")}`}
                     >
-                      <div className="p-4 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 transition-all">
+                      <div className={`p-4 rounded-lg border border-border/60 transition-all ${accent.hoverBorder}`}>
                         <div className="flex items-center justify-between gap-3">
-                          <div>
-                            <p className="font-medium text-foreground group-hover:text-primary transition-colors text-sm">{link.label}</p>
+                          <div className="min-w-0">
+                            <p className="font-medium text-foreground group-hover:text-foreground transition-colors text-sm truncate">{link.label}</p>
                             <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{link.desc}</p>
                           </div>
-                          <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary shrink-0 transition-colors" />
+                          <ArrowRight className={`w-4 h-4 text-muted-foreground shrink-0 transition-colors group-hover:${accent.iconColor}`} />
                         </div>
                       </div>
                     </Link>

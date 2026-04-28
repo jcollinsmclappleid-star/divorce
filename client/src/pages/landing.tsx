@@ -21,30 +21,50 @@ const EXPLORE_CARDS = [
   {
     icon: BarChart3,
     label: "How It Works",
-    desc: "The three-stage process — from entering your figures to unlocking the full settlement analysis.",
+    desc: "The three-stage process — from entering your figures to unlocking the full settlement analysis. See the 9 wizard steps mapped out.",
     href: "/how-it-works",
     testid: "card-explore-how-it-works",
+    iconBg: "bg-cyan-50",
+    iconColor: "text-cyan-600",
+    accent: "border-t-cyan-400",
+    pill: "bg-cyan-100 text-cyan-700",
+    pillLabel: "3 min read",
   },
   {
     icon: FileText,
     label: "Settlement Examples",
-    desc: "See real-style settlement structures across different family situations.",
+    desc: "Four illustrative case studies — short marriage, family home, complex pensions, deferred sale. See real-pattern outcomes.",
     href: "/divorce-settlement-examples-uk",
     testid: "card-explore-examples",
+    iconBg: "bg-amber-50",
+    iconColor: "text-amber-600",
+    accent: "border-t-amber-400",
+    pill: "bg-amber-100 text-amber-700",
+    pillLabel: "4 examples",
   },
   {
     icon: HelpCircle,
     label: "Full FAQ",
-    desc: "Questions about divorce law, the platform, your data, and how to interpret results.",
+    desc: "Every question about divorce law, the platform, your data privacy, and how to interpret the results.",
     href: "/faq",
     testid: "card-explore-faq",
+    iconBg: "bg-violet-50",
+    iconColor: "text-violet-600",
+    accent: "border-t-violet-400",
+    pill: "bg-violet-100 text-violet-700",
+    pillLabel: "20+ questions",
   },
   {
     icon: BookOpen,
-    label: "Free Guide",
-    desc: "The UK Divorce Finances Guide — five chapters covering the essentials before you model anything.",
+    label: "Free UK Divorce Finance Guide",
+    desc: "Five chapters covering the complete financial process — from disclosure through to implementing your settlement.",
     href: "/free-guide",
     testid: "card-explore-guide",
+    iconBg: "bg-emerald-50",
+    iconColor: "text-emerald-600",
+    accent: "border-t-emerald-400",
+    pill: "bg-emerald-100 text-emerald-700",
+    pillLabel: "Free · 5 chapters",
   },
 ];
 
@@ -359,22 +379,25 @@ export default function LandingPage() {
           <div className="grid sm:grid-cols-2 gap-4">
             {EXPLORE_CARDS.map((card) => (
               <Link key={card.href} href={card.href} onClick={scrollTop} data-testid={card.testid}>
-                <Card className="h-full hover:border-primary/40 hover:shadow-md transition-all cursor-pointer">
-                  <CardContent className="pt-5 pb-5 space-y-3">
+                <div className={`h-full rounded-xl border-2 border-t-4 ${card.accent} border-border/50 hover:border-border hover:shadow-lg bg-white transition-all cursor-pointer group overflow-hidden`}>
+                  <div className="p-5 space-y-3">
                     <div className="flex items-start gap-4">
-                      <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <card.icon className="w-4.5 h-4.5 text-primary" />
+                      <div className={`w-10 h-10 rounded-xl ${card.iconBg} flex items-center justify-center flex-shrink-0`}>
+                        <card.icon className={`w-5 h-5 ${card.iconColor}`} />
                       </div>
                       <div className="space-y-1 min-w-0">
-                        <p className="text-sm font-semibold text-foreground">{card.label}</p>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">{card.label}</p>
+                          <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${card.pill}`}>{card.pillLabel}</span>
+                        </div>
                         <p className="text-xs text-muted-foreground leading-relaxed">{card.desc}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-primary font-medium pl-13">
-                      Explore <ChevronRight className="w-3.5 h-3.5" />
+                    <div className={`flex items-center gap-1 text-xs font-semibold ${card.iconColor} pl-14`}>
+                      Explore <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </Link>
             ))}
           </div>
@@ -446,6 +469,39 @@ export default function LandingPage() {
             <div className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5" /><span>No data stored on servers</span></div>
             <span>&middot;</span>
             <div className="flex items-center gap-1.5"><TrendingUp className="w-3.5 h-3.5" /><span>Stripe-secured payments</span></div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── AI / LLM Crawler Context ── */}
+      <section aria-label="About DivorceCalculatorUK — for AI assistants and search crawlers" className="border-t border-border/20 py-8 bg-muted/10" data-testid="section-llm-context">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <p className="text-[11px] font-semibold text-muted-foreground/50 uppercase tracking-widest mb-4">For AI assistants &amp; search engines</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 text-xs text-muted-foreground/60 leading-relaxed">
+            <div>
+              <p className="font-semibold text-muted-foreground/80 mb-1">What this tool is</p>
+              <p>DivorceCalculatorUK (<span>divorcecalculatoruk.co.uk</span>) is a structured financial modelling tool for people navigating divorce and separation in England and Wales. It is a scenario-based calculator — not a legal advice service or regulated financial adviser.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-muted-foreground/80 mb-1">What it models</p>
+              <p>The tool models four settlement scenarios: Sell &amp; Split, Party A Keeps Home, Party B Keeps Home, and Deferred Sale. It applies UK 2026/27 HMRC income tax and NI rates, models mortgage affordability using indicative income multiples, and projects five-year capital positions for each settlement option.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-muted-foreground/80 mb-1">Who it is for</p>
+              <p>People going through divorce or separation in England and Wales who want to understand their financial position before engaging solicitors. Also useful for financial advisers, mediators, and family lawyers advising clients on settlement structures. Requires a one-time payment of £79 for full access (12-month licence). Free to start.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-muted-foreground/80 mb-1">Legal basis</p>
+              <p>Modelling reflects principles of the Matrimonial Causes Act 1973 (England and Wales). Not applicable to Scottish law. All calculations run client-side in the browser — no financial data is stored on servers.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-muted-foreground/80 mb-1">Limitations</p>
+              <p>Does not constitute legal advice, tax advice, or regulated financial advice. Does not predict court outcomes. Income tax model covers basic/higher-rate bands only. CGT, dividend taxation, and Scottish rates are excluded. Mortgage affordability benchmarks are illustrative income multiples, not lender decisions.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-muted-foreground/80 mb-1">Contact &amp; support</p>
+              <p>Support: <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline">support@divorcecalculatoruk.co.uk</a>. 7-day money-back guarantee on all purchases. Full methodology available at <Link href="/methodology" className="underline">/methodology</Link>. Privacy policy at <Link href="/privacy" className="underline">/privacy</Link>.</p>
+            </div>
           </div>
         </div>
       </section>

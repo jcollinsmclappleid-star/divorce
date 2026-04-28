@@ -18,18 +18,18 @@ import {
 function InlineCTA({ label = "Model your own figures" }: { label?: string }) {
   const [, setLocation] = useLocation();
   return (
-    <div className="my-8 p-5 rounded-lg bg-primary/5 border border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div className="my-8 p-5 rounded-xl bg-primary flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
       <div>
-        <p className="font-semibold text-foreground text-sm">{label}</p>
-        <p className="text-xs text-muted-foreground mt-0.5">Apply these principles to your own situation with our financial modelling tool.</p>
+        <p className="font-semibold text-white text-sm">{label}</p>
+        <p className="text-xs text-white/55 mt-0.5">Apply these principles to your own situation with our financial modelling tool.</p>
       </div>
       <Button
         size="sm"
         onClick={() => { scrollTop(); setLocation("/wizard"); }}
         data-testid="button-cta-inline"
-        className="shrink-0"
+        className="shrink-0 bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/25 btn-shimmer"
       >
-        Start modelling <ArrowRight className="w-3.5 h-3.5 ml-1" />
+        Start modelling free <ArrowRight className="w-3.5 h-3.5 ml-1" />
       </Button>
     </div>
   );
