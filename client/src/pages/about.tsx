@@ -32,10 +32,12 @@ const NOT_LIST = [
 export default function AboutPage() {
   useDocumentTitle("About Divorce Calculator UK | Financial Modelling Tool");
   useMetaTags({
-    description: "About Divorce Calculator UK — a free financial modelling tool for people going through divorce or separation in England and Wales. Based on the Matrimonial Causes Act 1973.",
+    description: "Divorce Calculator UK models divorce financial settlements for England and Wales — free to start, no sign-up. Based on the Matrimonial Causes Act 1973. Not legal or financial advice.",
     canonical: "https://divorcecalculatoruk.co.uk/about",
-    ogTitle: "About Divorce Calculator UK",
-    ogDescription: "What this tool does, how it works, what it covers, and what it doesn't do. Free UK divorce financial settlement modelling.",
+    ogTitle: "About Divorce Calculator UK — Financial Modelling Tool",
+    ogDescription: "Free divorce financial modelling for England and Wales. See what every settlement option means for your money. Not legal advice.",
+    ogUrl: "https://divorcecalculatoruk.co.uk/about",
+    ogType: "website",
   });
 
   const [, setLocation] = useLocation();

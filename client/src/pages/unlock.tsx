@@ -126,8 +126,8 @@ export default function UnlockPage() {
               <div className="px-6 py-5 space-y-4">
                 <div className="grid grid-cols-3 gap-2 text-center">
                   <div className="bg-white/5 rounded-lg py-2.5">
-                    <p className="text-sm font-bold text-white">15 min</p>
-                    <p className="text-[10px] text-white/45 mt-0.5">First model</p>
+                    <p className="text-sm font-bold text-white">Under 5 min</p>
+                    <p className="text-[10px] text-white/45 mt-0.5">To model</p>
                   </div>
                   <div className="bg-white/5 rounded-lg py-2.5">
                     <p className="text-sm font-bold text-white">12 months</p>
@@ -155,6 +155,10 @@ export default function UnlockPage() {
                     "Unlock Full Analysis — £79"
                   )}
                 </Button>
+
+                <p className="text-center text-xs text-white/40 italic">
+                  A single hour with a solicitor typically costs £250–£400. This covers your entire financial picture.
+                </p>
 
                 <div className="flex items-center justify-center gap-1.5 text-xs text-white/50">
                   <CheckCircle className="w-3.5 h-3.5" />

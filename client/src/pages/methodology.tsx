@@ -5,10 +5,14 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 export default function MethodologyPage() {
-  useDocumentTitle("Model Methodology & Limitations | DivorceCalculatorUK");
+  useDocumentTitle("How We Model Divorce Settlements | DivorceCalculatorUK");
   useMetaTags({
-    description: "How DivorceCalculatorUK calculates divorce financial settlement scenarios. UK 2026/27 income tax and National Insurance rates, scope, assumptions, and limitations explained.",
+    description: "How we calculate divorce financial settlements — 2026/27 UK tax and NI rates, pension offsetting, mortgage capacity, FSI scores, and scenario assumptions explained.",
     canonical: "https://divorcecalculatoruk.co.uk/methodology",
+    ogTitle: "Divorce Calculator UK — Calculation Methodology",
+    ogDescription: "2026/27 UK tax and NI rates, pension offsetting, mortgage capacity, FSI scores — how our divorce financial model works.",
+    ogUrl: "https://divorcecalculatoruk.co.uk/methodology",
+    ogType: "website",
   });
   const [, setLocation] = useLocation();
 

@@ -1,6 +1,8 @@
 import { Layout } from "@/components/layout";
 import { useAppStore } from "@/hooks/use-store";
 import { useEngine } from "@/hooks/use-engine";
+import { useDocumentTitle } from "@/hooks/use-document-title";
+import { useMetaTags } from "@/hooks/use-meta-tags";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -49,6 +51,15 @@ const scenarioList = [
 ];
 
 export default function ScenariosPage() {
+  useDocumentTitle("Divorce Settlement Scenarios Explained | DivorceCalculatorUK");
+  useMetaTags({
+    description: "Sell & Split, keep the home, or defer the sale — four divorce settlement scenarios modelled with UK 2026/27 tax for England and Wales. See what each option means financially.",
+    canonical: "https://divorcecalculatoruk.co.uk/settlement-scenarios",
+    ogTitle: "UK Divorce Settlement Scenarios — Sell, Retain, Defer",
+    ogDescription: "Four scenarios modelled with UK 2026/27 tax: Sell & Split, keep the home, or a deferred sale. See what each option means for your finances.",
+    ogUrl: "https://divorcecalculatoruk.co.uk/settlement-scenarios",
+    ogType: "website",
+  });
   const { scenarios, toggleScenario, assumptions, updateAssumptions, children, updateChildren } = useAppStore();
   const engine = useEngine();
 

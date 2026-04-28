@@ -22,7 +22,7 @@ const EXPLORE_CARDS = [
   {
     icon: BarChart3,
     label: "How It Works",
-    desc: "The three-stage process — from entering your figures to unlocking the full settlement analysis. See the 9 wizard steps mapped out.",
+    desc: "The three-stage process — from entering your figures to unlocking the full settlement analysis. Takes under 5 minutes.",
     href: "/how-it-works",
     testid: "card-explore-how-it-works",
     iconBg: "bg-cyan-50",
@@ -136,7 +136,7 @@ export default function LandingPage() {
                 <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">blind.</span>
               </h1>
               <p className="text-base md:text-lg text-white/70 leading-relaxed">
-                In 20 minutes, see what each settlement option means for your financial future — which are sustainable, which leave you stretched, and where your money stands in 5 years. Free to start. No sign-up.
+                In under 5 minutes, see what each settlement option means for your financial future — which are sustainable, which leave you stretched, and where your money stands in 5 years. Free to start. No sign-up.
               </p>
               <p className="text-sm text-white/50 leading-relaxed border-l-2 border-gold/40 pl-3">
                 If you're here, you're worried about the house, your finances, and what comes next. This shows you exactly where you stand — in numbers.
@@ -366,6 +366,9 @@ export default function LandingPage() {
               <p className="text-sm text-muted-foreground">
                 Start entering your figures at no cost — no sign-up, no card required. Pay once to see the full breakdown.
               </p>
+              <p className="text-xs text-muted-foreground/70 italic">
+                A single hour with a solicitor costs more. This covers your entire financial picture.
+              </p>
             </div>
             <div className="text-center md:text-right space-y-2 shrink-0">
               <div className="flex flex-wrap gap-2 justify-center md:justify-end text-xs text-muted-foreground">
@@ -434,7 +437,7 @@ export default function LandingPage() {
           </p>
           <div className="grid grid-cols-3 gap-4 text-center max-w-md mx-auto py-6 border-y border-white/10">
             <div>
-              <p className="text-2xl font-bold text-cyan-400">20 min</p>
+              <p className="text-2xl font-bold text-cyan-400">5 min</p>
               <p className="text-xs text-white/55 mt-1">First analysis complete</p>
             </div>
             <div>

@@ -33,7 +33,7 @@ const STEPS = [
   { id: 5, title: "Income & Employment", icon: Briefcase },
   { id: 6, title: "Monthly Expenses", icon: Receipt },
   { id: 7, title: "Children & Support", icon: Calculator },
-  { id: 8, title: "Review & Model", icon: TrendingUp },
+  { id: 8, title: "Your model is ready", icon: TrendingUp },
 ];
 
 const STEP_META = [
@@ -50,48 +50,63 @@ const STEP_META = [
 
 const STEP_COPY = [
   {
-    prompt: "Let's build your financial model",
-    reassurance: "This tool allows you to model different settlement structures and compare their financial implications. All calculations happen in your browser \u2014 your data stays private. Use your best estimates where you're unsure."
+    prompt: "Let's build your financial picture together.",
+    reassurance: "All calculations happen privately in your browser — your data never leaves your device. Best estimates are fine throughout. You can refine figures as you go."
   },
   {
-    prompt: "About your situation",
-    reassurance: "A few baseline assumptions to get started. You can always come back and adjust these later."
+    prompt: "A few baseline details to shape your model.",
+    reassurance: "Take it step by step — a rough sense of your situation is all you need here. You can always come back and adjust these details later."
   },
   {
-    prompt: "Property & mortgage",
-    reassurance: "The family home is often the largest asset. A rough valuation is fine \u2014 you can refine assumptions later."
+    prompt: "The family home is usually the largest asset in any settlement.",
+    reassurance: "A rough figure is fine here — Rightmove, Zoopla, or a recent estate agent's view works. Your solicitor will want a formal valuation later, but estimates get you 90% of the way."
   },
   {
-    prompt: "Savings, investments & debts",
-    reassurance: "Include savings, investments, vehicles, and any liabilities. Best estimates work well for initial modelling."
+    prompt: "Savings, investments, and any debts outside the mortgage.",
+    reassurance: "Don't worry about precision — bank statements or rough figures work well. The model shows relative impact across scenarios, not an exact penny count."
   },
   {
-    prompt: "Pension provision",
-    reassurance: "Pensions can be a significant part of the overall financial picture. If you have a recent statement, the Cash Equivalent Transfer Value (CETV) is the most useful figure."
+    prompt: "Pensions are often the most valuable asset in a divorce — easy to overlook.",
+    reassurance: "If you have a recent pension statement, the Cash Equivalent Transfer Value (CETV) is the number to use. Estimates are fine if you don't have it to hand."
   },
   {
-    prompt: "Income & employment",
-    reassurance: "Add each party's income sources. This allows the model to calculate take-home pay and assess long-term sustainability."
+    prompt: "Income figures power the sustainability calculations.",
+    reassurance: "Enter gross (before tax) income — the model calculates take-home automatically using 2026/27 UK tax rates. Rough figures still produce meaningful results."
   },
   {
-    prompt: "Post-separation monthly expenses",
-    reassurance: "Estimate what each person is likely to spend after separation. This is key to modelling whether each scenario is financially sustainable."
+    prompt: "Monthly costs after separation — the key to knowing if each option is liveable.",
+    reassurance: "Best estimates are completely fine here. These figures tell the model whether each settlement scenario leaves you covering your bills long-term."
   },
   {
-    prompt: "Children & support assumptions",
-    reassurance: "If there are children, you can include a child maintenance estimate. These assumptions feed into the sustainability projections."
+    prompt: "Child maintenance assumptions — if relevant to your situation.",
+    reassurance: "Child maintenance is estimated using the standard CMS formula based on your income figures. These are indicative — not a formal CMS calculation."
   },
   {
-    prompt: "Review & model",
-    reassurance: "Review your assumptions and compare how different settlement structures affect the financial position of each party."
+    prompt: "Everything's in place — review your assumptions below.",
+    reassurance: "Take a moment to check the figures look right. When you're ready, your full financial picture is one click away."
   },
 ];
 
+const WIZARD_STAGES = [
+  { label: "Your Assets", steps: [1, 2, 3], stageNum: 1 },
+  { label: "Your Income", steps: [4, 5], stageNum: 2 },
+  { label: "Finishing Up", steps: [6, 7, 8], stageNum: 3 },
+];
+
+function getStageForStep(step: number): number {
+  for (const s of WIZARD_STAGES) {
+    if (s.steps.includes(step)) return s.stageNum;
+  }
+  return 0;
+}
+
 export default function WizardPage() {
-  useDocumentTitle("Financial Data Entry | DivorceCalculatorUK");
+  useDocumentTitle("Build Your Financial Model | DivorceCalculatorUK");
   useNoIndex();
   const [currentStep, setCurrentStep] = useState(0);
   const [advancedMode, setAdvancedMode] = useState(false);
+  const [midJourneyEmailDismissed, setMidJourneyEmailDismissed] = useState(false);
+  const [showMidJourneyEmail, setShowMidJourneyEmail] = useState(false);
   const [, setLocation] = useLocation();
 
   const progress = ((currentStep) / (STEPS.length - 1)) * 100;
@@ -102,9 +117,8 @@ export default function WizardPage() {
     if (currentStep === STEPS.length - 1) {
       const capturedEmail = store.profile?.capturedEmail;
       if (capturedEmail) {
-        const engine = store;
         const assetPool = String(
-          (engine.assets || []).reduce((s, a) => s + (a.currentValue ?? 0), 0)
+          (store.assets || []).reduce((s, a) => s + (a.currentValue ?? 0), 0)
         );
         fetch("/api/leads", {
           method: "POST",
@@ -114,9 +128,13 @@ export default function WizardPage() {
       }
       setLocation("/preview");
     } else {
-      setCurrentStep(s => Math.min(s + 1, STEPS.length - 1));
+      const nextStep = Math.min(currentStep + 1, STEPS.length - 1);
+      if (currentStep === 5 && !store.profile?.capturedEmail && !midJourneyEmailDismissed) {
+        setShowMidJourneyEmail(true);
+      }
+      setCurrentStep(nextStep);
     }
-  }, [currentStep, setLocation, store]);
+  }, [currentStep, setLocation, store, midJourneyEmailDismissed]);
 
   const goBack = useCallback(() => {
     scrollTop();
@@ -133,36 +151,41 @@ export default function WizardPage() {
         <div className="container mx-auto px-4 h-14 flex items-center justify-between gap-4">
           <Logo size="md" />
 
-          <div className="flex-1 max-w-lg mx-auto hidden md:block">
-            <div className="flex items-center gap-0.5">
-              {STEPS.map((step, i) => (
-                <button
-                  key={step.id}
-                  onClick={() => { scrollTop(); setCurrentStep(i); }}
-                  className={`flex items-center gap-1.5 text-xs px-1.5 py-1 rounded transition-colors ${
-                    i === currentStep
-                      ? "text-primary font-semibold"
-                      : i < currentStep
-                      ? "text-primary/60"
-                      : "text-muted-foreground"
-                  }`}
-                  data-testid={`stepper-step-${i}`}
-                >
-                  <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border shrink-0 transition-all duration-300 ${
-                    i < currentStep
-                      ? `${STEP_META[i].dotBg} ${STEP_META[i].dotBorder} text-white`
-                      : i === currentStep
-                      ? `${STEP_META[i].dotBg} ${STEP_META[i].dotBorder} text-white ring-2 ring-offset-1 ring-offset-background ring-current`
-                      : "border-muted-foreground/30 text-muted-foreground"
+          <div className="flex-1 max-w-2xl mx-auto hidden md:flex items-start justify-center gap-6">
+            {WIZARD_STAGES.map((stage) => {
+              const stageComplete = stage.steps.every(s => s < currentStep);
+              const stageActive = stage.steps.includes(currentStep);
+              return (
+                <div key={stage.stageNum} className="flex flex-col items-center gap-1 min-w-0">
+                  <span className={`text-[9px] font-semibold uppercase tracking-widest whitespace-nowrap transition-colors ${
+                    stageActive ? "text-primary" : stageComplete ? "text-primary/50" : "text-muted-foreground/40"
                   }`}>
-                    {i < currentStep ? <Check className="w-3 h-3" /> : i + 1}
+                    {stage.label}
+                  </span>
+                  <div className="flex items-center gap-0.5">
+                    {stage.steps.map((stepIdx) => (
+                      <button
+                        key={stepIdx}
+                        onClick={() => { scrollTop(); setCurrentStep(stepIdx); }}
+                        data-testid={`stepper-step-${stepIdx}`}
+                        title={STEPS[stepIdx].title}
+                        className="p-0.5"
+                      >
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border shrink-0 transition-all duration-300 ${
+                          stepIdx < currentStep
+                            ? `${STEP_META[stepIdx].dotBg} ${STEP_META[stepIdx].dotBorder} text-white`
+                            : stepIdx === currentStep
+                            ? `${STEP_META[stepIdx].dotBg} ${STEP_META[stepIdx].dotBorder} text-white ring-2 ring-offset-1 ring-offset-background ring-current`
+                            : "border-muted-foreground/30 text-muted-foreground/50 bg-background"
+                        }`}>
+                          {stepIdx < currentStep ? <Check className="w-3 h-3" /> : stepIdx}
+                        </div>
+                      </button>
+                    ))}
                   </div>
-                  {i === currentStep && (
-                    <span className="hidden lg:inline truncate max-w-[90px]">{step.title}</span>
-                  )}
-                </button>
-              ))}
-            </div>
+                </div>
+              );
+            })}
           </div>
 
           <div className="flex items-center gap-2">
@@ -192,7 +215,12 @@ export default function WizardPage() {
                     {meta.category}
                   </span>
                   <span className="text-xs font-medium text-muted-foreground md:hidden" data-testid="text-step-progress">
-                    {currentStep === 0 ? "Start" : `${currentStep} of ${STEPS.length - 1} complete`}
+                    {currentStep === 0
+                      ? "Start"
+                      : getStageForStep(currentStep) > 0
+                        ? `Stage ${getStageForStep(currentStep)} of 3 · Step ${currentStep} of ${STEPS.length - 1}`
+                        : `Step ${currentStep} of ${STEPS.length - 1}`
+                    }
                   </span>
                 </div>
                 <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground" data-testid="text-step-title">
@@ -202,6 +230,17 @@ export default function WizardPage() {
                   {STEP_COPY[currentStep].prompt}
                 </p>
               </div>
+
+              {currentStep >= 2 && <LivePoolPanel />}
+
+              {currentStep === 6 && showMidJourneyEmail && !midJourneyEmailDismissed && (
+                <MidJourneyEmailCard
+                  onDismiss={() => {
+                    setMidJourneyEmailDismissed(true);
+                    setShowMidJourneyEmail(false);
+                  }}
+                />
+              )}
 
               <Card className={`mb-5 border-t-4 ${meta.borderTop} overflow-hidden`}>
                 <CardContent className="pt-6">
@@ -230,14 +269,130 @@ export default function WizardPage() {
                   data-testid="button-continue"
                   className="bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/20 btn-shimmer"
                 >
-                  {currentStep === STEPS.length - 1 ? "See My Preview" : "Continue"}
-                  {currentStep === STEPS.length - 1 ? <ArrowRight className="w-4 h-4 ml-1" /> : <ChevronRight className="w-4 h-4 ml-1" />}
+                  {currentStep === STEPS.length - 1
+                    ? "Show me my results"
+                    : currentStep === 0
+                    ? "Let's begin"
+                    : "Continue"
+                  }
+                  <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>
               </div>
             </>
           );
         })()}
       </main>
+    </div>
+  );
+}
+
+function LivePoolPanel() {
+  const { assets, liabilities } = useAppStore();
+
+  const propertyValue = assets
+    .filter(a => a.category === "primary_home" || a.category === "other_property")
+    .reduce((s, a) => s + (a.currentValue ?? 0), 0);
+  const mortgageBalance = liabilities
+    .filter(l => l.category === "mortgage")
+    .reduce((s, l) => s + (l.balance ?? 0), 0);
+  const propertyEquity = Math.max(0, propertyValue - mortgageBalance);
+
+  const liquidAssets = assets
+    .filter(a => !["primary_home","other_property","pension"].includes(a.category))
+    .reduce((s, a) => s + (a.currentValue ?? 0), 0);
+
+  const pensions = assets
+    .filter(a => a.category === "pension")
+    .reduce((s, a) => s + (a.cetv ?? a.currentValue ?? 0), 0);
+
+  const combinedPool = propertyEquity + liquidAssets + pensions;
+
+  const hasData = combinedPool > 0;
+
+  const fmt = (n: number) => n === 0 ? "—" : `£${n.toLocaleString("en-GB", { maximumFractionDigits: 0 })}`;
+
+  return (
+    <div className="mb-5 rounded-lg border border-border/60 bg-primary/[0.025] overflow-hidden" data-testid="panel-live-pool">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-border/40">
+        <span className="text-xs font-semibold text-foreground/70 flex items-center gap-1.5">
+          <TrendingUp className="w-3.5 h-3.5 text-gold" />
+          Building your picture
+        </span>
+        <span className="text-[10px] text-muted-foreground/60 italic">Illustrative running estimate</span>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-0 divide-x divide-border/40">
+        {[
+          { label: "Property equity", value: propertyEquity, color: "text-rose-500" },
+          { label: "Liquid assets", value: liquidAssets, color: "text-amber-500" },
+          { label: "Pensions", value: pensions, color: "text-emerald-500" },
+          { label: "Combined pool", value: combinedPool, color: "text-cyan-500 font-bold" },
+        ].map(item => (
+          <div key={item.label} className="px-4 py-2.5 text-center">
+            <p className={`text-sm tabular-nums transition-all ${item.color} ${!hasData ? "opacity-30" : ""}`}>
+              {fmt(item.value)}
+            </p>
+            <p className="text-[10px] text-muted-foreground/60 mt-0.5 leading-tight">{item.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MidJourneyEmailCard({ onDismiss }: { onDismiss: () => void }) {
+  const { profile, updateProfile } = useAppStore();
+  const [email, setEmail] = useState(profile.capturedEmail || "");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSave = () => {
+    if (!email || !email.includes("@")) return;
+    updateProfile({ capturedEmail: email });
+    fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, source: "wizard_midpoint" }),
+    }).catch(() => {});
+    setSubmitted(true);
+    setTimeout(onDismiss, 1800);
+  };
+
+  return (
+    <div className="mb-5 rounded-lg border border-cyan-200 bg-cyan-50/60 dark:border-cyan-900 dark:bg-cyan-950/30 p-4" data-testid="card-midjourney-email">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex-1 min-w-0">
+          {submitted ? (
+            <p className="text-sm text-cyan-700 font-medium flex items-center gap-1.5">
+              <Check className="w-4 h-4" /> Saved — we'll email your progress link.
+            </p>
+          ) : (
+            <>
+              <p className="text-sm font-semibold text-foreground mb-0.5">Want to save your progress?</p>
+              <p className="text-xs text-muted-foreground mb-3">We'll email your figures so you can return to this exactly where you left off. Completely optional.</p>
+              <div className="flex gap-2">
+                <Input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="text-sm h-8 max-w-xs"
+                  data-testid="input-midjourney-email"
+                />
+                <Button size="sm" onClick={handleSave} className="h-8 bg-cyan-600 hover:bg-cyan-700 text-white border-0 shrink-0" data-testid="button-midjourney-save">
+                  Save
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+        <button
+          onClick={onDismiss}
+          className="text-muted-foreground/50 hover:text-muted-foreground shrink-0 mt-0.5"
+          aria-label="Dismiss"
+          data-testid="button-midjourney-dismiss"
+        >
+          ✕
+        </button>
+      </div>
     </div>
   );
 }
@@ -277,47 +432,56 @@ function StepWelcome() {
   const { profile, updateProfile } = useAppStore();
 
   return (
-    <div className="space-y-8">
-      <div className="text-center space-y-2 pb-2">
-        <h2 className="text-xl font-display font-bold">A few quick questions before we begin</h2>
-        <p className="text-sm text-muted-foreground max-w-md mx-auto">
-          All optional — skip anything you prefer not to answer. This helps us tailor the model to your situation.
-        </p>
+    <div className="space-y-7">
+      <div className="relative rounded-xl bg-gradient-to-br from-primary/[0.07] via-primary/[0.03] to-gold/[0.05] border border-primary/10 p-6 overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{
+          backgroundImage: "repeating-linear-gradient(45deg, hsl(var(--primary)) 0, hsl(var(--primary)) 1px, transparent 0, transparent 50%)",
+          backgroundSize: "16px 16px"
+        }} />
+        <div className="relative">
+          <h2 className="text-2xl sm:text-3xl font-display font-bold text-foreground leading-snug mb-2">
+            Let's build your financial picture.
+          </h2>
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">
+            Answer a few questions about your situation. All calculations happen privately in your browser — your data never leaves your device.
+          </p>
+          <div className="flex flex-wrap gap-4 mt-4 text-xs text-muted-foreground/70">
+            <span className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-emerald-500" /> 100% private</span>
+            <span className="flex items-center gap-1.5"><Calculator className="w-3.5 h-3.5 text-cyan-500" /> Best estimates are fine</span>
+            <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-gold" /> Under 5 minutes</span>
+          </div>
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label className="flex items-center gap-1.5">
-            <Users className="w-3.5 h-3.5 text-muted-foreground" />
-            What's your first name?
-          </Label>
+          <Label className="font-medium">Your first name</Label>
           <Input
             value={profile.partyAName}
             onChange={(e) => updateProfile({ partyAName: e.target.value })}
             placeholder="e.g. Alex"
+            className="text-base h-11"
             data-testid="input-party-a-name"
           />
-          <p className="text-xs text-muted-foreground">Used to personalise your report</p>
+          <p className="text-xs text-muted-foreground">Used to personalise your model</p>
         </div>
         <div className="space-y-2">
-          <Label className="flex items-center gap-1.5">
-            <Users className="w-3.5 h-3.5 text-muted-foreground" />
-            What would you like to call the other party?
-          </Label>
+          <Label className="font-medium">What shall we call the other party?</Label>
           <Input
             value={profile.partyBName}
             onChange={(e) => updateProfile({ partyBName: e.target.value })}
             placeholder="e.g. My ex, Sarah, My husband"
+            className="text-base h-11"
             data-testid="input-party-b-name"
           />
-          <p className="text-xs text-muted-foreground">Can be a name or description</p>
+          <p className="text-xs text-muted-foreground">A name or description — whatever feels right</p>
         </div>
       </div>
 
       <div className="space-y-3">
-        <Label className="flex items-center gap-1.5">
-          <Heart className="w-3.5 h-3.5 text-muted-foreground" />
-          Where are you in the process?
+        <Label className="font-medium flex items-center gap-1.5">
+          <Heart className="w-3.5 h-3.5 text-rose-400" />
+          Where are you in the process? <span className="text-muted-foreground text-xs font-normal">(optional)</span>
         </Label>
         <div className="flex flex-wrap gap-2">
           {PROCESS_STAGES.map((stage) => (
@@ -339,9 +503,8 @@ function StepWelcome() {
       </div>
 
       <div className="space-y-3">
-        <Label className="flex items-center gap-1.5">
-          <Shield className="w-3.5 h-3.5 text-muted-foreground" />
-          What matters most to you right now?
+        <Label className="font-medium flex items-center gap-1.5">
+          What matters most to you right now? <span className="text-muted-foreground text-xs font-normal">(optional)</span>
         </Label>
         <div className="flex flex-wrap gap-2">
           {MAIN_PRIORITIES.map((priority) => (
@@ -362,9 +525,9 @@ function StepWelcome() {
         </div>
       </div>
 
-      <div className="space-y-2 border-t pt-6">
+      <div className="space-y-2 border-t pt-5">
         <Label className="text-sm font-medium flex items-center gap-1.5">
-          Email your results to yourself <span className="text-muted-foreground text-xs font-normal ml-1">(optional)</span>
+          Save your progress by email <span className="text-muted-foreground text-xs font-normal">(optional)</span>
         </Label>
         <Input
           type="email"
@@ -375,19 +538,8 @@ function StepWelcome() {
           className="max-w-sm"
         />
         <p className="text-xs text-muted-foreground">
-          We'll email your combined pool total when you reach the preview. No verification, no spam.
+          We'll email your combined pool total when you reach the preview. No spam, no account needed.
         </p>
-      </div>
-
-      <div className="grid gap-3 text-sm border-t pt-4">
-        <div className="flex items-start gap-3">
-          <Shield className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-          <p className="text-muted-foreground text-xs">All calculations run in your browser. Your data never leaves your device.</p>
-        </div>
-        <div className="flex items-start gap-3">
-          <Calculator className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-          <p className="text-muted-foreground text-xs">Best estimates are fine — approximate values still give meaningful comparisons.</p>
-        </div>
       </div>
     </div>
   );

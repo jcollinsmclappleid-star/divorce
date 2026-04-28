@@ -200,8 +200,12 @@ function ChapterSection({ chapter, expanded, onToggle }: {
 export default function FreeGuidePage() {
   useDocumentTitle("Free UK Divorce Finances Guide | DivorceCalculatorUK");
   useMetaTags({
-    description: "A free guide to UK divorce finances covering assets, pensions, property, income, and financial settlements. Five chapters to help you prepare for separation.",
+    description: "Free guide to UK divorce finances — assets, property, pensions, and maintenance explained. Covers what to know before financial disclosure. No sign-up required. England and Wales.",
     canonical: "https://divorcecalculatoruk.co.uk/free-guide",
+    ogTitle: "Free UK Divorce Finances Guide — England & Wales",
+    ogDescription: "Five-chapter guide to divorce finances — assets, property, pensions, and maintenance covered. Free, no sign-up required. England and Wales.",
+    ogUrl: "https://divorcecalculatoruk.co.uk/free-guide",
+    ogType: "website",
   });
   const [, setLocation] = useLocation();
   const [email, setEmail] = useState("");

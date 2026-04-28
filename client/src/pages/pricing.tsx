@@ -52,10 +52,14 @@ const FAQ_ITEMS = [
 ];
 
 export default function PricingPage() {
-  useDocumentTitle("Pricing | DivorceCalculatorUK — £79 One-Time");
+  useDocumentTitle("Pricing — £79 One-Time | DivorceCalculatorUK");
   useMetaTags({
-    description: "DivorceCalculatorUK pricing. One-time £79 payment for 12-month access to the full divorce financial analysis — scenario comparisons, 5-year projections, FSI score, and downloadable brief.",
+    description: "One-time £79 for 12-month access to full divorce settlement analysis — scenario comparisons, sustainability scores, 5-year projections, and a downloadable financial brief. England and Wales.",
     canonical: "https://divorcecalculatoruk.co.uk/pricing",
+    ogTitle: "Divorce Calculator UK Pricing — £79 One-Time",
+    ogDescription: "Full settlement analysis for £79. Compare scenarios, see 5-year projections, and download your financial brief. England and Wales.",
+    ogUrl: "https://divorcecalculatoruk.co.uk/pricing",
+    ogType: "website",
   });
   const [, setLocation] = useLocation();
 
@@ -142,7 +146,7 @@ export default function PricingPage() {
             <div className="px-6 py-5 space-y-4">
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div className="bg-white/5 rounded-lg py-2.5">
-                  <p className="text-sm font-bold text-white">15 min</p>
+                  <p className="text-sm font-bold text-white">Under 5 min</p>
                   <p className="text-[10px] text-white/45 mt-0.5">To model</p>
                 </div>
                 <div className="bg-white/5 rounded-lg py-2.5">
@@ -164,6 +168,10 @@ export default function PricingPage() {
                 Start free — no sign-up
                 <ArrowRight className="w-4 h-4 ml-1.5" />
               </Button>
+
+              <p className="text-center text-xs text-white/40 italic">
+                A single hour with a solicitor typically costs £250–£400. This covers your entire financial picture.
+              </p>
 
               <div className="flex flex-col items-center gap-1 text-xs text-white/50">
                 <div className="flex items-center gap-1.5">

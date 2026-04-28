@@ -65,12 +65,14 @@ export default function HowItWorksPage() {
   const [, setLocation] = useLocation();
   const reset = useAppStore((s) => s.reset);
 
-  useDocumentTitle("How It Works | Divorce Calculator UK — Financial Clarity Platform");
+  useDocumentTitle("How Divorce Calculator UK Works — 3 Stages");
   useMetaTags({
-    description: "See how Divorce Calculator UK models your financial settlement in three stages: enter your figures, preview your asset pool, then unlock your full settlement analysis.",
+    description: "Enter your figures, preview your settlement scenarios, then unlock the full analysis — sustainability scores, 5-year projections, stress tests. Takes under 5 minutes. England and Wales.",
     canonical: "https://divorcecalculatoruk.co.uk/how-it-works",
     ogTitle: "How Divorce Calculator UK Works",
-    ogDescription: "Three stages: enter figures, preview your asset pool, then unlock your complete settlement analysis with FSI scores, cashflow, and stress testing.",
+    ogDescription: "Three stages: enter figures, preview your settlement, then unlock full analysis with sustainability scores and 5-year projections. England and Wales.",
+    ogUrl: "https://divorcecalculatoruk.co.uk/how-it-works",
+    ogType: "website",
   });
 
   const startFresh = () => {

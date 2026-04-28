@@ -176,12 +176,14 @@ export default function FaqPage() {
   const [, setLocation] = useLocation();
   const reset = useAppStore((s) => s.reset);
 
-  useDocumentTitle("Frequently Asked Questions | Divorce Calculator UK");
+  useDocumentTitle("UK Divorce Settlement FAQ | DivorceCalculatorUK");
   useMetaTags({
-    description: "Common questions about divorce financial settlements in England and Wales — what's included, how the platform works, data security, and payment information.",
+    description: "Answers about divorce financial settlements in England and Wales — how assets are split, what happens to the house and pensions, child maintenance, and how the calculator works.",
     canonical: "https://divorcecalculatoruk.co.uk/faq",
-    ogTitle: "Divorce Calculator UK — Frequently Asked Questions",
-    ogDescription: "Find answers to common questions about divorce financial settlements, how the platform works, data privacy, and access.",
+    ogTitle: "UK Divorce Settlement FAQ — Common Questions Answered",
+    ogDescription: "How are assets split? What happens to the house and pensions? Answers for England and Wales divorces — and how this tool works.",
+    ogUrl: "https://divorcecalculatoruk.co.uk/faq",
+    ogType: "website",
   });
   useFaqJsonLd();
 

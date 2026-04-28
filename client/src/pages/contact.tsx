@@ -7,8 +7,12 @@ import { ArrowLeft, Mail, RefreshCw, BookOpen, CreditCard, AlertCircle } from "l
 export default function ContactPage() {
   useDocumentTitle("Contact & Support | DivorceCalculatorUK");
   useMetaTags({
-    description: "Get support with DivorceCalculatorUK. Contact us for help with access, billing, technical issues, or general enquiries about our divorce financial modelling tool.",
+    description: "Get help with DivorceCalculatorUK — access, billing, or technical questions. For England and Wales divorce financial modelling support. Not legal or financial advice.",
     canonical: "https://divorcecalculatoruk.co.uk/contact",
+    ogTitle: "Contact Divorce Calculator UK — Support",
+    ogDescription: "Get help with access, billing, or platform questions about our divorce financial modelling tool for England and Wales.",
+    ogUrl: "https://divorcecalculatoruk.co.uk/contact",
+    ogType: "website",
   });
   const [, setLocation] = useLocation();
 

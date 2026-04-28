@@ -5,9 +5,11 @@ interface MetaTagOptions {
   canonical?: string;
   ogTitle?: string;
   ogDescription?: string;
+  ogUrl?: string;
+  ogType?: string;
 }
 
-export function useMetaTags({ description, canonical, ogTitle, ogDescription }: MetaTagOptions) {
+export function useMetaTags({ description, canonical, ogTitle, ogDescription, ogUrl, ogType }: MetaTagOptions) {
   useEffect(() => {
     const setMeta = (name: string, content: string, attr: "name" | "property" = "name") => {
       let el = document.querySelector(`meta[${attr}="${name}"]`) as HTMLMetaElement | null;
@@ -25,6 +27,8 @@ export function useMetaTags({ description, canonical, ogTitle, ogDescription }: 
     if (description) cleanups.push(setMeta("description", description));
     if (ogTitle) cleanups.push(setMeta("og:title", ogTitle, "property"));
     if (ogDescription) cleanups.push(setMeta("og:description", ogDescription, "property"));
+    if (ogUrl) cleanups.push(setMeta("og:url", ogUrl, "property"));
+    if (ogType) cleanups.push(setMeta("og:type", ogType, "property"));
 
     let linkEl: HTMLLinkElement | null = null;
     if (canonical) {
@@ -40,5 +44,5 @@ export function useMetaTags({ description, canonical, ogTitle, ogDescription }: 
     return () => {
       cleanups.forEach(fn => fn());
     };
-  }, [description, canonical, ogTitle, ogDescription]);
+  }, [description, canonical, ogTitle, ogDescription, ogUrl, ogType]);
 }
