@@ -1,0 +1,485 @@
+Act as a senior conversion-focused product designer, full-stack Replit engineer, UX copywriter, and SaaS pricing strategist.
+
+I want to update the Divorce Calculator UK homepage, pricing section, report preview experience, and free-user paywall flow to better reflect the new Guided Report Summary enhancement.
+
+Important context:
+The paid product is a browser-based financial modelling report for separation/divorce in England and Wales. It compares settlement scenarios, models property, income, pensions, liabilities, mortgage pressure, cashflow, sustainability indicators, and produces a downloadable/printable report.
+
+The new enhancement is called:
+
+Guided Report Summary
+
+It is an intelligent tool-assisted explanation layer that turns calculated model figures into:
+- plain-English overview
+- key takeaways
+- scenario interpretation
+- pressure points
+- questions for professionals
+- missing information and confidence checks
+- preparation checklist if implemented
+
+Do not lead with “AI” in customer-facing copy. Use:
+- Guided Report Summary
+- intelligent summary
+- guided summary
+- plain-English report interpretation
+- selected model figures
+
+Avoid:
+- AI advice
+- AI solicitor
+- legal expert
+- financial adviser
+- settlement recommendation
+- guaranteed outcome
+- anonymous/anonymised in normal UI
+
+Use this disclosure where relevant:
+“To generate this guided summary, we securely process selected figures from your model. No names, addresses, contact details, documents or messages are included.”
+
+====================================================
+1. HOMEPAGE POSITIONING UPDATE
+====================================================
+
+Update the homepage copy so the product feels more valuable than a basic divorce calculator.
+
+The core homepage promise should be:
+
+“Understand your divorce finances before expensive conversations.”
+
+Supporting copy should explain:
+
+“Model property, income, pensions, debts, maintenance and settlement scenarios — then generate a plain-English Guided Report Summary showing key takeaways, pressure points and questions to raise with professionals.”
+
+The homepage should make clear that the customer receives:
+
+- full financial position summary
+- property equity modelling
+- income tax and NI estimates
+- net monthly income
+- asset and liability summary
+- pension CETV comparison
+- multiple settlement scenarios
+- mortgage affordability pressure checks
+- surplus/deficit projections
+- sustainability/cashflow indicators
+- missing information checks
+- Guided Report Summary
+- professional questions for solicitor/mediator, mortgage broker and pension expert
+- downloadable/printable report
+
+Add a section titled:
+
+What your full report includes
+
+Use conversion-focused cards or rows:
+
+1. Financial Snapshot
+Copy:
+See your assets, debts, property equity, pensions and net financial position in one structured view.
+
+2. Settlement Scenario Comparison
+Copy:
+Compare what happens if the home is sold, one party keeps it, or a deferred sale is considered.
+
+3. Monthly Cashflow View
+Copy:
+Understand estimated take-home pay, housing costs, surplus or deficit under each scenario.
+
+4. Mortgage Pressure Checks
+Copy:
+See whether a keep-home scenario may create high mortgage pressure based on the figures entered.
+
+5. Guided Report Summary
+Copy:
+Get plain-English takeaways, pressure points and questions to raise with professionals.
+
+6. Downloadable Report
+Copy:
+Keep a structured report for your own records or to support conversations with a solicitor, mediator or mortgage broker.
+
+Keep wording clear, premium and calm. Do not make legal or financial advice claims.
+
+====================================================
+2. PRICING SECTION UPDATE
+====================================================
+
+Update the pricing section to make the £79 offer feel strong and complete.
+
+Primary pricing card:
+
+Full Financial Report
+£79
+One-time payment
+12 months’ access
+
+Included:
+- Full financial modelling report
+- Property equity and asset split scenarios
+- Income tax and NI estimates
+- Monthly surplus/deficit modelling
+- Mortgage pressure checks
+- Pension CETV comparison
+- Sustainability indicators
+- Guided Report Summary
+- Questions for professionals
+- Downloadable/printable report
+- 12 months’ access to revisit and update figures
+
+CTA:
+Start your report
+
+Secondary supporting line:
+“One hour of professional advice can cost more than this full report. Use this tool to understand your numbers before expensive conversations.”
+
+Make sure this line says “can cost more”, not “costs more”.
+
+Add a comparison mini-table if visually appropriate:
+
+Free preview:
+- Enter figures
+- See limited scenario preview
+- Basic calculation preview
+- Locked detailed report
+- Locked Guided Report Summary
+- No full PDF/report download
+
+Full report £79:
+- All scenarios
+- Full modelling detail
+- Guided Report Summary
+- Professional questions
+- Missing information checks
+- Downloadable/printable report
+- 12 months’ access
+
+====================================================
+3. HOMEPAGE REPORT PREVIEW DOWNLOAD / OPEN MODAL
+====================================================
+
+Under the existing dashboard preview section, add a new report preview callout.
+
+Section title:
+See what the full report looks like
+
+Copy:
+Preview a sample divorce financial report before you start. The example shows the structure, scenario comparison, Guided Report Summary and professional questions included in the paid report.
+
+Button:
+Open sample report
+
+Important UX requirement:
+When the user clicks “Open sample report”, they should NOT leave the homepage.
+
+Implement one of these:
+- modal overlay with full scrollable mock report
+- drawer overlay
+- embedded PDF-style preview modal
+
+The user should be able to:
+- open the sample report
+- scroll the full mock report
+- close it and return to the homepage exactly where they were
+- optionally click “Start your report” from inside the modal
+
+Do not navigate away to a separate page unless absolutely necessary.
+
+The mock report should be a static sample, not generated by OpenAI and not personalised.
+
+Use realistic but clearly fictional/sample figures.
+
+Add visible label at top:
+Sample report — fictional example
+
+The sample report should include:
+- cover/header
+- important disclaimer
+- Guided Report Summary sample
+- financial snapshot
+- income summary
+- scenario comparison
+- scenario notes
+- pressure points
+- questions for professionals
+- missing information/model confidence
+- assumptions/methodology summary
+
+Do not use real user data.
+
+====================================================
+4. SAMPLE REPORT PREVIEW CONTENT
+====================================================
+
+Create a polished mock report preview.
+
+Suggested title:
+Sample Divorce Financial Report
+
+Subtitle:
+Financial modelling and guided summary for England & Wales
+
+Use fictional figures:
+- Total assets: £843,000
+- Total liabilities: £590,000
+- Net position: £253,000
+- Family home: £675,000
+- Mortgage: £590,000
+- Pension CETV total: £60,000
+- Party A gross income: £126,000
+- Party B gross income: £60,000
+
+Include 3 or 4 scenario rows:
+- Sell & Split
+- Party A Keeps Home
+- Party B Keeps Home
+- Deferred Sale, if supported
+
+Include example Guided Report Summary:
+
+Plain-English Overview:
+“This sample model shows that most of the household wealth is tied up in the family home. The main pressure point is whether either party could retain the property while maintaining enough monthly cashflow and liquid capital.”
+
+What Stands Out:
+- The family home is the largest asset in the model.
+- Party A has materially higher income than Party B.
+- Keep-home scenarios create higher mortgage pressure.
+- Pension values are included, but pension type is not assessed in this sample.
+
+Pressure Points:
+- Mortgage affordability may need review if one party keeps the home.
+- Liquidity may reduce after an equity buyout.
+- Missing costs such as moving costs, legal fees or stamp duty could affect the model.
+
+Questions for Professionals:
+Solicitor / Mediator:
+- How should the income difference between the parties be considered when reviewing options?
+- What protections may be needed if one party keeps the home?
+- Would pension sharing or pension offsetting need further review?
+
+Mortgage Broker:
+- Could either party refinance the mortgage in their sole name?
+- How would existing debts affect borrowing capacity?
+
+Pension Expert:
+- Are CETV figures enough, or would pension type and benefits need specialist review?
+- Would a pension sharing report be useful?
+
+Model Confidence:
+Medium — this sample includes core income, property and pension figures, but excludes some transaction costs and detailed pension analysis.
+
+Add disclaimer:
+“This sample is fictional and for product preview only. The tool provides illustrative modelling, not legal, financial, tax or mortgage advice.”
+
+====================================================
+5. FREE CREATION PAYWALL FLOW UPDATE
+====================================================
+
+At the end of the free creation/wizard flow, when the user reaches the paywall, show them that their personalised report has been prepared.
+
+Important:
+Do NOT call the full OpenAI generation at free preview stage.
+Do NOT generate the full Guided Report Summary for free users.
+Do NOT spend GPT tokens for full report content before payment.
+
+But do show a personalised locked report preview based on their entered model figures.
+
+The free paywall should say:
+
+Your personalised financial report is ready
+
+Subcopy:
+“We’ve prepared your scenario modelling using the figures you entered. Unlock the full report to see detailed scenario comparisons, cashflow pressure points, the Guided Report Summary, professional questions and the printable report.”
+
+Show a locked preview with some personalised values already calculated by the deterministic engine, such as:
+- estimated total assets
+- estimated liabilities
+- estimated net position
+- property equity
+- number of scenarios prepared
+- whether mortgage pressure checks are available
+- confidence badge if deterministic confidence is available
+
+Do not show:
+- full scenario narratives
+- full Guided Report Summary
+- professional questions
+- full downloadable report
+- full PDF export
+
+Show a blurred/truncated mock of the report with labels:
+- Financial Snapshot — locked
+- Scenario Comparison — locked
+- Guided Report Summary — locked
+- Questions for Professionals — locked
+- Downloadable Report — locked
+
+CTA:
+Unlock full report — £79
+
+Secondary copy:
+“Includes 12 months’ access to revisit and update your figures.”
+
+====================================================
+6. LIGHTWEIGHT PRE-PAYMENT PERSONALISATION
+====================================================
+
+At the paywall, create a “report prepared” experience without GPT full generation.
+
+Use deterministic data only.
+
+Example personalised card:
+
+Prepared from your figures:
+- Modelled assets: £X
+- Modelled liabilities: £X
+- Estimated net position: £X
+- Scenarios prepared: X
+- Guided summary: Ready after unlock
+- Printable report: Ready after unlock
+
+For Guided Report Summary locked state:
+“Your guided summary will be generated after unlock using selected figures from your model. No names, addresses, contact details, documents or messages are included.”
+
+This creates the feeling that the report exists and is ready without making the GPT call until payment.
+
+====================================================
+7. PAID UNLOCK FLOW AND GPT MINI CALL
+====================================================
+
+Use GPT-4.1-mini or the most cost-efficient available mini model for the Guided Report Summary.
+
+Important cost rule:
+Only call GPT mini when the customer has paid and explicitly clicks to generate the Guided Report Summary, or when the paid report page is first opened if we choose auto-generation.
+
+Preferred:
+Do not auto-generate immediately on payment unless already designed.
+Show the button:
+Generate guided summary
+
+This keeps the user in control and avoids unnecessary API calls.
+
+If product flow requires showing the summary immediately after payment, make only one GPT mini call and cache it.
+
+Cache the result in Zustand/localStorage/session state so navigating away does not create another call.
+
+Rate limit:
+Maximum 3 generations per paid session per hour.
+
+====================================================
+8. HOMEPAGE CTA AND MICROCOPY
+====================================================
+
+Update homepage CTAs:
+
+Primary:
+Start your financial report
+
+Secondary:
+Preview sample report
+
+Alternative CTA:
+Build my report
+
+Trust microcopy near CTA:
+No names or addresses needed. Core calculations run in your browser.
+
+Near Guided Report Summary mention:
+Guided summaries use selected model figures only — no names, addresses or contact details.
+
+====================================================
+9. COPY SAFETY RULES
+====================================================
+
+Do not say:
+- legal advice
+- financial advice
+- tax advice
+- mortgage advice
+- recommended settlement
+- best option
+- fair split
+- likely court outcome
+- entitled to
+- accept this
+- reject this
+- guaranteed
+- solicitor replacement
+- replaces legal advice
+- anonymous/anonymised in normal UI
+
+Use:
+- illustrative modelling
+- based on the figures entered
+- plain-English summary
+- pressure points
+- questions to raise
+- professional conversations
+- selected model figures
+- no names or addresses
+- before expensive conversations
+
+====================================================
+10. IMPLEMENTATION DETAIL
+====================================================
+
+Please inspect the current codebase first and reuse existing components/styles where possible.
+
+Likely files to inspect/update:
+- landing/home page component
+- pricing component/section
+- dashboard preview section
+- results/paywall component
+- report/print component
+- guided report summary component if already created
+- store/session state
+- routes/API endpoint for guided report summary
+
+Add a static sample report component if helpful:
+SampleReportPreviewModal
+or
+ReportPreviewModal
+
+Suggested component:
+client/src/components/report-preview-modal.tsx
+
+It should:
+- render from static sample data
+- be scrollable
+- be responsive on mobile
+- not navigate away from homepage
+- include close button
+- include CTA to start report
+- be accessible with keyboard close/escape
+- avoid body scroll issues where possible
+
+Paywall preview component:
+client/src/components/report-ready-preview.tsx
+
+It should:
+- show personalised deterministic figures
+- show locked sections
+- show unlock CTA
+- not call GPT
+- not expose full paid report
+
+====================================================
+11. ACCEPTANCE CRITERIA
+====================================================
+
+The work is complete when:
+
+1. Homepage clearly sells the enhanced full report, not just a calculator.
+2. Pricing section reflects the £79 full report value.
+3. Guided Report Summary is included in the paid offer.
+4. Homepage includes a “Preview sample report” / “Open sample report” button under the existing dashboard preview.
+5. Clicking the report preview opens a full scrollable sample report without leaving the homepage.
+6. Sample report is clearly labelled as fictional/sample.
+7. Free users at the paywall see “Your personalised financial report is ready.”
+8. Paywall uses deterministic calculated figures only and does not call GPT.
+9. Full Guided Report Summary generation is reserved for paid users.
+10. GPT mini/model call is only used after payment and explicit generation or paid report access.
+11. The guided summary result is cached and not regenerated on navigation.
+12. Normal UI uses “selected model figures”, not “anonymised” or “de-identified”.
+13. Copy avoids legal/financial advice claims.
+14. Mobile layout is clean and conversion-focused.
+15. Existing payment/access logic is not broken.
