@@ -76,7 +76,7 @@ function ScenarioPanel() {
       />
       <div className="flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={SCENARIO_DATA} margin={{ top: 4, right: 4, left: -14, bottom: 32 }}>
+          <BarChart data={SCENARIO_DATA} margin={{ top: 4, right: 4, left: 4, bottom: 32 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
             <XAxis
               dataKey="name"
@@ -89,7 +89,7 @@ function ScenarioPanel() {
             <YAxis
               tickFormatter={fmtK}
               tick={{ fontSize: 9, fill: "#6B7280" }}
-              width={36}
+              width={42}
               tickLine={false}
               axisLine={false}
             />
