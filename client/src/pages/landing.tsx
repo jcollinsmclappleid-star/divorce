@@ -357,6 +357,70 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── UK Divorce Facts ── */}
+      <section className="py-16 md:py-20 bg-muted/20 border-t border-border/40" data-testid="section-uk-facts">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="text-center mb-10 space-y-3" data-reveal>
+            <h2 className="text-2xl md:text-3xl font-display font-bold">Divorce in England & Wales — the financial reality</h2>
+            <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
+              Understanding what most people face helps you plan better. These are the numbers behind the process.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
+            {[
+              {
+                figure: "113,000",
+                unit: "divorces",
+                label: "granted in England & Wales in 2022 — roughly one every five minutes throughout the year.",
+                source: "ONS, Divorces in England and Wales: 2022",
+                delay: "0",
+              },
+              {
+                figure: "62",
+                unit: "weeks",
+                label: "average time from petition to final order under the new no-fault system — over a year of legal process.",
+                source: "Ministry of Justice, Family Court Statistics, 2023",
+                delay: "100",
+              },
+              {
+                figure: "£30k+",
+                unit: "per party",
+                label: "in solicitor fees for contested financial proceedings. Even 'straightforward' cases routinely reach five figures.",
+                source: "Resolution, Guide to Family Law Costs",
+                delay: "200",
+              },
+              {
+                figure: "90%",
+                unit: "of couples",
+                label: "negotiate or mediate — only 1 in 10 reaches a court-determined settlement. Most people need to negotiate well, not litigate.",
+                source: "Resolution, Family Law Statistics",
+                delay: "300",
+              },
+            ].map((stat, i) => (
+              <div
+                key={i}
+                className="bg-background rounded-xl border border-border/60 p-6 flex flex-col gap-3 shadow-sm"
+                data-testid={`card-uk-fact-${i}`}
+                data-reveal
+                data-reveal-delay={stat.delay}
+              >
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-display font-bold text-primary">{stat.figure}</span>
+                  <span className="text-sm font-semibold text-muted-foreground">{stat.unit}</span>
+                </div>
+                <p className="text-sm text-foreground leading-relaxed flex-1">{stat.label}</p>
+                <p className="text-[10px] text-muted-foreground/60 italic">{stat.source}</p>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-center text-sm text-muted-foreground mt-10 max-w-2xl mx-auto leading-relaxed" data-reveal>
+            This tool is designed for the 90% who will negotiate — so you can negotiate from a position of clarity, not guesswork.
+          </p>
+        </div>
+      </section>
+
       {/* ── Pricing callout ── */}
       <section className="py-10 bg-muted/30 border-y border-border/40" data-testid="section-pricing-callout">
         <div className="container mx-auto px-4 max-w-3xl">
