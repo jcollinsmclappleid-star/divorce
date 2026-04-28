@@ -72,8 +72,8 @@ const FAQ_CATEGORIES = [
     category: "Understanding your results",
     items: [
       {
-        q: "What does the Financial Sustainability Indicator mean?",
-        a: "The Financial Sustainability Indicator (FSI) is a score from 0 to 100 that reflects how viable each settlement option looks over a five-year horizon — based on income, outgoings, housing costs, and capital position. It does not constitute financial advice, risk profiling, or a suitability assessment. Green (70+) indicates sustainability under current assumptions. Amber (40–69) warrants attention. Red (below 40) indicates financial stress.",
+        q: "What does the Cashflow Resilience Indicator mean?",
+        a: "The Cashflow Resilience Indicator (CRI) is a score from 0 to 100 that reflects how viable each settlement option looks over a five-year horizon — based on income, outgoings, housing costs, and capital position. It does not constitute financial advice, risk profiling, or a suitability assessment. Green (70+) indicates sustainability under current assumptions. Amber (40–69) warrants attention. Red (below 40) indicates financial stress.",
       },
       {
         q: "What do the 5-year projections show?",
@@ -81,11 +81,11 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "What is the stress test feature?",
-        a: "The stress test tool lets you adjust key financial assumptions — such as interest rates, monthly expenses, or house price changes — and immediately see how those changes affect each settlement option's FSI score and cashflow. It is designed to help you understand how resilient each option is to realistic changes in your circumstances.",
+        a: "The stress test tool lets you adjust key financial assumptions — such as interest rates, monthly expenses, or house price changes — and immediately see how those changes affect each settlement option's CRI score and cashflow. It is designed to help you understand how resilient each option is to realistic changes in your circumstances.",
       },
       {
         q: "What is the Structured Financial Brief?",
-        a: "The Structured Financial Brief is a downloadable PDF summary of your full analysis. It includes your asset pool breakdown, the net position for each settlement option, monthly surplus/deficit figures, and your FSI scores. It is designed to be a useful reference document for discussions with solicitors, mediators, or your own planning — not a formal financial statement.",
+        a: "The Structured Financial Brief is a downloadable PDF summary of your full analysis. It includes your asset pool breakdown, the net position for each settlement option, monthly surplus/deficit figures, and your CRI scores. It is designed to be a useful reference document for discussions with solicitors, mediators, or your own planning — not a formal financial statement.",
       },
     ],
   },
@@ -111,7 +111,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "What does the free version include?",
-        a: "The free version includes the full 9-step financial wizard, entry of all assets and liabilities, and a preview of your total marital asset pool as a ring chart. The full settlement analysis — including FSI scores, monthly cashflow, stress testing, projections, and the PDF brief — requires a one-time payment of £79.",
+        a: "The free version includes the full 9-step financial wizard, entry of all assets and liabilities, and a preview of your total marital asset pool as a ring chart. The full settlement analysis — including CRI scores, monthly cashflow, stress testing, projections, and the PDF brief — requires a one-time payment of £79.",
       },
       {
         q: "What support is available after purchase?",

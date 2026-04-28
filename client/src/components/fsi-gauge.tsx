@@ -49,7 +49,7 @@ export function FsiGauge({ score, size = 120, label }: FsiGaugeProps) {
         height={size * 0.65}
         viewBox={`0 0 ${size} ${size * 0.65}`}
         role="img"
-        aria-label={`Financial Sustainability Indicator score: ${score}`}
+        aria-label={`Cashflow Resilience Indicator score: ${score}`}
       >
         <path d={bgPath} fill="none" stroke="#E5E7EB" strokeWidth={strokeW} strokeLinecap="round" />
         <path d={fillPath} fill="none" stroke={color.stroke} strokeWidth={strokeW} strokeLinecap="round" />
@@ -100,7 +100,7 @@ export function FsiGaugeLocked({ size = 120 }: { size?: number }) {
           height={size * 0.65}
           viewBox={`0 0 ${size} ${size * 0.65}`}
           role="img"
-          aria-label="Financial Sustainability Indicator — locked"
+          aria-label="Cashflow Resilience Indicator — locked"
           className="opacity-30 blur-[2px]"
         >
           <path d={bgPath} fill="none" stroke="#D1D5DB" strokeWidth={strokeW} strokeLinecap="round" strokeDasharray="4 3" />

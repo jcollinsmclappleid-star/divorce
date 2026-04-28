@@ -635,7 +635,7 @@ export default function LandingPage() {
           <div className="space-y-2.5">
             {[
               "Full settlement comparison — all four options modelled and scored",
-              "Financial Sustainability Indicator — understand the financial resilience of each option",
+              "Cashflow Resilience Indicator — understand the financial resilience of each option",
               "5-year capital projections — see where your money stands under each option",
               "Mortgage pressure checks — affordability benchmarks for keep-home scenarios",
               "Guided Report Summary — plain-English takeaways and questions for professionals",

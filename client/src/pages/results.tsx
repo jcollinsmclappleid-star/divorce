@@ -471,7 +471,7 @@ function DecisionLensToggle({ viewLens, setViewLens }: { viewLens: ViewLens; set
   const lenses: { id: ViewLens; label: string; icon: typeof PoundSterling; description: string }[] = [
     { id: "liquidity", label: "Liquidity Analysis", icon: PoundSterling, description: "Liquid Capital [cash and realisable investments available immediately]" },
     { id: "networth", label: "Net Worth Analysis", icon: Target, description: "Total Net Asset Position [liquid capital, property equity, and pension valuations]" },
-    { id: "risk", label: "Sustainability & Projection", icon: Activity, description: "Financial Sustainability Indicator [liquidity sustainability and lending capacity benchmarks]" },
+    { id: "risk", label: "Sustainability & Projection", icon: Activity, description: "Cashflow Resilience Indicator [liquidity sustainability and lending capacity benchmarks]" },
   ];
 
   return (
@@ -1380,11 +1380,11 @@ function ScenarioDetailCard({
           </div>
           <div className="flex gap-3 flex-wrap items-center">
             <div className="flex flex-col items-center">
-              <span className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">A FSI</span>
+              <span className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">A CRI</span>
               <FsiGauge score={stabilityScore.scoreA} size={64} />
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">B FSI</span>
+              <span className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">B CRI</span>
               <FsiGauge score={stabilityScore.scoreB} size={64} />
             </div>
           </div>
@@ -1394,7 +1394,7 @@ function ScenarioDetailCard({
         <NarrativeSection narrative={narrative} />
 
         <div className="space-y-4 p-4 bg-muted/20 rounded-md" data-testid="block-financial-sustainability">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Financial Sustainability Indicator</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Cashflow Resilience Indicator</h3>
           
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="flex flex-col items-center gap-1">
@@ -1595,7 +1595,7 @@ function ScenarioDetailCard({
         )}
 
         <DetailCollapsible
-          title="Financial Sustainability Indicator Detail"
+          title="Cashflow Resilience Indicator Detail"
           summary={<span>View scoring breakdown and assessment drivers</span>}
           testId="detail-stability-assessment"
         >
@@ -1907,7 +1907,7 @@ function StabilitySection({ score }: { score: StabilityResult }) {
   return (
     <div className="space-y-3" data-testid="section-stability">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <Shield className="w-3.5 h-3.5" /> Financial Sustainability Indicator (Illustrative Model Output)
+        <Shield className="w-3.5 h-3.5" /> Cashflow Resilience Indicator (Illustrative Model Output)
       </h3>
       <p className="text-[10px] text-muted-foreground/70 italic">Model-generated composite metric. Not a suitability assessment, risk profile, or financial recommendation.</p>
       <div className="grid gap-3 sm:grid-cols-2">

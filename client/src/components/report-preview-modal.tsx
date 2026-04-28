@@ -296,8 +296,8 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                       { label: "Monthly Mortgage",       values: ["None",     "£3,280 (A)","£3,280 (B)","£1,640 each"] },
                       { label: "Monthly Surplus — A",    values: ["+£2,656",  "+£1,026",  "+£2,656",  "+£2,666"], green: true },
                       { label: "Monthly Surplus — B",    values: ["+£652",    "+£652",    "(£978)",   "+£662"],   mixed: true },
-                      { label: "FSI Score — A",          values: ["78/100",   "52/100",   "82/100",   "71/100"] },
-                      { label: "FSI Score — B",          values: ["63/100",   "71/100",   "22/100",   "54/100"] },
+                      { label: "CRI Score — A",          values: ["78/100",   "52/100",   "82/100",   "71/100"] },
+                      { label: "CRI Score — B",          values: ["63/100",   "71/100",   "22/100",   "54/100"] },
                       { label: "10-yr Runway — A",       values: ["Sustained","Sustained","Sustained","Sustained"] },
                       { label: "10-yr Runway — B",       values: ["Sustained","Sustained","Yr 2 est.","Sustained"] },
                     ].map((row, i) => (
@@ -344,8 +344,8 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                   {[
                     { label: "A Liquid Capital", value: "£18,250" },
                     { label: "B Liquid Capital", value: "£89,750" },
-                    { label: "A FSI Score",       value: "52/100" },
-                    { label: "B FSI Score",       value: "71/100" },
+                    { label: "A CRI Score",       value: "52/100" },
+                    { label: "B CRI Score",       value: "71/100" },
                   ].map(({ label, value }) => (
                     <div key={label}>
                       <p className="text-[9px] text-gray-400 uppercase tracking-wider">{label}</p>
@@ -363,7 +363,7 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
               </div>
 
               <div>
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-3">Financial Sustainability Indicator (FSI) — Illustrative</p>
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-3">Cashflow Resilience Indicator (CRI) — Illustrative</p>
                 <div className="grid sm:grid-cols-2 gap-5">
                   {[
                     {

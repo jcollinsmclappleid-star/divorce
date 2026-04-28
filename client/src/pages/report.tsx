@@ -475,8 +475,8 @@ export default function ReportPage() {
                   { label: "B — Starting Capital", value: fmt(sc.liquidStartB) },
                   { label: "A — Monthly Surplus", value: `${snapshot.surplusA >= 0 ? "+" : ""}${fmt(snapshot.surplusA)}/mo`, flagRed: snapshot.surplusA < 0 },
                   { label: "B — Monthly Surplus", value: `${snapshot.surplusB >= 0 ? "+" : ""}${fmt(snapshot.surplusB)}/mo`, flagRed: snapshot.surplusB < 0 },
-                  { label: "A FSI Score", value: `${stability.scoreA}/100` },
-                  { label: "B FSI Score", value: `${stability.scoreB}/100` },
+                  { label: "A CRI Score", value: `${stability.scoreA}/100` },
+                  { label: "B CRI Score", value: `${stability.scoreB}/100` },
                 ].map(({ label, value, flagRed }) => (
                   <div key={label}>
                     <p className="text-[9px] text-gray-400 uppercase tracking-wider">{label}</p>
@@ -512,7 +512,7 @@ export default function ReportPage() {
                 </div>
               </ReportCollapsible>
 
-              <ReportCollapsible title="Financial Sustainability Indicator">
+              <ReportCollapsible title="Cashflow Resilience Indicator">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Party A</p>
@@ -782,7 +782,7 @@ export default function ReportPage() {
             <div><span className="font-semibold">Net Equity:</span> <span className="text-gray-600">The value of property after deducting the outstanding mortgage balance and estimated selling costs.</span></div>
             <div><span className="font-semibold">Equity Transfer Obligation:</span> <span className="text-gray-600">The lump sum payable by the party retaining the property to compensate the departing party for their share of net equity.</span></div>
             <div><span className="font-semibold">Reserve Duration:</span> <span className="text-gray-600">The projected period for which liquid reserves can sustain expenditure, measured in months or years.</span></div>
-            <div><span className="font-semibold">Financial Sustainability Indicator (Illustrative Model Output):</span> <span className="text-gray-600">A composite indicator reflecting liquidity sustainability and lending capacity benchmarks under current modelling assumptions. It is not a suitability or lending assessment.</span></div>
+            <div><span className="font-semibold">Cashflow Resilience Indicator (Illustrative Model Output):</span> <span className="text-gray-600">A composite indicator reflecting cashflow sustainability and lending capacity benchmarks under current modelling assumptions. It is not a suitability or lending assessment.</span></div>
             <div><span className="font-semibold">CETV (Cash Equivalent Transfer Value):</span> <span className="text-gray-600">The estimated lump sum value of a pension, used for comparison and division purposes.</span></div>
             <div><span className="font-semibold">CMS (Child Maintenance Service):</span> <span className="text-gray-600">The UK government service that calculates child maintenance obligations based on income and overnight stays.</span></div>
             <div><span className="font-semibold">Income Multiple:</span> <span className="text-gray-600">The ratio of mortgage required to gross annual income, used as a generalised lending capacity benchmark.</span></div>

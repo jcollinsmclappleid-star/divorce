@@ -401,29 +401,29 @@ export default function PreviewPage() {
           </div>
         </section>
 
-        {/* ── FSI score dial ── */}
+        {/* ── CRI score dial ── */}
         <section>
           <Card className="border-2 border-dashed border-border/60 overflow-hidden" data-testid="card-fsi-preview">
             <CardContent className="py-8">
               <div className="text-center space-y-4">
                 <div className="flex items-center justify-center gap-2 mb-1">
                   <AlertCircle className="w-4 h-4 text-amber-500" />
-                  <h2 className="text-base font-semibold">Financial Sustainability Indicator</h2>
+                  <h2 className="text-base font-semibold">Cashflow Resilience Indicator</h2>
                 </div>
                 <p className="text-xs text-muted-foreground max-w-sm mx-auto">
-                  The FSI scores how financially viable each scenario is for each party — combining income, outgoings, housing costs, and capital. Scores below 40 signal significant strain; above 70 indicates sustainable.
+                  The CRI scores how financially viable each scenario is for each party — combining income, outgoings, housing costs, and capital. Scores below 40 signal significant strain; above 70 indicates sustainable.
                 </p>
                 <div className="flex justify-center">
                   <FsiGaugeLocked size={140} />
                 </div>
-                <p className="text-xs font-medium text-amber-600">Your FSI scores across all 4 scenarios are ready — unlock to view.</p>
+                <p className="text-xs font-medium text-amber-600">Your CRI scores across all 4 scenarios are ready — unlock to view.</p>
                 <button
                   onClick={handleCheckout}
                   disabled={checkoutLoading}
                   className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary/70 transition-colors"
                   data-testid="button-unlock-fsi"
                 >
-                  <Lock className="w-3.5 h-3.5" /> Unlock to view your sustainability scores
+                  <Lock className="w-3.5 h-3.5" /> Unlock to view your resilience scores
                 </button>
               </div>
             </CardContent>
@@ -510,7 +510,7 @@ export default function PreviewPage() {
               <div className="space-y-2">
                 {[
                   "Full settlement comparison — all four options modelled and scored",
-                  "Financial Sustainability Indicator per party",
+                  "Cashflow Resilience Indicator per party",
                   "Monthly cashflow view — income, housing costs, surplus/deficit",
                   "5-year capital projections with charts",
                   "Mortgage pressure checks and affordability benchmarks",
@@ -604,7 +604,7 @@ export default function PreviewPage() {
                 "Capital allocation under all 4 options",
                 "Net monthly income per party (post-tax)",
                 "Monthly surplus / deficit per scenario",
-                "Financial Sustainability Indicator scores",
+                "Cashflow Resilience Indicator scores",
                 "5-year capital projection charts",
                 "Housing feasibility benchmark",
                 "Guided Report Summary — plain-English takeaways",

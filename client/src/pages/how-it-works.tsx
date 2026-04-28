@@ -47,7 +47,7 @@ const FEATURE_COLORS = [
 ];
 
 const RESULTS_FEATURES = [
-  { icon: BarChart3, title: "Financial Sustainability Indicator", desc: "A 0–100 score for each settlement option reflecting its five-year viability based on income, outgoings, and capital." },
+  { icon: BarChart3, title: "Cashflow Resilience Indicator", desc: "A 0–100 score for each settlement option reflecting its five-year viability based on income, outgoings, and capital." },
   { icon: Scale, title: "4 settlement options side by side", desc: "Sell & Split, Party A keeps the home, Party B keeps the home, and a Deferred Sale — each showing the full net position." },
   { icon: PoundSterling, title: "Monthly cashflow for each party", desc: "Net income after tax and NI, minus living costs and housing payments — showing monthly surplus or deficit." },
   { icon: TrendingUp, title: "5-year capital projections", desc: "How the capital position of each settlement evolves over five years under your assumptions." },
@@ -149,7 +149,7 @@ export default function HowItWorksPage() {
               {
                 step: "03",
                 title: "Unlock your full analysis",
-                desc: "One payment of £79 unlocks 12 months of access to the complete analysis: FSI scores, monthly cashflow, stress testing, five-year projections, and a downloadable brief.",
+                desc: "One payment of £79 unlocks 12 months of access to the complete analysis: CRI scores, monthly cashflow, stress testing, five-year projections, and a downloadable brief.",
                 tag: "£79 · 12-month access",
                 color: "bg-amber-50 border-amber-200",
                 tagColor: "text-amber-700 bg-amber-100 font-semibold",
