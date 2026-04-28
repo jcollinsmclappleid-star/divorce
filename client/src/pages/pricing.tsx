@@ -49,14 +49,6 @@ const FAQ_ITEMS = [
     q: "Is there a refund if it doesn't work for me?",
     a: "Yes. If you're not satisfied within 7 days of purchase, contact us at support@divorcecalculatoruk.co.uk and we'll issue a full refund. See our full Refund Policy for details.",
   },
-  {
-    q: "How does this compare to a solicitor consultation?",
-    a: "A single initial solicitor consultation typically costs £250–£400 per hour. This tool gives you a structured, quantified financial picture before you engage professionals — so you arrive prepared and spend less time on basics.",
-  },
-  {
-    q: "Is my financial data safe?",
-    a: "All calculations happen entirely in your browser. Your financial data is never sent to or stored on our servers. We see nothing. Access is linked to a session token stored locally on your device.",
-  },
 ];
 
 export default function PricingPage() {
@@ -238,7 +230,7 @@ export default function PricingPage() {
             onClick={() => { scrollTop(); setLocation("/wizard"); }}
             data-testid="button-bottom-start"
           >
-            Start your financial model — free
+            Start free — no sign-up
             <ArrowRight className="w-4 h-4 ml-1.5" />
           </Button>
           <p className="text-xs text-muted-foreground">
