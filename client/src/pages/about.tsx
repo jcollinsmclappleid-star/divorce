@@ -202,7 +202,7 @@ export default function AboutPage() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 {[
                   "All 4 settlement scenarios compared",
-                  "Financial Sustainability Index scores",
+                  "Cashflow Resilience Indicator (CRI) scores",
                   "5-year capital projections",
                   "Stress testing sliders",
                   "Downloadable PDF brief",

@@ -14,10 +14,12 @@ const FREE_FEATURES = [
   { label: "Scenario names visible", included: true },
   { label: "Combined pool value", included: true },
   { label: "Scenario capital breakdowns", included: false },
-  { label: "Financial Sustainability Index score", included: false },
+  { label: "Cashflow Resilience Indicator (CRI) score", included: false },
   { label: "5-year sustainability projections", included: false },
   { label: "Monthly cash position per scenario", included: false },
   { label: "Sensitivity & stress-test analysis", included: false },
+  { label: "Guided Report Summary — plain-English analysis", included: false },
+  { label: "Tailored questions for your solicitor, broker & pension adviser", included: false },
   { label: "Downloadable Structured Financial Brief", included: false },
   { label: "12 months unlimited re-runs", included: false },
 ];
@@ -28,10 +30,12 @@ const PAID_FEATURES = [
   { label: "Scenario names visible", included: true },
   { label: "Combined pool value", included: true },
   { label: "Scenario capital breakdowns", included: true },
-  { label: "Financial Sustainability Index score", included: true },
+  { label: "Cashflow Resilience Indicator (CRI) score", included: true },
   { label: "5-year sustainability projections", included: true },
   { label: "Monthly cash position per scenario", included: true },
   { label: "Sensitivity & stress-test analysis", included: true },
+  { label: "Guided Report Summary — plain-English analysis", included: true },
+  { label: "Tailored questions for your solicitor, broker & pension adviser", included: true },
   { label: "Downloadable Structured Financial Brief", included: true },
   { label: "12 months unlimited re-runs", included: true },
 ];
@@ -119,11 +123,13 @@ export default function PricingPage() {
             <ul className="space-y-3">
               {[
                 "All four settlement scenarios compared side-by-side",
-                "Financial Sustainability Index score with driver breakdown",
+                "Cashflow Resilience Indicator (CRI) score with driver breakdown",
                 "5-year capital depletion & sustainability projections",
                 "Monthly cash position (surplus/deficit) per scenario",
                 "Sensitivity analysis — which assumptions matter most",
                 "Stress-test modelling for interest rate changes",
+                "Guided Report Summary — plain-English analysis of your figures",
+                "Tailored questions to raise with your solicitor, broker & pension adviser",
                 "Downloadable Structured Financial Brief (print-ready)",
                 "12 months unlimited access — update figures any time",
               ].map((item, i) => (
@@ -155,7 +161,7 @@ export default function PricingPage() {
                 </div>
                 <div className="bg-white/5 rounded-lg py-2.5">
                   <p className="text-sm font-bold text-white">100%</p>
-                  <p className="text-[10px] text-white/45 mt-0.5">Private</p>
+                  <p className="text-[10px] text-white/45 mt-0.5">In-browser</p>
                 </div>
               </div>
 
@@ -192,7 +198,7 @@ export default function PricingPage() {
         <section className="border-y py-6" data-testid="section-trust">
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-3">
             {[
-              { icon: Lock, text: "Browser-only calculations — zero data on our servers" },
+              { icon: Lock, text: "Core calculations run in your browser — no financial data on our servers" },
               { icon: Shield, text: "UK 2026/27 HMRC tax rates" },
               { icon: Zap, text: "Instant access after payment" },
             ].map((s, i) => (

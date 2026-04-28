@@ -153,7 +153,7 @@ function CashflowPanel() {
       </div>
 
       <div className="mt-3 pt-3 border-t">
-        <p className="text-[10px] text-muted-foreground mb-2">Financial Sustainability Index · this scenario</p>
+        <p className="text-[10px] text-muted-foreground mb-2">Cashflow Resilience Indicator (CRI) · this scenario</p>
         <div className="grid grid-cols-2 gap-3">
           {[
             { name: "Alex",   score: 71, bg: "bg-emerald-50 border-emerald-200", color: "text-emerald-600", label: "Sustainable"      },
@@ -258,7 +258,7 @@ function FsiPanel() {
       <PanelHeader
         icon={Gauge}
         color="text-rose-500"
-        title="Financial Sustainability Index"
+        title="Cashflow Resilience Indicator"
         subtitle="Composite resilience score per party · Sell & Split scenario"
       />
       <div className="flex gap-2 mt-2">

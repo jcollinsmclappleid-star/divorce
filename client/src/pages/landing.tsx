@@ -142,7 +142,7 @@ export default function LandingPage() {
                 In under 5 minutes, see what each settlement option means for your financial future — which are sustainable, which leave you stretched, and where your money stands in 5 years. Free to start. No sign-up.
               </p>
               <p className="text-sm text-white/50 leading-relaxed border-l-2 border-gold/40 pl-3">
-                If you're here, you're worried about the house, your finances, and what comes next. This shows you exactly where you stand — in numbers.
+                Unlock the full report and get a plain-English Guided Summary of your figures — including tailored questions to raise with your solicitor, mortgage broker, and pension adviser — so you walk into every conversation prepared.
               </p>
 
               {/* Trust pills */}
@@ -150,7 +150,8 @@ export default function LandingPage() {
                 {[
                   { text: "HMRC-sourced tax rate bands" },
                   { text: "Core calculations stay private in your browser" },
-                  { text: "Questions? We'll help within 7 days" },
+                  { text: "Guided plain-English summary included" },
+                  { text: "Tailored professional questions" },
                 ].map((pill, i) => (
                   <span key={i} className="flex items-center gap-1.5 text-[11px] text-white/50 bg-white/5 border border-white/10 rounded-full px-3 py-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-gold/60 flex-shrink-0" />
@@ -447,9 +448,11 @@ export default function LandingPage() {
               </p>
             </div>
             <div className="text-center md:text-right space-y-2 shrink-0">
-              <div className="flex flex-wrap gap-2 justify-center md:justify-end text-xs text-muted-foreground">
+              <div className="flex flex-col gap-1.5 items-center md:items-end text-xs text-muted-foreground">
                 <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Free preview included</span>
                 <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Full analysis £79 one-time</span>
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Guided plain-English summary of your figures</span>
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Tailored questions for your solicitor, broker & pension adviser</span>
                 <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> General email support included</span>
               </div>
               <Link href="/pricing" onClick={scrollTop} className="text-xs text-primary hover:underline block" data-testid="link-see-full-pricing">

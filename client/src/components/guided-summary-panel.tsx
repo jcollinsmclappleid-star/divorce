@@ -265,9 +265,12 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
             )}
             <div className="flex items-start gap-3 p-3.5 rounded-lg bg-primary/5 border border-primary/10">
               <Sparkles className="w-4 h-4 text-primary/60 shrink-0 mt-0.5" />
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                To generate this guided summary, we securely process selected figures from your model. No names, addresses, contact details, documents or messages are included.
-              </p>
+              <div className="space-y-1">
+                <p className="text-xs font-medium text-foreground">This feature uses an intelligent analysis engine</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  When you click Generate, your anonymous model figures are securely sent to our analysis engine to produce the plain-English summary, pressure points, and professional questions below. No names, addresses, contact details, documents or messages are ever included.
+                </p>
+              </div>
             </div>
             <Button
               onClick={handleGenerate}
@@ -342,7 +345,7 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
           </div>
 
           <p className="text-[10px] text-muted-foreground/60 italic">
-            This guided summary is illustrative and generated from the figures you entered. It is not legal, tax, or financial advice. Please consult qualified professionals before making any decisions.
+            This guided summary was produced by an intelligent analysis engine from the anonymous model figures you entered. It is illustrative only and is not legal, tax, or financial advice. Please consult qualified professionals before making any decisions.
           </p>
         </div>
       ) : null}
