@@ -1098,60 +1098,73 @@ function ExecutiveTable({
             const rw = runways[s.id];
             const meta = SCENARIO_META[s.id];
             const annual = ((s.mortgageMonthlyA ?? 0) + (s.mortgageMonthlyB ?? 0)) * 12;
+            const nameA = store.profile?.partyAName || "Party A";
+            const nameB = store.profile?.partyBName || "Party B";
+            const reserveLabel = (depletion?: number, sustained?: boolean) => {
+              if (sustained) return <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50 text-[10px]">Sustained</Badge>;
+              if (!depletion || depletion < 1) return <Badge variant="outline" className="text-red-600 border-red-200 bg-red-50 text-[10px]">Under 1 yr</Badge>;
+              return <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]">Yr {depletion}</Badge>;
+            };
             return (
-              <div key={s.id} className="p-4 border rounded-md space-y-2.5" data-testid={`mobile-card-${s.id}`}>
-                <div className="flex items-center gap-2">
+              <div key={s.id} className="border rounded-lg overflow-hidden" data-testid={`mobile-card-${s.id}`}>
+                <div className="flex items-center gap-2 px-4 py-3 border-b bg-muted/30">
                   <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: meta?.color }} />
                   <span className="text-sm font-semibold">{meta?.label ?? s.name}</span>
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="min-w-0">
-                    <span className="text-muted-foreground block">Liquid Capital — A</span>
-                    <span className="tabular-nums font-semibold text-blue-600">{formatCurrency(s.liquidStartA)}</span>
+                <div className="p-4 space-y-3">
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="min-w-0 space-y-0.5">
+                      <span className="text-muted-foreground block truncate">Cash — {nameA}</span>
+                      <span className="tabular-nums font-semibold text-blue-600 text-sm">{formatCurrency(s.liquidStartA)}</span>
+                    </div>
+                    <div className="min-w-0 space-y-0.5">
+                      <span className="text-muted-foreground block truncate">Cash — {nameB}</span>
+                      <span className="tabular-nums font-semibold text-emerald-600 text-sm">{formatCurrency(s.liquidStartB)}</span>
+                    </div>
+                    <div className="min-w-0 space-y-1">
+                      <span className="text-muted-foreground block">Reserves — {nameA}</span>
+                      {reserveLabel(rw?.partyA.depletionYear, rw?.partyA.sustained)}
+                    </div>
+                    <div className="min-w-0 space-y-1">
+                      <span className="text-muted-foreground block">Reserves — {nameB}</span>
+                      {reserveLabel(rw?.partyB.depletionYear, rw?.partyB.sustained)}
+                    </div>
                   </div>
-                  <div className="min-w-0">
-                    <span className="text-muted-foreground block">Liquid Capital — B</span>
-                    <span className="tabular-nums font-semibold text-emerald-600">{formatCurrency(s.liquidStartB)}</span>
+                  <div className="grid grid-cols-2 gap-2 pt-1 border-t">
+                    <div className="flex flex-col items-center gap-0.5">
+                      <span className="text-[10px] text-muted-foreground">{nameA}</span>
+                      <FsiGauge score={st?.scoreA ?? 100} size={72} />
+                    </div>
+                    <div className="flex flex-col items-center gap-0.5">
+                      <span className="text-[10px] text-muted-foreground">{nameB}</span>
+                      <FsiGauge score={st?.scoreB ?? 100} size={72} />
+                    </div>
                   </div>
-                  <div className="min-w-0">
-                    <span className="text-muted-foreground block">Reserves — A</span>
-                    {rw?.partyA.sustained
-                      ? <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50 text-[10px]">Sustained</Badge>
-                      : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]">Yr {rw?.partyA.depletionYear}</Badge>}
-                  </div>
-                  <div className="min-w-0">
-                    <span className="text-muted-foreground block">Reserves — B</span>
-                    {rw?.partyB.sustained
-                      ? <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50 text-[10px]">Sustained</Badge>
-                      : <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50 text-[10px]">Yr {rw?.partyB.depletionYear}</Badge>}
-                  </div>
-                  <div className="min-w-0">
-                    <span className="text-muted-foreground block mb-1">Sustainability — A</span>
-                    <FsiGauge score={st?.scoreA ?? 100} size={72} />
-                  </div>
-                  <div className="min-w-0">
-                    <span className="text-muted-foreground block mb-1">Sustainability — B</span>
-                    <FsiGauge score={st?.scoreB ?? 100} size={72} />
-                  </div>
-                  {(s.fundingGap ?? 0) > 0 && (
-                    <div className="col-span-2">
-                      <span className="text-muted-foreground block">Funding Shortfall</span>
-                      <span className="tabular-nums font-semibold text-amber-600">{formatCurrency(s.fundingGap!)}</span>
+                  {((s.fundingGap ?? 0) > 0 || annual > 0) && (
+                    <div className="pt-1 border-t grid grid-cols-2 gap-3 text-xs">
+                      {(s.fundingGap ?? 0) > 0 && (
+                        <div className="col-span-2 space-y-0.5">
+                          <span className="text-muted-foreground block">Funding Shortfall</span>
+                          <span className="tabular-nums font-semibold text-red-600">{formatCurrency(s.fundingGap!)}</span>
+                        </div>
+                      )}
+                      {annual > 0 && (
+                        <div className="col-span-2 space-y-0.5">
+                          <span className="text-muted-foreground block">Annual Mortgage</span>
+                          <span className="tabular-nums font-semibold text-amber-600">{formatCurrency(annual)}/yr</span>
+                        </div>
+                      )}
                     </div>
                   )}
-                  {annual > 0 && (
-                    <div className="col-span-2">
-                      <span className="text-muted-foreground block">Annual Mortgage Obligation</span>
-                      <span className="tabular-nums font-semibold text-amber-600">{formatCurrency(annual)}/yr</span>
+                  <div className="pt-1 border-t grid grid-cols-2 gap-3 text-xs">
+                    <div className="space-y-0.5">
+                      <span className="text-muted-foreground block">Total Net — {nameA}</span>
+                      <span className="tabular-nums font-bold text-blue-600 text-sm">{formatCurrency(s.totalA)}</span>
                     </div>
-                  )}
-                  <div>
-                    <span className="text-muted-foreground block">Total Net — A</span>
-                    <span className="tabular-nums font-bold text-blue-600">{formatCurrency(s.totalA)}</span>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground block">Total Net — B</span>
-                    <span className="tabular-nums font-bold text-emerald-600">{formatCurrency(s.totalB)}</span>
+                    <div className="space-y-0.5">
+                      <span className="text-muted-foreground block">Total Net — {nameB}</span>
+                      <span className="tabular-nums font-bold text-emerald-600 text-sm">{formatCurrency(s.totalB)}</span>
+                    </div>
                   </div>
                 </div>
               </div>

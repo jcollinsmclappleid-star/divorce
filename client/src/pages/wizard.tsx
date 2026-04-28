@@ -782,22 +782,30 @@ function StepHome({ advancedMode }: { advancedMode: boolean }) {
 
 const ASSET_SUGGESTIONS: { name: string; category: string; owner: string; hint: string }[] = [
   { name: "Joint Savings Account", category: "cash", owner: "joint", hint: "Current or savings accounts held jointly" },
-  { name: "ISA", category: "investments", owner: "A", hint: "Individual Savings Account - check your latest statement for the current value" },
-  { name: "Stocks & Shares", category: "investments", owner: "A", hint: "Share portfolios, investment platforms (e.g. Hargreaves Lansdown, Vanguard)" },
+  { name: "ISA (A)", category: "investments", owner: "A", hint: "Party A's Individual Savings Account — check your latest statement for the current value" },
+  { name: "ISA (B)", category: "investments", owner: "B", hint: "Party B's Individual Savings Account — check their latest statement for the current value" },
+  { name: "Stocks & Shares (A)", category: "investments", owner: "A", hint: "Party A's share portfolios or investment platforms (e.g. Hargreaves Lansdown, Vanguard)" },
+  { name: "Stocks & Shares (B)", category: "investments", owner: "B", hint: "Party B's share portfolios or investment platforms" },
   { name: "Premium Bonds", category: "cash", owner: "joint", hint: "Check your NS&I account for the current holding" },
-  { name: "Buy-to-Let Property", category: "other_property", owner: "joint", hint: "Investment or rental property - use current market value estimate" },
-  { name: "Business Interest", category: "business", owner: "A", hint: "Share of a business - use the most recent valuation or accountant's estimate" },
-  { name: "Vehicle", category: "vehicle", owner: "A", hint: "Car, motorbike or other vehicle - use a trade-in or private sale value" },
+  { name: "Buy-to-Let Property", category: "other_property", owner: "joint", hint: "Investment or rental property — use current market value estimate" },
+  { name: "Business Interest (A)", category: "business", owner: "A", hint: "Party A's share of a business — use the most recent valuation or accountant's estimate" },
+  { name: "Business Interest (B)", category: "business", owner: "B", hint: "Party B's share of a business — use the most recent valuation or accountant's estimate" },
+  { name: "Vehicle (A)", category: "vehicle", owner: "A", hint: "Party A's car, motorbike or other vehicle — use a trade-in or private sale value" },
+  { name: "Vehicle (B)", category: "vehicle", owner: "B", hint: "Party B's car, motorbike or other vehicle — use a trade-in or private sale value" },
   { name: "Valuables / Jewellery", category: "personal_possessions", owner: "joint", hint: "High-value items such as jewellery, art, antiques or collections" },
 ];
 
 const DEBT_SUGGESTIONS: { name: string; category: string; owner: string; hint: string }[] = [
-  { name: "Credit Card", category: "credit_card", owner: "A", hint: "Outstanding balance on credit cards" },
+  { name: "Credit Card (A)", category: "credit_card", owner: "A", hint: "Party A's outstanding credit card balance" },
+  { name: "Credit Card (B)", category: "credit_card", owner: "B", hint: "Party B's outstanding credit card balance" },
   { name: "Personal Loan", category: "loan", owner: "joint", hint: "Bank or building society personal loan" },
-  { name: "Car Finance", category: "loan", owner: "A", hint: "HP, PCP or other vehicle finance agreement" },
-  { name: "Student Loan", category: "loan", owner: "A", hint: "Student loan balance (Plan 1, 2, or postgrad)" },
+  { name: "Car Finance (A)", category: "loan", owner: "A", hint: "Party A's HP, PCP or other vehicle finance agreement" },
+  { name: "Car Finance (B)", category: "loan", owner: "B", hint: "Party B's HP, PCP or other vehicle finance agreement" },
+  { name: "Student Loan (A)", category: "loan", owner: "A", hint: "Party A's student loan balance (Plan 1, 2, or postgrad)" },
+  { name: "Student Loan (B)", category: "loan", owner: "B", hint: "Party B's student loan balance (Plan 1, 2, or postgrad)" },
   { name: "Tax Owed", category: "tax", owner: "A", hint: "Any outstanding tax liability to HMRC" },
-  { name: "Overdraft", category: "loan", owner: "A", hint: "Arranged or unarranged overdraft balance" },
+  { name: "Overdraft (A)", category: "loan", owner: "A", hint: "Party A's arranged or unarranged overdraft balance" },
+  { name: "Overdraft (B)", category: "loan", owner: "B", hint: "Party B's arranged or unarranged overdraft balance" },
 ];
 
 function StepAssets({ advancedMode }: { advancedMode: boolean }) {
@@ -867,10 +875,8 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
     setLiabilityDialogOpen(false);
   };
 
-  const addedAssetNames = new Set(nonHomeAssets.map(a => a.name));
-  const unusedAssetSuggestions = ASSET_SUGGESTIONS.filter(s => !addedAssetNames.has(s.name));
-  const addedDebtNames = new Set(nonMortgageLiabilities.map(l => l.name));
-  const unusedDebtSuggestions = DEBT_SUGGESTIONS.filter(s => !addedDebtNames.has(s.name));
+  const unusedAssetSuggestions = ASSET_SUGGESTIONS;
+  const unusedDebtSuggestions = DEBT_SUGGESTIONS;
 
   return (
     <div className="space-y-6">
@@ -1130,11 +1136,14 @@ const PENSION_SUGGESTIONS: { name: string; owner: string; pensionType: string; h
 ];
 
 const INCOME_SUGGESTIONS: { name: string; owner: string; hint: string }[] = [
-  { name: "Salary (A)", owner: "A", hint: "Annual gross salary before tax - check your payslip or P60" },
+  { name: "Salary (A)", owner: "A", hint: "Annual gross salary before tax — check your payslip or P60" },
   { name: "Salary (B)", owner: "B", hint: "Party B's annual gross salary before tax" },
-  { name: "Self-Employment", owner: "A", hint: "Net profit from self-employment (before personal tax)" },
-  { name: "Rental Income", owner: "joint", hint: "Gross annual rent received from investment property" },
-  { name: "Dividends", owner: "A", hint: "Annual dividend income from shares or company ownership" },
+  { name: "Self-Employment (A)", owner: "A", hint: "Net profit from self-employment (before personal tax)" },
+  { name: "Self-Employment (B)", owner: "B", hint: "Party B's net profit from self-employment (before personal tax)" },
+  { name: "Rental Income (A)", owner: "A", hint: "Gross annual rent received — use the figure before mortgage costs" },
+  { name: "Rental Income (B)", owner: "B", hint: "Party B's gross annual rental income from investment property" },
+  { name: "Dividends (A)", owner: "A", hint: "Annual dividend income from shares or company ownership" },
+  { name: "Dividends (B)", owner: "B", hint: "Party B's annual dividend income" },
   { name: "Child Benefit", owner: "A", hint: "Annual Child Benefit received (tax-free up to income threshold)" },
   { name: "Other Benefits", owner: "A", hint: "Universal Credit, Tax Credits, or other state benefits" },
 ];
@@ -1187,8 +1196,7 @@ function StepPensions({ advancedMode }: { advancedMode: boolean }) {
   };
 
   const totalCETV = pensions.reduce((s, p) => s + (p.cetv ?? p.currentValue), 0);
-  const addedPensionNames = new Set(pensions.map(p => p.name));
-  const unusedPensionSuggestions = PENSION_SUGGESTIONS.filter(s => !addedPensionNames.has(s.name));
+  const unusedPensionSuggestions = PENSION_SUGGESTIONS;
 
   return (
     <div className="space-y-6">
@@ -1385,8 +1393,7 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
     setIncomeDialogOpen(false);
   };
 
-  const addedIncomeNames = new Set(incomes.map(i => i.name));
-  const unusedIncomeSuggestions = INCOME_SUGGESTIONS.filter(s => !addedIncomeNames.has(s.name));
+  const unusedIncomeSuggestions = INCOME_SUGGESTIONS;
 
   return (
     <div className="space-y-6">
