@@ -138,9 +138,9 @@ export default function WizardPage() {
                 >
                   <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border shrink-0 ${
                     i < currentStep
-                      ? "bg-primary text-primary-foreground border-primary"
+                      ? "bg-cyan-500 text-white border-cyan-500"
                       : i === currentStep
-                      ? "bg-gold border-gold text-white"
+                      ? "bg-cyan-500 border-cyan-500 text-white"
                       : "border-muted-foreground/30 text-muted-foreground"
                   }`}>
                     {i < currentStep ? <Check className="w-3 h-3" /> : i + 1}
@@ -164,7 +164,7 @@ export default function WizardPage() {
             </div>
           </div>
         </div>
-        <Progress value={progress} className="h-1 rounded-none" data-testid="progress-bar" />
+        <Progress value={progress} className="h-1 rounded-none [&>div]:bg-cyan-500" data-testid="progress-bar" />
       </header>
 
       <main className="flex-1 container mx-auto px-4 py-6 max-w-3xl">

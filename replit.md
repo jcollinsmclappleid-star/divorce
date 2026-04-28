@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a **UK Divorce Financial Modelling Web Application** designed to provide illustrative, scenario-based financial modelling for separation and divorce. Its primary purpose is to help users understand potential financial outcomes by modelling various settlement scenarios based on their assets, liabilities, incomes, and expenses. The application offers clarity and structured insights for users navigating complex financial divisions, acting as a decision-support tool. It includes a configurable UK tax/NI engine, optional child maintenance estimations, and optional spousal maintenance income transfer. The vision is to empower users with financial understanding, reduce the need for expensive preliminary consultations, and improve negotiation outcomes, always with a clear disclaimer that it does not provide legal, tax, or financial advice.
+This project is a **UK Divorce Financial Modelling Web Application** providing illustrative, scenario-based financial modelling for separation and divorce. It helps users understand potential financial outcomes by modelling various settlement scenarios based on their assets, liabilities, incomes, and expenses. The application offers clarity and structured insights, acting as a decision-support tool. It includes a configurable UK tax/NI engine, optional child maintenance estimations, and optional spousal maintenance income transfer. The vision is to empower users with financial understanding, reduce the need for expensive preliminary consultations, and improve negotiation outcomes, while explicitly stating it does not provide legal, tax, or financial advice.
 
 ## User Preferences
 
@@ -10,125 +10,58 @@ Preferred communication style: Simple, everyday language. Avoid financial jargon
 
 ## System Architecture
 
-### Overall Structure
-
 The project uses a **monorepo** with `client/` for the React frontend, `server/` for the Express.js API, and `shared/` for common types, schemas, and route definitions.
 
 ### Frontend (`client/`)
 
-A React 18 Single Page Application built with TypeScript and Vite. It uses Wouter for routing, Zustand for state management with localStorage persistence, and shadcn/ui (New York style) with Radix UI and Tailwind CSS for the UI. Data fetching is done with TanStack React Query, and Recharts for visualizations. Forms use React Hook Form with Zod for validation. Features include a multi-step wizard, a landing page, and a comprehensive results page with decision-support tools, scenario detail cards, stress test sliders, projection charts, a decision lens toggle, and downloadable reports. Personalization uses `partyAName` and `partyBName` from a welcome screen to dynamically replace "Party A" / "Party B" throughout the application. Logo component displays "Divorce Calculator UK" text branding (text-only, no icon).
+A React 18 Single Page Application (TypeScript, Vite) uses Wouter for routing, Zustand for state management with localStorage persistence, and shadcn/ui (New York style) with Radix UI and Tailwind CSS for the UI. Data fetching uses TanStack React Query, and Recharts for visualizations. Forms are managed with React Hook Form and Zod for validation. Key features include a multi-step wizard, a landing page, and a comprehensive results page with decision-support tools, scenario cards, stress test sliders, projection charts, a decision lens toggle, and downloadable reports. User personalization uses `partyAName` and `partyBName` to dynamically update display names. The logo component displays "Divorce Calculator UK" text branding.
 
-**Key landing page sections (in order)**: disclaimer bar → SiteNav → Hero → Trust strip (5 badges) → "What you'll see" explainer (4 output cards on navy bg) → "Why this works" value strip (3 columns) → Pricing callout → Explore grid → Hero pricing section → Contact strip → Footer (5 columns: brand, What's Included, Guides, Specialist Topics, Legal & Support).
-
-**UI utilities**: `useScrollReveal` hook + `[data-reveal]` CSS class for scroll-triggered fade-in animations. `CookieBanner` component in `App.tsx` (localStorage `cookieConsent` key, "Essential only" / "Accept"). Sticky mobile CTA on landing page fades in after 200px scroll. Scroll-aware nav shadow in `site-nav.tsx`. `/pricing` page at `client/src/pages/pricing.tsx`.
+The design features a signature gold accent (`#C9A84C`) for primary CTAs and branding, complemented by a multi-color palette for interactive elements (teal/cyan), assets (violet), income (rose), sustainability (emerald), and scenarios (amber). Scroll-triggered fade-in animations are used for UI elements.
 
 ### Backend (`server/`)
 
-An Express.js server on Node.js providing RESTful JSON API endpoints for session management (creating, retrieving, updating sessions), email lead capture (`POST /api/leads`), and a stub for PDF generation.
+An Express.js server (Node.js) provides RESTful JSON API endpoints for session management (create, retrieve, update), email lead capture (`POST /api/leads`), and a stub for PDF generation.
 
 ### Financial Engine
 
-The financial engine is a **deterministic, pure-function based, and fully testable** component in `client/src/lib/engine/`. It handles all financial calculations client-side for privacy. All tax bands, NI thresholds, and CMS rates are configuration-driven via `config.fixed.json`. It includes modules for income tax, national insurance, net income calculation, mortgage amortization, child maintenance estimation, and various settlement scenarios (Sell & Split, A Keeps Home, B Keeps Home, Deferred Sale). All arithmetic uses decimal-safe libraries and rounds currency to two decimal places. Spousal maintenance (when included by the user) is applied as an income transfer in the monthly surplus/deficit calculation.
+A **deterministic, pure-function based, and fully testable** financial engine resides client-side (`client/src/lib/engine/`) for privacy. All financial calculations occur in the browser. Tax bands, NI thresholds, and CMS rates are configuration-driven via `config.fixed.json`. It includes modules for income tax, national insurance, net income, mortgage amortization, child maintenance, and various settlement scenarios (Sell & Split, A Keeps Home, B Keeps Home, Deferred Sale). All arithmetic uses decimal-safe libraries and rounds currency to two decimal places. Spousal maintenance, when enabled, applies as an income transfer.
 
 ### Data Layer
 
-PostgreSQL is used as the database, accessed via Drizzle ORM. The `sessions` table stores the full `AppState` as JSONB, the `purchases` table tracks Stripe payments, and the `email_leads` table stores email addresses captured from the preview page and free guide. Client-side state persistence is managed by Zustand with localStorage.
+PostgreSQL is used as the database via Drizzle ORM. Tables include `sessions` (stores `AppState` as JSONB), `purchases` (Stripe payments), and `email_leads` (captured email addresses). Client-side state persistence is handled by Zustand with localStorage.
 
 ### Premium Access Flow
 
-A freemium model requires a one-time payment for full access. A `/preview` page shows limited data (real asset pool ring chart + locked scenario cards + greyed FSI dial + social proof + email lead capture), redirecting users to an `/unlock` page for Stripe Checkout. Upon successful payment at `/payment-success`, a 6-month access is granted. Access to `/results` and `/report` is controlled by an `AccessGate` component that checks `GET /api/access/:sessionToken`.
+A freemium model requires a one-time payment for full access. A `/preview` page shows limited data and prompts users to an `/unlock` page for Stripe Checkout. Successful payment at `/payment-success` grants 6-month access. Access to `/results` and `/report` is controlled by an `AccessGate` component.
 
 ### Key Design Decisions
 
-1. **Client-side engine for privacy**: Sensitive financial calculations occur in the browser.
-2. **Config-driven tax model**: Financial parameters are externalized in a JSON configuration.
-3. **Scenario comparison model**: Focuses on modelling user-defined split assumptions.
-4. **Zod for validation**: Consistent schema validation across client and server.
-5. **Freemium access model**: Preview limited data, full analysis requires payment.
-6. **Email lead capture**: Three sources — `preview_page` (sends progress summary email directly via Resend, no verification step), `wizard_preview` (auto-submitted when user navigates from wizard to preview with a captured email), and `free_guide` (double opt-in verification email). `sendProgressSummaryEmail` in `server/email.ts` handles the summary. `POST /api/leads` routes by source.
-7. **Spousal maintenance toggle**: Optional field in wizard Step 5 (Income). When enabled, applies a monthly income transfer between parties in the engine's surplus/deficit calculation.
-8. **Wizard email capture**: Optional `capturedEmail` field in Profile store (Step 0/Welcome). Auto-submitted to `/api/leads` with `source: wizard_preview` when user clicks "See My Preview" on the final wizard step.
+1.  **Client-side engine for privacy**: Sensitive financial calculations occur in the browser.
+2.  **Config-driven tax model**: Financial parameters are externalized in a JSON configuration.
+3.  **Scenario comparison model**: Focuses on modelling user-defined split assumptions.
+4.  **Zod for validation**: Consistent schema validation across client and server.
+5.  **Freemium access model**: Preview limited data, full analysis requires payment.
+6.  **Email lead capture**: Captures emails from preview page, wizard, and free guide, with a double opt-in for the free guide.
+7.  **Spousal maintenance toggle**: Optional feature in the wizard, applying an income transfer between parties in calculations.
 
-### SEO Foundation
+### Security
 
-Technical SEO is fully implemented for `divorcecalculatoruk.co.uk`:
-- **index.html**: Title, meta description, OG tags, Twitter cards, geo tags, canonical. Three JSON-LD schemas: `WebSite` (with SearchAction), `WebApplication` (with Offer), and `Organization`.
-- **Per-page meta**: `useDocumentTitle` sets `<title>`. `useMetaTags` hook sets meta description, canonical, OG title/description dynamically per page. `ContentPageLayout` handles meta for all content/cluster/FAQ/pillar pages. All trust pages (privacy, terms, methodology, contact, refund-policy, free-guide) have canonicals.
-- **robots.txt** and **sitemap.xml** in `client/public/`. Sitemap covers 22 URLs with lastmod dates and priority scores.
-- **Footer**: Five-column layout on landing page — Brand (with privacy reassurance), What's Included, Guides & Resources, Specialist Topics, Legal & Support. Full internal linking coverage.
-- Dynamic pages (`/results`, `/report`, `/wizard`, `/preview`, `/unlock`, `/admin`, etc.) are `noindex, nofollow`.
-
-**Content pages (public, indexed):**
-- `/methodology` — Model methodology and limitations
-- `/privacy`, `/terms` — Legal pages
-- `/divorce-financial-modelling` — Pillar page
-- `/divorce-50-50-split-calculator-uk`, `/divorce-house-buyout-calculator-uk`, `/divorce-pension-split-calculator-uk`, `/divorce-mortgage-affordability-after-separation`, `/divorce-financial-checklist-before-mediation` — Cluster pages
-- `/is-50-50-split-automatic-uk`, `/can-i-keep-the-house-after-divorce-uk`, `/how-are-pensions-divided-in-divorce-uk` — FAQ pages
-- `/how-much-does-divorce-cost-uk`, `/divorce-financial-settlement-calculator-uk`, `/who-gets-house-divorce-uk`, `/how-pensions-split-divorce-uk`, `/divorce-settlement-examples-uk` — 5 SEO authority pages
-- `/free-guide` — Free UK Divorce Finances Guide (5 chapters, email capture, inline CTAs)
-- `/contact` — Contact & Support page (support@divorcecalculatoruk.co.uk, quick-help paths, non-advisory disclaimer)
-- `/refund-policy` — Standalone Refund Policy page (UK Consumer Contracts Regulations 2013, Consumer Rights Act 2015, billing errors, technical issues, refund process via support email)
-
-**38 expanded SEO content pages (all use ContentPageLayout):**
-- **Original 7**: `/how-is-property-divided-in-divorce-uk`, `/what-happens-to-debts-in-divorce-uk`, `/what-is-a-consent-order-uk-divorce`, `/what-is-a-clean-break-order-uk`, `/financial-disclosure-divorce-uk`, `/financial-remedy-proceedings-uk`, `/how-are-savings-split-in-divorce-uk`
-- **Assets**: `/how-are-investments-divided-in-divorce-uk`, `/joint-bank-accounts-after-divorce-uk`, `/can-ex-claim-inheritance-uk-divorce`, `/is-inheritance-included-in-divorce-settlement-uk`
-- **Property**: `/both-names-on-mortgage-divorce-uk`, `/can-i-force-sale-of-house-after-divorce-uk`, `/who-pays-mortgage-during-divorce-uk`, `/buying-partner-out-of-house-divorce-uk`, `/unmarried-separating-house-uk`
-- **Situations**: `/divorce-settlement-no-assets-uk`, `/divorce-where-one-earns-more-uk`
-- **Children**: `/divorce-with-children-financial-settlement-uk`, `/how-does-child-custody-affect-financial-settlement-uk`, `/child-maintenance-vs-spousal-maintenance-uk`, `/who-pays-what-after-divorce-with-children-uk`, `/does-having-children-change-divorce-settlement-uk`
-- **Disclosure/hiding**: `/can-i-hide-assets-in-divorce-uk`, `/spouse-refuses-financial-disclosure-uk`
-- **Process**: `/can-i-divorce-without-financial-settlement-uk`, `/ex-doesnt-agree-settlement-uk`, `/can-i-reopen-divorce-settlement-uk`, `/how-long-after-divorce-can-financial-claims-be-made-uk`, `/when-is-divorce-financial-settlement-legally-binding-uk`, `/steps-after-final-order-finances-uk`, `/can-i-refuse-divorce-financial-settlement-uk`
-- **Routes**: `/mediation-vs-court-divorce-uk-costs`, `/consent-order-vs-clean-break-order-uk`, `/divorce-solicitor-vs-mediation-uk`, `/settling-out-of-court-vs-court-divorce-uk`, `/divorce-mediation-process-uk`
-- **Maintenance/timing**: `/how-much-maintenance-after-divorce-uk`, `/how-long-does-divorce-financial-settlement-take-uk`, `/timeline-of-divorce-and-financial-settlement-uk`
-
-All content pages are linked from `/divorce-financial-guides` hub and included in the sitemap in `server/routes.ts`.
-
-### Access Management
-
-Email recovery (`/recover`) allows users to regain session tokens. The results page shows access expiry, with a warning for approaching expiry. An `/admin` panel (password-protected) allows customer support to extend access. Security measures include rate-limiting and timing-safe comparisons for sensitive endpoints.
-
-### Wizard Steps
-
-1. Your Situation (profile, partyAName, partyBName, England/Wales note)
-2. Your Home (property assets)
-3. Other Assets (savings, investments, other property)
-4. Pensions
-5. Your Income (incomes + spousal maintenance toggle)
-6. Liabilities/Debts
-7. Living Costs
-8. Children (child maintenance)
-9. Scenarios & Assumptions
-
-### Store State
-
-Key additions beyond base state:
-- `maintenance: { included: boolean; monthlyAmount: number; direction: "AtoB" | "BtoA" }` — spousal maintenance toggle
-- `profile.partyAName`, `profile.partyBName` — custom party names throughout the app
-
-## Security
-
-- **HTTP security headers**: Applied via `helmet` in `server/index.ts`. Includes CSP (allowing Stripe.js, self-hosted fonts), HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy. CSP is more permissive in dev (allows unsafe-eval/unsafe-inline for Vite HMR).
-- **Email FROM domain**: `noreply@divorcecalculatoruk.co.uk` — must be verified in Resend dashboard with SPF/DKIM DNS records to deliver correctly.
-- **Double opt-in for email leads**: `POST /api/leads` sends a verification email; `GET /api/leads/verify?token=...` confirms and marks the lead as verified. Schema has `verified` (boolean) and `verification_token` (varchar) columns.
-- **GDPR data deletion**: `POST /api/gdpr/delete` accepts an email, rate-limited (3/hour/IP), anonymises purchases (nullifies email) and hard-deletes email_leads. Form is embedded in the Privacy Policy page.
-- **Stripe webhook verification**: `STRIPE_WEBHOOK_SECRET` env var enables signature verification in `server/webhookHandlers.ts`. Falls back to raw JSON parsing if the secret is not set (managed webhook handles verification via stripe-replit-sync).
-- **Admin password**: `ADMIN_PASSWORD` env var only — `SESSION_SECRET` fallback was removed.
-- **Self-hosted fonts**: Inter + Playfair Display WOFF2 files in `client/public/fonts/`. Google Fonts CDN removed from both `client/index.html` and `client/src/index.css`.
-- **Dependencies**: `npm audit fix` applied — 0 known vulnerabilities.
+HTTP security headers are applied via `helmet` including CSP (allowing Stripe.js, self-hosted fonts), HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy. Email FROM domains are verified (Resend with SPF/DKIM). Double opt-in is implemented for email leads. GDPR data deletion (`POST /api/gdpr/delete`) anonymises purchases and deletes email leads. Stripe webhook verification uses `STRIPE_WEBHOOK_SECRET`. Admin access is password-protected. Self-hosted fonts are used, and dependencies are regularly audited.
 
 ## External Dependencies
 
-- **PostgreSQL**: Primary data store.
-- **drizzle-orm** + **drizzle-kit**: ORM and migration tools.
-- **zod**: Schema validation.
-- **zustand**: Client-side state management.
-- **@tanstack/react-query**: Server state management and API calls.
-- **recharts**: Charting library.
-- **react-hook-form** + **@hookform/resolvers**: Form management.
-- **shadcn/ui** (Radix UI primitives): UI component library.
-- **wouter**: Lightweight client-side router.
-- **stripe** + **stripe-replit-sync**: Payment processing and webhook sync.
-- **helmet**: HTTP security headers middleware.
-- **Vite**: Frontend bundling.
-- **esbuild**: Server bundling.
-- **tsx**: TypeScript execution.
-- **Tailwind CSS** + **PostCSS** + **Autoprefixer**: Styling.
+-   **PostgreSQL**: Primary data store.
+-   **drizzle-orm** + **drizzle-kit**: ORM and migration tools.
+-   **zod**: Schema validation.
+-   **zustand**: Client-side state management.
+-   **@tanstack/react-query**: Server state management and API calls.
+-   **recharts**: Charting library.
+-   **react-hook-form** + **@hookform/resolvers**: Form management.
+-   **shadcn/ui** (Radix UI primitives): UI component library.
+-   **wouter**: Lightweight client-side router.
+-   **stripe** + **stripe-replit-sync**: Payment processing and webhook sync.
+-   **helmet**: HTTP security headers middleware.
+-   **Vite**: Frontend bundling.
+-   **esbuild**: Server bundling.
+-   **tsx**: TypeScript execution.
+-   **Tailwind CSS** + **PostCSS** + **Autoprefixer**: Styling.

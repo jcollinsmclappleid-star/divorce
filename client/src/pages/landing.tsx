@@ -122,7 +122,7 @@ export default function LandingPage() {
                 size="lg"
                 onClick={startFresh}
                 data-testid="button-hero-start"
-                className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
+                className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 btn-shimmer"
               >
                 Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1.5" />
               </Button>
@@ -158,17 +158,19 @@ export default function LandingPage() {
       {/* ── Trust strip ── */}
       <section className="py-6 bg-background border-b border-border/40" data-testid="section-trust-strip">
         <div className="container mx-auto px-4 max-w-5xl">
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-3" data-reveal>
+          <div className="flex flex-wrap justify-center gap-2.5" data-reveal>
             {[
-              { icon: Lock, text: "Runs in your browser — we never see your data" },
-              { icon: Shield, text: "Based on HMRC 2026/27 tax rates" },
-              { icon: TrendingUp, text: "England & Wales jurisdiction" },
-              { icon: ArrowRight, text: "No sign-up to start" },
-              { icon: Check, text: "7-day money-back guarantee" },
+              { icon: Lock, text: "Runs in your browser — we never see your data", iconColor: "text-emerald-600", bg: "bg-emerald-50" },
+              { icon: Shield, text: "HMRC 2026/27 tax rates", iconColor: "text-cyan-600", bg: "bg-cyan-50" },
+              { icon: TrendingUp, text: "England & Wales", iconColor: "text-violet-600", bg: "bg-violet-50" },
+              { icon: ArrowRight, text: "No sign-up to start", iconColor: "text-sky-600", bg: "bg-sky-50" },
+              { icon: Check, text: "7-day money-back guarantee", iconColor: "text-emerald-600", bg: "bg-emerald-50" },
             ].map((badge, i) => (
-              <div key={i} className="flex items-center gap-2" data-testid={`badge-trust-${i}`}>
-                <badge.icon className="w-3.5 h-3.5 text-primary shrink-0" />
-                <span className="text-xs text-muted-foreground">{badge.text}</span>
+              <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/50 bg-background shadow-sm" data-testid={`badge-trust-${i}`}>
+                <div className={`w-5 h-5 rounded-full ${badge.bg} flex items-center justify-center flex-shrink-0`}>
+                  <badge.icon className={`w-2.5 h-2.5 ${badge.iconColor}`} />
+                </div>
+                <span className="text-xs text-muted-foreground whitespace-nowrap">{badge.text}</span>
               </div>
             ))}
           </div>
@@ -190,12 +192,15 @@ export default function LandingPage() {
                 icon: BarChart3,
                 title: "Scenario comparison",
                 desc: "Sell & Split · Keep the Home · Deferred Sale · Equalise Pensions — all four side-by-side",
+                accentColor: "#06B6D4",
+                iconColor: "text-cyan-400",
+                barColor: "bg-cyan-400/50",
                 preview: (
                   <div className="space-y-1.5 mt-2">
-                    {["Sell & Split", "A Keeps Home", "B Keeps Home", "Deferred"].map((s, i) => (
-                      <div key={i} className="flex items-center justify-between gap-2">
+                    {["Sell & Split", "A Keeps Home", "B Keeps Home", "Deferred"].map((s, j) => (
+                      <div key={j} className="flex items-center justify-between gap-2">
                         <span className="text-[10px] text-white/50">{s}</span>
-                        <div className="h-1.5 rounded-full bg-gold/30" style={{ width: `${[85, 72, 65, 78][i]}%` }} />
+                        <div className="h-1.5 rounded-full bg-cyan-400/40" style={{ width: `${[85, 72, 65, 78][j]}%` }} />
                       </div>
                     ))}
                   </div>
@@ -205,10 +210,12 @@ export default function LandingPage() {
                 icon: Activity,
                 title: "Monthly cash position",
                 desc: "Post-settlement surplus or deficit each month — which scenario is actually liveable",
+                accentColor: "#10B981",
+                iconColor: "text-emerald-400",
                 preview: (
                   <div className="mt-2 bg-white/5 rounded-lg p-3 text-center">
                     <p className="text-[10px] text-white/40 mb-1">Monthly surplus after costs</p>
-                    <p className="text-lg font-mono font-bold text-gold">+£847</p>
+                    <p className="text-lg font-mono font-bold text-emerald-400">+£847</p>
                     <p className="text-[10px] text-white/30">Scenario 1 · Party A</p>
                   </div>
                 ),
@@ -217,10 +224,12 @@ export default function LandingPage() {
                 icon: Calendar,
                 title: "5-year projections",
                 desc: "See how capital positions evolve over five years under static assumptions",
+                accentColor: "#8B5CF6",
+                iconColor: "text-violet-400",
                 preview: (
                   <div className="mt-2 flex items-end gap-1 h-10">
-                    {[40, 55, 48, 62, 70].map((h, i) => (
-                      <div key={i} className="flex-1 rounded-t-sm bg-gold/40" style={{ height: `${h}%` }} />
+                    {[40, 55, 48, 62, 70].map((h, j) => (
+                      <div key={j} className="flex-1 rounded-t-sm bg-violet-400/50" style={{ height: `${h}%` }} />
                     ))}
                   </div>
                 ),
@@ -229,11 +238,13 @@ export default function LandingPage() {
                 icon: Gauge,
                 title: "Financial Sustainability Index",
                 desc: "A composite resilience score showing how stable each scenario is for each party",
+                accentColor: "#F43F5E",
+                iconColor: "text-rose-400",
                 preview: (
                   <div className="mt-2 flex items-center justify-center">
                     <div className="relative w-16 h-8 overflow-hidden">
                       <div className="absolute inset-0 rounded-t-full border-4 border-white/10" />
-                      <div className="absolute inset-0 rounded-t-full border-4 border-gold/50" style={{ clipPath: "inset(0 40% 0 0)" }} />
+                      <div className="absolute inset-0 rounded-t-full border-4 border-rose-400/60" style={{ clipPath: "inset(0 40% 0 0)" }} />
                       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0.5 h-6 bg-white/70 origin-bottom rotate-[-30deg]" />
                     </div>
                     <p className="text-[10px] text-white/40 ml-2">72 / 100</p>
@@ -241,9 +252,10 @@ export default function LandingPage() {
                 ),
               },
             ].map((card, i) => (
-              <div key={i} className="bg-white/5 rounded-xl p-4 border border-white/10" data-testid={`card-output-${i}`}>
-                <div className="flex items-center gap-2 mb-2">
-                  <card.icon className="w-4 h-4 text-gold" />
+              <div key={i} className="bg-white/5 rounded-xl p-4 border border-white/10 overflow-hidden relative" data-testid={`card-output-${i}`}>
+                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: card.accentColor }} />
+                <div className="flex items-center gap-2 mb-2 mt-1">
+                  <card.icon className={`w-4 h-4 ${card.iconColor}`} />
                   <h3 className="text-sm font-semibold text-white">{card.title}</h3>
                 </div>
                 <p className="text-xs text-white/50 leading-relaxed">{card.desc}</p>
@@ -277,23 +289,29 @@ export default function LandingPage() {
                 title: "Built on UK law",
                 body: "England & Wales jurisdiction throughout. HMRC 2026/27 income tax and National Insurance rates applied to every calculation. Not a generic global tool.",
                 delay: "100",
+                iconBg: "bg-cyan-50",
+                iconColor: "text-cyan-600",
               },
               {
                 icon: Lock,
                 title: "Completely private",
                 body: "All calculations happen in your browser. Your financial figures are never sent to, or stored on, our servers. We have no access to what you enter.",
                 delay: "200",
+                iconBg: "bg-emerald-50",
+                iconColor: "text-emerald-600",
               },
               {
                 icon: BarChart3,
                 title: "One run. Four scenarios.",
                 body: "Model all four settlement options simultaneously — not one at a time. See the capital, cash, and sustainability picture for every option at once.",
                 delay: "300",
+                iconBg: "bg-violet-50",
+                iconColor: "text-violet-600",
               },
             ].map((col, i) => (
               <div key={i} className="text-center space-y-3" data-testid={`card-why-${i}`} data-reveal data-reveal-delay={col.delay}>
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-                  <col.icon className="w-5 h-5 text-primary" />
+                <div className={`w-11 h-11 rounded-full ${col.iconBg} flex items-center justify-center mx-auto`}>
+                  <col.icon className={`w-5 h-5 ${col.iconColor}`} />
                 </div>
                 <h3 className="font-semibold text-base">{col.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{col.body}</p>
@@ -377,15 +395,15 @@ export default function LandingPage() {
           </p>
           <div className="grid grid-cols-3 gap-4 text-center max-w-md mx-auto py-6 border-y border-white/10">
             <div>
-              <p className="text-2xl font-bold text-gold">20 min</p>
+              <p className="text-2xl font-bold text-cyan-400">20 min</p>
               <p className="text-xs text-white/55 mt-1">First analysis complete</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-gold">12 months</p>
+              <p className="text-2xl font-bold text-violet-400">12 months</p>
               <p className="text-xs text-white/55 mt-1">Unlimited re-runs</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-gold">100%</p>
+              <p className="text-2xl font-bold text-emerald-400">100%</p>
               <p className="text-xs text-white/55 mt-1">Private &amp; secure</p>
             </div>
           </div>
@@ -398,7 +416,7 @@ export default function LandingPage() {
               "Downloadable Structured Financial Brief (PDF)",
             ].map((item) => (
               <div key={item} className="flex items-center gap-2 justify-center text-left">
-                <Check className="w-3.5 h-3.5 text-gold flex-shrink-0" />
+                <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
                 <span className="text-sm text-white/75">{item}</span>
               </div>
             ))}
