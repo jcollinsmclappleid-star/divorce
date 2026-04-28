@@ -7,7 +7,7 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Printer, ChevronDown } from "lucide-react";
+import { ArrowLeft, Printer, ChevronDown, List, TrendingUp, Wallet, Users, Home } from "lucide-react";
 import {
   generateScenarioNarrative,
   buildSourceOfFunds,
@@ -265,7 +265,21 @@ export default function ReportPage() {
           </div>
         </header>
 
-        <ReportSection title="Executive Summary">
+        <ReportTOC
+          scenarios={allScenarios}
+          scenarioCount={allScenarios.length}
+          hasGuidedSummary={!!(store.guidedSummary && store.guidedSummaryStatus === "done")}
+        />
+
+        <ReportSection
+          id="exec-summary"
+          title="Executive Overview"
+          description="A plain-English summary of your estate, income position, and what the modelling shows across all settlement options."
+        >
+          <AtAGlance
+            engine={engine}
+            hasProperty={store.assets.some(a => a.category === "primary_home" && a.currentValue > 0)}
+          />
           {buildQualitativeExecutiveSummary(engine, store, scenarioData).map((section, si) => (
             <div key={si} className={si > 0 ? "mt-4 pt-3 border-t border-gray-100" : ""}>
               <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">{section.heading}</h4>
@@ -279,7 +293,11 @@ export default function ReportPage() {
           </p>
         </ReportSection>
 
-        <ReportSection title="1. Financial Position Summary">
+        <ReportSection
+          id="section-fin"
+          title="1. Financial Position Summary"
+          description="All the assets and debts that make up your combined estate, and how they net off against each other."
+        >
           <div className="grid grid-cols-2 gap-8">
             <div>
               <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Assets & Investments</h4>
@@ -317,7 +335,11 @@ export default function ReportPage() {
           </div>
         </ReportSection>
 
-        <ReportSection title="2. Income & Taxation Summary">
+        <ReportSection
+          id="section-income"
+          title="2. Income & Taxation Summary"
+          description="Your estimated take-home pay after income tax and National Insurance, based on the figures you entered."
+        >
           <div className="grid grid-cols-2 gap-8">
             <TaxSummaryColumn label="Party A" tax={engine.taxA} />
             <TaxSummaryColumn label="Party B" tax={engine.taxB} />
@@ -335,7 +357,11 @@ export default function ReportPage() {
           <p className="text-xs text-gray-400 italic mt-3">Tax figures are based on a simplified 2026/27 UK model and may not reflect individual circumstances.</p>
         </ReportSection>
 
-        <ReportSection title="3. Projected Monthly Expenditure">
+        <ReportSection
+          id="section-expenses"
+          title="3. Projected Monthly Expenditure"
+          description="The expense figures you entered, used to calculate monthly surplus or deficit in each settlement scenario."
+        >
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-200">
@@ -365,7 +391,11 @@ export default function ReportPage() {
           </table>
         </ReportSection>
 
-        <ReportSection title="4. Scenario Comparison — Executive Summary">
+        <ReportSection
+          id="section-comparison"
+          title="4. Scenario Comparison — Executive Summary"
+          description="A side-by-side view of all settlement options: the capital each party receives, mortgage obligations, and 5-year reserve sustainability."
+        >
           <p className="text-xs text-gray-500 mb-3">
             Split assumption: {pct(store.assumptions.splitRatio)} to Party A, {pct(1 - store.assumptions.splitRatio)} to Party B.
             Pension split: {pct(store.assumptions.splitPensionToA)} to A, {pct(1 - store.assumptions.splitPensionToA)} to B.
@@ -430,36 +460,47 @@ export default function ReportPage() {
         </ReportSection>
 
         {scenarioData.map(({ sc, narrative, sourceOfFunds, stability, snapshot, comparison, housing }, idx) => (
-          <ReportSection key={sc.id} title={`${5 + idx}. ${SCENARIO_META[sc.id]?.label ?? sc.name} — Detail`} accentColor={SCENARIO_META[sc.id]?.color}>
-            <div className="space-y-5">
-              {/* Scenario stat strip */}
-              <div className="rounded-lg p-3 flex flex-wrap gap-4 mb-1" style={{ background: `${SCENARIO_META[sc.id]?.color}12`, borderLeft: `3px solid ${SCENARIO_META[sc.id]?.color}` }}>
+          <ReportSection
+            key={sc.id}
+            id={`scenario-${sc.id}`}
+            title={`${5 + idx}. ${SCENARIO_META[sc.id]?.label ?? sc.name} — Detail`}
+            description="A full breakdown of this settlement option: starting positions, monthly cashflow, sustainability score, and key risk indicators."
+            accentColor={SCENARIO_META[sc.id]?.color}
+          >
+            <div className="space-y-4">
+              {/* Scenario stat strip — always visible */}
+              <div className="rounded-lg p-3 flex flex-wrap gap-5" style={{ background: `${SCENARIO_META[sc.id]?.color}10`, borderLeft: `3px solid ${SCENARIO_META[sc.id]?.color}` }}>
                 {[
-                  { label: "A Starting Position", value: fmt(sc.liquidStartA) },
-                  { label: "B Starting Position", value: fmt(sc.liquidStartB) },
-                  { label: "A FSI", value: `${stability.scoreA}/100` },
-                  { label: "B FSI", value: `${stability.scoreB}/100` },
-                ].map(({ label, value }) => (
+                  { label: "A — Starting Capital", value: fmt(sc.liquidStartA) },
+                  { label: "B — Starting Capital", value: fmt(sc.liquidStartB) },
+                  { label: "A — Monthly Surplus", value: `${snapshot.surplusA >= 0 ? "+" : ""}${fmt(snapshot.surplusA)}/mo`, flagRed: snapshot.surplusA < 0 },
+                  { label: "B — Monthly Surplus", value: `${snapshot.surplusB >= 0 ? "+" : ""}${fmt(snapshot.surplusB)}/mo`, flagRed: snapshot.surplusB < 0 },
+                  { label: "A FSI Score", value: `${stability.scoreA}/100` },
+                  { label: "B FSI Score", value: `${stability.scoreB}/100` },
+                ].map(({ label, value, flagRed }) => (
                   <div key={label}>
                     <p className="text-[9px] text-gray-400 uppercase tracking-wider">{label}</p>
-                    <p className="text-sm font-bold text-gray-800 tabular-nums">{value}</p>
+                    <p className={`text-sm font-bold tabular-nums ${flagRed ? "text-red-600" : "text-gray-800"}`}>{value}</p>
                   </div>
                 ))}
               </div>
+
+              {/* Narrative — always visible */}
               <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Executive Narrative Summary</h4>
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Summary</h4>
                 <p className="text-sm text-gray-700 leading-relaxed">{narrative.headline}</p>
                 {narrative.keyDrivers.length > 0 && (
                   <ul className="mt-2 space-y-1">
                     {narrative.keyDrivers.map((d, i) => (
                       <li key={i} className="text-sm text-gray-600 flex items-start gap-1.5">
-                        <span className="text-gray-400 mt-0.5">-</span>{d}
+                        <span className="text-gray-400 mt-0.5">–</span>{d}
                       </li>
                     ))}
                   </ul>
                 )}
               </div>
 
+              {/* Collapsible detail sections */}
               <ReportCollapsible title="Source of Funds Breakdown">
                 <div className="grid grid-cols-2 gap-6">
                   <FundsColumn label="Party A" funds={sourceOfFunds.A} color="text-blue-600" />
@@ -471,8 +512,7 @@ export default function ReportPage() {
                 </div>
               </ReportCollapsible>
 
-              <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Financial Sustainability Indicator (Illustrative Model Output)</h4>
+              <ReportCollapsible title="Financial Sustainability Indicator">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Party A</p>
@@ -511,7 +551,8 @@ export default function ReportPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+                <p className="text-[10px] text-gray-400 italic mt-3">Illustrative model output. Not a suitability or lending assessment.</p>
+              </ReportCollapsible>
 
               {(() => {
                 const runway = engine.runways[sc.id];
@@ -562,8 +603,7 @@ export default function ReportPage() {
               </ReportCollapsible>
 
               {housing && (
-                <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Indicative Lending Capacity Benchmark (Non-Lender Specific)</h4>
+                <ReportCollapsible title="Indicative Lending Capacity Benchmark">
                   <div className="text-sm text-gray-600 space-y-0.5">
                     <p className={housing.withinBenchmarkThresholds ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
                       {housing.classification}
@@ -575,14 +615,13 @@ export default function ReportPage() {
                     {housing.notes.map((n: string, ni: number) => (
                       <p key={ni} className="text-xs text-gray-400">{n}</p>
                     ))}
-                    <p className="text-xs text-gray-400 italic mt-1">This is a generalised income multiple illustration and does not constitute a lending assessment, mortgage advice, or credit approval indication.</p>
+                    <p className="text-xs text-gray-400 italic mt-1">Generalised income multiple illustration only. Not a lending assessment, mortgage advice, or credit approval indication.</p>
                   </div>
-                </div>
+                </ReportCollapsible>
               )}
 
               {comparison && (
-                <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Comparison to Sale & Distribution Scenario</h4>
+                <ReportCollapsible title="Comparison to Sell & Split Scenario">
                   <div className="text-sm text-gray-600 space-y-0.5">
                     <p>Liquid Capital Variance — Party A: <DeltaValue v={comparison.deltaLiquidA} /></p>
                     <p>Liquid Capital Variance — Party B: <DeltaValue v={comparison.deltaLiquidB} /></p>
@@ -592,21 +631,20 @@ export default function ReportPage() {
                       <p key={ni} className="text-xs text-gray-400">{n}</p>
                     ))}
                   </div>
-                </div>
+                </ReportCollapsible>
               )}
 
               {narrative.riskFlags.length > 0 && (
-                <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-red-500 mb-1">Risk Indicators</h4>
+                <ReportCollapsible title="Risk Indicators">
                   <ul className="space-y-1">
                     {narrative.riskFlags.map((rf, i) => (
                       <li key={i} className="text-sm flex items-start gap-1.5" style={{ color: rf.severity === "risk" ? "#EF4444" : rf.severity === "warn" ? "#F59E0B" : "#6B7280" }}>
-                        <span className="mt-0.5">{rf.severity === "risk" ? "!" : rf.severity === "warn" ? "~" : "-"}</span>
+                        <span className="mt-0.5">{rf.severity === "risk" ? "!" : rf.severity === "warn" ? "~" : "–"}</span>
                         <span><strong>{rf.label}:</strong> {rf.detail}</span>
                       </li>
                     ))}
                   </ul>
-                </div>
+                </ReportCollapsible>
               )}
 
               <ReportScenarioConsiderations scenario={sc} engine={engine} store={store} />
@@ -614,7 +652,11 @@ export default function ReportPage() {
           </ReportSection>
         ))}
 
-        <ReportSection title={`${5 + scenarioData.length}. Assumption Review Prompts`}>
+        <ReportSection
+          id="section-assumption-review"
+          title={`${5 + scenarioData.length}. Assumption Review Prompts`}
+          description="Questions to help you stress-test the key assumptions behind this analysis — not recommendations, just structured prompts."
+        >
           <p className="text-xs text-gray-400 italic mb-3">Structured reflection points to evaluate the assumptions underpinning this analysis. These are not recommendations — they are provided to encourage structured review.</p>
           <div className="space-y-3">
             <div className="text-sm text-gray-600">
@@ -662,7 +704,11 @@ export default function ReportPage() {
           </div>
         </ReportSection>
 
-        <ReportSection title={`${6 + scenarioData.length}. Assumptions & Methodology`}>
+        <ReportSection
+          id="section-methodology"
+          title={`${6 + scenarioData.length}. Assumptions & Methodology`}
+          description="The specific rates and parameters used in this model — provided for reference and professional review."
+        >
           <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm">
             <AssumptionRow label="Asset Settlement Ratio" value={`${pct(store.assumptions.splitRatio)} / ${pct(1 - store.assumptions.splitRatio)}`} />
             <AssumptionRow label="Pension Settlement Ratio" value={`${pct(store.assumptions.splitPensionToA)} / ${pct(1 - store.assumptions.splitPensionToA)}`} />
@@ -729,7 +775,7 @@ export default function ReportPage() {
           </div>
         </ReportSection>
 
-        <section className="mb-6 page-break" data-testid="section-report-glossary">
+        <section id="section-glossary" className="mb-6 page-break scroll-mt-20" data-testid="section-report-glossary">
           <h3 className="text-lg font-bold mb-3 border-b pb-1">Glossary of Key Terms</h3>
           <div className="grid grid-cols-1 gap-2 text-xs">
             <div><span className="font-semibold">Liquid Capital:</span> <span className="text-gray-600">Cash, savings, ISAs, and investments that can be accessed or realised within a short timeframe.</span></div>
@@ -787,7 +833,7 @@ function GuidedSummaryReportSection({ summary }: { summary: GuidedSummary }) {
   ].filter(g => g.show);
 
   return (
-    <section className="mb-8 break-inside-avoid" data-testid="section-report-guided-summary">
+    <section id="section-guided-summary" className="mb-8 break-inside-avoid scroll-mt-20" data-testid="section-report-guided-summary">
       {/* Premium header */}
       <div className="bg-gradient-to-r from-[hsl(220_52%_22%)] to-[hsl(220_52%_16%)] rounded-xl px-5 py-4 mb-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -846,13 +892,159 @@ function GuidedSummaryReportSection({ summary }: { summary: GuidedSummary }) {
   );
 }
 
-function ReportSection({ title, children, accentColor }: { title: string; children: React.ReactNode; accentColor?: string }) {
+function ReportTOC({
+  scenarios,
+  hasGuidedSummary,
+  scenarioCount,
+}: {
+  scenarios: ScenarioResult[];
+  hasGuidedSummary: boolean;
+  scenarioCount: number;
+}) {
+  const fixed = [
+    { id: "exec-summary",      num: "",   label: "Executive Overview" },
+    { id: "section-fin",       num: "1.", label: "Financial Position" },
+    { id: "section-income",    num: "2.", label: "Income & Tax" },
+    { id: "section-expenses",  num: "3.", label: "Projected Expenses" },
+    { id: "section-comparison",num: "4.", label: "Scenario Comparison" },
+  ];
+  const scenarioItems = scenarios.map((sc, i) => ({
+    id: `scenario-${sc.id}`,
+    num: `${5 + i}.`,
+    label: `${SCENARIO_META[sc.id]?.shortLabel ?? sc.name} — Detail`,
+  }));
+  const tail = [
+    { id: "section-assumption-review", num: `${5 + scenarioCount}.`, label: "Assumption Review" },
+    { id: "section-methodology",       num: `${6 + scenarioCount}.`, label: "Assumptions & Methodology" },
+    { id: "section-glossary",          num: "",                       label: "Glossary" },
+    ...(hasGuidedSummary ? [{ id: "section-guided-summary", num: "", label: "Guided Report Summary" }] : []),
+  ];
+  const allItems = [...fixed, ...scenarioItems, ...tail];
+
   return (
-    <section className="mb-8 break-inside-avoid" data-testid={`section-report-${title.toLowerCase().replace(/\s+/g, "-")}`}>
-      <div className="flex items-stretch gap-0 mb-5 rounded-lg overflow-hidden shadow-sm">
+    <div className="mb-8 print:hidden" data-testid="section-report-toc">
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="flex items-center gap-2.5 px-5 py-3 border-b border-gray-100 bg-gray-50/60">
+          <List className="w-3.5 h-3.5 text-primary/60 shrink-0" />
+          <span className="text-xs font-semibold uppercase tracking-widest text-gray-500">Contents</span>
+        </div>
+        <div className="p-4 grid grid-cols-2 gap-x-6 gap-y-1">
+          {allItems.map(({ id, num, label }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className="flex items-baseline gap-1.5 py-0.5 text-xs text-gray-500 hover:text-primary transition-colors group"
+            >
+              {num && (
+                <span className="text-[10px] text-gray-400 w-5 shrink-0 tabular-nums">{num}</span>
+              )}
+              <span className={`leading-snug group-hover:underline underline-offset-2 ${!num ? "pl-5" : ""}`}>{label}</span>
+            </a>
+          ))}
+        </div>
+        <div className="px-5 pb-3">
+          <p className="text-[10px] text-gray-400 italic">Click any section to jump directly to it. Use your browser's back button to return here.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AtAGlance({
+  engine,
+  hasProperty,
+}: {
+  engine: ReturnType<typeof useEngine>;
+  hasProperty: boolean;
+}) {
+  const pool = engine.intermediate.totalLiquid + engine.intermediate.netHomeEquity;
+  const grossA = engine.taxA.gross;
+  const grossB = engine.taxB.gross;
+  const netMonthA = Math.round(engine.taxA.net / 12);
+  const netMonthB = Math.round(engine.taxB.net / 12);
+  const ltv = hasProperty && engine.intermediate.homeValue > 0
+    ? Math.round((engine.intermediate.totalMortgage / engine.intermediate.homeValue) * 100)
+    : null;
+
+  const incomeRatio = grossA > 0 && grossB > 0
+    ? `${fmt(Math.max(grossA, grossB))} vs ${fmt(Math.min(grossA, grossB))}`
+    : grossA > 0 ? fmt(grossA) : grossB > 0 ? fmt(grossB) : "—";
+
+  const cards = [
+    {
+      icon: Wallet,
+      label: "Distributable pool",
+      value: fmt(pool),
+      sub: "Property equity + liquid assets",
+      color: "text-cyan-600",
+      bg: "bg-cyan-50",
+      border: "border-cyan-100",
+    },
+    {
+      icon: Users,
+      label: "Gross income split",
+      value: incomeRatio,
+      sub: "Party A vs Party B (annual)",
+      color: "text-violet-600",
+      bg: "bg-violet-50",
+      border: "border-violet-100",
+    },
+    {
+      icon: TrendingUp,
+      label: "Take-home pay",
+      value: `${fmt(netMonthA)}/mo · ${fmt(netMonthB)}/mo`,
+      sub: "After estimated tax & NI",
+      color: "text-emerald-600",
+      bg: "bg-emerald-50",
+      border: "border-emerald-100",
+    },
+    ...(ltv !== null ? [{
+      icon: Home,
+      label: "Property LTV",
+      value: `${ltv}%`,
+      sub: ltv > 80 ? "High — affects transfer options" : ltv > 60 ? "Moderate" : "Low",
+      color: ltv > 80 ? "text-amber-600" : "text-emerald-600",
+      bg: ltv > 80 ? "bg-amber-50" : "bg-emerald-50",
+      border: ltv > 80 ? "border-amber-100" : "border-emerald-100",
+    }] : []),
+  ];
+
+  return (
+    <div className="grid grid-cols-2 gap-3 mb-5" data-testid="section-at-a-glance">
+      {cards.map(({ icon: Icon, label, value, sub, color, bg, border }) => (
+        <div key={label} className={`rounded-lg border ${border} ${bg} px-3.5 py-3`}>
+          <div className="flex items-center gap-1.5 mb-1">
+            <Icon className={`w-3 h-3 ${color} shrink-0`} />
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-500">{label}</span>
+          </div>
+          <p className={`text-sm font-bold tabular-nums ${color} leading-snug`}>{value}</p>
+          <p className="text-[10px] text-gray-400 mt-0.5">{sub}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ReportSection({ title, children, accentColor, id, description }: {
+  title: string;
+  children: React.ReactNode;
+  accentColor?: string;
+  id?: string;
+  description?: string;
+}) {
+  return (
+    <section
+      id={id}
+      className="mb-8 break-inside-avoid scroll-mt-20"
+      data-testid={`section-report-${title.toLowerCase().replace(/\s+/g, "-")}`}
+    >
+      <div className="flex items-stretch gap-0 mb-4 rounded-lg overflow-hidden shadow-sm">
         <div className="w-1.5 shrink-0" style={{ background: accentColor ?? "#1e3a5f" }} />
-        <div className="flex-1 bg-gradient-to-r from-[hsl(220_52%_20%)] to-[hsl(220_52%_16%)] px-5 py-3 flex items-center justify-between">
+        <div className="flex-1 bg-gradient-to-r from-[hsl(220_52%_20%)] to-[hsl(220_52%_16%)] px-5 py-3">
           <h2 className="text-sm font-bold text-white uppercase tracking-widest">{title}</h2>
+          {description && (
+            <p className="text-[11px] text-white/50 mt-0.5 leading-relaxed">{description}</p>
+          )}
         </div>
       </div>
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
