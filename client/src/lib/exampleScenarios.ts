@@ -55,7 +55,7 @@ export const EXAMPLE_SCENARIOS: ExampleScenario[] = [
         { id: uuidv4(), name: "A's Personal & Clothing", owner: "A", amountAnnual: 1200, category: "personal", inflationLinked: true },
         { id: uuidv4(), name: "B's Personal & Clothing", owner: "B", amountAnnual: 1200, category: "personal", inflationLinked: true },
       ],
-      config: { taxYear: "2025/26", currency: "GBP" },
+      config: { taxYear: "2026/27", currency: "GBP" },
       scenarios: {
         S1_Sell_Split: { enabled: true, params: {} },
         S2_A_Keeps_Home: { enabled: true, params: {} },
@@ -111,7 +111,7 @@ export const EXAMPLE_SCENARIOS: ExampleScenario[] = [
         { id: uuidv4(), name: "B's Transport", owner: "B", amountAnnual: 900, category: "transport", inflationLinked: true },
         { id: uuidv4(), name: "School Costs", owner: "shared", amountAnnual: 1200, category: "education", inflationLinked: true },
       ],
-      config: { taxYear: "2025/26", currency: "GBP" },
+      config: { taxYear: "2026/27", currency: "GBP" },
       scenarios: {
         S1_Sell_Split: { enabled: true, params: {} },
         S2_A_Keeps_Home: { enabled: false, params: {} },
@@ -169,7 +169,7 @@ export const EXAMPLE_SCENARIOS: ExampleScenario[] = [
         { id: uuidv4(), name: "A's Personal & Leisure", owner: "A", amountAnnual: 2400, category: "personal", inflationLinked: true },
         { id: uuidv4(), name: "B's Personal & Leisure", owner: "B", amountAnnual: 2400, category: "personal", inflationLinked: true },
       ],
-      config: { taxYear: "2025/26", currency: "GBP" },
+      config: { taxYear: "2026/27", currency: "GBP" },
       scenarios: {
         S1_Sell_Split: { enabled: true, params: {} },
         S2_A_Keeps_Home: { enabled: true, params: {} },

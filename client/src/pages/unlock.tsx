@@ -24,7 +24,7 @@ const INCLUDES_ITEMS = [
 
 const TRUST_SIGNALS = [
   { icon: Lock, text: "All calculations in your browser — your data stays private" },
-  { icon: Shield, text: "Built on UK 2025/26 HMRC tax rules" },
+  { icon: Shield, text: "Built on UK 2026/27 HMRC tax rules" },
   { icon: Zap, text: "Instant access after payment" },
 ];
 

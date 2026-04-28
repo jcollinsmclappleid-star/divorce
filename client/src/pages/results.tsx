@@ -401,7 +401,7 @@ export default function ResultsPage() {
                     <div className="flex justify-between gap-2"><span>Mortgage term</span><span className="tabular-nums">{assumptions.mortgageTermYears} years</span></div>
                     <div className="flex justify-between gap-2"><span>Inflation rate</span><span className="tabular-nums">{(assumptions.inflationRate * 100).toFixed(1)}%</span></div>
                     <div className="flex justify-between gap-2"><span>Projection period</span><span className="tabular-nums">{assumptions.projectionYears} years</span></div>
-                    <div className="flex justify-between gap-2"><span>Tax model</span><span>{assumptions.includeTaxModel ? "2025/26 UK rates" : "Disabled"}</span></div>
+                    <div className="flex justify-between gap-2"><span>Tax model</span><span>{assumptions.includeTaxModel ? "2026/27 UK rates" : "Disabled"}</span></div>
                     <div className="flex justify-between gap-2"><span>Child maintenance</span><span>{assumptions.includeCMSEstimate ? `CMS estimate (${engine.cmsYearsRemaining > 0 ? `~${engine.cmsYearsRemaining} yrs remaining` : "all children 16+"})` : "Not included"}</span></div>
                     {(assumptions.overrideNetIncomeA != null || assumptions.overrideNetIncomeB != null || assumptions.overrideCMSAnnual != null) && (
                       <div className="mt-2 pt-2 border-t border-muted space-y-1">

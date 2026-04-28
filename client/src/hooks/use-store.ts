@@ -111,7 +111,7 @@ const initialState: StoreState = {
   incomes: [],
   expenses: [],
   config: {
-    taxYear: "2025/26",
+    taxYear: "2026/27",
     currency: "GBP"
   },
   scenarios: {

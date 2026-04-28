@@ -3,9 +3,9 @@
     "country": "UK",
     "currency": "GBP",
     "version": "1.0.0",
-    "lastReviewed": "2026-02-18",
+    "lastReviewed": "2026-04-28",
     "sources": [
-      "GOV.UK rates and thresholds for employers 2025 to 2026",
+      "GOV.UK rates and thresholds for employers 2026 to 2027",
       "GOV.UK (Budget annex) personal allowance income limit & taper statement",
       "nidirect child maintenance rates explained",
       "nidirect shared care reduction bands"
@@ -86,7 +86,7 @@
         { "name": "additional", "from": 125140, "to": null, "rate": 0.45 }
       ],
       "notes": [
-        "Bands are for England/Wales/NI for 2025/26; amounts are ABOVE personal allowance threshold.",
+        "Bands are for England/Wales/NI for 2026/27; amounts are ABOVE personal allowance threshold.",
         "Implementation must subtract personal allowance (after taper) before applying bands."
       ]
     },

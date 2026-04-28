@@ -51,7 +51,7 @@ export default function LandingPage() {
     description: "See what every divorce settlement option means for your financial future. Compare Sell & Split, retain, and deferred sale — with sustainability scores and 5-year projections. England and Wales. Free to start.",
     canonical: "https://divorcecalculatoruk.co.uk/",
     ogTitle: "Divorce Calculator UK (2026) | Financial Settlement Tool",
-    ogDescription: "Model different divorce financial settlement scenarios with UK 2025/26 tax rules applied. Compare sell vs retain options and understand long-term outcomes.",
+    ogDescription: "Model different divorce financial settlement scenarios with UK 2026/27 tax rules applied. Compare sell vs retain options and understand long-term outcomes.",
   });
 
   const [, setLocation] = useLocation();
@@ -81,7 +81,7 @@ export default function LandingPage() {
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <div className="flex flex-wrap items-center justify-center gap-2">
               <Badge variant="outline" className="text-xs px-3 py-1 border-gold/50 text-gold bg-gold/10">
-                UK 2025/26 Tax &amp; NI Rates
+                UK 2026/27 Tax &amp; NI Rates
               </Badge>
             </div>
             <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight text-white" data-testid="text-hero-headline">
