@@ -47,7 +47,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "What if I have questions about my results?",
-    a: "Email support@divorcecalculatoruk.co.uk within 7 days of purchase and we'll help you understand your analysis and get the most from it. For technical access issues, contact the same address and we'll resolve them promptly.",
+    a: "Email support@divorcecalculatoruk.co.uk and we can help with how the platform works, understanding what the figures on screen mean, account access, and billing. We cannot provide financial, legal, or tax advice — for that, you'll need a qualified solicitor or regulated financial adviser.",
   },
 ];
 
@@ -168,9 +168,9 @@ export default function PricingPage() {
               <div className="flex flex-col items-center gap-1 text-xs text-white/50">
                 <div className="flex items-center gap-1.5">
                   <CheckCircle className="w-3.5 h-3.5" />
-                  <span>Questions about your results?</span>
+                  <span>Platform, access or billing questions?</span>
                 </div>
-                <span className="text-white/40">Email <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline hover:text-white/60 transition-colors">support@divorcecalculatoruk.co.uk</a> — we'll help within 7 days</span>
+                <span className="text-white/40">Email <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline hover:text-white/60 transition-colors">support@divorcecalculatoruk.co.uk</a> — general support only, not advice</span>
               </div>
 
               <p className="text-xs text-white/40 text-center">

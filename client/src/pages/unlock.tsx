@@ -158,7 +158,7 @@ export default function UnlockPage() {
 
                 <div className="flex items-center justify-center gap-1.5 text-xs text-white/50">
                   <CheckCircle className="w-3.5 h-3.5" />
-                  <span>Questions about your results? Email <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline">support@divorcecalculatoruk.co.uk</a> — we'll help within 7 days</span>
+                  <span>Platform or billing questions? Email <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline">support@divorcecalculatoruk.co.uk</a> — general support only, not financial or legal advice</span>
                 </div>
 
                 <p className="text-xs text-white/40 text-center">

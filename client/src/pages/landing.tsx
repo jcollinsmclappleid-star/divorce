@@ -428,7 +428,7 @@ export default function LandingPage() {
               <div className="flex flex-wrap gap-2 justify-center md:justify-end text-xs text-muted-foreground">
                 <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Free preview included</span>
                 <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Full analysis £79 one-time</span>
-                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Email support included</span>
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> General email support included</span>
               </div>
               <Link href="/pricing" onClick={scrollTop} className="text-xs text-primary hover:underline block" data-testid="link-see-full-pricing">
                 See full pricing &amp; what's included →
@@ -573,7 +573,7 @@ export default function LandingPage() {
             </div>
             <div>
               <p className="font-semibold text-muted-foreground/80 mb-1">Contact &amp; support</p>
-              <p>Support: <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline">support@divorcecalculatoruk.co.uk</a>. Questions about your results? Email us and we'll help. Full methodology available at <Link href="/methodology" className="underline">/methodology</Link>. Privacy policy at <Link href="/privacy" className="underline">/privacy</Link>.</p>
+              <p>Support: <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline">support@divorcecalculatoruk.co.uk</a>. We can help with platform usage, account access, and billing — we cannot provide financial, legal, or tax advice. Full methodology at <Link href="/methodology" className="underline">/methodology</Link>. Privacy policy at <Link href="/privacy" className="underline">/privacy</Link>.</p>
             </div>
           </div>
         </div>
