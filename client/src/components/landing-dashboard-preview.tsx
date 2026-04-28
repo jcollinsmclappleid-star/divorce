@@ -227,25 +227,25 @@ function ProjectionPanel() {
 
 function FsiPanel() {
   return (
-    <div className="flex flex-col h-full relative">
+    <div className="flex flex-col h-full">
       <PanelHeader
         icon={Gauge}
         color="text-rose-500"
         title="Financial Sustainability Index"
         subtitle="Composite resilience score per party · Sell & Split scenario"
       />
-      <div className="flex gap-4 justify-center items-center flex-1">
-        <div className="flex flex-col items-center gap-1">
-          <p className="text-[11px] font-semibold text-foreground">Alex</p>
-          <FsiGauge score={78} size={108} />
+      <div className="flex gap-2 justify-center items-start mt-2">
+        <div className="flex-1 flex flex-col items-center bg-emerald-50 border border-emerald-100 rounded-xl py-3 px-2">
+          <p className="text-[11px] font-semibold text-foreground mb-1">Alex</p>
+          <FsiGauge score={78} size={110} />
         </div>
-        <div className="w-px bg-border self-stretch mx-1" />
-        <div className="flex flex-col items-center gap-1">
-          <p className="text-[11px] font-semibold text-foreground">Jordan</p>
-          <FsiGauge score={54} size={108} />
+        <div className="flex-1 flex flex-col items-center bg-amber-50 border border-amber-100 rounded-xl py-3 px-2">
+          <p className="text-[11px] font-semibold text-foreground mb-1">Jordan</p>
+          <FsiGauge score={54} size={110} />
         </div>
       </div>
-      <div className="mt-3 pt-3 border-t space-y-2">
+      <div className="mt-4 pt-3 border-t space-y-2.5">
+        <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Supporting metrics</p>
         {[
           { label: "Liquidity ratio — Alex",   value: "3.1× expenses", color: "text-emerald-600" },
           { label: "Liquidity ratio — Jordan", value: "1.8× expenses", color: "text-amber-600"   },
