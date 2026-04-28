@@ -671,7 +671,7 @@ export default function LandingPage() {
                     <h3 className="text-sm font-bold text-foreground">Settlement Analyser</h3>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-muted-foreground font-medium">Included</span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">Four settlement scenarios modelled side-by-side — with CRI scores, 5-year projections, mortgage pressure checks and stress-testing.</p>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">Four settlement scenarios modelled side-by-side — with Cashflow Resilience Indicator (CRI) scores, 5-year projections, mortgage pressure checks and stress-testing.</p>
                 </div>
               </div>
 
@@ -720,7 +720,7 @@ export default function LandingPage() {
                 </div>
                 <div className="space-y-2 border-l border-border/20 pl-4">
                   <p className="font-bold text-primary uppercase tracking-widest text-[10px]">Full — £79</p>
-                  {["All 4 scenarios fully modelled", "CRI scores & sustainability ratings", "5-year capital projections", "Stress tests & mortgage checks", "Guided Intelligence Report"].map(item => (
+                  {["All 4 scenarios fully modelled", "Cashflow Resilience Indicator (CRI) scores & sustainability ratings", "5-year capital projections", "Stress tests & mortgage checks", "Guided Intelligence Report"].map(item => (
                     <div key={item} className="flex items-center gap-1.5 text-foreground/80">
                       <Check className="w-3 h-3 text-emerald-500 shrink-0" />
                       <span>{item}</span>
