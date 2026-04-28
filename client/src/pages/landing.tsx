@@ -262,7 +262,7 @@ export default function LandingPage() {
               { icon: Shield, text: "HMRC 2026/27 tax rates", iconColor: "text-cyan-600", bg: "bg-cyan-50" },
               { icon: TrendingUp, text: "England & Wales", iconColor: "text-violet-600", bg: "bg-violet-50" },
               { icon: ArrowRight, text: "No sign-up to start", iconColor: "text-sky-600", bg: "bg-sky-50" },
-              { icon: Check, text: "Questions? We'll help within 7 days", iconColor: "text-emerald-600", bg: "bg-emerald-50" },
+              { icon: Check, text: "Questions? We typically respond within 24 hours", iconColor: "text-emerald-600", bg: "bg-emerald-50" },
             ].map((badge, i) => (
               <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/50 bg-background shadow-sm" data-testid={`badge-trust-${i}`}>
                 <div className={`w-5 h-5 rounded-full ${badge.bg} flex items-center justify-center flex-shrink-0`}>
