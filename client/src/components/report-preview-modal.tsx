@@ -80,6 +80,7 @@ function StatStrip({ items, color }: { items: { label: string; value: string; wa
 
 const TOC_ITEMS = [
   { num: "",   label: "Executive Overview" },
+  { num: "",   label: "Guided Intelligence Report" },
   { num: "1.", label: "Financial Position" },
   { num: "2.", label: "Income & Taxation" },
   { num: "3.", label: "Projected Expenses" },
@@ -89,7 +90,6 @@ const TOC_ITEMS = [
   { num: "",   label: "Assumption Review" },
   { num: "",   label: "Assumptions & Methodology" },
   { num: "",   label: "Glossary" },
-  { num: "",   label: "Guided Intelligence Report" },
 ];
 
 export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
@@ -257,6 +257,133 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                 </div>
               ))}
             </div>
+          </section>
+
+          {/* ── GIR separator ── */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 border-t border-dashed border-gray-200" />
+            <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+              <Sparkles className="w-3 h-3" /> Guided Intelligence Report
+            </div>
+            <div className="flex-1 border-t border-dashed border-gray-200" />
+          </div>
+
+          {/* ── Guided Intelligence Report ── */}
+          <section>
+            <div className="bg-gradient-to-r from-[hsl(220_52%_22%)] to-[hsl(220_52%_16%)] rounded-xl px-5 py-4 mb-5 flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-7 h-7 rounded-lg bg-gold/20 flex items-center justify-center shrink-0">
+                  <Sparkles className="w-4 h-4 text-gold" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-white uppercase tracking-widest">Guided Intelligence Report</h3>
+                  <p className="text-[10px] text-white/40 mt-0.5">Intelligently generated plain-English interpretation of your figures</p>
+                </div>
+              </div>
+              <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full shrink-0">Confidence: Medium</span>
+            </div>
+
+            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-5">
+
+              <div className="border-l-4 border-l-blue-800/40 pl-4 py-1">
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Plain-English Overview</p>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  The combined estate is dominated by the family home (£675,000), but the outstanding mortgage of £590,000 — representing an 87% loan-to-value ratio — means the net equity available for division is only £71,500 after estimated sale costs. When combined with liquid savings of £108,000, the total distributable pool is £179,500. The most financially balanced outcome appears to be Sell & Split, where both parties receive equal capital and maintain positive monthly cashflows. Scenarios involving one party retaining the home introduce significant pressure due to the high mortgage relative to individual incomes.
+                </p>
+                <p className="text-xs text-gray-400 italic mt-2">Note: This is an illustrative summary based on fictional figures. Not legal, tax, or financial advice.</p>
+              </div>
+
+              <div className="border-l-4 border-l-yellow-500/50 pl-4 py-1">
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">What Stands Out</p>
+                <ul className="space-y-2">
+                  {[
+                    "The outstanding mortgage of £590,000 on a £675,000 property represents an 87% loan-to-value ratio — leaving net equity of only £71,500 after estimated sale costs. Both parties start from a significantly weaker capital position than the headline asset value of £843,000 suggests.",
+                    "Party A earns more than twice Party B's gross income (£126,000 vs £60,000). This income disparity materially affects each party's ability to sustain housing costs and monthly outgoings after settlement.",
+                    "Party A's estimated solo borrowing capacity (4.5× gross = £567,000) falls £23,000 short of the outstanding mortgage balance (£590,000). A sole transfer to Party A's name may require a capital reduction or additional income evidence before lender approval.",
+                    "The pension values entered differ significantly (£42,000 for Party A vs £18,000 for Party B). The £24,000 gap may warrant review by a pension specialist, particularly if either pension is a defined benefit scheme where CETVs can understate true value.",
+                  ].map((point, i) => (
+                    <li key={i} className="flex gap-2 text-sm text-gray-700">
+                      <span className="text-yellow-500/70 shrink-0 mt-0.5">•</span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="border-l-4 border-l-rose-400/60 pl-4 py-1">
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Pressure Points</p>
+                <ul className="space-y-2">
+                  {[
+                    "Under 'B Keeps Home', Party B faces an estimated monthly deficit of £978 — meaning outgoings exceed net income each month. With only £18,250 in liquid capital, the model projects capital depletion within approximately 2 years. This scenario appears financially unsustainable without an additional income source or significant reduction in outgoings.",
+                    "Under 'A Keeps Home', Party A retains only £18,250 in liquid capital after funding the buyout — approximately 2.8 months of net income. This leaves very limited buffer for unexpected costs, legal fees, or early repayment charges.",
+                    "The mortgage balance slightly exceeds Party A's standard solo borrowing capacity. Lender affordability would need to be formally assessed before agreeing any keep-home arrangement.",
+                  ].map((point, i) => (
+                    <li key={i} className="flex gap-2 text-sm text-gray-700">
+                      <span className="text-rose-400 shrink-0 mt-0.5 font-bold">!</span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="border-l-4 border-l-cyan-400/50 pl-4 py-1">
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Questions for Professionals</p>
+                <div className="space-y-5">
+                  {[
+                    {
+                      icon: Scale, color: "text-primary/60", label: "Solicitor / Mediator",
+                      questions: [
+                        "Under 'B Keeps Home', Party B faces a projected monthly deficit of £978 and capital depletion within approximately 2 years. Should any negotiated settlement include a minimum capital floor to protect against this outcome?",
+                        "The income disparity between parties (£126,000 vs £60,000 gross) is significant. Should spousal maintenance be considered alongside the capital settlement — and if so, what factors typically influence the amount and duration in cases with this income profile?",
+                        "Party A's pension CETV of £42,000 is more than double Party B's (£18,000). Would pension sharing or pension offsetting be more appropriate given the modest overall estate?",
+                      ],
+                    },
+                    {
+                      icon: Home, color: "text-emerald-600", label: "Mortgage Broker",
+                      questions: [
+                        "Party A earns £126,000 gross — suggesting a solo borrowing capacity of approximately £567,000 (4.5× income). The outstanding balance is £590,000, which is £23,000 above this threshold. What options exist to bring the mortgage within a standard lending multiple?",
+                        "If the property is sold and Party B receives £89,750 in capital (Sell & Split), what would that support in terms of an independent purchase, and at what property value and loan-to-value?",
+                        "Does the existing mortgage carry an early repayment charge, and if so, how should this be factored into the net equity figure before settlement is finalised?",
+                      ],
+                    },
+                    {
+                      icon: PiggyBank, color: "text-violet-600", label: "Pension Expert",
+                      questions: [
+                        "The CETVs entered are £42,000 (Party A) and £18,000 (Party B). Are these figures recent and do they represent the full actuarial value? If either pension is a defined benefit scheme, the CETV may significantly understate the true long-term benefit.",
+                        "Given the £24,000 gap in pension values, would pension offsetting or a pension sharing order produce a more practical and tax-efficient outcome?",
+                      ],
+                    },
+                  ].map(g => (
+                    <div key={g.label}>
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <g.icon className={`w-3.5 h-3.5 ${g.color}`} />
+                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{g.label}</p>
+                      </div>
+                      <ol className="space-y-2">
+                        {g.questions.map((q, qi) => (
+                          <li key={qi} className="flex gap-2.5 text-sm text-gray-700">
+                            <span className="text-primary/40 shrink-0 font-semibold tabular-nums">{qi + 1}.</span>
+                            <span className="leading-relaxed">{q}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="border-l-4 border-l-amber-400/60 pl-4 py-1">
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Missing Information & Model Confidence</p>
+                <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full border border-amber-400 text-amber-700 bg-amber-50 inline-block mb-2">Confidence: Medium</span>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  This sample model has medium confidence. Core income, property equity, liquid savings, and pension CETVs are included. However, the following are not modelled: transaction costs beyond the 2% sale cost estimate (legal fees, stamp duty on a new purchase, moving costs, early repayment charges), childcare costs beyond what was entered, and any actuarial pension assessment. The pension CETV figures are nominal values only — pension type, scheme rules, and normal retirement age are not assessed.
+                </p>
+              </div>
+            </div>
+
+            <p className="text-[10px] text-gray-400 italic mt-3">
+              This guided summary is illustrative only. It is not legal, tax, or financial advice. Always consult qualified professionals before making financial decisions.
+            </p>
           </section>
 
           {/* Product 1 label */}
@@ -780,133 +907,6 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                 <div key={term}><span className="font-semibold text-gray-800">{term}:</span> <span className="text-gray-600">{def}</span></div>
               ))}
             </div>
-          </section>
-
-          {/* Product 2 separator */}
-          <div className="flex items-center gap-3">
-            <div className="flex-1 border-t border-dashed border-gray-200" />
-            <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
-              <Sparkles className="w-3 h-3" /> Guided Intelligence Report
-            </div>
-            <div className="flex-1 border-t border-dashed border-gray-200" />
-          </div>
-
-          {/* ── Guided Intelligence Report ── */}
-          <section>
-            <div className="bg-gradient-to-r from-[hsl(220_52%_22%)] to-[hsl(220_52%_16%)] rounded-xl px-5 py-4 mb-5 flex items-center justify-between flex-wrap gap-3">
-              <div className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-lg bg-gold/20 flex items-center justify-center shrink-0">
-                  <Sparkles className="w-4 h-4 text-gold" />
-                </div>
-                <div>
-                  <h3 className="text-xs font-bold text-white uppercase tracking-widest">Guided Intelligence Report</h3>
-                  <p className="text-[10px] text-white/40 mt-0.5">Intelligently generated plain-English interpretation of your figures</p>
-                </div>
-              </div>
-              <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full shrink-0">Confidence: Medium</span>
-            </div>
-
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-5">
-
-              <div className="border-l-4 border-l-blue-800/40 pl-4 py-1">
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Plain-English Overview</p>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  The combined estate is dominated by the family home (£675,000), but the outstanding mortgage of £590,000 — representing an 87% loan-to-value ratio — means the net equity available for division is only £71,500 after estimated sale costs. When combined with liquid savings of £108,000, the total distributable pool is £179,500. The most financially balanced outcome appears to be Sell & Split, where both parties receive equal capital and maintain positive monthly cashflows. Scenarios involving one party retaining the home introduce significant pressure due to the high mortgage relative to individual incomes.
-                </p>
-                <p className="text-xs text-gray-400 italic mt-2">Note: This is an illustrative summary based on fictional figures. Not legal, tax, or financial advice.</p>
-              </div>
-
-              <div className="border-l-4 border-l-yellow-500/50 pl-4 py-1">
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">What Stands Out</p>
-                <ul className="space-y-2">
-                  {[
-                    "The outstanding mortgage of £590,000 on a £675,000 property represents an 87% loan-to-value ratio — leaving net equity of only £71,500 after estimated sale costs. Both parties start from a significantly weaker capital position than the headline asset value of £843,000 suggests.",
-                    "Party A earns more than twice Party B's gross income (£126,000 vs £60,000). This income disparity materially affects each party's ability to sustain housing costs and monthly outgoings after settlement.",
-                    "Party A's estimated solo borrowing capacity (4.5× gross = £567,000) falls £23,000 short of the outstanding mortgage balance (£590,000). A sole transfer to Party A's name may require a capital reduction or additional income evidence before lender approval.",
-                    "The pension values entered differ significantly (£42,000 for Party A vs £18,000 for Party B). The £24,000 gap may warrant review by a pension specialist, particularly if either pension is a defined benefit scheme where CETVs can understate true value.",
-                  ].map((point, i) => (
-                    <li key={i} className="flex gap-2 text-sm text-gray-700">
-                      <span className="text-yellow-500/70 shrink-0 mt-0.5">•</span>
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="border-l-4 border-l-rose-400/60 pl-4 py-1">
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Pressure Points</p>
-                <ul className="space-y-2">
-                  {[
-                    "Under 'B Keeps Home', Party B faces an estimated monthly deficit of £978 — meaning outgoings exceed net income each month. With only £18,250 in liquid capital, the model projects capital depletion within approximately 2 years. This scenario appears financially unsustainable without an additional income source or significant reduction in outgoings.",
-                    "Under 'A Keeps Home', Party A retains only £18,250 in liquid capital after funding the buyout — approximately 2.8 months of net income. This leaves very limited buffer for unexpected costs, legal fees, or early repayment charges.",
-                    "The mortgage balance slightly exceeds Party A's standard solo borrowing capacity. Lender affordability would need to be formally assessed before agreeing any keep-home arrangement.",
-                  ].map((point, i) => (
-                    <li key={i} className="flex gap-2 text-sm text-gray-700">
-                      <span className="text-rose-400 shrink-0 mt-0.5 font-bold">!</span>
-                      <span>{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="border-l-4 border-l-cyan-400/50 pl-4 py-1">
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Questions for Professionals</p>
-                <div className="space-y-5">
-                  {[
-                    {
-                      icon: Scale, color: "text-primary/60", label: "Solicitor / Mediator",
-                      questions: [
-                        "Under 'B Keeps Home', Party B faces a projected monthly deficit of £978 and capital depletion within approximately 2 years. Should any negotiated settlement include a minimum capital floor to protect against this outcome?",
-                        "The income disparity between parties (£126,000 vs £60,000 gross) is significant. Should spousal maintenance be considered alongside the capital settlement — and if so, what factors typically influence the amount and duration in cases with this income profile?",
-                        "Party A's pension CETV of £42,000 is more than double Party B's (£18,000). Would pension sharing or pension offsetting be more appropriate given the modest overall estate?",
-                      ],
-                    },
-                    {
-                      icon: Home, color: "text-emerald-600", label: "Mortgage Broker",
-                      questions: [
-                        "Party A earns £126,000 gross — suggesting a solo borrowing capacity of approximately £567,000 (4.5× income). The outstanding balance is £590,000, which is £23,000 above this threshold. What options exist to bring the mortgage within a standard lending multiple?",
-                        "If the property is sold and Party B receives £89,750 in capital (Sell & Split), what would that support in terms of an independent purchase, and at what property value and loan-to-value?",
-                        "Does the existing mortgage carry an early repayment charge, and if so, how should this be factored into the net equity figure before settlement is finalised?",
-                      ],
-                    },
-                    {
-                      icon: PiggyBank, color: "text-violet-600", label: "Pension Expert",
-                      questions: [
-                        "The CETVs entered are £42,000 (Party A) and £18,000 (Party B). Are these figures recent and do they represent the full actuarial value? If either pension is a defined benefit scheme, the CETV may significantly understate the true long-term benefit.",
-                        "Given the £24,000 gap in pension values, would pension offsetting or a pension sharing order produce a more practical and tax-efficient outcome?",
-                      ],
-                    },
-                  ].map(g => (
-                    <div key={g.label}>
-                      <div className="flex items-center gap-1.5 mb-2">
-                        <g.icon className={`w-3.5 h-3.5 ${g.color}`} />
-                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{g.label}</p>
-                      </div>
-                      <ol className="space-y-2">
-                        {g.questions.map((q, qi) => (
-                          <li key={qi} className="flex gap-2.5 text-sm text-gray-700">
-                            <span className="text-primary/40 shrink-0 font-semibold tabular-nums">{qi + 1}.</span>
-                            <span className="leading-relaxed">{q}</span>
-                          </li>
-                        ))}
-                      </ol>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="border-l-4 border-l-amber-400/60 pl-4 py-1">
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Missing Information & Model Confidence</p>
-                <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full border border-amber-400 text-amber-700 bg-amber-50 inline-block mb-2">Confidence: Medium</span>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  This sample model has medium confidence. Core income, property equity, liquid savings, and pension CETVs are included. However, the following are not modelled: transaction costs beyond the 2% sale cost estimate (legal fees, stamp duty on a new purchase, moving costs, early repayment charges), childcare costs beyond what was entered, and any actuarial pension assessment. The pension CETV figures are nominal values only — pension type, scheme rules, and normal retirement age are not assessed.
-                </p>
-              </div>
-            </div>
-
-            <p className="text-[10px] text-gray-400 italic mt-3">
-              This guided summary is illustrative only. It is not legal, tax, or financial advice. Always consult qualified professionals before making financial decisions.
-            </p>
           </section>
 
         </div>
