@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { ChevronLeft, ChevronRight, Lock, TrendingUp, Activity, BarChart3, Gauge } from "lucide-react";
+import { ChevronLeft, ChevronRight, TrendingUp, Activity, BarChart3, Gauge } from "lucide-react";
 import { FsiGauge } from "@/components/fsi-gauge";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -48,19 +48,6 @@ const SENSITIVITY = [
 const fmtK  = (v: number) => `£${Math.round(v / 1000)}k`;
 const fmtGbp = (v: number) => `£${Math.abs(v).toLocaleString()}`;
 
-function LockedOverlay() {
-  return (
-    <div className="absolute inset-0 z-10 backdrop-blur-[5px] bg-white/75 rounded-xl flex flex-col items-center justify-center gap-3">
-      <div className="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center">
-        <Lock className="w-5 h-5 text-primary" />
-      </div>
-      <div className="text-center">
-        <p className="text-sm font-semibold text-foreground">Unlock to view</p>
-        <p className="text-xs text-muted-foreground mt-0.5">Available after purchase</p>
-      </div>
-    </div>
-  );
-}
 
 function PanelHeader({ icon: Icon, color, title, subtitle }: {
   icon: typeof BarChart3;
@@ -241,7 +228,6 @@ function ProjectionPanel() {
 function FsiPanel() {
   return (
     <div className="flex flex-col h-full relative">
-      <LockedOverlay />
       <PanelHeader
         icon={Gauge}
         color="text-rose-500"
@@ -279,7 +265,6 @@ function FsiPanel() {
 function SensitivityPanel() {
   return (
     <div className="flex flex-col h-full relative">
-      <LockedOverlay />
       <PanelHeader
         icon={Activity}
         color="text-amber-500"
