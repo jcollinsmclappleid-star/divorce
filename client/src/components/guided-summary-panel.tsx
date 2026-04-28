@@ -197,29 +197,53 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
   if (!hasAccess) {
     return (
       <div className="mt-8" data-testid="section-guided-summary-locked">
-        <div className="bg-gradient-to-r from-primary to-[hsl(220_52%_28%)] rounded-xl px-5 py-4 mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-gold" />
-            <h2 className="text-base font-semibold text-white">Guided Intelligence Report</h2>
-            <ConfidenceBadge level={confidence} size="sm" />
+        <div className="bg-gradient-to-r from-primary to-[hsl(220_52%_28%)] rounded-xl px-5 py-4 mb-4 flex items-center justify-between flex-wrap gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center shrink-0">
+              <BookOpen className="w-4 h-4 text-gold" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-base font-semibold text-white">Guided Intelligence Report</h2>
+                <span className="text-[10px] text-white/50 bg-white/10 px-2 py-0.5 rounded-full font-medium">Intelligently generated</span>
+              </div>
+              <p className="text-xs text-white/45 mt-0.5">Plain-English analysis of your modelled figures</p>
+            </div>
           </div>
+          <ConfidenceBadge level={confidence} size="sm" />
         </div>
         <Card className="border-border/60 overflow-hidden">
           <CardContent className="p-0">
-            <div className="p-4 bg-muted/20 border-b border-border/40">
-              <p className="text-sm text-muted-foreground">
-                The Guided Intelligence Report turns your calculated results into plain-English takeaways, pressure points, missing-information checks and tailored questions to raise with your solicitor, mortgage broker, and pension adviser.
-              </p>
+            {/* Section preview list */}
+            <div className="p-4 border-b border-border/40 space-y-2">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">What you'll receive</p>
+              {[
+                { icon: TrendingUp,   label: "Plain-English Overview",               desc: "What your estate means in plain language — and what the headline numbers tell you.",     borderColor: "border-l-primary/40" },
+                { icon: Sparkles,     label: "What Stands Out",                      desc: "The 3–5 most significant observations from your modelled figures.",                       borderColor: "border-l-gold/50" },
+                { icon: BookOpen,     label: "Scenario Interpretation",              desc: "A narrative explanation of each settlement option — what it means financially.",           borderColor: "border-l-cyan-400" },
+                { icon: AlertCircle,  label: "Pressure Points",                      desc: "Where each scenario could create financial strain — and which risks to watch.",            borderColor: "border-l-rose-400" },
+                { icon: HelpCircle,   label: "Questions for Professionals",          desc: "Tailored questions for your solicitor, mortgage broker, and pension specialist.",         borderColor: "border-l-cyan-300" },
+                { icon: FileSearch,   label: "Missing Information & Confidence",     desc: "What data gaps affect the analysis — and how confident the model is.",                    borderColor: "border-l-amber-400" },
+              ].map(({ icon: Icon, label, desc, borderColor }) => (
+                <div key={label} className={`border-l-4 ${borderColor} pl-3 py-1 flex items-start gap-2.5`}>
+                  <Icon className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-xs font-semibold text-foreground/70">{label}</p>
+                    <p className="text-[11px] text-muted-foreground leading-relaxed">{desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
+            {/* Blurred teaser + unlock */}
             <div className="relative">
               <div className="p-4 blur-sm select-none pointer-events-none" aria-hidden>
-                <p className="text-sm text-muted-foreground">
-                  Based on the figures entered, Party A and Party B are dealing with a combined estate of moderate complexity. The primary residence represents the largest single asset and will likely drive the core negotiation. There is a notable income disparity between the two parties which will affect post-settlement sustainability in several of the scenarios modelled...
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Based on the figures entered, the combined estate is dominated by property, which carries a significant mortgage relative to the available equity. The income disparity between the two parties means post-settlement sustainability will vary considerably depending on which scenario is adopted...
                 </p>
               </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/80 backdrop-blur-sm rounded-b-lg">
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/80 backdrop-blur-sm rounded-b-lg p-4">
                 <Lock className="w-5 h-5 text-muted-foreground" />
-                <p className="text-sm font-medium text-foreground text-center px-4">
+                <p className="text-sm font-medium text-foreground text-center">
                   Unlock full access to generate your Guided Intelligence Report
                 </p>
                 <Link href="/unlock">
@@ -263,12 +287,31 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
                 <p className="text-sm text-rose-700">{errorMessage}</p>
               </div>
             )}
+            {/* Section preview */}
+            <div className="space-y-2 mb-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Your report will include</p>
+              <div className="grid sm:grid-cols-2 gap-1.5">
+                {[
+                  { icon: TrendingUp,  label: "Plain-English Overview",          borderColor: "border-l-primary/40" },
+                  { icon: Sparkles,    label: "What Stands Out",                 borderColor: "border-l-gold/50" },
+                  { icon: BookOpen,    label: "Scenario Interpretation",         borderColor: "border-l-cyan-400" },
+                  { icon: AlertCircle, label: "Pressure Points",                 borderColor: "border-l-rose-400" },
+                  { icon: HelpCircle,  label: "Questions for Professionals",     borderColor: "border-l-cyan-300" },
+                  { icon: FileSearch,  label: "Missing Info & Confidence",       borderColor: "border-l-amber-400" },
+                ].map(({ icon: Icon, label, borderColor }) => (
+                  <div key={label} className={`border-l-4 ${borderColor} pl-2.5 py-0.5 flex items-center gap-1.5`}>
+                    <Icon className="w-3 h-3 text-muted-foreground/50 shrink-0" />
+                    <span className="text-xs text-foreground/65">{label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
             <div className="flex items-start gap-3 p-3.5 rounded-lg bg-primary/5 border border-primary/10">
               <Sparkles className="w-4 h-4 text-primary/60 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <p className="text-xs font-medium text-foreground">This feature uses an intelligent analysis engine</p>
+                <p className="text-xs font-medium text-foreground">Uses an intelligent analysis engine</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  When you click Generate, your anonymous model figures are securely sent to our analysis engine to produce the plain-English summary, pressure points, and professional questions below. No names, addresses, contact details, documents or messages are ever included.
+                  Your anonymous model figures are securely sent to produce the plain-English summary, pressure points, and professional questions. No names, addresses, contact details, documents or messages are ever included.
                 </p>
               </div>
             </div>
@@ -278,8 +321,9 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
               data-testid="button-generate-guided-summary"
             >
               <Sparkles className="w-4 h-4 mr-2" />
-              Generate Guided Summary
+              Generate Guided Intelligence Report
             </Button>
+            <p className="text-[10px] text-muted-foreground/60">Usually takes 10–20 seconds · Uses your figures, not templates</p>
           </CardContent>
         </Card>
       ) : guidedSummaryStatus === "loading" ? (

@@ -541,7 +541,7 @@ export async function registerRoutes(
   app.post('/api/auth/send-link', async (req, res) => {
     try {
       const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
-      if (!rateLimit(`magic-link:${clientIp}`, 5, 60 * 60 * 1000)) {
+      if (!rateLimit(`magic-link:${clientIp}`, 3, 60 * 60 * 1000)) {
         return res.status(429).json({ message: 'Too many attempts. Please try again in an hour.' });
       }
 

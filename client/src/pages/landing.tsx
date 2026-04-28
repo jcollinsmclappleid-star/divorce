@@ -449,10 +449,12 @@ export default function LandingPage() {
             </div>
             <div className="text-center md:text-right space-y-2 shrink-0">
               <div className="flex flex-col gap-1.5 items-center md:items-end text-xs text-muted-foreground">
-                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Free preview included</span>
-                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Full analysis £79 one-time</span>
-                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Guided plain-English summary of your figures</span>
-                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Tailored questions for your solicitor, broker & pension adviser</span>
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Free to start — no sign-up or card required</span>
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Full analysis £79 one-time (no subscription)</span>
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Settlement Analyser: 4 scenarios, CRI scores, 5-yr projections</span>
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Guided Intelligence Report: plain-English financial narrative</span>
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Tailored questions for solicitor, broker & pension adviser</span>
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> 12 months' access — re-run as your situation develops</span>
                 <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> General email support included</span>
               </div>
               <Link href="/pricing" onClick={scrollTop} className="text-xs text-primary hover:underline block" data-testid="link-see-full-pricing">
@@ -523,31 +525,43 @@ export default function LandingPage() {
               </div>
               <p className="text-xs font-bold text-foreground uppercase tracking-wide">Settlement Analyser</p>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {[
                 {
                   icon: LayoutDashboard,
                   title: "Financial Snapshot",
-                  body: "Assets, debts, property equity, pensions and net financial position in one structured view.",
+                  body: "Assets, debts, property equity, pensions and net financial position in one structured view — including a combined net worth summary.",
                   iconBg: "bg-cyan-50", iconColor: "text-cyan-600", accent: "border-t-cyan-400",
                 },
                 {
                   icon: TrendingUp,
                   title: "Settlement Scenario Comparison",
-                  body: "All four options — Sell & Split, A Keeps, B Keeps, Deferred Sale — modelled and scored side by side.",
+                  body: "All four options — Sell & Split, A Keeps, B Keeps, Deferred Sale — modelled and scored side by side with capital positions and sustainability ratings.",
                   iconBg: "bg-emerald-50", iconColor: "text-emerald-600", accent: "border-t-emerald-400",
                 },
                 {
                   icon: DollarSign,
                   title: "Monthly Cashflow View",
-                  body: "Estimated take-home pay, housing costs, surplus or deficit under each scenario — for both parties.",
+                  body: "Estimated take-home pay after tax and NI, housing costs, surplus or deficit under each scenario — for both parties, side by side.",
                   iconBg: "bg-violet-50", iconColor: "text-violet-600", accent: "border-t-violet-400",
                 },
                 {
                   icon: Home,
                   title: "Mortgage Pressure Checks",
-                  body: "See whether a keep-home scenario creates high mortgage pressure based on income multiples.",
+                  body: "See whether a keep-home scenario is feasible — income multiples, deposit percentage, and mortgage-to-income ratio benchmarked against standard thresholds.",
                   iconBg: "bg-amber-50", iconColor: "text-amber-600", accent: "border-t-amber-400",
+                },
+                {
+                  icon: Activity,
+                  title: "5-Year Capital Projections",
+                  body: "See where each party's capital stands year by year — whether reserves sustain or erode, and which scenario delivers the strongest long-term position.",
+                  iconBg: "bg-rose-50", iconColor: "text-rose-600", accent: "border-t-rose-400",
+                },
+                {
+                  icon: Gauge,
+                  title: "Cashflow Resilience Indicator",
+                  body: "A composite score (0–100) that weighs income, outgoings, housing costs, and capital sustainability. Quickly compare financial resilience across all options.",
+                  iconBg: "bg-sky-50", iconColor: "text-sky-600", accent: "border-t-sky-400",
                 },
               ].map((card, i) => (
                 <div
