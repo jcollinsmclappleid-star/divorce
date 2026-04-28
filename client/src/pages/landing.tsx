@@ -16,6 +16,7 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { SiteNav } from "@/components/site-nav";
 import { useMetaTags } from "@/hooks/use-meta-tags";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+import { LandingDashboardPreview } from "@/components/landing-dashboard-preview";
 
 const EXPLORE_CARDS = [
   {
@@ -271,92 +272,34 @@ export default function LandingPage() {
       </section>
 
       {/* ── What you'll see ── */}
-      <section className="py-16 md:py-20 bg-primary" data-testid="section-what-youll-see">
+      <section
+        className="py-16 md:py-24 bg-gradient-to-b from-[#152e50] to-[#0f2440]"
+        data-testid="section-what-youll-see"
+      >
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-10 space-y-3" data-reveal>
-            <h2 className="text-2xl md:text-3xl font-display font-bold text-white">What you'll see in the full analysis</h2>
-            <p className="text-white/60 text-sm max-w-xl mx-auto">
-              Four real analytical outputs — not estimates or averages, but your specific figures modelled under each settlement option.
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+              </span>
+              <span className="text-xs font-medium text-emerald-400 tracking-wide">Sample output · real model format</span>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-display font-bold text-white">
+              Here's what the full analysis looks like
+            </h2>
+            <p className="text-white/60 text-sm max-w-lg mx-auto">
+              Five live-format panels from the real dashboard — built from a sample couple's figures so you can see exactly what you're unlocking.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-            {[
-              {
-                icon: BarChart3,
-                title: "Scenario comparison",
-                desc: "Sell & Split · Keep the Home · Deferred Sale · Equalise Pensions — all four side-by-side",
-                accentColor: "#06B6D4",
-                iconColor: "text-cyan-400",
-                barColor: "bg-cyan-400/50",
-                preview: (
-                  <div className="space-y-1.5 mt-2">
-                    {["Sell & Split", "A Keeps Home", "B Keeps Home", "Deferred"].map((s, j) => (
-                      <div key={j} className="flex items-center justify-between gap-2">
-                        <span className="text-[10px] text-white/50">{s}</span>
-                        <div className="h-1.5 rounded-full bg-cyan-400/40" style={{ width: `${[85, 72, 65, 78][j]}%` }} />
-                      </div>
-                    ))}
-                  </div>
-                ),
-              },
-              {
-                icon: Activity,
-                title: "Monthly cash position",
-                desc: "Post-settlement surplus or deficit each month — which scenario is actually liveable",
-                accentColor: "#10B981",
-                iconColor: "text-emerald-400",
-                preview: (
-                  <div className="mt-2 bg-white/5 rounded-lg p-3 text-center">
-                    <p className="text-[10px] text-white/40 mb-1">Monthly surplus after costs</p>
-                    <p className="text-lg font-mono font-bold text-emerald-400">+£847</p>
-                    <p className="text-[10px] text-white/30">Scenario 1 · Party A</p>
-                  </div>
-                ),
-              },
-              {
-                icon: Calendar,
-                title: "5-year projections",
-                desc: "See how capital positions evolve over five years under static assumptions",
-                accentColor: "#8B5CF6",
-                iconColor: "text-violet-400",
-                preview: (
-                  <div className="mt-2 flex items-end gap-1 h-10">
-                    {[40, 55, 48, 62, 70].map((h, j) => (
-                      <div key={j} className="flex-1 rounded-t-sm bg-violet-400/50" style={{ height: `${h}%` }} />
-                    ))}
-                  </div>
-                ),
-              },
-              {
-                icon: Gauge,
-                title: "Financial Sustainability Index",
-                desc: "A composite resilience score showing how stable each scenario is for each party",
-                accentColor: "#F43F5E",
-                iconColor: "text-rose-400",
-                preview: (
-                  <div className="mt-2 flex items-center justify-center">
-                    <div className="relative w-16 h-8 overflow-hidden">
-                      <div className="absolute inset-0 rounded-t-full border-4 border-white/10" />
-                      <div className="absolute inset-0 rounded-t-full border-4 border-rose-400/60" style={{ clipPath: "inset(0 40% 0 0)" }} />
-                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0.5 h-6 bg-white/70 origin-bottom rotate-[-30deg]" />
-                    </div>
-                    <p className="text-[10px] text-white/40 ml-2">72 / 100</p>
-                  </div>
-                ),
-              },
-            ].map((card, i) => (
-              <div key={i} className="bg-white/5 rounded-xl p-4 border border-white/10 overflow-hidden relative" data-testid={`card-output-${i}`}>
-                <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: card.accentColor }} />
-                <div className="flex items-center gap-2 mb-2 mt-1">
-                  <card.icon className={`w-4 h-4 ${card.iconColor}`} />
-                  <h3 className="text-sm font-semibold text-white">{card.title}</h3>
-                </div>
-                <p className="text-xs text-white/50 leading-relaxed">{card.desc}</p>
-                {card.preview}
-              </div>
-            ))}
-          </div>
-          <div className="text-center">
+
+          <LandingDashboardPreview />
+
+          <p className="text-center text-[11px] text-white/30 mt-5">
+            Sample figures shown. Your analysis reflects your actual inputs — recalculated instantly in your browser.
+          </p>
+
+          <div className="text-center mt-8">
             <Button
               size="lg"
               onClick={startFresh}
