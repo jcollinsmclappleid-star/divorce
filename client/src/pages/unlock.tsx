@@ -1,49 +1,87 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { useAccess, useSessionToken } from "@/hooks/use-access";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
-  CheckCircle, Loader2, Check,
-  Shield, Lock, Zap
+import { Badge } from "@/components/ui/badge";
+import {
+  CheckCircle, Loader2, Shield, Lock, Zap, ArrowRight,
+  BarChart3, TrendingUp, FileText, Sparkles, HelpCircle,
+  ChevronRight, Calendar, RefreshCw,
 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { SiteNav } from "@/components/site-nav";
 import { useNoIndex } from "@/hooks/use-noindex";
 
-const INCLUDES_ITEMS = [
-  "Compare alternative settlement structures side-by-side",
-  "5-year capital sustainability projections",
-  "Financial sustainability indicators with driver analysis",
-  "Monthly financial position snapshot per scenario",
-  "Sensitivity analysis — see which assumptions matter most",
-  "Downloadable Structured Financial Brief (PDF)",
-  "12 months unlimited access to update and re-run",
+const FEATURE_GROUPS = [
+  {
+    icon: BarChart3,
+    iconBg: "bg-cyan-500/10",
+    iconColor: "text-cyan-500",
+    title: "Four scenarios, one view",
+    desc: "Sell & Split, A Keeps Home, B Keeps Home, and Deferred Sale — all modelled and scored side-by-side.",
+  },
+  {
+    icon: TrendingUp,
+    iconBg: "bg-violet-500/10",
+    iconColor: "text-violet-500",
+    title: "5-year capital projections",
+    desc: "See how your capital position evolves under each scenario, with Cashflow Resilience Indicator scores and sustainability ratings.",
+  },
+  {
+    icon: RefreshCw,
+    iconBg: "bg-emerald-500/10",
+    iconColor: "text-emerald-500",
+    title: "Sensitivity & stress-testing",
+    desc: "Adjust interest rate assumptions and re-run instantly. See which scenarios hold up and which are fragile.",
+  },
+  {
+    icon: Sparkles,
+    iconBg: "bg-gold/10",
+    iconColor: "text-gold",
+    title: "Guided Report Summary",
+    desc: "An intelligent plain-English analysis of your figures — what stands out, where the financial pressure points are, and what to watch out for.",
+    highlight: true,
+  },
+  {
+    icon: HelpCircle,
+    iconBg: "bg-rose-500/10",
+    iconColor: "text-rose-500",
+    title: "Tailored professional questions",
+    desc: "Bespoke questions to raise with your solicitor, mortgage broker, and pension adviser — so you walk into every consultation prepared.",
+    highlight: true,
+  },
+  {
+    icon: FileText,
+    iconBg: "bg-primary/10",
+    iconColor: "text-primary",
+    title: "Downloadable Structured Financial Brief",
+    desc: "A print-ready PDF summarising your full analysis — useful for professional meetings and keeping your own records.",
+  },
 ];
 
-const TRUST_SIGNALS = [
-  { icon: Lock, text: "All calculations in your browser — your data stays private" },
-  { icon: Shield, text: "Applies UK 2026/27 income tax rate bands (illustrative)" },
-  { icon: Zap, text: "Instant access after payment" },
+const STEPS = [
+  { n: "1", label: "Pay once — £79", sub: "Stripe-secured. Instant." },
+  { n: "2", label: "Unlock all four scenarios", sub: "Access immediately, no sign-up." },
+  { n: "3", label: "Generate your Guided Summary", sub: "Plain-English analysis + professional questions." },
 ];
 
 const FAQ_ITEMS = [
   {
     question: "What happens after I pay?",
-    answer: "You'll get immediate access to your full financial analysis, including all scenarios, projections, charts, and a downloadable report. Your access lasts 12 months.",
+    answer: "You get immediate access to the full analysis — all four scenarios, 5-year projections, sustainability scores, stress-testing, and the Guided Report Summary. Your access lasts 12 months.",
   },
   {
     question: "Is my data safe?",
-    answer: "All core financial calculations happen in your browser. No names or contact details are ever included in any processing.",
+    answer: "Core financial calculations run entirely in your browser. When you choose to generate the Guided Report Summary, only anonymous model figures are sent to our analysis engine — no names, addresses, or contact details are ever included.",
   },
   {
     question: "Can I update my figures later?",
-    answer: "Yes. During your 12-month access period, you can update your inputs and re-run the analysis as many times as you need.",
+    answer: "Yes. During your 12-month access period you can update your inputs and re-run the full analysis as many times as you need. The model re-calculates instantly.",
   },
   {
     question: "How does this compare to a professional consultation?",
-    answer: "A single professional consultation could cost £250–£400 per hour. This tool provides structured financial modelling for £79, allowing you to approach professional discussions with quantified assumptions already prepared.",
+    answer: "A single hour with a solicitor typically costs £250–£400. This gives you structured, quantified financial modelling for £79 — so you walk into professional consultations with your figures already clear.",
   },
 ];
 
@@ -56,30 +94,28 @@ export default function UnlockPage() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && hasAccess) {
-      navigate('/results');
-    }
+    if (!isLoading && hasAccess) navigate("/results");
   }, [hasAccess, isLoading, navigate]);
 
   async function handleCheckout() {
     setCheckoutLoading(true);
     try {
-      const res = await fetch('/api/checkout/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/checkout/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionToken }),
       });
       const data = await res.json();
       if (res.ok && data.url) {
         window.location.href = data.url;
       } else {
-        console.error('Checkout failed:', data.message || 'Unknown error');
-        alert('Payment page failed to load. Please try again.');
+        console.error("Checkout failed:", data.message || "Unknown error");
+        alert("Payment page failed to load. Please try again.");
         setCheckoutLoading(false);
       }
     } catch (err) {
-      console.error('Checkout error:', err);
-      alert('An error occurred. Please try again.');
+      console.error("Checkout error:", err);
+      alert("An error occurred. Please try again.");
       setCheckoutLoading(false);
     }
   }
@@ -88,111 +124,185 @@ export default function UnlockPage() {
     <div className="min-h-screen bg-background">
       <SiteNav />
 
-      <main className="max-w-3xl mx-auto px-4 py-10 space-y-12">
-        <section className="space-y-8" data-testid="section-hero">
-          <div className="text-center space-y-3">
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight leading-tight font-display">
-              Your Financial Position Has Been Modelled.
-            </h1>
-            <p className="text-muted-foreground max-w-lg mx-auto text-sm leading-relaxed">
-              Unlock the complete structured analysis to compare settlement scenarios and assess indicative sustainability. Your data is already entered — instant access after payment.
-            </p>
+      {/* ── Hero ── */}
+      <section className="relative overflow-hidden bg-primary" data-testid="section-hero">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,_hsl(220_52%_28%),_transparent_70%)] pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <svg className="absolute inset-0 w-full h-full opacity-[0.04]" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="unlock-dot-grid" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+                <circle cx="1" cy="1" r="1" fill="white" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#unlock-dot-grid)" />
+          </svg>
+        </div>
+        <div className="relative container mx-auto px-4 py-12 md:py-16 max-w-4xl text-center space-y-5">
+          <Badge variant="outline" className="text-xs px-3 py-1 border-gold/50 text-gold bg-gold/10">
+            Your figures are entered · Instant access after payment
+          </Badge>
+          <h1 className="text-3xl md:text-4xl font-display font-bold text-white leading-tight" data-testid="text-hero-headline">
+            Your financial analysis is<br />
+            <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">ready to unlock.</span>
+          </h1>
+          <p className="text-white/65 max-w-xl mx-auto text-sm leading-relaxed">
+            See all four settlement scenarios compared side-by-side, with 5-year projections, sustainability scores, and a plain-English Guided Summary — including tailored questions to take to your solicitor, broker, and pension adviser.
+          </p>
+
+          {/* 3-step timeline */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-0 sm:gap-0 mt-6">
+            {STEPS.map((step, i) => (
+              <div key={i} className="flex items-center">
+                <div className="flex flex-col items-center gap-1 px-4 py-3">
+                  <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center text-gold text-sm font-bold">
+                    {step.n}
+                  </div>
+                  <p className="text-white/90 text-xs font-semibold whitespace-nowrap">{step.label}</p>
+                  <p className="text-white/45 text-[10px] whitespace-nowrap">{step.sub}</p>
+                </div>
+                {i < STEPS.length - 1 && (
+                  <ChevronRight className="w-4 h-4 text-white/20 hidden sm:block shrink-0" />
+                )}
+              </div>
+            ))}
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 items-start">
-            <div className="space-y-3" data-testid="section-value-proposition">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">What You Get</h2>
-              <ul className="space-y-2.5">
-                {INCLUDES_ITEMS.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2.5" data-testid={`text-value-prop-${i}`}>
-                    <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                    <span className="text-sm leading-snug">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <Button
+            size="lg"
+            onClick={handleCheckout}
+            disabled={checkoutLoading}
+            data-testid="button-checkout-hero"
+            className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 text-base font-semibold mt-2"
+          >
+            {checkoutLoading ? (
+              <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Redirecting to payment...</>
+            ) : (
+              <>Unlock Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" /></>
+            )}
+          </Button>
+          <p className="text-white/35 text-xs">
+            One-time payment · 12 months access · Secured by Stripe
+          </p>
+        </div>
+      </section>
 
-            <div
-              className="rounded-xl bg-primary border border-white/10 shadow-2xl overflow-hidden"
-              data-testid="section-pricing"
-            >
-              <div className="px-6 pt-6 pb-2 text-center border-b border-white/10 space-y-2">
-                <div className="inline-flex items-center gap-1.5 bg-gold/15 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full" data-testid="badge-access-duration">
-                  Twelve Months · Unlimited Access
-                </div>
-                <div className="text-5xl font-bold tracking-tight text-gold pt-1" data-testid="text-price">£79</div>
-                <div className="text-sm text-white/55 pb-2">One-time payment. No subscription.</div>
-              </div>
-              <div className="px-6 py-5 space-y-4">
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="bg-white/5 rounded-lg py-2.5">
-                    <p className="text-sm font-bold text-white">Under 5 min</p>
-                    <p className="text-[10px] text-white/45 mt-0.5">To model</p>
-                  </div>
-                  <div className="bg-white/5 rounded-lg py-2.5">
-                    <p className="text-sm font-bold text-white">12 months</p>
-                    <p className="text-[10px] text-white/45 mt-0.5">Reruns</p>
-                  </div>
-                  <div className="bg-white/5 rounded-lg py-2.5">
-                    <p className="text-sm font-bold text-white">100%</p>
-                    <p className="text-[10px] text-white/45 mt-0.5">Private</p>
-                  </div>
-                </div>
+      <main className="max-w-4xl mx-auto px-4 py-12 space-y-14">
 
-                <Button
-                  className="w-full bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/30 text-base font-semibold"
-                  size="lg"
-                  onClick={handleCheckout}
-                  disabled={checkoutLoading}
-                  data-testid="button-checkout"
-                >
-                  {checkoutLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Redirecting to payment...
-                    </>
-                  ) : (
-                    "Unlock Full Analysis — £79"
-                  )}
-                </Button>
-
-                <p className="text-center text-xs text-white/40 italic">
-                  A single hour with a solicitor typically costs £250–£400. This covers your entire financial picture.
-                </p>
-
-                <div className="flex items-center justify-center gap-1.5 text-xs text-white/50">
-                  <CheckCircle className="w-3.5 h-3.5" />
-                  <span>Platform or billing questions? Email <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline">support@divorcecalculatoruk.co.uk</a> — general support only, not financial or legal advice</span>
-                </div>
-
-                <p className="text-xs text-white/40 text-center">
-                  Secured by Stripe
-                </p>
-
-                <div className="text-xs text-white/35 text-center space-y-1 border-t border-white/10 pt-3">
-                  <p>Illustrative modelling only. Not legal or financial advice. See <Link href="/terms" className="underline text-white/55 hover:text-white transition-colors" data-testid="link-refund-terms">Terms</Link>.</p>
-                  <p>
-                    Already purchased? <Link href="/recover" className="underline text-white/55 hover:text-white transition-colors" data-testid="link-recover">Recover your access</Link>
-                  </p>
-                </div>
-              </div>
-            </div>
+        {/* ── What you unlock ── */}
+        <section data-testid="section-value-proposition">
+          <div className="text-center mb-8 space-y-2">
+            <h2 className="text-xl md:text-2xl font-display font-bold">What you unlock for £79</h2>
+            <p className="text-sm text-muted-foreground max-w-md mx-auto">Everything you need to understand your financial position before negotiating — or sitting down with a professional.</p>
           </div>
-        </section>
-
-        <section className="flex justify-center py-4 border-y" data-testid="section-trust-signals">
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-            {TRUST_SIGNALS.map((signal, i) => (
-              <div key={i} className="flex items-center gap-2" data-testid={`text-trust-signal-${i}`}>
-                <signal.icon className="w-4 h-4 text-muted-foreground shrink-0" />
-                <span className="text-xs text-muted-foreground">{signal.text}</span>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {FEATURE_GROUPS.map((f, i) => (
+              <div
+                key={i}
+                className={`rounded-xl border p-4 space-y-2.5 transition-all ${
+                  f.highlight
+                    ? "border-gold/30 bg-gold/5 shadow-sm"
+                    : "border-border/60 bg-muted/20"
+                }`}
+                data-testid={`card-feature-${i}`}
+              >
+                {f.highlight && (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-gold bg-gold/10 border border-gold/20 px-2 py-0.5 rounded-full uppercase tracking-wide">
+                    <Sparkles className="w-2.5 h-2.5" /> Key USP
+                  </span>
+                )}
+                <div className={`w-9 h-9 rounded-lg ${f.iconBg} flex items-center justify-center`}>
+                  <f.icon className={`w-4.5 h-4.5 ${f.iconColor}`} />
+                </div>
+                <h3 className="text-sm font-semibold text-foreground leading-snug">{f.title}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="space-y-4 max-w-lg mx-auto" data-testid="section-faq">
-          <h2 className="text-lg font-semibold text-center">Frequently Asked Questions</h2>
+        {/* ── Pricing card ── */}
+        <section data-testid="section-pricing" className="max-w-md mx-auto">
+          <div className="rounded-2xl bg-primary border border-white/10 shadow-2xl overflow-hidden">
+            <div className="px-6 pt-6 pb-4 text-center border-b border-white/10 space-y-2">
+              <div className="inline-flex items-center gap-1.5 bg-gold/15 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full" data-testid="badge-access-duration">
+                <Calendar className="w-3 h-3" /> Twelve Months · Unlimited Access
+              </div>
+              <div className="text-5xl font-bold tracking-tight text-gold pt-1 font-mono" data-testid="text-price">£79</div>
+              <div className="text-sm text-white/55">One-time payment. No subscription.</div>
+            </div>
+
+            <div className="px-6 py-5 space-y-4">
+              {/* Stat strip — no "100%" */}
+              <div className="grid grid-cols-2 gap-3 text-center">
+                <div className="bg-white/5 rounded-xl py-3">
+                  <p className="text-sm font-bold text-white">4 scenarios</p>
+                  <p className="text-[10px] text-white/45 mt-0.5">All modelled simultaneously</p>
+                </div>
+                <div className="bg-white/5 rounded-xl py-3 flex flex-col items-center justify-center gap-0.5">
+                  <div className="flex items-center gap-1.5">
+                    <Shield className="w-3.5 h-3.5 text-emerald-400" />
+                    <p className="text-sm font-bold text-white">Private & Secure</p>
+                  </div>
+                  <p className="text-[10px] text-white/45">Core calculations in-browser</p>
+                </div>
+              </div>
+
+              <Button
+                className="w-full bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/30 text-base font-semibold"
+                size="lg"
+                onClick={handleCheckout}
+                disabled={checkoutLoading}
+                data-testid="button-checkout"
+              >
+                {checkoutLoading ? (
+                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Redirecting to payment...</>
+                ) : (
+                  "Unlock Full Analysis — £79"
+                )}
+              </Button>
+
+              <p className="text-center text-xs text-white/40 italic">
+                A single solicitor hour costs £250–£400. This covers your entire financial picture.
+              </p>
+
+              <div className="flex items-center justify-center gap-1.5 text-xs text-white/50">
+                <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+                <span>Platform or billing questions? Email <a href="mailto:support@divorcecalculatoruk.co.uk" className="underline">support@divorcecalculatoruk.co.uk</a> — general support only</span>
+              </div>
+
+              <p className="text-xs text-white/40 text-center flex items-center justify-center gap-1.5">
+                <Zap className="w-3 h-3" /> Secured by Stripe · Instant access after payment
+              </p>
+
+              <div className="text-xs text-white/35 text-center space-y-1 border-t border-white/10 pt-3">
+                <p>Illustrative modelling only. Not legal or financial advice. See <Link href="/terms" className="underline text-white/55 hover:text-white transition-colors" data-testid="link-refund-terms">Terms</Link>.</p>
+                <p>
+                  Already purchased? <Link href="/recover" className="underline text-white/55 hover:text-white transition-colors" data-testid="link-recover">Recover your access</Link>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Trust signals ── */}
+        <section className="py-4 border-y border-border/40" data-testid="section-trust-signals">
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3">
+            {[
+              { icon: Lock, text: "Core calculations run in your browser — no financial data on our servers" },
+              { icon: Shield, text: "UK 2026/27 HMRC income tax & NI rates applied" },
+              { icon: Zap, text: "Instant access after payment" },
+            ].map((s, i) => (
+              <div key={i} className="flex items-center gap-2" data-testid={`text-trust-signal-${i}`}>
+                <s.icon className="w-4 h-4 text-muted-foreground shrink-0" />
+                <span className="text-xs text-muted-foreground">{s.text}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── FAQ ── */}
+        <section className="max-w-lg mx-auto space-y-4" data-testid="section-faq">
+          <h2 className="text-xl font-display font-bold text-center">Common questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {FAQ_ITEMS.map((faq, i) => (
               <AccordionItem key={i} value={`faq-${i}`}>
@@ -209,27 +319,28 @@ export default function UnlockPage() {
           </Accordion>
         </section>
 
-        <section className="text-center space-y-4 pb-8" data-testid="section-reinforcement">
-          <p className="text-sm font-medium">Ready to see your scenarios?</p>
+        {/* ── Bottom CTA ── */}
+        <section className="text-center space-y-4 pb-6" data-testid="section-reinforcement">
+          <h2 className="text-lg font-display font-bold">Ready to see your full picture?</h2>
           <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-            Unlock now to review all settlement scenarios side-by-side with 5-year projections. Your inputs are saved — access lasts 12 months.
+            Your figures are saved. Unlock now and see all four settlement scenarios, 5-year projections, and your Guided Summary — ready in seconds.
           </p>
           <Button
             size="lg"
             onClick={handleCheckout}
             disabled={checkoutLoading}
+            className="bg-gold hover:bg-gold/90 text-white border-0"
             data-testid="button-checkout-secondary"
           >
             {checkoutLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Redirecting to payment...
-              </>
+              <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Redirecting to payment...</>
             ) : (
-              "Unlock Full Analysis — £79"
+              <>Unlock Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" /></>
             )}
           </Button>
+          <p className="text-xs text-muted-foreground">England & Wales · Illustrative modelling only · Not legal or financial advice</p>
         </section>
+
       </main>
 
       <footer className="border-t py-6">

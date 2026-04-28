@@ -499,7 +499,7 @@ export default function PreviewPage() {
                 {[
                   { stat: "20 min", label: "First model" },
                   { stat: "12 months", label: "Reruns" },
-                  { stat: "100%", label: "In-browser" },
+                  { stat: "Private & Secure", label: "Core calcs in-browser" },
                 ].map(({ stat, label }) => (
                   <div key={label} className="bg-white/5 rounded-lg py-2.5">
                     <p className="text-sm font-bold text-white">{stat}</p>

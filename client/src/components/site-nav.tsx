@@ -13,6 +13,7 @@ import { Menu, ArrowRight, LogIn, LogOut, BarChart3 } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { scrollTop } from "@/lib/utils";
 import { useAppStore } from "@/hooks/use-store";
+import { useAccess } from "@/hooks/use-access";
 
 const SESSION_KEY = "dfm-session-token";
 
@@ -42,6 +43,13 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
   }, []);
 
   const reset = useAppStore((s) => s.reset);
+  const assets = useAppStore((s) => s.assets);
+  const incomes = useAppStore((s) => s.incomes);
+  const { hasAccess } = useAccess();
+
+  const hasModelData = assets.length > 0 || incomes.length > 0;
+
+  const myAnalysisHref = hasAccess ? "/results" : hasModelData ? "/preview" : "/wizard";
 
   useEffect(() => {
     const check = () => setHasSession(!!localStorage.getItem(SESSION_KEY));
@@ -94,10 +102,11 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
                 {link.label}
               </Link>
             ))}
-            {hasSession ? (
+            {(hasModelData || hasAccess) ? (
               <>
                 <Link
-                  href="/results"
+                  href={myAnalysisHref}
+                  onClick={scrollTop}
                   className="text-sm text-primary font-medium hover:text-primary/80 transition-colors whitespace-nowrap flex items-center gap-1"
                   data-testid="link-nav-my-analysis"
                 >
@@ -113,6 +122,15 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
                   Sign Out
                 </button>
               </>
+            ) : hasSession ? (
+              <button
+                onClick={handleSignOut}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap flex items-center gap-1"
+                data-testid="button-nav-sign-out"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                Sign Out
+              </button>
             ) : (
               <Link
                 href="/recover"
@@ -178,11 +196,12 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
 
                 <div className="border-t border-border/40 my-3 mx-0" />
 
-                {hasSession ? (
+                {(hasModelData || hasAccess) ? (
                   <>
                     <SheetClose asChild>
                       <Link
-                        href="/results"
+                        href={myAnalysisHref}
+                        onClick={scrollTop}
                         className="flex items-center gap-2 px-3 py-3 rounded-md text-base font-medium text-primary hover:bg-primary/5 transition-colors"
                         data-testid="link-mobile-my-analysis"
                       >
@@ -199,6 +218,15 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
                       Sign Out
                     </button>
                   </>
+                ) : hasSession ? (
+                  <button
+                    onClick={handleSignOut}
+                    className="flex items-center gap-2 px-3 py-3 rounded-md text-base font-medium text-muted-foreground hover:bg-muted transition-colors text-left w-full"
+                    data-testid="button-mobile-sign-out"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    Sign Out
+                  </button>
                 ) : (
                   <SheetClose asChild>
                     <Link
