@@ -114,8 +114,8 @@ const FAQ_CATEGORIES = [
         a: "The free version includes the full 9-step financial wizard, entry of all assets and liabilities, and a preview of your total marital asset pool as a ring chart. The full settlement analysis — including FSI scores, monthly cashflow, stress testing, projections, and the PDF brief — requires a one-time payment of £79.",
       },
       {
-        q: "What support do I get after purchase?",
-        a: "If you have questions about your results or how to interpret your analysis, email support@divorcecalculatoruk.co.uk within 7 days of purchase and we'll help you get the most from your model. For billing queries or technical issues that prevent access, contact the same address and we'll resolve them promptly.",
+        q: "What support is available after purchase?",
+        a: "Email support is available at support@divorcecalculatoruk.co.uk. Our support covers: how to use the platform and its features, understanding what the figures and scores on screen mean, recovering access to your account, and billing or technical issues. We are not able to provide financial advice, legal advice, tax advice, or guidance on what settlement you should accept — those questions require a qualified solicitor or regulated financial adviser.",
       },
     ],
   },
@@ -235,11 +235,11 @@ export default function FaqPage() {
           <div className="mt-12 p-6 rounded-xl bg-muted/30 border border-border text-center space-y-4">
             <p className="text-sm font-semibold text-foreground">Still have a question?</p>
             <p className="text-xs text-muted-foreground">
-              Contact us at{" "}
+              Email us at{" "}
               <a href="mailto:support@divorcecalculatoruk.co.uk" className="text-primary underline hover:no-underline">
                 support@divorcecalculatoruk.co.uk
               </a>
-              {" "}and we'll get back to you within one business day.
+              {" "}and we'll get back to you within one business day. We can help with how the platform works, account access, and billing. We cannot provide financial, legal, or tax advice.
             </p>
             <Button
               onClick={startFresh}
