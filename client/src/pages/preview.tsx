@@ -24,7 +24,7 @@ export default function PreviewPage() {
   const engine = useEngine();
   const { hasAccess, isLoading } = useAccess();
   const [email, setEmail] = useState("");
-  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [emailSubmitted, setEmailSubmitted] = useState(() => !!store.profile?.capturedEmail);
   const [emailLoading, setEmailLoading] = useState(false);
 
   useEffect(() => {

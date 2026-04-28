@@ -574,16 +574,17 @@ export async function registerRoutes(
       });
       const { email, firstName, source, assetPoolSnapshot } = schema.parse(req.body);
       const existing = await storage.getEmailLeadByEmail(email);
+      const isSummarySource = source === 'preview_page' || source === 'wizard_preview';
       if (!existing) {
         const verificationToken = crypto.randomBytes(32).toString('hex');
         await storage.createEmailLead(email, firstName, source, assetPoolSnapshot, verificationToken);
-        if (source === 'preview_page') {
+        if (isSummarySource) {
           await sendProgressSummaryEmail(email, assetPoolSnapshot || '');
           await storage.verifyEmailLead((await storage.getEmailLeadByEmail(email))!.id);
         } else {
           await sendEmailVerificationEmail(email, verificationToken);
         }
-      } else if (source === 'preview_page') {
+      } else if (isSummarySource) {
         await sendProgressSummaryEmail(email, assetPoolSnapshot || '');
       }
       return res.json({ success: true });

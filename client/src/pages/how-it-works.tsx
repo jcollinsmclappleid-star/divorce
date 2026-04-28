@@ -151,8 +151,8 @@ export default function HowItWorksPage() {
                 className="flex items-start gap-4 p-4 rounded-lg bg-background border border-border/50"
                 data-testid={`card-wizard-step-${step.n}`}
               >
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-xs font-bold text-primary">{step.n}</span>
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center">
+                  <span className="text-xs font-bold text-gold font-mono">{step.n}</span>
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-foreground">{step.label}</p>

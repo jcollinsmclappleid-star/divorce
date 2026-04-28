@@ -81,15 +81,25 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background font-sans" ref={revealRef}>
-      <div className="bg-primary/10 text-primary px-4 py-1.5 text-xs text-center font-medium border-b border-primary/20" data-testid="text-disclaimer">
-        Illustrative modelling only. Not legal, tax or financial advice.
+      <div className="bg-[hsl(220_52%_10%)] text-white/65 px-4 py-1.5 text-xs text-center font-medium" data-testid="text-disclaimer">
+        Illustrative modelling only <span className="text-gold/50 mx-1">·</span> Not legal, tax or financial advice
       </div>
 
       <SiteNav onStartClick={startFresh} />
 
       {/* ── Hero ── */}
       <section className="relative overflow-hidden bg-primary" data-testid="section-hero">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_hsl(220_60%_35%),_transparent_60%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,_hsl(220_52%_28%),_transparent_70%)] pointer-events-none" />
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <svg className="absolute inset-0 w-full h-full opacity-[0.04]" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="hero-dot-grid" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+                <circle cx="1" cy="1" r="1" fill="white" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#hero-dot-grid)" />
+          </svg>
+        </div>
         <div className="container mx-auto px-4 pt-16 pb-20 md:pt-24 md:pb-28 relative">
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <div className="flex flex-wrap items-center justify-center gap-2">
@@ -98,7 +108,8 @@ export default function LandingPage() {
               </Badge>
             </div>
             <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight text-white" data-testid="text-hero-headline">
-              Stop negotiating your divorce blind.
+              Stop negotiating your divorce{" "}
+              <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">blind.</span>
             </h1>
             <p className="text-lg text-white/70 leading-relaxed">
               In 20 minutes, see exactly what each settlement option means for your financial future — which ones are sustainable, which leave you stretched, and what your money looks like in five years under each. Free to start. No sign-up.

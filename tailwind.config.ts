@@ -54,7 +54,9 @@ export default {
         gold: {
           DEFAULT: "hsl(var(--gold) / <alpha-value>)",
           foreground: "hsl(var(--gold-foreground) / <alpha-value>)",
+          light: "hsl(var(--gold-light) / <alpha-value>)",
         },
+        surface: "hsl(var(--surface) / <alpha-value>)",
         ring: "hsl(var(--ring) / <alpha-value>)",
         chart: {
           "1": "hsl(var(--chart-1) / <alpha-value>)",
@@ -91,6 +93,10 @@ export default {
         serif: ["var(--font-serif)"],
         mono: ["var(--font-mono)"],
         display: ["var(--font-display)"],
+      },
+      boxShadow: {
+        card: "0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08)",
+        "card-hover": "0 8px 32px rgba(0,0,0,0.14)",
       },
       keyframes: {
         "accordion-down": {
