@@ -274,6 +274,72 @@ export default function PreviewPage() {
           )}
         </section>
 
+        {/* ── Guided Intelligence Report — plain-English hook ── */}
+        <section>
+          <Card className="border-2 border-gold/30 overflow-hidden bg-gradient-to-br from-[hsl(220_52%_19%)] to-[hsl(220_52%_15%)]" data-testid="card-guided-summary-locked">
+            <CardContent className="p-0">
+              <div className="px-5 py-4 border-b border-white/10 flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-gold/20 flex items-center justify-center shrink-0">
+                    <Sparkles className="w-4.5 h-4.5 text-gold" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white">Guided Intelligence Report</p>
+                    <p className="text-[11px] text-white/50 mt-0.5">What your figures actually mean — in plain English</p>
+                  </div>
+                </div>
+                <span className="inline-flex items-center gap-1 text-[10px] bg-gold/15 text-gold border border-gold/30 px-2.5 py-1 rounded-full font-semibold shrink-0">
+                  <Sparkles className="w-2.5 h-2.5" /> Included
+                </span>
+              </div>
+              <div className="px-5 pt-4 pb-3 space-y-3">
+                <p className="text-xs text-white/60 leading-relaxed">
+                  Numbers tell you what. The Guided Intelligence Report tells you <em className="text-white/80 not-italic font-medium">so what</em> — plain-English commentary on your specific figures, where the pressure points are, and exactly what to ask your solicitor, mortgage broker, and pension adviser.
+                </p>
+                <div className="space-y-2">
+                  {[
+                    "What stands out about your estate and why it matters",
+                    "Which settlement option looks strongest — and where the risks lie",
+                    "Where the financial pressure points are for each party",
+                    "Tailored questions to raise with each professional",
+                  ].map((line, i) => (
+                    <div key={i} className="flex gap-2 text-xs text-white/55">
+                      <span className="text-gold shrink-0 mt-0.5">✦</span>
+                      <span>{line}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="relative pt-1">
+                  <div className="blur-[4px] select-none pointer-events-none space-y-1.5">
+                    {[
+                      "The combined estate is concentrated in property, which drives settlement complexity.",
+                      "There is a material income disparity between the two parties which affects post-settlement sustainability.",
+                      "Scenario 2 (A Keeps Home) may create significant affordability pressure based on income multiple analysis.",
+                    ].map((line, i) => (
+                      <div key={i} className="flex gap-2 text-xs text-white/50">
+                        <span className="text-white/30 shrink-0 mt-0.5">•</span>
+                        <span>{line}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <button
+                      onClick={handleCheckout}
+                      disabled={checkoutLoading}
+                      className="flex items-center gap-2 bg-white/90 backdrop-blur border border-white/20 shadow-lg rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-white transition-all"
+                      data-testid="button-unlock-guided-summary-preview"
+                    >
+                      <Lock className="w-4 h-4 text-gold" />
+                      Unlock your Guided Report
+                      <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
         {/* ── Teaser: Settlement scenario comparison bar chart ── */}
         <section>
           <Card className="overflow-hidden border-2 border-dashed border-border/60" data-testid="card-scenario-chart-teaser">
@@ -549,59 +615,6 @@ export default function PreviewPage() {
           </Card>
         </section>
 
-        {/* ── Guided Summary locked teaser ── */}
-        <section>
-          <Card className="border-2 border-dashed border-gold/30 overflow-hidden" data-testid="card-guided-summary-locked">
-            <CardContent className="p-0">
-              <div className="bg-gradient-to-r from-[hsl(220_52%_20%)] to-[hsl(220_52%_16%)] px-5 py-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-gold/20 flex items-center justify-center shrink-0">
-                    <span className="text-gold text-sm font-bold">✦</span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-white">Guided Intelligence Report</p>
-                    <p className="text-[10px] text-white/45 mt-0.5">Plain-English interpretation of your figures</p>
-                  </div>
-                </div>
-                <span className="inline-flex items-center gap-1 text-xs bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-medium shrink-0">
-                  <Lock className="w-3 h-3" /> Included in full report
-                </span>
-              </div>
-              <div className="p-5 space-y-4">
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Once unlocked, you can generate a plain-English summary of your results — identifying what stands out, where the financial pressure points are, and specific questions to raise with your solicitor, mortgage broker, or pension specialist.
-                </p>
-                <div className="relative">
-                  <div className="blur-[4px] select-none pointer-events-none space-y-2">
-                    {[
-                      "The combined estate is concentrated in property, which drives settlement complexity.",
-                      "There is a material income disparity between the two parties which affects post-settlement sustainability.",
-                      "Scenario S2 (A Keeps Home) may create affordability pressure based on income multiple assumptions.",
-                    ].map((line, i) => (
-                      <div key={i} className="flex gap-2 text-sm text-muted-foreground">
-                        <span className="text-primary/50 shrink-0 mt-0.5">•</span>
-                        <span>{line}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <button
-                      onClick={handleCheckout}
-                      disabled={checkoutLoading}
-                      className="flex items-center gap-2 bg-white/90 backdrop-blur border border-border shadow-lg rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-white transition-all"
-                      data-testid="button-unlock-guided-summary-preview"
-                    >
-                      <Lock className="w-4 h-4 text-gold" />
-                      Unlock to read your Guided Summary
-                      <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
         {/* ── Pricing CTA ── */}
         <section>
           <div className="rounded-2xl bg-primary border border-white/10 shadow-2xl overflow-hidden" data-testid="card-pricing-cta">
@@ -647,7 +660,7 @@ export default function PreviewPage() {
               {/* Stat strip */}
               <div className="grid grid-cols-3 gap-2 text-center">
                 {[
-                  { stat: "20 min", label: "First model" },
+                  { stat: "5 min", label: "First model" },
                   { stat: "12 months", label: "Reruns" },
                   { stat: "Private & Secure", label: "Core calcs in-browser" },
                 ].map(({ stat, label }) => (
