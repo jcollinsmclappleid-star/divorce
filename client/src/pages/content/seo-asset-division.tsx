@@ -42,7 +42,7 @@ export default function SeoAssetDivisionPage() {
             <Link href="/divorce-financial-guides" onClick={scrollTop} className="text-sm text-primary hover:underline flex items-center gap-1" data-testid="link-all-guides">← All guides</Link>
           </div>
           <div className="space-y-3">
-            <Badge variant="outline" className="text-primary border-primary/30">England & Wales · 2025/26</Badge>
+            <Badge variant="outline" className="text-primary border-primary/30">England & Wales · 2026/27</Badge>
             <h1 className="text-3xl md:text-4xl font-display font-bold tracking-tight leading-tight" data-testid="text-page-title">
               Divorce Financial Settlement UK — How Assets Are Divided
             </h1>

@@ -27,7 +27,7 @@ export default function TermsPage() {
         <h1 className="text-3xl font-display font-bold mb-8" data-testid="text-terms-title">Terms of Use</h1>
 
         <div className="prose prose-sm max-w-none space-y-6 text-muted-foreground">
-          <p className="text-foreground font-medium">Last updated: February 2026</p>
+          <p className="text-foreground font-medium">Last updated: April 2026</p>
           <p>By accessing or using DivorceCalculatorUK ("the Service", "the Tool"), you agree to be bound by these Terms of Use. If you do not agree to these terms, you must not use the Service.</p>
 
           <section>
@@ -58,7 +58,7 @@ export default function TermsPage() {
             <p>Users must not treat any output as a definitive, reliable, or actionable statement of their financial position.</p>
 
             <p className="font-medium mt-3">Tax model scope and exclusions:</p>
-            <p>The tax engine applies a simplified UK income tax and employee Class 1 National Insurance calculation only, based on published HMRC rates for the 2025/26 tax year. Personal allowance tapering above £100,000 is modelled. All entered income sources are aggregated and taxed as a single pool of income. The following are explicitly excluded from the tax model:</p>
+            <p>The tax engine applies a simplified UK income tax and employee Class 1 National Insurance calculation only, based on published HMRC rates for the 2026/27 tax year. Personal allowance tapering above £100,000 is modelled. All entered income sources are aggregated and taxed as a single pool of income. The following are explicitly excluded from the tax model:</p>
             <ul className="list-disc pl-6 space-y-1">
               <li>Dividend tax rates (8.75% / 33.75% / 39.35%) and the £1,000 dividend allowance — all income is taxed at standard income tax rates regardless of source</li>
               <li>Savings income allowance and starting rate for savings</li>

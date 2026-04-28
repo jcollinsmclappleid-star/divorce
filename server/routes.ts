@@ -7,7 +7,7 @@ import { z } from "zod";
 import crypto from "crypto";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { seedDatabase } from "./seed";
-import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail } from "./email";
+import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail } from "./email";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 function rateLimit(key: string, maxAttempts: number, windowMs: number): boolean {
@@ -577,7 +577,14 @@ export async function registerRoutes(
       if (!existing) {
         const verificationToken = crypto.randomBytes(32).toString('hex');
         await storage.createEmailLead(email, firstName, source, assetPoolSnapshot, verificationToken);
-        await sendEmailVerificationEmail(email, verificationToken);
+        if (source === 'preview_page') {
+          await sendProgressSummaryEmail(email, assetPoolSnapshot || '');
+          await storage.verifyEmailLead((await storage.getEmailLeadByEmail(email))!.id);
+        } else {
+          await sendEmailVerificationEmail(email, verificationToken);
+        }
+      } else if (source === 'preview_page') {
+        await sendProgressSummaryEmail(email, assetPoolSnapshot || '');
       }
       return res.json({ success: true });
     } catch (err) {

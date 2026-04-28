@@ -122,7 +122,7 @@ export default function DivorceFinancialGuidesPage() {
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-primary" />
-              <span className="text-sm font-medium text-primary">England & Wales · 2025/26</span>
+              <span className="text-sm font-medium text-primary">England & Wales · 2026/27</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-display font-bold tracking-tight leading-tight" data-testid="text-page-title">
               Divorce Financial Guides

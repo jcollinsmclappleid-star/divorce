@@ -109,7 +109,7 @@ The most common mistake: accepting a 50/50 split of the CETV when one pension is
     content: `
 Capital allocation (who gets what) is only half the picture. The other half is monthly cash flow — whether each party can actually live on their income after the settlement.
 
-**Net income after tax.** For employed income, income tax and employee National Insurance reduce gross pay significantly. In 2025/26, the basic rate of income tax is 20% on income between £12,571 and £50,270. The higher rate is 40% above £50,270 up to £125,140. Employee NI (Class 1) applies at 8% between the primary threshold (£12,570/year) and the upper earnings limit (£50,270/year), and 2% above.
+**Net income after tax.** For employed income, income tax and employee National Insurance reduce gross pay significantly. In 2026/27, the basic rate of income tax is 20% on income between £12,571 and £50,270. The higher rate is 40% above £50,270 up to £125,140. Employee NI (Class 1) applies at 8% between the primary threshold (£12,570/year) and the upper earnings limit (£50,270/year), and 2% above.
 
 **Living costs — individual and shared.** Costs need to be re-modelled post-separation. Many expenses that were shared (rent/mortgage, utilities, streaming, insurance) will now be duplicated across two households. This is the "two-household problem" and is one of the most common causes of post-divorce financial stress.
 

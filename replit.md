@@ -18,6 +18,10 @@ The project uses a **monorepo** with `client/` for the React frontend, `server/`
 
 A React 18 Single Page Application built with TypeScript and Vite. It uses Wouter for routing, Zustand for state management with localStorage persistence, and shadcn/ui (New York style) with Radix UI and Tailwind CSS for the UI. Data fetching is done with TanStack React Query, and Recharts for visualizations. Forms use React Hook Form with Zod for validation. Features include a multi-step wizard, a landing page, and a comprehensive results page with decision-support tools, scenario detail cards, stress test sliders, projection charts, a decision lens toggle, and downloadable reports. Personalization uses `partyAName` and `partyBName` from a welcome screen to dynamically replace "Party A" / "Party B" throughout the application. Logo component displays "Divorce Calculator UK" text branding (text-only, no icon).
 
+**Key landing page sections (in order)**: disclaimer bar → SiteNav → Hero → Trust strip (5 badges) → "What you'll see" explainer (4 output cards on navy bg) → "Why this works" value strip (3 columns) → Pricing callout → Explore grid → Hero pricing section → Contact strip → Footer (5 columns: brand, What's Included, Guides, Specialist Topics, Legal & Support).
+
+**UI utilities**: `useScrollReveal` hook + `[data-reveal]` CSS class for scroll-triggered fade-in animations. `CookieBanner` component in `App.tsx` (localStorage `cookieConsent` key, "Essential only" / "Accept"). Sticky mobile CTA on landing page fades in after 200px scroll. Scroll-aware nav shadow in `site-nav.tsx`. `/pricing` page at `client/src/pages/pricing.tsx`.
+
 ### Backend (`server/`)
 
 An Express.js server on Node.js providing RESTful JSON API endpoints for session management (creating, retrieving, updating sessions), email lead capture (`POST /api/leads`), and a stub for PDF generation.
@@ -41,8 +45,9 @@ A freemium model requires a one-time payment for full access. A `/preview` page 
 3. **Scenario comparison model**: Focuses on modelling user-defined split assumptions.
 4. **Zod for validation**: Consistent schema validation across client and server.
 5. **Freemium access model**: Preview limited data, full analysis requires payment.
-6. **Email lead capture**: Preview page and free guide page capture email leads to `email_leads` table via `POST /api/leads`. Actual email delivery is a TODO (requires third-party email service integration).
+6. **Email lead capture**: Three sources — `preview_page` (sends progress summary email directly via Resend, no verification step), `wizard_preview` (auto-submitted when user navigates from wizard to preview with a captured email), and `free_guide` (double opt-in verification email). `sendProgressSummaryEmail` in `server/email.ts` handles the summary. `POST /api/leads` routes by source.
 7. **Spousal maintenance toggle**: Optional field in wizard Step 5 (Income). When enabled, applies a monthly income transfer between parties in the engine's surplus/deficit calculation.
+8. **Wizard email capture**: Optional `capturedEmail` field in Profile store (Step 0/Welcome). Auto-submitted to `/api/leads` with `source: wizard_preview` when user clicks "See My Preview" on the final wizard step.
 
 ### SEO Foundation
 
@@ -50,7 +55,7 @@ Technical SEO is fully implemented for `divorcecalculatoruk.co.uk`:
 - **index.html**: Title, meta description, OG tags, Twitter cards, geo tags, canonical. Three JSON-LD schemas: `WebSite` (with SearchAction), `WebApplication` (with Offer), and `Organization`.
 - **Per-page meta**: `useDocumentTitle` sets `<title>`. `useMetaTags` hook sets meta description, canonical, OG title/description dynamically per page. `ContentPageLayout` handles meta for all content/cluster/FAQ/pillar pages. All trust pages (privacy, terms, methodology, contact, refund-policy, free-guide) have canonicals.
 - **robots.txt** and **sitemap.xml** in `client/public/`. Sitemap covers 22 URLs with lastmod dates and priority scores.
-- **Footer**: Four-column layout linking to all content pages — Guides & Resources, Specialist Topics, Legal & Support columns. Full internal linking coverage.
+- **Footer**: Five-column layout on landing page — Brand (with privacy reassurance), What's Included, Guides & Resources, Specialist Topics, Legal & Support. Full internal linking coverage.
 - Dynamic pages (`/results`, `/report`, `/wizard`, `/preview`, `/unlock`, `/admin`, etc.) are `noindex, nofollow`.
 
 **Content pages (public, indexed):**

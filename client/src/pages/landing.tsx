@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useLocation, Link } from "wouter";
 import { scrollTop } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -7,12 +8,14 @@ import {
   ArrowRight, ChevronRight, BarChart3,
   HelpCircle, BookOpen, FileText,
   Lock, Shield, TrendingUp, Check,
+  Eye, Gauge, Calendar, Activity,
 } from "lucide-react";
 import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
 import { useAppStore } from "@/hooks/use-store";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { SiteNav } from "@/components/site-nav";
 import { useMetaTags } from "@/hooks/use-meta-tags";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const EXPLORE_CARDS = [
   {
@@ -66,8 +69,18 @@ export default function LandingPage() {
     setLocation("/preview");
   };
 
+  const [scrolled, setScrolled] = useState(false);
+  const [location] = useLocation();
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 200);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const revealRef = useScrollReveal<HTMLDivElement>();
+
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen bg-background font-sans" ref={revealRef}>
       <div className="bg-primary/10 text-primary px-4 py-1.5 text-xs text-center font-medium border-b border-primary/20" data-testid="text-disclaimer">
         Illustrative modelling only. Not legal, tax or financial advice.
       </div>
@@ -131,10 +144,182 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── Trust strip ── */}
+      <section className="py-6 bg-background border-b border-border/40" data-testid="section-trust-strip">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-3" data-reveal>
+            {[
+              { icon: Lock, text: "Runs in your browser — we never see your data" },
+              { icon: Shield, text: "Based on HMRC 2026/27 tax rates" },
+              { icon: TrendingUp, text: "England & Wales jurisdiction" },
+              { icon: ArrowRight, text: "No sign-up to start" },
+              { icon: Check, text: "7-day money-back guarantee" },
+            ].map((badge, i) => (
+              <div key={i} className="flex items-center gap-2" data-testid={`badge-trust-${i}`}>
+                <badge.icon className="w-3.5 h-3.5 text-primary shrink-0" />
+                <span className="text-xs text-muted-foreground">{badge.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── What you'll see ── */}
+      <section className="py-16 md:py-20 bg-primary" data-testid="section-what-youll-see">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center mb-10 space-y-3" data-reveal>
+            <h2 className="text-2xl md:text-3xl font-display font-bold text-white">What you'll see in the full analysis</h2>
+            <p className="text-white/60 text-sm max-w-xl mx-auto">
+              Four real analytical outputs — not estimates or averages, but your specific figures modelled under each settlement option.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+            {[
+              {
+                icon: BarChart3,
+                title: "Scenario comparison",
+                desc: "Sell & Split · Keep the Home · Deferred Sale · Equalise Pensions — all four side-by-side",
+                preview: (
+                  <div className="space-y-1.5 mt-2">
+                    {["Sell & Split", "A Keeps Home", "B Keeps Home", "Deferred"].map((s, i) => (
+                      <div key={i} className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] text-white/50">{s}</span>
+                        <div className="h-1.5 rounded-full bg-gold/30" style={{ width: `${[85, 72, 65, 78][i]}%` }} />
+                      </div>
+                    ))}
+                  </div>
+                ),
+              },
+              {
+                icon: Activity,
+                title: "Monthly cash position",
+                desc: "Post-settlement surplus or deficit each month — which scenario is actually liveable",
+                preview: (
+                  <div className="mt-2 bg-white/5 rounded-lg p-3 text-center">
+                    <p className="text-[10px] text-white/40 mb-1">Monthly surplus after costs</p>
+                    <p className="text-lg font-mono font-bold text-gold">+£847</p>
+                    <p className="text-[10px] text-white/30">Scenario 1 · Party A</p>
+                  </div>
+                ),
+              },
+              {
+                icon: Calendar,
+                title: "5-year projections",
+                desc: "See how capital positions evolve over five years under static assumptions",
+                preview: (
+                  <div className="mt-2 flex items-end gap-1 h-10">
+                    {[40, 55, 48, 62, 70].map((h, i) => (
+                      <div key={i} className="flex-1 rounded-t-sm bg-gold/40" style={{ height: `${h}%` }} />
+                    ))}
+                  </div>
+                ),
+              },
+              {
+                icon: Gauge,
+                title: "Financial Sustainability Index",
+                desc: "A composite resilience score showing how stable each scenario is for each party",
+                preview: (
+                  <div className="mt-2 flex items-center justify-center">
+                    <div className="relative w-16 h-8 overflow-hidden">
+                      <div className="absolute inset-0 rounded-t-full border-4 border-white/10" />
+                      <div className="absolute inset-0 rounded-t-full border-4 border-gold/50" style={{ clipPath: "inset(0 40% 0 0)" }} />
+                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0.5 h-6 bg-white/70 origin-bottom rotate-[-30deg]" />
+                    </div>
+                    <p className="text-[10px] text-white/40 ml-2">72 / 100</p>
+                  </div>
+                ),
+              },
+            ].map((card, i) => (
+              <div key={i} className="bg-white/5 rounded-xl p-4 border border-white/10" data-testid={`card-output-${i}`}>
+                <div className="flex items-center gap-2 mb-2">
+                  <card.icon className="w-4 h-4 text-gold" />
+                  <h3 className="text-sm font-semibold text-white">{card.title}</h3>
+                </div>
+                <p className="text-xs text-white/50 leading-relaxed">{card.desc}</p>
+                {card.preview}
+              </div>
+            ))}
+          </div>
+          <div className="text-center">
+            <Button
+              size="lg"
+              onClick={startFresh}
+              data-testid="button-explainer-start"
+              className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
+            >
+              Start your financial model — free <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Why this works ── */}
+      <section className="py-16 md:py-20 bg-background" data-testid="section-why-this-works">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="text-center mb-10 space-y-2" data-reveal>
+            <h2 className="text-2xl md:text-3xl font-display font-bold">Why this works</h2>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Shield,
+                title: "Built on UK law",
+                body: "England & Wales jurisdiction throughout. HMRC 2026/27 income tax and National Insurance rates applied to every calculation. Not a generic global tool.",
+                delay: "100",
+              },
+              {
+                icon: Lock,
+                title: "Completely private",
+                body: "All calculations happen in your browser. Your financial figures are never sent to, or stored on, our servers. We have no access to what you enter.",
+                delay: "200",
+              },
+              {
+                icon: BarChart3,
+                title: "One run. Four scenarios.",
+                body: "Model all four settlement options simultaneously — not one at a time. See the capital, cash, and sustainability picture for every option at once.",
+                delay: "300",
+              },
+            ].map((col, i) => (
+              <div key={i} className="text-center space-y-3" data-testid={`card-why-${i}`} data-reveal data-reveal-delay={col.delay}>
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+                  <col.icon className="w-5 h-5 text-primary" />
+                </div>
+                <h3 className="font-semibold text-base">{col.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{col.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Pricing callout ── */}
+      <section className="py-10 bg-muted/30 border-y border-border/40" data-testid="section-pricing-callout">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6" data-reveal>
+            <div className="space-y-1 text-center md:text-left">
+              <h3 className="text-lg font-display font-bold">Free to model. £79 to unlock.</h3>
+              <p className="text-sm text-muted-foreground">
+                Start entering your figures at no cost — no sign-up, no card required. Pay once to see the full breakdown.
+              </p>
+            </div>
+            <div className="text-center md:text-right space-y-2 shrink-0">
+              <div className="flex flex-wrap gap-2 justify-center md:justify-end text-xs text-muted-foreground">
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Free preview included</span>
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> Full analysis £79 one-time</span>
+                <span className="flex items-center gap-1"><Check className="w-3 h-3 text-green-500" /> 7-day guarantee</span>
+              </div>
+              <Link href="/pricing" onClick={scrollTop} className="text-xs text-primary hover:underline block" data-testid="link-see-full-pricing">
+                See full pricing &amp; what's included →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Explore grid ── */}
       <section className="py-16 md:py-20 bg-background" data-testid="section-explore">
         <div className="container mx-auto px-4 max-w-4xl">
-          <div className="text-center mb-10 space-y-2">
+          <div className="text-center mb-10 space-y-2" data-reveal>
             <h2 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-explore-headline">
               Explore the platform
             </h2>
@@ -236,10 +421,39 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── Contact Strip ── */}
+      <section className="bg-primary/95 border-t border-white/10 py-8" data-testid="section-contact-strip">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h3 className="text-sm font-semibold text-white">Questions before you start?</h3>
+              <p className="text-xs text-white/55 mt-1">We're here to help — get in touch any time.</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-4 shrink-0">
+              <a
+                href="mailto:support@divorcecalculatoruk.co.uk"
+                className="text-sm text-gold hover:text-gold/80 transition-colors font-medium"
+                data-testid="link-contact-email"
+              >
+                support@divorcecalculatoruk.co.uk
+              </a>
+              <Link
+                href="/contact"
+                onClick={scrollTop}
+                className="text-sm text-white/60 hover:text-white transition-colors"
+                data-testid="link-contact-page"
+              >
+                Full contact page →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Footer ── */}
       <footer className="pt-12 pb-8 bg-primary border-t border-white/10" data-testid="section-footer">
         <div className="container mx-auto px-4 max-w-5xl">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 mb-10">
             <div>
               <Link href="/" onClick={scrollTop} className="inline-block mb-3 group">
                 <span className="font-display font-bold text-white text-sm tracking-tight group-hover:text-gold transition-colors">DivorceCalculatorUK</span>
@@ -247,6 +461,20 @@ export default function LandingPage() {
               <p className="text-xs text-white/40 leading-relaxed">
                 Illustrative financial modelling for separation and divorce in England &amp; Wales.
               </p>
+              <p className="text-xs text-white/30 leading-relaxed mt-3">
+                All calculations run privately in your browser. We never store your financial data on our servers.
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">What's included</p>
+              <ul className="space-y-2">
+                <li className="text-xs text-white/40">Scenario comparison (all 4)</li>
+                <li className="text-xs text-white/40">Financial Sustainability Index</li>
+                <li className="text-xs text-white/40">5-year capital projections</li>
+                <li className="text-xs text-white/40">Monthly cash position</li>
+                <li className="text-xs text-white/40">Sensitivity analysis</li>
+                <li className="text-xs text-white/40">Downloadable brief (PDF)</li>
+              </ul>
             </div>
             <div>
               <p className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">Guides &amp; Resources</p>
@@ -293,6 +521,23 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+      {/* ── Sticky mobile CTA ── */}
+      {location !== "/wizard" && (
+        <div
+          className={`fixed bottom-0 left-0 right-0 z-50 md:hidden transition-all duration-300 ${scrolled ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}
+          data-testid="section-sticky-mobile-cta"
+        >
+          <div className="bg-primary/97 backdrop-blur border-t border-white/15 px-4 py-3">
+            <Button
+              onClick={startFresh}
+              className="w-full bg-gold hover:bg-gold/90 text-white border-0 h-12 text-base font-semibold"
+              data-testid="button-sticky-mobile-cta"
+            >
+              Get my financial picture — Free <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

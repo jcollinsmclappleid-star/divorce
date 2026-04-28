@@ -419,7 +419,7 @@ export default function ResultsPage() {
                     )}
                   </div>
                   <div className="mt-3 pt-2 border-t border-muted space-y-1">
-                    <p className="text-xs font-medium text-muted-foreground">Tax Model Scope (2025/26):</p>
+                    <p className="text-xs font-medium text-muted-foreground">Tax Model Scope (2026/27):</p>
                     <p className="text-xs text-muted-foreground">The tax engine aggregates all entered income sources (salary, self-employment, rental, dividends, benefits) per party and applies a single income tax and employee Class 1 NI calculation. Personal allowance tapering above £100,000 is modelled.</p>
                     <p className="text-xs font-medium text-muted-foreground mt-1">The following are not separately modelled:</p>
                     <ul className="text-xs text-muted-foreground list-disc list-inside space-y-0.5">

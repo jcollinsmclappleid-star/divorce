@@ -251,7 +251,7 @@ export default function HowItWorksPage() {
             {[
               { icon: Lock, title: "Private by design", desc: "Your financial data never leaves your browser." },
               { icon: Shield, title: "No financial advice", desc: "Illustrative modelling only. Always seek independent advice for decisions." },
-              { icon: BarChart3, title: "Accurate tax engine", desc: "UK 2025/26 income tax and Class 1 NI applied to all income figures." },
+              { icon: BarChart3, title: "Accurate tax engine", desc: "UK 2026/27 income tax and Class 1 NI applied to all income figures." },
             ].map((t, i) => (
               <div key={i} className="flex flex-col items-center gap-3" data-testid={`card-trust-${i}`}>
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">

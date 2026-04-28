@@ -1,14 +1,17 @@
 import { Switch, Route, Redirect } from "wouter";
+import { useState, useEffect } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import NotFoundPage from "@/pages/not-found";
 import LandingPage from "@/pages/landing";
 import WizardPage from "@/pages/wizard";
 import ResultsPage from "@/pages/results";
 import ReportPage from "@/pages/report";
 import PreviewPage from "@/pages/preview";
 import UnlockPage from "@/pages/unlock";
+import PricingPage from "@/pages/pricing";
 import PaymentSuccessPage from "@/pages/payment-success";
 import PrivacyPage from "@/pages/privacy";
 import TermsPage from "@/pages/terms";
@@ -159,6 +162,7 @@ function Router() {
       <Route path="/divorce-pension-offsetting-uk" component={PensionOffsettingPage} />
       <Route path="/spousal-maintenance-after-divorce-uk" component={SpousalMaintenancePage} />
       <Route path="/transfer-of-equity-divorce-uk" component={TransferOfEquityPage} />
+      <Route path="/pricing" component={PricingPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/results">
         <AccessGate>
@@ -174,8 +178,61 @@ function Router() {
       <Route path="/assets"><Redirect to="/" /></Route>
       <Route path="/budget"><Redirect to="/" /></Route>
       <Route path="/scenarios"><Redirect to="/" /></Route>
-      <Route><Redirect to="/" /></Route>
+      <Route component={NotFoundPage} />
     </Switch>
+  );
+}
+
+function CookieBanner() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const consent = localStorage.getItem("cookieConsent");
+    if (!consent) setVisible(true);
+  }, []);
+
+  const accept = () => {
+    localStorage.setItem("cookieConsent", "all");
+    setVisible(false);
+  };
+
+  const essential = () => {
+    localStorage.setItem("cookieConsent", "essential");
+    setVisible(false);
+  };
+
+  if (!visible) return null;
+
+  return (
+    <div
+      className="fixed bottom-0 left-0 right-0 z-[100] bg-primary/97 backdrop-blur border-t border-white/15 px-4 py-3"
+      data-testid="section-cookie-banner"
+    >
+      <div className="container mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p className="text-xs text-white/70 leading-relaxed text-center sm:text-left">
+          We use essential cookies to keep the platform working. No tracking without your consent.{" "}
+          <a href="/privacy" className="underline underline-offset-2 hover:text-white transition-colors">
+            Privacy Policy
+          </a>
+        </p>
+        <div className="flex gap-2 shrink-0">
+          <button
+            onClick={essential}
+            className="text-xs text-white/55 hover:text-white px-3 py-1.5 rounded border border-white/20 hover:border-white/40 transition-colors"
+            data-testid="button-cookie-essential"
+          >
+            Essential only
+          </button>
+          <button
+            onClick={accept}
+            className="text-xs bg-gold hover:bg-gold/90 text-white px-3 py-1.5 rounded transition-colors font-medium"
+            data-testid="button-cookie-accept"
+          >
+            Accept
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -185,6 +242,7 @@ function App() {
       <TooltipProvider delayDuration={100}>
         <Toaster />
         <Router />
+        <CookieBanner />
       </TooltipProvider>
     </QueryClientProvider>
   );

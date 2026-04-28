@@ -25,9 +25,9 @@ function InlineCTA({ label = "Model your financial settlement" }: { label?: stri
 }
 
 export default function SeoDivorceCostsPage() {
-  useDocumentTitle("How Much Does Divorce Cost in the UK? (2025/26) | DivorceCalculatorUK");
+  useDocumentTitle("How Much Does Divorce Cost in the UK? (2026/27) | DivorceCalculatorUK");
   useMetaTags({
-    description: "A plain-English breakdown of UK divorce costs in 2025/26 — solicitor fees, court fees, mediation costs, and how to keep costs down. Covers England & Wales.",
+    description: "A plain-English breakdown of UK divorce costs in 2026/27 — solicitor fees, court fees, mediation costs, and how to keep costs down. Covers England & Wales.",
     canonical: "https://divorcecalculatoruk.co.uk/how-much-does-divorce-cost-uk",
   });
   const [, setLocation] = useLocation();
@@ -42,7 +42,7 @@ export default function SeoDivorceCostsPage() {
             <Link href="/divorce-financial-guides" onClick={scrollTop} className="text-sm text-primary hover:underline flex items-center gap-1" data-testid="link-all-guides">← All guides</Link>
           </div>
           <div className="space-y-3">
-            <Badge variant="outline" className="text-primary border-primary/30">England & Wales · 2025/26</Badge>
+            <Badge variant="outline" className="text-primary border-primary/30">England & Wales · 2026/27</Badge>
             <h1 className="text-3xl md:text-4xl font-display font-bold tracking-tight leading-tight" data-testid="text-page-title">
               How Much Does Divorce Cost in the UK?
             </h1>

@@ -340,7 +340,13 @@ export default function PreviewPage() {
               >
                 Unlock Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" />
               </Button>
-              <p className="text-xs text-white/40 text-center">Secured by Stripe · Instant access</p>
+              <p className="text-xs text-white/40 text-center">Secured by Stripe · Instant access · 7-day guarantee</p>
+              <p className="text-xs text-white/35 text-center">
+                Already purchased?{" "}
+                <Link href="/recover" className="underline underline-offset-2 hover:text-white transition-colors" data-testid="link-recover-access-preview">
+                  Recover access →
+                </Link>
+              </p>
             </div>
           </div>
         </section>
@@ -362,8 +368,8 @@ export default function PreviewPage() {
               ) : (
                 <div className="space-y-3">
                   <div>
-                    <p className="font-medium text-sm">Save your progress and receive a summary by email</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">We'll send your asset pool headline figures so you can pick this up later.</p>
+                    <p className="font-medium text-sm">Email me my figures</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">We'll send your combined pool total straight to your inbox — no verification step, no spam.</p>
                   </div>
                   <form onSubmit={handleEmailSubmit} className="flex gap-2 flex-col sm:flex-row">
                     <Input
@@ -375,7 +381,7 @@ export default function PreviewPage() {
                       data-testid="input-preview-email"
                     />
                     <Button type="submit" variant="outline" disabled={emailLoading} data-testid="button-save-progress">
-                      {emailLoading ? "Saving..." : "Save progress"}
+                      {emailLoading ? "Sending..." : "Send summary"}
                     </Button>
                   </form>
                 </div>

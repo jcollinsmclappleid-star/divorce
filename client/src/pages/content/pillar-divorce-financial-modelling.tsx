@@ -376,7 +376,7 @@ export default function PillarDivorceFinancialModelling() {
               GOV.UK: CMS calculation guidance
             </ExternalLinkButton>
             <ExternalLinkButton href="https://www.gov.uk/income-tax-rates">
-              HMRC: 2025/26 income tax rates
+              HMRC: 2026/27 income tax rates
             </ExternalLinkButton>
             <InlineCTA label="Start Modelling" />
           </TabsContent>
@@ -397,7 +397,7 @@ export default function PillarDivorceFinancialModelling() {
               <ul className="space-y-1.5 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <TrendingUp className="w-3.5 h-3.5 mt-0.5 text-primary shrink-0" />
-                  Basic and higher rate income tax thresholds (2025/26)
+                  Basic and higher rate income tax thresholds (2026/27)
                 </li>
                 <li className="flex items-start gap-2">
                   <TrendingUp className="w-3.5 h-3.5 mt-0.5 text-primary shrink-0" />

@@ -85,7 +85,7 @@ function buildQualitativeExecutiveSummary(
     const netBLabel = store.assumptions.overrideNetIncomeB != null && store.assumptions.overrideNetIncomeB > 0
       ? `${fmt(engine.taxB.net)} (Party B, user-provided override)`
       : `${fmt(engine.taxB.net)} (Party B)`;
-    incomeParts.push(`After applying estimated 2025/26 UK income tax and National Insurance, net incomes are ${netALabel} and ${netBLabel} per annum.`);
+    incomeParts.push(`After applying estimated 2026/27 UK income tax and National Insurance, net incomes are ${netALabel} and ${netBLabel} per annum.`);
     if (engine.cmsAnnual > 0) {
       const cmsSource = store.assumptions.overrideCMSAnnual != null && store.assumptions.overrideCMSAnnual > 0
         ? "a user-provided override" : "the CMS formula";
@@ -136,7 +136,7 @@ function buildQualitativeExecutiveSummary(
   sections.push({ heading: "Scenario Analysis", paragraphs: scenarioParas });
 
   const closingParts: string[] = [];
-  closingParts.push("The figures presented in this report are based on the data provided and standard modelling assumptions, including current UK 2025/26 tax and National Insurance rates.");
+  closingParts.push("The figures presented in this report are based on the data provided and standard modelling assumptions, including current UK 2026/27 tax and National Insurance rates.");
   closingParts.push(`All projections use an assumed inflation rate of ${(store.assumptions.inflationRate * 100).toFixed(1)}% and a mortgage interest rate of ${(store.assumptions.mortgageAPR * 100).toFixed(1)}% over a ${store.assumptions.mortgageTermYears}-year term.`);
   closingParts.push("This analysis is illustrative only and does not constitute legal, tax, or financial advice. The scenarios modelled represent potential outcomes under specified assumptions and are not predictions or recommendations. Independent professional review may be warranted before making any financial decisions relating to separation or divorce.");
   sections.push({ heading: "Basis of Preparation", paragraphs: [closingParts.join(" ")] });
@@ -310,7 +310,7 @@ export default function ReportPage() {
               )}
             </div>
           )}
-          <p className="text-xs text-gray-400 italic mt-3">Tax figures are based on a simplified 2025/26 UK model and may not reflect individual circumstances.</p>
+          <p className="text-xs text-gray-400 italic mt-3">Tax figures are based on a simplified 2026/27 UK model and may not reflect individual circumstances.</p>
         </ReportSection>
 
         <ReportSection title="3. Projected Monthly Expenditure">
@@ -634,7 +634,7 @@ export default function ReportPage() {
             <AssumptionRow label="Mortgage Term" value={`${store.assumptions.mortgageTermYears} years`} />
             <AssumptionRow label="Projection Period" value={`${store.assumptions.projectionYears} years`} />
             <AssumptionRow label="Assumed Inflation Rate" value={`${(store.assumptions.inflationRate * 100).toFixed(1)}%`} />
-            <AssumptionRow label="Tax Model Applied" value={store.assumptions.includeTaxModel ? "UK 2025/26" : "Off"} />
+            <AssumptionRow label="Tax Model Applied" value={store.assumptions.includeTaxModel ? "UK 2026/27" : "Off"} />
             <AssumptionRow label="Child Maintenance (CMS)" value={store.assumptions.includeCMSEstimate ? `Included (${engine.cmsYearsRemaining > 0 ? `~${engine.cmsYearsRemaining} yrs remaining` : "all children 16+"})` : "Excluded"} />
             {store.children.numChildren > 0 && (
               <>
@@ -653,7 +653,7 @@ export default function ReportPage() {
             )}
           </div>
           <div className="mt-4 pt-3 border-t">
-            <ReportCollapsible title="Tax Model Scope (2025/26)">
+            <ReportCollapsible title="Tax Model Scope (2026/27)">
             <div className="text-xs text-gray-600 space-y-2">
               <p>The tax engine aggregates all entered income sources (salary, self-employment, rental, dividends, benefits) per party and applies a single income tax and employee Class 1 NI calculation. Personal allowance tapering above £100,000 is modelled.</p>
               <p className="font-medium text-gray-700">The following are not separately modelled:</p>

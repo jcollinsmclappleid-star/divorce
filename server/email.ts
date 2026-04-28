@@ -11,7 +11,14 @@ function getResend(): Resend | null {
 
 // NOTE: noreply@divorcecalculatoruk.co.uk must be verified in Resend dashboard
 // with SPF and DKIM DNS records before this will deliver correctly.
-const FROM = 'DivorceCalculatorUK <noreply@divorcecalculatoruk.co.uk>';
+// Set RESEND_FROM_EMAIL env var to override the FROM address (e.g. for testing before DNS propagation).
+const VERIFIED_DOMAIN = 'divorcecalculatoruk.co.uk';
+const defaultFromEmail = `noreply@${VERIFIED_DOMAIN}`;
+const fromEmail = process.env.RESEND_FROM_EMAIL || defaultFromEmail;
+if (!fromEmail.endsWith(`@${VERIFIED_DOMAIN}`)) {
+  console.warn(`[email] WARNING: FROM address (${fromEmail}) is not on the verified domain ${VERIFIED_DOMAIN}. Emails may fail to deliver.`);
+}
+const FROM = `DivorceCalculatorUK <${fromEmail}>`;
 const REPLY_TO = 'support@divorcecalculatoruk.co.uk';
 
 function htmlEscape(str: string): string {
@@ -187,6 +194,62 @@ export async function sendAccessRecoveryEmail(
     console.log('[email] Recovery email sent');
   } catch (err) {
     console.error('[email] Failed to send recovery email:', err);
+  }
+}
+
+export async function sendProgressSummaryEmail(
+  email: string,
+  assetPoolSnapshot: string
+): Promise<void> {
+  const client = getResend();
+  if (!client) {
+    console.warn('[email] RESEND_API_KEY not set — skipping progress summary email');
+    return;
+  }
+
+  const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
+  const poolDisplay = htmlEscape(assetPoolSnapshot ? `£${Number(assetPoolSnapshot).toLocaleString('en-GB')}` : 'your figures');
+
+  const html = emailWrapper(`
+    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">Your financial position has been modelled</h1>
+    <p style="margin:0 0 24px;color:#64748b;font-size:15px;">Here's a summary of what you entered.</p>
+
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:20px;margin-bottom:24px;">
+      <p style="margin:0 0 4px;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Combined distributable pool</p>
+      <p style="margin:0;color:#0f1e3c;font-size:24px;font-weight:700;">${poolDisplay}</p>
+      <p style="margin:6px 0 0;color:#94a3b8;font-size:12px;">Property equity + liquid assets. Pensions modelled separately.</p>
+    </div>
+
+    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6;">
+      Your free preview shows the shape of your settlement. The full analysis shows you whether you can live on it — including monthly surplus or deficit per option, the Financial Sustainability Index, and 5-year capital projections.
+    </p>
+
+    <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+      <tr>
+        <td style="background:#c49b2a;border-radius:6px;">
+          <a href="${unlockUrl}" style="display:inline-block;padding:14px 28px;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;border-radius:6px;">Unlock Full Analysis — £79</a>
+        </td>
+      </tr>
+    </table>
+
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
+
+    <p style="margin:0;color:#64748b;font-size:13px;line-height:1.6;">
+      Need to return to your session on a different device? Visit <a href="https://divorcecalculatoruk.co.uk/recover" style="color:#0f1e3c;">divorcecalculatoruk.co.uk/recover</a> and enter this email address.
+    </p>
+  `);
+
+  try {
+    await client.emails.send({
+      from: FROM,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: 'Your DivorceCalculatorUK financial summary',
+      html,
+    });
+    console.log('[email] Progress summary email sent');
+  } catch (err) {
+    console.error('[email] Failed to send progress summary email:', err);
   }
 }
 

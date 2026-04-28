@@ -83,15 +83,28 @@ export default function WizardPage() {
   const [, setLocation] = useLocation();
 
   const progress = ((currentStep) / (STEPS.length - 1)) * 100;
+  const store = useAppStore();
 
   const goNext = useCallback(() => {
     scrollTop();
     if (currentStep === STEPS.length - 1) {
+      const capturedEmail = store.profile?.capturedEmail;
+      if (capturedEmail) {
+        const engine = store;
+        const assetPool = String(
+          (engine.assets || []).reduce((s, a) => s + (a.currentValue ?? 0), 0)
+        );
+        fetch("/api/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: capturedEmail, source: "wizard_preview", assetPoolSnapshot: assetPool }),
+        }).catch(() => {});
+      }
       setLocation("/preview");
     } else {
       setCurrentStep(s => Math.min(s + 1, STEPS.length - 1));
     }
-  }, [currentStep, setLocation]);
+  }, [currentStep, setLocation, store]);
 
   const goBack = useCallback(() => {
     scrollTop();
@@ -127,7 +140,7 @@ export default function WizardPage() {
                     i < currentStep
                       ? "bg-primary text-primary-foreground border-primary"
                       : i === currentStep
-                      ? "border-primary text-primary"
+                      ? "bg-gold border-gold text-white"
                       : "border-muted-foreground/30 text-muted-foreground"
                   }`}>
                     {i < currentStep ? <Check className="w-3 h-3" /> : i + 1}
@@ -195,7 +208,7 @@ export default function WizardPage() {
             disabled={false}
             data-testid="button-continue"
           >
-            {currentStep === STEPS.length - 1 ? "View Full Results" : "Continue"}
+            {currentStep === STEPS.length - 1 ? "See My Preview" : "Continue"}
             {currentStep === STEPS.length - 1 ? <ArrowRight className="w-4 h-4 ml-1" /> : <ChevronRight className="w-4 h-4 ml-1" />}
           </Button>
         </div>
@@ -324,7 +337,24 @@ function StepWelcome() {
         </div>
       </div>
 
-      <div className="grid gap-3 text-sm pt-2 border-t pt-6">
+      <div className="space-y-2 border-t pt-6">
+        <Label className="text-sm font-medium flex items-center gap-1.5">
+          Email your results to yourself <span className="text-muted-foreground text-xs font-normal ml-1">(optional)</span>
+        </Label>
+        <Input
+          type="email"
+          placeholder="your@email.com"
+          value={profile.capturedEmail || ""}
+          onChange={(e) => updateProfile({ capturedEmail: e.target.value })}
+          data-testid="input-wizard-email"
+          className="max-w-sm"
+        />
+        <p className="text-xs text-muted-foreground">
+          We'll email your combined pool total when you reach the preview. No verification, no spam.
+        </p>
+      </div>
+
+      <div className="grid gap-3 text-sm border-t pt-4">
         <div className="flex items-start gap-3">
           <Shield className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
           <p className="text-muted-foreground text-xs">All calculations run in your browser. Your data never leaves your device.</p>
@@ -1187,7 +1217,7 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
         <p className="text-sm font-medium">Income sources</p>
         <p className="text-xs text-muted-foreground">
           Add each party's income sources. Enter <strong>annual gross</strong> (before tax) amounts. 
-          The model will calculate take-home pay using 2025/26 UK tax and NI rates. 
+          The model will calculate take-home pay using 2026/27 UK tax and NI rates. 
           Include all regular income: employment, self-employment, benefits, rental income, dividends, etc.
         </p>
       </div>

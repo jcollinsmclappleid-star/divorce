@@ -19,6 +19,7 @@ const SESSION_KEY = "dfm-session-token";
 const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "How It Works", href: "/how-it-works" },
+  { label: "Pricing", href: "/pricing" },
   { label: "Guides", href: "/divorce-financial-guides" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
@@ -32,6 +33,13 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
   const [open, setOpen] = useState(false);
   const [, setLocation] = useLocation();
   const [hasSession, setHasSession] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 4);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const reset = useAppStore((s) => s.reset);
 
@@ -67,7 +75,7 @@ export function SiteNav({ onStartClick }: SiteNavProps) {
 
   return (
     <nav
-      className="sticky top-0 z-[100] w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      className={`sticky top-0 z-[100] w-full border-b backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-200 ${scrolled ? "border-border/60 bg-background/97 shadow-sm" : "border-border/40 bg-background/95"}`}
       data-testid="nav-site"
     >
       <div className="container mx-auto px-4 h-12 flex items-center justify-between gap-2">

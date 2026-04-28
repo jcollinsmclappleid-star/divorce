@@ -7,7 +7,7 @@ import { ArrowLeft } from "lucide-react";
 export default function MethodologyPage() {
   useDocumentTitle("Model Methodology & Limitations | DivorceCalculatorUK");
   useMetaTags({
-    description: "How DivorceCalculatorUK calculates divorce financial settlement scenarios. UK 2025/26 income tax and National Insurance rates, scope, assumptions, and limitations explained.",
+    description: "How DivorceCalculatorUK calculates divorce financial settlement scenarios. UK 2026/27 income tax and National Insurance rates, scope, assumptions, and limitations explained.",
     canonical: "https://divorcecalculatoruk.co.uk/methodology",
   });
   const [, setLocation] = useLocation();
@@ -27,7 +27,7 @@ export default function MethodologyPage() {
         <h1 className="text-3xl font-display font-bold mb-8" data-testid="text-methodology-title">Model Methodology & Limitations</h1>
 
         <div className="prose prose-sm max-w-none space-y-6 text-muted-foreground">
-          <p className="text-foreground font-medium">Last updated: February 2026</p>
+          <p className="text-foreground font-medium">Last updated: April 2026</p>
           <p>This page describes the mathematical framework, structural assumptions, and explicit limitations of the DivorceCalculatorUK financial modelling tool. It is provided for transparency and to support informed use of the modelling outputs.</p>
 
           <section>
@@ -50,7 +50,7 @@ export default function MethodologyPage() {
               <li>Net property equity after deduction of estimated selling costs</li>
               <li>Liquid asset and liability aggregation</li>
               <li>Pension allocation on a nominal CETV basis</li>
-              <li>Income tax and employee Class 1 National Insurance estimates (2025/26 rates)</li>
+              <li>Income tax and employee Class 1 National Insurance estimates (2026/27 rates)</li>
               <li>Indicative lending capacity benchmarks (generalised income multiple illustration)</li>
               <li>Capital allocation across settlement scenarios</li>
               <li>5-year capital sustainability projections (static assumptions)</li>
@@ -76,7 +76,7 @@ export default function MethodologyPage() {
 
             <p className="font-medium mt-3">Tax model limitations:</p>
             <ul className="list-disc pl-6 space-y-1">
-              <li>Income tax and employee Class 1 NI only (2025/26 rates)</li>
+              <li>Income tax and employee Class 1 NI only (2026/27 rates)</li>
               <li>Personal allowance tapering above £100,000 is modelled</li>
               <li>All income sources are aggregated and taxed as a single pool — no dividend rates, savings allowance, or source-specific treatment</li>
               <li>Scottish income tax rates are not applied — England, Wales, and Northern Ireland rates are used for all parties</li>
@@ -137,7 +137,7 @@ export default function MethodologyPage() {
           <section>
             <h2 className="text-xl font-semibold text-foreground">8. Configuration and Updates</h2>
             <p>Tax rates, NI thresholds, and lending capacity parameters are stored in an external configuration file (<code>config.fixed.json</code>). When HMRC publishes updated rates for a new tax year, the configuration file is updated accordingly. No changes to the model code are required to update tax parameters.</p>
-            <p>The current configuration reflects HMRC published rates for the 2025/26 UK tax year. Users should verify that the tax year applied matches their requirements.</p>
+            <p>The current configuration reflects HMRC published rates for the 2026/27 UK tax year. Users should verify that the tax year applied matches their requirements.</p>
           </section>
 
           <section>
@@ -147,7 +147,7 @@ export default function MethodologyPage() {
             <p className="font-medium mt-3">Net income calculation:</p>
             <ul className="list-disc pl-6 space-y-1">
               <li>Gross income is entered by the user for each party</li>
-              <li>Income tax is calculated using 2025/26 HMRC rates: 0% personal allowance (£12,570), 20% basic rate (£12,571–£50,270), 40% higher rate (£50,271–£125,140), 45% additional rate (above £125,140)</li>
+              <li>Income tax is calculated using 2026/27 HMRC rates: 0% personal allowance (£12,570), 20% basic rate (£12,571–£50,270), 40% higher rate (£50,271–£125,140), 45% additional rate (above £125,140)</li>
               <li>Personal allowance tapers by £1 for every £2 of income above £100,000</li>
               <li>Employee Class 1 NI is calculated at 8% on earnings between £12,570 and £50,270, and 2% above £50,270</li>
               <li>Net income = Gross income − Income tax − National Insurance</li>

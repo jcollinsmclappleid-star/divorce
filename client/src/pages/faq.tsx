@@ -27,7 +27,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "How accurate are the tax calculations?",
-        a: "The tax engine applies UK income tax and employee Class 1 National Insurance calculations based on published HMRC 2025/26 rates for England and Wales. It excludes dividend rates, Scottish rates, self-employed NI, Capital Gains Tax, pension relief, and other reliefs. Full details are available on the Methodology page.",
+        a: "The tax engine applies UK income tax and employee Class 1 National Insurance calculations based on published HMRC 2026/27 rates for England and Wales. It excludes dividend rates, Scottish rates, self-employed NI, Capital Gains Tax, pension relief, and other reliefs. Full details are available on the Methodology page.",
       },
       {
         q: "What do the lending capacity benchmarks mean?",
