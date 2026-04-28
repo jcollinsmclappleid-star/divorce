@@ -36,6 +36,18 @@ const STEPS = [
   { id: 8, title: "Review & Model", icon: TrendingUp },
 ];
 
+const STEP_META = [
+  { category: "Welcome",  icon: Heart,      pillBg: "bg-cyan-100",    pillText: "text-cyan-700",    borderTop: "border-t-cyan-400",    dotBg: "bg-cyan-500",    dotBorder: "border-cyan-500",    shieldBorder: "border-l-cyan-300",    progressBar: "[&>div]:bg-cyan-500" },
+  { category: "Profile",  icon: Users,      pillBg: "bg-violet-100",  pillText: "text-violet-700",  borderTop: "border-t-violet-400",  dotBg: "bg-violet-500",  dotBorder: "border-violet-500",  shieldBorder: "border-l-violet-300",  progressBar: "[&>div]:bg-violet-500" },
+  { category: "Property", icon: Home,       pillBg: "bg-rose-100",    pillText: "text-rose-700",    borderTop: "border-t-rose-400",    dotBg: "bg-rose-500",    dotBorder: "border-rose-500",    shieldBorder: "border-l-rose-300",    progressBar: "[&>div]:bg-rose-500" },
+  { category: "Assets",   icon: Wallet,     pillBg: "bg-amber-100",   pillText: "text-amber-700",   borderTop: "border-t-amber-400",   dotBg: "bg-amber-500",   dotBorder: "border-amber-500",   shieldBorder: "border-l-amber-300",   progressBar: "[&>div]:bg-amber-500" },
+  { category: "Pensions", icon: Landmark,   pillBg: "bg-emerald-100", pillText: "text-emerald-700", borderTop: "border-t-emerald-400", dotBg: "bg-emerald-500", dotBorder: "border-emerald-500", shieldBorder: "border-l-emerald-300", progressBar: "[&>div]:bg-emerald-500" },
+  { category: "Income",   icon: Briefcase,  pillBg: "bg-cyan-100",    pillText: "text-cyan-700",    borderTop: "border-t-cyan-400",    dotBg: "bg-cyan-500",    dotBorder: "border-cyan-500",    shieldBorder: "border-l-cyan-300",    progressBar: "[&>div]:bg-cyan-500" },
+  { category: "Expenses", icon: Receipt,    pillBg: "bg-rose-100",    pillText: "text-rose-700",    borderTop: "border-t-rose-400",    dotBg: "bg-rose-500",    dotBorder: "border-rose-500",    shieldBorder: "border-l-rose-300",    progressBar: "[&>div]:bg-rose-500" },
+  { category: "Children", icon: Users,      pillBg: "bg-violet-100",  pillText: "text-violet-700",  borderTop: "border-t-violet-400",  dotBg: "bg-violet-500",  dotBorder: "border-violet-500",  shieldBorder: "border-l-violet-300",  progressBar: "[&>div]:bg-violet-500" },
+  { category: "Summary",  icon: TrendingUp, pillBg: "bg-emerald-100", pillText: "text-emerald-700", borderTop: "border-t-emerald-400", dotBg: "bg-emerald-500", dotBorder: "border-emerald-500", shieldBorder: "border-l-emerald-300", progressBar: "[&>div]:bg-emerald-500" },
+];
+
 const STEP_COPY = [
   {
     prompt: "Let's build your financial model",
@@ -136,11 +148,11 @@ export default function WizardPage() {
                   }`}
                   data-testid={`stepper-step-${i}`}
                 >
-                  <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border shrink-0 ${
+                  <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border shrink-0 transition-all duration-300 ${
                     i < currentStep
-                      ? "bg-cyan-500 text-white border-cyan-500"
+                      ? `${STEP_META[i].dotBg} ${STEP_META[i].dotBorder} text-white`
                       : i === currentStep
-                      ? "bg-cyan-500 border-cyan-500 text-white"
+                      ? `${STEP_META[i].dotBg} ${STEP_META[i].dotBorder} text-white ring-2 ring-offset-1 ring-offset-background ring-current`
                       : "border-muted-foreground/30 text-muted-foreground"
                   }`}>
                     {i < currentStep ? <Check className="w-3 h-3" /> : i + 1}
@@ -164,54 +176,67 @@ export default function WizardPage() {
             </div>
           </div>
         </div>
-        <Progress value={progress} className="h-1 rounded-none [&>div]:bg-cyan-500" data-testid="progress-bar" />
+        <Progress value={progress} className={`h-1.5 rounded-none transition-all duration-500 ${STEP_META[currentStep].progressBar}`} data-testid="progress-bar" />
       </header>
 
       <main className="flex-1 container mx-auto px-4 py-6 max-w-3xl">
-        <div className="mb-6">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1 md:hidden" data-testid="text-step-progress">
-            {currentStep === 0
-              ? "Let's get started — 9 steps to your model"
-              : `You're building your financial picture — ${currentStep + 1} of ${STEPS.length} complete`}
-          </div>
-          <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground" data-testid="text-step-title">
-            {STEPS[currentStep].title}
-          </h1>
-          <p className="text-muted-foreground mt-1" data-testid="text-step-prompt">
-            {STEP_COPY[currentStep].prompt}
-          </p>
-        </div>
+        {(() => {
+          const meta = STEP_META[currentStep];
+          const StepIcon = meta.icon;
+          return (
+            <>
+              <div className="mb-5">
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${meta.pillBg} ${meta.pillText}`} data-testid="text-step-category">
+                    <StepIcon className="w-3 h-3" />
+                    {meta.category}
+                  </span>
+                  <span className="text-xs font-medium text-muted-foreground md:hidden" data-testid="text-step-progress">
+                    {currentStep === 0 ? "Start" : `${currentStep} of ${STEPS.length - 1} complete`}
+                  </span>
+                </div>
+                <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground" data-testid="text-step-title">
+                  {STEPS[currentStep].title}
+                </h1>
+                <p className="text-muted-foreground mt-1" data-testid="text-step-prompt">
+                  {STEP_COPY[currentStep].prompt}
+                </p>
+              </div>
 
-        <Card className="mb-6">
-          <CardContent className="pt-6">
-            <StepContent step={currentStep} advancedMode={advancedMode} />
-          </CardContent>
-        </Card>
+              <Card className={`mb-5 border-t-4 ${meta.borderTop} overflow-hidden`}>
+                <CardContent className="pt-6">
+                  <StepContent step={currentStep} advancedMode={advancedMode} />
+                </CardContent>
+              </Card>
 
-        <div className="p-3 bg-muted/50 rounded-md text-sm text-muted-foreground mb-6 flex items-start gap-2">
-          <Shield className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary/60" />
-          <span>{STEP_COPY[currentStep].reassurance}</span>
-        </div>
+              <div className={`p-3 bg-muted/40 rounded-md text-sm text-muted-foreground mb-6 flex items-start gap-2 border-l-4 ${meta.shieldBorder}`}>
+                <Shield className="w-4 h-4 mt-0.5 flex-shrink-0 text-muted-foreground/60" />
+                <span>{STEP_COPY[currentStep].reassurance}</span>
+              </div>
 
-        <div className="flex items-center justify-between gap-4">
-          <Button
-            variant="outline"
-            onClick={goBack}
-            disabled={currentStep === 0}
-            data-testid="button-back"
-          >
-            <ChevronLeft className="w-4 h-4 mr-1" /> Back
-          </Button>
+              <div className="flex items-center justify-between gap-4">
+                <Button
+                  variant="outline"
+                  onClick={goBack}
+                  disabled={currentStep === 0}
+                  data-testid="button-back"
+                >
+                  <ChevronLeft className="w-4 h-4 mr-1" /> Back
+                </Button>
 
-          <Button
-            onClick={goNext}
-            disabled={false}
-            data-testid="button-continue"
-          >
-            {currentStep === STEPS.length - 1 ? "See My Preview" : "Continue"}
-            {currentStep === STEPS.length - 1 ? <ArrowRight className="w-4 h-4 ml-1" /> : <ChevronRight className="w-4 h-4 ml-1" />}
-          </Button>
-        </div>
+                <Button
+                  onClick={goNext}
+                  disabled={false}
+                  data-testid="button-continue"
+                  className="bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/20 btn-shimmer"
+                >
+                  {currentStep === STEPS.length - 1 ? "See My Preview" : "Continue"}
+                  {currentStep === STEPS.length - 1 ? <ArrowRight className="w-4 h-4 ml-1" /> : <ChevronRight className="w-4 h-4 ml-1" />}
+                </Button>
+              </div>
+            </>
+          );
+        })()}
       </main>
     </div>
   );
