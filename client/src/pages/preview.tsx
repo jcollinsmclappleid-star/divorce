@@ -175,7 +175,7 @@ export default function PreviewPage() {
               <span className="text-gold">One step away from the full picture.</span>
             </h1>
             <p className="text-white/65 text-sm max-w-xl leading-relaxed mb-6">
-              You've entered your assets, income, and situation. Your combined pool has been calculated. Unlock the full structured analysis to see every settlement option scored, ranked, and projected over 5 years.
+              You've entered your assets, income, and situation. Your combined pool has been calculated. Unlock the full structured analysis to see every settlement option modelled, scored, and projected over 5 years.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <UnlockButton label="Unlock Full Analysis — £79" />
@@ -441,7 +441,7 @@ export default function PreviewPage() {
               </div>
               <div className="space-y-2">
                 {[
-                  "Full settlement comparison — all four options scored",
+                  "Full settlement comparison — all four options modelled and scored",
                   "Financial Sustainability Indicator per party",
                   "5-year capital projections with charts",
                   "Stress testing — rate & income changes",
