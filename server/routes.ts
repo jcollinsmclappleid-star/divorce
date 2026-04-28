@@ -862,7 +862,7 @@ export async function registerRoutes(
         return res.status(403).json({ message: 'Your access has expired. Please renew to use this feature.' });
       }
 
-      // Rate limit: max 5 calls per session per hour
+      // Rate limit: max 3 calls per session per hour
       const rlKey = `guided-summary:${sessionToken}`;
       if (!rateLimit(rlKey, 3, 60 * 60 * 1000)) {
         return res.status(429).json({ message: 'You have generated too many summaries recently. Please try again in an hour.' });
@@ -876,8 +876,8 @@ export async function registerRoutes(
       const ltv = payload.hasProperty && payload.propertyValue > 0
         ? Math.round((payload.mortgageBalance / payload.propertyValue) * 100)
         : null;
-      const borrowCapA = grossA > 0 ? Math.round(grossA * 4) : null;
-      const borrowCapB = grossB > 0 ? Math.round(grossB * 4) : null;
+      const borrowCapA = grossA > 0 ? Math.round(grossA * 4.5) : null;
+      const borrowCapB = grossB > 0 ? Math.round(grossB * 4.5) : null;
 
       // Build the user prompt from the validated payload
       const userPrompt = `Here is the financial model data for this case. Generate a Guided Report Summary.
@@ -900,12 +900,12 @@ ${payload.liabilities.length > 0 ? payload.liabilities.map(l => `- ${l.category}
 INCOME — PARTY A:
 ${payload.incomes.partyA.length > 0 ? payload.incomes.partyA.map(i => `- ${i.type}: £${i.grossAnnual.toLocaleString('en-GB')} gross / £${i.netAnnual.toLocaleString('en-GB')} net per year (≈ £${Math.round(i.netAnnual / 12).toLocaleString('en-GB')}/mo net)`).join('\n') : '- No income entered'}
 ${grossA > 0 ? `PARTY A TOTAL GROSS: £${grossA.toLocaleString('en-GB')} / NET ANNUAL: £${netAnnualA.toLocaleString('en-GB')} / NET MONTHLY: £${Math.round(netAnnualA / 12).toLocaleString('en-GB')}` : ''}
-${borrowCapA !== null && payload.hasProperty ? `PARTY A ESTIMATED SOLO BORROWING CAPACITY (4x gross income): ~£${borrowCapA.toLocaleString('en-GB')}` : ''}
+${borrowCapA !== null && payload.hasProperty ? `PARTY A ESTIMATED SOLO BORROWING CAPACITY (4.5x gross income): ~£${borrowCapA.toLocaleString('en-GB')}` : ''}
 
 INCOME — PARTY B:
 ${payload.incomes.partyB.length > 0 ? payload.incomes.partyB.map(i => `- ${i.type}: £${i.grossAnnual.toLocaleString('en-GB')} gross / £${i.netAnnual.toLocaleString('en-GB')} net per year (≈ £${Math.round(i.netAnnual / 12).toLocaleString('en-GB')}/mo net)`).join('\n') : '- No income entered'}
 ${grossB > 0 ? `PARTY B TOTAL GROSS: £${grossB.toLocaleString('en-GB')} / NET ANNUAL: £${netAnnualB.toLocaleString('en-GB')} / NET MONTHLY: £${Math.round(netAnnualB / 12).toLocaleString('en-GB')}` : ''}
-${borrowCapB !== null && payload.hasProperty ? `PARTY B ESTIMATED SOLO BORROWING CAPACITY (4x gross income): ~£${borrowCapB.toLocaleString('en-GB')}` : ''}
+${borrowCapB !== null && payload.hasProperty ? `PARTY B ESTIMATED SOLO BORROWING CAPACITY (4.5x gross income): ~£${borrowCapB.toLocaleString('en-GB')}` : ''}
 
 BASE MONTHLY BUDGET SURPLUS (before mortgage, pre-scenario):
   Party A: £${payload.budget.monthlyA.toLocaleString('en-GB')}/mo

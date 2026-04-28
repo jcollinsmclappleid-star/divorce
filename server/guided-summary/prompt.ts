@@ -20,7 +20,11 @@ OVERVIEW: Write 3–5 sentences summarising what the modelled estate looks like 
 
 WHAT_STANDS_OUT: Identify 3–5 notable features of this specific estate. Be highly specific — cite the actual figures. For example: if the LTV is high, state the percentage; if incomes are significantly different, state both gross figures; if a pension gap exists, state both CETVs. Format as a single string with each point on a new line starting with a bullet character (•).
 
-SCENARIO_INTERPRETATION: For each enabled scenario in the data, write 2–3 sentences. Use the exact scenario names as provided. State who receives what capital and pension, whether the model indicates the mortgage is within solo lending capacity, what the monthly mortgage obligation is (if provided), and whether either party's runway is sustained or depleted. Be specific with all figures.
+SCENARIO_INTERPRETATION: For each enabled scenario in the data, write 2–3 sentences. Use the exact scenario names as provided. State who receives what capital and pension amount. Then:
+- If the scenario involves selling the property (i.e. no ongoing mortgage is provided for either party), do NOT mention mortgage lending capacity — simply note that both parties receive cash from the sale.
+- If one or both parties has a monthly mortgage obligation in this scenario, state the amount and whether the model indicates it is within solo lending capacity (use the pre-computed solo borrowing capacity figures provided in the data, not a recalculated amount).
+- For runway: if the data says a party's runway is "sustained", state that their reserves are sustained over the modelled projection period — do NOT invent a specific number of years. If a depletionYear is provided, state that year exactly.
+Be specific with all figures.
 
 PRESSURE_POINTS: Identify the 2–4 most significant financial challenges. These must be derived from actual figures in the data — e.g. cite the specific funding gap amount, the depletion year, or the monthly deficit. Do not be generic. Format as a single string with each point on a new line starting with a bullet character (•).
 
@@ -28,7 +32,7 @@ QUESTIONS_FOR_PROFESSIONALS:
 These questions must be highly specific to this estate's actual figures. Generic questions that could apply to any divorce are not acceptable. Use the pre-computed figures in the data (income totals, solo borrowing capacities, LTV, pension CETVs, monthly mortgage amounts, runway depletion years) to write questions that directly reference those numbers.
 
 - solicitor_mediator: 3–4 questions to raise with a family law solicitor or mediator. Reference the specific income levels, pension CETV values, capital allocations per scenario, and any significant imbalances between the parties.
-- mortgage_broker: 3–4 questions about mortgage affordability — ONLY include if the estate has a property; omit entirely (empty array []) if there is no property. Use the pre-computed solo borrowing capacities (4x gross income), the actual outstanding mortgage balance, the actual LTV percentage, and the monthly mortgage figures from each scenario. Ask specifically whether each party's income supports the mortgage balance.
+- mortgage_broker: 3–4 questions about mortgage affordability — ONLY include if the estate has a property; omit entirely (empty array []) if there is no property. Use the pre-computed solo borrowing capacities (4.5x gross income, as provided in the data), the actual outstanding mortgage balance, the actual LTV percentage, and the monthly mortgage figures from each scenario. Ask specifically whether each party's income supports the mortgage balance.
 - pension_expert: 2–4 questions about pension division — ONLY include if the estate has a pension; omit entirely (empty array []) if there are no pensions. Reference the specific CETV values for Party A and Party B individually.
 
 MISSING_INFORMATION: The confidence level for this model has already been determined as one of: High, Medium, or Low (you will see it in the data as the "confidence" field). Reference this level explicitly and do not contradict it. Then describe what gaps exist in the data and how they affect the reliability of the figures. If confidence is High, note what is well-populated. If Medium or Low, explain what is missing and what the user should add to improve the analysis.
