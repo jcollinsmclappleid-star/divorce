@@ -151,8 +151,8 @@ export default function HowIsPropertyDividedPage() {
         </div>
 
         <div className="mt-8 p-5 bg-background rounded-lg border">
-          <p className="text-sm font-semibold mb-2">Real-World Example</p>
-          <p className="text-sm text-muted-foreground">Sarah and James have been married for 14 years. Their family home is worth £400,000 with an outstanding mortgage of £150,000, leaving equity of £250,000. Sarah works part-time due to caring for their two children (ages 8 and 11). James earns significantly more. A court would likely prioritise housing the children. Sarah may be awarded a greater share of the equity to allow her to rehouse locally, or the home may be deferred via a Mesher Order until the children finish school.</p>
+          <p className="text-sm font-semibold mb-2">Illustrative Example (not a prediction)</p>
+          <p className="text-sm text-muted-foreground">Sarah and James have been married for 14 years. Their family home is worth £400,000 with an outstanding mortgage of £150,000, leaving equity of £250,000. Sarah works part-time due to caring for their two children (ages 8 and 11). James earns significantly more. In circumstances like these, courts often weigh the children's housing needs as a first consideration. In practice, the primary carer may receive a larger share of the equity to allow them to rehouse locally, or the home may be deferred via a Mesher Order until the children finish school. Every case turns on its specific facts — this example is illustrative only.</p>
         </div>
 
         <InlineCTA label="Model Your Property Settlement" />

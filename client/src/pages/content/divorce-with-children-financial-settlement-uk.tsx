@@ -115,8 +115,8 @@ export default function DivorceWithChildrenPage() {
         </div>
 
         <div className="p-5 bg-background rounded-lg border mb-4">
-          <p className="text-sm font-semibold mb-2">Real-World Example</p>
-          <p className="text-sm text-muted-foreground">Diane and James have two children aged 6 and 9. The family home is worth £320,000 with £150,000 outstanding mortgage (equity £170,000). Diane earns part-time and is the primary carer. James earns full-time. A 50/50 split would leave Diane with £85,000 — not enough to rehouse in the area near their school. A court would likely order a higher share for Diane, or a Mesher Order allowing her to remain in the home until the youngest child reaches 18. James keeps more of the pension to compensate.</p>
+          <p className="text-sm font-semibold mb-2">Illustrative Example (not a prediction)</p>
+          <p className="text-sm text-muted-foreground">Diane and James have two children aged 6 and 9. The family home is worth £320,000 with £150,000 outstanding mortgage (equity £170,000). Diane earns part-time and is the primary carer. James earns full-time. A 50/50 split would leave Diane with £85,000 — not enough to rehouse in the area near their school. In practice, courts often consider the primary carer's housing needs first, which may result in a larger share for that party, or a Mesher Order allowing them to remain in the home until the youngest child reaches 18, with the other party retaining a greater pension share. Every case turns on its specific facts — this example is illustrative only.</p>
         </div>
         <InlineCTA label="Model Your Settlement Including Children's Impact" />
       </ContentSection>

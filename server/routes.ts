@@ -489,6 +489,48 @@ export async function registerRoutes(
     }
   });
 
+  // Alternative recovery: user enters their Stripe checkout session ID (cs_...) from receipt email
+  app.post('/api/access/recover-by-order', async (req, res) => {
+    try {
+      const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
+      if (!rateLimit(`recover-order:${clientIp}`, 3, 60 * 60 * 1000)) {
+        return res.status(429).json({ message: 'Too many attempts. Please try again later.' });
+      }
+
+      const schema = z.object({ checkoutSessionId: z.string().min(5) });
+      const { checkoutSessionId } = schema.parse(req.body);
+
+      const purchase = await storage.getPurchaseByCheckoutSessionId(checkoutSessionId.trim());
+
+      if (!purchase || purchase.status !== 'paid') {
+        return res.json({ found: false });
+      }
+
+      if (purchase.expiresAt && new Date() > new Date(purchase.expiresAt)) {
+        return res.json({ found: true, expired: true });
+      }
+
+      if (!purchase.email) {
+        // No email on record — send back the session token directly (last resort)
+        return res.json({ found: true, noEmail: true });
+      }
+
+      sendAccessRecoveryEmail(purchase.email, purchase.sessionToken, purchase.expiresAt).catch(() => {});
+
+      return res.json({
+        found: true,
+        expired: false,
+        emailSent: true,
+        maskedEmail: purchase.email.replace(/^(.)(.+?)(@.+)$/, (_, a, b, c) => a + '*'.repeat(Math.min(b.length, 4)) + c),
+      });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Valid order reference required' });
+      }
+      res.status(500).json({ message: 'Failed to recover access' });
+    }
+  });
+
   const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 
   function requireAdmin(req: any, res: any, next: any) {

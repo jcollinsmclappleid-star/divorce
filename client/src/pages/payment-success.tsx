@@ -80,12 +80,20 @@ export default function PaymentSuccessPage() {
             </>
           ) : (
             <>
-              <h2 className="text-xl font-semibold" data-testid="text-payment-issue">Something went wrong</h2>
-              <p className="text-muted-foreground text-sm">
-                We could not verify your payment. If you were charged, your access will be activated shortly.
+              <h2 className="text-xl font-semibold" data-testid="text-payment-issue">Payment not yet confirmed</h2>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                We could not confirm your payment automatically. If you were charged, your access will activate within a few minutes. You can also recover access at any time using the email address you entered at checkout.
               </p>
               <Button
+                className="w-full"
+                onClick={() => navigate('/recover')}
+                data-testid="button-recover-access"
+              >
+                Recover Access by Email
+              </Button>
+              <Button
                 variant="outline"
+                size="sm"
                 onClick={() => navigate('/preview')}
                 data-testid="button-back-to-preview"
               >

@@ -58,7 +58,7 @@ const RESULTS_FEATURES = [
 const TRUST_ITEMS = [
   { icon: Lock, title: "Private by design", desc: "Your financial data never leaves your browser.", bg: "bg-emerald-50", iconColor: "text-emerald-600" },
   { icon: Shield, title: "No financial advice", desc: "Illustrative modelling only. Always seek independent advice for decisions.", bg: "bg-amber-50", iconColor: "text-amber-600" },
-  { icon: BarChart3, title: "Accurate tax engine", desc: "UK 2026/27 income tax and Class 1 NI applied to all income figures.", bg: "bg-cyan-50", iconColor: "text-cyan-600" },
+  { icon: BarChart3, title: "Illustrative income tax model", desc: "UK 2026/27 income tax and Class 1 NI rates applied as indicative estimates to all income figures.", bg: "bg-cyan-50", iconColor: "text-cyan-600" },
 ];
 
 export default function HowItWorksPage() {

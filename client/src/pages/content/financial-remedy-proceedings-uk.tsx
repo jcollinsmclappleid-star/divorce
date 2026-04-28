@@ -74,7 +74,7 @@ export default function FinancialRemedyProceedingsPage() {
   return (
     <ContentPageLayout
       title="Financial Remedy Proceedings UK: A Plain-English Explanation"
-      subtitle="Financial remedy proceedings are the formal court process by which a judge decides how assets are divided when a couple cannot agree. Understanding how they work helps you see what you're heading into — and why agreeing without court is almost always preferable."
+      subtitle="Financial remedy proceedings are the formal court process by which a judge decides how assets are divided when a couple cannot agree. Understanding how they work helps you see what is involved — and why most cases ultimately settle before a final hearing."
       documentTitle="Financial Remedy Proceedings UK Explained | DivorceCalculatorUK"
       metaDescription="Understand financial remedy proceedings in England and Wales — when they start, the three-hearing structure (FDA, FDR, Final Hearing), costs, and what orders a court can make."
       relatedPages={relatedPages}

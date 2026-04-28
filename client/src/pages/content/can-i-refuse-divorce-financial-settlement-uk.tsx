@@ -16,7 +16,7 @@ import {
 const faqItems = [
   {
     question: "Can I simply refuse to engage with financial settlement proceedings?",
-    answer: "You can refuse to engage, but courts will proceed without you. The other party can apply for a financial remedy order and the court will decide the settlement based on the information available. You will be worse off by refusing to engage, as the court will not have your side of the story.",
+    answer: "You can refuse to engage, but courts can proceed without you. The other party may apply for a financial remedy order and the court can decide the settlement based on the information available. Parties who disengage often find themselves at a disadvantage, as the court will not have their side of the story. Independent legal advice on the consequences of non-engagement is strongly recommended.",
   },
   {
     question: "Can I refuse a consent order I previously agreed to?",

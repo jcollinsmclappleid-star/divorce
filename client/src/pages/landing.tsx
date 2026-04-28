@@ -306,8 +306,8 @@ export default function LandingPage() {
             {[
               {
                 icon: Shield,
-                title: "Built on UK law",
-                body: "England & Wales jurisdiction throughout. HMRC 2026/27 income tax and National Insurance rates applied to every calculation. Not a generic global tool.",
+                title: "England & Wales focused",
+                body: "Structured around England & Wales separation. HMRC 2026/27 income tax and National Insurance rates applied to every calculation as illustrative estimates. Not a generic global tool.",
                 delay: "100",
                 iconBg: "bg-cyan-50",
                 iconColor: "text-cyan-600",

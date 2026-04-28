@@ -107,10 +107,10 @@ export default function AboutPage() {
           </div>
           <h2 className="text-2xl font-display font-bold">Scenario modelling for England &amp; Wales</h2>
           <p className="text-muted-foreground leading-relaxed">
-            Divorce Calculator UK is a financial clarity platform for people navigating separation and divorce in England and Wales. It applies the principles of English and Welsh family law — primarily the Matrimonial Causes Act 1973 — to show how assets, property, pensions, savings and debts might be divided across different settlement structures, and what each one means for your financial future.
+            Divorce Calculator UK is a financial clarity platform for people navigating separation and divorce in England and Wales. It is structured around general principles of English and Welsh family law — with reference to factors courts commonly consider under the Matrimonial Causes Act 1973 — to illustrate how assets, property, pensions, savings and debts might be divided across different settlement structures, and what each could mean for your financial future. It does not apply the law, predict court outcomes, or constitute legal advice.
           </p>
           <p className="text-muted-foreground leading-relaxed">
-            Every calculation applies UK 2026/27 HMRC income tax and National Insurance rates. It models mortgage affordability against indicative income multiples, and projects how capital positions may change over five years under each settlement option. All calculations run entirely in your browser — no financial data is ever transmitted to our servers.
+            Every calculation applies UK 2026/27 HMRC income tax and National Insurance rates as illustrative estimates. It models mortgage affordability against indicative income multiples, and projects how capital positions may change over five years under each settlement option. All calculations run entirely in your browser — no financial data is ever transmitted to our servers.
           </p>
         </div>
       </section>
