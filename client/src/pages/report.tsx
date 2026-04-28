@@ -1,6 +1,7 @@
 import { useState, useMemo, Fragment } from "react";
 import { Link } from "wouter";
 import { useAppStore, StoreState } from "@/hooks/use-store";
+import type { GuidedSummary } from "@/lib/guided-summary/types";
 import { useEngine, ScenarioResult, ProjectionYear, RunwayResult } from "@/hooks/use-engine";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
@@ -707,6 +708,10 @@ export default function ReportPage() {
           </div>
         </section>
 
+        {store.guidedSummary && store.guidedSummaryStatus === "done" && (
+          <GuidedSummaryReportSection summary={store.guidedSummary} />
+        )}
+
         <footer className="mt-12 pt-6 border-t border-gray-300 text-center space-y-2 pb-10">
           <div className="flex items-center justify-center gap-2 mb-2">
             <LogoPrint className="h-6" />
@@ -718,6 +723,82 @@ export default function ReportPage() {
         </footer>
       </div>
     </div>
+  );
+}
+
+function GuidedSummaryReportSection({ summary }: { summary: GuidedSummary }) {
+  const hasProperty = summary.questions_for_professionals.mortgage_broker?.length > 0;
+  const hasPension = summary.questions_for_professionals.pension_expert?.length > 0;
+
+  const confidenceColour =
+    summary.confidence === "High"
+      ? "#059669"
+      : summary.confidence === "Medium"
+      ? "#D97706"
+      : "#E11D48";
+
+  const blocks = [
+    { title: "Plain-English Overview", content: summary.overview },
+    { title: "What Stands Out", content: summary.what_stands_out },
+    { title: "Scenario Interpretation", content: summary.scenario_interpretation },
+    { title: "Pressure Points", content: summary.pressure_points },
+    { title: "Missing Information & Model Confidence", content: summary.missing_information },
+  ];
+
+  const proGroups = [
+    { label: "Solicitor / Mediator", questions: summary.questions_for_professionals.solicitor_mediator, show: true },
+    { label: "Mortgage Broker", questions: summary.questions_for_professionals.mortgage_broker, show: hasProperty && (summary.questions_for_professionals.mortgage_broker?.length ?? 0) > 0 },
+    { label: "Pension Expert", questions: summary.questions_for_professionals.pension_expert, show: hasPension && (summary.questions_for_professionals.pension_expert?.length ?? 0) > 0 },
+  ].filter(g => g.show);
+
+  return (
+    <section className="mb-8 break-inside-avoid" data-testid="section-report-guided-summary">
+      <div className="bg-primary px-4 py-2 rounded-md mb-4 flex items-center justify-between">
+        <h2 className="text-sm font-bold text-white uppercase tracking-wider">Guided Report Summary</h2>
+        <span className="text-[10px] text-white/70">Intelligent summary</span>
+      </div>
+
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-xs font-medium text-gray-600">Model confidence:</span>
+        <span className="text-xs font-semibold px-2 py-0.5 rounded-full border" style={{ color: confidenceColour, borderColor: confidenceColour }}>
+          {summary.confidence}
+        </span>
+      </div>
+
+      <div className="space-y-4">
+        {blocks.map(b => (
+          <div key={b.title}>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">{b.title}</h4>
+            <div className="text-sm text-gray-700 space-y-1">
+              {b.content.split("\n").filter(Boolean).map((line, i) => (
+                <p key={i}>{line.replace(/^[-•]\s*/, "")}</p>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        <div>
+          <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Questions for Professionals</h4>
+          <div className="space-y-3">
+            {proGroups.map(g => (
+              <div key={g.label}>
+                <p className="text-xs font-semibold text-gray-600 mb-1">{g.label}</p>
+                <ol className="list-decimal list-inside space-y-0.5">
+                  {(g.questions ?? []).map((q, i) => (
+                    <li key={i} className="text-sm text-gray-700">{q}</li>
+                  ))}
+                </ol>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <p className="text-[10px] text-gray-400 italic mt-4">
+        This guided summary is illustrative and generated from the figures entered. It is not legal, tax, or financial advice.
+        Generated: {new Date(summary.generatedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.
+      </p>
+    </section>
   );
 }
 

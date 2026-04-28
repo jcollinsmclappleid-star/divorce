@@ -146,7 +146,7 @@ export default function LandingPage() {
               <div className="flex flex-wrap gap-2 pt-1">
                 {[
                   { text: "HMRC-sourced tax rate bands" },
-                  { text: "Your figures never leave your browser" },
+                  { text: "Core calculations stay private in your browser" },
                   { text: "Questions? We'll help within 7 days" },
                 ].map((pill, i) => (
                   <span key={i} className="flex items-center gap-1.5 text-[11px] text-white/50 bg-white/5 border border-white/10 rounded-full px-3 py-1">
@@ -254,7 +254,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="flex flex-wrap justify-center gap-2.5" data-reveal>
             {[
-              { icon: Lock, text: "Runs in your browser — we never see your data", iconColor: "text-emerald-600", bg: "bg-emerald-50" },
+              { icon: Lock, text: "Core calculations run privately in your browser", iconColor: "text-emerald-600", bg: "bg-emerald-50" },
               { icon: Shield, text: "HMRC 2026/27 tax rates", iconColor: "text-cyan-600", bg: "bg-cyan-50" },
               { icon: TrendingUp, text: "England & Wales", iconColor: "text-violet-600", bg: "bg-violet-50" },
               { icon: ArrowRight, text: "No sign-up to start", iconColor: "text-sky-600", bg: "bg-sky-50" },
@@ -330,8 +330,8 @@ export default function LandingPage() {
               },
               {
                 icon: Lock,
-                title: "Completely private",
-                body: "All calculations happen in your browser. Your financial figures are never sent to, or stored on, our servers. We have no access to what you enter.",
+                title: "Keeps your data safe",
+                body: "Core calculations happen privately in your browser. No names, addresses or contact details are ever included in any processing. Your figures are yours.",
                 delay: "200",
                 iconBg: "bg-emerald-50",
                 iconColor: "text-emerald-600",
@@ -485,7 +485,7 @@ export default function LandingPage() {
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-white/40 pt-2">
             <div className="flex items-center gap-1.5"><Lock className="w-3.5 h-3.5" /><span>All calculations in-browser</span></div>
             <span>&middot;</span>
-            <div className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5" /><span>No data stored on servers</span></div>
+            <div className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5" /><span>No names or contact details processed</span></div>
             <span>&middot;</span>
             <div className="flex items-center gap-1.5"><TrendingUp className="w-3.5 h-3.5" /><span>Stripe-secured payments</span></div>
           </div>
@@ -511,7 +511,7 @@ export default function LandingPage() {
             </div>
             <div>
               <p className="font-semibold text-muted-foreground/80 mb-1">Legal basis</p>
-              <p>Modelling reflects principles of the Matrimonial Causes Act 1973 (England and Wales). Not applicable to Scottish law. All calculations run client-side in the browser — no financial data is stored on servers.</p>
+              <p>Modelling reflects principles of the Matrimonial Causes Act 1973 (England and Wales). Not applicable to Scottish law. Core calculations run privately in your browser. If you use the optional Guided Report Summary, only selected model figures are processed — no names or contact details are included.</p>
             </div>
             <div>
               <p className="font-semibold text-muted-foreground/80 mb-1">Limitations</p>
@@ -566,7 +566,7 @@ export default function LandingPage() {
                 Illustrative financial modelling for separation and divorce in England &amp; Wales.
               </p>
               <p className="text-xs text-white/30 leading-relaxed mt-3">
-                All calculations run privately in your browser. We never store your financial data on our servers.
+                Core calculations run privately in your browser. No names or contact details are ever included in any processing.
               </p>
             </div>
             <div>

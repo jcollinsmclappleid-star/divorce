@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { 
   AppConfigSchema,
 } from '@shared/schema';
+import type { GuidedSummary, GuidedSummaryStatus } from '@/lib/guided-summary/types';
 
 export interface Asset {
   id: string;
@@ -104,6 +105,8 @@ export interface StoreState {
   children: Children;
   profile: Profile;
   maintenance: Maintenance;
+  guidedSummary: GuidedSummary | null;
+  guidedSummaryStatus: GuidedSummaryStatus;
 }
 
 const initialState: StoreState = {
@@ -150,6 +153,8 @@ const initialState: StoreState = {
     monthlyAmount: 0,
     direction: "AtoB",
   },
+  guidedSummary: null,
+  guidedSummaryStatus: "idle",
 };
 
 interface AppActions {
@@ -175,6 +180,9 @@ interface AppActions {
   updateChildren: (children: Partial<Children>) => void;
   updateProfile: (profile: Partial<Profile>) => void;
   updateMaintenance: (maintenance: Partial<Maintenance>) => void;
+
+  setGuidedSummary: (summary: GuidedSummary | null) => void;
+  setGuidedSummaryStatus: (status: GuidedSummaryStatus) => void;
 
   reset: () => void;
   loadState: (state: StoreState) => void;
@@ -257,6 +265,9 @@ export const useAppStore = create<StoreState & AppActions>()(
         maintenance: { ...state.maintenance, ...updates }
       })),
 
+      setGuidedSummary: (summary) => set({ guidedSummary: summary }),
+      setGuidedSummaryStatus: (status) => set({ guidedSummaryStatus: status }),
+
       reset: () => set(initialState),
       loadState: (newState) => set(newState),
     }),
@@ -284,6 +295,12 @@ export const useAppStore = create<StoreState & AppActions>()(
         }
         if (state && !state.maintenance) {
           state.maintenance = { included: false, monthlyAmount: 0, direction: "AtoB" };
+        }
+        if (state && state.guidedSummaryStatus === undefined) {
+          state.guidedSummaryStatus = "idle";
+        }
+        if (state && state.guidedSummary === undefined) {
+          state.guidedSummary = null;
         }
       },
     }

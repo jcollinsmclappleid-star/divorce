@@ -8,8 +8,13 @@ import crypto from "crypto";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { seedDatabase } from "./seed";
 import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail } from "./email";
+import OpenAI from "openai";
+import { GUIDED_SUMMARY_SYSTEM_PROMPT } from "./guided-summary/prompt";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
 function rateLimit(key: string, maxAttempts: number, windowMs: number): boolean {
   const now = Date.now();
   const entry = rateLimitMap.get(key);
@@ -770,6 +775,180 @@ export async function registerRoutes(
       res.json(session);
     } catch (err) {
        res.status(500).json({ message: "Failed to update session" });
+    }
+  });
+
+  // ─── Guided Report Summary ────────────────────────────────────────────────
+  const guidedSummaryPayloadSchema = z.object({
+    sessionToken: z.string().min(1),
+    payload: z.object({
+      splitRatio: z.number().min(0).max(1),
+      netEquity: z.number(),
+      totalAssets: z.number(),
+      totalLiabilities: z.number(),
+      totalLiquid: z.number(),
+      assets: z.array(z.object({
+        category: z.string().max(60),
+        value: z.number(),
+      })),
+      liabilities: z.array(z.object({
+        category: z.string().max(60),
+        balance: z.number(),
+      })),
+      incomes: z.object({
+        partyA: z.array(z.object({
+          type: z.string().max(60),
+          grossAnnual: z.number(),
+          netAnnual: z.number(),
+        })),
+        partyB: z.array(z.object({
+          type: z.string().max(60),
+          grossAnnual: z.number(),
+          netAnnual: z.number(),
+        })),
+      }),
+      hasProperty: z.boolean(),
+      hasPension: z.boolean(),
+      pensionTotalCETV: z.number(),
+      childrenCount: z.number().int().min(0),
+      cmsWeeklyEstimate: z.number().nullable(),
+      maintenanceIncluded: z.boolean(),
+      maintenanceMonthlyAmount: z.number(),
+      maintenanceDirection: z.enum(["AtoB", "BtoA"]),
+      scenarios: z.array(z.object({
+        id: z.string().max(10),
+        name: z.string().max(60),
+        enabled: z.boolean(),
+        liquidStartA: z.number(),
+        liquidStartB: z.number(),
+        pensionA: z.number(),
+        pensionB: z.number(),
+        totalA: z.number(),
+        totalB: z.number(),
+        affordable: z.boolean().optional(),
+        fundingGap: z.number().optional(),
+        runwayA: z.object({ sustained: z.boolean(), depletionYear: z.number().nullable() }),
+        runwayB: z.object({ sustained: z.boolean(), depletionYear: z.number().nullable() }),
+      })),
+      budget: z.object({
+        surplusA: z.number(),
+        surplusB: z.number(),
+      }),
+      confidence: z.enum(["High", "Medium", "Low"]),
+    }),
+  });
+
+  app.post('/api/guided-summary', async (req, res) => {
+    try {
+      const parsed = guidedSummaryPayloadSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: 'Invalid request payload', errors: parsed.error.flatten() });
+      }
+
+      const { sessionToken, payload } = parsed.data;
+
+      // Verify paid access
+      const purchase = await storage.getPurchaseBySessionToken(sessionToken);
+      if (!purchase) {
+        return res.status(403).json({ message: 'No active purchase found for this session.' });
+      }
+      if (purchase.expiresAt && new Date() > new Date(purchase.expiresAt)) {
+        return res.status(403).json({ message: 'Your access has expired. Please renew to use this feature.' });
+      }
+
+      // Rate limit: max 5 calls per session per hour
+      const rlKey = `guided-summary:${sessionToken}`;
+      if (!rateLimit(rlKey, 5, 60 * 60 * 1000)) {
+        return res.status(429).json({ message: 'You have generated too many summaries recently. Please try again in an hour.' });
+      }
+
+      // Build the user prompt from the validated payload
+      const userPrompt = `Here is the financial model data for this case. Generate a Guided Report Summary.
+
+SPLIT RATIO: ${Math.round(payload.splitRatio * 100)}% to Party A, ${Math.round((1 - payload.splitRatio) * 100)}% to Party B
+TOTAL ASSETS: £${payload.totalAssets.toLocaleString('en-GB')}
+TOTAL LIABILITIES: £${payload.totalLiabilities.toLocaleString('en-GB')}
+NET EQUITY (home after sale costs): £${payload.netEquity.toLocaleString('en-GB')}
+TOTAL LIQUID ASSETS: £${payload.totalLiquid.toLocaleString('en-GB')}
+
+ASSETS:
+${payload.assets.map(a => `- ${a.category}: £${a.value.toLocaleString('en-GB')}`).join('\n')}
+
+LIABILITIES:
+${payload.liabilities.length > 0 ? payload.liabilities.map(l => `- ${l.category}: £${l.balance.toLocaleString('en-GB')}`).join('\n') : '- None entered'}
+
+INCOME — PARTY A:
+${payload.incomes.partyA.length > 0 ? payload.incomes.partyA.map(i => `- ${i.type}: £${i.grossAnnual.toLocaleString('en-GB')} gross / £${i.netAnnual.toLocaleString('en-GB')} net per year`).join('\n') : '- No income entered'}
+
+INCOME — PARTY B:
+${payload.incomes.partyB.length > 0 ? payload.incomes.partyB.map(i => `- ${i.type}: £${i.grossAnnual.toLocaleString('en-GB')} gross / £${i.netAnnual.toLocaleString('en-GB')} net per year`).join('\n') : '- No income entered'}
+
+MONTHLY BUDGET SURPLUS: Party A £${payload.budget.surplusA.toLocaleString('en-GB', { maximumFractionDigits: 0 })}, Party B £${payload.budget.surplusB.toLocaleString('en-GB', { maximumFractionDigits: 0 })}
+
+HAS PROPERTY: ${payload.hasProperty ? 'Yes' : 'No'}
+HAS PENSION: ${payload.hasPension ? 'Yes' : 'No'}${payload.hasPension ? ` (Total CETV: £${payload.pensionTotalCETV.toLocaleString('en-GB')})` : ''}
+CHILDREN COUNT: ${payload.childrenCount}
+${payload.cmsWeeklyEstimate !== null ? `CHILD MAINTENANCE ESTIMATE: £${payload.cmsWeeklyEstimate.toLocaleString('en-GB', { maximumFractionDigits: 2 })} per week` : 'CHILD MAINTENANCE: Not modelled'}
+${payload.maintenanceIncluded ? `SPOUSAL MAINTENANCE: £${payload.maintenanceMonthlyAmount.toLocaleString('en-GB')} per month, direction: ${payload.maintenanceDirection === 'AtoB' ? 'Party A → Party B' : 'Party B → Party A'}` : 'SPOUSAL MAINTENANCE: Not included'}
+
+SCENARIOS MODELLED:
+${payload.scenarios.filter(s => s.enabled).map(s => `
+Scenario: ${s.name}
+  Party A receives: £${s.liquidStartA.toLocaleString('en-GB')} liquid + £${s.pensionA.toLocaleString('en-GB')} pension = £${s.totalA.toLocaleString('en-GB')} total
+  Party B receives: £${s.liquidStartB.toLocaleString('en-GB')} liquid + £${s.pensionB.toLocaleString('en-GB')} pension = £${s.totalB.toLocaleString('en-GB')} total
+  ${s.affordable !== undefined ? `Mortgage affordable: ${s.affordable ? 'Yes' : 'No'}` : ''}
+  ${s.fundingGap !== undefined && s.fundingGap > 0 ? `Funding gap: £${s.fundingGap.toLocaleString('en-GB')}` : ''}
+  Party A 10-year runway: ${s.runwayA.sustained ? 'Sustained' : `Depletes in year ${s.runwayA.depletionYear}`}
+  Party B 10-year runway: ${s.runwayB.sustained ? 'Sustained' : `Depletes in year ${s.runwayB.depletionYear}`}
+`).join('\n')}
+
+MODEL CONFIDENCE: ${payload.confidence}
+
+Please generate the Guided Report Summary JSON now.`;
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-4.1-mini",
+        messages: [
+          { role: "system", content: GUIDED_SUMMARY_SYSTEM_PROMPT },
+          { role: "user", content: userPrompt },
+        ],
+        temperature: 0.4,
+        max_tokens: 3000,
+        response_format: { type: "json_object" },
+      });
+
+      const raw = response.choices[0]?.message?.content;
+      if (!raw) {
+        return res.status(502).json({ message: 'The summary service returned an empty response. Please try again.' });
+      }
+
+      let summaryData: Record<string, unknown>;
+      try {
+        summaryData = JSON.parse(raw);
+      } catch {
+        return res.status(502).json({ message: 'The summary service returned an unexpected format. Please try again.' });
+      }
+
+      // Validate required keys are present
+      const requiredKeys = ['overview', 'what_stands_out', 'scenario_interpretation', 'pressure_points', 'questions_for_professionals', 'missing_information'];
+      for (const key of requiredKeys) {
+        if (!summaryData[key]) {
+          return res.status(502).json({ message: 'The summary was incomplete. Please try again.' });
+        }
+      }
+
+      return res.json({
+        ...summaryData,
+        confidence: payload.confidence,
+        generatedAt: new Date().toISOString(),
+      });
+
+    } catch (err: unknown) {
+      console.error('Guided summary error:', err);
+      if (err && typeof err === 'object' && 'status' in err && (err as { status: number }).status === 429) {
+        return res.status(429).json({ message: 'The summary service is busy. Please try again in a moment.' });
+      }
+      return res.status(502).json({ message: 'Something went wrong generating your summary. Please try again.' });
     }
   });
 

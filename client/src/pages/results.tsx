@@ -5,6 +5,7 @@ import { useEngine, ScenarioResult, ProjectionYear, RunwayResult } from "@/hooks
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { useAccess } from "@/hooks/use-access";
+import { GuidedSummaryPanel } from "@/components/guided-summary-panel";
 import { Logo } from "@/components/logo";
 import { FsiGauge } from "@/components/fsi-gauge";
 import { PREMIUM_TOOLTIP_STYLE } from "@/components/premium-tooltip";
@@ -143,6 +144,7 @@ export default function ResultsPage() {
   const store = useAppStore();
   const { assumptions, updateAssumptions } = store;
   const engine = useEngine();
+  const { hasAccess } = useAccess();
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [viewLens, setViewLens] = useState<ViewLens>("liquidity");
 
@@ -449,6 +451,8 @@ export default function ResultsPage() {
               </CardContent>
             </Card>
           )}
+
+          <GuidedSummaryPanel hasAccess={hasAccess} />
         </div>
       </main>
 
@@ -456,7 +460,7 @@ export default function ResultsPage() {
         <div className="container mx-auto px-4 text-center text-muted-foreground text-xs space-y-1.5">
           <p className="font-medium">Illustrative modelling only — not legal, tax, or financial advice.</p>
           <p>All outputs are estimates based on the information entered and standard assumptions. They must not be relied upon for decision-making. Lending capacity benchmarks are generalised income multiple illustrations and do not constitute a lending assessment, mortgage advice, or credit approval indication.</p>
-          <p>All calculations are performed locally in your browser. No financial data is transmitted to any external server.</p>
+          <p>Core calculations are performed locally in your browser. No names or contact details are included in any processing. <a href="/privacy" className="underline hover:text-primary transition-colors">Privacy policy</a></p>
         </div>
       </footer>
     </div>
