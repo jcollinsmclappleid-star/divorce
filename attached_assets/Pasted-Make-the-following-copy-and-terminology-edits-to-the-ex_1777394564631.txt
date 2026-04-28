@@ -1,0 +1,65 @@
+Make the following copy and terminology edits to the existing Guided Report Summary plan. Do not rewrite the whole feature plan.
+
+1. Keep the feature name as:
+Guided Report Summary
+
+2. Remove technical privacy wording from normal user-facing UI.
+
+In dashboard, wizard, homepage, report and CTA copy, do NOT use:
+- anonymised
+- anonymous
+- de-identified
+- pseudonymised
+
+Instead use:
+- selected model figures
+- only the figures needed from your model
+- no names or addresses
+- no contact details
+- no documents or messages
+
+3. Update the generate disclosure to:
+
+“To generate this guided summary, we securely process selected figures from your model. No names, addresses, contact details, documents or messages are included.”
+
+4. Update the wizard trust badge to:
+
+“All core calculations happen privately in your browser. If you choose to generate the Guided Report Summary later, only selected model figures are securely processed — no names, addresses or contact details are included.”
+
+5. Update homepage/privacy trust block to:
+
+“Private by design
+
+All core calculations run in your browser. Your financial figures are not stored on our servers. If you choose to generate a Guided Report Summary, only selected figures from your model are securely processed to create plain-English notes — no names, addresses or contact details are included.”
+
+6. Keep “de-identified” only for privacy-policy/legal wording where needed.
+
+Privacy policy wording can say:
+
+“When you choose to generate a Guided Report Summary, selected de-identified model figures are securely processed to create plain-English notes.”
+
+But normal product UI should say:
+
+“selected model figures”
+
+7. Do not use the word “AI” as the main user-facing label.
+
+Use:
+- intelligent summary
+- guided summary
+- Guided Report Summary
+
+Avoid:
+- AI Smart Notes
+- AI Insights
+- AI advice
+- AI solicitor
+- AI legal review
+
+8. Keep the user-facing explanation simple:
+
+“Guided Report Summary turns your calculated results into plain-English takeaways, pressure points, missing-information checks and questions to raise with professionals.”
+
+9. Confirm that no names, addresses, contact details, documents, messages, employer names, uploaded files, solicitor letters, bank statements, raw notes or free-text personal history are sent in the Guided Report Summary payload.
+
+Only selected calculated model figures should be sent.
