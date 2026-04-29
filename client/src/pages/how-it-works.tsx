@@ -177,7 +177,7 @@ export default function HowItWorksPage() {
             <p className="text-xs font-semibold tracking-wider uppercase text-cyan-600 mb-2">9-Step Wizard</p>
             <h2 className="text-2xl md:text-3xl font-display font-bold">What the wizard covers</h2>
             <p className="text-muted-foreground mt-3 text-sm max-w-xl mx-auto">
-              Nine short steps. Most people complete it in under 20 minutes. You can pause and return at any time.
+              Nine short steps. Most people complete it in under 5 minutes. You can pause and return at any time.
             </p>
           </div>
 
