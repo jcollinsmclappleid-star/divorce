@@ -25,7 +25,7 @@
     "incomeMultiple": 4.5,
     "housePriceGrowthRate": 0.02,
     "saleCostPctByAssetCategory": {
-      "primary_home": 0.02,
+      "primary_home": 0.03,
       "other_property": 0.03,
       "investments": 0.0,
       "business": 0.0,

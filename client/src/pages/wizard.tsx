@@ -733,16 +733,31 @@ function StepHome({ advancedMode }: { advancedMode: boolean }) {
         </div>
       </div>
 
-      {(home || mortgage) && (
-        <div className="p-4 bg-muted/30 rounded-md">
-          <div className="flex items-center justify-between gap-2 text-sm">
-            <span className="text-muted-foreground">Estimated equity</span>
-            <span className="font-bold text-lg">
-              {formatCurrency((home?.currentValue ?? 0) - (mortgage?.balance ?? 0))}
-            </span>
+      {(home || mortgage) && (() => {
+        const homeVal = home?.currentValue ?? 0;
+        const mortgageVal = mortgage?.balance ?? 0;
+        const grossEquity = homeVal - mortgageVal;
+        const saleCostPct = home?.saleCostPct ?? 0.03;
+        const saleCosts = homeVal * saleCostPct;
+        const netEquity = Math.max(0, grossEquity - saleCosts);
+        return (
+          <div className="p-4 bg-muted/30 rounded-md space-y-2">
+            <div className="flex items-center justify-between gap-2 text-sm">
+              <span className="text-muted-foreground">Gross equity</span>
+              <span className="font-medium">{formatCurrency(grossEquity)}</span>
+            </div>
+            <div className="flex items-center justify-between gap-2 text-sm">
+              <span className="text-muted-foreground">Est. sale costs ({(saleCostPct * 100).toFixed(1)}%)</span>
+              <span className="font-medium text-rose-500">−{formatCurrency(saleCosts)}</span>
+            </div>
+            <div className="flex items-center justify-between gap-2 text-sm border-t border-border/50 pt-2">
+              <span className="text-muted-foreground font-medium">Net sale equity</span>
+              <span className="font-bold text-lg">{formatCurrency(netEquity)}</span>
+            </div>
+            <p className="text-xs text-muted-foreground">Includes estimated estate agent and legal fees. Adjustable in advanced mode.</p>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {advancedMode && (
         <div className="space-y-4 pt-2">
