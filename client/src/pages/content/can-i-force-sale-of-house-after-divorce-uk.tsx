@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Gavel, Home } from "lucide-react";
+import { Gavel, Home, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -30,12 +30,21 @@ const faqItems = [
     question: "What if my ex lives in the house and won't leave?",
     answer: "If your ex will not leave voluntarily after a court order has been made, you may need to apply for a possession order and potentially an ouster order. This is a separate step after the sale or transfer order has been made.",
   },
+  {
+    question: "What is the difference between a Mesher Order and a Martin Order?",
+    answer: "A Mesher Order defers the sale of the family home until a specified trigger event relating to children — typically the youngest child turning 18 or leaving full-time education. A Martin Order defers sale until the occupying party remarries, cohabits, or dies — regardless of children. Both orders allow the property to be occupied but retain the non-occupying party's interest until the trigger.",
+  },
+  {
+    question: "Can I sell my share of the house without my ex agreeing?",
+    answer: "You cannot sell the whole property without your ex's cooperation if both names are on the title. You may theoretically be able to sell your 'interest' in the property to a third party, but in practice this is rarely viable as buyers will not purchase a partial interest in an occupied matrimonial home. The practical route is a court order requiring sale.",
+  },
 ];
 
 const relatedPages = [
   { title: "Both Names on Mortgage Divorce UK", description: "Your options when both names are on the mortgage.", href: "/both-names-on-mortgage-divorce-uk", badge: "Mortgage" },
   { title: "Who Pays the Mortgage During Divorce UK?", description: "Managing mortgage payments during proceedings.", href: "/who-pays-mortgage-during-divorce-uk", badge: "Mortgage" },
   { title: "How Is Property Divided in Divorce UK?", description: "The full picture of how courts approach property division.", href: "/how-is-property-divided-in-divorce-uk", badge: "Property" },
+  { title: "Preview the Full Financial Report", description: "Compare a property sale against buyout and deferred sale scenarios.", href: "/unlock", badge: "Report" },
 ];
 
 export default function ForceSaleHousePage() {
@@ -105,6 +114,67 @@ export default function ForceSaleHousePage() {
         <p className="text-muted-foreground text-sm mb-4">Where children live in the family home, courts may defer a sale — particularly if the resident parent cannot find suitable alternative accommodation. However, deferral is not indefinite and courts will consider a range of factors including the children's welfare, both parties' housing needs, and the financial impact of delay.</p>
         <p className="text-sm text-muted-foreground mb-6">A Mesher Order allows the family home to be sold at a deferred trigger event — typically when the youngest child reaches 18 or leaves full-time education. A Martin Order allows deferral until the resident party remarries, cohabits, or dies. These are compromise solutions that avoid immediate sale but give both parties certainty about what happens next.</p>
         <InlineCTA label="Model Sale and Other Scenarios Side by Side" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures Needed to Model Property Scenarios</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Current market value of the property",
+            "Outstanding mortgage balance",
+            "Estimated sale costs (agent fees, legal costs — typically 3%)",
+            "Net equity (value minus mortgage minus sale costs)",
+            "Rental cost in the local area if rehousing",
+            "Each party's income (to assess re-mortgage affordability)",
+            "Any second charges or secured loans on the property",
+            "Children's ages if a deferred sale is being considered",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Financial Pressure Points</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Negative equity complicating sale", desc: "Where the outstanding mortgage exceeds the property value, a sale may crystallise a joint liability. Both parties need to understand how any shortfall will be allocated." },
+            { label: "One party unable to afford the buyout", desc: "If one party wants to keep the property, they need sufficient income to re-mortgage in their sole name. Income multiples and affordability assessments may make this impossible." },
+            { label: "Delays costing both parties", desc: "Every month the property is occupied without contributing to a resolution is a month of mortgage interest, maintenance costs, and legal fees that reduce the final pot." },
+            { label: "Mesher Order locking in illiquid equity", desc: "A deferred sale can trap one party's equity for years. If the non-occupying party needs their equity to rehouse, this can create significant financial strain." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "Whether a court would order immediate sale or a deferred arrangement given the specific circumstances",
+            "Whether a Mesher or Martin Order is more appropriate for your situation",
+            "What the enforcement timeline and costs would be in your specific court centre",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>Given the children's ages and the available equity, would a Mesher Order or immediate sale be more likely?</li>
+          <li>If my ex refuses to cooperate with the sale, what are the realistic costs and timelines for enforcement?</li>
+          <li>Could one party afford to buy the other out based on their current income?</li>
+          <li>How should sale costs, capital gains tax (if applicable), and timing be managed?</li>
+        </ul>
+        <InlineCTA label="Compare Sale, Buyout and Deferred Scenarios" />
       </ContentSection>
 
       <ContentSection>

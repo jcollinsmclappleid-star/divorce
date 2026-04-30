@@ -50,6 +50,7 @@ const relatedPages = [
   { title: "How is Property Divided in Divorce UK?", description: "The full guide to dividing the family home and other property.", href: "/how-is-property-divided-in-divorce-uk", badge: "Property" },
   { title: "Both Names on Mortgage in Divorce UK", description: "Options when both spouses are on the mortgage.", href: "/both-names-on-mortgage-divorce-uk", badge: "Mortgage" },
   { title: "Divorce Settlement Calculator UK", description: "Model assets and liabilities together for the full picture.", href: "/divorce-financial-settlement-calculator-uk", badge: "Calculator" },
+  { title: "Preview the Full Financial Report", description: "Model debts alongside assets in the full settlement.", href: "/unlock", badge: "Report" },
 ];
 
 export default function WhatHappensToDebtsPage() {

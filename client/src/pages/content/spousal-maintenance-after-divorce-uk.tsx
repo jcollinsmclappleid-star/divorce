@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { DollarSign, Clock } from "lucide-react";
+import { DollarSign, Clock, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -39,12 +39,21 @@ const faqItems = [
     question: "Can spousal maintenance be changed after it is agreed?",
     answer: "Yes — either party can apply to the court to vary the maintenance if circumstances change significantly. Common reasons include the payer losing their job, the recipient's financial needs changing, or one party retiring. The court has wide discretion to vary, suspend, or capitalise maintenance at any time.",
   },
+  {
+    question: "How is the amount of spousal maintenance calculated?",
+    answer: "There is no fixed formula for spousal maintenance in England and Wales. Courts assess the recipient's reasonable monthly needs (outgoings) minus their own income, and check whether the paying party can afford the difference after meeting their own reasonable needs. The resulting figure is the starting point for negotiation — the actual amount agreed may vary.",
+  },
+  {
+    question: "Does the divorce settlement calculator model spousal maintenance?",
+    answer: "Yes. The calculator includes an optional spousal maintenance toggle that applies an income transfer between the parties. You can model the cashflow impact of different maintenance amounts on both parties' net monthly income — helping you see the full financial picture before agreeing any maintenance arrangement.",
+  },
 ];
 
 const relatedPages = [
   { title: "How Much Maintenance After Divorce?", description: "How courts calculate spousal maintenance — the factors, range, and duration.", href: "/how-much-maintenance-after-divorce-uk", badge: "Maintenance" },
   { title: "Child Maintenance vs Spousal Maintenance", description: "The key differences between CMS child support and court-ordered spousal maintenance.", href: "/child-maintenance-vs-spousal-maintenance-uk", badge: "Maintenance" },
   { title: "Clean Break Order UK", description: "How a clean break ends all future financial claims between parties.", href: "/what-is-a-clean-break-order-uk", badge: "Orders" },
+  { title: "Preview the Full Financial Report", description: "Model maintenance and its cashflow impact on both parties.", href: "/unlock", badge: "Report" },
 ];
 
 export default function SpousalMaintenancePage() {
@@ -110,6 +119,67 @@ export default function SpousalMaintenancePage() {
           ))}
         </div>
         <InlineCTA label="Include Maintenance in Your Financial Settlement Model" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures Needed to Model Maintenance</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Gross income of both parties (before tax)",
+            "Net take-home pay after tax and NI",
+            "Monthly essential outgoings for each party",
+            "Childcare costs (if applicable)",
+            "Housing costs post-separation (mortgage or rent)",
+            "Any other income sources (rental, savings interest, benefits)",
+            "Pension contributions being made by each party",
+            "Children's ages and care arrangements",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Financial Pressure Points</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Maintenance variability creating financial uncertainty", desc: "Unlike capital settlements, maintenance can be varied by either party at any time if circumstances change. The paying party faces potential upward variation; the receiving party faces potential reduction." },
+            { label: "Clean break vs maintenance tradeoff", desc: "A lump sum to capitalise maintenance (a clean break) gives certainty but requires significant capital. If the capital is insufficient, ongoing maintenance may be the only option — even if both parties prefer a clean break." },
+            { label: "Pension income in retirement not addressed", desc: "Spousal maintenance typically runs during the working years. Pension sharing addresses the retirement income gap. Leaving pension sharing unaddressed while agreeing maintenance creates a gap later." },
+            { label: "Cohabitation triggering review", desc: "The paying party can apply to vary maintenance if the recipient cohabits with a new partner. This creates uncertainty for the recipient and potential conflict if relationships change." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "Whether maintenance is appropriate in your specific circumstances — this depends on needs, ability to pay, and the overall settlement structure",
+            "What a court would consider a reasonable duration or amount for maintenance in your case",
+            "Whether a capitalised clean break is achievable given the available assets",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>Is spousal maintenance appropriate in our situation, and if so what duration is realistic?</li>
+          <li>Could the income gap be addressed through capital (pension sharing or a larger equity share) rather than ongoing maintenance?</li>
+          <li>What are the tax implications of maintenance payments for both parties?</li>
+          <li>How should maintenance and pension provision work together in the overall settlement?</li>
+        </ul>
+        <InlineCTA label="Model Maintenance and Its Cashflow Impact" />
       </ContentSection>
 
       <ContentSection>

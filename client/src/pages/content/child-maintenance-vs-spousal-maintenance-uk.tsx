@@ -36,6 +36,7 @@ const relatedPages = [
   { title: "How Much Maintenance After Divorce UK?", description: "How spousal maintenance amounts are calculated and for how long.", href: "/how-much-maintenance-after-divorce-uk", badge: "Maintenance" },
   { title: "Who Pays What After Divorce With Children UK?", description: "A practical breakdown of all financial obligations after divorce.", href: "/who-pays-what-after-divorce-with-children-uk", badge: "Children" },
   { title: "Divorce Financial Settlement Calculator UK", description: "Model post-divorce finances including maintenance.", href: "/divorce-financial-settlement-calculator-uk", badge: "Calculator" },
+  { title: "Preview the Full Financial Report", description: "Model both types of maintenance and their income impact.", href: "/unlock", badge: "Report" },
 ];
 
 export default function ChildVsSpousalMaintenancePage() {

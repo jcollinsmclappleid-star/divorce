@@ -67,6 +67,7 @@ const relatedPages = [
   { title: "Mediation vs Court Divorce UK Costs", description: "The true cost difference between mediation and fully contested proceedings.", href: "/mediation-vs-court-divorce-uk-costs", badge: "Costs" },
   { title: "Settling Out of Court vs Court Divorce UK", description: "Pros, cons, and costs of each route compared.", href: "/settling-out-of-court-vs-court-divorce-uk", badge: "Process" },
   { title: "What is a Consent Order in UK Divorce?", description: "How to formalise an agreed settlement without a full hearing.", href: "/what-is-a-consent-order-uk-divorce", badge: "/consent-order" },
+  { title: "Preview the Full Financial Report", description: "Understand the financial position before court proceedings.", href: "/unlock", badge: "Report" },
 ];
 
 export default function FinancialRemedyProceedingsPage() {

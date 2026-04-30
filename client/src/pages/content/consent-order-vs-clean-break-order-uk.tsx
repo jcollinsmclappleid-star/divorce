@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Scale, Shield } from "lucide-react";
+import { Scale, Shield, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -30,12 +30,21 @@ const faqItems = [
     question: "Which is more important to get right — the financial terms or the clean break?",
     answer: "Both are essential. The financial terms determine what you each receive now. The clean break ensures neither party can make future claims. Both must be correct — a generous financial settlement without a clean break leaves future claims open, and a clean break with inadequate financial terms gives you finality but not fairness.",
   },
+  {
+    question: "What happens if I divorce without a consent order at all?",
+    answer: "All financial claims remain permanently open. This includes claims on property, savings, pensions, and income. There is no time limit on bringing a financial claim after divorce (unless the parties have obtained a consent order). Either party could make a financial claim years later if circumstances change.",
+  },
+  {
+    question: "How much does a consent order with clean break cost?",
+    answer: "The court filing fee is £53. Solicitor drafting costs vary — a simple clean break consent order may cost £300–800; a more complex one with property transfers, pension sharing, and maintenance will cost more. Some online services offer fixed-fee drafting for simpler cases. Both parties should have the opportunity to take independent legal advice before signing.",
+  },
 ];
 
 const relatedPages = [
   { title: "What is a Consent Order in UK Divorce?", description: "How the consent order document works and what it includes.", href: "/what-is-a-consent-order-uk-divorce", badge: "Legal Orders" },
   { title: "What is a Clean Break Order UK?", description: "How the clean break clause provides permanent financial protection.", href: "/what-is-a-clean-break-order-uk", badge: "Legal Orders" },
   { title: "When is a Divorce Financial Settlement Legally Binding?", description: "Understanding exactly when the consent order takes effect.", href: "/when-is-divorce-financial-settlement-legally-binding-uk", badge: "Legal" },
+  { title: "Preview the Full Financial Report", description: "Understand what your settlement covers before agreeing to any consent order.", href: "/unlock", badge: "Report" },
 ];
 
 export default function ConsentVsCleanBreakPage() {
@@ -112,6 +121,66 @@ export default function ConsentVsCleanBreakPage() {
           </Card>
         </div>
         <InlineCTA label="Model Whether a Clean Break Works for You" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures to Help Assess Clean Break Viability</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Net income of both parties post-separation",
+            "Monthly essential outgoings for each party",
+            "Net equity in the family home",
+            "Pension CETVs for both parties",
+            "Any savings or investment assets",
+            "Childcare costs (if applicable)",
+            "Likely rental or mortgage cost for each party",
+            "Any income support (benefits, tax credits) available",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Assuming a clean break is always achievable", desc: "Where there is a significant income gap — particularly after a long marriage with a career sacrificed by one partner — a clean break may not be immediately achievable. Maintenance for a transitional period is common." },
+            { label: "Leaving financial claims open without a consent order", desc: "Many divorces proceed without a consent order. Both parties may intend to 'sort it out later'. Without a consent order, all claims remain permanently open — including claims on future inheritances, property acquisitions, or business success." },
+            { label: "Not understanding the difference until it is too late", desc: "Some people believe they have a 'clean break' because they verbally agreed or exchanged emails. Only a court-approved consent order with a clean break clause provides the legal protection. Informal agreements are not enforceable." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "Whether a clean break is legally achievable in your specific circumstances — this requires a professional assessment of needs and ability to pay",
+            "Whether a deferred clean break with a fixed maintenance term is more appropriate than an immediate clean break",
+            "What a court would order if you cannot agree on whether a clean break is fair",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>Is an immediate clean break achievable given both parties' income positions?</li>
+          <li>If not, what would a reasonable maintenance term be before a deferred clean break?</li>
+          <li>Could the income gap be addressed through additional capital rather than maintenance?</li>
+          <li>Are there any pension or capital claims that could survive a standard clean break clause?</li>
+        </ul>
+        <InlineCTA label="Model Your Settlement to Test Clean Break Viability" />
       </ContentSection>
 
       <ContentSection>

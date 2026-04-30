@@ -206,21 +206,28 @@ export function ContentPageLayout({
         {children}
       </article>
 
-      <section className="py-10 md:py-12 bg-primary border-y border-white/10" data-testid="section-calculator-cta">
+      <section className="py-12 md:py-16 bg-primary border-y border-white/10" data-testid="section-calculator-cta">
         <div className="container mx-auto px-4 max-w-3xl">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-white">Model this for your own situation</p>
-              <p className="text-xs text-white/55 leading-relaxed max-w-md">
-                Divorce Calculator UK lets you enter your actual figures and see how different settlement options compare — free to start, with a full analysis available for £79.
-              </p>
-            </div>
+          <p className="text-xs font-semibold tracking-wider uppercase text-gold mb-3">Model your own figures</p>
+          <h2 className="text-2xl md:text-3xl font-display font-bold text-white mb-3">See where you could stand financially</h2>
+          <p className="text-white/65 text-sm leading-relaxed max-w-xl mb-6">
+            Use the divorce settlement calculator to compare property, pensions, income, debts and cashflow across settlement scenarios. Unlike a solicitor lead form, this is built around financial modelling. Start free — unlock the full report when ready.
+          </p>
+          <div className="flex flex-wrap gap-3">
             <Button
               onClick={() => setLocation("/wizard")}
-              className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 shrink-0 btn-shimmer"
-              data-testid="button-article-cta"
+              className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 btn-shimmer"
+              data-testid="button-article-cta-start"
             >
-              Start My Free Financial Model <ArrowRight className="w-4 h-4 ml-1.5" />
+              Start free <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+            <Button
+              onClick={() => setLocation("/unlock")}
+              variant="outline"
+              className="border-white/30 text-white bg-white/10 hover:bg-white/20 hover:text-white"
+              data-testid="button-article-cta-preview"
+            >
+              Preview sample report
             </Button>
           </div>
         </div>
@@ -255,7 +262,7 @@ export function ContentPageLayout({
       <div className="border-t border-border/40 bg-muted/20 py-6">
         <div className="container mx-auto px-4 max-w-3xl">
           <p className="text-xs text-muted-foreground leading-relaxed" data-testid="text-page-disclaimer">
-            This page provides high-level financial modelling information only. It does not constitute legal, tax, or financial advice and does not predict court outcomes. Independent professional advice may be warranted before making financial decisions.
+            This guide provides general information and financial modelling context only. It is not legal, financial, tax or mortgage advice and does not recommend what either party should do. Figures used are illustrative only. Independent professional advice from a qualified solicitor, regulated financial adviser, or other relevant professional may be needed before making any financial decisions.
           </p>
         </div>
       </div>

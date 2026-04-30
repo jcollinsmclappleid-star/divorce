@@ -36,6 +36,7 @@ const relatedPages = [
   { title: "Mediation vs Court Divorce UK Costs", description: "The cost difference between mediation and contested court proceedings.", href: "/mediation-vs-court-divorce-uk-costs", badge: "Costs" },
   { title: "My Ex Doesn't Agree With the Settlement UK", description: "What happens when your ex won't agree and you need court involvement.", href: "/ex-doesnt-agree-settlement-uk", badge: "Process" },
   { title: "Financial Remedy Proceedings UK", description: "How the formal court process works from start to finish.", href: "/financial-remedy-proceedings-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "Model your settlement position before negotiating.", href: "/unlock", badge: "Report" },
 ];
 
 export default function SettlingOutOfCourtPage() {

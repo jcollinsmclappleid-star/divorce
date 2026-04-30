@@ -50,6 +50,7 @@ const relatedPages = [
   { title: "Spouse Refuses Financial Disclosure UK", description: "What to do when your ex won't cooperate with disclosure.", href: "/spouse-refuses-financial-disclosure-uk", badge: "Disclosure" },
   { title: "Financial Disclosure in UK Divorce", description: "The legal duty of full and frank disclosure.", href: "/financial-disclosure-divorce-uk", badge: "Process" },
   { title: "Financial Remedy Proceedings UK", description: "How court proceedings compel disclosure and set consequences.", href: "/financial-remedy-proceedings-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "Model a complete, transparent asset pool before settlement.", href: "/unlock", badge: "Report" },
 ];
 
 export default function HideAssetsPage() {

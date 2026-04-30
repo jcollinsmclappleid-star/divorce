@@ -58,6 +58,7 @@ const relatedPages = [
   { title: "Can I Hide Assets in Divorce UK?", description: "The law, the risks, and what courts can do to detect concealment.", href: "/can-i-hide-assets-in-divorce-uk", badge: "Disclosure" },
   { title: "Spouse Refuses Financial Disclosure UK", description: "Your options when your ex won't cooperate with disclosure.", href: "/spouse-refuses-financial-disclosure-uk", badge: "Process" },
   { title: "What is a Consent Order in UK Divorce?", description: "Why disclosure must be complete before your order can be approved.", href: "/what-is-a-consent-order-uk-divorce", badge: "Legal Orders" },
+  { title: "Preview the Full Financial Report", description: "See the full asset picture modelled before disclosure.", href: "/unlock", badge: "Report" },
 ];
 
 export default function FinancialDisclosurePage() {

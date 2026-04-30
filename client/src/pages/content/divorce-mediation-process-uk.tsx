@@ -44,6 +44,7 @@ const relatedPages = [
   { title: "Mediation vs Court Divorce UK Costs", description: "The cost comparison between mediation and contested court proceedings.", href: "/mediation-vs-court-divorce-uk-costs", badge: "Costs" },
   { title: "Divorce Solicitor vs Mediation UK", description: "When to use a solicitor vs a mediator — and when you need both.", href: "/divorce-solicitor-vs-mediation-uk", badge: "Process" },
   { title: "Divorce Mediation Process UK", description: "The step-by-step guide to how mediation works.", href: "/divorce-mediation-process-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "Model your figures before entering mediation.", href: "/unlock", badge: "Report" },
 ];
 
 export default function MediationProcessPage() {

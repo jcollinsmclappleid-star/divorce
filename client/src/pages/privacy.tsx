@@ -30,7 +30,7 @@ function DataDeletionForm() {
       }
     } catch {
       setStatus('error');
-      setMessage('Unable to process your request. Please try again or email privacy@divorcecalculatoruk.co.uk.');
+      setMessage('Unable to process your request. Please try again or email support@divorcecalculatoruk.co.uk.');
     }
   }
 
@@ -91,7 +91,7 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-xl font-semibold text-foreground">1. Data Controller</h2>
-            <p>The data controller responsible for your personal data is the operator of DivorceCalculatorUK. For data protection enquiries, including exercising your rights under UK GDPR, please contact us at: <strong>privacy@divorcecalculatoruk.co.uk</strong>.</p>
+            <p>The data controller responsible for your personal data is the operator of DivorceCalculatorUK. For data protection enquiries, including exercising your rights under UK GDPR, please contact us at: <strong>support@divorcecalculatoruk.co.uk</strong>.</p>
             <p>We will respond to all data protection enquiries within one month of receipt.</p>
           </section>
 
@@ -223,7 +223,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-semibold text-foreground">9. Data Retention</h2>
             <p>We retain personal data only for as long as necessary for the purposes for which it was collected:</p>
             <ul className="list-disc pl-6 space-y-1">
-              <li><strong>Email addresses:</strong> Retained for the duration of your access period (12 months from purchase) plus 6 years thereafter for accounting purposes. After your access expires, we retain your email address in encrypted form to enable access recovery if you repurchase. You may request deletion of your email address at any time by contacting us at privacy@divorcecalculatoruk.co.uk.</li>
+              <li><strong>Email addresses:</strong> Retained for the duration of your access period (12 months from purchase) plus 6 years thereafter for accounting purposes. After your access expires, we retain your email address in encrypted form to enable access recovery if you repurchase. You may request deletion of your email address at any time by contacting us at support@divorcecalculatoruk.co.uk.</li>
               <li><strong>Payment records:</strong> Retained for the duration of your access period (12 months from purchase) plus 6 years thereafter, as required for UK tax and accounting obligations under HMRC record-keeping requirements.</li>
               <li><strong>Session tokens:</strong> Retained on our server for the duration of the access period. The corresponding token in your browser persists until you clear your browser data.</li>
               <li><strong>Server access logs:</strong> Retained for up to 90 days for security monitoring purposes, after which they are automatically deleted.</li>
@@ -293,7 +293,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-semibold text-foreground">15. Contact Us</h2>
             <p>For any questions about this Privacy Policy, to exercise your data protection rights, or to raise a concern about how your data is being handled, please contact us:</p>
             <ul className="list-disc pl-6 space-y-1">
-              <li><strong>Email:</strong> privacy@divorcecalculatoruk.co.uk</li>
+              <li><strong>Email:</strong> support@divorcecalculatoruk.co.uk</li>
               <li><strong>Website:</strong> divorcecalculatoruk.co.uk</li>
             </ul>
             <p>We aim to respond to all enquiries within one month of receipt.</p>

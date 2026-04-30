@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Clock, Shield, AlertTriangle } from "lucide-react";
+import { Clock, Shield, AlertTriangle, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -30,12 +30,21 @@ const faqItems = [
     question: "Does the clean break protect against child maintenance claims too?",
     answer: "No. Child maintenance can never be permanently barred through a clean break order — the Child Maintenance Service can always be applied to. The clean break protects only financial claims between the former spouses themselves.",
   },
+  {
+    question: "Can I make a pension claim years after divorce?",
+    answer: "Without a clean break order in place, a pension sharing order can technically still be applied for after divorce. However, pension sharing orders can only be made in financial remedy proceedings — you would need to apply to court and obtain leave to proceed out of time. The later you leave it, the harder the hurdle.",
+  },
+  {
+    question: "Is an informal agreement enough to stop future claims?",
+    answer: "No. A written agreement, a solicitor's letter confirming an agreement, or even a deed of separation does not bar future financial claims in the same way that a court-approved consent order does. Only a court order permanently dismisses the financial claims between the parties.",
+  },
 ];
 
 const relatedPages = [
   { title: "Can I Divorce Without a Financial Settlement UK?", description: "Why divorcing without a financial order leaves you permanently exposed.", href: "/can-i-divorce-without-financial-settlement-uk", badge: "Process" },
   { title: "What is a Clean Break Order UK?", description: "The most effective protection against future financial claims.", href: "/what-is-a-clean-break-order-uk", badge: "Legal Orders" },
   { title: "Can I Reopen a Divorce Settlement UK?", description: "The grounds on which settled cases can be challenged.", href: "/can-i-reopen-divorce-settlement-uk", badge: "Legal" },
+  { title: "Preview the Full Financial Report", description: "Understand what a complete financial settlement should cover.", href: "/unlock", badge: "Report" },
 ];
 
 export default function FinancialClaimsAfterDivorcePage() {
@@ -104,6 +113,68 @@ export default function FinancialClaimsAfterDivorcePage() {
         </div>
 
         <InlineCTA label="Understand Your Settlement Before It's Too Late" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures Worth Having on Record</h2>
+        <p className="text-sm text-muted-foreground mb-4">Even if you agree informally, having the full financial picture documented is important:</p>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Property value and mortgage balance at time of separation",
+            "Pension CETVs for both parties",
+            "Savings, ISAs, and investment accounts",
+            "Joint and sole liabilities",
+            "Business interests or directorship values",
+            "Gross income of both parties",
+            "Significant assets acquired since separation",
+            "Any inheritances received or expected",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Financial Pressure Points</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Future income or asset growth", desc: "Any business, career progression, or inheritance after divorce remains potentially claimable without a consent order. This risk grows over time as fortunes diverge." },
+            { label: "Pension claims", desc: "Pension values grow over time. A pension that was modest at divorce may be substantial a decade later. Without a consent order, pension sharing claims remain open." },
+            { label: "Remarriage trap", desc: "If you remarry without having applied for a capital settlement, you lose the right to make capital claims. Your ex, however, retains their rights against you — creating an asymmetric risk." },
+            { label: "Informal agreements providing false security", desc: "Many people believe a handshake deal or written agreement ends the matter. It does not. Only a court-approved consent order permanently closes financial claims." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "Whether a late claim would succeed — this depends on the specific circumstances and judicial discretion",
+            "Whether you need a full consent order or a simple clean break — a solicitor's view is advisable",
+            "The strength of a potential future claim against you — this is a legal assessment, not a financial one",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>What should a clean break consent order include in our situation to be fully effective?</li>
+          <li>How should the pension position be dealt with in the consent order?</li>
+          <li>Is a simple clean break achievable given both parties' assets and income positions?</li>
+          <li>What are the risks of our current informal agreement not being enforceable?</li>
+        </ul>
+        <InlineCTA label="Model the Full Settlement Before Finalising Anything" />
       </ContentSection>
 
       <ContentSection>

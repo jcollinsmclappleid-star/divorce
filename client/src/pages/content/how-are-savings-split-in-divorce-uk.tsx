@@ -59,6 +59,7 @@ const relatedPages = [
   { title: "How Are Investments Divided in Divorce UK?", description: "Shares, ISAs, and portfolios — how they are valued and split.", href: "/how-are-investments-divided-in-divorce-uk", badge: "Assets" },
   { title: "Joint Bank Accounts After Divorce UK", description: "What to do with joint accounts at separation and during proceedings.", href: "/joint-bank-accounts-after-divorce-uk", badge: "Assets" },
   { title: "Divorce Financial Settlement Calculator UK", description: "Model savings, property, and pension trade-offs.", href: "/divorce-financial-settlement-calculator-uk", badge: "Calculator" },
+  { title: "Preview the Full Financial Report", description: "Include savings in your full settlement model.", href: "/unlock", badge: "Report" },
 ];
 
 export default function SavingsSplitPage() {

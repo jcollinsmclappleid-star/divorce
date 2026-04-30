@@ -64,6 +64,7 @@ const relatedPages = [
   { title: "What is a Consent Order in UK Divorce?", description: "How to make your property agreement legally binding.", href: "/what-is-a-consent-order-uk-divorce", badge: "Legal Orders" },
   { title: "Both Names on Mortgage in Divorce UK", description: "Options when both spouses are on the mortgage.", href: "/both-names-on-mortgage-divorce-uk", badge: "Property" },
   { title: "Divorce Financial Settlement Calculator UK", description: "Model your property and pension trade-offs.", href: "/divorce-financial-settlement-calculator-uk", badge: "Calculator" },
+  { title: "Preview the Full Financial Report", description: "Model property division scenarios with your own figures.", href: "/unlock", badge: "Report" },
 ];
 
 export default function HowIsPropertyDividedPage() {

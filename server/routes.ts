@@ -7,7 +7,8 @@ import { z } from "zod";
 import crypto from "crypto";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { seedDatabase } from "./seed";
-import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail, sendMagicLinkEmail } from "./email";
+import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail, sendMagicLinkEmail, sendAdminNotification } from "./email";
+import { pool } from "./db";
 import OpenAI from "openai";
 import { GUIDED_SUMMARY_SYSTEM_PROMPT } from "./guided-summary/prompt";
 
@@ -419,6 +420,12 @@ export async function registerRoutes(
           if (email) {
             const updatedForEmail = await storage.getPurchaseByCheckoutSessionId(checkoutSessionId);
             sendPurchaseConfirmationEmail(email, purchase.sessionToken, updatedForEmail?.expiresAt ?? null).catch(() => {});
+            sendAdminNotification('New purchase confirmed', [
+              { label: 'Customer email', value: email },
+              { label: 'Purchase ID', value: purchase.id },
+              { label: 'Amount', value: '£79' },
+              { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
+            ], 'purchase').catch(() => {});
           }
         }
         const updatedPurchase = await storage.getPurchaseByCheckoutSessionId(checkoutSessionId);
@@ -748,6 +755,13 @@ export async function registerRoutes(
       if (!existing) {
         const verificationToken = crypto.randomBytes(32).toString('hex');
         await storage.createEmailLead(email, firstName, source, assetPoolSnapshot, verificationToken);
+        sendAdminNotification('New email lead captured', [
+          { label: 'Email', value: email },
+          { label: 'Name', value: firstName || '—' },
+          { label: 'Source', value: source || '—' },
+          { label: 'Asset pool', value: assetPoolSnapshot ? `£${Number(assetPoolSnapshot).toLocaleString('en-GB')}` : '—' },
+          { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
+        ], 'lead_capture').catch(() => {});
         if (isSummarySource) {
           await sendProgressSummaryEmail(email, assetPoolSnapshot || '');
           await storage.verifyEmailLead((await storage.getEmailLeadByEmail(email))!.id);
@@ -791,6 +805,14 @@ export async function registerRoutes(
 
       await storage.anonymisePurchasesByEmail(email);
       await storage.deleteEmailLeadByEmail(email);
+      await storage.deleteMagicLinksByEmail(email);
+      await pool.query(`DELETE FROM user_sessions WHERE sess->>'email' = $1`, [email.toLowerCase().trim()]);
+
+      sendAdminNotification('GDPR data deletion processed', [
+        { label: 'Email', value: email },
+        { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
+        { label: 'Actions', value: 'Purchases anonymised · Email lead deleted · Magic links deleted · Sessions cleared' },
+      ], 'gdpr_delete').catch(() => {});
 
       console.log('[gdpr] Data deletion request processed');
       return res.json({ success: true, message: 'All personal data for this email has been removed.' });
@@ -836,11 +858,19 @@ export async function registerRoutes(
         if (session?.id && session?.payment_status === 'paid') {
           const purchase = await storage.getPurchaseByCheckoutSessionId(session.id);
           if (purchase && purchase.status !== 'paid') {
+            const webhookEmail = session.customer_details?.email ?? null;
             await storage.markPurchasePaid(
               purchase.id,
               session.payment_intent as string || '',
-              session.customer_details?.email ?? null
+              webhookEmail
             );
+            sendAdminNotification('New purchase (Stripe webhook)', [
+              { label: 'Customer email', value: webhookEmail || 'unknown' },
+              { label: 'Purchase ID', value: purchase.id },
+              { label: 'Stripe session', value: session.id },
+              { label: 'Amount', value: '£79' },
+              { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
+            ], 'purchase').catch(() => {});
             console.log('[webhook] Purchase marked paid');
           }
         }

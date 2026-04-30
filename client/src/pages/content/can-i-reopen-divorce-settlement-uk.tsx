@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AlertTriangle, Scale } from "lucide-react";
+import { AlertTriangle, Scale, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -37,12 +37,17 @@ const faqItems = [
     question: "What if I simply agreed to a bad deal?",
     answer: "Regret, or the realisation that you agreed to unfavourable terms, is not grounds to set aside a consent order. Courts place great weight on the finality of agreed settlements. The system depends on parties being able to reach final resolutions without fear of reopening.",
   },
+  {
+    question: "Does getting the financial model right before settlement help avoid reopening?",
+    answer: "Yes. One of the most common reasons people feel a settlement was unfair is that they did not fully understand what they were agreeing to at the time — particularly around pension values, long-term cashflow, and the true net equity after costs. Modelling scenarios before finalising reduces the risk of later regret.",
+  },
 ];
 
 const relatedPages = [
   { title: "When is a Divorce Financial Settlement Legally Binding?", description: "When your agreement becomes final and enforceable.", href: "/when-is-divorce-financial-settlement-legally-binding-uk", badge: "Legal" },
   { title: "How Long After Divorce Can Financial Claims Be Made UK?", description: "Time limits (and lack of them) for financial claims after divorce.", href: "/how-long-after-divorce-can-financial-claims-be-made-uk", badge: "Legal" },
   { title: "Can I Hide Assets in Divorce UK?", description: "The consequences of non-disclosure — including reopening settlements.", href: "/can-i-hide-assets-in-divorce-uk", badge: "Disclosure" },
+  { title: "Preview the Full Financial Report", description: "Understand the full picture before settling — model your scenarios now.", href: "/unlock", badge: "Report" },
 ];
 
 export default function ReopenDivorceSettlementPage() {
@@ -108,6 +113,67 @@ export default function ReopenDivorceSettlementPage() {
         </ul>
 
         <InlineCTA label="Get the Settlement Right Before It's Final" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Financial Information That Would Matter in a Challenge</h2>
+        <p className="text-sm text-muted-foreground mb-4">If you are considering a challenge based on non-disclosure, gathering evidence of what was concealed is critical:</p>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Pension CETVs at the time of settlement (from provider records)",
+            "Property valuations at the time of agreement",
+            "Bank and investment account statements around settlement date",
+            "Evidence of business interests or directorship",
+            "HMRC tax returns or self-assessment records",
+            "Evidence of salary, bonuses, or income not disclosed",
+            "Any valuations of assets excluded from disclosure",
+            "Correspondence showing knowledge of undisclosed assets",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points After Settlement</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Discovering hidden assets after signing", desc: "Post-settlement disclosure is one of the more common drivers of challenge. Acting quickly once you discover concealment strengthens your position — delay can be fatal to an application." },
+            { label: "Implementation disputes becoming substantive", desc: "Sometimes what begins as a dispute about how to implement an order (e.g. property valuation at sale) escalates into a challenge to the order itself. Being clear on this distinction — and taking legal advice early — is important." },
+            { label: "Maintenance reviews creating instability", desc: "Periodical payments orders can be varied, creating ongoing uncertainty. Where a clean break was achievable, leaving maintenance orders open creates risk for both parties." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "Whether you have sufficient grounds to reopen a consent order — this is a legal assessment requiring a solicitor",
+            "Whether any concealed assets would have been material to the outcome",
+            "What a successful challenge would result in — courts have wide discretion on any rehearing",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>Do I have sufficient evidence of non-disclosure to bring a credible application?</li>
+          <li>Would the undisclosed assets, if proven, have materially changed the outcome?</li>
+          <li>What are the realistic costs and success chances of a challenge in our situation?</li>
+          <li>Is there a maintenance order that can be varied rather than challenging the full order?</li>
+        </ul>
+        <InlineCTA label="Model Scenarios Before Any Agreement Becomes Final" />
       </ContentSection>
 
       <ContentSection>

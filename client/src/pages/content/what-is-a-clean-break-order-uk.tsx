@@ -52,6 +52,7 @@ const relatedPages = [
   { title: "What is a Consent Order in UK Divorce?", description: "How the consent order document works and what it includes.", href: "/what-is-a-consent-order-uk-divorce", badge: "Legal Orders" },
   { title: "Consent Order vs Clean Break Order UK", description: "Clear explanation of the difference between these two terms.", href: "/consent-order-vs-clean-break-order-uk", badge: "Legal" },
   { title: "Can I Divorce Without a Financial Settlement UK?", description: "Why divorcing without a settlement is financially dangerous.", href: "/can-i-divorce-without-financial-settlement-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "Model whether a clean break is achievable in your situation.", href: "/unlock", badge: "Report" },
 ];
 
 export default function CleanBreakOrderPage() {

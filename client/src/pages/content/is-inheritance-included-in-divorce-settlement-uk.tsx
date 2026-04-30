@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Scale } from "lucide-react";
+import { Scale, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -30,12 +30,21 @@ const faqItems = [
     question: "Is future expected inheritance taken into account?",
     answer: "Courts can take into account expected inheritance under Section 25 of the Matrimonial Causes Act 1973 as a financial resource — but they are cautious about speculative future inheritances. A clear and imminent expected inheritance is more likely to be relevant than a distant or uncertain one.",
   },
+  {
+    question: "Does the length of the marriage affect whether inheritance is included?",
+    answer: "Yes — significantly. In a short marriage, inheritance received before or during the marriage may be more easily ring-fenced as non-matrimonial. In a long marriage, the distinction between matrimonial and non-matrimonial assets erodes over time and courts are more likely to include inherited assets in the overall pot.",
+  },
+  {
+    question: "Can the calculator model scenarios with and without inheritance included?",
+    answer: "Yes. You can model the property and asset pool with or without inherited assets included. The calculator allows you to adjust asset values and see how different capital allocations affect each party's net position — helping you understand the financial difference between including and excluding an inherited asset.",
+  },
 ];
 
 const relatedPages = [
   { title: "Can My Ex Claim My Inheritance in UK Divorce?", description: "When your ex can and cannot claim your inheritance.", href: "/can-ex-claim-inheritance-uk-divorce", badge: "Assets" },
   { title: "How Are Savings Split in Divorce UK?", description: "How courts treat pre-marital savings and gifts alongside matrimonial savings.", href: "/how-are-savings-split-in-divorce-uk", badge: "Assets" },
   { title: "What is a Clean Break Order UK?", description: "How to permanently close all financial claims after divorce.", href: "/what-is-a-clean-break-order-uk", badge: "Legal Orders" },
+  { title: "Preview the Full Financial Report", description: "Model scenarios with and without specific assets included in the pot.", href: "/unlock", badge: "Report" },
 ];
 
 export default function InheritanceSettlementPage() {
@@ -109,6 +118,66 @@ export default function InheritanceSettlementPage() {
           </div>
         </div>
         <InlineCTA label="Model Your Settlement Including Inheritance" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures That May Be Relevant</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Value and date of inheritance received",
+            "Whether inherited funds were kept separate or mingled with joint finances",
+            "Whether inherited property was solely or jointly used",
+            "Length of the marriage",
+            "Net equity in the family home and other matrimonial assets",
+            "Both parties' financial needs — particularly housing",
+            "Any other significant non-matrimonial assets (pre-marital property, gifts)",
+            "Pension CETVs (to assess overall balance of the settlement)",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Inheritance used for the family home", desc: "If inherited funds were used to buy or improve the family home, those funds are likely now matrimonial — the home was a joint asset regardless of the source of the purchase funds." },
+            { label: "Long marriages where the distinction has eroded", desc: "In a 20-year marriage, arguing that assets received 10 years ago are still distinctly 'non-matrimonial' becomes progressively more difficult. Courts look at how the parties treated the assets during the marriage." },
+            { label: "Needs overriding non-matrimonial arguments", desc: "Even a clear inheritance ring-fencing argument may be overridden if the other party's housing or income needs cannot be met without including it — particularly where children are involved." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "Whether a court would treat a specific inheritance as matrimonial or non-matrimonial — this is a legal assessment on the specific facts",
+            "The weight a court would give to non-matrimonial arguments in your case given the marriage length and circumstances",
+            "Whether financial need would override a non-matrimonial argument in your situation",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>Is there a credible argument that this inheritance is non-matrimonial given how it was used?</li>
+          <li>Would the other party's financial needs override a non-matrimonial argument in our case?</li>
+          <li>What evidence would strengthen the case for ring-fencing the inheritance?</li>
+          <li>Should the inheritance be modelled as included or excluded when calculating the overall settlement?</li>
+        </ul>
+        <InlineCTA label="Model With and Without the Inheritance in the Asset Pool" />
       </ContentSection>
 
       <ContentSection>

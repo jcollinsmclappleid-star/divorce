@@ -50,6 +50,7 @@ const relatedPages = [
   { title: "Child Maintenance vs Spousal Maintenance UK", description: "Understanding the difference between these two types of payments.", href: "/child-maintenance-vs-spousal-maintenance-uk", badge: "Maintenance" },
   { title: "Divorce Where One Earns More UK", description: "How income inequality shapes the financial settlement.", href: "/divorce-where-one-earns-more-uk", badge: "Income" },
   { title: "Divorce Financial Settlement Calculator UK", description: "Model post-divorce income including maintenance for both parties.", href: "/divorce-financial-settlement-calculator-uk", badge: "Calculator" },
+  { title: "Preview the Full Financial Report", description: "Model maintenance amounts and cashflow impact.", href: "/unlock", badge: "Report" },
 ];
 
 export default function MaintenanceAmountPage() {

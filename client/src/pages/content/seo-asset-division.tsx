@@ -197,6 +197,7 @@ export default function SeoAssetDivisionPage() {
               <Link href="/can-i-keep-the-house-after-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">Who gets the house?</Link>
               <Link href="/how-are-pensions-divided-in-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">How pensions are split</Link>
               <Link href="/divorce-settlement-examples-uk" onClick={scrollTop} className="text-primary hover:underline">Settlement examples</Link>
+              <Link href="/unlock" onClick={scrollTop} className="text-primary hover:underline">Preview full report</Link>
             </div>
           </div>
         </div>

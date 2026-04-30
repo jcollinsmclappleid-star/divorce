@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Users, Banknote, Home } from "lucide-react";
+import { Users, Banknote, Home, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -30,12 +30,21 @@ const faqItems = [
     question: "What if my ex refuses to contribute to the children's expenses?",
     answer: "Use the CMS for child maintenance — they have enforcement powers. For agreed extras (like school trips or clubs), you may need to negotiate or, in serious cases, return to court. Documenting agreed arrangements in a separation agreement reduces these disputes.",
   },
+  {
+    question: "Does child maintenance affect the capital settlement?",
+    answer: "Child maintenance and capital settlement are separate. However, the housing settlement is heavily influenced by children — courts ensure the primary carer has adequate housing for the children. This can result in the primary carer receiving a larger share of equity or a deferred sale arrangement.",
+  },
+  {
+    question: "When does child maintenance stop?",
+    answer: "Child maintenance through the CMS normally continues until the child is 16, or up to 20 if in full-time non-advanced education. Private agreements can extend maintenance through university, though this requires specific agreement. Maintenance does not automatically extend to university costs unless agreed.",
+  },
 ];
 
 const relatedPages = [
   { title: "Child Maintenance vs Spousal Maintenance UK", description: "The key differences between these two types of maintenance.", href: "/child-maintenance-vs-spousal-maintenance-uk", badge: "Maintenance" },
   { title: "Divorce Financial Settlement With Children UK", description: "How having children affects the overall financial settlement.", href: "/divorce-with-children-financial-settlement-uk", badge: "Children" },
   { title: "Does Having Children Change the Divorce Settlement?", description: "Specific ways children affect the financial outcome of divorce.", href: "/does-having-children-change-divorce-settlement-uk", badge: "Children" },
+  { title: "Preview the Full Financial Report", description: "Model child maintenance, income, and cashflow for both parents.", href: "/unlock", badge: "Report" },
 ];
 
 export default function WhoPaysAfterDivorcePage() {
@@ -103,14 +112,77 @@ export default function WhoPaysAfterDivorcePage() {
         <div className="p-5 bg-background rounded-lg border mb-6">
           <p className="text-sm font-semibold mb-3">Sophie and David (two children aged 8 and 11)</p>
           <div className="space-y-2 text-sm text-muted-foreground">
-            <p>David earns £60,000/year gross (£3,871 gross weekly income). Sophie earns £22,000/year part-time (primary carer).</p>
-            <p><strong>Child maintenance (CMS):</strong> David's liability is approximately 16% of gross income over £800/week for 2 children, reduced for overnight stays (every other weekend). Approximately £350–400/month.</p>
-            <p><strong>Spousal maintenance:</strong> Courts may order David to pay Sophie £800–1,000/month for 5 years — enough to bridge her income gap while the children are young and enable her to increase her working hours as they get older.</p>
-            <p><strong>Housing:</strong> Sophie stays in the family home under a Mesher Order. David rents elsewhere and contributes to the mortgage (included in the overall payment arrangement). When the youngest reaches 18, the property is sold and proceeds divided 40/60 in Sophie's favour.</p>
-            <p><strong>School activities:</strong> Both agreed to split extracurricular costs equally. School trips are split proportionally (70% David, 30% Sophie reflecting their income ratio).</p>
+            <p>David earns £60,000/year gross. Sophie earns £22,000/year part-time (primary carer).</p>
+            <p><strong>Child maintenance (CMS):</strong> David's liability is approximately 16% of gross income over £800/week for 2 children, reduced for overnight stays. Approximately £350–400/month.</p>
+            <p><strong>Spousal maintenance:</strong> Courts may order David to pay Sophie £800–1,000/month for 5 years to bridge her income gap while the children are young and enable her to increase her working hours as they get older.</p>
+            <p><strong>Housing:</strong> Sophie stays in the family home under a Mesher Order. When the youngest reaches 18, the property is sold and proceeds divided in Sophie's favour.</p>
+            <p><strong>School activities:</strong> Both agreed to split extracurricular costs equally. School trips are split proportionally reflecting their income ratio.</p>
           </div>
+          <p className="text-xs text-muted-foreground mt-3">This is illustrative only. Actual outcomes depend on the specific circumstances of each case.</p>
         </div>
         <InlineCTA label="Model Your Post-Divorce Finances" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures to Gather</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Gross income of both parents",
+            "Number of overnight stays with each parent per year",
+            "Monthly childcare costs (nursery, after-school clubs)",
+            "School fees (if private) and associated costs",
+            "Housing costs for both parents post-separation",
+            "Children's ages and education stage",
+            "Any benefits entitlement (Child Benefit, Child Tax Credit)",
+            "Monthly essential outgoings for each parent",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Financial Pressure Points</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Childcare costs not factored into the overall picture", desc: "Childcare costs for younger children can run to £1,000–1,500/month in many areas. These significantly affect the income position of the primary carer and should be reflected in both the maintenance calculation and the overall capital settlement." },
+            { label: "Child maintenance vs spousal maintenance overlap", desc: "There is often confusion about what child maintenance covers and whether spousal maintenance is also needed. CMS payments address the children's direct costs — they do not cover the primary carer's additional income shortfall from reduced working hours." },
+            { label: "Housing needs creating capital tension", desc: "Courts prioritise housing for children. If the primary carer cannot rehouse adequately with an equal split, the settlement typically favours them in the capital division — sometimes leaving the non-resident parent with limited capital to rehouse themselves." },
+            { label: "Post-18 financial support", desc: "Once children reach 18, most formal financial obligations end. But university costs, accommodation, and transition support are often not formally agreed. Planning ahead reduces conflict at this stage." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "The exact CMS child maintenance figure — this requires the paying parent's gross income and overnight stay data via the CMS calculator",
+            "Whether spousal maintenance is appropriate in your specific circumstances",
+            "How a court would divide capital between two parents with very different income positions",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>Based on our income levels and childcare costs, would spousal maintenance be appropriate alongside child maintenance?</li>
+          <li>How should childcare costs factor into the capital division?</li>
+          <li>What housing arrangement would best meet the children's needs given both parents' incomes?</li>
+          <li>Should we agree to a Mesher Order or is a clean sale and division more appropriate?</li>
+          <li>How should school fee contributions be structured if we want to continue private schooling?</li>
+        </ul>
+        <InlineCTA label="Model Child Maintenance and Income for Both Parents" />
       </ContentSection>
 
       <ContentSection>

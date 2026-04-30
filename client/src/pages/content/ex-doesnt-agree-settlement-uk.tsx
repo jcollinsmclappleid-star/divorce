@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Scale, Gavel } from "lucide-react";
+import { Scale, Gavel, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -37,12 +37,21 @@ const faqItems = [
     question: "How long does it take if my ex won't agree?",
     answer: "A contested financial case typically takes 12–24 months from filing Form A to a final hearing. If the case settles at the FDR stage (which many do), the timeline is often 8–14 months. Delays can be caused by complex assets, non-disclosure, or a party's deliberate delay tactics (which courts can sanction with cost orders).",
   },
+  {
+    question: "Does entering court proceedings mean I lose control of the outcome?",
+    answer: "Not entirely. Most court financial cases settle before the final hearing — often at the FDR stage — because the judge's non-binding indication gives both parties a realistic assessment of the likely outcome. Proceeding to a full contested hearing is the exception, not the rule.",
+  },
+  {
+    question: "Can the calculator help if my ex's position seems unreasonable?",
+    answer: "Yes. Modelling the full financial picture — property scenarios, income positions, pension values — gives you an evidence-based view of what a reasonable settlement looks like. This can help you and your solicitor form a clear negotiating position, and identify if your ex's demands are genuinely disproportionate.",
+  },
 ];
 
 const relatedPages = [
   { title: "Mediation vs Court Divorce UK Costs", description: "The cost difference between mediation and contested court proceedings.", href: "/mediation-vs-court-divorce-uk-costs", badge: "Costs" },
   { title: "Financial Remedy Proceedings UK", description: "How the three-stage court process works when you cannot agree.", href: "/financial-remedy-proceedings-uk", badge: "Process" },
   { title: "Settling Out of Court vs Court Divorce UK", description: "The pros, cons, and costs of each route.", href: "/settling-out-of-court-vs-court-divorce-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "See what a reasonable settlement looks like modelled across your figures.", href: "/unlock", badge: "Report" },
 ];
 
 export default function ExDoesntAgreeSettlementPage() {
@@ -101,8 +110,70 @@ export default function ExDoesntAgreeSettlementPage() {
             </tbody>
           </table>
         </div>
-        <p className="text-sm text-muted-foreground mb-6">These costs come out of the matrimonial pot — the money that could otherwise go to you. Understanding what is reasonable with a financial settlement calculator before entering negotiations helps you frame realistic positions and avoid unnecessary escalation.</p>
+        <p className="text-sm text-muted-foreground mb-6">These costs come out of the matrimonial pot — the money that could otherwise go to you. Understanding what is reasonable before entering negotiations helps you frame realistic positions and avoid unnecessary escalation.</p>
         <InlineCTA label="Model What a Reasonable Settlement Looks Like" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures That Help Frame a Negotiating Position</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Net equity in the family home (value minus mortgage)",
+            "Pension CETVs for both parties",
+            "Gross and net income of both parties",
+            "Savings, ISAs, and investments",
+            "Joint and sole liabilities",
+            "Monthly housing costs post-separation",
+            "Any maintenance already being paid",
+            "Children's ages and care arrangements",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points When an Ex Won't Agree</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Emotional rather than financial objections", desc: "Disagreements are often driven by principle or emotion rather than financial logic. Modelling the actual numbers can depersonalise discussions and shift focus to what is financially reasonable." },
+            { label: "One party underestimating what the court would order", desc: "Courts rarely produce radically one-sided outcomes. If your ex's position is significantly more favourable to them than the FDR indication would be, the costs of fighting may not justify their position." },
+            { label: "Legal costs eating into the settlement", desc: "Every month of delay or escalation costs money. Contested final hearings can cost each party £20,000–£100,000 — funds that could have been part of the settlement itself." },
+            { label: "Property valuation disputes", desc: "Disagreement about property value is common. Instructing a joint surveyor is usually quicker and cheaper than two separate valuations plus a dispute." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "Whether your ex's position is legally reasonable — that requires a solicitor's assessment",
+            "What a judge would award at an FDR or final hearing in your specific case",
+            "Whether mediation is appropriate in your circumstances (particularly where there are safety concerns)",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>Based on the figures, is my ex's position within the range of what a court might order?</li>
+          <li>At what point is it more cost-effective to apply to court than continue negotiating?</li>
+          <li>What is the realistic litigation risk if we proceed to a final hearing?</li>
+          <li>Could an FDR indication resolve things without going all the way to a contested hearing?</li>
+          <li>Are there any red flags in the other party's position that would justify a costs order?</li>
+        </ul>
+        <InlineCTA label="Build an Evidence-Based Negotiating Position" />
       </ContentSection>
 
       <ContentSection>

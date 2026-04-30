@@ -44,6 +44,7 @@ const relatedPages = [
   { title: "What is a Consent Order in UK Divorce?", description: "How a consent order works and what the approval process involves.", href: "/what-is-a-consent-order-uk-divorce", badge: "Legal Orders" },
   { title: "Can I Divorce Without a Financial Settlement UK?", description: "Why informal agreements are insufficient legal protection.", href: "/can-i-divorce-without-financial-settlement-uk", badge: "Process" },
   { title: "Can I Reopen a Divorce Settlement UK?", description: "The limited circumstances where a final order can be challenged.", href: "/can-i-reopen-divorce-settlement-uk", badge: "Legal" },
+  { title: "Preview the Full Financial Report", description: "Model your settlement before it becomes final.", href: "/unlock", badge: "Report" },
 ];
 
 export default function LegallyBindingSettlementPage() {

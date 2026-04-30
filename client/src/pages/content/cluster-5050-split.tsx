@@ -44,6 +44,7 @@ const relatedPages = [
     href: "/divorce-where-one-earns-more-uk",
     badge: "Situations",
   },
+  { title: "Preview the Full Financial Report", description: "See a full 50/50 split modelled with real figures.", href: "/unlock", badge: "Report" },
 ];
 
 export default function Cluster5050Split() {

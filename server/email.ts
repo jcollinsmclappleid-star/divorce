@@ -308,6 +308,50 @@ export async function sendMagicLinkEmail(
   }
 }
 
+const ADMIN_EMAIL = 'support@divorcecalculatoruk.co.uk';
+
+export async function sendAdminNotification(
+  subject: string,
+  bodyLines: { label: string; value: string }[],
+  eventType: 'purchase' | 'gdpr_delete' | 'lead_capture'
+): Promise<void> {
+  const client = getResend();
+  if (!client) {
+    console.warn('[email] RESEND_API_KEY not set — skipping admin notification');
+    return;
+  }
+
+  const badgeColour = eventType === 'purchase' ? '#15803d' : eventType === 'gdpr_delete' ? '#b91c1c' : '#1d4ed8';
+  const badgeLabel = eventType === 'purchase' ? 'New Purchase' : eventType === 'gdpr_delete' ? 'GDPR Delete Request' : 'New Lead Capture';
+
+  const rows = bodyLines.map(({ label, value }) => `
+    <tr>
+      <td style="padding:6px 12px;color:#64748b;font-size:13px;border-bottom:1px solid #f1f5f9;">${htmlEscape(label)}</td>
+      <td style="padding:6px 12px;color:#0f1e3c;font-size:13px;font-weight:500;border-bottom:1px solid #f1f5f9;">${htmlEscape(value)}</td>
+    </tr>`).join('');
+
+  const html = emailWrapper(`
+    <div style="display:inline-block;padding:4px 10px;background:${badgeColour};color:#fff;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;">${badgeLabel}</div>
+    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:20px;font-weight:700;">${htmlEscape(subject)}</h1>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;margin-bottom:16px;">
+      ${rows}
+    </table>
+    <p style="margin:0;color:#94a3b8;font-size:11px;">Sent automatically by DivorceCalculatorUK · ${new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' })}</p>
+  `);
+
+  try {
+    await client.emails.send({
+      from: FROM,
+      to: ADMIN_EMAIL,
+      subject: `[DivorceCalcUK] ${subject}`,
+      html,
+    });
+    console.log(`[email] Admin notification sent: ${subject}`);
+  } catch (err) {
+    console.error('[email] Failed to send admin notification:', err);
+  }
+}
+
 export async function sendEmailVerificationEmail(
   email: string,
   verificationToken: string

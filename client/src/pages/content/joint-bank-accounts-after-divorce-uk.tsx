@@ -43,6 +43,7 @@ const relatedPages = [
   { title: "How Are Savings Split in Divorce UK?", description: "The full guide to dividing savings and bank accounts.", href: "/how-are-savings-split-in-divorce-uk", badge: "Assets" },
   { title: "Can I Hide Assets in Divorce UK?", description: "Why courts treat dissipation of matrimonial assets so seriously.", href: "/can-i-hide-assets-in-divorce-uk", badge: "Disclosure" },
   { title: "Financial Disclosure in UK Divorce", description: "What must be disclosed and the consequences of non-disclosure.", href: "/financial-disclosure-divorce-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "Include joint accounts in the full asset pool model.", href: "/unlock", badge: "Report" },
 ];
 
 export default function JointBankAccountsPage() {

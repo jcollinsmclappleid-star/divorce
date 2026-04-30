@@ -55,6 +55,7 @@ const relatedPages = [
     href: "/can-i-force-sale-of-house-after-divorce-uk",
     badge: "Property",
   },
+  { title: "Preview the Full Financial Report", description: "See if keeping the house is financially viable with the calculator.", href: "/unlock", badge: "Report" },
 ];
 
 const keyFactors = [

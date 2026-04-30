@@ -36,6 +36,7 @@ const relatedPages = [
   { title: "Financial Remedy Proceedings UK", description: "How the three-stage court process works in detail.", href: "/financial-remedy-proceedings-uk", badge: "Process" },
   { title: "Settling Out of Court vs Court Divorce UK", description: "The full comparison of out-of-court and court routes.", href: "/settling-out-of-court-vs-court-divorce-uk", badge: "Process" },
   { title: "Divorce Solicitor vs Mediation UK", description: "When to use a solicitor and when mediation is more appropriate.", href: "/divorce-solicitor-vs-mediation-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "Model your settlement before deciding on mediation or court.", href: "/unlock", badge: "Report" },
 ];
 
 export default function MediationVsCourtPage() {

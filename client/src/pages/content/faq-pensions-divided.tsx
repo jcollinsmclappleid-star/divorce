@@ -58,6 +58,7 @@ const relatedPages = [
     href: "/how-are-savings-split-in-divorce-uk",
     badge: "Assets",
   },
+  { title: "Preview the Full Financial Report", description: "Model pension sharing in the full settlement calculator.", href: "/unlock", badge: "Report" },
 ];
 
 const approaches = [

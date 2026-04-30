@@ -42,6 +42,7 @@ const relatedPages = [
   { title: "How Are Pensions Divided in Divorce?", description: "The full overview of pension sharing in UK divorce.", href: "/how-are-pensions-divided-in-divorce-uk", badge: "Pensions" },
   { title: "Divorce Pension Split Calculator", description: "Model pension sharing assumptions alongside your other assets.", href: "/divorce-pension-split-calculator-uk", badge: "Tool" },
   { title: "Divorce Financial Settlement Calculator", description: "Model the full financial settlement including pension.", href: "/divorce-financial-settlement-calculator-uk", badge: "Tool" },
+  { title: "Preview the Full Financial Report", description: "Model pension offsetting against property in the calculator.", href: "/unlock", badge: "Report" },
 ];
 
 export default function PensionOffsettingPage() {

@@ -44,6 +44,7 @@ const relatedPages = [
     href: "/transfer-of-equity-divorce-uk",
     badge: "Property",
   },
+  { title: "Preview the Full Financial Report", description: "Model a property buyout scenario with your figures.", href: "/unlock", badge: "Report" },
 ];
 
 export default function ClusterHouseBuyout() {

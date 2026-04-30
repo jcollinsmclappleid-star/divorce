@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { TrendingUp, AlertTriangle } from "lucide-react";
+import { TrendingUp, AlertTriangle, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -39,12 +39,21 @@ const faqItems = [
     question: "Can investments be divided without selling?",
     answer: "Yes — if both parties agree, investments can be transferred in specie (without selling) so the receiving party takes the actual assets rather than a cash equivalent. This may have CGT advantages and avoids the need to time a sale.",
   },
+  {
+    question: "When should investments be valued for divorce purposes?",
+    answer: "Courts generally use the value as close to the order date as possible. Because markets move, this can create significant differences from valuations at the time of separation. Both parties should request up-to-date valuations before finalising a consent order — especially for volatile portfolios.",
+  },
+  {
+    question: "Are unvested shares or options included in the settlement?",
+    answer: "Partially. Courts generally include the proportion of unvested shares attributable to the marriage period while leaving post-separation accrual out. The proportion is typically calculated pro-rata based on the vesting timeline versus the marriage duration. Expert valuation evidence is often required for complex share schemes.",
+  },
 ];
 
 const relatedPages = [
   { title: "How Are Savings Split in Divorce UK?", description: "How bank accounts and cash savings are treated in divorce.", href: "/how-are-savings-split-in-divorce-uk", badge: "Assets" },
   { title: "Can My Ex Claim My Inheritance in UK Divorce?", description: "When inheritance can and cannot be included in a settlement.", href: "/can-ex-claim-inheritance-uk-divorce", badge: "Assets" },
   { title: "Divorce Financial Settlement Calculator UK", description: "Model your investment portfolio alongside other assets.", href: "/divorce-financial-settlement-calculator-uk", badge: "Calculator" },
+  { title: "Preview the Full Financial Report", description: "See how investments and assets work together in a complete settlement model.", href: "/unlock", badge: "Report" },
 ];
 
 export default function InvestmentsDividedPage() {
@@ -106,11 +115,73 @@ export default function InvestmentsDividedPage() {
         </Card>
 
         <div className="p-5 bg-background rounded-lg border mb-4">
-          <p className="text-sm font-semibold mb-2">Real-World Example</p>
+          <p className="text-sm font-semibold mb-2">Illustrative Scenario</p>
           <p className="text-sm text-muted-foreground">Claire and Mark divorce after 14 years. Mark has a stocks and shares ISA worth £62,000, built up entirely during the marriage. Claire has a smaller portfolio worth £18,000. They also have the family home. Starting from equal division of investments (£80,000 total = £40,000 each), Mark takes a larger share of property equity while Claire takes all of the investment portfolio. A financial settlement calculator helped them verify the overall values were equivalent before submitting a consent order.</p>
+          <p className="text-xs text-muted-foreground mt-2">This is illustrative only. Actual outcomes depend on the specific circumstances of each case.</p>
         </div>
 
         <InlineCTA label="Model Your Investment Portfolio in the Settlement" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures to Gather for Investment Division</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Current portfolio valuations (as of today — not last statement)",
+            "Date each investment was opened / first funded",
+            "Whether funds came from matrimonial income or separate sources",
+            "Unrealised capital gains (cost basis vs current value)",
+            "Outstanding unvested share awards — schedule and conditions",
+            "ISA balances in each party's name",
+            "Investment bonds — current surrender value and any surrender penalties",
+            "Business shareholdings — last formal valuation or accounts",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Financial Pressure Points</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Market timing disagreements", desc: "If one party wants to sell now and the other wants to wait for a recovery, this becomes a source of conflict. The consent order should specify the valuation date and method to avoid later disputes." },
+            { label: "Unvested awards with uncertain values", desc: "Performance-linked share awards may vest at zero or full value depending on company results. Agreeing a settlement around uncertain future values requires careful structuring — often with a 'when and if' clause if the shares vest." },
+            { label: "CGT on transfer after separation", desc: "Couples who took years to agree a settlement may find their investment transfers have CGT implications where an earlier transfer would not. This can reduce the real value of the settlement and needs to be factored in." },
+            { label: "Business valuation disputes", desc: "Where one party holds shares in a private business, valuation is highly subjective. Minority discounts, goodwill, and future earnings projections all affect the number. Both parties appointing a joint expert reduces cost and dispute." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "The value of unvested shares or performance-conditional awards — these require expert valuation",
+            "The CGT implications of any specific transfer — a tax adviser should review this",
+            "Whether a business shareholding is matrimonial or non-matrimonial in your specific circumstances",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>Should investments be transferred in specie or liquidated — and what are the CGT implications of each?</li>
+          <li>What proportion of my unvested shares should be included in the matrimonial pot?</li>
+          <li>Is our separation date within the current tax year, meaning spousal transfer relief still applies?</li>
+          <li>Does the business shareholding require a formal independent valuation?</li>
+        </ul>
+        <InlineCTA label="Include Your Investment Portfolio in the Financial Model" />
       </ContentSection>
 
       <ContentSection>

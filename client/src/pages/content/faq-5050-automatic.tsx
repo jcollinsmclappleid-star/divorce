@@ -62,6 +62,7 @@ const relatedPages = [
     href: "/divorce-settlement-examples-uk",
     badge: "Examples",
   },
+  { title: "Preview the Full Financial Report", description: "Model a 50/50 split with your own figures.", href: "/unlock", badge: "Report" },
 ];
 
 const practiceItems = [

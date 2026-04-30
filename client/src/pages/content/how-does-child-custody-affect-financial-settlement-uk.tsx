@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Users, Home } from "lucide-react";
+import { Users, Home, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -30,12 +30,21 @@ const faqItems = [
     question: "What happens to maintenance when children turn 18?",
     answer: "Child maintenance via CMS typically ends when a child leaves full-time secondary education. Spousal maintenance is a separate matter and continues according to the order terms regardless of children's ages. If the primary carer's maintenance was partially based on their childcare role, they may be able to return to full-time work as children get older — this can be a basis for reviewing maintenance.",
   },
+  {
+    question: "Can the divorce settlement calculator model child maintenance?",
+    answer: "Yes — the calculator includes an optional child maintenance estimate based on CMS rates and overnight-stay bands. This feeds into the monthly cashflow model for both parties, helping you see the full income picture alongside the capital settlement.",
+  },
+  {
+    question: "Does the number of children affect the capital settlement?",
+    answer: "Indirectly. More children typically means a larger housing requirement for the primary carer and higher ongoing childcare costs. This can strengthen the case for the primary carer receiving a greater share of the property equity — but there is no formula. Each case is assessed on its own facts.",
+  },
 ];
 
 const relatedPages = [
   { title: "Divorce Financial Settlement With Children UK", description: "The full picture of how children shape a divorce financial settlement.", href: "/divorce-with-children-financial-settlement-uk", badge: "Children" },
   { title: "Child Maintenance vs Spousal Maintenance UK", description: "The key differences between child and spousal maintenance.", href: "/child-maintenance-vs-spousal-maintenance-uk", badge: "Maintenance" },
   { title: "Who Pays What After Divorce With Children UK?", description: "A practical breakdown of financial responsibilities after divorce.", href: "/who-pays-what-after-divorce-with-children-uk", badge: "Children" },
+  { title: "Preview the Full Financial Report", description: "See what the settlement calculator models across property, income and cashflow.", href: "/unlock", badge: "Report" },
 ];
 
 export default function CustodyFinancialSettlementPage() {
@@ -55,7 +64,7 @@ export default function CustodyFinancialSettlementPage() {
     >
       <ContentSection>
         <p className="text-muted-foreground leading-relaxed mb-6">
-          Care arrangements and financial settlements are decided in separate processes — but they are closely linked. Where children live primarily affects the financial settlement in two key ways: it determines housing needs (the primary carer typically needs a home large enough for the children), and it affects child maintenance calculations.
+          Care arrangements and financial settlements are decided in separate processes — but they are closely linked. Where children live primarily affects the financial settlement in two key ways: it determines housing needs (the primary carer typically needs a home large enough for the children), and it affects child maintenance calculations. Understanding this interplay is essential before modelling your financial position.
         </p>
 
         <h2 className="text-2xl font-display font-bold mt-8 mb-4">How Care Arrangements Feed Into the Financial Settlement</h2>
@@ -87,6 +96,70 @@ export default function CustodyFinancialSettlementPage() {
           <div className="p-3 rounded-lg border bg-background text-sm text-muted-foreground">Spousal maintenance may still apply based on the income disparity, regardless of the care split</div>
         </div>
         <InlineCTA label="Model Your Financial Position With Children" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures That May Be Relevant to Model</h2>
+        <p className="text-sm text-muted-foreground mb-4">When modelling a settlement where children are involved, the following figures are typically needed:</p>
+        <div className="grid sm:grid-cols-2 gap-3 mb-6">
+          {[
+            "Gross income of both parties (before tax)",
+            "Number of overnight stays per week with each parent",
+            "Ages of each child",
+            "Property value and outstanding mortgage",
+            "Pension CETV (cash equivalent transfer value) for each party",
+            "Monthly childcare costs (nursery, wraparound care)",
+            "Current monthly housing costs (mortgage or rent)",
+            "Savings and liquid assets available to both parties",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border bg-background">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-8 mb-4">Common Financial Pressure Points</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Housing affordability for the primary carer", desc: "If the primary carer cannot sustain the mortgage on a single income, they may face a choice between a deferred sale and rehousing — each with different cashflow pressures." },
+            { label: "Child maintenance reducing take-home pay", desc: "CMS payments reduce the non-resident parent's available income significantly. On a gross income of £40,000, the basic CMS rate for two children is approximately £266/month before overnight-stay reductions." },
+            { label: "Pension imbalance between parties", desc: "Where one party sacrificed career progression for childcare, pension CETVs may be significantly unequal. This is often invisible until modelled alongside the capital settlement." },
+            { label: "Income gap after separation", desc: "Where one party earned significantly more during the marriage, the lower earner may face an immediate income shortfall — particularly if childcare costs prevent a return to full-time work." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border bg-background">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "What care arrangement courts would order — custody decisions are made in separate proceedings based on the children's welfare",
+            "Whether spousal maintenance is appropriate in your circumstances — this depends on facts specific to your case",
+            "What level of housing the court would consider adequate for the children",
+            "Whether a Mesher Order (deferred sale) or immediate sale is more appropriate for your situation",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>How does the number of agreed overnight stays affect the CMS calculation in our specific situation?</li>
+          <li>Would a Mesher Order (deferred sale) be appropriate given the children's ages and the available equity?</li>
+          <li>Could spousal maintenance be relevant alongside child maintenance in our case?</li>
+          <li>What pension provision, if any, should be considered alongside the property settlement?</li>
+          <li>How should childcare costs be factored into the overall cashflow assessment?</li>
+        </ul>
+        <InlineCTA label="Compare Scenarios Including Maintenance in the Calculator" />
       </ContentSection>
 
       <ContentSection>

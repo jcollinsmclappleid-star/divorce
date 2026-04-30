@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AlertTriangle, Gavel } from "lucide-react";
+import { AlertTriangle, Gavel, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -30,12 +30,21 @@ const faqItems = [
     question: "Can I delay the financial settlement process?",
     answer: "Courts have strict timetables and can penalise delay tactics with cost orders. Courts can also make unless orders — if a party fails to comply by a deadline, they are barred from taking further steps in the proceedings. Deliberate delay is taken very seriously.",
   },
+  {
+    question: "What if I feel pressured into agreeing to terms?",
+    answer: "If you have signed or are being pressured into agreeing to a settlement under duress, take independent legal advice immediately. A consent order signed under undue pressure or without genuine free consent may be challengeable, but this threshold is high. Acting quickly is important.",
+  },
+  {
+    question: "Can modelling help if I think a proposed settlement is unfair?",
+    answer: "Yes. A financial model showing property scenarios, income positions, pension values, and post-separation cashflow gives you an evidence-based picture of what a reasonable settlement might look like. This can help you and your solicitor articulate why a proposed arrangement is disproportionate — or confirm that it is closer to reasonable than you initially thought.",
+  },
 ];
 
 const relatedPages = [
   { title: "My Ex Doesn't Agree With the Settlement UK", description: "What to do when your ex is being unreasonable.", href: "/ex-doesnt-agree-settlement-uk", badge: "Process" },
   { title: "Financial Remedy Proceedings UK", description: "How courts handle financial settlements when parties cannot agree.", href: "/financial-remedy-proceedings-uk", badge: "Process" },
   { title: "Can I Divorce Without a Financial Settlement UK?", description: "The risks of avoiding the financial settlement process entirely.", href: "/can-i-divorce-without-financial-settlement-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "Understand what a balanced financial settlement model covers.", href: "/unlock", badge: "Report" },
 ];
 
 export default function RefuseSettlementPage() {
@@ -107,6 +116,66 @@ export default function RefuseSettlementPage() {
           ))}
         </div>
         <InlineCTA label="Understand What a Fair Settlement Looks Like" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures to Gather to Form a Counter-Position</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Net equity in the family home",
+            "Pension CETVs for both parties",
+            "Gross income and take-home pay for both parties",
+            "Savings, ISAs, and investments",
+            "Joint and sole liabilities",
+            "Monthly income and expenditure post-separation",
+            "Any maintenance already being paid or received",
+            "Children's ages and care arrangements if relevant",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Settlement feels emotionally unacceptable even if financially reasonable", desc: "Divorce settlements often feel unfair to one or both parties because the emotional context is so charged. Viewing the numbers objectively — what does the law actually say? — is key to separating emotion from financial reality." },
+            { label: "Being presented with a fait accompli", desc: "If the other party's solicitor has drafted a consent order and is pressing you to sign quickly, you are entitled to take independent legal advice. Never sign under time pressure without understanding what you are agreeing to." },
+            { label: "Not understanding the implications", desc: "A consent order is final and binding. Not understanding what you are agreeing to — particularly around pensions, maintenance, and clean break provisions — can have long-term consequences." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "Whether the proposed settlement is legally fair in your circumstances — this requires a solicitor's assessment",
+            "Whether you have grounds to challenge a consent order you have already signed",
+            "What the court would order in your specific case if you proceeded",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>Based on the figures, is the proposal within the range of what a court might order?</li>
+          <li>What are my options if I believe the proposed settlement is genuinely disproportionate?</li>
+          <li>What are the realistic costs and timelines if I decide to contest?</li>
+          <li>Are there any aspects of the proposal I should be particularly concerned about long-term?</li>
+        </ul>
+        <InlineCTA label="Model a Counter-Proposal With Your Own Figures" />
       </ContentSection>
 
       <ContentSection>

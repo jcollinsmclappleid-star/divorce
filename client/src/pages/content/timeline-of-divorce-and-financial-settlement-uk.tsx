@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Clock } from "lucide-react";
+import { Clock, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -37,12 +37,21 @@ const faqItems = [
     question: "Do financial proceedings affect the divorce timeline?",
     answer: "The financial settlement and the divorce are separate processes. Contested financial proceedings (going to a final hearing) typically take longer than the divorce itself and can run well beyond the date of the Final Order. Courts can and do make financial orders after the divorce is finalised.",
   },
+  {
+    question: "When should I start modelling the financial settlement?",
+    answer: "As early as possible — ideally before or at the same time as starting the legal divorce process. Modelling scenarios early helps you understand your financial position, identify what information you need to gather, and enter negotiations (or mediation) with a clear picture of what is reasonable.",
+  },
+  {
+    question: "What happens if the consent order is not approved?",
+    answer: "The court reviews consent orders on paper to ensure they are fair. If a judge considers the order unreasonable (e.g., significantly one-sided), they can request further information or decline to approve it. This is uncommon but it is why consent orders should be drafted carefully — ideally with legal assistance.",
+  },
 ];
 
 const relatedPages = [
   { title: "How Long Does Divorce Financial Settlement Take UK?", description: "Detailed timelines by route for the financial settlement.", href: "/how-long-does-divorce-financial-settlement-take-uk", badge: "Timeline" },
   { title: "Financial Remedy Proceedings UK", description: "The full court process timeline from Form A to Final Hearing.", href: "/financial-remedy-proceedings-uk", badge: "Process" },
   { title: "Steps After the Final Order UK", description: "What to do after the financial settlement is approved.", href: "/steps-after-final-order-finances-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "See what your financial settlement model covers from the start.", href: "/unlock", badge: "Report" },
 ];
 
 export default function DivorceTimelinePage() {
@@ -104,6 +113,68 @@ export default function DivorceTimelinePage() {
         </div>
         <p className="text-xs text-muted-foreground mb-6">Timelines are approximate and affected by court backlogs, complexity of assets, and cooperation between the parties.</p>
         <InlineCTA label="Understand Your Financial Position to Speed Negotiations" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Financial Information to Gather Early</h2>
+        <p className="text-sm text-muted-foreground mb-4">Starting the financial modelling early requires gathering key figures. The sooner you have these, the better prepared you will be for negotiations:</p>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Mortgage statements (balance, rate, remaining term)",
+            "Property valuation (estate agent or surveyor estimate)",
+            "Pension statements — request CETV from each provider",
+            "Bank, savings, and ISA balances",
+            "Payslips or P60s for both parties",
+            "Any sole-name accounts or investments",
+            "Life assurance policies and surrender values",
+            "Outstanding loans, credit cards, or finance agreements",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Timing Pressure Points</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Applying for the Final Order too early", desc: "Remarrying after the Final Order without having made a capital financial claim bars you from making one. Many solicitors advise filing or completing the financial settlement first." },
+            { label: "Mortgage payments during proceedings", desc: "Someone needs to maintain the mortgage throughout the process. Falling behind can trigger lender action regardless of what stage proceedings are at." },
+            { label: "Pension CETV expiry", desc: "CETVs (pension valuations) typically expire after 3 months. If you are close to agreement, allow time for updated CETVs rather than discovering they have expired at a critical point." },
+            { label: "Court backlogs extending timelines", desc: "Financial remedy proceedings in England and Wales are affected by court backlogs. First hearings can take 4–6 months to schedule in busy court centres. Starting early reduces the pressure." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "What the right timing is for your specific situation — this depends on your circumstances and goals",
+            "Whether to apply for the Final Order before or after the financial settlement is resolved",
+            "What the court timetable looks like in your local court centre at the current time",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>Should we apply for the Final Order before or after the financial consent order is in place?</li>
+          <li>What is the realistic timeline for reaching an agreement given our circumstances?</li>
+          <li>At what point should we move from informal negotiations to filing formally?</li>
+          <li>How should mortgage payments and the family home be managed during the process?</li>
+        </ul>
+        <InlineCTA label="Start Modelling Your Settlement Today" />
       </ContentSection>
 
       <ContentSection>

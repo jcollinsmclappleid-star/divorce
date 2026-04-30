@@ -40,6 +40,7 @@ const relatedPages = [
   { title: "Both Names on Mortgage in Divorce UK", description: "Your full options when both names remain on the mortgage.", href: "/both-names-on-mortgage-divorce-uk", badge: "Mortgage" },
   { title: "Can I Force Sale of House After Divorce UK?", description: "Your options when your ex won't agree to sell.", href: "/can-i-force-sale-of-house-after-divorce-uk", badge: "Property" },
   { title: "Buying Partner Out of House in Divorce UK", description: "How to buy out your partner's share and take on the mortgage solo.", href: "/buying-partner-out-of-house-divorce-uk", badge: "Property" },
+  { title: "Preview the Full Financial Report", description: "Include mortgage costs in your post-separation cashflow model.", href: "/unlock", badge: "Report" },
 ];
 
 export default function MortgageDuringDivorcePage() {

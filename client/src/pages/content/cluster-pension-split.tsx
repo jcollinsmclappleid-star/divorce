@@ -38,6 +38,7 @@ const relatedPages = [
     href: "/how-are-pensions-divided-in-divorce-uk",
     badge: "FAQ",
   },
+  { title: "Preview the Full Financial Report", description: "See how pension sharing works in a full settlement model.", href: "/unlock", badge: "Report" },
 ];
 
 export default function ClusterPensionSplit() {

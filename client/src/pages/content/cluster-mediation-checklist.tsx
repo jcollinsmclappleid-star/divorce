@@ -38,6 +38,7 @@ const relatedPages = [
     href: "/divorce-mediation-process-uk",
     badge: "Process",
   },
+  { title: "Preview the Full Financial Report", description: "Understand what figures to bring to mediation.", href: "/unlock", badge: "Report" },
 ];
 
 const checklistItems = [

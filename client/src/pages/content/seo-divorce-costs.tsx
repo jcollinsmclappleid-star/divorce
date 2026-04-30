@@ -190,6 +190,7 @@ export default function SeoDivorceCostsPage() {
               <Link href="/how-are-pensions-divided-in-divorce-uk" onClick={scrollTop} className="text-primary hover:underline">How pensions are split</Link>
               <Link href="/divorce-settlement-examples-uk" onClick={scrollTop} className="text-primary hover:underline">Settlement examples</Link>
               <Link href="/free-guide" onClick={scrollTop} className="text-primary hover:underline">Free divorce finances guide</Link>
+              <Link href="/unlock" onClick={scrollTop} className="text-primary hover:underline">Preview full report</Link>
             </div>
           </div>
         </div>

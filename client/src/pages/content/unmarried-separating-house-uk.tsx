@@ -40,6 +40,7 @@ const relatedPages = [
   { title: "Can I Force Sale of House After Divorce UK?", description: "Court powers to compel property sale — applies to TOLATA cases too.", href: "/can-i-force-sale-of-house-after-divorce-uk", badge: "Property" },
   { title: "Buying Partner Out of House in Divorce UK", description: "How to buy out a co-owner's share when separating.", href: "/buying-partner-out-of-house-divorce-uk", badge: "Property" },
   { title: "Divorce Financial Settlement Calculator UK", description: "Model your financial position after separation.", href: "/divorce-financial-settlement-calculator-uk", badge: "Calculator" },
+  { title: "Preview the Full Financial Report", description: "Understand your financial position before separation.", href: "/unlock", badge: "Report" },
 ];
 
 export default function UnmarriedSeparatingHousePage() {

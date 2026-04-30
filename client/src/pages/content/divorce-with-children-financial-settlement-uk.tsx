@@ -48,6 +48,7 @@ const relatedPages = [
   { title: "Child Maintenance vs Spousal Maintenance UK", description: "The difference between the two types of maintenance after divorce.", href: "/child-maintenance-vs-spousal-maintenance-uk", badge: "Maintenance" },
   { title: "Does Having Children Change the Divorce Settlement?", description: "How children affect the financial outcome of divorce.", href: "/does-having-children-change-divorce-settlement-uk", badge: "Children" },
   { title: "How Does Child Custody Affect Financial Settlement UK?", description: "How care arrangements feed into the financial settlement.", href: "/how-does-child-custody-affect-financial-settlement-uk", badge: "Children" },
+  { title: "Preview the Full Financial Report", description: "Model income, maintenance, and housing with children.", href: "/unlock", badge: "Report" },
 ];
 
 export default function DivorceWithChildrenPage() {

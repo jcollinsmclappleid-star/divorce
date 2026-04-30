@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { CheckCircle, AlertTriangle } from "lucide-react";
+import { CheckCircle, AlertTriangle, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -39,12 +39,17 @@ const faqItems = [
     question: "Do I need to notify HMRC after my divorce?",
     answer: "Yes — inform HMRC of your change in marital status as it affects tax codes, Marriage Allowance (if applicable), and Child Benefit arrangements. If the property has been transferred as part of the settlement, you may also have CGT considerations to address.",
   },
+  {
+    question: "What should I do about joint financial products that aren't addressed in the consent order?",
+    answer: "Review all joint financial products — current accounts, savings accounts, credit cards, insurance policies — and either close them or transfer to a sole name. Even if not specifically addressed in the consent order, leaving joint accounts open can create complications and ongoing joint liability.",
+  },
 ];
 
 const relatedPages = [
   { title: "When is a Divorce Financial Settlement Legally Binding?", description: "Understanding when the consent order takes effect.", href: "/when-is-divorce-financial-settlement-legally-binding-uk", badge: "Legal" },
   { title: "Both Names on Mortgage in Divorce UK", description: "The practical steps for property transfers and mortgage changes.", href: "/both-names-on-mortgage-divorce-uk", badge: "Property" },
   { title: "What is a Consent Order in UK Divorce?", description: "What the consent order document covers and how it works.", href: "/what-is-a-consent-order-uk-divorce", badge: "Legal Orders" },
+  { title: "Preview the Full Financial Report", description: "Understand the full financial settlement picture before implementation.", href: "/unlock", badge: "Report" },
 ];
 
 export default function StepsAfterFinalOrderPage() {
@@ -108,6 +113,67 @@ export default function StepsAfterFinalOrderPage() {
           ))}
         </div>
         <InlineCTA label="Start Planning Your Post-Divorce Finances" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures to Have Available During Implementation</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Copy of the approved consent order (with court seal)",
+            "Pension sharing annexure (for pension providers)",
+            "Land Registry title number (for property transfers)",
+            "Mortgage account number and lender contact details",
+            "Bank account details for all agreed transfers",
+            "CMS case reference if child maintenance is involved",
+            "HMRC reference for tax and Marriage Allowance changes",
+            "Current insurance policy details to update or cancel",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Implementation Pressure Points</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Pension sharing delays", desc: "Pension providers routinely take 4–12 weeks to implement pension sharing orders. Some providers have backlogs. Chase proactively — do not assume it is happening without checking." },
+            { label: "Property transfer complications", desc: "Transfer of equity requires the mortgage lender's consent (if re-mortgaging in one name). If a party cannot afford the re-mortgage, the property may need to be sold instead — even where the order says otherwise." },
+            { label: "Joint debt remaining after settlement", desc: "The consent order allocates responsibility between the parties, but the creditor can still pursue either party. Joint credit card, loan, or overdraft liabilities need to be actively resolved, not just addressed on paper." },
+            { label: "Ex-spouse non-compliance", desc: "If the other party is not cooperating with implementation, you may need to return to court for enforcement. Acting early and documenting non-compliance is important." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "Whether the property transfer or sale will proceed smoothly — practical complications can arise",
+            "The timeline for pension implementation — each provider has different processes",
+            "What tax implications arise from specific assets being transferred — professional tax advice may be needed",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>Are there any CGT implications from the property transfer or asset disposals?</li>
+          <li>What is the realistic timeline for all elements of the settlement to be implemented?</li>
+          <li>What are my enforcement options if the other party does not comply?</li>
+          <li>Do I need a new mortgage application and what is my likely affordability position?</li>
+        </ul>
+        <InlineCTA label="Model Your Post-Settlement Financial Position" />
       </ContentSection>
 
       <ContentSection>

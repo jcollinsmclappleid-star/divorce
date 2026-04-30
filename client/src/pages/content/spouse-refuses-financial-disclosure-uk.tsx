@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AlertTriangle, Gavel } from "lucide-react";
+import { AlertTriangle, Gavel, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -34,12 +34,21 @@ const faqItems = [
     question: "What if my spouse has assets in their sole name that I know nothing about?",
     answer: "Your spouse is legally required to disclose all assets in their sole name. If you have information suggesting hidden assets, share this with your solicitor. Courts can order disclosure from third parties (banks, HMRC) independently of your spouse.",
   },
+  {
+    question: "Can I use a financial modelling calculator without full disclosure?",
+    answer: "Yes — and it can be useful to model with known or estimated figures before disclosure is complete. Modelling different asset scenarios based on what you do know can help identify what information is most material to the outcome, and help you prepare questions and instructions for your solicitor.",
+  },
+  {
+    question: "What is Form E and why does it matter?",
+    answer: "Form E is the standard financial disclosure document used in financial remedy proceedings in England and Wales. Both parties must complete it with full details of their assets, income, liabilities, and financial needs. It is a sworn document — providing false information on Form E is perjury.",
+  },
 ];
 
 const relatedPages = [
   { title: "Can I Hide Assets in Divorce UK?", description: "The consequences of non-disclosure and how courts detect concealment.", href: "/can-i-hide-assets-in-divorce-uk", badge: "Disclosure" },
   { title: "Financial Disclosure in UK Divorce", description: "The legal duty of full and frank disclosure explained.", href: "/financial-disclosure-divorce-uk", badge: "Process" },
   { title: "Financial Remedy Proceedings UK", description: "How the court process works when you cannot agree.", href: "/financial-remedy-proceedings-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "See what a complete financial model covers across property, pensions and income.", href: "/unlock", badge: "Report" },
 ];
 
 export default function SpouseRefusesDisclosurePage() {
@@ -59,7 +68,7 @@ export default function SpouseRefusesDisclosurePage() {
     >
       <ContentSection>
         <p className="text-muted-foreground leading-relaxed mb-6">
-          Financial disclosure in UK divorce proceedings is a legal obligation — not optional. Both parties are required by law to provide full and frank disclosure of all assets, income, liabilities, and financial resources. Where a party refuses to comply, courts have a range of powers to compel disclosure and to penalise non-compliance.
+          Financial disclosure in UK divorce proceedings is a legal obligation — not optional. Both parties are required by law to provide full and frank disclosure of all assets, income, liabilities, and financial resources. Where a party refuses to comply, courts have a range of powers to compel disclosure and to penalise non-compliance. Understanding those powers is important before assuming you are stuck.
         </p>
 
         <Card className="bg-primary/5 border-primary/20 mb-6">
@@ -98,7 +107,71 @@ export default function SpouseRefusesDisclosurePage() {
           </CardContent>
         </Card>
 
-        <InlineCTA label="Understand What You Are Entitled To" />
+        <InlineCTA label="Model With the Figures You Do Know" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures That May Be Relevant to Gather</h2>
+        <p className="text-sm text-muted-foreground mb-4">Even where disclosure is incomplete, gathering what you can helps build the picture for your solicitor:</p>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Property value (Zoopla or Rightmove estimate)",
+            "Outstanding mortgage balance (from statements)",
+            "Your own income, pension CETV, savings",
+            "Known joint accounts and their approximate balances",
+            "Employment details (employer, approximate salary) of other party",
+            "Any known sole-name accounts or investments",
+            "Business interests or self-employment income (if known)",
+            "Credit commitments visible on joint statements",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points When Disclosure Is Refused</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Inability to model with incomplete data", desc: "Without full disclosure, any financial model is built on estimates. Modelling conservative and optimistic scenarios for the undisclosed assets can still be useful for planning and negotiation." },
+            { label: "Cost pressure of court proceedings", desc: "Forcing disclosure through court proceedings is expensive. Cost orders can recover some of this from the non-disclosing party — but professional guidance on whether to litigate is important." },
+            { label: "Delay extending financial uncertainty", desc: "Refusal to disclose prolongs proceedings, creates uncertainty, and can affect both parties' ability to plan rehousing and financial futures. Early escalation through solicitors may resolve it faster than people expect." },
+            { label: "Pension values particularly difficult to estimate", desc: "Defined benefit (final salary) pensions require actuarial assessment and cannot be reliably estimated without a CETV from the pension provider. Courts can order this directly." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "What assets the other party actually holds — the calculator uses figures you provide",
+            "Whether court proceedings are the right strategy in your specific situation",
+            "What the court would award based on estimated or partial figures",
+            "Whether a third-party disclosure order would be granted in your case",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>What is the most effective and cost-efficient way to obtain disclosure from a reluctant spouse?</li>
+          <li>Could a third-party disclosure order compel banks or HMRC to provide records directly?</li>
+          <li>What are the cost risks if disclosure enforcement becomes contested?</li>
+          <li>At what point might adverse inference become relevant in our case?</li>
+          <li>How should pension values be obtained if the other party will not cooperate?</li>
+        </ul>
+        <InlineCTA label="Start Modelling With the Figures You Have" />
       </ContentSection>
 
       <ContentSection>

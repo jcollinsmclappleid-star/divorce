@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Scale, AlertTriangle } from "lucide-react";
+import { Scale, AlertTriangle, CheckSquare, AlertCircle } from "lucide-react";
 import {
   ContentPageLayout,
   ContentSection,
@@ -30,12 +30,21 @@ const faqItems = [
     question: "What if we have debt but no assets?",
     answer: "Debt is different from assets — it cannot be transferred to a third party (the creditor) without their consent. Your divorce settlement can address who is responsible for which debts between yourselves, but the creditor is not bound by your consent order. Both parties remain liable to creditors for joint debts.",
   },
+  {
+    question: "If both of us are renting, does financial settlement still matter?",
+    answer: "Yes. Even where neither party owns property, financial claims remain open without a consent order. Future assets — including an inheritance, a property purchase, or a business interest — can all be claimed by a former spouse years later. A clean break consent order is important regardless of current asset levels.",
+  },
+  {
+    question: "Can the calculator still be useful if we have no significant assets?",
+    answer: "Yes. The calculator models income positions, monthly cashflow, and the income gap between parties. Even in a low-asset divorce, understanding the ongoing income dynamic — who needs what to cover living costs — can be important for agreeing any maintenance position and for modelling life post-separation.",
+  },
 ];
 
 const relatedPages = [
   { title: "What is a Clean Break Order UK?", description: "Why a clean break order is essential even with no significant assets.", href: "/what-is-a-clean-break-order-uk", badge: "Legal Orders" },
   { title: "What Happens to Debts in Divorce UK?", description: "How debts are treated and divided during divorce proceedings.", href: "/what-happens-to-debts-in-divorce-uk", badge: "Debts" },
   { title: "Can I Divorce Without a Financial Settlement UK?", description: "The risks of divorcing without addressing finances formally.", href: "/can-i-divorce-without-financial-settlement-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "See what a financial settlement model covers — even in simpler situations.", href: "/unlock", badge: "Report" },
 ];
 
 export default function DivorceNoAssetsPage() {
@@ -108,6 +117,67 @@ export default function DivorceNoAssetsPage() {
           ))}
         </div>
         <InlineCTA label="Understand Your Financial Position Clearly" />
+      </ContentSection>
+
+      <ContentSection>
+        <h2 className="text-2xl font-display font-bold mb-6">Figures to Gather Even in a Low-Asset Divorce</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Pension statements — request CETV from each provider",
+            "Bank account balances for both parties",
+            "Any outstanding loans or credit card balances",
+            "Gross income of both parties",
+            "Monthly essential expenditure",
+            "Any savings, ISAs, or shares",
+            "Any significant assets in sole names (vehicle, etc.)",
+            "Details of any joint financial products",
+          ].map((fig, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {fig}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points in Low-Asset Divorces</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            { label: "Income gap between parties", desc: "Where one party earns significantly more, the lower earner may face an income shortfall after separation — especially if they were not working or working part-time during the marriage." },
+            { label: "Joint debts with no assets to offset them", desc: "Credit cards, car finance, or personal loans in joint names remain the liability of both parties regardless of what the consent order says. Creditors are not bound by it." },
+            { label: "Pension imbalance going unnoticed", desc: "Even small pension pots accumulated over a long marriage can represent a material asset. Both parties should obtain CETVs before agreeing a clean break." },
+            { label: "Future vulnerability if no consent order in place", desc: "Low-asset divorces are often done 'informally' with no consent order. This leaves both parties exposed to future claims if either later acquires property, an inheritance, or other assets." },
+          ].map((p, i) => (
+            <div key={i} className="p-4 rounded-lg border">
+              <p className="text-sm font-semibold mb-1">{p.label}</p>
+              <p className="text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ContentSection>
+
+      <ContentSection muted>
+        <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
+        <div className="space-y-3 mb-6">
+          {[
+            "Whether a clean break is legally achievable given any income or maintenance considerations",
+            "Whether any pension values are significant enough to require a formal pension sharing order",
+            "What a court would order if the parties' situations are very unequal",
+          ].map((item, i) => (
+            <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
+        <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
+          <li>Is a straightforward clean break achievable, or does the income gap require maintenance consideration?</li>
+          <li>Should pension values be addressed even if they are relatively small?</li>
+          <li>What is the most cost-effective way to get a consent order in our situation?</li>
+          <li>How should joint debts be handled in the consent order?</li>
+        </ul>
+        <InlineCTA label="Model Your Income and Cashflow Post-Separation" />
       </ContentSection>
 
       <ContentSection>

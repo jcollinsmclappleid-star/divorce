@@ -58,6 +58,7 @@ const relatedPages = [
   { title: "What is a Clean Break Order UK?", description: "How to permanently end all financial ties after divorce.", href: "/what-is-a-clean-break-order-uk", badge: "Legal Orders" },
   { title: "When is a Divorce Financial Settlement Legally Binding?", description: "Understand exactly when your agreement becomes enforceable.", href: "/when-is-divorce-financial-settlement-legally-binding-uk", badge: "Legal" },
   { title: "Financial Disclosure in UK Divorce", description: "What you must disclose before a consent order can be approved.", href: "/financial-disclosure-divorce-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "Understand what your consent order should cover financially.", href: "/unlock", badge: "Report" },
 ];
 
 export default function ConsentOrderPage() {

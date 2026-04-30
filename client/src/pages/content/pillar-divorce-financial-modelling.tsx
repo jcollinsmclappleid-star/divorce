@@ -64,6 +64,7 @@ const relatedPages = [
     href: "/divorce-mortgage-affordability-after-separation",
     badge: "Affordability",
   },
+  { title: "Preview the Full Financial Report", description: "See the full financial modelling report in action.", href: "/unlock", badge: "Report" },
 ];
 
 const statutoryFactors = [

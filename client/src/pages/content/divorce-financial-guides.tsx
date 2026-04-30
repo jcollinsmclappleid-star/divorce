@@ -201,6 +201,7 @@ export default function DivorceFinancialGuidesPage() {
               <Link href="/free-guide" onClick={scrollTop} className="text-primary hover:underline">Free divorce finances guide</Link>
               <Link href="/methodology" onClick={scrollTop} className="text-primary hover:underline">Model methodology</Link>
               <Link href="/contact" onClick={scrollTop} className="text-primary hover:underline">Contact & support</Link>
+              <Link href="/unlock" onClick={scrollTop} className="text-primary hover:underline">Preview full report</Link>
             </div>
           </div>
         </div>

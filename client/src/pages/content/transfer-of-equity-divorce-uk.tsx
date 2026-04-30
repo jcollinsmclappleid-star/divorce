@@ -44,6 +44,7 @@ const relatedPages = [
   { title: "Buying Your Partner Out of the House", description: "How a buyout works in practice — costs, mortgage, and equity calculation.", href: "/buying-partner-out-of-house-divorce-uk", badge: "Property" },
   { title: "Both Names on the Mortgage — Divorce", description: "What happens when the mortgage is in joint names and you are separating.", href: "/both-names-on-mortgage-divorce-uk", badge: "Property" },
   { title: "Mortgage Affordability After Separation", description: "What lenders look at for a sole mortgage after divorce.", href: "/divorce-mortgage-affordability-after-separation", badge: "Property" },
+  { title: "Preview the Full Financial Report", description: "Model a transfer of equity alongside the overall settlement.", href: "/unlock", badge: "Report" },
 ];
 
 export default function TransferOfEquityPage() {

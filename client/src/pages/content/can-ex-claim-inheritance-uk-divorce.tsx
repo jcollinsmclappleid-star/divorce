@@ -55,6 +55,7 @@ const relatedPages = [
   { title: "Is Inheritance Included in Divorce Settlement UK?", description: "The full legal picture on when inheritance features in a settlement.", href: "/is-inheritance-included-in-divorce-settlement-uk", badge: "Assets" },
   { title: "How Are Savings Split in Divorce UK?", description: "How savings and bank accounts are treated in a UK divorce settlement.", href: "/how-are-savings-split-in-divorce-uk", badge: "Assets" },
   { title: "What is a Clean Break Order UK?", description: "How to protect future assets from claims after divorce.", href: "/what-is-a-clean-break-order-uk", badge: "Legal Orders" },
+  { title: "Preview the Full Financial Report", description: "See how inheritance fits into the full asset pool model.", href: "/unlock", badge: "Report" },
 ];
 
 export default function InheritanceClaimPage() {

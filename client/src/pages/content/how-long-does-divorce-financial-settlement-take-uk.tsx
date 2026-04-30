@@ -42,6 +42,7 @@ const relatedPages = [
   { title: "Timeline of Divorce and Financial Settlement UK", description: "The full timeline from separation to final order.", href: "/timeline-of-divorce-and-financial-settlement-uk", badge: "Process" },
   { title: "Financial Remedy Proceedings UK", description: "How the three-stage court process works in detail.", href: "/financial-remedy-proceedings-uk", badge: "Process" },
   { title: "Settling Out of Court vs Court Divorce UK", description: "The pros and cons of each route including timelines.", href: "/settling-out-of-court-vs-court-divorce-uk", badge: "Process" },
+  { title: "Preview the Full Financial Report", description: "Understand your financial position at every stage.", href: "/unlock", badge: "Report" },
 ];
 
 export default function HowLongFinancialSettlementPage() {
