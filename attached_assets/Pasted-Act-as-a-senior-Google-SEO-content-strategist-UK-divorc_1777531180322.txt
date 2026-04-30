@@ -1,0 +1,376 @@
+Act as a senior Google SEO content strategist, UK divorce-finance content expert, legal-risk-aware UX writer, and conversion-focused product marketer.
+
+The guide pages already exist. Do NOT create lots of new guide pages unless a clearly missing internal link target already exists in the app. Your job is to review and enhance the existing guide pages only.
+
+Focus on three priorities:
+
+1. Content depth
+2. On-page conversion
+3. Internal linking
+
+The site is a dedicated divorce settlement financial modelling calculator/report for England & Wales. It is not a solicitor firm and must not provide legal, financial, tax or mortgage advice.
+
+Core positioning:
+“Built for people, not solicitor sales pitches.”
+“Dedicated divorce settlement financial modelling.”
+“Not a solicitor lead form.”
+
+Main product:
+Users start free, enter their figures, and can unlock a £79 financial modelling report covering property, pensions, income, debts, cashflow, settlement scenarios, pressure points, and Guided Report Summary.
+
+====================================================
+OBJECTIVE
+====================================================
+
+Review every existing guide page and upgrade it so it deserves to rank better and converts more users into the calculator/report flow.
+
+Do not produce thin SEO filler.
+Do not create generic blog-style content.
+Do not add legal or financial advice.
+Do not recommend settlements, splits, property decisions or pension decisions.
+
+Each existing guide page should become:
+- deeper
+- more useful
+- more specific to divorce financial modelling
+- better internally linked
+- clearer on next step
+- safer from advice-risk wording
+- more conversion-focused
+
+====================================================
+PAGE REVIEW TASK
+====================================================
+
+For each existing guide page:
+
+1. Identify the target keyword/search intent.
+2. Assess whether the current page is thin.
+3. Add depth where the page lacks substance.
+4. Add practical modelling context.
+5. Add clear H2/H3 structure.
+6. Add a relevant example where safe.
+7. Add a conversion CTA block.
+8. Add internal links to the calculator, sample report, pricing/full report, and related guides.
+9. Add or improve FAQs.
+10. Add a non-advisory safety note.
+11. Improve the meta title and meta description if weak or duplicated.
+12. Ensure the page feels more helpful than a generic solicitor blog.
+
+====================================================
+CONTENT DEPTH REQUIREMENTS
+====================================================
+
+Each existing guide page should include, where relevant:
+
+- direct answer to the search intent in the first 100 words
+- explanation of the financial issue
+- why it matters during separation/divorce
+- figures the user may need to model it
+- common pressure points
+- what the calculator/report can model
+- what the calculator/report cannot decide
+- questions users may raise with professionals
+- CTA to start the calculator
+- related guides/internal links
+- FAQ section
+
+Do not pad word count. Add useful detail.
+
+Core commercial pages should feel substantial enough to compete with solicitor firm pages and generic calculators. Aim for roughly 900–1,500 words where appropriate, but quality matters more than exact length.
+
+====================================================
+SAFE CONTENT RULES
+====================================================
+
+Do not say or imply:
+
+- what settlement someone should accept
+- what split is fair
+- what the court would award
+- what someone is entitled to
+- whether someone should keep or sell the house
+- whether someone should transfer pensions
+- whether someone should pay or receive maintenance
+- whether a mortgage is affordable for them
+- that the tool replaces a solicitor, mediator, financial adviser, pension expert, tax adviser or mortgage broker
+
+Avoid these phrases:
+- you should
+- you are entitled to
+- the court will
+- the court is likely to
+- the best option
+- the fairest split
+- recommended settlement
+- accept this
+- reject this
+- suitable for you
+- financial advice
+- legal advice
+- mortgage advice
+- tax advice
+
+Use safe language:
+- may be relevant
+- could be a point to discuss
+- based on the figures entered
+- from a cashflow perspective
+- this can help you understand
+- professional review may be needed
+- the model illustrates
+- different outcomes can create different cashflow pressures
+- this guide is for general information and modelling context only
+
+Add this safety note near the bottom of every guide:
+
+“This guide provides general information and financial modelling context only. It is not legal, financial, tax or mortgage advice and does not recommend what either party should do.”
+
+====================================================
+ON-PAGE CONVERSION REQUIREMENTS
+====================================================
+
+Every guide page must include at least one strong CTA block.
+
+CTA block copy:
+
+Heading:
+Model your own figures
+
+Body:
+Use the divorce settlement calculator to compare property, pensions, income, debts and cashflow across settlement scenarios. Start free, then unlock the full financial modelling report when ready.
+
+Buttons:
+Start free
+Preview sample report
+
+Use one additional softer CTA naturally in the content:
+
+“See where you could stand financially using your own figures.”
+
+or:
+
+“Compare scenarios instead of guessing.”
+
+Add the product differentiation naturally on relevant pages:
+
+“Unlike a solicitor lead form or a basic estimate, the report is built around financial modelling: property, pensions, income, debts, mortgage pressure, cashflow and scenario comparison.”
+
+Do not overuse this exact sentence on every page. Vary it naturally.
+
+====================================================
+INTERNAL LINKING REQUIREMENTS
+====================================================
+
+Build a clear internal guide cluster.
+
+Every existing guide page should link to:
+
+1. Main calculator/start page
+Anchor examples:
+- divorce settlement calculator
+- start your financial report
+- model your own figures
+
+2. Sample report preview
+Anchor examples:
+- preview a sample financial report
+- see what the full report includes
+- sample divorce financial report
+
+3. Pricing/full report section where relevant
+Anchor examples:
+- unlock the full financial modelling report
+- full £79 report
+- guided financial report
+
+4. At least 2 related guide pages
+Use natural anchors specific to the topic.
+
+Examples:
+- house buyout calculator
+- divorce pension split calculator
+- divorce mortgage affordability after separation
+- divorce financial disclosure checklist
+- divorce cashflow after separation
+- what happens to the house in divorce
+
+Also ensure the homepage/main calculator page links to the guide pages in a “Divorce finance guides” or “Learn more” section.
+
+Avoid repeated identical anchor text across every page. Use varied but relevant anchors.
+
+====================================================
+CONTENT MODULES TO ADD WHERE RELEVANT
+====================================================
+
+Add these modules to existing pages where they fit.
+
+1. “What this means in practice”
+A plain-English section explaining the topic without advice.
+
+2. “Figures you may need”
+Checklist-style:
+- property value
+- mortgage balance
+- pension CETV
+- gross income
+- debts
+- savings/investments
+- monthly housing costs
+- childcare/maintenance assumptions
+
+3. “Common pressure points”
+Use pressure language, not risk/advice language:
+- low liquid capital
+- high mortgage payment pressure
+- pension imbalance
+- income disparity
+- missing costs
+- debt pressure
+- property concentration
+- sensitivity to interest rates
+
+4. “How the calculator helps”
+Explain how the tool models the topic.
+
+5. “What the calculator cannot decide”
+Explain limitations clearly:
+- does not decide fairness
+- does not predict court outcomes
+- does not replace professional advice
+- does not approve lending
+- does not value complex pensions
+
+6. “Questions to raise with professionals”
+Add 3–6 neutral questions.
+
+Example:
+- “How should the mortgage responsibility be documented if one party keeps the home?”
+- “Would a pension CETV alone be enough, or would further pension review be useful?”
+- “What costs should be added to the model before relying on the figures?”
+- “Could a mortgage broker assess whether refinancing is possible?”
+
+Do not frame as “you should ask”.
+
+====================================================
+FAQ REQUIREMENTS
+====================================================
+
+Each guide should include or improve 4–6 FAQs.
+
+Example FAQ style:
+
+Q: Can a divorce calculator tell me what I will receive?
+A: No. A calculator cannot decide legal fairness or predict an outcome. It can help model financial scenarios using the figures entered, including property, pensions, income, debts and cashflow.
+
+Q: Can this replace a solicitor?
+A: No. The tool is not a legal service. It helps users organise and understand the financial modelling before professional conversations.
+
+Q: What figures do I need?
+A: Useful figures include property value, mortgage balance, pensions/CETV, income, debts, savings, investments and monthly costs.
+
+Q: Does the calculator decide the best settlement?
+A: No. It compares modelled scenarios and highlights pressure points. It does not recommend what either party should do.
+
+Where possible, add FAQ schema if already supported by the app.
+
+====================================================
+SEO META REQUIREMENTS
+====================================================
+
+Improve weak or duplicate metadata.
+
+Each guide page should have:
+- unique SEO title
+- unique meta description
+- clear H1
+- logical H2/H3s
+- indexable content
+- canonical tag where relevant
+- internal links
+- FAQ schema if supported
+
+Meta descriptions should be conversion-focused and include the page’s target keyword naturally.
+
+Avoid overstuffing. Make the search result compelling.
+
+For the main page, use:
+
+Title:
+Divorce Settlement Calculator | Not a Solicitor Lead Form
+
+Meta:
+The divorce settlement calculator built for people, not solicitor sales pitches. Compare property, pensions, income, debts and cashflow across 4 scenarios.
+
+For guide pages, create unique variants relevant to each topic.
+
+====================================================
+EXAMPLE SAFE CONTENT STYLE
+====================================================
+
+Use this:
+
+“Keeping the home can preserve housing continuity, but it may also concentrate wealth in an illiquid asset and create higher monthly mortgage pressure. A financial model can help compare the cashflow effect of this scenario against selling the home or using a deferred sale structure.”
+
+Do not write:
+
+“You should keep the home if you can afford it.”
+
+Use this:
+
+“A pension CETV gives a starting point for modelling, but it may not capture the full practical value of a pension. Pension type, benefits and implementation costs may need specialist review.”
+
+Do not write:
+
+“You should ask for a pension sharing order.”
+
+====================================================
+GUIDE PAGE QUALITY CHECK
+====================================================
+
+Before finishing each page, ask:
+
+- Does this page answer the query better than before?
+- Does it include useful divorce-finance modelling context?
+- Is it specific enough to beat thin solicitor blogs?
+- Does it avoid legal/financial advice?
+- Does it naturally push users toward the calculator/report?
+- Does it link to related guides?
+- Does it have clear headings and FAQs?
+- Would a user feel more informed after reading it?
+
+====================================================
+IMPLEMENTATION STEPS
+====================================================
+
+1. Inspect existing guide routes/pages.
+2. Create a list of all current guide pages.
+3. For each page, identify likely target keyword and search intent.
+4. Enhance the page content depth.
+5. Add conversion CTA blocks.
+6. Add internal links.
+7. Add FAQs.
+8. Add safe non-advisory note.
+9. Update SEO title/meta where needed.
+10. Add FAQ schema if supported.
+11. Check mobile readability.
+12. Run build/typecheck.
+13. Provide a summary of each page updated and what changed.
+
+====================================================
+ACCEPTANCE CRITERIA
+====================================================
+
+The work is complete when:
+
+1. Existing guide pages are materially deeper and more useful.
+2. No unnecessary new pages are created.
+3. Each guide page has clear internal links to the calculator/report flow.
+4. Each guide page has at least 2 related guide links.
+5. Each guide page includes a strong CTA.
+6. Each guide page includes FAQs.
+7. Each guide page has safe non-advisory language.
+8. Metadata is unique and conversion-focused.
+9. The site better communicates dedicated divorce settlement financial modelling.
+10. No legal, financial, tax or mortgage advice claims are introduced.
+11. Build/typecheck passes.
