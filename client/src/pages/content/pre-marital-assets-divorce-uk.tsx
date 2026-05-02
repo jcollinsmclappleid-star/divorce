@@ -126,6 +126,25 @@ export default function PreMaritalAssetsPage() {
           ))}
         </div>
 
+        <h2 className="text-2xl font-display font-bold mb-4">Figures to Capture in the Calculator</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Date of marriage and any prior cohabitation start date",
+            "Value of property brought into the marriage by each party",
+            "Pre-marital savings, investment and ISA values",
+            "Inheritance amounts received during the marriage and dates",
+            "Pre-marital pension CETVs at date of marriage (if obtainable)",
+            "Current value of those same assets and any growth",
+            "Total length of the marriage in years",
+            "Total current matrimonial pot for context",
+          ].map((f, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {f}
+            </div>
+          ))}
+        </div>
+
         <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points</h2>
         <div className="space-y-3 mb-6">
           {[

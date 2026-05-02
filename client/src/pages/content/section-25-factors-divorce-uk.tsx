@@ -128,6 +128,25 @@ export default function Section25FactorsPage() {
           ))}
         </div>
 
+        <h2 className="text-2xl font-display font-bold mb-4">Figures to Capture in the Calculator</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Length of marriage in full years (and any prior cohabitation)",
+            "Age of each party at the date of separation",
+            "Combined gross annual income (both parties)",
+            "Total capital pool — assets minus liabilities",
+            "Number and ages of dependent children",
+            "Combined pension CETVs (workplace, personal, SIPPs)",
+            "Family home equity after typical 2–3% sale costs",
+            "Estimated monthly income need for each party post-separation",
+          ].map((f, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {f}
+            </div>
+          ))}
+        </div>
+
         <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points</h2>
         <div className="space-y-3 mb-6">
           {[

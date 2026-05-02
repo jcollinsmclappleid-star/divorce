@@ -138,6 +138,25 @@ export default function MatrimonialVsNonMatrimonialPage() {
           ))}
         </div>
 
+        <h2 className="text-2xl font-display font-bold mb-4">Figures to Capture in the Calculator</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Date of marriage and date of any prior cohabitation",
+            "Value of property each party brought into the marriage",
+            "Pre-marital savings and investment values (with statements where available)",
+            "Inheritance amounts received during the marriage and dates",
+            "Gifts from family received during the marriage",
+            "Pre-marital pension CETVs at the date of marriage (if obtainable)",
+            "Current value of all assets — matrimonial and claimed non-matrimonial",
+            "Estimated matrimonial pot once non-matrimonial elements are stripped out",
+          ].map((f, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {f}
+            </div>
+          ))}
+        </div>
+
         <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points</h2>
         <div className="space-y-3 mb-6">
           {[

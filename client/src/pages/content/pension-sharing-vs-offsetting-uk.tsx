@@ -142,6 +142,25 @@ export default function PensionSharingVsOffsettingPage() {
           ))}
         </div>
 
+        <h2 className="text-2xl font-display font-bold mb-4">Figures to Capture in the Calculator</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Pension-rich party's combined CETV across all schemes",
+            "Pension-poor party's combined CETV across all schemes",
+            "The CETV gap between the two parties",
+            "Type of each scheme — defined contribution or defined benefit",
+            "Each party's age and years to expected retirement",
+            "Liquid non-pension matrimonial assets available for offsetting",
+            "An assumed offset utility ratio (often 70–80% of CETV)",
+            "Each party's projected position under sharing versus offsetting",
+          ].map((f, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {f}
+            </div>
+          ))}
+        </div>
+
         <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points</h2>
         <div className="space-y-3 mb-6">
           {[

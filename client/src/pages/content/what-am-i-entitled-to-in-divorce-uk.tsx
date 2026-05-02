@@ -126,6 +126,25 @@ export default function WhatAmIEntitledToPage() {
           ))}
         </div>
 
+        <h2 className="text-2xl font-display font-bold mb-4">Figures to Capture in the Calculator</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Each party's gross annual income",
+            "Combined liquid capital — savings, ISAs, investments",
+            "Family home equity after typical 2–3% sale costs",
+            "Outstanding joint debts (mortgages, loans, credit cards)",
+            "Combined pension CETVs across all schemes",
+            "Number and ages of dependent children",
+            "Length of marriage in full years",
+            "Each party's estimated monthly income need post-divorce",
+          ].map((f, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {f}
+            </div>
+          ))}
+        </div>
+
         <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points</h2>
         <div className="space-y-3 mb-6">
           {[

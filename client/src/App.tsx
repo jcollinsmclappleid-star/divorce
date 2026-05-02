@@ -96,6 +96,17 @@ import PensionSharingVsOffsettingPage from "@/pages/content/pension-sharing-vs-o
 import PreMaritalAssetsPage from "@/pages/content/pre-marital-assets-divorce-uk";
 import CryptocurrencyDivorcePage from "@/pages/content/cryptocurrency-divorce-uk";
 import BonusesRsusDivorcePage from "@/pages/content/bonuses-rsus-divorce-uk";
+import PrenuptialAgreementPage from "@/pages/content/prenuptial-agreement-uk";
+import PostnuptialAgreementPage from "@/pages/content/postnuptial-agreement-uk";
+import SeparationAgreementPage from "@/pages/content/separation-agreement-uk";
+import ArbitrationDivorcePage from "@/pages/content/arbitration-divorce-uk";
+import CollaborativeLawDivorcePage from "@/pages/content/collaborative-law-divorce-uk";
+import DivorceAndTheFamilyBusinessPage from "@/pages/content/divorce-and-the-family-business-uk";
+import TrustAssetsDivorcePage from "@/pages/content/trust-assets-divorce-uk";
+import OffshoreAssetsDivorcePage from "@/pages/content/offshore-assets-divorce-uk";
+import MaintenancePendingSuitPage from "@/pages/content/maintenance-pending-suit-uk";
+import DivorceAndLifeInsurancePage from "@/pages/content/divorce-and-life-insurance-uk";
+import ChildArrangementsOrderPage from "@/pages/content/child-arrangements-order-uk";
 import AboutPage from "@/pages/about";
 import HowItWorksPage from "@/pages/how-it-works";
 import FaqPage from "@/pages/faq";
@@ -192,6 +203,17 @@ function Router() {
       <Route path="/pre-marital-assets-divorce-uk" component={PreMaritalAssetsPage} />
       <Route path="/cryptocurrency-divorce-uk" component={CryptocurrencyDivorcePage} />
       <Route path="/bonuses-rsus-divorce-uk" component={BonusesRsusDivorcePage} />
+      <Route path="/prenuptial-agreement-uk" component={PrenuptialAgreementPage} />
+      <Route path="/postnuptial-agreement-uk" component={PostnuptialAgreementPage} />
+      <Route path="/separation-agreement-uk" component={SeparationAgreementPage} />
+      <Route path="/arbitration-divorce-uk" component={ArbitrationDivorcePage} />
+      <Route path="/collaborative-law-divorce-uk" component={CollaborativeLawDivorcePage} />
+      <Route path="/divorce-and-the-family-business-uk" component={DivorceAndTheFamilyBusinessPage} />
+      <Route path="/trust-assets-divorce-uk" component={TrustAssetsDivorcePage} />
+      <Route path="/offshore-assets-divorce-uk" component={OffshoreAssetsDivorcePage} />
+      <Route path="/maintenance-pending-suit-uk" component={MaintenancePendingSuitPage} />
+      <Route path="/divorce-and-life-insurance-uk" component={DivorceAndLifeInsurancePage} />
+      <Route path="/child-arrangements-order-uk" component={ChildArrangementsOrderPage} />
       <Route path="/pricing" component={PricingPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/results">

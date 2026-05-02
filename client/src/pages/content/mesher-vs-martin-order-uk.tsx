@@ -124,6 +124,25 @@ export default function MesherVsMartinOrderPage() {
           ))}
         </div>
 
+        <h2 className="text-2xl font-display font-bold mb-4">Figures to Capture in the Calculator</h2>
+        <div className="grid sm:grid-cols-2 gap-3 mb-8">
+          {[
+            "Current market value of the family home",
+            "Outstanding mortgage balance and remaining term",
+            "Current net equity (value minus mortgage)",
+            "Each party's percentage share under the proposed order",
+            "Estimated sale costs at trigger (typically 2–3% of value)",
+            "Years until the expected trigger event (e.g. youngest child finishing education)",
+            "An assumed annual property growth rate to project value at trigger",
+            "Each party's projected net proceeds at the trigger date",
+          ].map((f, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm text-muted-foreground p-3 rounded-lg border">
+              <CheckSquare className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              {f}
+            </div>
+          ))}
+        </div>
+
         <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points</h2>
         <div className="space-y-3 mb-6">
           {[
