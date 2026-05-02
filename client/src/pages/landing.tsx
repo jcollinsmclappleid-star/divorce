@@ -227,7 +227,7 @@ export default function LandingPage() {
 
       {/* ── What you'll see ── */}
       <section
-        className="py-16 md:py-24 bg-gradient-to-b from-[#152e50] to-[#0f2440]"
+        className="py-16 md:py-24 bg-gradient-to-b from-[#152e50] to-[#0f2440] overflow-hidden"
         data-testid="section-what-youll-see"
       >
         <div className="container mx-auto px-4 max-w-5xl">

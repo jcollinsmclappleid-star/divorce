@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { TrendingUp, TrendingDown, Sliders, Lock, Sparkles, ChevronRight } from "lucide-react";
+import { TrendingUp, TrendingDown, Sliders, Lock, Sparkles, ChevronRight, ChevronLeft } from "lucide-react";
 import { AnimatedNumber } from "@/components/charts/animated-number";
 import { RadialGauge } from "@/components/charts/radial-gauge";
 import { chartTheme, fmtK, fmtGbp, gaugeColor, densifyProjection, hashSeed } from "@/lib/chart-theme";
@@ -104,9 +104,9 @@ export function LandingCommandConsole() {
   const minRColor = gaugeColor(minR);
 
   return (
-    <div className="relative w-full max-w-[640px] mx-auto" data-testid="command-console">
-      {/* Ambient gold glow behind the device */}
-      <div className="absolute -inset-6 rounded-[28px] bg-gold/[0.06] blur-2xl pointer-events-none" />
+    <div className="relative w-full max-w-[640px] mx-auto isolate" data-testid="command-console">
+      {/* Ambient gold glow behind the device — clipped to prevent overflow */}
+      <div className="absolute -inset-6 rounded-[28px] bg-gold/[0.06] blur-2xl pointer-events-none -z-10" />
 
       {/* Device frame */}
       <div className="relative rounded-2xl bg-[#0B1220] border border-white/10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] overflow-hidden">
@@ -124,28 +124,72 @@ export function LandingCommandConsole() {
           <div className="w-12" />
         </div>
 
-        {/* Scenario chips */}
+        {/* Scenario chips with arrow nav */}
         <div className="px-4 pt-4 pb-3 border-b border-white/5">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-white/35 font-medium mb-2">Switch settlement scenario</p>
-          <div className="flex gap-1.5 flex-wrap">
-            {SCENARIOS.map((s, i) => {
-              const isActive = i === active;
-              return (
-                <button
-                  key={s.id}
-                  onClick={() => setActive(i)}
-                  data-testid={`chip-scenario-${s.id}`}
-                  className={`relative px-3 py-1.5 rounded-full text-[11px] font-medium transition-all border ${
-                    isActive
-                      ? "bg-gold text-[#0B1220] border-gold shadow-[0_0_0_4px_rgba(201,168,76,0.18)]"
-                      : "bg-white/[0.04] text-white/60 border-white/10 hover:bg-white/[0.08] hover:text-white/85"
-                  }`}
-                >
-                  {s.shortName}
-                  {isActive && <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-gold animate-pulse" />}
-                </button>
-              );
-            })}
+          <div className="flex items-center justify-between mb-2 gap-2 flex-wrap">
+            <p className="text-[9px] uppercase tracking-[0.18em] text-white/35 font-medium">Switch settlement scenario</p>
+            <span className="inline-flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-gold bg-gold/15 border border-gold/30 px-2 py-0.5 rounded-full">
+              <motion.span
+                className="w-1.5 h-1.5 rounded-full bg-gold"
+                animate={{ scale: [1, 1.6, 1], opacity: [1, 0.4, 1] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              />
+              Live · click to try
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setActive((i) => (i - 1 + SCENARIOS.length) % SCENARIOS.length)}
+              data-testid="console-prev"
+              aria-label="Previous scenario"
+              className="shrink-0 w-7 h-7 rounded-full border border-white/15 bg-white/[0.04] hover:bg-white/[0.10] hover:border-gold/40 flex items-center justify-center text-white/70 hover:text-gold transition-colors"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+            </button>
+            <div className="flex gap-1.5 flex-wrap flex-1 justify-center">
+              {SCENARIOS.map((s, i) => {
+                const isActive = i === active;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => setActive(i)}
+                    data-testid={`chip-scenario-${s.id}`}
+                    aria-pressed={isActive}
+                    className={`relative px-3 py-1.5 rounded-full text-[11px] font-medium transition-all border ${
+                      isActive
+                        ? "bg-gold text-[#0B1220] border-gold shadow-[0_0_0_4px_rgba(201,168,76,0.18)]"
+                        : "bg-white/[0.04] text-white/60 border-white/10 hover:bg-white/[0.08] hover:text-white/85"
+                    }`}
+                  >
+                    {s.shortName}
+                    {isActive && <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-gold animate-pulse" />}
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              type="button"
+              onClick={() => setActive((i) => (i + 1) % SCENARIOS.length)}
+              data-testid="console-next"
+              aria-label="Next scenario"
+              className="shrink-0 w-7 h-7 rounded-full border border-gold/40 bg-gold/10 hover:bg-gold/25 flex items-center justify-center text-gold transition-colors"
+            >
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          {/* Dot indicators */}
+          <div className="flex items-center justify-center gap-1.5 mt-3">
+            {SCENARIOS.map((s, i) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => setActive(i)}
+                aria-label={`Go to ${s.shortName}`}
+                data-testid={`console-dot-${s.id}`}
+                className={`h-1.5 rounded-full transition-all ${i === active ? "w-6 bg-gold" : "w-1.5 bg-white/20 hover:bg-white/40"}`}
+              />
+            ))}
           </div>
         </div>
 
