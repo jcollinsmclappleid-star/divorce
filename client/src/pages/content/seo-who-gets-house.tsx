@@ -17,7 +17,7 @@ function InlineCTA({ label = "Model your housing scenarios" }: { label?: string 
         <p className="font-semibold text-foreground text-sm">{label}</p>
         <p className="text-xs text-muted-foreground mt-0.5">See what each housing outcome means for your long-term financial position.</p>
       </div>
-      <Button size="sm" onClick={() => { scrollTop(); setLocation("/wizard"); }} data-testid="button-cta-inline" className="shrink-0">
+      <Button size="sm" onClick={() => { scrollTop(); setLocation("/wizard"); }} data-testid="button-cta-inline" className="shrink-0 bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 btn-shimmer">
         Start modelling <ArrowRight className="w-3.5 h-3.5 ml-1" />
       </Button>
     </div>
