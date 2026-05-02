@@ -620,21 +620,35 @@ const LABS = [
   { id: "maintenance", title: "Maintenance Bridge",     subtitle: "Move money between parties",            Comp: MaintenanceLab },
 ];
 
-export function DemoCarousel() {
+export function DemoCarousel({ variant = "light" }: { variant?: "light" | "dark" }) {
   const [idx, setIdx] = useState(0);
   const Lab = LABS[idx].Comp;
   const next = () => setIdx((i) => (i + 1) % LABS.length);
   const prev = () => setIdx((i) => (i - 1 + LABS.length) % LABS.length);
+  const dark = variant === "dark";
+
+  // Theme-adaptive class sets
+  const wrap   = dark ? "bg-white/[0.04] rounded-xl border border-white/10 backdrop-blur-sm overflow-hidden" : "bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden";
+  const head   = dark ? "flex items-center justify-between px-3 py-2 border-b border-white/10 bg-white/[0.03]" : "flex items-center justify-between px-3 py-2 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white";
+  const title  = dark ? "text-[11px] font-bold uppercase tracking-wider text-white/85" : "text-[11px] font-bold uppercase tracking-wider text-gray-700";
+  const count  = dark ? "text-[10px] text-white/40 ml-1" : "text-[10px] text-gray-400 ml-1";
+  const prevBtn = dark ? "w-7 h-7 rounded-full border border-white/15 bg-white/[0.04] hover:bg-white/[0.10] flex items-center justify-center text-white/70 transition-colors" : "w-7 h-7 rounded-full border border-gray-200 hover:bg-gray-100 flex items-center justify-center text-gray-600 transition-colors";
+  const tabsBg = dark ? "bg-white/10" : "bg-gray-100";
+  const tabActiveBg   = dark ? "bg-white/[0.06]" : "bg-white";
+  const tabInactiveBg = dark ? "bg-white/[0.02] hover:bg-white/[0.05]" : "bg-gray-50 hover:bg-white";
+  const tabIdx        = (active: boolean) => active ? "text-gold" : (dark ? "text-white/40" : "text-gray-400");
+  const tabTitle      = (active: boolean) => active ? (dark ? "text-white" : "text-gray-900") : (dark ? "text-white/70" : "text-gray-600");
+  const tabSubtitle   = (active: boolean) => active ? (dark ? "text-white/55" : "text-gray-500") : (dark ? "text-white/40" : "text-gray-400");
 
   return (
     <div className="space-y-3" data-testid="demo-carousel">
       {/* Tab strip */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="flex items-center justify-between px-3 py-2 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+      <div className={wrap}>
+        <div className={head}>
           <div className="flex items-center gap-1.5">
             <Sliders className="w-3.5 h-3.5 text-gold" />
-            <span className="text-[11px] font-bold uppercase tracking-wider text-gray-700">Try the dashboards</span>
-            <span className="text-[10px] text-gray-400 ml-1">{idx + 1} of {LABS.length}</span>
+            <span className={title}>Try the dashboards</span>
+            <span className={count}>{idx + 1} of {LABS.length}</span>
           </div>
           <div className="flex items-center gap-1">
             <button
@@ -642,7 +656,7 @@ export function DemoCarousel() {
               onClick={prev}
               data-testid="carousel-prev"
               aria-label="Previous lab"
-              className="w-7 h-7 rounded-full border border-gray-200 hover:bg-gray-100 flex items-center justify-center text-gray-600 transition-colors"
+              className={prevBtn}
             >
               <ArrowLeft className="w-3.5 h-3.5" />
             </button>
@@ -651,13 +665,13 @@ export function DemoCarousel() {
               onClick={next}
               data-testid="carousel-next"
               aria-label="Next lab"
-              className="w-7 h-7 rounded-full border border-gold/40 bg-gold/10 hover:bg-gold/20 flex items-center justify-center text-gold transition-colors"
+              className="w-7 h-7 rounded-full border border-gold/40 bg-gold/15 hover:bg-gold/25 flex items-center justify-center text-gold transition-colors"
             >
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-gray-100">
+        <div className={`grid grid-cols-2 sm:grid-cols-4 gap-px ${tabsBg}`}>
           {LABS.map((lab, i) => {
             const isActive = i === idx;
             return (
@@ -667,17 +681,13 @@ export function DemoCarousel() {
                 onClick={() => setIdx(i)}
                 data-testid={`carousel-tab-${lab.id}`}
                 aria-pressed={isActive}
-                className={`relative px-3 py-2.5 text-left transition-all ${
-                  isActive
-                    ? "bg-white"
-                    : "bg-gray-50 hover:bg-white"
-                }`}
+                className={`relative px-3 py-2.5 text-left transition-all ${isActive ? tabActiveBg : tabInactiveBg}`}
               >
                 <div className="flex items-center gap-1.5 mb-0.5">
-                  <span className={`text-[9px] font-mono ${isActive ? "text-gold" : "text-gray-400"}`}>0{i + 1}</span>
-                  <span className={`text-[11px] font-bold ${isActive ? "text-gray-900" : "text-gray-600"}`}>{lab.title}</span>
+                  <span className={`text-[9px] font-mono ${tabIdx(isActive)}`}>0{i + 1}</span>
+                  <span className={`text-[11px] font-bold ${tabTitle(isActive)}`}>{lab.title}</span>
                 </div>
-                <p className={`text-[10px] leading-tight ${isActive ? "text-gray-500" : "text-gray-400"}`}>{lab.subtitle}</p>
+                <p className={`text-[10px] leading-tight ${tabSubtitle(isActive)}`}>{lab.subtitle}</p>
                 {isActive && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />}
               </button>
             );
@@ -707,7 +717,7 @@ export function DemoCarousel() {
             onClick={() => setIdx(i)}
             aria-label={`Go to ${lab.title}`}
             data-testid={`carousel-dot-${lab.id}`}
-            className={`h-1.5 rounded-full transition-all ${i === idx ? "w-6 bg-gold" : "w-1.5 bg-gray-300 hover:bg-gray-400"}`}
+            className={`h-1.5 rounded-full transition-all ${i === idx ? "w-6 bg-gold" : (dark ? "w-1.5 bg-white/20 hover:bg-white/40" : "w-1.5 bg-gray-300 hover:bg-gray-400")}`}
           />
         ))}
       </div>

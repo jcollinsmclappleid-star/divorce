@@ -19,6 +19,7 @@ import { SiteNav } from "@/components/site-nav";
 import { useMetaTags } from "@/hooks/use-meta-tags";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { LandingCommandConsole } from "@/components/landing-command-console";
+import { DemoCarousel } from "@/components/demo-dashboards";
 
 const EXPLORE_CARDS = [
   {
@@ -240,14 +241,14 @@ export default function LandingPage() {
               <span className="text-xs font-medium text-emerald-400 tracking-wide">Sample output · real model format</span>
             </div>
             <h2 className="text-2xl md:text-3xl font-display font-bold text-white">
-              The Settlement Command Console
+              Four interactive dashboards. Try them all.
             </h2>
             <p className="text-white/60 text-sm max-w-lg mx-auto">
-              Switch between scenarios. Stress-test the assumptions. Watch every number recalculate live — exactly what you'll see with your own figures.
+              Switch scenarios, drag split sliders, toggle stress shocks, and move the maintenance dial. Every number recalculates live — exactly what you'll see with your own figures.
             </p>
           </div>
 
-          <LandingCommandConsole />
+          <DemoCarousel variant="dark" />
 
           <p className="text-center text-[11px] text-white/30 mt-5">
             Sample figures shown. Your analysis reflects your actual inputs — recalculated instantly in your browser.
