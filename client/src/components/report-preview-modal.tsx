@@ -3,11 +3,14 @@ import { useLocation } from "wouter";
 import { scrollTop } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
-  X, ArrowRight, AlertTriangle, TrendingUp, Sparkles,
+  X, ArrowRight, AlertTriangle, TrendingUp, TrendingDown, Sparkles,
   BookOpen, AlertCircle, FileSearch, Scale, Home, PiggyBank,
-  Wallet, Users, List, ChevronDown, ChevronUp,
+  Wallet, Users, List, ChevronDown, ChevronUp, Sliders, Activity,
 } from "lucide-react";
 import { useState } from "react";
+import { motion } from "framer-motion";
+import { RadialGauge } from "@/components/charts/radial-gauge";
+import { chartTheme, fmtK, gaugeColor, densifyProjection, hashSeed } from "@/lib/chart-theme";
 
 interface ReportPreviewModalProps {
   open: boolean;
@@ -61,6 +64,214 @@ function Collapsible({ title, children, defaultOpen = false }: { title: string; 
           : <ChevronDown className="w-3.5 h-3.5 text-gray-400" />}
       </button>
       {open && <div className="mt-2">{children}</div>}
+    </div>
+  );
+}
+
+// ─── Sample executive dashboard (visual showcase at top of preview) ───
+const SAMPLE_SCENARIOS = [
+  { id: "S1", name: "Sell & Split",  short: "Sell & Split", capA: 89_750, capB: 89_750, surA: 2656, surB:  652, criA: 78, criB: 63, projection: [179_500, 188_900, 198_700, 208_200, 217_400, 226_800] },
+  { id: "S2", name: "A Keeps Home",  short: "A Keeps",      capA: 18_250, capB: 89_750, surA: 1026, surB:  652, criA: 52, criB: 71, projection: [108_000, 119_300, 131_800, 144_100, 156_700, 169_300] },
+  { id: "S3", name: "B Keeps Home",  short: "B Keeps",      capA: 89_750, capB: 18_250, surA: 2656, surB: -978, criA: 82, criB: 22, projection: [108_000, 102_000,  85_500,  69_400,  53_200,  37_500] },
+  { id: "S4", name: "Deferred Sale", short: "Deferred",     capA: 54_000, capB: 54_000, surA: 2666, surB:  662, criA: 71, criB: 54, projection: [108_000, 117_400, 127_500, 138_000, 149_100, 160_700] },
+];
+
+const SAMPLE_COMPOSITION = [
+  { label: "Property equity", value: 71_500,  color: "#A78BFA" },
+  { label: "Pension (CETV)",  value: 60_000,  color: "#22D3EE" },
+  { label: "Cash & savings",  value: 108_000, color: "#C9A84C" },
+];
+
+function MiniSparkline({ data, color = chartTheme.color.gold, height = 36, gradId = "mini-spark" }: { data: number[]; color?: string; height?: number; gradId?: string }) {
+  const W = 220, H = height, P = 3;
+  const min = Math.min(...data), max = Math.max(...data);
+  const range = Math.max(1, max - min);
+  const pts = data.map((v, i) => ({
+    x: P + (i / (data.length - 1)) * (W - P * 2),
+    y: H - P - ((v - min) / range) * (H - P * 2),
+  }));
+  const path = pts.map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`)).join(" ");
+  const area = `${path} L ${pts[pts.length - 1].x} ${H} L ${pts[0].x} ${H} Z`;
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height }} preserveAspectRatio="none">
+      <defs>
+        <linearGradient id={gradId} x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%"   stopColor={color} stopOpacity={0.32} />
+          <stop offset="100%" stopColor={color} stopOpacity={0} />
+        </linearGradient>
+      </defs>
+      <path d={area} fill={`url(#${gradId})`} />
+      <path d={path} fill="none" stroke={color} strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function SampleDashboard() {
+  const [active, setActive] = useState(0);
+  const sc = SAMPLE_SCENARIOS[active];
+  const totalCap = sc.capA + sc.capB;
+  const compTotal = SAMPLE_COMPOSITION.reduce((s, c) => s + c.value, 0);
+  const minR = Math.min(sc.criA, sc.criB);
+  const minRColor = gaugeColor(minR);
+  const bestSurplus = Math.max(sc.surA, sc.surB);
+  const denseTraj = densifyProjection(sc.projection, hashSeed(sc.id));
+
+  return (
+    <div className="relative">
+      <div className="absolute -inset-4 rounded-[24px] bg-gold/[0.06] blur-2xl pointer-events-none" />
+      <div className="relative rounded-2xl bg-[#0B1220] border border-white/10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] overflow-hidden">
+        {/* Window chrome */}
+        <div className="flex items-center justify-between px-4 py-2.5 bg-white/[0.03] border-b border-white/10">
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-white/20" /><div className="w-2.5 h-2.5 rounded-full bg-white/20" /><div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+          </div>
+          <div className="flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+            <Activity className="w-3 h-3 text-gold/70" />
+            <span>Settlement Command Console — sample</span>
+          </div>
+          <div className="w-12" />
+        </div>
+
+        {/* Scenario chips */}
+        <div className="px-4 pt-3 pb-3 border-b border-white/5">
+          <p className="text-[9px] uppercase tracking-[0.18em] text-white/35 font-medium mb-2">Switch settlement scenario</p>
+          <div className="flex gap-1.5 flex-wrap">
+            {SAMPLE_SCENARIOS.map((s, i) => {
+              const isActive = i === active;
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => setActive(i)}
+                  data-testid={`sample-chip-${s.id}`}
+                  aria-pressed={isActive}
+                  className={`px-3 py-1.5 rounded-full text-[11px] font-medium transition-all border ${
+                    isActive
+                      ? "bg-gold text-[#0B1220] border-gold shadow-[0_0_0_3px_rgba(201,168,76,0.18)]"
+                      : "bg-white/[0.04] text-white/60 border-white/10 hover:bg-white/[0.08]"
+                  }`}
+                >
+                  {s.short}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Hero metrics */}
+        <div className="grid grid-cols-3 gap-px bg-white/5">
+          <div className="bg-[#0B1220] px-4 py-3">
+            <p className="text-[9px] uppercase tracking-wider text-white/35 font-medium mb-1">Net capital · combined</p>
+            <p className="text-2xl font-bold text-white tabular-nums">£{totalCap.toLocaleString()}</p>
+            <p className="text-[10px] text-white/40 mt-0.5">A {fmtK(sc.capA)} · B {fmtK(sc.capB)}</p>
+          </div>
+          <div className="bg-[#0B1220] px-4 py-3">
+            <p className="text-[9px] uppercase tracking-wider text-white/35 font-medium mb-1">Best monthly surplus</p>
+            <p className={`text-2xl font-bold tabular-nums flex items-center gap-1 ${bestSurplus >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+              {bestSurplus >= 0 ? "+" : "−"}£{Math.abs(bestSurplus).toLocaleString()}
+              {bestSurplus >= 0 ? <TrendingUp className="w-3 h-3 text-emerald-400/60" /> : <TrendingDown className="w-3 h-3 text-rose-400/60" />}
+            </p>
+            <p className="text-[10px] text-white/40 mt-0.5">{sc.surA >= sc.surB ? "Party A" : "Party B"} strongest</p>
+          </div>
+          <div className="bg-[#0B1220] px-4 py-3">
+            <p className="text-[9px] uppercase tracking-wider text-white/35 font-medium mb-1">Lowest resilience score</p>
+            <p className="text-2xl font-bold tabular-nums" style={{ color: minRColor.stroke }}>
+              {minR}<span className="text-sm font-normal text-white/40">/100</span>
+            </p>
+            <p className="text-[10px] text-white/40 mt-0.5">{minRColor.label}</p>
+          </div>
+        </div>
+
+        {/* Lower panes */}
+        <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-px bg-white/5">
+          {/* Composition + trajectory */}
+          <div className="bg-[#0B1220] p-4 space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium">Capital composition</p>
+                <p className="text-[10px] font-mono text-white/40">£{compTotal.toLocaleString()}</p>
+              </div>
+              <div className="flex h-3 rounded-full overflow-hidden bg-white/[0.04]">
+                {SAMPLE_COMPOSITION.map((c, i) => (
+                  <motion.div
+                    key={c.label}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(c.value / compTotal) * 100}%` }}
+                    transition={{ duration: 0.7, ease: chartTheme.ease, delay: i * 0.08 }}
+                    style={{ background: c.color }}
+                  />
+                ))}
+              </div>
+              <div className="mt-2 grid grid-cols-3 gap-2">
+                {SAMPLE_COMPOSITION.map((c) => (
+                  <div key={c.label} className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-sm shrink-0" style={{ background: c.color }} />
+                    <div className="min-w-0">
+                      <p className="text-[10px] text-white/85 font-medium tabular-nums">{fmtK(c.value)}</p>
+                      <p className="text-[9px] text-white/40 truncate">{c.label}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium">5-year capital trajectory</p>
+                <p className="text-[10px] font-mono text-white/60">
+                  Yr 5 <span className="text-emerald-400 font-semibold">{fmtK(sc.projection[5])}</span>
+                </p>
+              </div>
+              <MiniSparkline data={denseTraj} height={70} gradId={`sample-spark-${sc.id}`} />
+            </div>
+          </div>
+
+          {/* Twin gauges */}
+          <div className="bg-[#0B1220] p-4 flex flex-col">
+            <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium mb-2">Resilience · weakest party</p>
+            <div className="flex-1 flex items-center justify-center">
+              <div className="bg-white/[0.03] rounded-xl px-4 py-2 border border-white/5">
+                <RadialGauge score={minR} size={140} label={minRColor.label.toUpperCase()} testId={`sample-gauge-${sc.id}`} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2 mt-3">
+              {[
+                { name: "Party A", score: sc.criA },
+                { name: "Party B", score: sc.criB },
+              ].map((p) => {
+                const g = gaugeColor(p.score);
+                return (
+                  <div key={p.name} className="rounded-lg border border-white/5 bg-white/[0.02] px-2 py-1.5 text-center">
+                    <p className="text-[9px] text-white/40">{p.name}</p>
+                    <p className="text-base font-bold tabular-nums" style={{ color: g.stroke }}>
+                      {p.score}<span className="text-[9px] font-normal text-white/40">/100</span>
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Stress-test row (visual only) */}
+        <div className="px-4 py-2.5 border-t border-white/5 bg-white/[0.02] flex items-center gap-2 flex-wrap">
+          <Sliders className="w-3 h-3 text-gold/70" />
+          <span className="text-[10px] uppercase tracking-wider text-white/40 font-medium mr-1">Stress tests</span>
+          {["Mortgage rate +1%", "Income −5%", "House price −10%"].map((s) => (
+            <span key={s} className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-white/[0.04] text-white/55 border border-white/10">{s}</span>
+          ))}
+          <span className="text-[10px] text-white/30 ml-auto">Interactive in the unlocked report</span>
+        </div>
+
+        {/* Footer */}
+        <div className="px-4 py-2.5 bg-gradient-to-r from-gold/[0.08] to-gold/[0.02] border-t border-gold/15 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-3 h-3 text-gold/70" />
+            <span className="text-[10px] text-gold/80 font-medium">Sample dashboard · the live version is wired to your figures</span>
+          </div>
+          <ArrowRight className="w-3.5 h-3.5 text-gold/60" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -187,6 +398,9 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
               </div>
             </div>
           </div>
+
+          {/* ── Visual snapshot dashboard ── */}
+          <SampleDashboard />
 
           {/* ── Disclaimer ── */}
           <div className="p-4 border border-amber-200 bg-amber-50 rounded-xl text-xs text-amber-900 leading-relaxed flex items-start gap-3">
