@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { TrendingUp, TrendingDown, Sliders, Lock, Sparkles, ChevronRight, Eye } from "lucide-react";
 import { AnimatedNumber } from "@/components/charts/animated-number";
 import { RadialGauge } from "@/components/charts/radial-gauge";
-import { chartTheme, fmtK, fmtGbp, gaugeColor } from "@/lib/chart-theme";
+import { chartTheme, fmtK, fmtGbp, gaugeColor, densifyProjection, hashSeed } from "@/lib/chart-theme";
 
 export interface ConsoleScenario {
   id: string;
@@ -240,7 +240,7 @@ export function SettlementConsole({
                       Yr 5 <span className={`text-emerald-400 font-semibold ${locked ? "blur-[4px] select-none" : ""}`}>{fmtK(sc.projection[sc.projection.length - 1] ?? 0)}</span>
                     </p>
                   </div>
-                  <Sparkline data={sc.projection} depletionYear={sc.depletionYear} />
+                  <Sparkline data={densifyProjection(sc.projection, hashSeed(sc.id))} depletionYear={sc.depletionYear !== undefined ? sc.depletionYear * 12 : undefined} />
                 </div>
               </div>
 
