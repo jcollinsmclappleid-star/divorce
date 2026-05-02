@@ -145,6 +145,7 @@ app.use(session({
     conString: process.env.DATABASE_URL,
     createTableIfMissing: true,
     tableName: 'user_sessions',
+    pruneSessionInterval: 60 * 60,
   }),
   secret: process.env.SESSION_SECRET || 'dfm-dev-secret',
   resave: false,
@@ -153,7 +154,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 12 * 30 * 24 * 60 * 60 * 1000,
+    maxAge: 90 * 24 * 60 * 60 * 1000,
     sameSite: 'lax',
   },
 }));
@@ -172,12 +173,7 @@ app.use((req, res, next) => {
   res.on("finish", () => {
     const duration = Date.now() - start;
     if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-      }
-
-      log(logLine);
+      log(`${req.method} ${path} ${res.statusCode} in ${duration}ms`);
     }
   });
 
@@ -187,6 +183,8 @@ app.use((req, res, next) => {
 (async () => {
   await initStripe();
   await registerRoutes(httpServer, app);
+  const { startRetentionCleanup } = await import("./cleanup");
+  startRetentionCleanup();
 
   app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
     const status = err.status || err.statusCode || 500;

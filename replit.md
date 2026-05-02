@@ -62,9 +62,22 @@ The `/recover` page also retains the order-reference fallback (`POST /api/access
 7.  **Spousal maintenance toggle**: Optional feature in the wizard, applying an income transfer between parties in calculations.
 8.  **Magic link auth**: No passwords. Server-side session via HttpOnly cookie. Cross-device access. Single-use tokens with 1-hour expiry. Email enumeration prevented (always returns `{ sent: true }`).
 
-### Security
+### Security & GDPR
 
-HTTP security headers are applied via `helmet` including CSP (allowing Stripe.js, self-hosted fonts), HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy. Email FROM domains are verified (Resend with SPF/DKIM). Double opt-in is implemented for email leads. GDPR data deletion (`POST /api/gdpr/delete`) anonymises purchases and deletes email leads. Stripe webhook verification uses `STRIPE_WEBHOOK_SECRET`. Admin access is password-protected. Self-hosted fonts are used, and dependencies are regularly audited. Magic link tokens are single-use, 1-hour expiry, 96 hex characters (48 bytes). Server sessions stored in PostgreSQL via connect-pg-simple.
+HTTP security headers are applied via `helmet` including CSP (allowing Stripe.js, self-hosted fonts), HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy. Email FROM domains are verified (Resend with SPF/DKIM). Double opt-in is implemented for email leads. GDPR data deletion (`POST /api/gdpr/delete`) anonymises purchases and deletes email leads, magic links, and user sessions. Stripe webhook verification uses `STRIPE_WEBHOOK_SECRET`. Admin access is password-protected. Self-hosted fonts are used. Magic link tokens are single-use, 1-hour expiry, 96 hex characters (48 bytes), with both per-IP and per-email rate limits on `/api/auth/send-link`. Server sessions stored in PostgreSQL via connect-pg-simple with a 90-day cookie lifetime and hourly pruning.
+
+**Data minimisation & retention:** API request logging only records method, path, status, and duration — never response bodies. Lead capture no longer stores `assetPoolSnapshot` (still passed through transiently for the user-confirmation email). No analytics, trackers, or cookie banner — only strictly necessary cookies are set.
+
+**Automated retention** (`server/cleanup.ts`) runs on boot + every 6 hours:
+- Expired `magic_links` (past `expires_at`) — deleted
+- Unverified `email_leads` older than 30 days — deleted
+- Verified `email_leads` older than 24 months — deleted
+- Existing `email_leads.asset_pool_snapshot` values — NULL'd (column retained, no longer written)
+- `purchases` older than 7 years — email anonymised (NULL)
+- `sessions` (server-side modelling state) older than 12 months by `updated_at` — deleted
+- `user_sessions` (auth) — pruned hourly by connect-pg-simple
+
+**Breach notification commitment** in privacy policy maps to UK GDPR Articles 33/34 only — ICO within 72 hours where required, data subjects without undue delay where high risk. No commitments beyond statutory minima.
 
 ## External Dependencies
 

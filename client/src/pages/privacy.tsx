@@ -85,7 +85,7 @@ export default function PrivacyPage() {
         <h1 className="text-3xl font-display font-bold mb-8" data-testid="text-privacy-title">Privacy Policy</h1>
 
         <div className="prose prose-sm max-w-none space-y-6 text-muted-foreground">
-          <p className="text-foreground font-medium">Last updated: April 2026</p>
+          <p className="text-foreground font-medium">Last updated: May 2026</p>
           <p>This Privacy Policy explains how DivorceCalculatorUK ("we", "us", "our") collects, uses, stores, and protects your personal data when you use our website and financial modelling tool ("the Service"). It applies to all visitors and users of the Service.</p>
           <p>This policy is provided in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018. By using the Service, you acknowledge that you have read and understood this Privacy Policy. This Privacy Policy should be read in conjunction with our <Link href="/terms" className="underline text-primary">Terms of Use</Link>.</p>
 
@@ -160,7 +160,7 @@ export default function PrivacyPage() {
             <p>We do not sell, rent, trade, or otherwise share your personal data with third parties for their own purposes. Your data is shared only in the following limited circumstances:</p>
             <ul className="list-disc pl-6 space-y-1">
               <li><strong>Stripe (payment processor):</strong> When you make a payment, your payment card details and email address are submitted directly from your browser to Stripe. We do not receive or handle your card details. Stripe processes your payment data as an independent data controller under its own <a href="https://stripe.com/gb/privacy" target="_blank" rel="noopener noreferrer" className="underline text-primary">Privacy Policy</a>.</li>
-              <li><strong>Resend (email service provider):</strong> To send you transactional emails (purchase confirmations and access recovery links), we share your email address with Resend, a third-party email service provider. Resend processes your email address solely for the purpose of delivering transactional emails and does not use it for marketing or other purposes. Resend acts as a data processor under their <a href="https://resend.com/privacy" target="_blank" rel="noopener noreferrer" className="underline text-primary">Privacy Policy</a>.</li>
+              <li><strong>Resend (email service provider):</strong> To send you transactional emails (purchase confirmations, access recovery links, magic link sign-in emails, free guide verification, and progress summary emails), we share your email address with Resend, a third-party email service provider. We also use Resend to send internal operational alerts to our administrator email when a purchase, lead capture, or data deletion request is processed; these alerts include the relevant email address as the subject of the event. Resend processes email addresses solely for the purpose of delivering these messages and does not use them for marketing or any other purpose. Resend acts as a data processor under their <a href="https://resend.com/privacy" target="_blank" rel="noopener noreferrer" className="underline text-primary">Privacy Policy</a>.</li>
               <li><strong>OpenAI (Guided Intelligence Report sub-processor):</strong> When you choose to use the optional Guided Intelligence Report feature, selected de-identified model figures are forwarded to OpenAI for processing. OpenAI acts as a data processor under a data processing agreement. The figures transmitted contain no names, contact details, addresses, or free-text personal information. OpenAI does not use API-submitted data to train its models under its standard API data processing terms. See Section 8 for full details.</li>
               <li><strong>Hosting infrastructure:</strong> The Service is hosted on cloud infrastructure. Our hosting provider processes server access logs and other data as a data processor acting on our instructions. They do not have independent access to or use of your data.</li>
               <li><strong>Legal requirements:</strong> We may disclose personal data where required to do so by law, regulation, legal process, or enforceable governmental request, or to protect our rights, property, or safety, or the rights, property, or safety of others.</li>
@@ -223,10 +223,13 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-semibold text-foreground">9. Data Retention</h2>
             <p>We retain personal data only for as long as necessary for the purposes for which it was collected:</p>
             <ul className="list-disc pl-6 space-y-1">
-              <li><strong>Email addresses:</strong> Retained for the duration of your access period (12 months from purchase) plus 6 years thereafter for accounting purposes. After your access expires, we retain your email address in encrypted form to enable access recovery if you repurchase. You may request deletion of your email address at any time by contacting us at support@divorcecalculatoruk.co.uk.</li>
-              <li><strong>Payment records:</strong> Retained for the duration of your access period (12 months from purchase) plus 6 years thereafter, as required for UK tax and accounting obligations under HMRC record-keeping requirements.</li>
-              <li><strong>Session tokens:</strong> Retained on our server for the duration of the access period. The corresponding token in your browser persists until you clear your browser data.</li>
-              <li><strong>Server access logs:</strong> Retained for up to 90 days for security monitoring purposes, after which they are automatically deleted.</li>
+              <li><strong>Purchase email addresses:</strong> Retained for the duration of your access period (12 months from purchase) plus up to 6 years thereafter to satisfy UK tax and accounting record-keeping obligations. After this period the email address is automatically removed from purchase records by our scheduled retention process. You may request earlier deletion at any time using the form below.</li>
+              <li><strong>Free guide / progress summary email addresses:</strong> Retained for up to 24 months from sign-up and then automatically deleted by our scheduled retention process. Addresses that are not confirmed via the verification email are automatically deleted within 30 days.</li>
+              <li><strong>Payment records:</strong> Retained for the duration of your access period plus up to 6 years thereafter, as required for UK tax and accounting obligations under HMRC record-keeping requirements. Personal identifiers (email address) are removed from these records once the retention period ends.</li>
+              <li><strong>Magic link tokens:</strong> Single-use, with a one-hour expiry. Expired tokens are automatically removed by our scheduled retention process.</li>
+              <li><strong>Authenticated session cookies:</strong> Stored server-side for up to 90 days from your most recent sign-in, after which they expire and are automatically pruned.</li>
+              <li><strong>Modelling sessions stored on our server:</strong> Server-side modelling session records are automatically deleted 12 months after their last update.</li>
+              <li><strong>Server access logs:</strong> Retained for up to 90 days for security monitoring purposes, after which they are deleted in line with our hosting provider's standard log rotation. Application request logs do not include response bodies or other personal data.</li>
               <li><strong>Browser-stored financial data:</strong> This data is stored locally on your device and is not subject to our retention policies. You may delete it at any time by clearing your browser data.</li>
             </ul>
           </section>
@@ -242,6 +245,7 @@ export default function PrivacyPage() {
               <li>Server access is restricted and monitored</li>
             </ul>
             <p>No method of electronic transmission or storage is completely secure. While we take reasonable precautions to protect your data, we cannot guarantee absolute security.</p>
+            <p><strong>Personal data breaches:</strong> In the event of a personal data breach that is likely to result in a risk to your rights and freedoms, we will notify the Information Commissioner's Office within 72 hours of becoming aware, in accordance with Article 33 of the UK GDPR. Where the breach is likely to result in a high risk to you, we will also notify you directly without undue delay, in accordance with Article 34.</p>
           </section>
 
           <section>
@@ -273,14 +277,15 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-xl font-semibold text-foreground">13. Cookies and Local Storage</h2>
-            <p>This Service does not use cookies for tracking, advertising, or analytics purposes.</p>
+            <p>This Service does not use cookies for tracking, advertising, or analytics purposes, and we do not display a cookie banner because no consent-requiring cookies are set.</p>
             <p>We use browser localStorage (a client-side storage mechanism) for the following essential purposes only:</p>
             <ul className="list-disc pl-6 space-y-1">
               <li><strong>Session token:</strong> To identify your browser session and verify access entitlements</li>
               <li><strong>Application state:</strong> To store your financial modelling data locally so that your progress is preserved between visits</li>
               <li><strong>User preferences:</strong> To store display preferences such as light/dark mode</li>
             </ul>
-            <p>These are classified as strictly necessary for the functioning of the Service under the Privacy and Electronic Communications Regulations 2003 (PECR) and do not require consent.</p>
+            <p>If you choose to use the optional magic link sign-in flow, we set a single strictly necessary HttpOnly cookie (<code>dfm.sid</code>) to maintain your authenticated session. This cookie is required for the sign-in feature to function and is not used for any other purpose.</p>
+            <p>These mechanisms are classified as strictly necessary for the functioning of the Service under the Privacy and Electronic Communications Regulations 2003 (PECR) and do not require consent.</p>
             <p>Stripe, our payment processor, may set its own cookies when you interact with the payment page. These are governed by Stripe's cookie policy.</p>
           </section>
 

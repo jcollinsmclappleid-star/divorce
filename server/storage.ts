@@ -14,7 +14,7 @@ export interface IStorage {
   getPaidPurchasesByEmail(email: string): Promise<Purchase[]>;
   extendPurchaseExpiry(purchaseId: string, months: number): Promise<Purchase>;
 
-  createEmailLead(email: string, firstName?: string, source?: string, assetPoolSnapshot?: string, verificationToken?: string): Promise<EmailLead>;
+  createEmailLead(email: string, firstName?: string, source?: string, verificationToken?: string): Promise<EmailLead>;
   getEmailLeadByEmail(email: string): Promise<EmailLead | undefined>;
   getEmailLeadByVerificationToken(token: string): Promise<EmailLead | undefined>;
   verifyEmailLead(id: string): Promise<EmailLead>;
@@ -125,12 +125,11 @@ export class DatabaseStorage implements IStorage {
       .returning();
     return updated;
   }
-  async createEmailLead(email: string, firstName?: string, source?: string, assetPoolSnapshot?: string, verificationToken?: string): Promise<EmailLead> {
+  async createEmailLead(email: string, firstName?: string, source?: string, verificationToken?: string): Promise<EmailLead> {
     const [lead] = await db.insert(emailLeads).values({
       email: email.toLowerCase().trim(),
       firstName: firstName ?? null,
       source: source ?? "free_guide",
-      assetPoolSnapshot: assetPoolSnapshot ?? null,
       verified: false,
       verificationToken: verificationToken ?? null,
     }).returning();

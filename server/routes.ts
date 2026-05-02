@@ -559,6 +559,12 @@ export async function registerRoutes(
       }
       const email = parsed.data.email.toLowerCase().trim();
 
+      // Per-email rate limit (silent so behaviour mirrors the no-purchase path
+      // and prevents enumeration via timing or response differences)
+      if (!rateLimit(`magic-link-email:${email}`, 5, 60 * 60 * 1000)) {
+        return res.json({ sent: true });
+      }
+
       const purchases = await storage.getPaidPurchasesByEmail(email);
       const validPurchase = purchases.find(p => p.expiresAt && new Date(p.expiresAt) > new Date());
 
@@ -754,12 +760,11 @@ export async function registerRoutes(
       const isSummarySource = source === 'preview_page' || source === 'wizard_preview';
       if (!existing) {
         const verificationToken = crypto.randomBytes(32).toString('hex');
-        await storage.createEmailLead(email, firstName, source, assetPoolSnapshot, verificationToken);
+        await storage.createEmailLead(email, firstName, source, verificationToken);
         sendAdminNotification('New email lead captured', [
           { label: 'Email', value: email },
           { label: 'Name', value: firstName || '—' },
           { label: 'Source', value: source || '—' },
-          { label: 'Asset pool', value: assetPoolSnapshot ? `£${Number(assetPoolSnapshot).toLocaleString('en-GB')}` : '—' },
           { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
         ], 'lead_capture').catch(() => {});
         if (isSummarySource) {
