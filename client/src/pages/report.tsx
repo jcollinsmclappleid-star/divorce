@@ -22,6 +22,7 @@ import type {
 import type { StabilityDriver } from "@/lib/insights/computeStabilityScore";
 import { LogoPrint } from "@/components/logo";
 import { FsiGauge } from "@/components/fsi-gauge";
+import { ExecutiveBriefing } from "@/components/report/executive-briefing";
 
 const SCENARIO_META: Record<string, { label: string; shortLabel: string; color: string }> = {
   S1: { label: "Sell & Split", shortLabel: "Sell & Split", color: "#2563EB" },
@@ -291,6 +292,17 @@ export default function ReportPage() {
           <p className="text-sm text-gray-600 italic mt-4 pt-2 border-t border-gray-200">
             Financial modelling highlights trade-offs. Each scenario reflects different implications for liquidity, leverage, and income variability.
           </p>
+        </ReportSection>
+
+        <ReportSection
+          id="exec-briefing"
+          title="Executive Briefing — Visual Analysis"
+          description="Four chart lenses on the same estate. Use these alongside the narrative sections that follow."
+        >
+          <ExecutiveBriefing
+            bundles={scenarioData.map(d => ({ sc: d.sc, stability: d.stability, snapshot: { surplusA: d.snapshot.surplusA, surplusB: d.snapshot.surplusB, netMonthlyIncomeA: d.snapshot.netMonthlyIncomeA, netMonthlyIncomeB: d.snapshot.netMonthlyIncomeB } }))}
+            projections={engine.projections}
+          />
         </ReportSection>
 
         <ReportSection

@@ -18,7 +18,7 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { SiteNav } from "@/components/site-nav";
 import { useMetaTags } from "@/hooks/use-meta-tags";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
-import { LandingDashboardPreview } from "@/components/landing-dashboard-preview";
+import { LandingCommandConsole } from "@/components/landing-command-console";
 
 const EXPLORE_CARDS = [
   {
@@ -194,59 +194,9 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Right — product preview (desktop only) */}
-            <div className="hidden md:block" aria-hidden="true">
-              <div className="rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-sm overflow-hidden shadow-2xl shadow-black/40">
-                {/* Window chrome */}
-                <div className="flex items-center gap-1.5 px-4 py-2.5 bg-white/[0.04] border-b border-white/10">
-                  <div className="w-2.5 h-2.5 rounded-full bg-white/15" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-white/15" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-white/15" />
-                  <span className="text-[10px] text-white/25 ml-2 font-mono">Full analysis — 4 scenarios</span>
-                </div>
-                {/* Content */}
-                <div className="p-5 space-y-4">
-                  {/* Scenario rows */}
-                  <div className="space-y-2.5">
-                    <p className="text-[10px] text-white/30 uppercase tracking-wider font-medium">Settlement scenario comparison</p>
-                    {[
-                      { name: "Sell & Split", equity: "£187,500", bar: 78, color: "bg-cyan-400", tag: "Balanced", tagCls: "text-cyan-300 bg-cyan-400/15" },
-                      { name: "A Keeps Home", equity: "£215,000", bar: 91, color: "bg-emerald-400", tag: "Sustainable", tagCls: "text-emerald-300 bg-emerald-400/15" },
-                      { name: "B Keeps Home", equity: "£142,000", bar: 58, color: "bg-amber-400", tag: "Stretched", tagCls: "text-amber-300 bg-amber-400/15" },
-                      { name: "Deferred Sale", equity: "£198,000", bar: 73, color: "bg-violet-400", tag: "Complex", tagCls: "text-violet-300 bg-violet-400/15" },
-                    ].map((s, i) => (
-                      <div key={i} className="flex items-center gap-2.5">
-                        <span className="text-[10px] text-white/45 w-22 flex-shrink-0 truncate" style={{ width: "5.5rem" }}>{s.name}</span>
-                        <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                          <div className={`h-full rounded-full ${s.color} opacity-75 transition-all`} style={{ width: `${s.bar}%` }} />
-                        </div>
-                        <span className="text-[10px] font-mono text-white/60 flex-shrink-0 w-16 text-right">{s.equity}</span>
-                        <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 ${s.tagCls}`}>{s.tag}</span>
-                      </div>
-                    ))}
-                  </div>
-                  {/* Stats row */}
-                  <div className="border-t border-white/10 pt-3 grid grid-cols-3 gap-2">
-                    <div className="text-center">
-                      <p className="text-sm font-bold text-emerald-400">+£847</p>
-                      <p className="text-[9px] text-white/30 mt-0.5">Best mo. surplus</p>
-                    </div>
-                    <div className="text-center border-x border-white/10">
-                      <p className="text-sm font-bold text-gold">78/100</p>
-                      <p className="text-[9px] text-white/30 mt-0.5">Sustainability</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm font-bold text-violet-300">+£23k</p>
-                      <p className="text-[9px] text-white/30 mt-0.5">5-yr capital gain</p>
-                    </div>
-                  </div>
-                  {/* Locked banner */}
-                  <div className="bg-gold/8 border border-gold/25 rounded-lg px-3 py-2 flex items-center gap-2">
-                    <Lock className="w-3 h-3 text-gold/60 flex-shrink-0" />
-                    <p className="text-[10px] text-gold/70">Guided Intelligence Report · stress tests · PDF · sustainability scores</p>
-                  </div>
-                </div>
-              </div>
+            {/* Right — live Settlement Command Console (desktop only) */}
+            <div className="hidden md:block">
+              <LandingCommandConsole />
             </div>
 
           </div>
@@ -290,14 +240,14 @@ export default function LandingPage() {
               <span className="text-xs font-medium text-emerald-400 tracking-wide">Sample output · real model format</span>
             </div>
             <h2 className="text-2xl md:text-3xl font-display font-bold text-white">
-              Here's what the full analysis looks like
+              The Settlement Command Console
             </h2>
             <p className="text-white/60 text-sm max-w-lg mx-auto">
-              Five live-format panels from the real dashboard — built from a sample couple's figures so you can see exactly what you're unlocking.
+              Switch between scenarios. Stress-test the assumptions. Watch every number recalculate live — exactly what you'll see with your own figures.
             </p>
           </div>
 
-          <LandingDashboardPreview />
+          <LandingCommandConsole />
 
           <p className="text-center text-[11px] text-white/30 mt-5">
             Sample figures shown. Your analysis reflects your actual inputs — recalculated instantly in your browser.
