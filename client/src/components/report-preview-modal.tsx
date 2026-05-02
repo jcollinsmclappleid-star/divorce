@@ -108,6 +108,7 @@ function MiniSparkline({ data, color = chartTheme.color.gold, height = 36, gradI
 
 function SampleDashboard() {
   const [active, setActive] = useState(0);
+  const [interacted, setInteracted] = useState(false);
   const sc = SAMPLE_SCENARIOS[active];
   const totalCap = sc.capA + sc.capB;
   const compTotal = SAMPLE_COMPOSITION.reduce((s, c) => s + c.value, 0);
@@ -134,28 +135,53 @@ function SampleDashboard() {
 
         {/* Scenario chips */}
         <div className="px-4 pt-3 pb-3 border-b border-white/5">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-white/35 font-medium mb-2">Switch settlement scenario</p>
+          <div className="flex items-center justify-between mb-2 gap-2 flex-wrap">
+            <p className="text-[9px] uppercase tracking-[0.18em] text-white/35 font-medium">Switch settlement scenario</p>
+            <span className="inline-flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-gold bg-gold/15 border border-gold/30 px-2 py-0.5 rounded-full">
+              <motion.span
+                className="w-1.5 h-1.5 rounded-full bg-gold"
+                animate={{ scale: [1, 1.6, 1], opacity: [1, 0.4, 1] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              />
+              Live · click to try
+            </span>
+          </div>
           <div className="flex gap-1.5 flex-wrap">
             {SAMPLE_SCENARIOS.map((s, i) => {
               const isActive = i === active;
+              const isHinted = !interacted && i === 1; // gentle hint on the second chip
               return (
                 <button
                   key={s.id}
                   type="button"
-                  onClick={() => setActive(i)}
+                  onClick={() => { setActive(i); setInteracted(true); }}
                   data-testid={`sample-chip-${s.id}`}
                   aria-pressed={isActive}
-                  className={`px-3 py-1.5 rounded-full text-[11px] font-medium transition-all border ${
+                  className={`relative px-3 py-1.5 rounded-full text-[11px] font-medium transition-all border ${
                     isActive
                       ? "bg-gold text-[#0B1220] border-gold shadow-[0_0_0_3px_rgba(201,168,76,0.18)]"
+                      : isHinted
+                      ? "bg-white/[0.08] text-white/85 border-gold/40 shadow-[0_0_0_3px_rgba(201,168,76,0.10)] animate-pulse"
                       : "bg-white/[0.04] text-white/60 border-white/10 hover:bg-white/[0.08]"
                   }`}
                 >
                   {s.short}
+                  {isHinted && (
+                    <motion.span
+                      className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-gold"
+                      animate={{ scale: [1, 1.5, 1] }}
+                      transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                  )}
                 </button>
               );
             })}
           </div>
+          {!interacted && (
+            <p className="text-[10px] text-gold/70 mt-2 italic flex items-center gap-1">
+              <ArrowRight className="w-2.5 h-2.5" /> Tap a different scenario to see how every figure changes
+            </p>
+          )}
         </div>
 
         {/* Hero metrics */}
