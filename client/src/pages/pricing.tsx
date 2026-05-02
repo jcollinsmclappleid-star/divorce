@@ -52,7 +52,8 @@ export default function PricingPage() {
     ogType: "website",
   });
   const [, setLocation] = useLocation();
-  const { startFresh } = useAppStore();
+  const { reset } = useAppStore();
+  const startFresh = () => { reset(); setLocation("/wizard"); };
 
   return (
     <div className="min-h-screen bg-background">

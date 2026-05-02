@@ -576,7 +576,7 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
 
           {/* ── 5. Sell & Split — Detail ── */}
           <section>
-            <SectionHeader title="5. Sell & Split — Detail" accentColor="#2563EB" description="A full breakdown of this settlement option: starting positions, monthly cashflow, sustainability, and key indicators." />
+            <SectionHeader title="5. Sell & Split — Detail" accent="#2563EB" description="A full breakdown of this settlement option: starting positions, monthly cashflow, sustainability, and key indicators." />
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
               <StatStrip color="#2563EB" items={[
                 { label: "A — Starting Capital", value: "£89,750" },
@@ -673,7 +673,7 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
 
           {/* ── 6. A Keeps Home — Detail ── */}
           <section>
-            <SectionHeader title="6. A Keeps Home — Detail" accentColor="#10B981" description="A full breakdown of this settlement option: starting positions, monthly cashflow, sustainability, and key indicators." />
+            <SectionHeader title="6. A Keeps Home — Detail" accent="#10B981" description="A full breakdown of this settlement option: starting positions, monthly cashflow, sustainability, and key indicators." />
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
               <StatStrip color="#10B981" items={[
                 { label: "A — Starting Capital", value: "£18,250" },
@@ -716,12 +716,15 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                       <p className="text-xs font-semibold text-gray-500 mb-1">{col.label}</p>
                       <table className="w-full text-sm">
                         <tbody>
-                          {col.rows.map(r => (
+                          {col.rows.map(row => {
+                            const r = row as { l: string; v: string; red?: boolean; green?: boolean; note?: boolean };
+                            return (
                             <tr key={r.l} className="border-b border-gray-100">
                               <td className="py-0.5 text-gray-600">{r.l}{r.note && <span className="text-[10px] text-gray-400 ml-1">(not liquid)</span>}</td>
                               <td className={`py-0.5 text-right tabular-nums font-medium ${r.red ? "text-rose-600" : r.green ? "text-emerald-600" : ""}`}>{r.v}</td>
                             </tr>
-                          ))}
+                            );
+                          })}
                         </tbody>
                       </table>
                       <div className="flex justify-between text-sm font-semibold mt-1 pt-1 border-t border-gray-200">
