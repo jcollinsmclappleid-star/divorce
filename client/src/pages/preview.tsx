@@ -20,6 +20,7 @@ import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis,
 } from "recharts";
+import { SettlementConsole, buildConsoleScenarios } from "@/components/settlement-console";
 
 const CHART_COLOURS = ["hsl(220,52%,22%)", "#0d9488", "#64748b"];
 
@@ -89,6 +90,36 @@ export default function PreviewPage() {
     { name: `${nameB} Keeps`,     value: Math.round(combinedPool * 0.55), color: "#8B5CF6" },
     { name: "Deferred Sale",      value: Math.round(combinedPool * 0.48), color: "#F59E0B" },
   ];
+
+  // Build a locked-mode console preview using illustrative percentages of the user's real pool
+  const previewConsoleScenarios = buildConsoleScenarios([
+    { id: "S1", name: "Sell & Split", shortName: "Sell & Split",
+      totalA: Math.round(combinedPool * 0.50), totalB: Math.round(combinedPool * 0.50),
+      surplusA:  680, surplusB:  420, resilienceA: 74, resilienceB: 62,
+      projection: Array.from({ length: 6 }, (_, y) => ({ capitalA: Math.round(combinedPool * (0.50 + y * 0.022)), capitalB: Math.round(combinedPool * (0.50 + y * 0.018)) })),
+    },
+    { id: "S2", name: `${nameA} Keeps Home`, shortName: `${nameA} Keeps`,
+      totalA: Math.round(combinedPool * 0.58), totalB: Math.round(combinedPool * 0.42),
+      surplusA:  340, surplusB:  610, resilienceA: 64, resilienceB: 71,
+      projection: Array.from({ length: 6 }, (_, y) => ({ capitalA: Math.round(combinedPool * (0.58 + y * 0.018)), capitalB: Math.round(combinedPool * (0.42 + y * 0.020)) })),
+    },
+    { id: "S3", name: `${nameB} Keeps Home`, shortName: `${nameB} Keeps`,
+      totalA: Math.round(combinedPool * 0.46), totalB: Math.round(combinedPool * 0.54),
+      surplusA:  520, surplusB: -120, resilienceA: 68, resilienceB: 39,
+      projection: Array.from({ length: 6 }, (_, y) => ({ capitalA: Math.round(combinedPool * (0.46 + y * 0.022)), capitalB: Math.round(combinedPool * (0.54 - y * 0.012)) })),
+    },
+    { id: "S4", name: "Deferred Sale", shortName: "Deferred",
+      totalA: Math.round(combinedPool * 0.49), totalB: Math.round(combinedPool * 0.49),
+      surplusA:  410, surplusB:  380, resilienceA: 70, resilienceB: 66,
+      projection: Array.from({ length: 6 }, (_, y) => ({ capitalA: Math.round(combinedPool * (0.49 + y * 0.024)), capitalB: Math.round(combinedPool * (0.49 + y * 0.022)) })),
+    },
+  ]);
+
+  const previewComposition = [
+    { label: "Property equity", value: Math.max(0, intermediate.netHomeEquity), color: "#A78BFA" },
+    { label: "Pension (CETV)",  value: Math.max(0, pensionTotal),               color: "#22D3EE" },
+    { label: "Cash & savings",  value: Math.max(0, intermediate.totalLiquid - pensionTotal), color: "#C9A84C" },
+  ].filter(c => c.value > 0);
 
   const scenarios = [
     {
@@ -199,6 +230,38 @@ export default function PreviewPage() {
             </div>
           </div>
         </section>
+
+        {/* ── Locked Settlement Console preview ── */}
+        {previewComposition.length > 0 && previewConsoleScenarios.length > 0 && (
+          <section className="space-y-3" data-testid="section-locked-console">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full">
+                  <Lock className="w-3 h-3" /> Locked preview
+                </span>
+                <h2 className="text-base font-semibold text-foreground">Your live Settlement Console</h2>
+              </div>
+              <p className="text-xs text-muted-foreground italic">Switch scenarios · stress-test the assumptions</p>
+            </div>
+            <p className="text-sm text-muted-foreground -mt-1">
+              This is the same console you'll use after unlocking — wired to your figures across all four settlement options. Numbers below are illustrative pending the full model run.
+            </p>
+            <div className="pt-3 pb-1">
+              <SettlementConsole
+                scenarios={previewConsoleScenarios}
+                composition={previewComposition}
+                partyAName={nameA}
+                partyBName={nameB}
+                locked
+                onUnlock={handleCheckout}
+                chromeCaption="Settlement Command Console"
+                footerText="Unlock to reveal exact figures, surplus and resilience scoring"
+                hideStress
+                testId="preview-settlement-console"
+              />
+            </div>
+          </section>
+        )}
 
         {/* ── What you can see ── */}
         <section className="space-y-4">

@@ -8,6 +8,7 @@ import { useAccess } from "@/hooks/use-access";
 import { GuidedSummaryPanel } from "@/components/guided-summary-panel";
 import { Logo } from "@/components/logo";
 import { FsiGauge } from "@/components/fsi-gauge";
+import { SettlementConsole, buildConsoleScenarios } from "@/components/settlement-console";
 import { PREMIUM_TOOLTIP_STYLE } from "@/components/premium-tooltip";
 import { calcMortgagePayment } from "@/lib/engine/calc/mortgage";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -164,6 +165,36 @@ export default function ResultsPage() {
     return scores;
   }, [allScenarios, engine.projections, store]);
 
+  const consoleScenarios = useMemo(() => {
+    return buildConsoleScenarios(allScenarios.map(sc => {
+      const snap = buildMonthlySnapshot(sc, store, engine.taxA, engine.taxB, engine.cmsAnnual);
+      const st = stabilityScores[sc.id];
+      return {
+        id: sc.id,
+        name: SCENARIO_META[sc.id]?.label ?? sc.name,
+        shortName: SCENARIO_META[sc.id]?.shortLabel ?? sc.id,
+        totalA: sc.totalA,
+        totalB: sc.totalB,
+        surplusA: snap.surplusA,
+        surplusB: snap.surplusB,
+        resilienceA: st?.scoreA ?? 100,
+        resilienceB: st?.scoreB ?? 100,
+        projection: engine.projections[sc.id] ?? [],
+      };
+    }));
+  }, [allScenarios, engine, store, stabilityScores]);
+
+  const consoleComposition = useMemo(() => {
+    const pensionTotal = store.assets
+      .filter(a => a.category === "pension")
+      .reduce((s, p) => s + (p.cetv ?? p.currentValue ?? 0), 0);
+    return [
+      { label: "Property equity", value: Math.max(0, engine.intermediate.netHomeEquity), color: "#A78BFA" },
+      { label: "Pension (CETV)",  value: Math.max(0, pensionTotal),                       color: "#22D3EE" },
+      { label: "Cash & savings",  value: Math.max(0, engine.intermediate.totalLiquid - pensionTotal), color: "#C9A84C" },
+    ].filter(c => c.value > 0);
+  }, [store.assets, engine.intermediate]);
+
   const setPreset = (split: number, pension: number) => {
     updateAssumptions({ splitRatio: split, splitPensionToA: pension });
   };
@@ -264,6 +295,20 @@ export default function ResultsPage() {
 
           {displayScenarios.length > 0 ? (
             <>
+              {consoleScenarios.length > 0 && consoleComposition.length > 0 && (
+                <div className="mb-6">
+                  <SettlementConsole
+                    scenarios={consoleScenarios}
+                    composition={consoleComposition}
+                    partyAName={store.profile?.partyAName || "Party A"}
+                    partyBName={store.profile?.partyBName || "Party B"}
+                    chromeCaption="Settlement Command Console — your figures"
+                    footerText={`Live model · ${consoleScenarios.length} scenarios · stress tests · 5-year projection`}
+                    testId="results-settlement-console"
+                  />
+                </div>
+              )}
+
               <ExecutiveTable
                 scenarios={displayScenarios}
                 projections={engine.projections}
