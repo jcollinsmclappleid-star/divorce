@@ -81,6 +81,21 @@ import DivorceTimelinePage from "@/pages/content/timeline-of-divorce-and-financi
 import PensionOffsettingPage from "@/pages/content/divorce-pension-offsetting-uk";
 import SpousalMaintenancePage from "@/pages/content/spousal-maintenance-after-divorce-uk";
 import TransferOfEquityPage from "@/pages/content/transfer-of-equity-divorce-uk";
+import WhatAmIEntitledToPage from "@/pages/content/what-am-i-entitled-to-in-divorce-uk";
+import FormEDisclosurePage from "@/pages/content/form-e-financial-disclosure-uk";
+import Section25FactorsPage from "@/pages/content/section-25-factors-divorce-uk";
+import StayAtHomeParentPage from "@/pages/content/stay-at-home-parent-divorce-settlement-uk";
+import CapitalGainsTaxDivorcePage from "@/pages/content/capital-gains-tax-on-divorce-uk";
+import ShortMarriageSettlementPage from "@/pages/content/short-marriage-divorce-settlement-uk";
+import LongMarriageSettlementPage from "@/pages/content/long-marriage-divorce-settlement-uk";
+import MatrimonialVsNonMatrimonialPage from "@/pages/content/matrimonial-vs-non-matrimonial-assets-uk";
+import SelfEmployedDivorcePage from "@/pages/content/self-employed-divorce-uk";
+import MesherVsMartinOrderPage from "@/pages/content/mesher-vs-martin-order-uk";
+import LumpSumOrderPage from "@/pages/content/lump-sum-order-divorce-uk";
+import PensionSharingVsOffsettingPage from "@/pages/content/pension-sharing-vs-offsetting-uk";
+import PreMaritalAssetsPage from "@/pages/content/pre-marital-assets-divorce-uk";
+import CryptocurrencyDivorcePage from "@/pages/content/cryptocurrency-divorce-uk";
+import BonusesRsusDivorcePage from "@/pages/content/bonuses-rsus-divorce-uk";
 import AboutPage from "@/pages/about";
 import HowItWorksPage from "@/pages/how-it-works";
 import FaqPage from "@/pages/faq";
@@ -162,6 +177,21 @@ function Router() {
       <Route path="/divorce-pension-offsetting-uk" component={PensionOffsettingPage} />
       <Route path="/spousal-maintenance-after-divorce-uk" component={SpousalMaintenancePage} />
       <Route path="/transfer-of-equity-divorce-uk" component={TransferOfEquityPage} />
+      <Route path="/what-am-i-entitled-to-in-divorce-uk" component={WhatAmIEntitledToPage} />
+      <Route path="/form-e-financial-disclosure-uk" component={FormEDisclosurePage} />
+      <Route path="/section-25-factors-divorce-uk" component={Section25FactorsPage} />
+      <Route path="/stay-at-home-parent-divorce-settlement-uk" component={StayAtHomeParentPage} />
+      <Route path="/capital-gains-tax-on-divorce-uk" component={CapitalGainsTaxDivorcePage} />
+      <Route path="/short-marriage-divorce-settlement-uk" component={ShortMarriageSettlementPage} />
+      <Route path="/long-marriage-divorce-settlement-uk" component={LongMarriageSettlementPage} />
+      <Route path="/matrimonial-vs-non-matrimonial-assets-uk" component={MatrimonialVsNonMatrimonialPage} />
+      <Route path="/self-employed-divorce-uk" component={SelfEmployedDivorcePage} />
+      <Route path="/mesher-vs-martin-order-uk" component={MesherVsMartinOrderPage} />
+      <Route path="/lump-sum-order-divorce-uk" component={LumpSumOrderPage} />
+      <Route path="/pension-sharing-vs-offsetting-uk" component={PensionSharingVsOffsettingPage} />
+      <Route path="/pre-marital-assets-divorce-uk" component={PreMaritalAssetsPage} />
+      <Route path="/cryptocurrency-divorce-uk" component={CryptocurrencyDivorcePage} />
+      <Route path="/bonuses-rsus-divorce-uk" component={BonusesRsusDivorcePage} />
       <Route path="/pricing" component={PricingPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/results">
