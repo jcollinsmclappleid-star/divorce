@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useLocation, Link } from "wouter";
 import { scrollTop } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import {
   Eye, Gauge, Calendar, Activity,
   LayoutDashboard, DollarSign, Home, PieChart, Sparkles, Download,
 } from "lucide-react";
-import { ReportPreviewModal } from "@/components/report-preview-modal";
+const ReportPreviewModal = lazy(() => import("@/components/report-preview-modal").then(m => ({ default: m.ReportPreviewModal })));
 import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
 import { useAppStore } from "@/hooks/use-store";
 import { useDocumentTitle } from "@/hooks/use-document-title";
@@ -952,7 +952,11 @@ export default function LandingPage() {
         </div>
       </footer>
       {/* ── Sample Report Modal ── */}
-      <ReportPreviewModal open={sampleReportOpen} onClose={() => setSampleReportOpen(false)} />
+      {sampleReportOpen && (
+        <Suspense fallback={null}>
+          <ReportPreviewModal open={sampleReportOpen} onClose={() => setSampleReportOpen(false)} />
+        </Suspense>
+      )}
 
       {/* ── Sticky mobile CTA ── */}
       {location !== "/wizard" && (
