@@ -11,6 +11,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { RadialGauge } from "@/components/charts/radial-gauge";
 import { chartTheme, fmtK, gaugeColor, densifyProjection, hashSeed } from "@/lib/chart-theme";
+import { DemoCarousel } from "@/components/demo-dashboards";
 
 interface ReportPreviewModalProps {
   open: boolean;
@@ -425,8 +426,8 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
             </div>
           </div>
 
-          {/* ── Visual snapshot dashboard ── */}
-          <SampleDashboard />
+          {/* ── Interactive demo carousel ── */}
+          <DemoCarousel />
 
           {/* ── Disclaimer ── */}
           <div className="p-4 border border-amber-200 bg-amber-50 rounded-xl text-xs text-amber-900 leading-relaxed flex items-start gap-3">
