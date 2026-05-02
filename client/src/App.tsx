@@ -107,6 +107,36 @@ import OffshoreAssetsDivorcePage from "@/pages/content/offshore-assets-divorce-u
 import MaintenancePendingSuitPage from "@/pages/content/maintenance-pending-suit-uk";
 import DivorceAndLifeInsurancePage from "@/pages/content/divorce-and-life-insurance-uk";
 import ChildArrangementsOrderPage from "@/pages/content/child-arrangements-order-uk";
+import NoFaultDivorcePage from "@/pages/content/no-fault-divorce-uk";
+import DecreeAbsoluteVsFinalOrderPage from "@/pages/content/decree-absolute-vs-final-order-uk";
+import HowLongDivorceTakePage from "@/pages/content/how-long-does-a-divorce-take-uk";
+import AnnulmentVsDivorcePage from "@/pages/content/annulment-vs-divorce-uk";
+import CommonLawMarriageMythPage from "@/pages/content/common-law-marriage-uk-myth";
+import SilverDivorcePage from "@/pages/content/silver-divorce-uk";
+import HighNetWorthDivorcePage from "@/pages/content/high-net-worth-divorce-uk";
+import CetvExplainedPage from "@/pages/content/cetv-explained-divorce-uk";
+import NhsPensionPage from "@/pages/content/nhs-pension-on-divorce-uk";
+import PolicePensionPage from "@/pages/content/police-pension-on-divorce-uk";
+import MilitaryPensionPage from "@/pages/content/military-pension-on-divorce-uk";
+import TeachersPensionPage from "@/pages/content/teachers-pension-on-divorce-uk";
+import StatePensionDivorcePage from "@/pages/content/state-pension-and-divorce-uk";
+import FinalSalaryPensionPage from "@/pages/content/final-salary-pension-on-divorce-uk";
+import PensionAttachmentVsSharingPage from "@/pages/content/pension-attachment-order-vs-sharing-order-uk";
+import BuyToLetPropertyPage from "@/pages/content/buy-to-let-property-on-divorce-uk";
+import LimitedCompanySharesPage from "@/pages/content/limited-company-shares-on-divorce-uk";
+import ShareOptionsEmiPage from "@/pages/content/share-options-and-emi-on-divorce-uk";
+import IsaLifetimeIsaPage from "@/pages/content/isa-and-lifetime-isa-on-divorce-uk";
+import StampDutyTransferEquityPage from "@/pages/content/stamp-duty-on-transfer-of-equity-divorce-uk";
+import JointTenantsVsTenantsInCommonPage from "@/pages/content/joint-tenants-vs-tenants-in-common-divorce-uk";
+import FdrHearingPage from "@/pages/content/fdr-hearing-financial-dispute-resolution-uk";
+import FdaPage from "@/pages/content/first-directions-appointment-fda-uk";
+import MiamPage from "@/pages/content/miam-mediation-information-assessment-uk";
+import TolataPage from "@/pages/content/tolata-claim-cohabitation-uk";
+import Schedule1Page from "@/pages/content/schedule-1-children-act-uk";
+import BarderPage from "@/pages/content/barder-event-reopening-divorce-settlement-uk";
+import ChildBenefitAfterDivorcePage from "@/pages/content/child-benefit-after-divorce-uk";
+import CouncilTaxSPDPage from "@/pages/content/council-tax-single-person-discount-divorce-uk";
+import BankruptcyDivorcePage from "@/pages/content/bankruptcy-and-divorce-uk";
 import AboutPage from "@/pages/about";
 import HowItWorksPage from "@/pages/how-it-works";
 import FaqPage from "@/pages/faq";
@@ -214,6 +244,36 @@ function Router() {
       <Route path="/maintenance-pending-suit-uk" component={MaintenancePendingSuitPage} />
       <Route path="/divorce-and-life-insurance-uk" component={DivorceAndLifeInsurancePage} />
       <Route path="/child-arrangements-order-uk" component={ChildArrangementsOrderPage} />
+      <Route path="/no-fault-divorce-uk" component={NoFaultDivorcePage} />
+      <Route path="/decree-absolute-vs-final-order-uk" component={DecreeAbsoluteVsFinalOrderPage} />
+      <Route path="/how-long-does-a-divorce-take-uk" component={HowLongDivorceTakePage} />
+      <Route path="/annulment-vs-divorce-uk" component={AnnulmentVsDivorcePage} />
+      <Route path="/common-law-marriage-uk-myth" component={CommonLawMarriageMythPage} />
+      <Route path="/silver-divorce-uk" component={SilverDivorcePage} />
+      <Route path="/high-net-worth-divorce-uk" component={HighNetWorthDivorcePage} />
+      <Route path="/cetv-explained-divorce-uk" component={CetvExplainedPage} />
+      <Route path="/nhs-pension-on-divorce-uk" component={NhsPensionPage} />
+      <Route path="/police-pension-on-divorce-uk" component={PolicePensionPage} />
+      <Route path="/military-pension-on-divorce-uk" component={MilitaryPensionPage} />
+      <Route path="/teachers-pension-on-divorce-uk" component={TeachersPensionPage} />
+      <Route path="/state-pension-and-divorce-uk" component={StatePensionDivorcePage} />
+      <Route path="/final-salary-pension-on-divorce-uk" component={FinalSalaryPensionPage} />
+      <Route path="/pension-attachment-order-vs-sharing-order-uk" component={PensionAttachmentVsSharingPage} />
+      <Route path="/buy-to-let-property-on-divorce-uk" component={BuyToLetPropertyPage} />
+      <Route path="/limited-company-shares-on-divorce-uk" component={LimitedCompanySharesPage} />
+      <Route path="/share-options-and-emi-on-divorce-uk" component={ShareOptionsEmiPage} />
+      <Route path="/isa-and-lifetime-isa-on-divorce-uk" component={IsaLifetimeIsaPage} />
+      <Route path="/stamp-duty-on-transfer-of-equity-divorce-uk" component={StampDutyTransferEquityPage} />
+      <Route path="/joint-tenants-vs-tenants-in-common-divorce-uk" component={JointTenantsVsTenantsInCommonPage} />
+      <Route path="/fdr-hearing-financial-dispute-resolution-uk" component={FdrHearingPage} />
+      <Route path="/first-directions-appointment-fda-uk" component={FdaPage} />
+      <Route path="/miam-mediation-information-assessment-uk" component={MiamPage} />
+      <Route path="/tolata-claim-cohabitation-uk" component={TolataPage} />
+      <Route path="/schedule-1-children-act-uk" component={Schedule1Page} />
+      <Route path="/barder-event-reopening-divorce-settlement-uk" component={BarderPage} />
+      <Route path="/child-benefit-after-divorce-uk" component={ChildBenefitAfterDivorcePage} />
+      <Route path="/council-tax-single-person-discount-divorce-uk" component={CouncilTaxSPDPage} />
+      <Route path="/bankruptcy-and-divorce-uk" component={BankruptcyDivorcePage} />
       <Route path="/pricing" component={PricingPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/results">
