@@ -121,7 +121,7 @@ export function ScenarioLeaderboard({
                 <Crown className="w-4 h-4 text-white" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] uppercase tracking-wider text-emerald-700 font-bold">Strongest · {SORT_LABELS[sortBy]}</p>
+                <p className="text-[10px] uppercase tracking-wider text-emerald-700 font-bold">Highest on · {SORT_LABELS[sortBy]}</p>
                 <p className="text-sm font-bold text-[#1a3357]">
                   {winner.name}
                   <span className={`text-[11px] font-normal text-slate-500 ml-2 tabular-nums ${blur}`}>
@@ -246,7 +246,7 @@ export function ScenarioLeaderboard({
                     </span>
                     {isWinner && (
                       <span className="text-[9px] font-bold text-emerald-700 flex items-center gap-0.5">
-                        <Crown className="w-2.5 h-2.5" /> Top of {SORT_LABELS[sortBy].toLowerCase()}
+                        Highest on {SORT_LABELS[sortBy].toLowerCase()}
                       </span>
                     )}
                   </div>
@@ -257,20 +257,25 @@ export function ScenarioLeaderboard({
         </div>
 
         {/* Footer */}
-        <div className="px-4 py-2.5 bg-gradient-to-r from-gold/[0.10] to-gold/[0.04] border-t border-gold/20 flex items-center justify-between gap-2 flex-wrap">
-          <p className="text-[10px] text-[#1a3357]/70 font-medium">
-            {footerText ?? "Re-rank by capital, monthly surplus, or weakest party's resilience."}
+        <div className="px-4 py-2.5 bg-gradient-to-r from-gold/[0.10] to-gold/[0.04] border-t border-gold/20 flex flex-col gap-1">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <p className="text-[10px] text-[#1a3357]/70 font-medium">
+              {footerText ?? "Re-rank by capital, monthly surplus, or weakest party's resilience."}
+            </p>
+            {locked && onUnlock && (
+              <button
+                type="button"
+                onClick={onUnlock}
+                className="text-[10px] font-bold text-gold hover:text-gold/80 underline underline-offset-2"
+                data-testid={`${testId}-unlock`}
+              >
+                Unlock to reveal exact figures →
+              </button>
+            )}
+          </div>
+          <p className="text-[9px] text-[#1a3357]/55 italic leading-snug">
+            Ranking is descriptive only — it shows which option scores highest on the chosen metric, not which one you should choose. The right settlement depends on factors this tool cannot model.
           </p>
-          {locked && onUnlock && (
-            <button
-              type="button"
-              onClick={onUnlock}
-              className="text-[10px] font-bold text-gold hover:text-gold/80 underline underline-offset-2"
-              data-testid={`${testId}-unlock`}
-            >
-              Unlock to reveal exact figures →
-            </button>
-          )}
         </div>
       </div>
     </div>

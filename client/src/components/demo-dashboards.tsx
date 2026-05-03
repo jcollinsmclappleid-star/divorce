@@ -165,7 +165,7 @@ function SettlementLab() {
                 <Crown className="w-4 h-4 text-white" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] uppercase tracking-wider text-emerald-700 font-bold">Winner · {SORT_LABELS[sortBy]}</p>
+                <p className="text-[10px] uppercase tracking-wider text-emerald-700 font-bold">Highest on · {SORT_LABELS[sortBy]}</p>
                 <p className="text-sm font-bold text-[#1a3357]">
                   {winner.name}
                   <span className="text-[11px] font-normal text-slate-500 ml-2 tabular-nums">
@@ -290,7 +290,7 @@ function SettlementLab() {
                     </span>
                     {isWinner && (
                       <span className="text-[9px] font-bold text-emerald-700 flex items-center gap-0.5">
-                        <Crown className="w-2.5 h-2.5" /> Top of {SORT_LABELS[sortBy].toLowerCase()}
+                        Highest on {SORT_LABELS[sortBy].toLowerCase()}
                       </span>
                     )}
                   </div>
