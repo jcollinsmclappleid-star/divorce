@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, ArrowRight, ArrowRightLeft, Sliders, Activity,
   TrendingUp, TrendingDown, Sparkles, Heart, Home, Wallet,
+  Trophy, Medal, Award, BarChart3, Crown,
 } from "lucide-react";
 import { RadialGauge } from "@/components/charts/radial-gauge";
-import { chartTheme, fmtK, gaugeColor, densifyProjection, hashSeed } from "@/lib/chart-theme";
+import { chartTheme, fmtK, gaugeColor } from "@/lib/chart-theme";
 
 // ─── Shared sample data ────────────────────────────────────────────────
 const POOL = 179_500;
@@ -31,30 +32,6 @@ const SAMPLE_COMPOSITION = [
 ];
 
 // ─── Tiny shared primitives ────────────────────────────────────────────
-function MiniSparkline({ data, color = chartTheme.color.gold, height = 36, gradId = "mini-spark" }: { data: number[]; color?: string; height?: number; gradId?: string }) {
-  const W = 220, H = height, P = 3;
-  const min = Math.min(...data), max = Math.max(...data);
-  const range = Math.max(1, max - min);
-  const pts = data.map((v, i) => ({
-    x: P + (i / (data.length - 1)) * (W - P * 2),
-    y: H - P - ((v - min) / range) * (H - P * 2),
-  }));
-  const path = pts.map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`)).join(" ");
-  const area = `${path} L ${pts[pts.length - 1].x} ${H} L ${pts[0].x} ${H} Z`;
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height }} preserveAspectRatio="none">
-      <defs>
-        <linearGradient id={gradId} x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%"   stopColor={color} stopOpacity={0.32} />
-          <stop offset="100%" stopColor={color} stopOpacity={0} />
-        </linearGradient>
-      </defs>
-      <path d={area} fill={`url(#${gradId})`} />
-      <path d={path} fill="none" stroke={color} strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 function ChromeWindow({ title, children, footer }: { title: string; children: React.ReactNode; footer?: React.ReactNode }) {
   return (
     <div className="relative">
@@ -98,137 +75,243 @@ function InteractiveHint({ text }: { text: string }) {
   );
 }
 
-// ─── Lab 1: Settlement Command Console ─────────────────────────────────
+// ─── Lab 1: Scenario Leaderboard (light theme — distinct from hero console) ───
+type SortKey = "capital" | "surplus" | "resilience";
+const SORT_LABELS: Record<SortKey, string> = {
+  capital: "Combined capital",
+  surplus: "Combined surplus",
+  resilience: "Weakest resilience",
+};
+
 function SettlementLab() {
-  const [active, setActive] = useState(0);
+  const [sortBy, setSortBy] = useState<SortKey>("capital");
   const [interacted, setInteracted] = useState(false);
-  const sc = SAMPLE_SCENARIOS[active];
-  const totalCap = sc.capA + sc.capB;
-  const compTotal = SAMPLE_COMPOSITION.reduce((s, c) => s + c.value, 0);
-  const minR = Math.min(sc.criA, sc.criB);
-  const minRColor = gaugeColor(minR);
-  const bestSurplus = Math.max(sc.surA, sc.surB);
-  const denseTraj = densifyProjection(sc.projection, hashSeed(sc.id));
+
+  const ranked = useMemo(() => {
+    const enriched = SAMPLE_SCENARIOS.map((s) => ({
+      ...s,
+      totalCap: s.capA + s.capB,
+      totalSur: s.surA + s.surB,
+      minCri: Math.min(s.criA, s.criB),
+    }));
+    return [...enriched].sort((a, b) => {
+      if (sortBy === "capital") return b.totalCap - a.totalCap;
+      if (sortBy === "surplus") return b.totalSur - a.totalSur;
+      return b.minCri - a.minCri;
+    });
+  }, [sortBy]);
+
+  const winner = ranked[0];
+  const maxCap = Math.max(...ranked.map((r) => r.totalCap));
+  const maxSur = Math.max(...ranked.map((r) => Math.abs(r.totalSur)), 1);
 
   return (
-    <ChromeWindow title="Lab 1 · Settlement Command Console">
-      <div className="px-4 pt-3 pb-3 border-b border-white/5">
-        <div className="flex items-center justify-between mb-2 gap-2 flex-wrap">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-white/35 font-medium">Switch settlement scenario</p>
-          <InteractiveHint text="Live · click any chip" />
-        </div>
-        <div className="flex gap-1.5 flex-wrap">
-          {SAMPLE_SCENARIOS.map((s, i) => {
-            const isActive = i === active;
-            const isHinted = !interacted && i === 1;
-            return (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => { setActive(i); setInteracted(true); }}
-                aria-pressed={isActive}
-                data-testid={`lab1-chip-${s.id}`}
-                className={`relative px-3 py-1.5 rounded-full text-[11px] font-medium transition-all border ${
-                  isActive
-                    ? "bg-gold text-[#0B1220] border-gold shadow-[0_0_0_3px_rgba(201,168,76,0.18)]"
-                    : isHinted
-                    ? "bg-white/[0.08] text-white/85 border-gold/40 shadow-[0_0_0_3px_rgba(201,168,76,0.10)] animate-pulse"
-                    : "bg-white/[0.04] text-white/60 border-white/10 hover:bg-white/[0.08]"
-                }`}
-              >
-                {s.short}
-                {isHinted && <motion.span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-gold" animate={{ scale: [1, 1.5, 1] }} transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }} />}
-              </button>
-            );
-          })}
-        </div>
-        {!interacted && (
-          <p className="text-[10px] text-gold/70 mt-2 italic flex items-center gap-1">
-            <ArrowRight className="w-2.5 h-2.5" /> Tap a different scenario to see how every figure changes
-          </p>
-        )}
-      </div>
-
-      <div className="grid grid-cols-3 gap-px bg-white/5">
-        <div className="bg-[#0B1220] px-4 py-3">
-          <p className="text-[9px] uppercase tracking-wider text-white/35 font-medium mb-1">Net capital · combined</p>
-          <p className="text-2xl font-bold text-white tabular-nums">£{totalCap.toLocaleString()}</p>
-          <p className="text-[10px] text-white/40 mt-0.5">A {fmtK(sc.capA)} · B {fmtK(sc.capB)}</p>
-        </div>
-        <div className="bg-[#0B1220] px-4 py-3">
-          <p className="text-[9px] uppercase tracking-wider text-white/35 font-medium mb-1">Best monthly surplus</p>
-          <p className={`text-2xl font-bold tabular-nums flex items-center gap-1 ${bestSurplus >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
-            {bestSurplus >= 0 ? "+" : "−"}£{Math.abs(bestSurplus).toLocaleString()}
-            {bestSurplus >= 0 ? <TrendingUp className="w-3 h-3 text-emerald-400/60" /> : <TrendingDown className="w-3 h-3 text-rose-400/60" />}
-          </p>
-          <p className="text-[10px] text-white/40 mt-0.5">{sc.surA >= sc.surB ? "Party A" : "Party B"} strongest</p>
-        </div>
-        <div className="bg-[#0B1220] px-4 py-3">
-          <p className="text-[9px] uppercase tracking-wider text-white/35 font-medium mb-1">Lowest resilience</p>
-          <p className="text-2xl font-bold tabular-nums" style={{ color: minRColor.stroke }}>
-            {minR}<span className="text-sm font-normal text-white/40">/100</span>
-          </p>
-          <p className="text-[10px] text-white/40 mt-0.5">{minRColor.label}</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-px bg-white/5">
-        <div className="bg-[#0B1220] p-4 space-y-4">
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium">Capital composition</p>
-              <p className="text-[10px] font-mono text-white/40">£{compTotal.toLocaleString()}</p>
-            </div>
-            <div className="flex h-3 rounded-full overflow-hidden bg-white/[0.04]">
-              {SAMPLE_COMPOSITION.map((c, i) => (
-                <motion.div key={c.label} initial={{ width: 0 }} animate={{ width: `${(c.value / compTotal) * 100}%` }} transition={{ duration: 0.7, ease: chartTheme.ease, delay: i * 0.08 }} style={{ background: c.color }} />
-              ))}
-            </div>
-            <div className="mt-2 grid grid-cols-3 gap-2">
-              {SAMPLE_COMPOSITION.map((c) => (
-                <div key={c.label} className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-sm shrink-0" style={{ background: c.color }} />
-                  <div className="min-w-0">
-                    <p className="text-[10px] text-white/85 font-medium tabular-nums">{fmtK(c.value)}</p>
-                    <p className="text-[9px] text-white/40 truncate">{c.label}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+    <div className="relative" data-testid="lab1-leaderboard">
+      <div className="absolute -inset-4 rounded-[24px] bg-gold/[0.12] blur-2xl pointer-events-none" />
+      {/* Light cream panel — visually opposite to the dark hero console */}
+      <div className="relative rounded-2xl bg-gradient-to-b from-[#FBF8F1] to-white border border-gold/30 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] overflow-hidden">
+        {/* Header */}
+        <div className="px-4 py-3 bg-gradient-to-r from-gold/15 via-gold/8 to-transparent border-b border-gold/20 flex items-center justify-between gap-2 flex-wrap">
+          <div className="flex items-center gap-2">
+            <Trophy className="w-4 h-4 text-gold" />
+            <p className="text-[12px] font-bold text-[#1a3357] tracking-tight">Scenario Leaderboard</p>
+            <span className="text-[10px] text-[#1a3357]/50 font-mono">all 4 at once</span>
           </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium">5-year capital trajectory</p>
-              <p className="text-[10px] font-mono text-white/60">Yr 5 <span className="text-emerald-400 font-semibold">{fmtK(sc.projection[5])}</span></p>
-            </div>
-            <MiniSparkline data={denseTraj} height={70} gradId={`lab1-spark-${sc.id}`} />
-          </div>
+          <InteractiveHint text="Live · change the ranking" />
         </div>
 
-        <div className="bg-[#0B1220] p-4 flex flex-col">
-          <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium mb-2">Resilience · weakest party</p>
-          <div className="flex-1 flex items-center justify-center">
-            <div className="bg-white/[0.03] rounded-xl px-4 py-2 border border-white/5">
-              <RadialGauge score={minR} size={140} label={minRColor.label.toUpperCase()} testId={`lab1-gauge-${sc.id}`} />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-2 mt-3">
-            {[{ name: "Party A", score: sc.criA }, { name: "Party B", score: sc.criB }].map((p) => {
-              const g = gaugeColor(p.score);
+        {/* Sort tabs */}
+        <div className="px-4 pt-3 pb-2 bg-white border-b border-slate-100">
+          <p className="text-[9px] uppercase tracking-[0.18em] text-slate-400 font-semibold mb-2">Rank scenarios by</p>
+          <div className="flex gap-1.5 flex-wrap">
+            {(Object.keys(SORT_LABELS) as SortKey[]).map((k) => {
+              const isActive = sortBy === k;
+              const isHinted = !interacted && k === "surplus";
               return (
-                <div key={p.name} className="rounded-lg border border-white/5 bg-white/[0.02] px-2 py-1.5 text-center">
-                  <p className="text-[9px] text-white/40">{p.name}</p>
-                  <p className="text-base font-bold tabular-nums" style={{ color: g.stroke }}>
-                    {p.score}<span className="text-[9px] font-normal text-white/40">/100</span>
-                  </p>
-                </div>
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => { setSortBy(k); setInteracted(true); }}
+                  aria-pressed={isActive}
+                  data-testid={`lab1-sort-${k}`}
+                  className={`relative px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all border ${
+                    isActive
+                      ? "bg-[#1a3357] text-white border-[#1a3357] shadow-md"
+                      : isHinted
+                      ? "bg-gold/10 text-[#1a3357] border-gold/40 animate-pulse"
+                      : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                  }`}
+                >
+                  {SORT_LABELS[k]}
+                  {isHinted && <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-gold" />}
+                </button>
               );
             })}
           </div>
         </div>
+
+        {/* Winner callout */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`winner-${winner.id}-${sortBy}`}
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.25 }}
+            className="px-4 py-3 bg-gradient-to-r from-emerald-50 via-emerald-50/60 to-transparent border-b border-emerald-200/60"
+          >
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center shadow-md shadow-emerald-500/30 shrink-0">
+                <Crown className="w-4 h-4 text-white" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] uppercase tracking-wider text-emerald-700 font-bold">Winner · {SORT_LABELS[sortBy]}</p>
+                <p className="text-sm font-bold text-[#1a3357]">
+                  {winner.name}
+                  <span className="text-[11px] font-normal text-slate-500 ml-2 tabular-nums">
+                    {sortBy === "capital" && `£${winner.totalCap.toLocaleString()} combined`}
+                    {sortBy === "surplus" && `${winner.totalSur >= 0 ? "+" : "−"}£${Math.abs(winner.totalSur).toLocaleString()}/mo combined`}
+                    {sortBy === "resilience" && `${winner.minCri}/100 weakest party`}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Leaderboard rows */}
+        <div className="bg-white">
+          <div className="grid grid-cols-[28px_1fr_auto] gap-3 px-4 py-2 border-b border-slate-100 bg-slate-50/60">
+            <span className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">#</span>
+            <span className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">Scenario</span>
+            <span className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold text-right">Metrics</span>
+          </div>
+
+          <AnimatePresence>
+            {ranked.map((s, i) => {
+              const capPct = (s.totalCap / maxCap) * 100;
+              const surPct = (Math.abs(s.totalSur) / maxSur) * 100;
+              const criColor = gaugeColor(s.minCri);
+              const isWinner = i === 0;
+              const rankIcons = [Crown, Medal, Award, BarChart3];
+              const RankIcon = rankIcons[i];
+              const rankColors = [
+                "bg-gradient-to-br from-amber-400 to-amber-500 text-white shadow-md shadow-amber-400/30",
+                "bg-gradient-to-br from-slate-300 to-slate-400 text-white",
+                "bg-gradient-to-br from-orange-300 to-orange-400 text-white",
+                "bg-slate-100 text-slate-400",
+              ];
+
+              return (
+                <motion.div
+                  key={s.id}
+                  layout
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.35, delay: i * 0.05 }}
+                  data-testid={`lab1-row-${s.id}`}
+                  className={`grid grid-cols-[28px_1fr_auto] gap-3 px-4 py-3 border-b border-slate-100 last:border-0 items-center ${
+                    isWinner ? "bg-gradient-to-r from-emerald-50/40 to-transparent" : ""
+                  }`}
+                >
+                  {/* Rank medal */}
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold ${rankColors[i]}`}>
+                    <RankIcon className="w-3.5 h-3.5" />
+                  </div>
+
+                  {/* Scenario name + bars */}
+                  <div className="min-w-0 space-y-1.5">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="text-[12px] font-bold text-[#1a3357] truncate">{s.name}</p>
+                      <span className="text-[9px] font-mono text-slate-400">A {fmtK(s.capA)} · B {fmtK(s.capB)}</span>
+                    </div>
+
+                    {/* Three mini bars stacked */}
+                    <div className="space-y-1">
+                      {/* Capital bar */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-[9px] text-slate-500 w-14 shrink-0">Capital</span>
+                        <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                          <motion.div
+                            className="h-full bg-gradient-to-r from-violet-400 to-violet-500"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${capPct}%` }}
+                            transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 }}
+                          />
+                        </div>
+                        <span className="text-[10px] font-mono font-semibold text-[#1a3357] tabular-nums w-14 text-right">£{Math.round(s.totalCap / 1000)}k</span>
+                      </div>
+                      {/* Surplus bar */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-[9px] text-slate-500 w-14 shrink-0">Surplus</span>
+                        <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                          <motion.div
+                            className={`h-full ${s.totalSur >= 0 ? "bg-gradient-to-r from-emerald-400 to-emerald-500" : "bg-gradient-to-r from-rose-400 to-rose-500"}`}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${surPct}%` }}
+                            transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 + 0.05 }}
+                          />
+                        </div>
+                        <span className={`text-[10px] font-mono font-semibold tabular-nums w-14 text-right ${s.totalSur >= 0 ? "text-emerald-700" : "text-rose-700"}`}>
+                          {s.totalSur >= 0 ? "+" : "−"}£{Math.abs(s.totalSur).toLocaleString()}
+                        </span>
+                      </div>
+                      {/* Resilience bar */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-[9px] text-slate-500 w-14 shrink-0">Resilience</span>
+                        <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                          <motion.div
+                            className="h-full"
+                            style={{ background: criColor.stroke }}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${s.minCri}%` }}
+                            transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 + 0.1 }}
+                          />
+                        </div>
+                        <span className="text-[10px] font-mono font-semibold tabular-nums w-14 text-right" style={{ color: criColor.stroke }}>
+                          {s.minCri}/100
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right summary chip */}
+                  <div className="flex flex-col items-end gap-1 shrink-0">
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[9px] uppercase tracking-wider font-bold border ${
+                        s.minCri >= 60
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                          : s.minCri >= 40
+                          ? "bg-amber-50 text-amber-700 border-amber-200"
+                          : "bg-rose-50 text-rose-700 border-rose-200"
+                      }`}
+                    >
+                      {criColor.label}
+                    </span>
+                    {isWinner && (
+                      <span className="text-[9px] font-bold text-emerald-700 flex items-center gap-0.5">
+                        <Crown className="w-2.5 h-2.5" /> Top of {SORT_LABELS[sortBy].toLowerCase()}
+                      </span>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+
+        {/* Footer hint */}
+        <div className="px-4 py-2.5 bg-gradient-to-r from-gold/[0.10] to-gold/[0.04] border-t border-gold/20 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-3 h-3 text-gold" />
+            <span className="text-[10px] text-[#1a3357]/75 font-medium">
+              Sample · ranking changes the moment you change the metric
+            </span>
+          </div>
+          <ArrowRight className="w-3.5 h-3.5 text-gold/60" />
+        </div>
       </div>
-    </ChromeWindow>
+    </div>
   );
 }
 
@@ -614,7 +697,7 @@ function MaintenanceLab() {
 
 // ─── Carousel container ────────────────────────────────────────────────
 const LABS = [
-  { id: "settlement",  title: "Settlement Console",     subtitle: "Compare 4 settlement scenarios",       Comp: SettlementLab },
+  { id: "settlement",  title: "Scenario Leaderboard",   subtitle: "Rank all 4 scenarios side-by-side",    Comp: SettlementLab },
   { id: "split",       title: "Asset Split Ratio",      subtitle: "Drag to change the 50/50 starting point", Comp: SplitRatioLab },
   { id: "stress",      title: "Stress Test",            subtitle: "Toggle real-world shocks",              Comp: StressLab },
   { id: "maintenance", title: "Maintenance Bridge",     subtitle: "Move money between parties",            Comp: MaintenanceLab },

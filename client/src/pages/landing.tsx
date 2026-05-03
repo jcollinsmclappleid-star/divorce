@@ -241,10 +241,10 @@ export default function LandingPage() {
               <span className="text-xs font-medium text-emerald-400 tracking-wide">Sample output · real model format</span>
             </div>
             <h2 className="text-2xl md:text-3xl font-display font-bold text-white">
-              Four interactive dashboards. Try them all.
+              Four different dashboards. Each answers a different question.
             </h2>
             <p className="text-white/60 text-sm max-w-lg mx-auto">
-              Switch scenarios, drag split sliders, toggle stress shocks, and move the maintenance dial. Every number recalculates live — exactly what you'll see with your own figures.
+              Rank all four scenarios at once, drag the split slider, toggle real-world shocks, and move the maintenance dial. Every dashboard is built differently — because each question deserves its own view.
             </p>
           </div>
 
