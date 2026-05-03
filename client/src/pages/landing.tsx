@@ -140,7 +140,7 @@ export default function LandingPage() {
                 <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">blind.</span>
               </h1>
               <p className="text-base md:text-lg text-white/70 leading-relaxed">
-                In under 5 minutes, see what each settlement option means for your financial future — which are sustainable, which leave you stretched, and where your money stands in 5 years. Free to start. No sign-up.
+                In under 5 minutes, see exactly which settlement option leaves you with the strongest capital position and the highest monthly surplus over 5 years — and which ones quietly run your reserves down. Free to start. No sign-up.
               </p>
               <p className="text-sm text-white/50 leading-relaxed border-l-2 border-gold/40 pl-3">
                 Unlock your Settlement Analyser and Guided Intelligence Report — a plain-English analysis of your figures, plus tailored questions to raise with your solicitor, mortgage broker, and pension adviser.
@@ -195,8 +195,8 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Right — live Settlement Command Console (desktop only) */}
-            <div className="hidden md:block">
+            {/* Right — live Settlement Command Console */}
+            <div className="block">
               <LandingCommandConsole />
             </div>
 
@@ -261,7 +261,7 @@ export default function LandingPage() {
               data-testid="button-explainer-start"
               className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25"
             >
-              Start my financial report — free <ArrowRight className="w-4 h-4 ml-1.5" />
+              Run these dashboards on your figures <ArrowRight className="w-4 h-4 ml-1.5" />
             </Button>
             <Button
               size="lg"
@@ -587,7 +587,7 @@ export default function LandingPage() {
                 data-testid="button-report-includes-start"
                 className="bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/20"
               >
-                Start my financial report — free <ArrowRight className="w-4 h-4 ml-1.5" />
+                Build my report — takes 5 minutes <ArrowRight className="w-4 h-4 ml-1.5" />
               </Button>
               <Button
                 size="lg"
@@ -664,11 +664,22 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Price hero */}
-            <div className="bg-primary px-6 md:px-8 py-6 text-center space-y-1">
-              <p className="text-white/55 text-xs tracking-wide">Both products, bundled together for</p>
-              <div className="text-6xl font-bold text-gold font-mono tracking-tight" data-testid="text-price-hero">£79</div>
+            {/* Price hero — anchored against solicitor cost */}
+            <div className="bg-primary px-6 md:px-8 py-7 text-center space-y-3">
+              <p className="text-white/55 text-xs tracking-wide uppercase font-semibold">Both products, bundled together for</p>
+              <div className="flex items-end justify-center gap-3">
+                <div className="text-left">
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider mb-0.5">Typical solicitor</p>
+                  <p className="text-2xl font-mono font-semibold text-white/35 line-through tabular-nums">£300<span className="text-base">/hr</span></p>
+                </div>
+                <div className="text-white/30 text-xl pb-1">→</div>
+                <div className="text-left">
+                  <p className="text-[10px] text-gold/70 uppercase tracking-wider mb-0.5 font-semibold">This report</p>
+                  <div className="text-6xl font-bold text-gold font-mono tracking-tight leading-none" data-testid="text-price-hero">£79</div>
+                </div>
+              </div>
               <p className="text-white/50 text-sm">One-time payment · No subscription · 12 months access</p>
+              <p className="text-[11px] text-white/40 italic max-w-sm mx-auto">Less than a quarter of one solicitor hour — and you walk in with your numbers already structured.</p>
             </div>
 
             {/* Free vs Full comparison */}

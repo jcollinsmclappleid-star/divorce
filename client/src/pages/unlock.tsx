@@ -302,6 +302,15 @@ export default function UnlockPage() {
                 )}
               </Button>
 
+              {/* Trust strip directly under pay button */}
+              <div className="flex items-center justify-center gap-3 text-[10px] text-white/55 font-medium">
+                <span className="flex items-center gap-1"><Lock className="w-3 h-3 text-emerald-400" /> Stripe-secured</span>
+                <span className="text-white/20">·</span>
+                <span className="flex items-center gap-1"><Zap className="w-3 h-3 text-gold" /> Instant access</span>
+                <span className="text-white/20">·</span>
+                <span className="flex items-center gap-1"><Calendar className="w-3 h-3 text-cyan-400" /> 12 months</span>
+              </div>
+
               <p className="text-center text-xs text-white/40 italic">
                 A single solicitor hour costs £250–£400. This covers your entire financial picture.
               </p>
