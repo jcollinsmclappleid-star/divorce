@@ -23,6 +23,10 @@ import {
   Briefcase, Calculator, Plus, Trash2, Edit2, Check, Settings2,
   Shield, Users, TrendingUp, ArrowRight, Receipt
 } from "lucide-react";
+import { LivePoolConsole, MobilePoolChip } from "@/components/wizard/live-pool-console";
+import { StageInsightCard } from "@/components/wizard/stage-insight-card";
+import { SmartExpenseChips } from "@/components/wizard/smart-expense-chips";
+import { useInlineConfirm, InlineConfirm } from "@/components/wizard/inline-confirm";
 
 const STEPS = [
   { id: 0, title: "Welcome", icon: Heart },
@@ -107,34 +111,52 @@ export default function WizardPage() {
   const [advancedMode, setAdvancedMode] = useState(false);
   const [midJourneyEmailDismissed, setMidJourneyEmailDismissed] = useState(false);
   const [showMidJourneyEmail, setShowMidJourneyEmail] = useState(false);
+  const [interstitial, setInterstitial] = useState<null | "afterAssets" | "afterIncome">(null);
+  const [seenInterstitial, setSeenInterstitial] = useState<{ afterAssets: boolean; afterIncome: boolean }>({ afterAssets: false, afterIncome: false });
   const [, setLocation] = useLocation();
 
   const progress = ((currentStep) / (STEPS.length - 1)) * 100;
-  const store = useAppStore();
 
   const goNext = useCallback(() => {
     scrollTop();
     if (currentStep === STEPS.length - 1) {
-      const capturedEmail = store.profile?.capturedEmail;
+      const { assets, profile } = useAppStore.getState();
+      const capturedEmail = profile?.capturedEmail;
       if (capturedEmail) {
         const assetPool = String(
-          (store.assets || []).reduce((s, a) => s + (a.currentValue ?? 0), 0)
+          (assets || []).reduce((s, a) => s + (a.currentValue ?? 0), 0)
         );
         fetch("/api/leads", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: capturedEmail, source: "wizard_preview", assetPoolSnapshot: assetPool }), 
+          body: JSON.stringify({ email: capturedEmail, source: "wizard_preview", assetPoolSnapshot: assetPool }),
         }).catch(() => {});
       }
       setLocation("/preview");
-    } else {
-      const nextStep = Math.min(currentStep + 1, STEPS.length - 1);
-      if (currentStep === 5 && !store.profile?.capturedEmail && !midJourneyEmailDismissed) {
+      return;
+    }
+    if (currentStep === 3 && !seenInterstitial.afterAssets) {
+      setInterstitial("afterAssets");
+      setSeenInterstitial((s) => ({ ...s, afterAssets: true }));
+      return;
+    }
+    if (currentStep === 5 && !seenInterstitial.afterIncome) {
+      setInterstitial("afterIncome");
+      setSeenInterstitial((s) => ({ ...s, afterIncome: true }));
+      const { profile } = useAppStore.getState();
+      if (!profile?.capturedEmail && !midJourneyEmailDismissed) {
         setShowMidJourneyEmail(true);
       }
-      setCurrentStep(nextStep);
+      return;
     }
-  }, [currentStep, setLocation, store, midJourneyEmailDismissed]);
+    setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
+  }, [currentStep, setLocation, midJourneyEmailDismissed, seenInterstitial]);
+
+  const continueFromInterstitial = useCallback(() => {
+    scrollTop();
+    setInterstitial(null);
+    setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
+  }, []);
 
   const goBack = useCallback(() => {
     scrollTop();
@@ -202,139 +224,114 @@ export default function WizardPage() {
         <Progress value={progress} className={`h-1.5 rounded-none transition-all duration-500 ${STEP_META[currentStep].progressBar}`} data-testid="progress-bar" />
       </header>
 
-      <main className="flex-1 container mx-auto px-4 py-6 max-w-3xl">
-        {(() => {
-          const meta = STEP_META[currentStep];
-          const StepIcon = meta.icon;
-          return (
-            <>
-              <div className="mb-5">
-                <div className="flex items-center justify-between mb-2.5">
-                  <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${meta.pillBg} ${meta.pillText}`} data-testid="text-step-category">
-                    <StepIcon className="w-3 h-3" />
-                    {meta.category}
-                  </span>
-                  <span className="text-xs font-medium text-muted-foreground md:hidden" data-testid="text-step-progress">
-                    {currentStep === 0
-                      ? "Start"
-                      : getStageForStep(currentStep) > 0
-                        ? `Stage ${getStageForStep(currentStep)} of 3 · Step ${currentStep} of ${STEPS.length - 1}`
-                        : `Step ${currentStep} of ${STEPS.length - 1}`
-                    }
-                  </span>
-                </div>
-                <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground" data-testid="text-step-title">
-                  {STEPS[currentStep].title}
-                </h1>
-                <p className="text-muted-foreground mt-1" data-testid="text-step-prompt">
-                  {STEP_COPY[currentStep].prompt}
-                </p>
-              </div>
+      <main className="flex-1 container mx-auto px-4 py-6 max-w-6xl">
+        <div className="flex gap-8 items-start">
+          <div className="flex-1 min-w-0 max-w-3xl mx-auto lg:mx-0">
+            {(() => {
+              const meta = STEP_META[currentStep];
+              const StepIcon = meta.icon;
 
-              {currentStep >= 2 && <LivePoolPanel />}
+              if (interstitial) {
+                return (
+                  <>
+                    <div className="mb-5">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full bg-gold/15 text-[#1a3357]" data-testid="text-step-category">
+                        <Check className="w-3 h-3 text-gold" />
+                        Stage complete
+                      </span>
+                    </div>
+                    <StageInsightCard stage={interstitial} onContinue={continueFromInterstitial} />
+                    {interstitial === "afterIncome" && showMidJourneyEmail && !midJourneyEmailDismissed && (
+                      <div className="mt-5">
+                        <MidJourneyEmailCard
+                          onDismiss={() => {
+                            setMidJourneyEmailDismissed(true);
+                            setShowMidJourneyEmail(false);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </>
+                );
+              }
 
-              {currentStep === 6 && showMidJourneyEmail && !midJourneyEmailDismissed && (
-                <MidJourneyEmailCard
-                  onDismiss={() => {
-                    setMidJourneyEmailDismissed(true);
-                    setShowMidJourneyEmail(false);
-                  }}
-                />
-              )}
+              return (
+                <>
+                  <div className="mb-5">
+                    <div className="flex items-center justify-between mb-2.5">
+                      <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${meta.pillBg} ${meta.pillText}`} data-testid="text-step-category">
+                        <StepIcon className="w-3 h-3" />
+                        {meta.category}
+                      </span>
+                      <span className="text-xs font-medium text-muted-foreground lg:hidden" data-testid="text-step-progress">
+                        {currentStep === 0
+                          ? "Start"
+                          : getStageForStep(currentStep) > 0
+                            ? `Stage ${getStageForStep(currentStep)} of 3 · Step ${currentStep} of ${STEPS.length - 1}`
+                            : `Step ${currentStep} of ${STEPS.length - 1}`
+                        }
+                      </span>
+                    </div>
+                    <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground" data-testid="text-step-title">
+                      {STEPS[currentStep].title}
+                    </h1>
+                    <p className="text-muted-foreground mt-1" data-testid="text-step-prompt">
+                      {STEP_COPY[currentStep].prompt}
+                    </p>
+                  </div>
 
-              <Card className={`mb-5 border-t-4 ${meta.borderTop} overflow-hidden`}>
-                <CardContent className="pt-6">
-                  <StepContent step={currentStep} advancedMode={advancedMode} />
-                </CardContent>
-              </Card>
+                  <Card className={`mb-5 border-t-4 ${meta.borderTop} overflow-hidden`}>
+                    <CardContent className="pt-6">
+                      <StepContent step={currentStep} advancedMode={advancedMode} />
+                    </CardContent>
+                  </Card>
 
-              <div className={`p-3 bg-muted/40 rounded-md text-sm text-muted-foreground mb-6 flex items-start gap-2 border-l-4 ${meta.shieldBorder}`}>
-                <Shield className="w-4 h-4 mt-0.5 flex-shrink-0 text-muted-foreground/60" />
-                <span>{STEP_COPY[currentStep].reassurance}</span>
-              </div>
+                  <div className={`p-3 bg-muted/40 rounded-md text-sm text-muted-foreground mb-6 flex items-start gap-2 border-l-4 ${meta.shieldBorder}`}>
+                    <Shield className="w-4 h-4 mt-0.5 flex-shrink-0 text-muted-foreground/60" />
+                    <span>{STEP_COPY[currentStep].reassurance}</span>
+                  </div>
 
-              <div className="flex items-center justify-between gap-4">
-                <Button
-                  variant="outline"
-                  onClick={goBack}
-                  disabled={currentStep === 0}
-                  data-testid="button-back"
-                >
-                  <ChevronLeft className="w-4 h-4 mr-1" /> Back
-                </Button>
+                  <div className="flex items-center justify-between gap-4 pb-20 lg:pb-0">
+                    <Button
+                      variant="outline"
+                      onClick={goBack}
+                      disabled={currentStep === 0}
+                      data-testid="button-back"
+                    >
+                      <ChevronLeft className="w-4 h-4 mr-1" /> Back
+                    </Button>
 
-                <Button
-                  onClick={goNext}
-                  disabled={false}
-                  data-testid="button-continue"
-                  className="bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/20 btn-shimmer"
-                >
-                  {currentStep === STEPS.length - 1
-                    ? "Show me my results"
-                    : currentStep === 0
-                    ? "Let's begin"
-                    : "Continue"
-                  }
-                  <ArrowRight className="w-4 h-4 ml-1" />
-                </Button>
-              </div>
-            </>
-          );
-        })()}
-      </main>
-    </div>
-  );
-}
-
-function LivePoolPanel() {
-  const { assets, liabilities } = useAppStore();
-
-  const propertyValue = assets
-    .filter(a => a.category === "primary_home" || a.category === "other_property")
-    .reduce((s, a) => s + (a.currentValue ?? 0), 0);
-  const mortgageBalance = liabilities
-    .filter(l => l.category === "mortgage")
-    .reduce((s, l) => s + (l.balance ?? 0), 0);
-  const propertyEquity = Math.max(0, propertyValue - mortgageBalance);
-
-  const liquidAssets = assets
-    .filter(a => !["primary_home","other_property","pension"].includes(a.category))
-    .reduce((s, a) => s + (a.currentValue ?? 0), 0);
-
-  const pensions = assets
-    .filter(a => a.category === "pension")
-    .reduce((s, a) => s + (a.cetv ?? a.currentValue ?? 0), 0);
-
-  const combinedPool = propertyEquity + liquidAssets + pensions;
-
-  const hasData = combinedPool > 0;
-
-  const fmt = (n: number) => n === 0 ? "—" : `£${n.toLocaleString("en-GB", { maximumFractionDigits: 0 })}`;
-
-  return (
-    <div className="mb-5 rounded-lg border border-border/60 bg-primary/[0.025] overflow-hidden" data-testid="panel-live-pool">
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-border/40">
-        <span className="text-xs font-semibold text-foreground/70 flex items-center gap-1.5">
-          <TrendingUp className="w-3.5 h-3.5 text-gold" />
-          Building your picture
-        </span>
-        <span className="text-[10px] text-muted-foreground/60 italic">Illustrative running estimate</span>
-      </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-0 divide-x divide-border/40">
-        {[
-          { label: "Property equity", value: propertyEquity, color: "text-rose-500" },
-          { label: "Liquid assets", value: liquidAssets, color: "text-amber-500" },
-          { label: "Pensions", value: pensions, color: "text-emerald-500" },
-          { label: "Combined pool", value: combinedPool, color: "text-cyan-500 font-bold" },
-        ].map(item => (
-          <div key={item.label} className="px-4 py-2.5 text-center">
-            <p className={`text-sm tabular-nums transition-all ${item.color} ${!hasData ? "opacity-30" : ""}`}>
-              {fmt(item.value)}
-            </p>
-            <p className="text-[10px] text-muted-foreground/60 mt-0.5 leading-tight">{item.label}</p>
+                    <Button
+                      onClick={goNext}
+                      disabled={false}
+                      data-testid="button-continue"
+                      className="bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/20 btn-shimmer"
+                    >
+                      {currentStep === STEPS.length - 1
+                        ? "Show me my results"
+                        : currentStep === 0
+                        ? "Let's begin"
+                        : "Continue"
+                      }
+                      <ArrowRight className="w-4 h-4 ml-1" />
+                    </Button>
+                  </div>
+                </>
+              );
+            })()}
           </div>
-        ))}
-      </div>
+
+          {/* Reserve sidebar slot from the start to prevent layout jump when it appears at step 2 */}
+          {!interstitial && currentStep >= 2 ? (
+            <>
+              <LivePoolConsole currentStep={currentStep} stages={WIZARD_STAGES} />
+              <MobilePoolChip currentStep={currentStep} stages={WIZARD_STAGES} />
+            </>
+          ) : (
+            <div className="hidden lg:block w-[280px] shrink-0" aria-hidden />
+          )}
+        </div>
+      </main>
     </div>
   );
 }
@@ -405,7 +402,7 @@ function StepContent({ step, advancedMode }: { step: number; advancedMode: boole
     case 3: return <StepAssets advancedMode={advancedMode} />;
     case 4: return <StepPensions advancedMode={advancedMode} />;
     case 5: return <StepIncome advancedMode={advancedMode} />;
-    case 6: return <StepExpenses advancedMode={advancedMode} />;
+    case 6: return <SmartExpenseChips advancedMode={advancedMode} />;
     case 7: return <StepSupport advancedMode={advancedMode} />;
     case 8: return <StepAssumptions />;
     default: return null;
@@ -670,6 +667,8 @@ function StepHome({ advancedMode }: { advancedMode: boolean }) {
   const nameB = profile?.partyBName || "Party B";
   const home = assets.find(a => a.category === "primary_home");
   const mortgage = liabilities.find(l => l.category === "mortgage");
+  const homeConfirm = useInlineConfirm();
+  const mortgageConfirm = useInlineConfirm();
 
   const setHomeValue = (val: number) => {
     if (home) {
@@ -711,10 +710,12 @@ function StepHome({ advancedMode }: { advancedMode: boolean }) {
             className="pl-7"
             value={home?.currentValue || ""}
             onChange={(e) => { const v = parseFloat(e.target.value); setHomeValue(isNaN(v) ? 0 : v); }}
+            onBlur={(e) => { const v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) homeConfirm.flash(`Saved — ${formatCurrency(v)} home value`); }}
             placeholder="e.g. 350000"
             data-testid="input-home-value"
           />
         </div>
+        <InlineConfirm message={homeConfirm.message} />
         <p className="text-xs text-muted-foreground">Check Zoopla or Rightmove for a rough estimate.</p>
       </div>
 
@@ -727,10 +728,12 @@ function StepHome({ advancedMode }: { advancedMode: boolean }) {
             className="pl-7"
             value={mortgage?.balance || ""}
             onChange={(e) => { const v = parseFloat(e.target.value); setMortgageBalance(isNaN(v) ? 0 : v); }}
+            onBlur={(e) => { const v = parseFloat(e.target.value); if (!isNaN(v) && v >= 0 && (home?.currentValue ?? 0) > 0) { const eq = Math.max(0, (home?.currentValue ?? 0) - v); mortgageConfirm.flash(`Saved — that's about ${formatCurrency(eq)} equity before sale costs`); } }}
             placeholder="e.g. 180000"
             data-testid="input-mortgage-balance"
           />
         </div>
+        <InlineConfirm message={mortgageConfirm.message} />
       </div>
 
       {(home || mortgage) && (() => {
