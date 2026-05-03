@@ -12,6 +12,8 @@ import { motion } from "framer-motion";
 import { RadialGauge } from "@/components/charts/radial-gauge";
 import { chartTheme, fmtK, gaugeColor, densifyProjection, hashSeed } from "@/lib/chart-theme";
 import { DemoCarousel } from "@/components/demo-dashboards";
+import { ScenarioLeaderboard } from "@/components/scenario-leaderboard";
+import type { ConsoleScenario } from "@/components/settlement-console";
 
 interface ReportPreviewModalProps {
   open: boolean;
@@ -425,6 +427,28 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
               </div>
             </div>
           </div>
+
+          {/* ── Sample Scenario Leaderboard (light, all-at-once view) ── */}
+          <ScenarioLeaderboard
+            scenarios={SAMPLE_SCENARIOS.map<ConsoleScenario>((s) => ({
+              id: s.id,
+              name: s.name,
+              shortName: s.short,
+              tag: "Balanced",
+              tagTone: "balanced",
+              capitalA: s.capA,
+              capitalB: s.capB,
+              surplusA: s.surA,
+              surplusB: s.surB,
+              resilienceA: s.criA,
+              resilienceB: s.criB,
+              projection: s.projection,
+            }))}
+            title="Sample Scenario Leaderboard"
+            caption="all 4 scenarios ranked at once"
+            footerText="In your real report this ranks your own figures live"
+            testId="modal-sample-leaderboard"
+          />
 
           {/* ── Interactive demo carousel ── */}
           <DemoCarousel />

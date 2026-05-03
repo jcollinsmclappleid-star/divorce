@@ -23,6 +23,8 @@ import type { StabilityDriver } from "@/lib/insights/computeStabilityScore";
 import { LogoPrint } from "@/components/logo";
 import { FsiGauge } from "@/components/fsi-gauge";
 import { ExecutiveBriefing } from "@/components/report/executive-briefing";
+import { ScenarioLeaderboard } from "@/components/scenario-leaderboard";
+import { buildConsoleScenarios } from "@/components/settlement-console";
 
 const SCENARIO_META: Record<string, { label: string; shortLabel: string; color: string }> = {
   S1: { label: "Sell & Split", shortLabel: "Sell & Split", color: "#2563EB" },
@@ -303,6 +305,28 @@ export default function ReportPage() {
             bundles={scenarioData.map(d => ({ sc: d.sc, stability: d.stability, snapshot: { surplusA: d.snapshot.surplusA, surplusB: d.snapshot.surplusB, netMonthlyIncomeA: d.snapshot.netMonthlyIncomeA, netMonthlyIncomeB: d.snapshot.netMonthlyIncomeB } }))}
             projections={engine.projections}
           />
+          <div className="mt-6">
+            <ScenarioLeaderboard
+              scenarios={buildConsoleScenarios(scenarioData.map(d => ({
+                id: d.sc.id,
+                name: SCENARIO_META[d.sc.id]?.label ?? d.sc.name,
+                shortName: SCENARIO_META[d.sc.id]?.shortLabel ?? d.sc.id,
+                totalA: d.sc.totalA,
+                totalB: d.sc.totalB,
+                surplusA: d.snapshot.surplusA,
+                surplusB: d.snapshot.surplusB,
+                resilienceA: d.stability?.scoreA ?? 100,
+                resilienceB: d.stability?.scoreB ?? 100,
+                projection: engine.projections[d.sc.id] ?? [],
+              })))}
+              partyAName={store.profile?.partyAName || "Party A"}
+              partyBName={store.profile?.partyBName || "Party B"}
+              title="Scenario Leaderboard — your figures"
+              caption="all scenarios ranked"
+              footerText="Re-rank by combined capital, monthly surplus, or the weakest party's resilience"
+              testId="report-leaderboard"
+            />
+          </div>
         </ReportSection>
 
         <ReportSection

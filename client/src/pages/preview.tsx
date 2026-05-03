@@ -21,6 +21,7 @@ import {
   BarChart, Bar, XAxis, YAxis,
 } from "recharts";
 import { SettlementConsole, buildConsoleScenarios } from "@/components/settlement-console";
+import { ScenarioLeaderboard } from "@/components/scenario-leaderboard";
 
 const CHART_COLOURS = ["hsl(220,52%,22%)", "#0d9488", "#64748b"];
 
@@ -258,6 +259,24 @@ export default function PreviewPage() {
                 footerText="Unlock to reveal exact figures, surplus and resilience scoring"
                 hideStress
                 testId="preview-settlement-console"
+              />
+            </div>
+
+            {/* Companion leaderboard view — same data, ranked side-by-side */}
+            <div className="pt-6">
+              <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+                <h3 className="text-sm font-semibold text-foreground">All four scenarios, ranked side-by-side</h3>
+                <p className="text-xs text-muted-foreground italic">A different way to compare the same figures</p>
+              </div>
+              <ScenarioLeaderboard
+                scenarios={previewConsoleScenarios}
+                partyAName={nameA}
+                partyBName={nameB}
+                locked
+                onUnlock={handleCheckout}
+                caption="locked preview · all 4 at once"
+                footerText="Unlock to reveal exact capital, surplus, and resilience figures"
+                testId="preview-leaderboard"
               />
             </div>
           </section>

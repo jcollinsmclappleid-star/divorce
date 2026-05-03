@@ -9,6 +9,7 @@ import { GuidedSummaryPanel } from "@/components/guided-summary-panel";
 import { Logo } from "@/components/logo";
 import { FsiGauge } from "@/components/fsi-gauge";
 import { SettlementConsole, buildConsoleScenarios } from "@/components/settlement-console";
+import { ScenarioLeaderboard } from "@/components/scenario-leaderboard";
 import { PREMIUM_TOOLTIP_STYLE } from "@/components/premium-tooltip";
 import { calcMortgagePayment } from "@/lib/engine/calc/mortgage";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -296,7 +297,7 @@ export default function ResultsPage() {
           {displayScenarios.length > 0 ? (
             <>
               {consoleScenarios.length > 0 && consoleComposition.length > 0 && (
-                <div className="mb-6">
+                <div className="mb-6 space-y-6">
                   <SettlementConsole
                     scenarios={consoleScenarios}
                     composition={consoleComposition}
@@ -305,6 +306,15 @@ export default function ResultsPage() {
                     chromeCaption="Settlement Command Console — your figures"
                     footerText={`Live model · ${consoleScenarios.length} scenarios · stress tests · 5-year projection`}
                     testId="results-settlement-console"
+                  />
+                  <ScenarioLeaderboard
+                    scenarios={consoleScenarios}
+                    partyAName={store.profile?.partyAName || "Party A"}
+                    partyBName={store.profile?.partyBName || "Party B"}
+                    title="Scenario Leaderboard — your figures"
+                    caption="all scenarios ranked"
+                    footerText="Re-rank by combined capital, monthly surplus, or the weakest party's resilience"
+                    testId="results-leaderboard"
                   />
                 </div>
               )}
