@@ -249,7 +249,7 @@ function SplitRatioLab() {
           </div>
           <div className="flex h-7 rounded-full overflow-hidden bg-slate-50 border border-slate-200">
             <motion.div
-              className="bg-gradient-to-r from-blue-500 to-blue-400 flex items-center justify-end pr-2"
+              className="bg-blue-500 flex items-center justify-end pr-2"
               animate={{ width: `${share}%` }}
               transition={{ duration: 0.25, ease: "easeOut" }}
             >
@@ -651,7 +651,7 @@ export function DemoCarousel({ variant = "light" }: { variant?: "light" | "dark"
   const tabActiveBg   = dark ? "bg-slate-100" : "bg-white";
   const tabInactiveBg = dark ? "bg-slate-50/60 hover:bg-white/[0.05]" : "bg-gray-50 hover:bg-white";
   const tabIdx        = (active: boolean) => active ? "text-gold" : (dark ? "text-slate-400" : "text-gray-400");
-  const tabTitle      = (active: boolean) => active ? (dark ? "text-white" : "text-gray-900") : (dark ? "text-slate-600" : "text-gray-600");
+  const tabTitle      = (active: boolean) => active ? (dark ? "text-slate-900" : "text-gray-900") : (dark ? "text-slate-600" : "text-gray-600");
   const tabSubtitle   = (active: boolean) => active ? (dark ? "text-slate-500" : "text-gray-500") : (dark ? "text-slate-400" : "text-gray-400");
 
   return (
