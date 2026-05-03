@@ -157,9 +157,18 @@ export default function WizardPage() {
 
   const continueFromInterstitial = useCallback(() => {
     scrollTop();
+    // Trigger mid-journey email when leaving the income (stage 2) interstitial.
+    // This mirrors the eligibility check in goNext so both progression paths
+    // (interstitial-shown and interstitial-skipped) behave identically.
+    if (interstitial === "afterIncome") {
+      const { profile } = useAppStore.getState();
+      if (!profile?.capturedEmail && !midJourneyEmailDismissed) {
+        setShowMidJourneyEmail(true);
+      }
+    }
     setInterstitial(null);
     setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
-  }, []);
+  }, [interstitial, midJourneyEmailDismissed]);
 
   const goBack = useCallback(() => {
     scrollTop();
