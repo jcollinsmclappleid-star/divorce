@@ -434,7 +434,6 @@ function Sparkline({ data, depletionYear }: { data: number[]; depletionYear?: nu
     return { x, y };
   });
   const path = pts.map((p, i) => (i === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`)).join(" ");
-  const area = `${path} L ${pts[pts.length - 1].x} ${H} L ${pts[0].x} ${H} Z`;
   const last = pts[pts.length - 1];
 
   return (

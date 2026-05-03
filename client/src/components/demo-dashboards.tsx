@@ -645,7 +645,7 @@ export function DemoCarousel({ variant = "light" }: { variant?: "light" | "dark"
   const prevBtn = dark ? "w-7 h-7 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors" : "w-7 h-7 rounded-full border border-gray-200 hover:bg-gray-100 flex items-center justify-center text-gray-600 transition-colors";
   const tabsBg = dark ? "bg-slate-100" : "bg-gray-100";
   const tabActiveBg   = dark ? "bg-slate-100" : "bg-white";
-  const tabInactiveBg = dark ? "bg-slate-50/60 hover:bg-white/[0.05]" : "bg-gray-50 hover:bg-white";
+  const tabInactiveBg = dark ? "bg-slate-50/60 hover:bg-slate-100" : "bg-gray-50 hover:bg-white";
   const tabIdx        = (active: boolean) => active ? "text-gold" : (dark ? "text-slate-400" : "text-gray-400");
   const tabTitle      = (active: boolean) => active ? (dark ? "text-slate-900" : "text-gray-900") : (dark ? "text-slate-600" : "text-gray-600");
   const tabSubtitle   = (active: boolean) => active ? (dark ? "text-slate-500" : "text-gray-500") : (dark ? "text-slate-400" : "text-gray-400");
