@@ -137,15 +137,15 @@ export function LandingCommandConsole() {
               Live · click to try
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={() => setActive((i) => (i - 1 + SCENARIOS.length) % SCENARIOS.length)}
               data-testid="console-prev"
               aria-label="Previous scenario"
-              className="shrink-0 w-7 h-7 rounded-full border border-white/15 bg-white/[0.04] hover:bg-white/[0.10] hover:border-gold/40 flex items-center justify-center text-white/70 hover:text-gold transition-colors"
+              className="shrink-0 w-9 h-9 rounded-full border border-white/25 bg-white/[0.06] hover:bg-white/[0.14] hover:border-gold/50 flex items-center justify-center text-white/80 hover:text-gold shadow-md shadow-black/20 transition-all"
             >
-              <ChevronLeft className="w-3.5 h-3.5" />
+              <ChevronLeft className="w-4 h-4" />
             </button>
             <div className="flex gap-1.5 flex-wrap flex-1 justify-center">
               {SCENARIOS.map((s, i) => {
@@ -173,23 +173,30 @@ export function LandingCommandConsole() {
               onClick={() => setActive((i) => (i + 1) % SCENARIOS.length)}
               data-testid="console-next"
               aria-label="Next scenario"
-              className="shrink-0 w-7 h-7 rounded-full border border-gold/40 bg-gold/10 hover:bg-gold/25 flex items-center justify-center text-gold transition-colors"
+              className="shrink-0 w-9 h-9 rounded-full border border-gold/55 bg-gold/15 hover:bg-gold/30 flex items-center justify-center text-gold shadow-md shadow-black/20 animate-pulse-soft animate-nudge-right transition-colors"
             >
-              <ChevronRight className="w-3.5 h-3.5" />
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-          {/* Dot indicators */}
-          <div className="flex items-center justify-center gap-1.5 mt-3">
-            {SCENARIOS.map((s, i) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => setActive(i)}
-                aria-label={`Go to ${s.shortName}`}
-                data-testid={`console-dot-${s.id}`}
-                className={`h-1.5 rounded-full transition-all ${i === active ? "w-6 bg-gold" : "w-1.5 bg-white/20 hover:bg-white/40"}`}
-              />
-            ))}
+          {/* Dot indicators + swipe hint */}
+          <div className="flex flex-col items-center gap-1.5 mt-3">
+            <div className="flex items-center justify-center gap-1.5">
+              {SCENARIOS.map((s, i) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => setActive(i)}
+                  aria-label={`Go to ${s.shortName}`}
+                  data-testid={`console-dot-${s.id}`}
+                  className={`h-1.5 rounded-full transition-all ${i === active ? "w-6 bg-gold" : "w-1.5 bg-white/20 hover:bg-white/40"}`}
+                />
+              ))}
+            </div>
+            <p className="text-[9px] uppercase tracking-[0.16em] text-white/40 flex items-center gap-1.5">
+              <ChevronLeft className="w-2.5 h-2.5" />
+              <span>{active + 1} of {SCENARIOS.length} · use arrows to explore</span>
+              <ChevronRight className="w-2.5 h-2.5" />
+            </p>
           </div>
         </div>
 
