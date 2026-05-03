@@ -59,10 +59,16 @@ export function calculateCommon(inputs: DivorceModelInputs) {
     net: incB.taxTreatment === "net_provided" ? (incB.amountAnnualNet || 0) : (incB.amountAnnualGross - (assumptions.includeTaxModel ? calcIncomeTax(incB.amountAnnualGross, config) : 0) - (assumptions.includeTaxModel ? calcNationalInsurance(incB.amountAnnualGross, config) : 0))
   } : { net: 0 };
 
-  const mort1 = liabilities.find(l => l.id === "mort1");
+  const homeMortgage = primaryHome
+    ? liabilities.find(l => l.securedAgainstAssetId === primaryHome.id)
+    : undefined;
+  const fallbackMortgage = liabilities.find(l => l.category === "mortgage");
+  const mortForPayment = homeMortgage ?? fallbackMortgage;
   let mortgageAnnualPayment = 0;
-  if (mort1) {
-    mortgageAnnualPayment = calcMortgagePayment(mort1.balance, mort1.interestAPR ?? 0.05, mort1.termYearsRemaining ?? 25).annualPayment;
+  if (mortForPayment) {
+    const apr = mortForPayment.interestAPR ?? assumptions.mortgageAPR ?? config.defaults.mortgage.defaultAPR;
+    const term = mortForPayment.termYearsRemaining ?? assumptions.mortgageTermYears ?? config.defaults.mortgage.defaultTermYears;
+    mortgageAnnualPayment = calcMortgagePayment(mortForPayment.balance, apr, term).annualPayment;
   }
 
   return {

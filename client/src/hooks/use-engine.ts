@@ -113,7 +113,7 @@ export function useEngine(): EngineResult {
   ]);
 }
 
-function runEngine(state: StoreState): EngineResult {
+export function runEngine(state: StoreState): EngineResult {
   const { assets, liabilities, incomes, expenses, assumptions, children, scenarios, maintenance } = state;
 
   const totalAssets = assets.reduce((s, a) => s + a.currentValue, 0);
