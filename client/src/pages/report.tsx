@@ -321,10 +321,10 @@ export default function ReportPage() {
               })))}
               partyAName={store.profile?.partyAName || "Party A"}
               partyBName={store.profile?.partyBName || "Party B"}
-              title="Scenario Leaderboard — your figures"
-              caption="all scenarios ranked"
-              footerText="Re-rank by combined capital, monthly surplus, or the weakest party's resilience"
-              testId="report-leaderboard"
+              title="Scenario Comparison — your figures"
+              caption="all scenarios side-by-side"
+              footerText="Capital, monthly surplus, and the weakest party's resilience for each option"
+              testId="report-comparison"
             />
           </div>
         </ReportSection>

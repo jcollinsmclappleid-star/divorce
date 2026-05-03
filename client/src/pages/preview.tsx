@@ -262,11 +262,11 @@ export default function PreviewPage() {
               />
             </div>
 
-            {/* Companion leaderboard view — same data, ranked side-by-side */}
+            {/* Companion comparison view — same data, side-by-side */}
             <div className="pt-6">
               <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
-                <h3 className="text-sm font-semibold text-foreground">All four scenarios, ranked side-by-side</h3>
-                <p className="text-xs text-muted-foreground italic">A different way to compare the same figures</p>
+                <h3 className="text-sm font-semibold text-foreground">All four scenarios, side-by-side</h3>
+                <p className="text-xs text-muted-foreground italic">A different way to read the same figures</p>
               </div>
               <ScenarioLeaderboard
                 scenarios={previewConsoleScenarios}
@@ -274,9 +274,9 @@ export default function PreviewPage() {
                 partyBName={nameB}
                 locked
                 onUnlock={handleCheckout}
-                caption="locked preview · all 4 at once"
+                caption="locked preview · all 4 side-by-side"
                 footerText="Unlock to reveal exact capital, surplus, and resilience figures"
-                testId="preview-leaderboard"
+                testId="preview-comparison"
               />
             </div>
           </section>

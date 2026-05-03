@@ -244,7 +244,7 @@ export default function LandingPage() {
               Four different dashboards. Each answers a different question.
             </h2>
             <p className="text-white/60 text-sm max-w-lg mx-auto">
-              Rank all four scenarios at once, drag the split slider, toggle real-world shocks, and move the maintenance dial. Every dashboard is built differently — because each question deserves its own view.
+              Compare all four scenarios side-by-side, drag the split slider, toggle real-world shocks, and move the maintenance dial. Every dashboard is built differently — because each question deserves its own view.
             </p>
           </div>
 

@@ -428,7 +428,7 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
             </div>
           </div>
 
-          {/* ── Sample Scenario Leaderboard (light, all-at-once view) ── */}
+          {/* ── Sample Scenario Comparison (light, all-at-once view) ── */}
           <ScenarioLeaderboard
             scenarios={SAMPLE_SCENARIOS.map<ConsoleScenario>((s) => ({
               id: s.id,
@@ -444,10 +444,10 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
               resilienceB: s.criB,
               projection: s.projection,
             }))}
-            title="Sample Scenario Leaderboard"
-            caption="all 4 scenarios ranked at once"
-            footerText="In your real report this ranks your own figures live"
-            testId="modal-sample-leaderboard"
+            title="Sample Scenario Comparison"
+            caption="all 4 scenarios side-by-side"
+            footerText="In your real report this is calculated from your own figures"
+            testId="modal-sample-comparison"
           />
 
           {/* ── Interactive demo carousel ── */}
