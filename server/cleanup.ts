@@ -1,5 +1,5 @@
 import { db, pool } from "./db";
-import { magicLinks, emailLeads, purchases, sessions } from "@shared/schema";
+import { magicLinks, emailLeads, purchases } from "@shared/schema";
 import { lt, and, eq, isNotNull } from "drizzle-orm";
 import { log } from "./index";
 
@@ -43,15 +43,8 @@ export async function runRetentionCleanup() {
       .where(and(isNotNull(purchases.email), lt(purchases.createdAt, sevenYearsAgo)))
       .returning({ id: purchases.id });
 
-    const twelveMonthsAgo = new Date(now);
-    twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
-    const oldSessions = await db
-      .delete(sessions)
-      .where(lt(sessions.updatedAt, twelveMonthsAgo))
-      .returning({ id: sessions.id });
-
     log(
-      `[retention] magic_links:${expiredMagicLinks.length} unverified_leads:${unverifiedLeads.length} expired_leads:${expiredLeads.length} anonymised_purchases:${anonymisedPurchases.length} old_sessions:${oldSessions.length}`,
+      `[retention] magic_links:${expiredMagicLinks.length} unverified_leads:${unverifiedLeads.length} expired_leads:${expiredLeads.length} anonymised_purchases:${anonymisedPurchases.length}`,
       'cleanup'
     );
   } catch (err) {

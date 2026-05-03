@@ -1,12 +1,8 @@
 import { db } from "./db";
-import { sessions, purchases, emailLeads, magicLinks, type Session, type InsertSession, type Purchase, type InsertPurchase, type EmailLead, type MagicLink } from "@shared/schema";
+import { purchases, emailLeads, magicLinks, type Purchase, type InsertPurchase, type EmailLead, type MagicLink } from "@shared/schema";
 import { eq, and, sql, desc } from "drizzle-orm";
 
 export interface IStorage {
-  createSession(session: InsertSession): Promise<Session>;
-  getSession(id: string): Promise<Session | undefined>;
-  updateSession(id: string, session: Partial<InsertSession>): Promise<Session>;
-
   createPurchase(purchase: InsertPurchase): Promise<Purchase>;
   getPurchaseBySessionToken(sessionToken: string): Promise<Purchase | undefined>;
   getPurchaseByCheckoutSessionId(checkoutSessionId: string): Promise<Purchase | undefined>;
@@ -28,25 +24,6 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  async createSession(session: InsertSession): Promise<Session> {
-    const [newSession] = await db.insert(sessions).values(session).returning();
-    return newSession;
-  }
-
-  async getSession(id: string): Promise<Session | undefined> {
-    const [session] = await db.select().from(sessions).where(eq(sessions.id, id));
-    return session;
-  }
-
-  async updateSession(id: string, updates: Partial<InsertSession>): Promise<Session> {
-    const [updated] = await db
-      .update(sessions)
-      .set({ ...updates, updatedAt: new Date() })
-      .where(eq(sessions.id, id))
-      .returning();
-    return updated;
-  }
-
   async createPurchase(purchase: InsertPurchase): Promise<Purchase> {
     const [newPurchase] = await db.insert(purchases).values(purchase).returning();
     return newPurchase;

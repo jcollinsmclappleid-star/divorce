@@ -24,7 +24,7 @@ The design features a signature gold accent (`#C9A84C`) for primary CTAs and bra
 
 ### Backend (`server/`)
 
-An Express.js server (Node.js) provides RESTful JSON API endpoints for session management (create, retrieve, update), email lead capture (`POST /api/leads`), and a stub for PDF generation.
+An Express.js server (Node.js) provides RESTful JSON API endpoints for purchase access checks (`GET /api/access/:token`, `/api/access/recover`), magic-link auth (`/api/auth/send-link`, `/api/auth/verify`, `/api/auth/me`, `/api/auth/logout`), email lead capture (`POST /api/leads` + `/api/leads/verify`), Stripe checkout + webhook, the guided report summary, and a stub for PDF generation. The server intentionally does **not** persist wizard modelling state — that lives only in the browser.
 
 ### Financial Engine
 
@@ -32,7 +32,7 @@ A **deterministic, pure-function based, and fully testable** financial engine re
 
 ### Data Layer
 
-PostgreSQL is used as the database via Drizzle ORM. Tables include `sessions` (stores `AppState` as JSONB), `purchases` (Stripe payments), `email_leads` (captured email addresses), `magic_links` (single-use sign-in tokens with 1-hour expiry), and `user_sessions` (server-side session store managed by connect-pg-simple). Client-side state persistence is handled by Zustand with localStorage.
+PostgreSQL is used as the database via Drizzle ORM. Tables: `purchases` (Stripe payments), `email_leads` (captured email addresses with double opt-in), `magic_links` (single-use sign-in tokens with 1-hour expiry), and `user_sessions` (server-side auth session store managed by connect-pg-simple). Wizard modelling state (names, finances, scenarios) is held entirely client-side via Zustand + localStorage and is never sent to the server — the legacy server-side `sessions` table and `/api/sessions` endpoints were removed in May 2026.
 
 ### Premium Access Flow
 
@@ -76,7 +76,6 @@ HTTP security headers are applied via `helmet` including CSP (allowing Stripe.js
 - Verified `email_leads` older than 24 months — deleted
 - Existing `email_leads.asset_pool_snapshot` values — NULL'd (column retained, no longer written)
 - `purchases` older than 7 years — email anonymised (NULL)
-- `sessions` (server-side modelling state) older than 12 months by `updated_at` — deleted
 - `user_sessions` (auth) — pruned hourly by connect-pg-simple
 
 **Breach notification commitment** in privacy policy maps to UK GDPR Articles 33/34 only — ICO within 72 hours where required, data subjects without undue delay where high risk. No commitments beyond statutory minima.

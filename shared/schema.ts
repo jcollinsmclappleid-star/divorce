@@ -4,14 +4,6 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { DivorceModelInputsSchema, Party, AssetCategory, LiabilityCategory, ExpenseCategory } from "./divorce_types";
 
-export const sessions = pgTable("sessions", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  name: text("name").notNull().default("Untitled Session"),
-  data: jsonb("data").notNull(), 
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
 export const purchases = pgTable("purchases", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   sessionToken: varchar("session_token").notNull(),
@@ -50,7 +42,6 @@ export const insertEmailLeadSchema = createInsertSchema(emailLeads).omit({ id: t
 export type EmailLead = typeof emailLeads.$inferSelect;
 export type InsertEmailLead = z.infer<typeof insertEmailLeadSchema>;
 
-export const insertSessionSchema = createInsertSchema(sessions);
 export const insertPurchaseSchema = createInsertSchema(purchases).omit({ id: true, createdAt: true });
 
 export const AppStateSchema = z.object({
@@ -66,11 +57,9 @@ export const AppConfigSchema = z.object({
 
 export const Owner = Party;
 
-export type Session = typeof sessions.$inferSelect;
 export type Purchase = typeof purchases.$inferSelect;
 export type InsertPurchase = z.infer<typeof insertPurchaseSchema>;
 export type AppState = z.infer<typeof AppStateSchema>;
-export type InsertSession = z.infer<typeof insertSessionSchema>;
 
 export { AssetCategory, LiabilityCategory, ExpenseCategory };
 export { DivorceModelInputsSchema };

@@ -228,7 +228,7 @@ export default function PrivacyPage() {
               <li><strong>Payment records:</strong> Retained for the duration of your access period plus up to 6 years thereafter, as required for UK tax and accounting obligations under HMRC record-keeping requirements. Personal identifiers (email address) are removed from these records once the retention period ends.</li>
               <li><strong>Magic link tokens:</strong> Single-use, with a one-hour expiry. Expired tokens are automatically removed by our scheduled retention process.</li>
               <li><strong>Authenticated session cookies:</strong> Stored server-side for up to 90 days from your most recent sign-in, after which they expire and are automatically pruned.</li>
-              <li><strong>Modelling sessions stored on our server:</strong> Server-side modelling session records are automatically deleted 12 months after their last update.</li>
+              <li><strong>Modelling data:</strong> Your wizard inputs (names, finances, etc.) never leave your browser — they live in your device's local storage and are not stored on our servers.</li>
               <li><strong>Server access logs:</strong> Retained for up to 90 days for security monitoring purposes, after which they are deleted in line with our hosting provider's standard log rotation. Application request logs do not include response bodies or other personal data.</li>
               <li><strong>Browser-stored financial data:</strong> This data is stored locally on your device and is not subject to our retention policies. You may delete it at any time by clearing your browser data.</li>
             </ul>

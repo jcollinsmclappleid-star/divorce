@@ -897,45 +897,6 @@ export async function registerRoutes(
     }
   });
 
-  app.post(api.sessions.create.path, async (req, res) => {
-    try {
-      const input = api.sessions.create.input.parse(req.body);
-      const session = await storage.createSession({
-        id: crypto.randomUUID(),
-        name: input.name || "Untitled Session",
-        data: input.data
-      });
-      res.status(201).json(session);
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        res.status(400).json({ message: err.errors });
-      } else {
-        res.status(500).json({ message: "Internal Server Error" });
-      }
-    }
-  });
-
-  app.get(api.sessions.get.path, async (req, res) => {
-    const session = await storage.getSession(req.params.id);
-    if (!session) {
-      return res.status(404).json({ message: "Session not found" });
-    }
-    res.json(session);
-  });
-  
-  app.put(api.sessions.update.path, async (req, res) => {
-    try {
-      const input = api.sessions.update.input.parse(req.body);
-      const session = await storage.updateSession(req.params.id, {
-        name: input.name,
-        data: input.data
-      });
-      res.json(session);
-    } catch (err) {
-       res.status(500).json({ message: "Failed to update session" });
-    }
-  });
-
   // ─── Guided Report Summary ────────────────────────────────────────────────
   const guidedSummaryPayloadSchema = z.object({
     sessionToken: z.string().min(1),
