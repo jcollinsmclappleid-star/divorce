@@ -139,6 +139,27 @@ const BarderPage = lazy(() => import("@/pages/content/barder-event-reopening-div
 const ChildBenefitAfterDivorcePage = lazy(() => import("@/pages/content/child-benefit-after-divorce-uk"));
 const CouncilTaxSPDPage = lazy(() => import("@/pages/content/council-tax-single-person-discount-divorce-uk"));
 const BankruptcyDivorcePage = lazy(() => import("@/pages/content/bankruptcy-and-divorce-uk"));
+const AverageDivorceSettlementPage = lazy(() => import("@/pages/content/average-divorce-settlement-uk"));
+const WifeEntitled5YearsPage = lazy(() => import("@/pages/content/wife-entitled-divorce-uk-after-5-years"));
+const WifeEntitled10YearsPage = lazy(() => import("@/pages/content/wife-entitled-divorce-uk-after-10-years"));
+const WifeEntitled20YearsPage = lazy(() => import("@/pages/content/wife-entitled-divorce-uk-after-20-years"));
+const WifeEntitled25YearsPage = lazy(() => import("@/pages/content/wife-entitled-divorce-uk-after-25-years"));
+const NegativeEquityDivorcePage = lazy(() => import("@/pages/content/negative-equity-and-divorce-uk"));
+const SecondMarriageDivorcePage = lazy(() => import("@/pages/content/second-marriage-divorce-settlement-uk"));
+const DiyDivorceCostPage = lazy(() => import("@/pages/content/diy-divorce-uk-cost"));
+const OnlineDivorceCostPage = lazy(() => import("@/pages/content/online-divorce-uk-cost"));
+const MovingOutDuringDivorcePage = lazy(() => import("@/pages/content/moving-out-during-divorce-uk"));
+const DoINeedSolicitorPage = lazy(() => import("@/pages/content/do-i-need-a-solicitor-for-financial-settlement-uk"));
+const UniversalCreditAfterDivorcePage = lazy(() => import("@/pages/content/universal-credit-after-divorce-uk"));
+const MarriageAllowanceAfterDivorcePage = lazy(() => import("@/pages/content/marriage-allowance-after-divorce-uk"));
+const InheritanceTaxAfterDivorcePage = lazy(() => import("@/pages/content/inheritance-tax-after-divorce-uk"));
+const CouncilTaxDuringDivorcePage = lazy(() => import("@/pages/content/council-tax-during-divorce-uk"));
+const SippOnDivorcePage = lazy(() => import("@/pages/content/sipp-on-divorce-uk"));
+const SharedOwnershipDivorcePage = lazy(() => import("@/pages/content/shared-ownership-and-divorce-uk"));
+const EngagementRingDivorcePage = lazy(() => import("@/pages/content/engagement-ring-and-wedding-gifts-divorce-uk"));
+const DirectorsLoanDivorcePage = lazy(() => import("@/pages/content/directors-loan-account-divorce-uk"));
+const DivorceInScotlandPage = lazy(() => import("@/pages/content/divorce-in-scotland-financial-settlement"));
+const DivorceInNorthernIrelandPage = lazy(() => import("@/pages/content/divorce-in-northern-ireland-financial-settlement"));
 const AboutPage = lazy(() => import("@/pages/about"));
 const HowItWorksPage = lazy(() => import("@/pages/how-it-works"));
 const FaqPage = lazy(() => import("@/pages/faq"));
@@ -277,6 +298,27 @@ function Router() {
       <Route path="/child-benefit-after-divorce-uk" component={ChildBenefitAfterDivorcePage} />
       <Route path="/council-tax-single-person-discount-divorce-uk" component={CouncilTaxSPDPage} />
       <Route path="/bankruptcy-and-divorce-uk" component={BankruptcyDivorcePage} />
+      <Route path="/average-divorce-settlement-uk" component={AverageDivorceSettlementPage} />
+      <Route path="/wife-entitled-divorce-uk-after-5-years" component={WifeEntitled5YearsPage} />
+      <Route path="/wife-entitled-divorce-uk-after-10-years" component={WifeEntitled10YearsPage} />
+      <Route path="/wife-entitled-divorce-uk-after-20-years" component={WifeEntitled20YearsPage} />
+      <Route path="/wife-entitled-divorce-uk-after-25-years" component={WifeEntitled25YearsPage} />
+      <Route path="/negative-equity-and-divorce-uk" component={NegativeEquityDivorcePage} />
+      <Route path="/second-marriage-divorce-settlement-uk" component={SecondMarriageDivorcePage} />
+      <Route path="/diy-divorce-uk-cost" component={DiyDivorceCostPage} />
+      <Route path="/online-divorce-uk-cost" component={OnlineDivorceCostPage} />
+      <Route path="/moving-out-during-divorce-uk" component={MovingOutDuringDivorcePage} />
+      <Route path="/do-i-need-a-solicitor-for-financial-settlement-uk" component={DoINeedSolicitorPage} />
+      <Route path="/universal-credit-after-divorce-uk" component={UniversalCreditAfterDivorcePage} />
+      <Route path="/marriage-allowance-after-divorce-uk" component={MarriageAllowanceAfterDivorcePage} />
+      <Route path="/inheritance-tax-after-divorce-uk" component={InheritanceTaxAfterDivorcePage} />
+      <Route path="/council-tax-during-divorce-uk" component={CouncilTaxDuringDivorcePage} />
+      <Route path="/sipp-on-divorce-uk" component={SippOnDivorcePage} />
+      <Route path="/shared-ownership-and-divorce-uk" component={SharedOwnershipDivorcePage} />
+      <Route path="/engagement-ring-and-wedding-gifts-divorce-uk" component={EngagementRingDivorcePage} />
+      <Route path="/directors-loan-account-divorce-uk" component={DirectorsLoanDivorcePage} />
+      <Route path="/divorce-in-scotland-financial-settlement" component={DivorceInScotlandPage} />
+      <Route path="/divorce-in-northern-ireland-financial-settlement" component={DivorceInNorthernIrelandPage} />
       <Route path="/pricing" component={PricingPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/results">

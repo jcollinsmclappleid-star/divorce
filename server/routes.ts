@@ -194,6 +194,42 @@ export async function registerRoutes(
     <loc>https://divorcecalculatoruk.co.uk/transfer-of-equity-divorce-uk</loc>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/average-divorce-settlement-uk</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/wife-entitled-divorce-uk-after-5-years</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/wife-entitled-divorce-uk-after-10-years</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/wife-entitled-divorce-uk-after-20-years</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/wife-entitled-divorce-uk-after-25-years</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/negative-equity-and-divorce-uk</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/second-marriage-divorce-settlement-uk</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/moving-out-during-divorce-uk</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/do-i-need-a-solicitor-for-financial-settlement-uk</loc>
+    <priority>0.9</priority>
+  </url>
 
   <url>
     <loc>https://divorcecalculatoruk.co.uk/about</loc>
@@ -297,6 +333,54 @@ export async function registerRoutes(
   </url>
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-mediation-process-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/diy-divorce-uk-cost</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/online-divorce-uk-cost</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/universal-credit-after-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/marriage-allowance-after-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/inheritance-tax-after-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/council-tax-during-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/sipp-on-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/shared-ownership-and-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/engagement-ring-and-wedding-gifts-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/directors-loan-account-divorce-uk</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-in-scotland-financial-settlement</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-in-northern-ireland-financial-settlement</loc>
     <priority>0.8</priority>
   </url>
 
