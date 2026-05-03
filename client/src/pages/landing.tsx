@@ -290,7 +290,6 @@ export default function LandingPage() {
           <div className="text-center mb-10 space-y-3" data-reveal>
             <div className="flex items-center justify-center gap-2 mb-3">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
               </span>
               <span className="text-xs font-medium text-emerald-400 tracking-wide">Sample output · real model format</span>

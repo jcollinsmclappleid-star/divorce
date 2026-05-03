@@ -63,12 +63,8 @@ function ChromeWindow({ title, children, footer }: { title: string; children: Re
 
 function InteractiveHint({ text }: { text: string }) {
   return (
-    <span className="inline-flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-gold bg-gold/15 border border-gold/30 px-2 py-0.5 rounded-full">
-      <motion.span
-        className="w-1.5 h-1.5 rounded-full bg-gold"
-        animate={{ scale: [1, 1.6, 1], opacity: [1, 0.4, 1] }}
-        transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-      />
+    <span className="inline-flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+      <span className="w-1.5 h-1.5 rounded-full bg-gold" />
       {text}
     </span>
   );
@@ -456,7 +452,7 @@ function StressLab() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-rose-500/[0.06] to-transparent border border-rose-400/20 rounded-xl px-4 py-3">
+        <div className="bg-rose-50 border border-rose-200 rounded-xl px-4 py-3">
           <p className="text-[10px] uppercase tracking-wider text-rose-700/80 font-semibold mb-1">What this means</p>
           <p className="text-[12px] text-slate-600 leading-relaxed">
             {activeCount === 0
@@ -578,7 +574,7 @@ function MaintenanceLab() {
           ))}
         </div>
 
-        <div className="bg-gradient-to-br from-emerald-500/[0.05] to-transparent border border-emerald-400/20 rounded-xl px-4 py-3">
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3">
           <p className="text-[10px] uppercase tracking-wider text-emerald-700/80 font-semibold mb-1">What this means</p>
           <p className="text-[12px] text-slate-600 leading-relaxed">
             {amount === 0
