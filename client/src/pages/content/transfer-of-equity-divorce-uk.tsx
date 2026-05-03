@@ -36,7 +36,7 @@ const faqItems = [
   },
   {
     question: "Does the mortgage lender have a say in the transfer?",
-    answer: "Yes — the mortgage lender must consent to any transfer of equity that affects the mortgage. They will assess whether the remaining party can afford the mortgage independently. If they refuse, the property may need to be sold rather than transferred. You should approach the lender early in the process to understand their requirements.",
+    answer: "Yes — the mortgage lender must consent to any transfer of equity that affects the mortgage. They will assess whether the remaining party can afford the mortgage independently. If they refuse, the property may need to be sold rather than transferred. In practice, lenders are commonly approached early in the process so that affordability requirements are understood before terms are agreed.",
   },
 ];
 

@@ -100,8 +100,8 @@ export default function RefuseSettlementPage() {
       </ContentSection>
 
       <ContentSection muted>
-        <h2 className="text-2xl font-display font-bold mb-4">What You Should Do Instead</h2>
-        <p className="text-muted-foreground text-sm mb-4">If you are unhappy with what is being proposed, the constructive responses are:</p>
+        <h2 className="text-2xl font-display font-bold mb-4">Constructive Alternatives People Use</h2>
+        <p className="text-muted-foreground text-sm mb-4">If someone is unhappy with what is being proposed, common constructive responses include:</p>
         <div className="space-y-3 mb-6">
           {[
             "Make counter-proposals and explain your reasoning with evidence",
