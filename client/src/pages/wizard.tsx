@@ -831,6 +831,8 @@ const DEBT_SUGGESTIONS: { name: string; category: string; owner: string; hint: s
 ];
 
 function StepAssets({ advancedMode }: { advancedMode: boolean }) {
+  const assetConfirm = useInlineConfirm();
+  const liabilityConfirm = useInlineConfirm();
   const { assets, liabilities, addAsset, updateAsset, removeAsset, addLiability, updateLiability, removeLiability, profile } = useAppStore();
   const nameA = profile?.partyAName || "Party A";
   const nameB = profile?.partyBName || "Party B";
@@ -1067,7 +1069,8 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
             </div>
             <div className="space-y-2">
               <Label>Value (£)</Label>
-              <Input type="number" value={assetForm.currentValue || ""} onChange={(e) => { const v = parseFloat(e.target.value); setAssetForm(f => ({ ...f, currentValue: isNaN(v) ? 0 : v })); }} data-testid="input-asset-value" />
+              <Input type="number" value={assetForm.currentValue || ""} onChange={(e) => { const v = parseFloat(e.target.value); setAssetForm(f => ({ ...f, currentValue: isNaN(v) ? 0 : v })); }} onBlur={(e) => { const v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) assetConfirm.flash(`Looks good — ${formatCurrency(v)} recorded`); }} data-testid="input-asset-value" />
+              <InlineConfirm message={assetConfirm.message} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -1113,7 +1116,8 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
             </div>
             <div className="space-y-2">
               <Label>Balance (£)</Label>
-              <Input type="number" value={liabilityForm.balance || ""} onChange={(e) => { const v = parseFloat(e.target.value); setLiabilityForm(f => ({ ...f, balance: isNaN(v) ? 0 : v })); }} data-testid="input-liability-balance" />
+              <Input type="number" value={liabilityForm.balance || ""} onChange={(e) => { const v = parseFloat(e.target.value); setLiabilityForm(f => ({ ...f, balance: isNaN(v) ? 0 : v })); }} onBlur={(e) => { const v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) liabilityConfirm.flash(`Saved — ${formatCurrency(v)} debt recorded`); }} data-testid="input-liability-balance" />
+              <InlineConfirm message={liabilityConfirm.message} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">

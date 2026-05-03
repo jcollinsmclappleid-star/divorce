@@ -45,9 +45,16 @@ function usePoolFigures() {
   }, [assets, liabilities]);
 }
 
-function PoolDial({ value, max }: { value: number; max: number }) {
-  const safeMax = Math.max(max, 100_000);
-  const pct = Math.min(1, Math.max(0, value / safeMax));
+const POOL_MILESTONES = [50_000, 100_000, 250_000, 500_000, 1_000_000, 2_000_000, 5_000_000, 10_000_000];
+
+function nextMilestone(value: number): number {
+  for (const m of POOL_MILESTONES) if (m > value) return m;
+  return POOL_MILESTONES[POOL_MILESTONES.length - 1];
+}
+
+function PoolDial({ value }: { value: number }) {
+  const target = nextMilestone(Math.max(0, value));
+  const pct = Math.min(1, Math.max(0, value / target));
   const size = 132;
   const cx = size / 2;
   const cy = size / 2 + size * 0.06;
@@ -79,25 +86,31 @@ function PoolDial({ value, max }: { value: number; max: number }) {
         <path d={arc(startA, endA)} stroke="rgba(15,27,45,0.07)" strokeWidth={sw} fill="none" strokeLinecap="round" />
         <motion.path
           d={arc(startA, fillA)}
+          key={target}
           stroke="url(#pool-dial-grad)"
           strokeWidth={sw}
           fill="none"
           strokeLinecap="round"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 0.7, ease: chartTheme.ease }}
+          initial={false}
+          animate={{ d: arc(startA, fillA) }}
+          transition={{ duration: 0.6, ease: chartTheme.ease }}
           style={{ filter: "drop-shadow(0 0 6px rgba(201,168,76,0.35))" }}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center pt-2">
-        <p
+        <motion.p
+          key={Math.round(value / 100)}
+          initial={{ opacity: 0.7, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, ease: chartTheme.ease }}
           className="text-xl font-bold tabular-nums leading-none"
           style={{ color: chartTheme.color.gold, fontFamily: chartTheme.font.serif, letterSpacing: "-0.02em" }}
           data-testid="text-pool-total"
         >
           {fmtPool(value)}
-        </p>
+        </motion.p>
         <p className="text-[9px] uppercase tracking-widest text-[#1a3357]/60 font-semibold mt-1">Combined pool</p>
+        <p className="text-[9px] text-[#1a3357]/45 mt-0.5 tabular-nums">of {fmtPool(target)} milestone</p>
       </div>
     </div>
   );
@@ -168,7 +181,7 @@ function ConsoleBody({ currentStep, stages }: LivePoolConsoleProps) {
 
   return (
     <div className="space-y-3">
-      <PoolDial value={fig.combinedPool} max={fig.combinedPool * 1.3 || 100_000} />
+      <PoolDial value={fig.combinedPool} />
 
       <div className="space-y-2 pt-1">
         <CategoryBar label="Property equity" value={fig.propertyEquity} max={max} icon={Home} color="#F43F5E" />

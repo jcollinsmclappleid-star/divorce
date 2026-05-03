@@ -4,6 +4,13 @@ import { useAppStore } from "@/hooks/use-store";
 import { useEngine } from "@/hooks/use-engine";
 import { chartTheme, fmtGbp } from "@/lib/chart-theme";
 
+/**
+ * StageInsightCard consumes engine outputs (`useEngine`) so the figures
+ * shown here always match the rest of the modelling. Avoid duplicating
+ * asset/income arithmetic from the store — pull from engine.intermediate,
+ * engine.scenarios[0] (pensions), or engine.taxA / engine.taxB.
+ */
+
 interface StatFigure {
   label: string;
   value: string;
@@ -70,7 +77,7 @@ function Donut({ slices }: { slices: { label: string; value: number; color: stri
 }
 
 export function StageInsightCard({ stage, onContinue }: StageInsightCardProps) {
-  const { assets, liabilities, profile } = useAppStore();
+  const { profile } = useAppStore();
   const engine = useEngine();
   const nameA = profile?.partyAName?.trim() || "Party A";
   const nameB = profile?.partyBName?.trim() || "Party B";
@@ -84,19 +91,14 @@ export function StageInsightCard({ stage, onContinue }: StageInsightCardProps) {
   let sentence = "";
 
   if (stage === "afterAssets") {
-    const propertyValue = assets
-      .filter((a) => a.category === "primary_home" || a.category === "other_property")
-      .reduce((s, a) => s + (a.currentValue ?? 0), 0);
-    const mortgage = liabilities.filter((l) => l.category === "mortgage").reduce((s, l) => s + (l.balance ?? 0), 0);
-    const propertyEquity = Math.max(0, propertyValue - mortgage);
-    const liquid = assets
-      .filter((a) => !["primary_home", "other_property", "pension"].includes(a.category))
-      .reduce((s, a) => s + (a.currentValue ?? 0), 0);
-    const pensions = assets
-      .filter((a) => a.category === "pension")
-      .reduce((s, a) => s + (a.cetv ?? a.currentValue ?? 0), 0);
-    const otherDebts = liabilities.filter((l) => l.category !== "mortgage").reduce((s, l) => s + (l.balance ?? 0), 0);
-    const netSoFar = propertyEquity + liquid + pensions - otherDebts;
+    // All figures consumed from engine outputs — single source of truth
+    const propertyEquity = engine.intermediate.netHomeEquity;
+    const liquid = engine.intermediate.totalLiquid;
+    const pensions = engine.scenarios[0]
+      ? (engine.scenarios[0].pensionA ?? 0) + (engine.scenarios[0].pensionB ?? 0)
+      : 0;
+    const otherDebts = Math.max(0, engine.intermediate.totalDebt - engine.intermediate.totalMortgage);
+    const netSoFar = engine.netWorth.total;
 
     slices = [
       { label: "Property equity", value: propertyEquity, color: chartTheme.color.rose },

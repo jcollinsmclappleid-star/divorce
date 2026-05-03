@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from "react";
+import { useInlineConfirm, InlineConfirm } from "./inline-confirm";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Home, Zap, ShoppingCart, Car, Shield, Users, Phone,
@@ -49,7 +50,9 @@ const CATEGORY_LABELS: Record<string, string> = {
   other: "Other",
 };
 
-function findExpenseForChip(expenses: Expense[], chip: ChipDef, owner: "A" | "B"): Expense | undefined {
+type ExpenseOwner = "A" | "B" | "joint";
+
+function findExpenseForChip(expenses: Expense[], chip: ChipDef, owner: ExpenseOwner): Expense | undefined {
   const ownerExpenses = expenses.filter((e) => e.owner === owner);
   // 1. Exact name match (current chip label)
   const exact = ownerExpenses.find((e) => e.name === chip.name);
@@ -66,7 +69,7 @@ function findExpenseForChip(expenses: Expense[], chip: ChipDef, owner: "A" | "B"
 interface ChipCardProps {
   chip: ChipDef;
   expense: Expense | undefined;
-  owner: "A" | "B";
+  owner: ExpenseOwner;
   onAdd: (monthly: number) => void;
   onUpdate: (monthly: number) => void;
   onRemove: () => void;
@@ -223,11 +226,14 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
   const nameA = profile?.partyAName?.trim() || "Party A";
   const nameB = profile?.partyBName?.trim() || "Party B";
 
-  const [activeOwner, setActiveOwner] = useState<"A" | "B">("A");
+  const [activeOwner, setActiveOwner] = useState<ExpenseOwner>("A");
   const [otherDialogOpen, setOtherDialogOpen] = useState(false);
-  const [otherForm, setOtherForm] = useState({ name: "", amount: 0, category: "other" as string, frequency: "monthly" as "monthly" | "annual" });
+  const [otherForm, setOtherForm] = useState({ name: "", amount: 0, category: "other" as string, frequency: "monthly" as "monthly" | "annual", owner: "A" as ExpenseOwner });
+  const chipConfirm = useInlineConfirm();
 
-  const handleAdd = (chip: ChipDef, owner: "A" | "B", monthly: number) => {
+  const ownerLabel = (o: ExpenseOwner) => (o === "A" ? nameA : o === "B" ? nameB : "Shared");
+
+  const handleAdd = (chip: ChipDef, owner: ExpenseOwner, monthly: number) => {
     addExpense({
       name: chip.name,
       amountAnnual: monthly * 12,
@@ -235,10 +241,12 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
       owner,
       inflationLinked: true,
     });
+    chipConfirm.flash(`Saved — ${chip.name} added at £${monthly.toLocaleString("en-GB")}/mo for ${ownerLabel(owner)}`);
   };
 
   const handleUpdate = (expense: Expense, monthly: number) => {
     updateExpense(expense.id, { amountAnnual: monthly * 12 });
+    chipConfirm.flash(`Updated — ${expense.name} now £${monthly.toLocaleString("en-GB")}/mo`);
   };
 
   const ownerExpenses = useMemo(() => expenses.filter((e) => e.owner === activeOwner), [expenses, activeOwner]);
@@ -260,6 +268,11 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
     return ownerExpenses.filter((e) => !claimedIds.has(e.id));
   }, [expenses, ownerExpenses, activeOwner]);
 
+  const openOtherDialog = () => {
+    setOtherForm({ name: "", amount: 0, category: "other", frequency: "monthly", owner: activeOwner });
+    setOtherDialogOpen(true);
+  };
+
   const saveOther = () => {
     if (!otherForm.name || otherForm.amount <= 0) return;
     const annual = otherForm.frequency === "monthly" ? otherForm.amount * 12 : otherForm.amount;
@@ -267,10 +280,11 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
       name: otherForm.name,
       amountAnnual: annual,
       category: otherForm.category,
-      owner: activeOwner,
+      owner: otherForm.owner,
       inflationLinked: true,
     });
-    setOtherForm({ name: "", amount: 0, category: "other", frequency: "monthly" });
+    chipConfirm.flash(`Saved — ${otherForm.name} added for ${ownerLabel(otherForm.owner)}`);
+    setOtherForm({ name: "", amount: 0, category: "other", frequency: "monthly", owner: activeOwner });
     setOtherDialogOpen(false);
   };
 
@@ -284,10 +298,10 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
         </p>
       </div>
 
-      <div className="flex items-center gap-2 border-b border-border/40">
-        {(["A", "B"] as const).map((owner) => {
+      <div className="flex items-center gap-2 border-b border-border/40 overflow-x-auto">
+        {(["A", "B", "joint"] as const).map((owner) => {
           const isActive = activeOwner === owner;
-          const ownerName = owner === "A" ? nameA : nameB;
+          const label = ownerLabel(owner);
           const count = expenses.filter((e) => e.owner === owner).length;
           const total = Math.round(expenses.filter((e) => e.owner === owner).reduce((s, e) => s + e.amountAnnual, 0) / 12);
           return (
@@ -296,13 +310,13 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
               type="button"
               onClick={() => setActiveOwner(owner)}
               data-testid={`tab-expenses-owner-${owner}`}
-              className={`relative px-4 py-2.5 text-sm font-semibold transition-colors -mb-px border-b-2 ${
+              className={`relative px-4 py-2.5 text-sm font-semibold transition-colors -mb-px border-b-2 whitespace-nowrap ${
                 isActive
                   ? "border-gold text-[#1a3357]"
                   : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
-              {ownerName}
+              {label}
               {count > 0 && (
                 <span className="ml-2 text-[10px] font-mono text-muted-foreground">
                   {count} · £{total.toLocaleString("en-GB")}/mo
@@ -313,13 +327,15 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
         })}
       </div>
 
+      <InlineConfirm message={chipConfirm.message} />
+
       <div className="flex items-center justify-between gap-3 px-1">
         <p className="text-xs text-muted-foreground">
           <span className="font-semibold text-[#1a3357]">{ownerCovered}</span> of {CHIPS.length} categories considered
           {customExpenses.length > 0 && <span> · {customExpenses.length} custom</span>}
         </p>
         <p className="text-xs">
-          <span className="text-muted-foreground">{activeOwner === "A" ? nameA : nameB} total: </span>
+          <span className="text-muted-foreground">{ownerLabel(activeOwner)} total: </span>
           <span className="font-bold text-[#1a3357] tabular-nums">£{ownerTotalMonthly.toLocaleString("en-GB")}/mo</span>
         </p>
       </div>
@@ -341,7 +357,7 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
         })}
         <button
           type="button"
-          onClick={() => setOtherDialogOpen(true)}
+          onClick={openOtherDialog}
           className="rounded-lg border-2 border-dashed border-slate-300 p-3 text-left hover:border-gold/50 hover:bg-gold/[0.04] transition-all flex flex-col items-center justify-center min-h-[90px] text-muted-foreground hover:text-foreground"
           data-testid="button-chip-add-other"
         >
@@ -353,7 +369,7 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
 
       {customExpenses.length > 0 && (
         <div className="space-y-1.5 pt-2">
-          <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Custom expenses for {activeOwner === "A" ? nameA : nameB}</p>
+          <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Custom expenses for {ownerLabel(activeOwner)}</p>
           <AnimatePresence>
             {customExpenses.map((e) => (
               <motion.div
@@ -411,16 +427,29 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
                 </Select>
               </div>
             </div>
-            <div className="space-y-2">
-              <Label>Category</Label>
-              <Select value={otherForm.category} onValueChange={(v) => setOtherForm((f) => ({ ...f, category: v }))}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {Object.entries(CATEGORY_LABELS).map(([val, label]) => (
-                    <SelectItem key={val} value={val}>{label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label>Whose expense?</Label>
+                <Select value={otherForm.owner} onValueChange={(v: ExpenseOwner) => setOtherForm((f) => ({ ...f, owner: v }))}>
+                  <SelectTrigger data-testid="select-other-owner"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="A">{nameA}</SelectItem>
+                    <SelectItem value="B">{nameB}</SelectItem>
+                    <SelectItem value="joint">Shared</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Category</Label>
+                <Select value={otherForm.category} onValueChange={(v) => setOtherForm((f) => ({ ...f, category: v }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(CATEGORY_LABELS).map(([val, label]) => (
+                      <SelectItem key={val} value={val}>{label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
           <DialogFooter>
