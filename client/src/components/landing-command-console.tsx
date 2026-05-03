@@ -67,10 +67,10 @@ const SCENARIOS: ScenarioModel[] = [
 ];
 
 const TONE_CLS: Record<ScenarioModel["tagTone"], string> = {
-  balanced: "bg-cyan-400/15 text-cyan-300 border-cyan-400/30",
-  sustain:  "bg-emerald-400/15 text-emerald-300 border-emerald-400/30",
-  stretch:  "bg-amber-400/15 text-amber-300 border-amber-400/30",
-  complex:  "bg-violet-400/15 text-violet-300 border-violet-400/30",
+  balanced: "bg-cyan-400/15 text-cyan-700 border-cyan-400/30",
+  sustain:  "bg-emerald-400/15 text-emerald-700 border-emerald-400/30",
+  stretch:  "bg-amber-400/15 text-amber-700 border-amber-400/30",
+  complex:  "bg-violet-400/15 text-violet-700 border-violet-400/30",
 };
 
 type StressKey = "rate" | "income" | "house";
@@ -129,19 +129,16 @@ export function LandingCommandConsole() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Ambient gold glow behind the device — clipped to prevent overflow */}
-      <div className="absolute -inset-6 rounded-[28px] bg-gold/[0.06] blur-2xl pointer-events-none -z-10" />
-
       {/* Device frame */}
-      <div className="relative rounded-2xl bg-[#0B1220] border border-white/10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] overflow-hidden">
+      <div className="relative rounded-2xl bg-white border border-slate-200 shadow-lg shadow-slate-900/10 overflow-hidden">
         {/* Window chrome */}
-        <div className="flex items-center justify-between px-4 py-2.5 bg-white/[0.03] border-b border-white/10">
+        <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200">
           <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-            <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-            <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+            <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+            <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+            <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
           </div>
-          <div className="flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+          <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400">
             <Sparkles className="w-3 h-3 text-gold/70" />
             <span>Settlement Command Console — illustrative model</span>
           </div>
@@ -149,15 +146,11 @@ export function LandingCommandConsole() {
         </div>
 
         {/* Scenario chips with arrow nav */}
-        <div className="px-4 pt-4 pb-3 border-b border-white/5">
+        <div className="px-4 pt-4 pb-3 border-b border-slate-100">
           <div className="flex items-center justify-between mb-2 gap-2 flex-wrap">
-            <p className="text-[9px] uppercase tracking-[0.18em] text-white/35 font-medium">Switch settlement scenario</p>
-            <span className="inline-flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-gold bg-gold/15 border border-gold/30 px-2 py-0.5 rounded-full">
-              <motion.span
-                className="w-1.5 h-1.5 rounded-full bg-gold"
-                animate={reduced ? { scale: 1, opacity: 1 } : { scale: [1, 1.6, 1], opacity: [1, 0.4, 1] }}
-                transition={reduced ? { duration: 0 } : { duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-              />
+            <p className="text-[9px] uppercase tracking-[0.18em] text-slate-400 font-medium">Switch settlement scenario</p>
+            <span className="inline-flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold" />
               Live · click to try
             </span>
           </div>
@@ -167,7 +160,7 @@ export function LandingCommandConsole() {
               onClick={goPrev}
               data-testid="console-prev"
               aria-label="Previous scenario"
-              className="shrink-0 w-9 h-9 rounded-full border border-white/25 bg-white/[0.06] hover:bg-white/[0.14] hover:border-gold/50 flex items-center justify-center text-white/80 hover:text-gold shadow-md shadow-black/20 transition-all"
+              className="shrink-0 w-9 h-9 rounded-full border border-slate-300 bg-white hover:bg-slate-50 hover:border-gold/60 flex items-center justify-center text-slate-600 hover:text-gold transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -182,12 +175,11 @@ export function LandingCommandConsole() {
                     aria-pressed={isActive}
                     className={`relative px-3 py-1.5 rounded-full text-[11px] font-medium transition-all border ${
                       isActive
-                        ? "bg-gold text-[#0B1220] border-gold shadow-[0_0_0_4px_rgba(201,168,76,0.18)]"
-                        : "bg-white/[0.04] text-white/60 border-white/10 hover:bg-white/[0.08] hover:text-white/85"
+                        ? "bg-gold text-white border-gold"
+                        : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-800"
                     }`}
                   >
                     {s.shortName}
-                    {isActive && <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-gold animate-pulse" />}
                   </button>
                 );
               })}
@@ -197,7 +189,7 @@ export function LandingCommandConsole() {
               onClick={goNext}
               data-testid="console-next"
               aria-label="Next scenario"
-              className="shrink-0 w-9 h-9 rounded-full border border-gold/55 bg-gold/15 hover:bg-gold/30 flex items-center justify-center text-gold shadow-md shadow-black/20 animate-pulse-soft animate-nudge-right transition-colors"
+              className="shrink-0 w-9 h-9 rounded-full border border-gold/60 bg-amber-50 hover:bg-amber-100 flex items-center justify-center text-gold transition-colors"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -212,11 +204,11 @@ export function LandingCommandConsole() {
                   onClick={() => goTo(i)}
                   aria-label={`Go to ${s.shortName}`}
                   data-testid={`console-dot-${s.id}`}
-                  className={`h-1.5 rounded-full transition-all ${i === active ? "w-6 bg-gold" : "w-1.5 bg-white/20 hover:bg-white/40"}`}
+                  className={`h-1.5 rounded-full transition-all ${i === active ? "w-6 bg-gold" : "w-1.5 bg-slate-300 hover:bg-slate-400"}`}
                 />
               ))}
             </div>
-            <p className="text-[9px] uppercase tracking-[0.16em] text-white/40 flex items-center gap-1.5">
+            <p className="text-[9px] uppercase tracking-[0.16em] text-slate-400 flex items-center gap-1.5">
               <ChevronLeft className="w-2.5 h-2.5" />
               <span>{active + 1} of {SCENARIOS.length} · use arrows to explore</span>
               <ChevronRight className="w-2.5 h-2.5" />
@@ -233,14 +225,14 @@ export function LandingCommandConsole() {
             transition={{ duration: 0.35, ease: chartTheme.ease }}
           >
             {/* Hero metrics */}
-            <div className="grid grid-cols-3 gap-px bg-white/5">
+            <div className="grid grid-cols-3 gap-px bg-slate-100">
               <Metric
                 label="Net capital · combined"
                 value={
                   <AnimatedNumber
                     value={totalCapital}
                     format={(v) => fmtGbp(v)}
-                    className="text-2xl font-bold text-white tabular-nums"
+                    className="text-2xl font-bold text-[#1a3357] tabular-nums"
                     testId="metric-capital"
                   />
                 }
@@ -252,7 +244,7 @@ export function LandingCommandConsole() {
                   <AnimatedNumber
                     value={Math.max(sc.surplusA, sc.surplusB)}
                     format={(v) => `${v >= 0 ? "+" : "−"}£${Math.abs(Math.round(v)).toLocaleString()}`}
-                    className={`text-2xl font-bold tabular-nums ${Math.max(sc.surplusA, sc.surplusB) >= 0 ? "text-emerald-400" : "text-rose-400"}`}
+                    className={`text-2xl font-bold tabular-nums ${Math.max(sc.surplusA, sc.surplusB) >= 0 ? "text-emerald-600" : "text-rose-600"}`}
                     testId="metric-surplus"
                   />
                 }
@@ -269,7 +261,7 @@ export function LandingCommandConsole() {
                       className="text-2xl font-bold tabular-nums"
                       testId="metric-resilience"
                     />
-                    <span className="text-sm font-normal text-white/40">/100</span>
+                    <span className="text-sm font-normal text-slate-400">/100</span>
                   </span>
                 }
                 sub={minRColor.label}
@@ -278,16 +270,16 @@ export function LandingCommandConsole() {
             </div>
 
             {/* Two-pane lower half */}
-            <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-px bg-white/5">
+            <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-px bg-slate-100">
               {/* Left: capital composition + projection sparkline */}
-              <div className="bg-[#0B1220] p-4 space-y-4">
+              <div className="bg-white p-4 space-y-4">
                 {/* Composition bar */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium">Capital composition</p>
-                    <p className="text-[10px] font-mono text-white/40">{fmtGbp(compTotal)}</p>
+                    <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Capital composition</p>
+                    <p className="text-[10px] font-mono text-slate-400">{fmtGbp(compTotal)}</p>
                   </div>
-                  <div className="flex h-3 rounded-full overflow-hidden bg-white/[0.04]">
+                  <div className="flex h-3 rounded-full overflow-hidden bg-slate-50">
                     {sc.composition.map((c, i) => {
                       const pct = (c.value / compTotal) * 100;
                       return (
@@ -299,7 +291,7 @@ export function LandingCommandConsole() {
                           style={{ background: c.color }}
                           className="relative group"
                         >
-                          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-white/15" />
+                          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/5" />
                         </motion.div>
                       );
                     })}
@@ -309,8 +301,8 @@ export function LandingCommandConsole() {
                       <div key={c.label} className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-sm shrink-0" style={{ background: c.color }} />
                         <div className="min-w-0">
-                          <p className="text-[10px] text-white/85 font-medium tabular-nums">{fmtK(c.value)}</p>
-                          <p className="text-[9px] text-white/40 truncate">{c.label}</p>
+                          <p className="text-[10px] text-slate-700 font-medium tabular-nums">{fmtK(c.value)}</p>
+                          <p className="text-[9px] text-slate-400 truncate">{c.label}</p>
                         </div>
                       </div>
                     ))}
@@ -320,9 +312,9 @@ export function LandingCommandConsole() {
                 {/* Projection sparkline */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium">5-year capital trajectory</p>
-                    <p className="text-[10px] font-mono text-white/60">
-                      Yr 5 <span className="text-emerald-400 font-semibold">{fmtK(sc.projection[5])}</span>
+                    <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">5-year capital trajectory</p>
+                    <p className="text-[10px] font-mono text-slate-500">
+                      Yr 5 <span className="text-emerald-600 font-semibold">{fmtK(sc.projection[5])}</span>
                     </p>
                   </div>
                   <Sparkline data={densifyProjection(sc.projection, hashSeed(sc.id))} depletionYear={sc.depletionYear !== undefined ? sc.depletionYear * 12 : undefined} />
@@ -330,10 +322,10 @@ export function LandingCommandConsole() {
               </div>
 
               {/* Right: resilience gauge + party breakdown */}
-              <div className="bg-[#0B1220] p-4 flex flex-col">
-                <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium mb-2">Resilience · weakest party</p>
+              <div className="bg-white p-4 flex flex-col">
+                <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium mb-2">Resilience · weakest party</p>
                 <div className="flex-1 flex items-center justify-center">
-                  <div className="bg-white/[0.03] rounded-xl px-4 py-2 border border-white/5">
+                  <div className="bg-slate-50 rounded-xl px-4 py-2 border border-slate-100">
                     <RadialGauge score={minR} size={150} label={minRColor.label.toUpperCase()} testId="gauge-resilience" />
                   </div>
                 </div>
@@ -344,10 +336,10 @@ export function LandingCommandConsole() {
                   ].map((p) => {
                     const c = gaugeColor(p.score);
                     return (
-                      <div key={p.name} className="rounded-lg border border-white/5 bg-white/[0.02] px-2 py-1.5 text-center">
-                        <p className="text-[9px] text-white/40">{p.name}</p>
+                      <div key={p.name} className="rounded-lg border border-slate-100 bg-slate-50/60 px-2 py-1.5 text-center">
+                        <p className="text-[9px] text-slate-400">{p.name}</p>
                         <p className="text-base font-bold tabular-nums" style={{ color: c.stroke }}>
-                          {p.score}<span className="text-[9px] font-normal text-white/40">/100</span>
+                          {p.score}<span className="text-[9px] font-normal text-slate-400">/100</span>
                         </p>
                       </div>
                     );
@@ -357,10 +349,10 @@ export function LandingCommandConsole() {
             </div>
 
             {/* Stress sliders */}
-            <div className="px-4 py-3 border-t border-white/5 bg-white/[0.02]">
+            <div className="px-4 py-3 border-t border-slate-100 bg-slate-50/60">
               <div className="flex items-center gap-2 mb-2">
                 <Sliders className="w-3 h-3 text-gold/70" />
-                <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium">Stress test the assumptions</p>
+                <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Stress test the assumptions</p>
               </div>
               <div className="flex gap-1.5 flex-wrap">
                 {(Object.keys(STRESS_LABELS) as StressKey[]).map((k) => {
@@ -372,8 +364,8 @@ export function LandingCommandConsole() {
                       data-testid={`stress-${k}`}
                       className={`px-2.5 py-1 rounded-md text-[10px] font-medium transition-all border ${
                         on
-                          ? "bg-rose-500/20 text-rose-300 border-rose-400/40 shadow-[inset_0_0_0_1px_rgba(244,63,94,0.2)]"
-                          : "bg-white/[0.04] text-white/55 border-white/10 hover:bg-white/[0.08]"
+                          ? "bg-rose-500/20 text-rose-700 border-rose-400/40 "
+                          : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100"
                       }`}
                     >
                       {on && <span className="mr-1">●</span>}
@@ -384,7 +376,7 @@ export function LandingCommandConsole() {
                 {(stress.rate || stress.income || stress.house) && (
                   <button
                     onClick={() => { stopAuto(); setStress({ rate: false, income: false, house: false }); }}
-                    className="px-2 py-1 rounded-md text-[10px] font-medium text-white/40 hover:text-white/70 transition-colors"
+                    className="px-2 py-1 rounded-md text-[10px] font-medium text-slate-400 hover:text-slate-600 transition-colors"
                   >
                     Reset
                   </button>
@@ -395,7 +387,7 @@ export function LandingCommandConsole() {
         </AnimatePresence>
 
         {/* Locked footer */}
-        <div className="px-4 py-2.5 bg-gradient-to-r from-gold/[0.06] to-gold/[0.02] border-t border-gold/15 flex items-center justify-between">
+        <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Lock className="w-3 h-3 text-gold/70" />
             <span className="text-[10px] text-gold/75 font-medium">
@@ -420,14 +412,14 @@ function fmtMo(v: number) { return `${v >= 0 ? "+" : "−"}£${Math.abs(Math.rou
 
 function Metric({ label, value, sub, accent, accentColor }: { label: string; value: React.ReactNode; sub: string; accent?: "up" | "down"; accentColor?: string }) {
   return (
-    <div className="bg-[#0B1220] px-4 py-3 relative">
-      <p className="text-[9px] uppercase tracking-wider text-white/35 font-medium mb-1">{label}</p>
+    <div className="bg-white px-4 py-3 relative">
+      <p className="text-[9px] uppercase tracking-wider text-slate-400 font-medium mb-1">{label}</p>
       <div className="flex items-baseline gap-1.5" style={accentColor ? { color: accentColor } : undefined}>
         {value}
-        {accent === "up" && <TrendingUp className="w-3 h-3 text-emerald-400/60" />}
-        {accent === "down" && <TrendingDown className="w-3 h-3 text-rose-400/60" />}
+        {accent === "up" && <TrendingUp className="w-3 h-3 text-emerald-600/60" />}
+        {accent === "down" && <TrendingDown className="w-3 h-3 text-rose-600/60" />}
       </div>
-      <p className="text-[10px] text-white/40 mt-0.5 truncate">{sub}</p>
+      <p className="text-[10px] text-slate-400 mt-0.5 truncate">{sub}</p>
     </div>
   );
 }
@@ -449,12 +441,12 @@ function Sparkline({ data, depletionYear }: { data: number[]; depletionYear?: nu
     <div className="relative">
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-[70px]" preserveAspectRatio="none">
         <defs>
-          <linearGradient id="spark-grad" x1="0" x2="0" y1="0" y2="1">
+          <linearGradient id="spark-grad-llc" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0%"   stopColor={chartTheme.color.gold} stopOpacity={0.35} />
             <stop offset="100%" stopColor={chartTheme.color.gold} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <motion.path d={area} fill="url(#spark-grad)" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }} />
+        <motion.path d={area} fill="url(#spark-grad-llc)" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }} />
         <motion.path
           d={path}
           fill="none"
@@ -467,10 +459,6 @@ function Sparkline({ data, depletionYear }: { data: number[]; depletionYear?: nu
           transition={{ duration: 0.9, ease: chartTheme.ease }}
         />
         <circle cx={last.x} cy={last.y} r={3} fill={chartTheme.color.gold} />
-        <circle cx={last.x} cy={last.y} r={6} fill={chartTheme.color.gold} opacity={0.25}>
-          <animate attributeName="r" values="3;9;3" dur="2.4s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.4;0;0.4" dur="2.4s" repeatCount="indefinite" />
-        </circle>
         {depletionYear !== undefined && (
           <g>
             <line

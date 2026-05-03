@@ -90,8 +90,6 @@ export default function SeoSettlementExamplesPage() {
         {/* Hero */}
         <div className="relative overflow-hidden bg-primary py-12 md:py-16">
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute -top-10 -left-10 w-64 h-64 rounded-full bg-amber-500/10 blur-3xl" />
-            <div className="absolute top-5 right-5 w-48 h-48 rounded-full bg-violet-500/10 blur-3xl" />
           </div>
           <div className="relative container mx-auto px-4 max-w-3xl">
             <Link href="/divorce-financial-guides" onClick={scrollTop} className="inline-flex items-center gap-1 text-xs text-white/60 hover:text-white mb-4 transition-colors" data-testid="link-all-guides">

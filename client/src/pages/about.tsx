@@ -53,9 +53,6 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="relative overflow-hidden bg-primary py-16 md:py-24" data-testid="section-about-hero">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-cyan-500/10 blur-3xl" />
-          <div className="absolute top-10 right-10 w-64 h-64 rounded-full bg-violet-500/10 blur-3xl" />
-          <div className="absolute bottom-0 left-1/2 w-96 h-40 rounded-full bg-gold/5 blur-3xl" />
         </div>
         <div className="relative container mx-auto px-4 max-w-3xl text-center space-y-5">
           <div className="inline-flex items-center gap-2 bg-white/10 text-white/80 text-xs font-semibold px-3 py-1.5 rounded-full border border-white/20 mb-2">

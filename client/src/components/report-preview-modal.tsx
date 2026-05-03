@@ -122,14 +122,13 @@ function SampleDashboard() {
 
   return (
     <div className="relative">
-      <div className="absolute -inset-4 rounded-[24px] bg-gold/[0.06] blur-2xl pointer-events-none" />
-      <div className="relative rounded-2xl bg-[#0B1220] border border-white/10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] overflow-hidden">
+      <div className="relative rounded-2xl bg-white border border-slate-200 shadow-lg shadow-slate-900/10 overflow-hidden">
         {/* Window chrome */}
-        <div className="flex items-center justify-between px-4 py-2.5 bg-white/[0.03] border-b border-white/10">
+        <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200">
           <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-white/20" /><div className="w-2.5 h-2.5 rounded-full bg-white/20" /><div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+            <div className="w-2.5 h-2.5 rounded-full bg-slate-300" /><div className="w-2.5 h-2.5 rounded-full bg-slate-300" /><div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
           </div>
-          <div className="flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+          <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-500">
             <Activity className="w-3 h-3 text-gold/70" />
             <span>Settlement Command Console — sample</span>
           </div>
@@ -137,22 +136,18 @@ function SampleDashboard() {
         </div>
 
         {/* Scenario chips */}
-        <div className="px-4 pt-3 pb-3 border-b border-white/5">
+        <div className="px-4 pt-3 pb-3 border-b border-slate-100">
           <div className="flex items-center justify-between mb-2 gap-2 flex-wrap">
-            <p className="text-[9px] uppercase tracking-[0.18em] text-white/35 font-medium">Switch settlement scenario</p>
-            <span className="inline-flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-gold bg-gold/15 border border-gold/30 px-2 py-0.5 rounded-full">
-              <motion.span
-                className="w-1.5 h-1.5 rounded-full bg-gold"
-                animate={{ scale: [1, 1.6, 1], opacity: [1, 0.4, 1] }}
-                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-              />
+            <p className="text-[9px] uppercase tracking-[0.18em] text-slate-400 font-medium">Switch settlement scenario</p>
+            <span className="inline-flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold" />
               Live · click to try
             </span>
           </div>
           <div className="flex gap-1.5 flex-wrap">
             {SAMPLE_SCENARIOS.map((s, i) => {
               const isActive = i === active;
-              const isHinted = !interacted && i === 1; // gentle hint on the second chip
+              const isHinted = !interacted && i === 1;
               return (
                 <button
                   key={s.id}
@@ -162,65 +157,58 @@ function SampleDashboard() {
                   aria-pressed={isActive}
                   className={`relative px-3 py-1.5 rounded-full text-[11px] font-medium transition-all border ${
                     isActive
-                      ? "bg-gold text-[#0B1220] border-gold shadow-[0_0_0_3px_rgba(201,168,76,0.18)]"
+                      ? "bg-gold text-white border-gold"
                       : isHinted
-                      ? "bg-white/[0.08] text-white/85 border-gold/40 shadow-[0_0_0_3px_rgba(201,168,76,0.10)] animate-pulse"
-                      : "bg-white/[0.04] text-white/60 border-white/10 hover:bg-white/[0.08]"
+                      ? "bg-amber-50 text-slate-800 border-gold/50"
+                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-800"
                   }`}
                 >
                   {s.short}
-                  {isHinted && (
-                    <motion.span
-                      className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-gold"
-                      animate={{ scale: [1, 1.5, 1] }}
-                      transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                  )}
                 </button>
               );
             })}
           </div>
           {!interacted && (
-            <p className="text-[10px] text-gold/70 mt-2 italic flex items-center gap-1">
+            <p className="text-[10px] text-gold/80 mt-2 italic flex items-center gap-1">
               <ArrowRight className="w-2.5 h-2.5" /> Tap a different scenario to see how every figure changes
             </p>
           )}
         </div>
 
         {/* Hero metrics */}
-        <div className="grid grid-cols-3 gap-px bg-white/5">
-          <div className="bg-[#0B1220] px-4 py-3">
-            <p className="text-[9px] uppercase tracking-wider text-white/35 font-medium mb-1">Net capital · combined</p>
-            <p className="text-2xl font-bold text-white tabular-nums">£{totalCap.toLocaleString()}</p>
-            <p className="text-[10px] text-white/40 mt-0.5">A {fmtK(sc.capA)} · B {fmtK(sc.capB)}</p>
+        <div className="grid grid-cols-3 gap-px bg-slate-200">
+          <div className="bg-white px-4 py-3">
+            <p className="text-[9px] uppercase tracking-wider text-slate-400 font-medium mb-1">Net capital · combined</p>
+            <p className="text-2xl font-bold text-[#1a3357] tabular-nums">£{totalCap.toLocaleString()}</p>
+            <p className="text-[10px] text-slate-500 mt-0.5">A {fmtK(sc.capA)} · B {fmtK(sc.capB)}</p>
           </div>
-          <div className="bg-[#0B1220] px-4 py-3">
-            <p className="text-[9px] uppercase tracking-wider text-white/35 font-medium mb-1">Best monthly surplus</p>
-            <p className={`text-2xl font-bold tabular-nums flex items-center gap-1 ${bestSurplus >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+          <div className="bg-white px-4 py-3">
+            <p className="text-[9px] uppercase tracking-wider text-slate-400 font-medium mb-1">Best monthly surplus</p>
+            <p className={`text-2xl font-bold tabular-nums flex items-center gap-1 ${bestSurplus >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
               {bestSurplus >= 0 ? "+" : "−"}£{Math.abs(bestSurplus).toLocaleString()}
-              {bestSurplus >= 0 ? <TrendingUp className="w-3 h-3 text-emerald-400/60" /> : <TrendingDown className="w-3 h-3 text-rose-400/60" />}
+              {bestSurplus >= 0 ? <TrendingUp className="w-3 h-3 text-emerald-600/70" /> : <TrendingDown className="w-3 h-3 text-rose-600/70" />}
             </p>
-            <p className="text-[10px] text-white/40 mt-0.5">{sc.surA >= sc.surB ? "Party A" : "Party B"} strongest</p>
+            <p className="text-[10px] text-slate-500 mt-0.5">{sc.surA >= sc.surB ? "Party A" : "Party B"} strongest</p>
           </div>
-          <div className="bg-[#0B1220] px-4 py-3">
-            <p className="text-[9px] uppercase tracking-wider text-white/35 font-medium mb-1">Lowest resilience score</p>
+          <div className="bg-white px-4 py-3">
+            <p className="text-[9px] uppercase tracking-wider text-slate-400 font-medium mb-1">Lowest resilience score</p>
             <p className="text-2xl font-bold tabular-nums" style={{ color: minRColor.stroke }}>
-              {minR}<span className="text-sm font-normal text-white/40">/100</span>
+              {minR}<span className="text-sm font-normal text-slate-400">/100</span>
             </p>
-            <p className="text-[10px] text-white/40 mt-0.5">{minRColor.label}</p>
+            <p className="text-[10px] text-slate-500 mt-0.5">{minRColor.label}</p>
           </div>
         </div>
 
         {/* Lower panes */}
-        <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-px bg-white/5">
+        <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-px bg-slate-200">
           {/* Composition + trajectory */}
-          <div className="bg-[#0B1220] p-4 space-y-4">
+          <div className="bg-white p-4 space-y-4">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium">Capital composition</p>
-                <p className="text-[10px] font-mono text-white/40">£{compTotal.toLocaleString()}</p>
+                <p className="text-[10px] uppercase tracking-wider text-slate-500 font-medium">Capital composition</p>
+                <p className="text-[10px] font-mono text-slate-500">£{compTotal.toLocaleString()}</p>
               </div>
-              <div className="flex h-3 rounded-full overflow-hidden bg-white/[0.04]">
+              <div className="flex h-3 rounded-full overflow-hidden bg-slate-100">
                 {SAMPLE_COMPOSITION.map((c, i) => (
                   <motion.div
                     key={c.label}
@@ -236,8 +224,8 @@ function SampleDashboard() {
                   <div key={c.label} className="flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-sm shrink-0" style={{ background: c.color }} />
                     <div className="min-w-0">
-                      <p className="text-[10px] text-white/85 font-medium tabular-nums">{fmtK(c.value)}</p>
-                      <p className="text-[9px] text-white/40 truncate">{c.label}</p>
+                      <p className="text-[10px] text-slate-700 font-medium tabular-nums">{fmtK(c.value)}</p>
+                      <p className="text-[9px] text-slate-500 truncate">{c.label}</p>
                     </div>
                   </div>
                 ))}
@@ -246,9 +234,9 @@ function SampleDashboard() {
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium">5-year capital trajectory</p>
-                <p className="text-[10px] font-mono text-white/60">
-                  Yr 5 <span className="text-emerald-400 font-semibold">{fmtK(sc.projection[5])}</span>
+                <p className="text-[10px] uppercase tracking-wider text-slate-500 font-medium">5-year capital trajectory</p>
+                <p className="text-[10px] font-mono text-slate-600">
+                  Yr 5 <span className="text-emerald-600 font-semibold">{fmtK(sc.projection[5])}</span>
                 </p>
               </div>
               <MiniSparkline data={denseTraj} height={70} gradId={`sample-spark-${sc.id}`} />
@@ -256,10 +244,10 @@ function SampleDashboard() {
           </div>
 
           {/* Twin gauges */}
-          <div className="bg-[#0B1220] p-4 flex flex-col">
-            <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium mb-2">Resilience · weakest party</p>
+          <div className="bg-white p-4 flex flex-col">
+            <p className="text-[10px] uppercase tracking-wider text-slate-500 font-medium mb-2">Resilience · weakest party</p>
             <div className="flex-1 flex items-center justify-center">
-              <div className="bg-white/[0.03] rounded-xl px-4 py-2 border border-white/5">
+              <div className="bg-slate-50 rounded-xl px-4 py-2 border border-slate-200">
                 <RadialGauge score={minR} size={140} label={minRColor.label.toUpperCase()} testId={`sample-gauge-${sc.id}`} />
               </div>
             </div>
@@ -270,10 +258,10 @@ function SampleDashboard() {
               ].map((p) => {
                 const g = gaugeColor(p.score);
                 return (
-                  <div key={p.name} className="rounded-lg border border-white/5 bg-white/[0.02] px-2 py-1.5 text-center">
-                    <p className="text-[9px] text-white/40">{p.name}</p>
+                  <div key={p.name} className="rounded-lg border border-slate-200 bg-slate-50 px-2 py-1.5 text-center">
+                    <p className="text-[9px] text-slate-500">{p.name}</p>
                     <p className="text-base font-bold tabular-nums" style={{ color: g.stroke }}>
-                      {p.score}<span className="text-[9px] font-normal text-white/40">/100</span>
+                      {p.score}<span className="text-[9px] font-normal text-slate-400">/100</span>
                     </p>
                   </div>
                 );
@@ -283,17 +271,17 @@ function SampleDashboard() {
         </div>
 
         {/* Stress-test row (visual only) */}
-        <div className="px-4 py-2.5 border-t border-white/5 bg-white/[0.02] flex items-center gap-2 flex-wrap">
+        <div className="px-4 py-2.5 border-t border-slate-100 bg-slate-50 flex items-center gap-2 flex-wrap">
           <Sliders className="w-3 h-3 text-gold/70" />
-          <span className="text-[10px] uppercase tracking-wider text-white/40 font-medium mr-1">Stress tests</span>
+          <span className="text-[10px] uppercase tracking-wider text-slate-500 font-medium mr-1">Stress tests</span>
           {["Mortgage rate +1%", "Income −5%", "House price −10%"].map((s) => (
-            <span key={s} className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-white/[0.04] text-white/55 border border-white/10">{s}</span>
+            <span key={s} className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-white text-slate-600 border border-slate-200">{s}</span>
           ))}
-          <span className="text-[10px] text-white/30 ml-auto">Interactive in the unlocked report</span>
+          <span className="text-[10px] text-slate-400 ml-auto">Interactive in the unlocked report</span>
         </div>
 
         {/* Footer */}
-        <div className="px-4 py-2.5 bg-gradient-to-r from-gold/[0.08] to-gold/[0.02] border-t border-gold/15 flex items-center justify-between">
+        <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="w-3 h-3 text-gold/70" />
             <span className="text-[10px] text-gold/80 font-medium">Sample dashboard · the live version is wired to your figures</span>

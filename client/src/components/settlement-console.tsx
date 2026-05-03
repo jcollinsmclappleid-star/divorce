@@ -39,10 +39,10 @@ export interface SettlementConsoleProps {
 }
 
 const TONE_CLS: Record<ConsoleScenario["tagTone"], string> = {
-  balanced: "bg-cyan-400/15 text-cyan-300 border-cyan-400/30",
-  sustain:  "bg-emerald-400/15 text-emerald-300 border-emerald-400/30",
-  stretch:  "bg-amber-400/15 text-amber-300 border-amber-400/30",
-  complex:  "bg-violet-400/15 text-violet-300 border-violet-400/30",
+  balanced: "bg-cyan-400/15 text-cyan-700 border-cyan-400/30",
+  sustain:  "bg-emerald-400/15 text-emerald-700 border-emerald-400/30",
+  stretch:  "bg-amber-400/15 text-amber-700 border-amber-400/30",
+  complex:  "bg-violet-400/15 text-violet-700 border-violet-400/30",
 };
 
 type StressKey = "rate" | "income" | "house";
@@ -98,17 +98,16 @@ export function SettlementConsole({
   return (
     <div className="relative w-full max-w-[700px] mx-auto" data-testid={testId}>
       {/* Ambient gold glow behind the device */}
-      <div className="absolute -inset-6 rounded-[28px] bg-gold/[0.06] blur-2xl pointer-events-none" />
 
-      <div className="relative rounded-2xl bg-[#0B1220] border border-white/10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] overflow-hidden">
+      <div className="relative rounded-2xl bg-white border border-slate-200 shadow-lg shadow-slate-900/10 overflow-hidden">
         {/* Window chrome */}
-        <div className="flex items-center justify-between px-4 py-2.5 bg-white/[0.03] border-b border-white/10">
+        <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200">
           <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-            <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-            <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+            <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+            <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+            <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
           </div>
-          <div className="flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+          <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400">
             {locked ? <Eye className="w-3 h-3 text-gold/70" /> : <Sparkles className="w-3 h-3 text-gold/70" />}
             <span>{chromeCaption}{locked ? " — preview" : ""}</span>
           </div>
@@ -116,8 +115,8 @@ export function SettlementConsole({
         </div>
 
         {/* Scenario chips */}
-        <div className="px-4 pt-4 pb-3 border-b border-white/5">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-white/35 font-medium mb-2">Switch settlement scenario</p>
+        <div className="px-4 pt-4 pb-3 border-b border-slate-100">
+          <p className="text-[9px] uppercase tracking-[0.18em] text-slate-400 font-medium mb-2">Switch settlement scenario</p>
           <div className="flex gap-1.5 flex-wrap">
             {safeScenarios.map((s, i) => {
               const isActive = i === Math.min(active, safeScenarios.length - 1);
@@ -129,12 +128,11 @@ export function SettlementConsole({
                   aria-pressed={isActive}
                   className={`relative px-3 py-1.5 rounded-full text-[11px] font-medium transition-all border ${
                     isActive
-                      ? "bg-gold text-[#0B1220] border-gold shadow-[0_0_0_4px_rgba(201,168,76,0.18)]"
-                      : "bg-white/[0.04] text-white/60 border-white/10 hover:bg-white/[0.08] hover:text-white/85"
+                      ? "bg-gold text-[#0B1220] border-gold "
+                      : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100 hover:text-slate-700"
                   }`}
                 >
                   {s.shortName}
-                  {isActive && <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-gold animate-pulse" />}
                 </button>
               );
             })}
@@ -150,7 +148,7 @@ export function SettlementConsole({
             transition={{ duration: 0.35, ease: chartTheme.ease }}
           >
             {/* Hero metrics */}
-            <div className="grid grid-cols-3 gap-px bg-white/5 relative">
+            <div className="grid grid-cols-3 gap-px bg-slate-100 relative">
               <Metric
                 label="Net capital · combined"
                 locked={locked}
@@ -158,7 +156,7 @@ export function SettlementConsole({
                   <AnimatedNumber
                     value={totalCapital}
                     format={(v) => fmtGbp(v)}
-                    className="text-2xl font-bold text-white tabular-nums"
+                    className="text-2xl font-bold text-[#1a3357] tabular-nums"
                     testId="metric-capital"
                   />
                 }
@@ -171,7 +169,7 @@ export function SettlementConsole({
                   <AnimatedNumber
                     value={bestSurplus}
                     format={(v) => `${v >= 0 ? "+" : "−"}£${Math.abs(Math.round(v)).toLocaleString()}`}
-                    className={`text-2xl font-bold tabular-nums ${bestSurplus >= 0 ? "text-emerald-400" : "text-rose-400"}`}
+                    className={`text-2xl font-bold tabular-nums ${bestSurplus >= 0 ? "text-emerald-600" : "text-rose-600"}`}
                     testId="metric-surplus"
                   />
                 }
@@ -189,7 +187,7 @@ export function SettlementConsole({
                       className="text-2xl font-bold tabular-nums"
                       testId="metric-resilience"
                     />
-                    <span className="text-sm font-normal text-white/40">/100</span>
+                    <span className="text-sm font-normal text-slate-400">/100</span>
                   </span>
                 }
                 sub={minRColor.label}
@@ -198,15 +196,15 @@ export function SettlementConsole({
             </div>
 
             {/* Two-pane lower half */}
-            <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-px bg-white/5">
+            <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-px bg-slate-100">
               {/* Left: capital composition + projection sparkline */}
-              <div className="bg-[#0B1220] p-4 space-y-4">
+              <div className="bg-white p-4 space-y-4">
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium">Capital composition</p>
-                    <p className="text-[10px] font-mono text-white/40">{fmtGbp(compTotal)}</p>
+                    <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Capital composition</p>
+                    <p className="text-[10px] font-mono text-slate-400">{fmtGbp(compTotal)}</p>
                   </div>
-                  <div className="flex h-3 rounded-full overflow-hidden bg-white/[0.04]">
+                  <div className="flex h-3 rounded-full overflow-hidden bg-slate-50">
                     {composition.map((c, i) => {
                       const pct = (c.value / compTotal) * 100;
                       return (
@@ -225,8 +223,8 @@ export function SettlementConsole({
                       <div key={c.label} className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-sm shrink-0" style={{ background: c.color }} />
                         <div className="min-w-0">
-                          <p className={`text-[10px] text-white/85 font-medium tabular-nums ${locked ? "blur-[5px] select-none" : ""}`}>{fmtK(c.value)}</p>
-                          <p className="text-[9px] text-white/40 truncate">{c.label}</p>
+                          <p className={`text-[10px] text-slate-700 font-medium tabular-nums ${locked ? "blur-[5px] select-none" : ""}`}>{fmtK(c.value)}</p>
+                          <p className="text-[9px] text-slate-400 truncate">{c.label}</p>
                         </div>
                       </div>
                     ))}
@@ -235,9 +233,9 @@ export function SettlementConsole({
 
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium">5-year capital trajectory</p>
-                    <p className="text-[10px] font-mono text-white/60">
-                      Yr 5 <span className={`text-emerald-400 font-semibold ${locked ? "blur-[4px] select-none" : ""}`}>{fmtK(sc.projection[sc.projection.length - 1] ?? 0)}</span>
+                    <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">5-year capital trajectory</p>
+                    <p className="text-[10px] font-mono text-slate-500">
+                      Yr 5 <span className={`text-emerald-600 font-semibold ${locked ? "blur-[4px] select-none" : ""}`}>{fmtK(sc.projection[sc.projection.length - 1] ?? 0)}</span>
                     </p>
                   </div>
                   <Sparkline data={densifyProjection(sc.projection, hashSeed(sc.id))} depletionYear={sc.depletionYear !== undefined ? sc.depletionYear * 12 : undefined} />
@@ -245,10 +243,10 @@ export function SettlementConsole({
               </div>
 
               {/* Right: resilience gauge + party breakdown */}
-              <div className="bg-[#0B1220] p-4 flex flex-col">
-                <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium mb-2">Resilience · weakest party</p>
+              <div className="bg-white p-4 flex flex-col">
+                <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium mb-2">Resilience · weakest party</p>
                 <div className="flex-1 flex items-center justify-center">
-                  <div className="bg-white/[0.03] rounded-xl px-4 py-2 border border-white/5">
+                  <div className="bg-slate-50 rounded-xl px-4 py-2 border border-slate-100">
                     <RadialGauge score={minR} size={150} label={minRColor.label.toUpperCase()} testId="gauge-resilience" />
                   </div>
                 </div>
@@ -259,10 +257,10 @@ export function SettlementConsole({
                   ].map((p) => {
                     const c = gaugeColor(p.score);
                     return (
-                      <div key={p.name} className="rounded-lg border border-white/5 bg-white/[0.02] px-2 py-1.5 text-center">
-                        <p className="text-[9px] text-white/40 truncate">{p.name}</p>
+                      <div key={p.name} className="rounded-lg border border-slate-100 bg-slate-50/60 px-2 py-1.5 text-center">
+                        <p className="text-[9px] text-slate-400 truncate">{p.name}</p>
                         <p className="text-base font-bold tabular-nums" style={{ color: c.stroke }}>
-                          {p.score}<span className="text-[9px] font-normal text-white/40">/100</span>
+                          {p.score}<span className="text-[9px] font-normal text-slate-400">/100</span>
                         </p>
                       </div>
                     );
@@ -272,10 +270,10 @@ export function SettlementConsole({
             </div>
 
             {!hideStress && (
-              <div className="px-4 py-3 border-t border-white/5 bg-white/[0.02]">
+              <div className="px-4 py-3 border-t border-slate-100 bg-slate-50/60">
                 <div className="flex items-center gap-2 mb-2">
                   <Sliders className="w-3 h-3 text-gold/70" />
-                  <p className="text-[10px] uppercase tracking-wider text-white/40 font-medium">Stress test the assumptions</p>
+                  <p className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Stress test the assumptions</p>
                 </div>
                 <div className="flex gap-1.5 flex-wrap">
                   {(Object.keys(STRESS_LABELS) as StressKey[]).map((k) => {
@@ -288,8 +286,8 @@ export function SettlementConsole({
                         aria-pressed={on}
                         className={`px-2.5 py-1 rounded-md text-[10px] font-medium transition-all border ${
                           on
-                            ? "bg-rose-500/20 text-rose-300 border-rose-400/40"
-                            : "bg-white/[0.04] text-white/55 border-white/10 hover:bg-white/[0.08]"
+                            ? "bg-rose-500/20 text-rose-700 border-rose-400/40"
+                            : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100"
                         }`}
                       >
                         {on && <span className="mr-1">●</span>}
@@ -300,7 +298,7 @@ export function SettlementConsole({
                   {(stress.rate || stress.income || stress.house) && (
                     <button
                       onClick={() => setStress({ rate: false, income: false, house: false })}
-                      className="px-2 py-1 rounded-md text-[10px] font-medium text-white/40 hover:text-white/70 transition-colors"
+                      className="px-2 py-1 rounded-md text-[10px] font-medium text-slate-400 hover:text-slate-600 transition-colors"
                     >
                       Reset
                     </button>
@@ -319,7 +317,7 @@ export function SettlementConsole({
             className="absolute left-1/2 -translate-x-1/2 top-[42%] z-20 group"
             data-testid="button-console-unlock"
           >
-            <span className="flex items-center gap-2 bg-white/95 backdrop-blur border border-gold/40 shadow-2xl rounded-xl px-5 py-3 text-sm font-semibold text-[#0B1220] hover:bg-white transition-all hover:shadow-[0_20px_50px_-10px_rgba(201,168,76,0.4)]">
+            <span className="flex items-center gap-2 bg-white border border-gold/50 shadow-md rounded-xl px-5 py-3 text-sm font-semibold text-[#0B1220] hover:bg-amber-50 transition-colors">
               <Lock className="w-4 h-4 text-gold" />
               Unlock the live console — £79
               <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
@@ -328,7 +326,7 @@ export function SettlementConsole({
         )}
 
         {/* Footer strip */}
-        <div className="px-4 py-2.5 bg-gradient-to-r from-gold/[0.06] to-gold/[0.02] border-t border-gold/15 flex items-center justify-between">
+        <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-2">
             {locked ? <Lock className="w-3 h-3 text-gold/70" /> : <Sparkles className="w-3 h-3 text-gold/70" />}
             <span className="text-[10px] text-gold/75 font-medium">
@@ -353,14 +351,14 @@ function fmtMo(v: number) { return `${v >= 0 ? "+" : "−"}£${Math.abs(Math.rou
 
 function Metric({ label, value, sub, accent, accentColor, locked }: { label: string; value: React.ReactNode; sub: string; accent?: "up" | "down"; accentColor?: string; locked?: boolean }) {
   return (
-    <div className="bg-[#0B1220] px-4 py-3 relative">
-      <p className="text-[9px] uppercase tracking-wider text-white/35 font-medium mb-1">{label}</p>
+    <div className="bg-white px-4 py-3 relative">
+      <p className="text-[9px] uppercase tracking-wider text-slate-400 font-medium mb-1">{label}</p>
       <div className={`flex items-baseline gap-1.5 ${locked ? "blur-[6px] select-none pointer-events-none" : ""}`} style={accentColor ? { color: accentColor } : undefined}>
         {value}
-        {accent === "up" && <TrendingUp className="w-3 h-3 text-emerald-400/60" />}
-        {accent === "down" && <TrendingDown className="w-3 h-3 text-rose-400/60" />}
+        {accent === "up" && <TrendingUp className="w-3 h-3 text-emerald-600/60" />}
+        {accent === "down" && <TrendingDown className="w-3 h-3 text-rose-600/60" />}
       </div>
-      <p className={`text-[10px] text-white/40 mt-0.5 truncate ${locked ? "blur-[3px] select-none" : ""}`}>{sub}</p>
+      <p className={`text-[10px] text-slate-400 mt-0.5 truncate ${locked ? "blur-[3px] select-none" : ""}`}>{sub}</p>
     </div>
   );
 }
@@ -401,10 +399,6 @@ function Sparkline({ data, depletionYear }: { data: number[]; depletionYear?: nu
           transition={{ duration: 0.9, ease: chartTheme.ease }}
         />
         <circle cx={last.x} cy={last.y} r={3} fill={chartTheme.color.gold} />
-        <circle cx={last.x} cy={last.y} r={6} fill={chartTheme.color.gold} opacity={0.25}>
-          <animate attributeName="r" values="3;9;3" dur="2.4s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.4;0;0.4" dur="2.4s" repeatCount="indefinite" />
-        </circle>
         {depletionYear !== undefined && depletionYear >= 0 && depletionYear < pts.length && (
           <g>
             <line x1={pts[depletionYear].x} y1={H - P} x2={pts[depletionYear].x} y2={P} stroke={chartTheme.color.pressure} strokeDasharray="2 2" strokeWidth={1} opacity={0.6} />

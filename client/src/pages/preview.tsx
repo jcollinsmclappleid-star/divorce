@@ -194,8 +194,6 @@ export default function PreviewPage() {
 
         {/* ── Hero ── */}
         <section className="rounded-2xl bg-gradient-to-br from-primary via-[hsl(220_52%_22%)] to-[hsl(220_52%_16%)] text-white px-6 py-8 relative overflow-hidden">
-          <div className="absolute -top-10 -right-10 w-56 h-56 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-gold/[0.07] rounded-full blur-3xl pointer-events-none" />
           <div className="relative">
             <div className="flex flex-wrap items-center gap-2 mb-4">
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-3 py-1 rounded-full">

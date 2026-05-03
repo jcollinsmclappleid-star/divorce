@@ -161,8 +161,6 @@ export function ContentPageLayout({
 
       <header className="relative overflow-hidden bg-primary py-12 md:py-16" data-testid="section-content-hero">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-12 -left-12 w-64 h-64 rounded-full bg-cyan-500/8 blur-3xl" />
-          <div className="absolute top-4 right-8 w-48 h-48 rounded-full bg-violet-500/8 blur-3xl" />
         </div>
         <div className="relative container mx-auto px-4 max-w-3xl">
           <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-3 -ml-2">

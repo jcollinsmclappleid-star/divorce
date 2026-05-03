@@ -51,11 +51,10 @@ export function ScenarioLeaderboard({
   const blur = locked ? "blur-[5px] select-none" : "";
 
   return (
-    <div className="relative" data-testid={testId}>
-      <div className="absolute -inset-4 rounded-[24px] bg-gold/[0.08] blur-2xl pointer-events-none" />
-      <div className="relative rounded-2xl bg-gradient-to-b from-[#FBF8F1] to-white border border-gold/30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.25)] overflow-hidden">
+    <div data-testid={testId}>
+      <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
         {/* Header */}
-        <div className="px-4 py-3 bg-gradient-to-r from-gold/15 via-gold/8 to-transparent border-b border-gold/20 flex items-center justify-between gap-2 flex-wrap">
+        <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-2">
             <Columns3 className="w-4 h-4 text-gold" />
             <p className="text-[12px] font-bold text-[#1a3357] tracking-tight">{title}</p>
@@ -111,7 +110,7 @@ export function ScenarioLeaderboard({
                       <span className="text-[9px] text-slate-500 w-14 shrink-0">Capital</span>
                       <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
                         <motion.div
-                          className="h-full bg-gradient-to-r from-violet-400 to-violet-500"
+                          className="h-full bg-violet-500"
                           initial={{ width: 0 }}
                           animate={{ width: `${capPct}%` }}
                           transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 }}
@@ -126,7 +125,7 @@ export function ScenarioLeaderboard({
                       <span className="text-[9px] text-slate-500 w-14 shrink-0">Surplus</span>
                       <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
                         <motion.div
-                          className={`h-full ${s.totalSur >= 0 ? "bg-gradient-to-r from-emerald-400 to-emerald-500" : "bg-gradient-to-r from-rose-400 to-rose-500"}`}
+                          className={`h-full ${s.totalSur >= 0 ? "bg-emerald-500" : "bg-rose-500"}`}
                           initial={{ width: 0 }}
                           animate={{ width: `${surPct}%` }}
                           transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 + 0.05 }}
@@ -175,7 +174,7 @@ export function ScenarioLeaderboard({
         </div>
 
         {/* Footer */}
-        <div className="px-4 py-2.5 bg-gradient-to-r from-gold/[0.10] to-gold/[0.04] border-t border-gold/20 flex flex-col gap-1">
+        <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-200 flex flex-col gap-1">
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <p className="text-[10px] text-[#1a3357]/70 font-medium">
               {footerText ?? "Bar widths are scaled to the largest figure across the four options for visual comparison only."}

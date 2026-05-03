@@ -35,13 +35,12 @@ const SAMPLE_COMPOSITION = [
 function ChromeWindow({ title, children, footer }: { title: string; children: React.ReactNode; footer?: React.ReactNode }) {
   return (
     <div className="relative">
-      <div className="absolute -inset-4 rounded-[24px] bg-gold/[0.06] blur-2xl pointer-events-none" />
-      <div className="relative rounded-2xl bg-[#0B1220] border border-white/10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-2.5 bg-white/[0.03] border-b border-white/10">
+      <div className="relative rounded-2xl bg-white border border-slate-200 shadow-lg shadow-slate-900/10 overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200">
           <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-white/20" /><div className="w-2.5 h-2.5 rounded-full bg-white/20" /><div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+            <div className="w-2.5 h-2.5 rounded-full bg-slate-300" /><div className="w-2.5 h-2.5 rounded-full bg-slate-300" /><div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
           </div>
-          <div className="flex items-center gap-1.5 text-[10px] font-mono text-white/40">
+          <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400">
             <Activity className="w-3 h-3 text-gold/70" />
             <span>{title}</span>
           </div>
@@ -49,7 +48,7 @@ function ChromeWindow({ title, children, footer }: { title: string; children: Re
         </div>
         {children}
         {footer ?? (
-          <div className="px-4 py-2.5 bg-gradient-to-r from-gold/[0.08] to-gold/[0.02] border-t border-gold/15 flex items-center justify-between">
+          <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkles className="w-3 h-3 text-gold/70" />
               <span className="text-[10px] text-gold/80 font-medium">Sample dashboard · the live version uses your figures</span>
@@ -88,10 +87,9 @@ function SettlementLab() {
 
   return (
     <div className="relative" data-testid="lab1-comparison">
-      <div className="absolute -inset-4 rounded-[24px] bg-gold/[0.12] blur-2xl pointer-events-none" />
-      <div className="relative rounded-2xl bg-gradient-to-b from-[#FBF8F1] to-white border border-gold/30 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] overflow-hidden">
+      <div className="relative rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
         {/* Header */}
-        <div className="px-4 py-3 bg-gradient-to-r from-gold/15 via-gold/8 to-transparent border-b border-gold/20 flex items-center justify-between gap-2 flex-wrap">
+        <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4 text-gold" />
             <p className="text-[12px] font-bold text-[#1a3357] tracking-tight">Scenario Comparison</p>
@@ -139,7 +137,7 @@ function SettlementLab() {
                       <span className="text-[9px] text-slate-500 w-14 shrink-0">Capital</span>
                       <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
                         <motion.div
-                          className="h-full bg-gradient-to-r from-violet-400 to-violet-500"
+                          className="h-full bg-violet-500"
                           initial={{ width: 0 }}
                           animate={{ width: `${capPct}%` }}
                           transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 }}
@@ -151,7 +149,7 @@ function SettlementLab() {
                       <span className="text-[9px] text-slate-500 w-14 shrink-0">Surplus</span>
                       <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
                         <motion.div
-                          className={`h-full ${s.totalSur >= 0 ? "bg-gradient-to-r from-emerald-400 to-emerald-500" : "bg-gradient-to-r from-rose-400 to-rose-500"}`}
+                          className={`h-full ${s.totalSur >= 0 ? "bg-emerald-500" : "bg-rose-500"}`}
                           initial={{ width: 0 }}
                           animate={{ width: `${surPct}%` }}
                           transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 + 0.05 }}
@@ -198,7 +196,7 @@ function SettlementLab() {
         </div>
 
         {/* Footer */}
-        <div className="px-4 py-2.5 bg-gradient-to-r from-gold/[0.10] to-gold/[0.04] border-t border-gold/20 flex flex-col gap-1">
+        <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-200 flex flex-col gap-1">
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <div className="flex items-center gap-2">
               <Sparkles className="w-3 h-3 text-gold" />
@@ -233,36 +231,36 @@ function SplitRatioLab() {
 
   return (
     <ChromeWindow title="Lab 2 · Asset Split Ratio">
-      <div className="px-4 pt-3 pb-3 border-b border-white/5">
+      <div className="px-4 pt-3 pb-3 border-b border-slate-100">
         <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-white/35 font-medium">Drag to change the split</p>
+          <p className="text-[9px] uppercase tracking-[0.18em] text-slate-400 font-medium">Drag to change the split</p>
           <InteractiveHint text="Live · drag the slider" />
         </div>
-        <p className="text-[11px] text-white/55">A starting point of 50/50 is common — but circumstances often push it.</p>
+        <p className="text-[11px] text-slate-500">A starting point of 50/50 is common — but circumstances often push it.</p>
       </div>
 
-      <div className="p-5 space-y-5 bg-[#0B1220]">
+      <div className="p-5 space-y-5 bg-white">
         {/* Share bar */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-semibold text-blue-300">Party A · {share}%</span>
-            <span className="text-[10px] text-white/40 font-mono">£{POOL.toLocaleString()} pool</span>
-            <span className="text-[11px] font-semibold text-emerald-300">{100 - share}% · Party B</span>
+            <span className="text-[11px] font-semibold text-blue-700">Party A · {share}%</span>
+            <span className="text-[10px] text-slate-400 font-mono">£{POOL.toLocaleString()} pool</span>
+            <span className="text-[11px] font-semibold text-emerald-700">{100 - share}% · Party B</span>
           </div>
-          <div className="flex h-7 rounded-full overflow-hidden bg-white/[0.04] border border-white/10">
+          <div className="flex h-7 rounded-full overflow-hidden bg-slate-50 border border-slate-200">
             <motion.div
               className="bg-gradient-to-r from-blue-500 to-blue-400 flex items-center justify-end pr-2"
               animate={{ width: `${share}%` }}
               transition={{ duration: 0.25, ease: "easeOut" }}
             >
-              <span className="text-[10px] font-bold text-white tabular-nums">£{capA.toLocaleString()}</span>
+              <span className="text-[10px] font-bold text-[#1a3357] tabular-nums">£{capA.toLocaleString()}</span>
             </motion.div>
             <motion.div
-              className="bg-gradient-to-r from-emerald-400 to-emerald-500 flex items-center pl-2"
+              className="bg-emerald-500 flex items-center pl-2"
               animate={{ width: `${100 - share}%` }}
               transition={{ duration: 0.25, ease: "easeOut" }}
             >
-              <span className="text-[10px] font-bold text-white tabular-nums">£{capB.toLocaleString()}</span>
+              <span className="text-[10px] font-bold text-[#1a3357] tabular-nums">£{capB.toLocaleString()}</span>
             </motion.div>
           </div>
 
@@ -282,10 +280,10 @@ function SplitRatioLab() {
               aria-valuemax={100}
               aria-valuenow={share}
               aria-valuetext={`${share}% to Party A`}
-              className="w-full h-2 rounded-full appearance-none cursor-pointer bg-white/10 accent-gold"
+              className="w-full h-2 rounded-full appearance-none cursor-pointer bg-slate-100 accent-gold"
               style={{ background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${share}%, #10b981 ${share}%, #10b981 100%)` }}
             />
-            <div className="flex justify-between mt-1.5 text-[9px] text-white/35 font-mono">
+            <div className="flex justify-between mt-1.5 text-[9px] text-slate-400 font-mono">
               <span>0% A</span><span>50/50</span><span>100% A</span>
             </div>
           </div>
@@ -301,7 +299,7 @@ function SplitRatioLab() {
                 className={`px-2 py-1 rounded-full text-[10px] font-semibold border transition-all ${
                   share === p
                     ? "bg-gold text-[#0B1220] border-gold"
-                    : "bg-white/[0.04] text-white/55 border-white/10 hover:bg-white/[0.08]"
+                    : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100"
                 }`}
               >
                 {p}/{100 - p}
@@ -313,24 +311,24 @@ function SplitRatioLab() {
         {/* Twin gauges + commentary */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
-            { name: "Party A", cap: capA, score: criA, c: colA, accent: "text-blue-300" },
-            { name: "Party B", cap: capB, score: criB, c: colB, accent: "text-emerald-300" },
+            { name: "Party A", cap: capA, score: criA, c: colA, accent: "text-blue-700" },
+            { name: "Party B", cap: capB, score: criB, c: colB, accent: "text-emerald-700" },
           ].map((p) => (
-            <div key={p.name} className="bg-white/[0.03] rounded-xl border border-white/10 p-4 flex items-center gap-4">
+            <div key={p.name} className="bg-slate-50 rounded-xl border border-slate-200 p-4 flex items-center gap-4">
               <RadialGauge score={p.score} size={90} label={p.c.label.toUpperCase()} testId={`lab2-gauge-${p.name}`} />
               <div className="min-w-0 flex-1">
                 <p className={`text-[10px] uppercase tracking-wider ${p.accent} font-semibold`}>{p.name}</p>
-                <p className="text-xl font-bold text-white tabular-nums">£{p.cap.toLocaleString()}</p>
-                <p className="text-[10px] text-white/45 mt-0.5">{p.c.label}</p>
+                <p className="text-xl font-bold text-[#1a3357] tabular-nums">£{p.cap.toLocaleString()}</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">{p.c.label}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* Commentary */}
-        <div className="bg-gradient-to-br from-gold/[0.08] to-transparent border border-gold/20 rounded-xl px-4 py-3">
+        <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
           <p className="text-[10px] uppercase tracking-wider text-gold/80 font-semibold mb-1">What this means</p>
-          <p className="text-[12px] text-white/75 leading-relaxed">
+          <p className="text-[12px] text-slate-600 leading-relaxed">
             {share === 50
               ? "An equal 50/50 split — both parties leave with the same liquid capital. This is the default starting point in most negotiations."
               : share > 50
@@ -366,15 +364,15 @@ function StressLab() {
 
   return (
     <ChromeWindow title="Lab 3 · Stress Test">
-      <div className="px-4 pt-3 pb-3 border-b border-white/5">
+      <div className="px-4 pt-3 pb-3 border-b border-slate-100">
         <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-white/35 font-medium">Toggle real-world shocks</p>
+          <p className="text-[9px] uppercase tracking-[0.18em] text-slate-400 font-medium">Toggle real-world shocks</p>
           <InteractiveHint text="Live · toggle any shock" />
         </div>
-        <p className="text-[11px] text-white/55">See who fails first when the unexpected hits.</p>
+        <p className="text-[11px] text-slate-500">See who fails first when the unexpected hits.</p>
       </div>
 
-      <div className="p-5 space-y-4 bg-[#0B1220]">
+      <div className="p-5 space-y-4 bg-white">
         <div className="flex flex-wrap gap-2">
           {STRESS_DEFS.map((d) => {
             const on = stress[d.key];
@@ -389,15 +387,15 @@ function StressLab() {
                 aria-pressed={on}
                 className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold border transition-all ${
                   on
-                    ? "bg-rose-500/20 text-rose-200 border-rose-400/40 shadow-[0_0_0_3px_rgba(244,63,94,0.10)]"
+                    ? "bg-rose-500/20 text-rose-700 border-rose-400/40 "
                     : isHinted
-                    ? "bg-white/[0.08] text-white/85 border-gold/40 animate-pulse"
-                    : "bg-white/[0.04] text-white/60 border-white/10 hover:bg-white/[0.08]"
+                    ? "bg-amber-50 text-slate-800 border-gold/50"
+                    : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100"
                 }`}
               >
                 <Icon className="w-3 h-3" />
                 {d.label}
-                {on && <span className="ml-0.5 text-rose-300">●</span>}
+                {on && <span className="ml-0.5 text-rose-700">●</span>}
               </button>
             );
           })}
@@ -405,7 +403,7 @@ function StressLab() {
             <button
               type="button"
               onClick={() => { setStress({ rate: false, income: false, house: false }); }}
-              className="text-[10px] text-white/40 hover:text-white/70 px-2 underline"
+              className="text-[10px] text-slate-400 hover:text-slate-600 px-2 underline"
               data-testid="lab3-reset"
             >
               Reset
@@ -415,17 +413,17 @@ function StressLab() {
 
         {/* Big gauge */}
         <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-3 items-center">
-          <div className="bg-white/[0.03] rounded-xl border border-white/10 p-3 flex flex-col items-center">
-            <p className="text-[10px] uppercase tracking-wider text-white/40 font-semibold mb-1">Weakest party resilience</p>
+          <div className="bg-slate-50 rounded-xl border border-slate-200 p-3 flex flex-col items-center">
+            <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-1">Weakest party resilience</p>
             <RadialGauge score={minR} size={140} label={gaugeColor(minR).label.toUpperCase()} testId="lab3-gauge" />
-            <p className="text-[10px] text-white/45 mt-1">
+            <p className="text-[10px] text-slate-400 mt-1">
               {activeCount === 0 ? "Baseline · no shocks applied" : `${activeCount} shock${activeCount > 1 ? "s" : ""} applied`}
             </p>
           </div>
 
           {/* Before / After table */}
-          <div className="bg-white/[0.02] rounded-xl border border-white/10 overflow-hidden">
-            <div className="grid grid-cols-3 text-[10px] uppercase tracking-wider text-white/40 px-3 py-2 border-b border-white/5 bg-white/[0.02]">
+          <div className="bg-slate-50/60 rounded-xl border border-slate-200 overflow-hidden">
+            <div className="grid grid-cols-3 text-[10px] uppercase tracking-wider text-slate-400 px-3 py-2 border-b border-slate-100 bg-slate-50/60">
               <span>Metric</span>
               <span className="text-right">Baseline</span>
               <span className="text-right">After shocks</span>
@@ -439,12 +437,12 @@ function StressLab() {
               const delta = row.now - row.base;
               const worse = delta < 0;
               return (
-                <div key={row.label} className="grid grid-cols-3 px-3 py-1.5 text-[11px] border-b border-white/5 last:border-0">
-                  <span className="text-white/65">{row.label}</span>
-                  <span className="text-right tabular-nums text-white/45">
+                <div key={row.label} className="grid grid-cols-3 px-3 py-1.5 text-[11px] border-b border-slate-100 last:border-0">
+                  <span className="text-slate-600">{row.label}</span>
+                  <span className="text-right tabular-nums text-slate-400">
                     {row.isCash ? `${row.base >= 0 ? "+" : "−"}£${Math.abs(row.base).toLocaleString()}` : `${row.base}/100`}
                   </span>
-                  <span className={`text-right tabular-nums font-semibold flex items-center justify-end gap-1 ${worse ? "text-rose-300" : "text-white/85"}`}>
+                  <span className={`text-right tabular-nums font-semibold flex items-center justify-end gap-1 ${worse ? "text-rose-700" : "text-slate-700"}`}>
                     {row.isCash ? `${row.now >= 0 ? "+" : "−"}£${Math.abs(row.now).toLocaleString()}` : `${row.now}/100`}
                     {delta !== 0 && (
                       <span className="text-[9px] opacity-70">
@@ -459,8 +457,8 @@ function StressLab() {
         </div>
 
         <div className="bg-gradient-to-br from-rose-500/[0.06] to-transparent border border-rose-400/20 rounded-xl px-4 py-3">
-          <p className="text-[10px] uppercase tracking-wider text-rose-300/80 font-semibold mb-1">What this means</p>
-          <p className="text-[12px] text-white/75 leading-relaxed">
+          <p className="text-[10px] uppercase tracking-wider text-rose-700/80 font-semibold mb-1">What this means</p>
+          <p className="text-[12px] text-slate-600 leading-relaxed">
             {activeCount === 0
               ? "No shocks applied. Both parties are above the resilience threshold — but real life rarely stays still."
               : criB < 40 || criA < 40
@@ -493,21 +491,21 @@ function MaintenanceLab() {
 
   return (
     <ChromeWindow title="Lab 4 · Spousal Maintenance Bridge">
-      <div className="px-4 pt-3 pb-3 border-b border-white/5">
+      <div className="px-4 pt-3 pb-3 border-b border-slate-100">
         <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-white/35 font-medium">Adjust the monthly transfer</p>
+          <p className="text-[9px] uppercase tracking-[0.18em] text-slate-400 font-medium">Adjust the monthly transfer</p>
           <InteractiveHint text="Live · drag the dial" />
         </div>
-        <p className="text-[11px] text-white/55">Spousal maintenance is an income transfer — each £1 paid by A is £1 received by B.</p>
+        <p className="text-[11px] text-slate-500">Spousal maintenance is an income transfer — each £1 paid by A is £1 received by B.</p>
       </div>
 
-      <div className="p-5 space-y-4 bg-[#0B1220]">
-        <div className="bg-white/[0.03] rounded-xl border border-white/10 p-4">
+      <div className="p-5 space-y-4 bg-white">
+        <div className="bg-slate-50 rounded-xl border border-slate-200 p-4">
           <div className="flex items-center justify-center gap-3 mb-3">
-            <Wallet className="w-4 h-4 text-blue-300" />
-            <ArrowRightLeft className="w-4 h-4 text-gold animate-pulse" />
-            <Heart className="w-4 h-4 text-emerald-300" />
-            <p className="text-2xl font-bold text-white tabular-nums">£{amount.toLocaleString()}<span className="text-sm font-normal text-white/45">/mo</span></p>
+            <Wallet className="w-4 h-4 text-blue-700" />
+            <ArrowRightLeft className="w-4 h-4 text-gold" />
+            <Heart className="w-4 h-4 text-emerald-700" />
+            <p className="text-2xl font-bold text-[#1a3357] tabular-nums">£{amount.toLocaleString()}<span className="text-sm font-normal text-slate-400">/mo</span></p>
           </div>
           <label htmlFor="lab4-slider" className="sr-only">Spousal maintenance amount, pounds per month</label>
           <input
@@ -525,9 +523,9 @@ function MaintenanceLab() {
             aria-valuenow={amount}
             aria-valuetext={`£${amount} per month`}
             className="w-full h-2 rounded-full appearance-none cursor-pointer accent-gold"
-            style={{ background: `linear-gradient(to right, #C9A84C 0%, #C9A84C ${(amount / 2000) * 100}%, rgba(255,255,255,0.1) ${(amount / 2000) * 100}%, rgba(255,255,255,0.1) 100%)` }}
+            style={{ background: `linear-gradient(to right, #C9A84C 0%, #C9A84C ${(amount / 2000) * 100}%, rgba(15,27,45,0.10) ${(amount / 2000) * 100}%, rgba(15,27,45,0.10) 100%)` }}
           />
-          <div className="flex justify-between mt-1.5 text-[9px] text-white/35 font-mono">
+          <div className="flex justify-between mt-1.5 text-[9px] text-slate-400 font-mono">
             <span>£0</span><span>£500</span><span>£1,000</span><span>£1,500</span><span>£2,000</span>
           </div>
           <div className="flex gap-1.5 mt-3 justify-center flex-wrap">
@@ -540,7 +538,7 @@ function MaintenanceLab() {
                 className={`px-2 py-1 rounded-full text-[10px] font-semibold border transition-all ${
                   amount === v
                     ? "bg-gold text-[#0B1220] border-gold"
-                    : "bg-white/[0.04] text-white/55 border-white/10 hover:bg-white/[0.08]"
+                    : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100"
                 }`}
               >
                 £{v}
@@ -555,25 +553,25 @@ function MaintenanceLab() {
             { name: "Party A · pays", val: surA, base: baseSurA, color: "blue", pct: pctA, passes: aPasses },
             { name: "Party B · receives", val: surB, base: baseSurB, color: "emerald", pct: pctB, passes: bPasses },
           ].map((p) => (
-            <div key={p.name} className="bg-white/[0.03] rounded-xl border border-white/10 p-3">
+            <div key={p.name} className="bg-slate-50 rounded-xl border border-slate-200 p-3">
               <div className="flex items-center justify-between mb-1">
-                <p className={`text-[10px] uppercase tracking-wider font-semibold ${p.color === "blue" ? "text-blue-300" : "text-emerald-300"}`}>{p.name}</p>
-                <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded ${p.passes ? "bg-emerald-500/15 text-emerald-300" : "bg-rose-500/15 text-rose-300"}`}>
+                <p className={`text-[10px] uppercase tracking-wider font-semibold ${p.color === "blue" ? "text-blue-700" : "text-emerald-700"}`}>{p.name}</p>
+                <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded ${p.passes ? "bg-emerald-500/15 text-emerald-700" : "bg-rose-500/15 text-rose-700"}`}>
                   {p.passes ? "Sustains" : "Deficit"}
                 </span>
               </div>
-              <p className={`text-2xl font-bold tabular-nums ${p.val >= 0 ? "text-white" : "text-rose-400"}`}>
+              <p className={`text-2xl font-bold tabular-nums ${p.val >= 0 ? "text-[#1a3357]" : "text-rose-600"}`}>
                 {p.val >= 0 ? "+" : "−"}£{Math.abs(Math.round(p.val)).toLocaleString()}
-                <span className="text-[10px] font-normal text-white/40">/mo</span>
+                <span className="text-[10px] font-normal text-slate-400">/mo</span>
               </p>
-              <div className="mt-2 h-2 rounded-full bg-white/[0.04] overflow-hidden">
+              <div className="mt-2 h-2 rounded-full bg-slate-50 overflow-hidden">
                 <motion.div
                   className={`h-full ${p.val >= 0 ? (p.color === "blue" ? "bg-blue-400" : "bg-emerald-400") : "bg-rose-500"}`}
                   animate={{ width: `${p.pct}%` }}
                   transition={{ duration: 0.25 }}
                 />
               </div>
-              <p className="text-[10px] text-white/40 mt-1">
+              <p className="text-[10px] text-slate-400 mt-1">
                 Baseline {p.base >= 0 ? "+" : "−"}£{Math.abs(p.base).toLocaleString()} → {p.val >= p.base ? "↑" : "↓"} £{Math.abs(p.val - p.base).toLocaleString()}
               </p>
             </div>
@@ -581,8 +579,8 @@ function MaintenanceLab() {
         </div>
 
         <div className="bg-gradient-to-br from-emerald-500/[0.05] to-transparent border border-emerald-400/20 rounded-xl px-4 py-3">
-          <p className="text-[10px] uppercase tracking-wider text-emerald-300/80 font-semibold mb-1">What this means</p>
-          <p className="text-[12px] text-white/75 leading-relaxed">
+          <p className="text-[10px] uppercase tracking-wider text-emerald-700/80 font-semibold mb-1">What this means</p>
+          <p className="text-[12px] text-slate-600 leading-relaxed">
             {amount === 0
               ? "No spousal maintenance applied. Party B's surplus relies solely on their own income and any child maintenance received."
               : aPasses && bPasses
@@ -644,17 +642,17 @@ export function DemoCarousel({ variant = "light" }: { variant?: "light" | "dark"
   const dark = variant === "dark";
 
   // Theme-adaptive class sets
-  const wrap   = dark ? "bg-white/[0.04] rounded-xl border border-white/10 backdrop-blur-sm overflow-hidden" : "bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden";
-  const head   = dark ? "flex items-center justify-between px-3 py-2 border-b border-white/10 bg-white/[0.03]" : "flex items-center justify-between px-3 py-2 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white";
-  const title  = dark ? "text-[11px] font-bold uppercase tracking-wider text-white/85" : "text-[11px] font-bold uppercase tracking-wider text-gray-700";
-  const count  = dark ? "text-[10px] text-white/40 ml-1" : "text-[10px] text-gray-400 ml-1";
-  const prevBtn = dark ? "w-7 h-7 rounded-full border border-white/15 bg-white/[0.04] hover:bg-white/[0.10] flex items-center justify-center text-white/70 transition-colors" : "w-7 h-7 rounded-full border border-gray-200 hover:bg-gray-100 flex items-center justify-center text-gray-600 transition-colors";
-  const tabsBg = dark ? "bg-white/10" : "bg-gray-100";
-  const tabActiveBg   = dark ? "bg-white/[0.06]" : "bg-white";
-  const tabInactiveBg = dark ? "bg-white/[0.02] hover:bg-white/[0.05]" : "bg-gray-50 hover:bg-white";
-  const tabIdx        = (active: boolean) => active ? "text-gold" : (dark ? "text-white/40" : "text-gray-400");
-  const tabTitle      = (active: boolean) => active ? (dark ? "text-white" : "text-gray-900") : (dark ? "text-white/70" : "text-gray-600");
-  const tabSubtitle   = (active: boolean) => active ? (dark ? "text-white/55" : "text-gray-500") : (dark ? "text-white/40" : "text-gray-400");
+  const wrap   = dark ? "bg-slate-50 rounded-xl border border-slate-200 backdrop-blur-sm overflow-hidden" : "bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden";
+  const head   = dark ? "flex items-center justify-between px-3 py-2 border-b border-slate-200 bg-slate-50" : "flex items-center justify-between px-3 py-2 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white";
+  const title  = dark ? "text-[11px] font-bold uppercase tracking-wider text-slate-700" : "text-[11px] font-bold uppercase tracking-wider text-gray-700";
+  const count  = dark ? "text-[10px] text-slate-400 ml-1" : "text-[10px] text-gray-400 ml-1";
+  const prevBtn = dark ? "w-7 h-7 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors" : "w-7 h-7 rounded-full border border-gray-200 hover:bg-gray-100 flex items-center justify-center text-gray-600 transition-colors";
+  const tabsBg = dark ? "bg-slate-100" : "bg-gray-100";
+  const tabActiveBg   = dark ? "bg-slate-100" : "bg-white";
+  const tabInactiveBg = dark ? "bg-slate-50/60 hover:bg-white/[0.05]" : "bg-gray-50 hover:bg-white";
+  const tabIdx        = (active: boolean) => active ? "text-gold" : (dark ? "text-slate-400" : "text-gray-400");
+  const tabTitle      = (active: boolean) => active ? (dark ? "text-white" : "text-gray-900") : (dark ? "text-slate-600" : "text-gray-600");
+  const tabSubtitle   = (active: boolean) => active ? (dark ? "text-slate-500" : "text-gray-500") : (dark ? "text-slate-400" : "text-gray-400");
 
   return (
     <div
@@ -741,7 +739,7 @@ export function DemoCarousel({ variant = "light" }: { variant?: "light" | "dark"
             onClick={() => goTo(i)}
             aria-label={`Go to ${lab.title}`}
             data-testid={`carousel-dot-${lab.id}`}
-            className={`h-1.5 rounded-full transition-all ${i === idx ? "w-6 bg-gold" : (dark ? "w-1.5 bg-white/20 hover:bg-white/40" : "w-1.5 bg-gray-300 hover:bg-gray-400")}`}
+            className={`h-1.5 rounded-full transition-all ${i === idx ? "w-6 bg-gold" : (dark ? "w-1.5 bg-slate-300 hover:bg-white/40" : "w-1.5 bg-gray-300 hover:bg-gray-400")}`}
           />
         ))}
       </div>

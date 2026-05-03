@@ -185,9 +185,6 @@ export default function DivorceFinancialGuidesPage() {
       {/* Hero */}
       <div className="relative overflow-hidden bg-primary py-12 md:py-16">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-16 -left-16 w-72 h-72 rounded-full bg-cyan-500/10 blur-3xl" />
-          <div className="absolute top-0 right-0 w-56 h-56 rounded-full bg-violet-500/10 blur-3xl" />
-          <div className="absolute bottom-0 left-1/2 w-80 h-24 rounded-full bg-amber-500/5 blur-3xl" />
         </div>
         <div className="relative container mx-auto px-4 max-w-3xl space-y-4">
           <div className="flex flex-wrap gap-2">

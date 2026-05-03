@@ -156,59 +156,56 @@ export function StageInsightCard({ stage, onContinue }: StageInsightCardProps) {
       transition={{ duration: 0.45, ease: chartTheme.ease }}
       data-testid={`card-stage-insight-${stage}`}
     >
-      <div className="relative">
-        <div className="absolute -inset-4 rounded-[24px] bg-gold/[0.08] blur-2xl pointer-events-none" />
-        <div className="relative rounded-2xl bg-gradient-to-b from-[#FBF8F1] to-white border border-gold/30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.25)] overflow-hidden">
-          <div className="px-5 py-3 bg-gradient-to-r from-gold/15 via-gold/8 to-transparent border-b border-gold/20 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-gold" />
-            <p className="text-[11px] font-bold tracking-widest uppercase text-[#1a3357]">{stageLabel}</p>
+      <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+        <div className="px-5 py-3 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-gold" />
+          <p className="text-[11px] font-bold tracking-widest uppercase text-[#1a3357]">{stageLabel}</p>
+        </div>
+
+        <div className="p-6 space-y-5">
+          <div>
+            <h2
+              className="text-2xl font-bold leading-tight"
+              style={{ color: "#1a3357", fontFamily: chartTheme.font.serif, letterSpacing: "-0.01em" }}
+            >
+              {headline}
+            </h2>
           </div>
 
-          <div className="p-6 space-y-5">
-            <div>
-              <h2
-                className="text-2xl font-bold leading-tight"
-                style={{ color: "#1a3357", fontFamily: chartTheme.font.serif, letterSpacing: "-0.01em" }}
-              >
-                {headline}
-              </h2>
+          <div className="grid sm:grid-cols-[auto_1fr] gap-6 items-center">
+            <div className="flex justify-center sm:justify-start">
+              <Donut slices={slices} />
             </div>
+            <div className="grid sm:grid-cols-3 gap-3">
+              {stats.map((s) => (
+                <div key={s.label} className="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2.5">
+                  <p className="text-[10px] uppercase tracking-wider text-[#1a3357]/55 font-semibold leading-none">{s.label}</p>
+                  <p className="text-lg font-bold tabular-nums mt-1.5" style={{ color: s.color ?? "#1a3357" }}>
+                    {s.value}
+                  </p>
+                  {s.hint && <p className="text-[10px] text-[#1a3357]/45 mt-0.5 leading-snug">{s.hint}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
 
-            <div className="grid sm:grid-cols-[auto_1fr] gap-6 items-center">
-              <div className="flex justify-center sm:justify-start">
-                <Donut slices={slices} />
-              </div>
-              <div className="grid sm:grid-cols-3 gap-3">
-                {stats.map((s) => (
-                  <div key={s.label} className="rounded-lg bg-white border border-slate-100 px-3 py-2.5 shadow-sm">
-                    <p className="text-[10px] uppercase tracking-wider text-[#1a3357]/55 font-semibold leading-none">{s.label}</p>
-                    <p className="text-lg font-bold tabular-nums mt-1.5" style={{ color: s.color ?? "#1a3357" }}>
-                      {s.value}
-                    </p>
-                    {s.hint && <p className="text-[10px] text-[#1a3357]/45 mt-0.5 leading-snug">{s.hint}</p>}
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="rounded-lg bg-slate-50 border border-slate-200 px-4 py-3">
+            <p className="text-sm text-[#1a3357]/85 leading-relaxed">{sentence}</p>
+          </div>
 
-            <div className="rounded-lg bg-[#1a3357]/[0.04] border border-[#1a3357]/10 px-4 py-3">
-              <p className="text-sm text-[#1a3357]/85 leading-relaxed">{sentence}</p>
-            </div>
-
-            <div className="flex items-center justify-between gap-3 pt-1">
-              <p className="text-[11px] text-[#1a3357]/55 italic">
-                Stage {stageNum} of 3 complete · {stage === "afterAssets" ? "Income next" : "Finishing up next"}
-              </p>
-              <button
-                type="button"
-                onClick={onContinue}
-                className="inline-flex items-center gap-1.5 bg-gold hover:bg-gold/90 text-white font-semibold px-5 py-2.5 rounded-md shadow-md shadow-gold/30 transition-all"
-                data-testid="button-stage-continue"
-              >
-                Continue to next stage
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+          <div className="flex items-center justify-between gap-3 pt-1">
+            <p className="text-[11px] text-[#1a3357]/55 italic">
+              Stage {stageNum} of 3 complete · {stage === "afterAssets" ? "Income next" : "Finishing up next"}
+            </p>
+            <button
+              type="button"
+              onClick={onContinue}
+              className="inline-flex items-center gap-1.5 bg-gold hover:bg-gold/90 text-white font-semibold px-5 py-2.5 rounded-md transition-colors"
+              data-testid="button-stage-continue"
+            >
+              Continue to next stage
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>

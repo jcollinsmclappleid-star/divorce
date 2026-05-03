@@ -77,24 +77,17 @@ function PoolDial({ value }: { value: number }) {
   return (
     <div className="relative flex flex-col items-center">
       <svg width={size} height={size * 0.78} viewBox={`0 0 ${size} ${size * 0.78}`}>
-        <defs>
-          <linearGradient id="pool-dial-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={chartTheme.color.gold} stopOpacity={0.5} />
-            <stop offset="100%" stopColor={chartTheme.color.gold} stopOpacity={1} />
-          </linearGradient>
-        </defs>
-        <path d={arc(startA, endA)} stroke="rgba(15,27,45,0.07)" strokeWidth={sw} fill="none" strokeLinecap="round" />
+        <path d={arc(startA, endA)} stroke="rgba(15,27,45,0.08)" strokeWidth={sw} fill="none" strokeLinecap="round" />
         <motion.path
           d={arc(startA, fillA)}
           key={target}
-          stroke="url(#pool-dial-grad)"
+          stroke={chartTheme.color.gold}
           strokeWidth={sw}
           fill="none"
           strokeLinecap="round"
           initial={false}
           animate={{ d: arc(startA, fillA) }}
           transition={{ duration: 0.6, ease: chartTheme.ease }}
-          style={{ filter: "drop-shadow(0 0 6px rgba(201,168,76,0.35))" }}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center pt-2">
@@ -153,7 +146,7 @@ function StagesStrip({ currentStep, stages }: { currentStep: number; stages: Liv
               complete
                 ? "bg-gold/10 border-gold/40"
                 : active
-                ? "bg-white border-gold shadow-[0_0_0_2px_rgba(201,168,76,0.18)]"
+                ? "bg-white border-gold"
                 : "bg-white/40 border-slate-200"
             }`}
           >
@@ -214,16 +207,13 @@ export function LivePoolConsole({ currentStep, stages }: LivePoolConsoleProps) {
       data-testid="aside-pool-console"
     >
       <div className="sticky top-24">
-        <div className="relative">
-          <div className="absolute -inset-3 rounded-[18px] bg-gold/[0.07] blur-2xl pointer-events-none" />
-          <div className="relative rounded-2xl bg-gradient-to-b from-[#FBF8F1] to-white border border-gold/30 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.18)] overflow-hidden">
-            <div className="px-3.5 py-2.5 bg-gradient-to-r from-gold/15 via-gold/8 to-transparent border-b border-gold/20 flex items-center gap-1.5">
-              <TrendingUp className="w-3.5 h-3.5 text-gold" />
-              <p className="text-[11px] font-bold text-[#1a3357] tracking-tight">Your financial pool</p>
-            </div>
-            <div className="p-3.5">
-              <ConsoleBody currentStep={currentStep} stages={stages} />
-            </div>
+        <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+          <div className="px-3.5 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center gap-1.5">
+            <TrendingUp className="w-3.5 h-3.5 text-gold" />
+            <p className="text-[11px] font-bold text-[#1a3357] tracking-tight">Your financial pool</p>
+          </div>
+          <div className="p-3.5">
+            <ConsoleBody currentStep={currentStep} stages={stages} />
           </div>
         </div>
       </div>
@@ -250,7 +240,7 @@ export function MobilePoolChip({ currentStep, stages }: LivePoolConsoleProps) {
         className="lg:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 bg-white border border-gold/40 shadow-lg rounded-full px-4 py-2 active:scale-[0.98] transition-transform"
         data-testid="button-pool-chip"
       >
-        <span className="w-2 h-2 rounded-full bg-gold animate-pulse" />
+        <span className="w-2 h-2 rounded-full bg-gold" />
         <span className="text-xs font-semibold text-[#1a3357]">Pool</span>
         <span className="text-sm font-bold tabular-nums" style={{ color: chartTheme.color.gold }}>
           {fmtFull(fig.combinedPool)}
@@ -269,7 +259,7 @@ export function MobilePoolChip({ currentStep, stages }: LivePoolConsoleProps) {
               onClick={() => setOpen(false)}
             />
             <motion.div
-              className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-b from-[#FBF8F1] to-white border-t border-gold/30 rounded-t-2xl shadow-2xl p-4 max-h-[80vh] overflow-y-auto"
+              className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 rounded-t-2xl shadow-xl p-4 max-h-[80vh] overflow-y-auto"
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
