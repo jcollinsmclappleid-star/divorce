@@ -20,6 +20,8 @@ Landing page includes: hero with dual CTA (start free + preview sample report), 
 
 The design features a signature gold accent (`#C9A84C`) for primary CTAs and branding, complemented by a multi-color palette for interactive elements (teal/cyan), assets (violet), income (rose), sustainability (emerald), and scenarios (amber). Scroll-triggered fade-in animations are used for UI elements.
 
+**Landing motion pass (subtle, professional):** The hero left column uses a staggered framer-motion fade-up cascade culminating in a drawn gold underline under "blind." and a slow `cta-breath` glow on the primary CTA; the dot-grid background has a gentle scroll-linked parallax; the right console fades up in sync. A 2px gold `ScrollProgressBar` (framer-motion `useScroll`/`useSpring`) appears past the hero. The `LandingCommandConsole` auto-rotates scenarios every 5s (pauses on hover, stops permanently on user interaction). The `DemoCarousel` auto-advances every 6s only while in view, with the same hover/interaction rules. UK Facts figures and the £79 price use a shared `AnimatedCounter` (IntersectionObserver-triggered count-up). The Live Pool showcase dial draws its gold arc on view via `motion.path` `pathLength`. All motion is gated by `useReducedMotion` and a `prefers-reduced-motion` CSS block that disables ambient loops (`cta-breath`, `btn-shimmer`, `step-node-active`, `animate-pulse-soft`, `animate-nudge-right`) and `[data-reveal]` transitions.
+
 ### Backend (`server/`)
 
 An Express.js server (Node.js) provides RESTful JSON API endpoints for session management (create, retrieve, update), email lead capture (`POST /api/leads`), and a stub for PDF generation.

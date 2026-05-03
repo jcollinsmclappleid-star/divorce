@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { TrendingUp, TrendingDown, Sliders, Lock, Sparkles, ChevronRight, ChevronLeft } from "lucide-react";
 import { AnimatedNumber } from "@/components/charts/animated-number";
 import { RadialGauge } from "@/components/charts/radial-gauge";
@@ -90,6 +90,25 @@ function applyStress(s: ScenarioModel, k: StressKey, on: boolean): ScenarioModel
 export function LandingCommandConsole() {
   const [active, setActive] = useState(0);
   const [stress, setStress] = useState<Record<StressKey, boolean>>({ rate: false, income: false, house: false });
+  const [paused, setPaused] = useState(false);
+  const interactedRef = useRef(false);
+  const reduced = useReducedMotion();
+
+  // Auto-rotate scenarios every 5s. Pauses on hover; stops permanently
+  // once the user clicks an arrow, chip, or dot.
+  useEffect(() => {
+    if (reduced || interactedRef.current || paused) return;
+    const id = window.setInterval(() => {
+      if (interactedRef.current) return;
+      setActive((i) => (i + 1) % SCENARIOS.length);
+    }, 5000);
+    return () => window.clearInterval(id);
+  }, [paused, reduced]);
+
+  const stopAuto = () => { interactedRef.current = true; };
+  const goTo = (i: number) => { stopAuto(); setActive(i); };
+  const goPrev = () => { stopAuto(); setActive((i) => (i - 1 + SCENARIOS.length) % SCENARIOS.length); };
+  const goNext = () => { stopAuto(); setActive((i) => (i + 1) % SCENARIOS.length); };
 
   const base = SCENARIOS[active];
   const sc = useMemo(() => {
@@ -104,7 +123,12 @@ export function LandingCommandConsole() {
   const minRColor = gaugeColor(minR);
 
   return (
-    <div className="relative w-full max-w-[640px] mx-auto isolate" data-testid="command-console">
+    <div
+      className="relative w-full max-w-[640px] mx-auto isolate"
+      data-testid="command-console"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       {/* Ambient gold glow behind the device — clipped to prevent overflow */}
       <div className="absolute -inset-6 rounded-[28px] bg-gold/[0.06] blur-2xl pointer-events-none -z-10" />
 
@@ -131,8 +155,8 @@ export function LandingCommandConsole() {
             <span className="inline-flex items-center gap-1 text-[9px] uppercase tracking-wider font-bold text-gold bg-gold/15 border border-gold/30 px-2 py-0.5 rounded-full">
               <motion.span
                 className="w-1.5 h-1.5 rounded-full bg-gold"
-                animate={{ scale: [1, 1.6, 1], opacity: [1, 0.4, 1] }}
-                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+                animate={reduced ? { scale: 1, opacity: 1 } : { scale: [1, 1.6, 1], opacity: [1, 0.4, 1] }}
+                transition={reduced ? { duration: 0 } : { duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
               />
               Live · click to try
             </span>
@@ -140,7 +164,7 @@ export function LandingCommandConsole() {
           <div className="flex items-center gap-2.5">
             <button
               type="button"
-              onClick={() => setActive((i) => (i - 1 + SCENARIOS.length) % SCENARIOS.length)}
+              onClick={goPrev}
               data-testid="console-prev"
               aria-label="Previous scenario"
               className="shrink-0 w-9 h-9 rounded-full border border-white/25 bg-white/[0.06] hover:bg-white/[0.14] hover:border-gold/50 flex items-center justify-center text-white/80 hover:text-gold shadow-md shadow-black/20 transition-all"
@@ -153,7 +177,7 @@ export function LandingCommandConsole() {
                 return (
                   <button
                     key={s.id}
-                    onClick={() => setActive(i)}
+                    onClick={() => goTo(i)}
                     data-testid={`chip-scenario-${s.id}`}
                     aria-pressed={isActive}
                     className={`relative px-3 py-1.5 rounded-full text-[11px] font-medium transition-all border ${
@@ -170,7 +194,7 @@ export function LandingCommandConsole() {
             </div>
             <button
               type="button"
-              onClick={() => setActive((i) => (i + 1) % SCENARIOS.length)}
+              onClick={goNext}
               data-testid="console-next"
               aria-label="Next scenario"
               className="shrink-0 w-9 h-9 rounded-full border border-gold/55 bg-gold/15 hover:bg-gold/30 flex items-center justify-center text-gold shadow-md shadow-black/20 animate-pulse-soft animate-nudge-right transition-colors"
@@ -185,7 +209,7 @@ export function LandingCommandConsole() {
                 <button
                   key={s.id}
                   type="button"
-                  onClick={() => setActive(i)}
+                  onClick={() => goTo(i)}
                   aria-label={`Go to ${s.shortName}`}
                   data-testid={`console-dot-${s.id}`}
                   className={`h-1.5 rounded-full transition-all ${i === active ? "w-6 bg-gold" : "w-1.5 bg-white/20 hover:bg-white/40"}`}
@@ -344,7 +368,7 @@ export function LandingCommandConsole() {
                   return (
                     <button
                       key={k}
-                      onClick={() => setStress((s) => ({ ...s, [k]: !s[k] }))}
+                      onClick={() => { stopAuto(); setStress((s) => ({ ...s, [k]: !s[k] })); }}
                       data-testid={`stress-${k}`}
                       className={`px-2.5 py-1 rounded-md text-[10px] font-medium transition-all border ${
                         on
@@ -359,7 +383,7 @@ export function LandingCommandConsole() {
                 })}
                 {(stress.rate || stress.income || stress.house) && (
                   <button
-                    onClick={() => setStress({ rate: false, income: false, house: false })}
+                    onClick={() => { stopAuto(); setStress({ rate: false, income: false, house: false }); }}
                     className="px-2 py-1 rounded-md text-[10px] font-medium text-white/40 hover:text-white/70 transition-colors"
                   >
                     Reset

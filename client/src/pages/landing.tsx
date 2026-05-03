@@ -1,5 +1,6 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { useLocation, Link } from "wouter";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { scrollTop } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,6 +21,8 @@ import { useMetaTags } from "@/hooks/use-meta-tags";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { LandingCommandConsole } from "@/components/landing-command-console";
 import { DemoCarousel } from "@/components/demo-dashboards";
+import { AnimatedCounter } from "@/components/animated-counter";
+import { ScrollProgressBar } from "@/components/scroll-progress-bar";
 
 const EXPLORE_CARDS = [
   {
@@ -104,8 +107,23 @@ export default function LandingPage() {
 
   const revealRef = useScrollReveal<HTMLDivElement>();
 
+  const reduced = useReducedMotion();
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: heroProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const dotY = useTransform(heroProgress, [0, 1], [0, reduced ? 0 : 40]);
+  const heroEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+  const fadeUp = (delay: number) => ({
+    initial: reduced ? false : { opacity: 0, y: 14 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.55, delay, ease: heroEase },
+  });
+
   return (
     <div className="min-h-screen bg-background font-sans" ref={revealRef}>
+      <ScrollProgressBar />
       <div className="bg-[hsl(220_52%_10%)] text-white/65 px-4 py-1.5 text-xs text-center font-medium" data-testid="text-disclaimer">
         Illustrative modelling only <span className="text-gold/50 mx-1">·</span> Not legal, tax or financial advice
       </div>
@@ -113,9 +131,13 @@ export default function LandingPage() {
       <SiteNav onStartClick={startFresh} />
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-primary" data-testid="section-hero">
+      <section ref={heroRef} className="relative overflow-hidden bg-primary" data-testid="section-hero">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,_hsl(220_52%_28%),_transparent_70%)] pointer-events-none" />
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          aria-hidden="true"
+          style={{ y: dotY }}
+        >
           <svg className="absolute inset-0 w-full h-full opacity-[0.04]" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="hero-dot-grid" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
@@ -124,50 +146,78 @@ export default function LandingPage() {
             </defs>
             <rect width="100%" height="100%" fill="url(#hero-dot-grid)" />
           </svg>
-        </div>
+        </motion.div>
         <div className="container mx-auto px-4 pt-14 pb-20 md:pt-20 md:pb-28 relative">
           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 md:gap-14 items-center">
 
             {/* Left — copy */}
             <div className="space-y-5">
-              <div>
+              <motion.div {...fadeUp(0)}>
                 <Badge variant="outline" className="text-xs px-3 py-1 border-gold/50 text-gold bg-gold/10">
                   England &amp; Wales · HMRC 2026/27 rates
                 </Badge>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight text-white" data-testid="text-hero-headline">
+              </motion.div>
+              <motion.h1
+                {...fadeUp(0.08)}
+                className="text-4xl md:text-5xl font-display font-bold leading-tight text-white"
+                data-testid="text-hero-headline"
+              >
                 Stop negotiating your divorce{" "}
-                <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">blind.</span>
-              </h1>
-              <p className="text-base md:text-lg text-white/70 leading-relaxed">
+                <span className="relative inline-block">
+                  <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">blind.</span>
+                  <motion.span
+                    aria-hidden
+                    className="absolute left-0 right-1 -bottom-0.5 h-[3px] rounded-full bg-gradient-to-r from-gold/0 via-gold to-gold-light origin-left"
+                    initial={reduced ? { scaleX: 1 } : { scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 0.6, delay: reduced ? 0 : 0.85, ease: heroEase }}
+                  />
+                </span>
+              </motion.h1>
+              <motion.p {...fadeUp(0.18)} className="text-base md:text-lg text-white/70 leading-relaxed">
                 In under 5 minutes, see exactly which settlement option leaves you with the strongest capital position and the highest monthly surplus over 5 years — and which ones quietly run your reserves down. Free to start. No sign-up.
-              </p>
-              <p className="text-sm text-white/50 leading-relaxed border-l-2 border-gold/40 pl-3">
+              </motion.p>
+              <motion.p {...fadeUp(0.28)} className="text-sm text-white/50 leading-relaxed border-l-2 border-gold/40 pl-3">
                 Unlock your Settlement Analyser and Guided Intelligence Report — a plain-English analysis of your figures, plus tailored questions to raise with your solicitor, mortgage broker, and pension adviser.
-              </p>
+              </motion.p>
 
               {/* Trust pills */}
-              <div className="flex flex-wrap gap-2 pt-1">
+              <motion.div
+                className="flex flex-wrap gap-2 pt-1"
+                initial={reduced ? false : "hidden"}
+                animate="show"
+                variants={{
+                  hidden: {},
+                  show: { transition: { staggerChildren: 0.06, delayChildren: 0.38 } },
+                }}
+              >
                 {[
                   { text: "HMRC-sourced tax rate bands" },
                   { text: "Core calculations stay private in your browser" },
                   { text: "Guided plain-English summary included" },
                   { text: "Tailored professional questions" },
                 ].map((pill, i) => (
-                  <span key={i} className="flex items-center gap-1.5 text-[11px] text-white/50 bg-white/5 border border-white/10 rounded-full px-3 py-1">
+                  <motion.span
+                    key={i}
+                    variants={{
+                      hidden: { opacity: 0, y: 8 },
+                      show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: heroEase } },
+                    }}
+                    className="flex items-center gap-1.5 text-[11px] text-white/50 bg-white/5 border border-white/10 rounded-full px-3 py-1"
+                  >
                     <span className="w-1.5 h-1.5 rounded-full bg-gold/60 flex-shrink-0" />
                     {pill.text}
-                  </span>
+                  </motion.span>
                 ))}
-              </div>
+              </motion.div>
 
               {/* CTAs */}
-              <div className="flex flex-col gap-3 pt-1">
+              <motion.div {...fadeUp(0.7)} className="flex flex-col gap-3 pt-1">
                 <Button
                   size="lg"
                   onClick={startFresh}
                   data-testid="button-hero-start"
-                  className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 btn-shimmer w-full sm:w-auto"
+                  className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 btn-shimmer cta-breath w-full sm:w-auto"
                 >
                   Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1.5" />
                 </Button>
@@ -192,13 +242,18 @@ export default function LandingPage() {
                     Free guide →
                   </Link>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* Right — live Settlement Command Console */}
-            <div className="block">
+            <motion.div
+              initial={reduced ? false : { opacity: 0, y: 18, scale: 0.985 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: heroEase }}
+              className="block"
+            >
               <LandingCommandConsole />
-            </div>
+            </motion.div>
 
           </div>
         </div>
@@ -334,28 +389,36 @@ export default function LandingPage() {
           <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
             {[
               {
-                figure: "113,000",
+                value: 113000,
+                prefix: "",
+                suffix: "",
                 unit: "divorces",
                 label: "granted in England & Wales in 2022 — roughly one every five minutes throughout the year.",
                 source: "ONS, Divorces in England and Wales: 2022",
                 delay: "0",
               },
               {
-                figure: "62",
+                value: 62,
+                prefix: "",
+                suffix: "",
                 unit: "weeks",
                 label: "average time from petition to final order under the new no-fault system — over a year of legal process.",
                 source: "Ministry of Justice, Family Court Statistics, 2023",
                 delay: "100",
               },
               {
-                figure: "£30k+",
+                value: 30,
+                prefix: "£",
+                suffix: "k+",
                 unit: "per party",
                 label: "in solicitor fees for contested financial proceedings. Even 'straightforward' cases routinely reach five figures.",
                 source: "Resolution, Guide to Family Law Costs",
                 delay: "200",
               },
               {
-                figure: "90%",
+                value: 90,
+                prefix: "",
+                suffix: "%",
                 unit: "of couples",
                 label: "negotiate or mediate — only 1 in 10 reaches a court-determined settlement. Most people need to negotiate well, not litigate.",
                 source: "Resolution, Family Law Statistics",
@@ -370,7 +433,14 @@ export default function LandingPage() {
                 data-reveal-delay={stat.delay}
               >
                 <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-display font-bold text-primary">{stat.figure}</span>
+                  <AnimatedCounter
+                    value={stat.value}
+                    prefix={stat.prefix}
+                    suffix={stat.suffix}
+                    duration={1300}
+                    className="text-4xl font-display font-bold text-primary tabular-nums"
+                    testId={`stat-uk-fact-${i}`}
+                  />
                   <span className="text-sm font-semibold text-muted-foreground">{stat.unit}</span>
                 </div>
                 <p className="text-sm text-foreground leading-relaxed flex-1">{stat.label}</p>
@@ -505,7 +575,17 @@ export default function LandingPage() {
                       </linearGradient>
                     </defs>
                     <path d="M 26 90 A 40 40 0 1 1 106 90" stroke="rgba(15,27,45,0.07)" strokeWidth="10" fill="none" strokeLinecap="round" />
-                    <path d="M 26 90 A 40 40 0 1 1 92 32" stroke="url(#pool-mock-grad)" strokeWidth="10" fill="none" strokeLinecap="round" />
+                    <motion.path
+                      d="M 26 90 A 40 40 0 1 1 92 32"
+                      stroke="url(#pool-mock-grad)"
+                      strokeWidth="10"
+                      fill="none"
+                      strokeLinecap="round"
+                      initial={reduced ? { pathLength: 1 } : { pathLength: 0 }}
+                      whileInView={{ pathLength: 1 }}
+                      viewport={{ once: true, amount: 0.5 }}
+                      transition={{ duration: 1.1, ease: heroEase }}
+                    />
                   </svg>
                   <div className="relative text-center">
                     <p className="text-xl font-bold tabular-nums text-gold font-display leading-none">£412k</p>
@@ -724,7 +804,13 @@ export default function LandingPage() {
                 <div className="text-white/30 text-xl pb-1">→</div>
                 <div className="text-left">
                   <p className="text-[10px] text-gold/70 uppercase tracking-wider mb-0.5 font-semibold">This report</p>
-                  <div className="text-6xl font-bold text-gold font-mono tracking-tight leading-none" data-testid="text-price-hero">£79</div>
+                  <AnimatedCounter
+                    value={79}
+                    prefix="£"
+                    duration={900}
+                    className="text-6xl font-bold text-gold font-mono tracking-tight leading-none block tabular-nums"
+                    testId="text-price-hero"
+                  />
                 </div>
               </div>
               <p className="text-white/50 text-sm">One-time payment · No subscription · 12 months access</p>

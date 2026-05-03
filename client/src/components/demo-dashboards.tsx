@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   ArrowLeft, ArrowRight, ArrowRightLeft, Sliders, Activity,
   TrendingUp, TrendingDown, Sparkles, Heart, Home, Wallet,
@@ -607,9 +607,40 @@ const LABS = [
 
 export function DemoCarousel({ variant = "light" }: { variant?: "light" | "dark" }) {
   const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const interactedRef = useRef(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const inViewRef = useRef(false);
+  const reduced = useReducedMotion();
+
+  // Auto-advance every 6s — only while in view, paused on hover, stops
+  // permanently once the user clicks an arrow / tab / dot.
+  useEffect(() => {
+    if (reduced) return;
+    const el = wrapperRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { inViewRef.current = e.isIntersecting; }),
+      { threshold: 0.35 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [reduced]);
+
+  useEffect(() => {
+    if (reduced || interactedRef.current || paused) return;
+    const id = window.setInterval(() => {
+      if (interactedRef.current || !inViewRef.current) return;
+      setIdx((i) => (i + 1) % LABS.length);
+    }, 6000);
+    return () => window.clearInterval(id);
+  }, [paused, reduced]);
+
+  const stopAuto = () => { interactedRef.current = true; };
   const Lab = LABS[idx].Comp;
-  const next = () => setIdx((i) => (i + 1) % LABS.length);
-  const prev = () => setIdx((i) => (i - 1 + LABS.length) % LABS.length);
+  const next = () => { stopAuto(); setIdx((i) => (i + 1) % LABS.length); };
+  const prev = () => { stopAuto(); setIdx((i) => (i - 1 + LABS.length) % LABS.length); };
+  const goTo = (i: number) => { stopAuto(); setIdx(i); };
   const dark = variant === "dark";
 
   // Theme-adaptive class sets
@@ -626,7 +657,15 @@ export function DemoCarousel({ variant = "light" }: { variant?: "light" | "dark"
   const tabSubtitle   = (active: boolean) => active ? (dark ? "text-white/55" : "text-gray-500") : (dark ? "text-white/40" : "text-gray-400");
 
   return (
-    <div className="space-y-3" data-testid="demo-carousel">
+    <div
+      ref={wrapperRef}
+      className="space-y-3"
+      data-testid="demo-carousel"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onPointerDownCapture={stopAuto}
+      onKeyDownCapture={stopAuto}
+    >
       {/* Tab strip */}
       <div className={wrap}>
         <div className={head}>
@@ -663,7 +702,7 @@ export function DemoCarousel({ variant = "light" }: { variant?: "light" | "dark"
               <button
                 key={lab.id}
                 type="button"
-                onClick={() => setIdx(i)}
+                onClick={() => goTo(i)}
                 data-testid={`carousel-tab-${lab.id}`}
                 aria-pressed={isActive}
                 className={`relative px-3 py-2.5 text-left transition-all ${isActive ? tabActiveBg : tabInactiveBg}`}
@@ -699,7 +738,7 @@ export function DemoCarousel({ variant = "light" }: { variant?: "light" | "dark"
           <button
             key={lab.id}
             type="button"
-            onClick={() => setIdx(i)}
+            onClick={() => goTo(i)}
             aria-label={`Go to ${lab.title}`}
             data-testid={`carousel-dot-${lab.id}`}
             className={`h-1.5 rounded-full transition-all ${i === idx ? "w-6 bg-gold" : (dark ? "w-1.5 bg-white/20 hover:bg-white/40" : "w-1.5 bg-gray-300 hover:bg-gray-400")}`}

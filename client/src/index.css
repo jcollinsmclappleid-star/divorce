@@ -230,6 +230,31 @@
 .stagger-3 { animation: slideUpFade 0.45s ease-out 0.25s both; }
 .stagger-4 { animation: slideUpFade 0.45s ease-out 0.35s both; }
 
+/* Slow breathing glow for the primary hero CTA */
+@keyframes ctaBreath {
+  0%, 100% { box-shadow: 0 10px 25px -10px rgba(201,168,76,0.35), 0 0 0 0 rgba(201,168,76,0.0); }
+  50%      { box-shadow: 0 14px 30px -10px rgba(201,168,76,0.55), 0 0 0 6px rgba(201,168,76,0.10); }
+}
+.cta-breath {
+  animation: ctaBreath 4s ease-in-out infinite;
+}
+
+/* Reduced motion — disable looping ambient animations */
+@media (prefers-reduced-motion: reduce) {
+  .cta-breath,
+  .btn-shimmer::after,
+  .step-node-active,
+  .animate-pulse-soft,
+  .animate-nudge-right {
+    animation: none !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 @media print {
   .print\:hidden { display: none !important; }
   body { background: white !important; color: black !important; font-size: 11pt; }
