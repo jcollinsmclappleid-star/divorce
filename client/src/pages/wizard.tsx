@@ -143,11 +143,14 @@ export default function WizardPage() {
     if (currentStep === 5 && !seenInterstitial.afterIncome) {
       setInterstitial("afterIncome");
       setSeenInterstitial((s) => ({ ...s, afterIncome: true }));
+      return;
+    }
+    // Show mid-journey email at the top of step 6 once stage 2 has been seen
+    if (currentStep === 5) {
       const { profile } = useAppStore.getState();
       if (!profile?.capturedEmail && !midJourneyEmailDismissed) {
         setShowMidJourneyEmail(true);
       }
-      return;
     }
     setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
   }, [currentStep, setLocation, midJourneyEmailDismissed, seenInterstitial]);
@@ -241,16 +244,6 @@ export default function WizardPage() {
                       </span>
                     </div>
                     <StageInsightCard stage={interstitial} onContinue={continueFromInterstitial} />
-                    {interstitial === "afterIncome" && showMidJourneyEmail && !midJourneyEmailDismissed && (
-                      <div className="mt-5">
-                        <MidJourneyEmailCard
-                          onDismiss={() => {
-                            setMidJourneyEmailDismissed(true);
-                            setShowMidJourneyEmail(false);
-                          }}
-                        />
-                      </div>
-                    )}
                   </>
                 );
               }
@@ -279,6 +272,17 @@ export default function WizardPage() {
                       {STEP_COPY[currentStep].prompt}
                     </p>
                   </div>
+
+                  {currentStep === 6 && showMidJourneyEmail && !midJourneyEmailDismissed && (
+                    <div className="mb-5">
+                      <MidJourneyEmailCard
+                        onDismiss={() => {
+                          setMidJourneyEmailDismissed(true);
+                          setShowMidJourneyEmail(false);
+                        }}
+                      />
+                    </div>
+                  )}
 
                   <Card className={`mb-5 border-t-4 ${meta.borderTop} overflow-hidden`}>
                     <CardContent className="pt-6">
@@ -1171,6 +1175,7 @@ function StepPensions({ advancedMode }: { advancedMode: boolean }) {
   const nameA = profile?.partyAName || "Party A";
   const nameB = profile?.partyBName || "Party B";
   const pensions = assets.filter(a => a.category === "pension");
+  const pensionConfirm = useInlineConfirm();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Asset | null>(null);
@@ -1317,7 +1322,8 @@ function StepPensions({ advancedMode }: { advancedMode: boolean }) {
                 const v = parseFloat(e.target.value);
                 const val = isNaN(v) ? 0 : v;
                 setForm(f => ({ ...f, cetv: val, currentValue: val }));
-              }} data-testid="input-pension-cetv" />
+              }} onBlur={(e) => { const v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) pensionConfirm.flash(`Saved — ${formatCurrency(v)} CETV recorded`); }} data-testid="input-pension-cetv" />
+              <InlineConfirm message={pensionConfirm.message} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -1382,6 +1388,7 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
   const nameB = profile?.partyBName || "Party B";
   const [incomeDialogOpen, setIncomeDialogOpen] = useState(false);
   const [editingIncome, setEditingIncome] = useState<Income | null>(null);
+  const incomeConfirm = useInlineConfirm();
 
   const [incomeForm, setIncomeForm] = useState({ name: "", amountAnnualGross: 0, owner: "A" as string });
 
@@ -1591,7 +1598,8 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
             </div>
             <div className="space-y-2">
               <Label>Annual gross ({"\u00A3"})</Label>
-              <Input type="number" value={incomeForm.amountAnnualGross || ""} onChange={(e) => { const v = parseFloat(e.target.value); setIncomeForm(f => ({ ...f, amountAnnualGross: isNaN(v) ? 0 : v })); }} data-testid="input-income-amount" />
+              <Input type="number" value={incomeForm.amountAnnualGross || ""} onChange={(e) => { const v = parseFloat(e.target.value); setIncomeForm(f => ({ ...f, amountAnnualGross: isNaN(v) ? 0 : v })); }} onBlur={(e) => { const v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) incomeConfirm.flash(`Saved — ${formatCurrency(Math.round(v / 12))}/mo gross before tax`); }} data-testid="input-income-amount" />
+              <InlineConfirm message={incomeConfirm.message} />
             </div>
             <div className="space-y-2">
               <Label>Earner</Label>

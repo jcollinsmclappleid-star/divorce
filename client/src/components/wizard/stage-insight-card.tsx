@@ -92,23 +92,34 @@ export function StageInsightCard({ stage, onContinue }: StageInsightCardProps) {
     const liquid = assets
       .filter((a) => !["primary_home", "other_property", "pension"].includes(a.category))
       .reduce((s, a) => s + (a.currentValue ?? 0), 0);
+    const pensions = assets
+      .filter((a) => a.category === "pension")
+      .reduce((s, a) => s + (a.cetv ?? a.currentValue ?? 0), 0);
     const otherDebts = liabilities.filter((l) => l.category !== "mortgage").reduce((s, l) => s + (l.balance ?? 0), 0);
-    const netSoFar = propertyEquity + liquid - otherDebts;
+    const netSoFar = propertyEquity + liquid + pensions - otherDebts;
 
     slices = [
       { label: "Property equity", value: propertyEquity, color: chartTheme.color.rose },
       { label: "Liquid assets", value: liquid, color: chartTheme.color.attention },
+      { label: "Pensions", value: pensions, color: chartTheme.color.sustain },
     ];
 
     stats = [
-      { label: "Property equity", value: fmtGbp(propertyEquity), color: chartTheme.color.rose, hint: "after estimated sale costs not yet applied" },
-      { label: "Savings & investments", value: fmtGbp(liquid), color: chartTheme.color.attention },
-      { label: "Other debts", value: otherDebts > 0 ? `−${fmtGbp(otherDebts)}` : "—", color: otherDebts > 0 ? chartTheme.color.pressure : "#94a3b8" },
+      { label: "Property equity", value: fmtGbp(propertyEquity), color: chartTheme.color.rose, hint: "before sale costs" },
+      { label: "Liquid assets", value: fmtGbp(liquid), color: chartTheme.color.attention, hint: "savings & investments" },
+      {
+        label: "Pensions",
+        value: pensions > 0 ? fmtGbp(pensions) : "Next step",
+        color: pensions > 0 ? chartTheme.color.sustain : "#94a3b8",
+        hint: pensions > 0 ? "CETV totals" : "often the largest asset",
+      },
     ];
 
     sentence =
-      propertyEquity > 0 || liquid > 0
-        ? `Your estimated net asset position so far is ${fmtGbp(netSoFar)}. Pensions are added next — they often shift the picture significantly.`
+      pensions > 0
+        ? `Your estimated net asset position so far is ${fmtGbp(netSoFar)}. Income comes next — it powers the sustainability side of the model.`
+        : propertyEquity > 0 || liquid > 0
+        ? `Net asset position so far is ${fmtGbp(netSoFar)}. Pensions are added next — for many UK couples they're the single largest asset of all.`
         : `Pensions come next — for many UK couples they're the largest asset of all. Easy to overlook.`;
   } else {
     const grossA = engine.taxA.gross;

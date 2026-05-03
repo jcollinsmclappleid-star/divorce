@@ -21,20 +21,22 @@ interface ChipDef {
   median: number;
   hint: string;
   color: string;
+  /** Lowercase substrings used to recognise legacy expense names */
+  aliases: string[];
 }
 
 const CHIPS: ChipDef[] = [
-  { key: "rent",       name: "Rent / Housing",       category: "housing",   icon: Home,         median: 950,  hint: "or your share of housing costs",       color: "#F43F5E" },
-  { key: "council",    name: "Council Tax",          category: "housing",   icon: Home,         median: 165,  hint: "you'll each pay your own after",       color: "#EC4899" },
-  { key: "utilities",  name: "Gas, electric, water", category: "housing",   icon: Zap,          median: 180,  hint: "monthly bills for new household",      color: "#F59E0B" },
-  { key: "groceries",  name: "Food & groceries",     category: "living",    icon: ShoppingCart, median: 320,  hint: "weekly shop for yourself",             color: "#84CC16" },
-  { key: "transport",  name: "Transport / car",      category: "transport", icon: Car,          median: 220,  hint: "fuel, insurance, tax, maintenance",    color: "#06B6D4" },
-  { key: "insurance",  name: "Insurance",            category: "insurance", icon: Shield,       median: 65,   hint: "contents, life, or other personal",    color: "#8B5CF6" },
-  { key: "childcare",  name: "Childcare",            category: "child",     icon: Users,        median: 480,  hint: "nursery, after-school, childminder",   color: "#A855F7" },
-  { key: "phone",      name: "Phone & internet",     category: "living",    icon: Phone,        median: 50,   hint: "mobile + broadband",                   color: "#3B82F6" },
-  { key: "clothing",   name: "Clothing & personal", category: "living",    icon: Shirt,        median: 90,   hint: "clothes, toiletries, haircuts",        color: "#10B981" },
-  { key: "leisure",    name: "Leisure & social",     category: "other",     icon: Coffee,       median: 150,  hint: "hobbies, eating out, subscriptions",   color: "#EAB308" },
-  { key: "health",     name: "Health & fitness",     category: "other",     icon: Heart,        median: 60,   hint: "gym, dental, prescriptions",           color: "#F43F5E" },
+  { key: "rent",       name: "Rent / Housing",       category: "housing",   icon: Home,         median: 950,  hint: "or your share of housing costs",       color: "#F43F5E", aliases: ["rent", "housing", "mortgage payment"] },
+  { key: "council",    name: "Council Tax",          category: "housing",   icon: Home,         median: 165,  hint: "you'll each pay your own after",       color: "#EC4899", aliases: ["council"] },
+  { key: "utilities",  name: "Gas, electric, water", category: "housing",   icon: Zap,          median: 180,  hint: "monthly bills for new household",      color: "#F59E0B", aliases: ["utilit", "gas", "electric", "water", "energy", "bills"] },
+  { key: "groceries",  name: "Food & groceries",     category: "living",    icon: ShoppingCart, median: 320,  hint: "weekly shop for yourself",             color: "#84CC16", aliases: ["food", "grocer", "shop"] },
+  { key: "transport",  name: "Transport / car",      category: "transport", icon: Car,          median: 220,  hint: "fuel, insurance, tax, maintenance",    color: "#06B6D4", aliases: ["transport", "car", "fuel", "petrol"] },
+  { key: "insurance",  name: "Insurance",            category: "insurance", icon: Shield,       median: 65,   hint: "contents, life, or other personal",    color: "#8B5CF6", aliases: ["insur"] },
+  { key: "childcare",  name: "Childcare",            category: "child",     icon: Users,        median: 480,  hint: "nursery, after-school, childminder",   color: "#A855F7", aliases: ["childcare", "nursery", "childminder"] },
+  { key: "phone",      name: "Phone & internet",     category: "living",    icon: Phone,        median: 50,   hint: "mobile + broadband",                   color: "#3B82F6", aliases: ["phone", "internet", "mobile", "broadband"] },
+  { key: "clothing",   name: "Clothing & personal", category: "living",    icon: Shirt,        median: 90,   hint: "clothes, toiletries, haircuts",        color: "#10B981", aliases: ["cloth", "personal", "toiletries"] },
+  { key: "leisure",    name: "Leisure & social",     category: "other",     icon: Coffee,       median: 150,  hint: "hobbies, eating out, subscriptions",   color: "#EAB308", aliases: ["leisure", "social", "hobby", "subscript"] },
+  { key: "health",     name: "Health & fitness",     category: "other",     icon: Heart,        median: 60,   hint: "gym, dental, prescriptions",           color: "#F43F5E", aliases: ["health", "fitness", "gym", "dental", "medical"] },
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -47,8 +49,18 @@ const CATEGORY_LABELS: Record<string, string> = {
   other: "Other",
 };
 
-function findExpenseByName(expenses: Expense[], name: string, owner: "A" | "B") {
-  return expenses.find((e) => e.name === name && e.owner === owner);
+function findExpenseForChip(expenses: Expense[], chip: ChipDef, owner: "A" | "B"): Expense | undefined {
+  const ownerExpenses = expenses.filter((e) => e.owner === owner);
+  // 1. Exact name match (current chip label)
+  const exact = ownerExpenses.find((e) => e.name === chip.name);
+  if (exact) return exact;
+  // 2. Alias substring match within the same category
+  const lower = (s: string) => s.toLowerCase();
+  return ownerExpenses.find((e) => {
+    if (e.category !== chip.category) return false;
+    const n = lower(e.name);
+    return chip.aliases.some((a) => n.includes(a));
+  });
 }
 
 interface ChipCardProps {
@@ -63,26 +75,35 @@ interface ChipCardProps {
 function ChipCard({ chip, expense, owner, onAdd, onUpdate, onRemove }: ChipCardProps) {
   const Icon = chip.icon;
   const active = !!expense;
+  const initialFreq: "monthly" | "annual" = expense && expense.amountAnnual % 12 !== 0 ? "annual" : "monthly";
+  const initialAmount = expense
+    ? initialFreq === "monthly"
+      ? Math.round(expense.amountAnnual / 12)
+      : Math.round(expense.amountAnnual)
+    : chip.median;
   const monthly = expense ? Math.round(expense.amountAnnual / 12) : 0;
   const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState(monthly || chip.median);
+  const [draft, setDraft] = useState(initialAmount);
+  const [freq, setFreq] = useState<"monthly" | "annual">(initialFreq);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (editing) {
-      setDraft(monthly || chip.median);
+      setDraft(initialAmount);
+      setFreq(initialFreq);
       setTimeout(() => { inputRef.current?.focus(); inputRef.current?.select(); }, 30);
     }
-  }, [editing, monthly, chip.median]);
+  }, [editing, initialAmount, initialFreq]);
 
   const commit = () => {
-    const v = Math.max(0, Math.round(draft || 0));
-    if (v === 0) {
+    const raw = Math.max(0, Math.round(draft || 0));
+    const monthlyEquivalent = freq === "monthly" ? raw : Math.round(raw / 12);
+    if (monthlyEquivalent === 0) {
       if (active) onRemove();
     } else if (active) {
-      onUpdate(v);
+      onUpdate(monthlyEquivalent);
     } else {
-      onAdd(v);
+      onAdd(monthlyEquivalent);
     }
     setEditing(false);
   };
@@ -136,7 +157,21 @@ function ChipCard({ chip, expense, owner, onAdd, onUpdate, onRemove }: ChipCardP
               className="h-7 text-sm px-2"
               data-testid={`input-chip-${chip.key}-${owner}`}
             />
-            <span className="text-[10px] text-muted-foreground shrink-0">/mo</span>
+          </div>
+          <div className="flex gap-0.5 rounded-md bg-slate-100 p-0.5 text-[10px] font-medium" onMouseDown={(e) => e.preventDefault()}>
+            {(["monthly", "annual"] as const).map((f) => (
+              <button
+                key={f}
+                type="button"
+                onClick={() => setFreq(f)}
+                className={`flex-1 rounded px-1.5 py-0.5 transition-all ${
+                  freq === f ? "bg-white text-[#1a3357] shadow-sm" : "text-muted-foreground"
+                }`}
+                data-testid={`freq-${chip.key}-${owner}-${f}`}
+              >
+                {f === "monthly" ? "/mo" : "/yr"}
+              </button>
+            ))}
           </div>
           {active && (
             <button
@@ -207,19 +242,23 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
   };
 
   const ownerExpenses = useMemo(() => expenses.filter((e) => e.owner === activeOwner), [expenses, activeOwner]);
-  const ownerCovered = useMemo(() => {
-    const names = new Set(ownerExpenses.map((e) => e.name));
-    return CHIPS.filter((c) => names.has(c.name)).length;
-  }, [ownerExpenses]);
+  const ownerCovered = useMemo(
+    () => CHIPS.filter((c) => !!findExpenseForChip(expenses, c, activeOwner)).length,
+    [expenses, activeOwner]
+  );
   const ownerTotalMonthly = useMemo(
     () => Math.round(ownerExpenses.reduce((s, e) => s + e.amountAnnual, 0) / 12),
     [ownerExpenses]
   );
 
   const customExpenses = useMemo(() => {
-    const chipNames = new Set(CHIPS.map((c) => c.name));
-    return ownerExpenses.filter((e) => !chipNames.has(e.name));
-  }, [ownerExpenses]);
+    const claimedIds = new Set<string>();
+    for (const c of CHIPS) {
+      const e = findExpenseForChip(expenses, c, activeOwner);
+      if (e) claimedIds.add(e.id);
+    }
+    return ownerExpenses.filter((e) => !claimedIds.has(e.id));
+  }, [expenses, ownerExpenses, activeOwner]);
 
   const saveOther = () => {
     if (!otherForm.name || otherForm.amount <= 0) return;
@@ -287,7 +326,7 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
         {CHIPS.map((chip) => {
-          const expense = findExpenseByName(expenses, chip.name, activeOwner);
+          const expense = findExpenseForChip(expenses, chip, activeOwner);
           return (
             <ChipCard
               key={`${chip.key}-${activeOwner}`}
