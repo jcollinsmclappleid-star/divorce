@@ -380,13 +380,6 @@ function Sparkline({ data, depletionYear }: { data: number[]; depletionYear?: nu
   return (
     <div className="relative">
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-[70px]" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="spark-grad-sc" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%"   stopColor={chartTheme.color.gold} stopOpacity={0.35} />
-            <stop offset="100%" stopColor={chartTheme.color.gold} stopOpacity={0} />
-          </linearGradient>
-        </defs>
-        <motion.path d={area} fill="url(#spark-grad-sc)" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }} />
         <motion.path
           d={path}
           fill="none"
