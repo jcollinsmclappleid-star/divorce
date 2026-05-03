@@ -639,7 +639,7 @@ export function DemoCarousel({ variant = "light" }: { variant?: "light" | "dark"
 
   // Theme-adaptive class sets
   const wrap   = dark ? "bg-slate-50 rounded-xl border border-slate-200 backdrop-blur-sm overflow-hidden" : "bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden";
-  const head   = dark ? "flex items-center justify-between px-3 py-2 border-b border-slate-200 bg-slate-50" : "flex items-center justify-between px-3 py-2 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white";
+  const head   = dark ? "flex items-center justify-between px-3 py-2 border-b border-slate-200 bg-slate-50" : "flex items-center justify-between px-3 py-2 border-b border-gray-100 bg-gray-50";
   const title  = dark ? "text-[11px] font-bold uppercase tracking-wider text-slate-700" : "text-[11px] font-bold uppercase tracking-wider text-gray-700";
   const count  = dark ? "text-[10px] text-slate-400 ml-1" : "text-[10px] text-gray-400 ml-1";
   const prevBtn = dark ? "w-7 h-7 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors" : "w-7 h-7 rounded-full border border-gray-200 hover:bg-gray-100 flex items-center justify-center text-gray-600 transition-colors";
