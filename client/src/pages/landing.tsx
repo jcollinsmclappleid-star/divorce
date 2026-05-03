@@ -468,7 +468,56 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Settlement Analyser cards — 4 in a 2×2 / 2×2 grid */}
+          {/* Live Pool Console — wizard UX showcase */}
+          <div
+            className="mb-6 rounded-2xl border-2 border-cyan-200/60 bg-gradient-to-br from-cyan-50 via-sky-50/60 to-teal-50/40 p-5 md:p-6 shadow-sm"
+            data-reveal
+            data-testid="card-live-pool-console-showcase"
+          >
+            <div className="flex flex-col md:flex-row gap-5 md:items-center">
+              <div className="flex-1 space-y-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-cyan-700 bg-cyan-100 border border-cyan-300/60 px-2 py-0.5 rounded-full uppercase tracking-wide">
+                    <Activity className="w-2.5 h-2.5" /> While you're building
+                  </span>
+                  <h3 className="text-base font-bold text-foreground">Live Pool Console</h3>
+                </div>
+                <p className="text-sm text-foreground/75 leading-relaxed">
+                  As you enter each asset, debt and income, a sticky panel updates a live dial of your combined pool — broken down into property equity, liquid savings and pensions. You see the picture take shape in real time, before the full analysis even runs.
+                </p>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 pt-1">
+                  {["Live combined-pool dial", "Property / liquid / pension breakdown", "Stage progress with completion ticks", "Mobile-friendly bottom panel"].map((t) => (
+                    <div key={t} className="flex items-center gap-1.5 text-xs text-foreground/70">
+                      <Check className="w-3 h-3 text-cyan-600 shrink-0" />
+                      <span>{t}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* Mock dial */}
+              <div className="md:w-[180px] shrink-0 flex justify-center md:justify-end">
+                <div className="relative w-[150px] h-[150px] rounded-2xl bg-white border border-border/40 shadow-sm flex items-center justify-center" aria-hidden>
+                  <svg viewBox="0 0 132 132" className="absolute inset-0 w-full h-full p-2">
+                    <defs>
+                      <linearGradient id="pool-mock-grad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stopColor="#C9A84C" stopOpacity={0.5} />
+                        <stop offset="100%" stopColor="#C9A84C" />
+                      </linearGradient>
+                    </defs>
+                    <path d="M 26 90 A 40 40 0 1 1 106 90" stroke="rgba(15,27,45,0.07)" strokeWidth="10" fill="none" strokeLinecap="round" />
+                    <path d="M 26 90 A 40 40 0 1 1 92 32" stroke="url(#pool-mock-grad)" strokeWidth="10" fill="none" strokeLinecap="round" />
+                  </svg>
+                  <div className="relative text-center">
+                    <p className="text-xl font-bold tabular-nums text-gold font-display leading-none">£412k</p>
+                    <p className="text-[8px] uppercase tracking-widest text-[#1a3357]/60 font-semibold mt-1">Combined pool</p>
+                    <p className="text-[8px] text-[#1a3357]/45 mt-0.5">illustrative</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Settlement Analyser cards — 6 in a 3×2 grid */}
           <div className="mb-3" data-reveal>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-6 h-6 rounded-md bg-cyan-100 flex items-center justify-center">
@@ -669,8 +718,8 @@ export default function LandingPage() {
               <p className="text-white/55 text-xs tracking-wide uppercase font-semibold">Both products, bundled together for</p>
               <div className="flex items-end justify-center gap-3">
                 <div className="text-left">
-                  <p className="text-[10px] text-white/40 uppercase tracking-wider mb-0.5">Typical solicitor</p>
-                  <p className="text-2xl font-mono font-semibold text-white/35 line-through tabular-nums">£300<span className="text-base">/hr</span></p>
+                  <p className="text-[10px] text-white/40 uppercase tracking-wider mb-0.5">Solicitor (indicative)</p>
+                  <p className="text-2xl font-mono font-semibold text-white/35 line-through tabular-nums">£200–400<span className="text-base">/hr</span></p>
                 </div>
                 <div className="text-white/30 text-xl pb-1">→</div>
                 <div className="text-left">
@@ -679,7 +728,7 @@ export default function LandingPage() {
                 </div>
               </div>
               <p className="text-white/50 text-sm">One-time payment · No subscription · 12 months access</p>
-              <p className="text-[11px] text-white/40 italic max-w-sm mx-auto">Less than a quarter of one solicitor hour — and you walk in with your numbers already structured.</p>
+              <p className="text-[11px] text-white/40 italic max-w-md mx-auto">UK family-law solicitors may charge anywhere from £200 to £400 per hour. This report could cost less than a single hour of advice — and you walk in with your numbers already structured.</p>
             </div>
 
             {/* Free vs Full comparison */}
