@@ -28,7 +28,7 @@ export default function AccessPage() {
         if (data.hasAccess) {
           localStorage.setItem("dfm-session-token", token);
           setStatus("success");
-          setTimeout(() => setLocation("/results"), 1500);
+          setTimeout(() => { window.location.href = "/results"; }, 1500);
         } else {
           setStatus("error");
         }
