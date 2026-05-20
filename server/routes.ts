@@ -540,6 +540,13 @@ export async function registerRoutes(
         return res.json({ hasAccess: false, reason: 'expired', expiresAt: purchase.expiresAt });
       }
 
+      // Elevate to a server-side session so /api/auth/me works on redirect —
+      // this makes access reliable regardless of localStorage state.
+      if (purchase.email && !req.session?.email) {
+        req.session.email = purchase.email;
+        req.session.save(() => {});
+      }
+
       return res.json({ 
         hasAccess: true, 
         expiresAt: purchase.expiresAt,
