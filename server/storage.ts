@@ -4,10 +4,12 @@ import { eq, and, sql, desc } from "drizzle-orm";
 
 export interface IStorage {
   createPurchase(purchase: InsertPurchase): Promise<Purchase>;
+  getPurchaseById(id: string): Promise<Purchase | undefined>;
   getPurchaseBySessionToken(sessionToken: string): Promise<Purchase | undefined>;
   getPurchaseByCheckoutSessionId(checkoutSessionId: string): Promise<Purchase | undefined>;
   markPurchasePaid(id: string, paymentIntentId: string, email: string | null): Promise<Purchase>;
   getPaidPurchasesByEmail(email: string): Promise<Purchase[]>;
+  createPurchaseFromStripeSession(checkoutSessionId: string, paymentIntentId: string, email: string): Promise<Purchase>;
   extendPurchaseExpiry(purchaseId: string, months: number): Promise<Purchase>;
 
   createEmailLead(email: string, firstName?: string, source?: string, verificationToken?: string): Promise<EmailLead>;
@@ -27,6 +29,11 @@ export class DatabaseStorage implements IStorage {
   async createPurchase(purchase: InsertPurchase): Promise<Purchase> {
     const [newPurchase] = await db.insert(purchases).values(purchase).returning();
     return newPurchase;
+  }
+
+  async getPurchaseById(id: string): Promise<Purchase | undefined> {
+    const [purchase] = await db.select().from(purchases).where(eq(purchases.id, id));
+    return purchase;
   }
 
   async getPurchaseBySessionToken(sessionToken: string): Promise<Purchase | undefined> {
@@ -80,6 +87,24 @@ export class DatabaseStorage implements IStorage {
         )
       )
       .orderBy(desc(purchases.purchasedAt));
+  }
+
+  async createPurchaseFromStripeSession(checkoutSessionId: string, paymentIntentId: string, email: string): Promise<Purchase> {
+    const now = new Date();
+    const expiresAt = new Date(now);
+    expiresAt.setMonth(expiresAt.getMonth() + 12);
+    const { randomUUID } = await import('crypto');
+    const [newPurchase] = await db.insert(purchases).values({
+      id: randomUUID(),
+      sessionToken: randomUUID(),
+      stripeCheckoutSessionId: checkoutSessionId,
+      stripePaymentIntentId: paymentIntentId,
+      email: email.toLowerCase().trim(),
+      status: 'paid',
+      purchasedAt: now,
+      expiresAt,
+    }).returning();
+    return newPurchase;
   }
 
   async extendPurchaseExpiry(purchaseId: string, months: number): Promise<Purchase> {

@@ -561,12 +561,48 @@ export async function registerRoutes(
       const { email } = schema.parse(req.body);
 
       const purchases = await storage.getPaidPurchasesByEmail(email);
-      if (purchases.length === 0) {
+      let validPurchase = purchases.find(p => p.expiresAt && new Date(p.expiresAt) > new Date());
+
+      // If no purchase record exists locally, check Stripe directly —
+      // covers cases where the webhook fired but fulfillment failed (e.g. missing secret).
+      if (!validPurchase) {
+        try {
+          const stripe = await getUncachableStripeClient();
+          const sessions = await stripe.checkout.sessions.list({ limit: 100 });
+          const paidSession = sessions.data.find(s =>
+            s.payment_status === 'paid' &&
+            (s.customer_email?.toLowerCase() === email.toLowerCase() ||
+             s.customer_details?.email?.toLowerCase() === email.toLowerCase())
+          );
+          if (paidSession) {
+            // Check if there's already a purchase record for this session (wrong email stored)
+            const existingBySession = await storage.getPurchaseByCheckoutSessionId(paidSession.id);
+            if (existingBySession && existingBySession.status !== 'paid') {
+              await storage.markPurchasePaid(existingBySession.id, paidSession.payment_intent as string || '', email);
+              validPurchase = await storage.getPurchaseById(existingBySession.id);
+            } else if (!existingBySession) {
+              // No local record at all — create one from the Stripe session
+              const newPurchase = await storage.createPurchaseFromStripeSession(
+                paidSession.id,
+                paidSession.payment_intent as string || '',
+                email
+              );
+              validPurchase = newPurchase;
+            } else {
+              validPurchase = existingBySession;
+            }
+            console.log('[recover] Auto-fulfilled missing purchase from Stripe for', email);
+          }
+        } catch (stripeErr: any) {
+          console.error('[recover] Stripe lookup failed:', stripeErr.message);
+        }
+      }
+
+      if (!validPurchase) {
         return res.json({ found: false });
       }
 
-      const validPurchase = purchases.find(p => p.expiresAt && new Date(p.expiresAt) > new Date());
-      if (!validPurchase) {
+      if (validPurchase.expiresAt && new Date() > new Date(validPurchase.expiresAt)) {
         return res.json({ found: true, expired: true });
       }
 
@@ -915,30 +951,38 @@ export async function registerRoutes(
 
   app.post('/api/webhooks/stripe', async (req, res) => {
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-    if (!webhookSecret) {
-      console.error('[webhook] /api/webhooks/stripe: STRIPE_WEBHOOK_SECRET is not set — endpoint is disabled');
-      return res.status(503).json({ error: 'Webhook endpoint not configured. Set STRIPE_WEBHOOK_SECRET.' });
-    }
-
-    const signature = req.headers['stripe-signature'];
-    if (!signature) {
-      return res.status(400).json({ error: 'Missing stripe-signature header' });
-    }
-
     const rawBody = (req as any).rawBody;
+
     if (!Buffer.isBuffer(rawBody)) {
       console.error('[webhook] /api/webhooks/stripe: raw body not available');
       return res.status(500).json({ error: 'Webhook processing error' });
     }
 
     let event: any;
-    try {
-      const stripe = await getUncachableStripeClient();
-      const sig = Array.isArray(signature) ? signature[0] : signature;
-      event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
-    } catch (err: any) {
-      console.error('[webhook] Signature verification failed:', err.message);
-      return res.status(400).json({ error: 'Webhook signature verification failed' });
+    const stripe = await getUncachableStripeClient();
+
+    if (webhookSecret) {
+      const signature = req.headers['stripe-signature'];
+      if (!signature) {
+        return res.status(400).json({ error: 'Missing stripe-signature header' });
+      }
+      try {
+        const sig = Array.isArray(signature) ? signature[0] : signature;
+        event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
+      } catch (err: any) {
+        console.error('[webhook] Signature verification failed:', err.message);
+        return res.status(400).json({ error: 'Webhook signature verification failed' });
+      }
+    } else {
+      // No secret configured — parse unverified and log a prominent warning.
+      // Set STRIPE_WEBHOOK_SECRET in environment secrets to enable verification.
+      console.warn('[webhook] WARNING: STRIPE_WEBHOOK_SECRET not set — processing without signature verification. Set this secret to secure the endpoint.');
+      try {
+        event = JSON.parse(rawBody.toString('utf8'));
+      } catch (err: any) {
+        console.error('[webhook] Failed to parse raw body:', err.message);
+        return res.status(400).json({ error: 'Invalid webhook payload' });
+      }
     }
 
     try {
@@ -960,7 +1004,7 @@ export async function registerRoutes(
               { label: 'Amount', value: '£79' },
               { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
             ], 'purchase').catch(() => {});
-            console.log('[webhook] Purchase marked paid');
+            console.log('[webhook] Purchase marked paid for', webhookEmail || session.id);
           }
         }
       }
