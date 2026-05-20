@@ -139,6 +139,16 @@ app.use(
 
 app.use(express.urlencoded({ extended: false }));
 
+// CRITICAL: behind Replit/Google's load balancer, the TLS terminates upstream
+// and the connection to Express is plain HTTP. Without trust proxy, express-session
+// sees req.secure=false and refuses to send the Set-Cookie header for secure cookies.
+// This is why the dfm.sid session cookie was never being set in production.
+app.set('trust proxy', 1);
+
+// Disable ETag generation on API routes so we never return 304 — 304 responses
+// strip Set-Cookie headers, breaking session establishment.
+app.set('etag', false);
+
 const PgSession = connectPgSimple(session);
 app.use(session({
   store: new PgSession({
