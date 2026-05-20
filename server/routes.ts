@@ -840,6 +840,36 @@ export async function registerRoutes(
     }
   });
 
+  app.post('/api/admin/grant', requireAdmin, async (req, res) => {
+    try {
+      const schema = z.object({
+        email: z.string().email(),
+        months: z.number().int().min(1).max(24).default(12),
+      });
+      const { email, months } = schema.parse(req.body);
+
+      const purchase = await storage.createPurchaseFromStripeSession(
+        `manual-grant-${Date.now()}`,
+        '',
+        email
+      );
+      sendAccessRecoveryEmail(email, purchase.sessionToken, purchase.expiresAt).catch(() => {});
+      console.log(`[admin] Manual access granted to ${email}, expires ${purchase.expiresAt}`);
+      return res.json({
+        id: purchase.id,
+        email: purchase.email,
+        sessionToken: purchase.sessionToken,
+        expiresAt: purchase.expiresAt,
+        accessUrl: `/access?token=${purchase.sessionToken}`,
+      });
+    } catch (err: any) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Valid email required' });
+      }
+      res.status(500).json({ message: err.message || 'Grant failed' });
+    }
+  });
+
   app.post('/api/admin/extend', requireAdmin, async (req, res) => {
     try {
       const schema = z.object({
