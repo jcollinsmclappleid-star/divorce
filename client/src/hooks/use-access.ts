@@ -82,6 +82,12 @@ export function useAccess() {
   const purchasedAt = serverAccess?.purchasedAt ?? localAccess?.purchasedAt;
   const reason = !hasAccess ? (localAccess?.reason ?? 'no_purchase') : undefined;
 
+  // Consider loading until BOTH checks have resolved — prevents the AccessGate
+  // from redirecting to checkout while the local token query is still in-flight.
+  const isLoading =
+    serverSessionQuery.isLoading ||
+    (!serverAccess?.hasAccess && localQuery.isLoading);
+
   return {
     hasAccess,
     isAuthenticated,
@@ -89,7 +95,7 @@ export function useAccess() {
     reason,
     expiresAt,
     purchasedAt,
-    isLoading: serverSessionQuery.isLoading,
+    isLoading,
     refresh,
     logout,
   };
