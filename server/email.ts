@@ -94,33 +94,34 @@ export async function sendPurchaseConfirmationEmail(
   const expiryText = htmlEscape(formatDate(expiresAt));
 
   const html = emailWrapper(`
-    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">Your access is ready</h1>
-    <p style="margin:0 0 24px;color:#64748b;font-size:15px;">Thank you for your purchase. Your full financial analysis is now unlocked.</p>
+    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:24px;font-weight:700;">Your access is ready</h1>
+    <p style="margin:0 0 28px;color:#475569;font-size:15px;line-height:1.6;">Thank you for your purchase. Your full divorce financial analysis is unlocked and ready to view.</p>
 
-    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:20px;margin-bottom:24px;">
-      <p style="margin:0 0 4px;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Access expires</p>
-      <p style="margin:0;color:#0f1e3c;font-size:16px;font-weight:600;">${expiryText}</p>
-    </div>
-
-    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6;">
-      Click the button below to open your analysis. Save this email so you can return at any time — this link will work for 12 months on the same device, or you can use it to restore access on a new device.
-    </p>
-
-    <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 28px;">
       <tr>
-        <td style="background:#c49b2a;border-radius:6px;">
-          <a href="${accessUrl}" style="display:inline-block;padding:14px 28px;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;border-radius:6px;">Open My Analysis</a>
+        <td align="center" style="background:#c49b2a;border-radius:8px;">
+          <a href="${accessUrl}" style="display:block;padding:18px 32px;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;letter-spacing:0.3px;">Open My Analysis →</a>
         </td>
       </tr>
     </table>
 
-    <p style="margin:0 0 8px;color:#94a3b8;font-size:12px;">Or copy this link into your browser:</p>
-    <p style="margin:0;color:#0f1e3c;font-size:12px;word-break:break-all;background:#f1f5f9;padding:10px 12px;border-radius:4px;font-family:monospace;">${accessUrl}</p>
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:16px 20px;margin-bottom:24px;">
+      <p style="margin:0 0 4px;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Access expires</p>
+      <p style="margin:0;color:#0f1e3c;font-size:16px;font-weight:600;">${expiryText}</p>
+    </div>
+
+    <p style="margin:0 0 8px;color:#94a3b8;font-size:12px;">Button not working? Copy this link:</p>
+    <p style="margin:0 0 24px;color:#0f1e3c;font-size:12px;word-break:break-all;background:#f1f5f9;padding:10px 12px;border-radius:4px;font-family:monospace;">${accessUrl}</p>
 
     <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
 
-    <p style="margin:0;color:#64748b;font-size:13px;line-height:1.6;">
-      Lost access later? Visit <a href="https://divorcecalculatoruk.co.uk/recover" style="color:#0f1e3c;">divorcecalculatoruk.co.uk/recover</a> and enter this email address to have a new access link sent to you.
+    <p style="margin:0 0 12px;color:#0f1e3c;font-size:14px;font-weight:600;">Using a different device or browser?</p>
+    <p style="margin:0 0 20px;color:#64748b;font-size:13px;line-height:1.6;">
+      Visit <a href="https://divorcecalculatoruk.co.uk/recover" style="color:#c49b2a;font-weight:600;">divorcecalculatoruk.co.uk/recover</a> and sign in with this email address (${htmlEscape(email)}) — we'll send you a fresh sign-in link.
+    </p>
+
+    <p style="margin:0;color:#94a3b8;font-size:12px;line-height:1.6;">
+      Save this email — your access works for 12 months and can be restored at any time using the address you paid with.
     </p>
   `);
 

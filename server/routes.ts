@@ -529,6 +529,11 @@ export async function registerRoutes(
 
   app.get('/api/access/:sessionToken', async (req, res) => {
     try {
+      // Disable HTTP caching — auth state must always be fresh, and Set-Cookie
+      // headers can be dropped on 304 responses.
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+      res.setHeader('Pragma', 'no-cache');
+
       const { sessionToken } = req.params;
       const purchase = await storage.getPurchaseBySessionToken(sessionToken);
 
@@ -541,10 +546,11 @@ export async function registerRoutes(
       }
 
       // Elevate to a server-side session so /api/auth/me works on redirect —
-      // this makes access reliable regardless of localStorage state.
+      // this makes access reliable regardless of localStorage state. Await the
+      // save so the Set-Cookie header lands before the response is flushed.
       if (purchase.email && !req.session?.email) {
         req.session.email = purchase.email;
-        req.session.save(() => {});
+        await new Promise<void>((resolve) => req.session.save(() => resolve()));
       }
 
       return res.json({ 
@@ -761,6 +767,9 @@ export async function registerRoutes(
 
   app.get('/api/auth/me', async (req, res) => {
     try {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+      res.setHeader('Pragma', 'no-cache');
+
       const email = req.session?.email;
       if (!email) {
         return res.json({ authenticated: false, hasAccess: false });
