@@ -76,12 +76,12 @@ const EXPLORE_CARDS = [
 ];
 
 export default function LandingPage() {
-  useDocumentTitle("Divorce Settlement Calculator | Not a Solicitor Lead Form");
+  useDocumentTitle("Free UK Divorce Settlement Calculator | Model a Fair Split, Pensions & Maintenance");
   useMetaTags({
-    description: "Built for people, not solicitor sales pitches. Start free with our innovative divorce settlement calculator and see where you could stand through modelling, scenarios and guided insights.",
+    description: "Model a fair UK divorce settlement in minutes. Free calculator covering assets, pensions, mortgage, child and spousal maintenance — innovative scenario modelling with guided insights. Private, browser-based, no solicitor required to start.",
     canonical: "https://divorcecalculatoruk.co.uk/",
-    ogTitle: "Divorce Settlement Calculator | Not a Solicitor Lead Form",
-    ogDescription: "Built for people, not solicitor sales pitches. Start free with our innovative divorce settlement calculator and see where you could stand through modelling, scenarios and guided insights.",
+    ogTitle: "Free UK Divorce Settlement Calculator | Model a Fair Split, Pensions & Maintenance",
+    ogDescription: "See where you could stand. Model assets, pensions and maintenance across fair settlement scenarios with our free UK divorce calculator — innovative, private and built around real outcomes.",
   });
 
   const [, setLocation] = useLocation();

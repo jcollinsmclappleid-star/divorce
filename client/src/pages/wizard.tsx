@@ -23,6 +23,7 @@ import {
   Briefcase, Calculator, Plus, Trash2, Edit2, Check, Settings2,
   Shield, Users, TrendingUp, ArrowRight, Receipt
 } from "lucide-react";
+import { useAccess } from "@/hooks/use-access";
 import { LivePoolConsole, MobilePoolChip } from "@/components/wizard/live-pool-console";
 import { StageInsightCard } from "@/components/wizard/stage-insight-card";
 import { SmartExpenseChips } from "@/components/wizard/smart-expense-chips";
@@ -114,6 +115,7 @@ export default function WizardPage() {
   const [interstitial, setInterstitial] = useState<null | "afterAssets" | "afterIncome">(null);
   const [seenInterstitial, setSeenInterstitial] = useState<{ afterAssets: boolean; afterIncome: boolean }>({ afterAssets: false, afterIncome: false });
   const [, setLocation] = useLocation();
+  const { hasAccess } = useAccess();
 
   const progress = ((currentStep) / (STEPS.length - 1)) * 100;
 
@@ -122,7 +124,7 @@ export default function WizardPage() {
     if (currentStep === STEPS.length - 1) {
       const { assets, profile } = useAppStore.getState();
       const capturedEmail = profile?.capturedEmail;
-      if (capturedEmail) {
+      if (capturedEmail && !hasAccess) {
         const assetPool = String(
           (assets || []).reduce((s, a) => s + (a.currentValue ?? 0), 0)
         );
@@ -132,7 +134,7 @@ export default function WizardPage() {
           body: JSON.stringify({ email: capturedEmail, source: "wizard_preview", assetPoolSnapshot: assetPool }),
         }).catch(() => {});
       }
-      setLocation("/preview");
+      setLocation(hasAccess ? "/results" : "/preview");
       return;
     }
     if (currentStep === 3 && !seenInterstitial.afterAssets) {
@@ -148,12 +150,12 @@ export default function WizardPage() {
     // Show mid-journey email at the top of step 6 once stage 2 has been seen
     if (currentStep === 5) {
       const { profile } = useAppStore.getState();
-      if (!profile?.capturedEmail && !midJourneyEmailDismissed) {
+      if (!profile?.capturedEmail && !midJourneyEmailDismissed && !hasAccess) {
         setShowMidJourneyEmail(true);
       }
     }
     setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
-  }, [currentStep, setLocation, midJourneyEmailDismissed, seenInterstitial]);
+  }, [currentStep, setLocation, midJourneyEmailDismissed, seenInterstitial, hasAccess]);
 
   const continueFromInterstitial = useCallback(() => {
     scrollTop();
@@ -162,13 +164,13 @@ export default function WizardPage() {
     // (interstitial-shown and interstitial-skipped) behave identically.
     if (interstitial === "afterIncome") {
       const { profile } = useAppStore.getState();
-      if (!profile?.capturedEmail && !midJourneyEmailDismissed) {
+      if (!profile?.capturedEmail && !midJourneyEmailDismissed && !hasAccess) {
         setShowMidJourneyEmail(true);
       }
     }
     setInterstitial(null);
     setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
-  }, [interstitial, midJourneyEmailDismissed]);
+  }, [interstitial, midJourneyEmailDismissed, hasAccess]);
 
   const goBack = useCallback(() => {
     scrollTop();
