@@ -195,7 +195,7 @@ export default function LandingPage() {
                   { text: "HMRC-sourced tax rate bands" },
                   { text: "Core calculations stay private in your browser" },
                   { text: "Guided plain-English summary included" },
-                  { text: "Tailored professional questions" },
+                  { text: "Your data is yours — we never sell or share it" },
                 ].map((pill, i) => (
                   <motion.span
                     key={i}
@@ -221,13 +221,19 @@ export default function LandingPage() {
                 >
                   Get My Financial Picture — Free <ArrowRight className="w-4 h-4 ml-1.5" />
                 </Button>
+                <p className="text-xs text-white/55" data-testid="text-hero-pricing">
+                  Free to start <span className="text-white/30">·</span> Full analysis <span className="text-gold/90 font-medium">£79 one-off</span> <span className="text-white/30">·</span> No subscription
+                </p>
+                <p className="text-[11px] italic text-gold/70 leading-relaxed" data-testid="text-hero-trust">
+                  We never share your details with solicitors, mortgage brokers, or anyone else. No follow-up calls. No spam. Ever.
+                </p>
                 <div className="flex flex-wrap items-center gap-4 text-xs text-white/40">
                   <button
                     onClick={() => { scrollTop(); setLocation("/unlock"); }}
                     data-testid="button-hero-buy-now"
                     className="underline underline-offset-2 text-white/45 hover:text-white/70 transition-colors"
                   >
-                    Already modelled? Unlock full analysis — £79 →
+                    Already modelled? Unlock now →
                   </button>
                   <span className="hidden sm:inline">·</span>
                   <button
