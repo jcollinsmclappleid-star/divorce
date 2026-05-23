@@ -76,12 +76,12 @@ const EXPLORE_CARDS = [
 ];
 
 export default function LandingPage() {
-  useDocumentTitle("Divorce Calculator UK (2026) | Financial Settlement Tool");
+  useDocumentTitle("Divorce Settlement Calculator | Not a Solicitor Lead Form");
   useMetaTags({
-    description: "See what every divorce settlement option means for your financial future. Compare Sell & Split, retain, and deferred sale — with sustainability scores and 5-year projections. England and Wales. Free to start.",
+    description: "Built for people, not solicitor sales pitches. Start free with our innovative divorce settlement calculator and see where you could stand through modelling, scenarios and guided insights.",
     canonical: "https://divorcecalculatoruk.co.uk/",
-    ogTitle: "Divorce Calculator UK (2026) | Financial Settlement Tool",
-    ogDescription: "Model different divorce financial settlement scenarios with UK 2026/27 tax rules applied. Compare sell vs retain options and understand long-term outcomes.",
+    ogTitle: "Divorce Settlement Calculator | Not a Solicitor Lead Form",
+    ogDescription: "Built for people, not solicitor sales pitches. Start free with our innovative divorce settlement calculator and see where you could stand through modelling, scenarios and guided insights.",
   });
 
   const [, setLocation] = useLocation();
