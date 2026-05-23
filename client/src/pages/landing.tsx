@@ -76,12 +76,12 @@ const EXPLORE_CARDS = [
 ];
 
 export default function LandingPage() {
-  useDocumentTitle("Free UK Divorce Settlement Calculator | Model a Fair Split, Pensions & Maintenance");
+  useDocumentTitle("Divorce Calculator UK — Free Settlement, Pension & Asset Split Modelling");
   useMetaTags({
-    description: "Model a fair UK divorce settlement in minutes. Free calculator covering assets, pensions, mortgage, child and spousal maintenance — innovative scenario modelling with guided insights. Private, browser-based, no solicitor required to start.",
+    description: "Free UK divorce settlement calculator with innovative scenario modelling. Compare property and asset splits, pension sharing, child & spousal maintenance, tax and 5-year projections — no sign-up, full report £79.",
     canonical: "https://divorcecalculatoruk.co.uk/",
-    ogTitle: "Free UK Divorce Settlement Calculator | Model a Fair Split, Pensions & Maintenance",
-    ogDescription: "See where you could stand. Model assets, pensions and maintenance across fair settlement scenarios with our free UK divorce calculator — innovative, private and built around real outcomes.",
+    ogTitle: "Divorce Calculator UK — Free Settlement, Pension & Asset Split Modelling",
+    ogDescription: "Free UK divorce settlement calculator with innovative scenario modelling. Compare property and asset splits, pension sharing, child & spousal maintenance, tax and 5-year projections — no sign-up, full report £79.",
   });
 
   const [, setLocation] = useLocation();
