@@ -516,6 +516,196 @@ export async function sendPromoEmail(
   }
 }
 
+export async function sendPensionInsightEmail(
+  email: string,
+  unsubscribeToken: string
+): Promise<void> {
+  const client = getResend();
+  if (!client) {
+    console.warn('[email] RESEND_API_KEY not set — skipping pension insight email');
+    return;
+  }
+
+  const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
+  const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(unsubscribeToken)}`;
+
+  const html = emailWrapper(`
+    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">One number most people overlook in a divorce</h1>
+    <p style="margin:0 0 20px;color:#64748b;font-size:15px;line-height:1.6;">
+      Of all the assets involved in a UK divorce, pensions are consistently the most underestimated — and the most mishandled.
+    </p>
+
+    <div style="background:#f8fafc;border-left:4px solid #c49b2a;padding:16px 20px;margin-bottom:24px;border-radius:0 6px 6px 0;">
+      <p style="margin:0;color:#0f1e3c;font-size:14px;line-height:1.7;">
+        The figure that matters isn't the monthly payment you'll eventually receive — it's the <strong>Cash Equivalent Transfer Value (CETV)</strong>. That's the lump-sum value of the pension today, and in many divorces it exceeds the equity in the family home.
+      </p>
+    </div>
+
+    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6;">
+      Your DivorceCalculatorUK model already factors in pension sharing. The full analysis shows you:
+    </p>
+
+    <ul style="margin:0 0 24px;padding-left:20px;color:#475569;font-size:14px;line-height:1.9;">
+      <li>How pension sharing or offsetting affects each settlement scenario</li>
+      <li>The capital difference between taking pension vs. taking more property</li>
+      <li>Which option leaves you better placed over a 5-year horizon</li>
+      <li>The right questions to raise with a pension on divorce specialist (PODE)</li>
+    </ul>
+
+    <p style="margin:0 0 20px;color:#475569;font-size:14px;line-height:1.6;">
+      Your model is still saved. Unlock the full picture today — use <strong>CLARITY15</strong> at checkout for 15% off.
+    </p>
+
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 12px;">
+      <tr>
+        <td align="center" style="background:#c49b2a;border-radius:8px;">
+          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;">Unlock My Full Analysis →</a>
+        </td>
+      </tr>
+    </table>
+    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">Use code <strong>CLARITY15</strong> at checkout · One-off £79 · 12 months unlimited access</p>
+
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
+    <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
+      Illustrative modelling only — not legal, financial or tax advice. Always consult a qualified professional.
+      &nbsp;&middot;&nbsp;<a href="${unsubscribeUrl}" style="color:#94a3b8;">Unsubscribe</a>
+    </p>
+  `);
+
+  try {
+    await client.emails.send({
+      from: FROM,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: 'The asset most people underestimate in a UK divorce',
+      html,
+    });
+    console.log(`[email] Pension insight email sent to ${email}`);
+  } catch (err) {
+    console.error('[email] Failed to send pension insight email:', err);
+  }
+}
+
+export async function sendSustainabilityEmail(
+  email: string,
+  unsubscribeToken: string
+): Promise<void> {
+  const client = getResend();
+  if (!client) {
+    console.warn('[email] RESEND_API_KEY not set — skipping sustainability email');
+    return;
+  }
+
+  const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
+  const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(unsubscribeToken)}`;
+
+  const html = emailWrapper(`
+    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">The question your settlement really needs to answer</h1>
+    <p style="margin:0 0 20px;color:#64748b;font-size:15px;line-height:1.6;">
+      Most divorce settlements focus on how to split the assets. The harder question — the one that actually determines how your life looks in 3 years' time — is whether you can sustain what you're left with.
+    </p>
+
+    <div style="background:#f8fafc;border-left:4px solid #c49b2a;padding:16px 20px;margin-bottom:24px;border-radius:0 6px 6px 0;">
+      <p style="margin:0;color:#0f1e3c;font-size:14px;line-height:1.7;">
+        A settlement that looks fair on paper can quietly drain your reserves within two years if your monthly outgoings exceed your income. The full analysis models exactly this — showing you the monthly surplus or deficit for each scenario, and whether your capital holds up over five years.
+      </p>
+    </div>
+
+    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6;">
+      The <strong>Financial Sustainability Index</strong> in your full report gives each settlement option a plain score — so you can see at a glance which ones are liveable, which are marginal, and which quietly run your reserves down.
+    </p>
+
+    <p style="margin:0 0 20px;color:#475569;font-size:14px;line-height:1.6;">
+      You've already done the hard part — your figures are in. Unlock the full picture and see where each path actually leads.
+    </p>
+
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 12px;">
+      <tr>
+        <td align="center" style="background:#c49b2a;border-radius:8px;">
+          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;">Unlock My Full Analysis →</a>
+        </td>
+      </tr>
+    </table>
+    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">Use code <strong>CLARITY15</strong> at checkout for 15% off · One-off £79 · 12 months unlimited access</p>
+
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
+    <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
+      Illustrative modelling only — not legal, financial or tax advice. Always consult a qualified professional.
+      &nbsp;&middot;&nbsp;<a href="${unsubscribeUrl}" style="color:#94a3b8;">Unsubscribe</a>
+    </p>
+  `);
+
+  try {
+    await client.emails.send({
+      from: FROM,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: 'Can you actually live on your settlement? Here\'s how to find out',
+      html,
+    });
+    console.log(`[email] Sustainability email sent to ${email}`);
+  } catch (err) {
+    console.error('[email] Failed to send sustainability email:', err);
+  }
+}
+
+export async function sendFinalNudgeEmail(
+  email: string,
+  unsubscribeToken: string
+): Promise<void> {
+  const client = getResend();
+  if (!client) {
+    console.warn('[email] RESEND_API_KEY not set — skipping final nudge email');
+    return;
+  }
+
+  const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
+  const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(unsubscribeToken)}`;
+
+  const html = emailWrapper(`
+    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">A quick note before we go quiet</h1>
+    <p style="margin:0 0 20px;color:#64748b;font-size:15px;line-height:1.6;">
+      We won't keep emailing you after this — but we wanted to make sure you knew the full analysis is still there whenever you're ready.
+    </p>
+
+    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6;">
+      Separation is rarely straightforward, and the timing isn't always right. If you're still working things through, that's completely normal. Your model is saved and the figures you entered are still in your browser — nothing is lost.
+    </p>
+
+    <p style="margin:0 0 20px;color:#475569;font-size:14px;line-height:1.6;">
+      When you're ready, your discount code <strong>CLARITY15</strong> still works at checkout — 15% off the full report, one-off £79, 12 months unlimited access.
+    </p>
+
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 12px;">
+      <tr>
+        <td align="center" style="background:#c49b2a;border-radius:8px;">
+          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;">Unlock My Full Analysis →</a>
+        </td>
+      </tr>
+    </table>
+    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">Code <strong>CLARITY15</strong> at checkout · No expiry pressure · We're here when you need it</p>
+
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
+    <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
+      Illustrative modelling only — not legal, financial or tax advice. Always consult a qualified professional.
+      &nbsp;&middot;&nbsp;<a href="${unsubscribeUrl}" style="color:#94a3b8;">Unsubscribe</a>
+    </p>
+  `);
+
+  try {
+    await client.emails.send({
+      from: FROM,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: 'We\'ll leave you to it — but your analysis is still here',
+      html,
+    });
+    console.log(`[email] Final nudge email sent to ${email}`);
+  } catch (err) {
+    console.error('[email] Failed to send final nudge email:', err);
+  }
+}
+
 export async function sendEmailVerificationEmail(
   email: string,
   verificationToken: string

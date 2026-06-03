@@ -39,6 +39,9 @@ export const emailLeads = pgTable("email_leads", {
   unsubscribedAt: timestamp("unsubscribed_at"),
   followup1SentAt: timestamp("followup1_sent_at"),
   promoSentAt: timestamp("promo_sent_at"),
+  followup2SentAt: timestamp("followup2_sent_at"),
+  followup3SentAt: timestamp("followup3_sent_at"),
+  followup4SentAt: timestamp("followup4_sent_at"),
 });
 
 export const insertEmailLeadSchema = createInsertSchema(emailLeads).omit({ id: true, createdAt: true });
