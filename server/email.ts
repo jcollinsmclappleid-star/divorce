@@ -353,6 +353,169 @@ export async function sendAdminNotification(
   }
 }
 
+export async function sendFollowUpEmail(
+  email: string,
+  assetPoolSnapshot: string | null
+): Promise<void> {
+  const client = getResend();
+  if (!client) {
+    console.warn('[email] RESEND_API_KEY not set — skipping follow-up email');
+    return;
+  }
+
+  const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
+  const poolDisplay = assetPoolSnapshot
+    ? `£${Number(assetPoolSnapshot).toLocaleString('en-GB')}`
+    : null;
+
+  const html = emailWrapper(`
+    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">Your financial model is still ready</h1>
+    <p style="margin:0 0 20px;color:#64748b;font-size:15px;line-height:1.6;">
+      You built your divorce financial model on DivorceCalculatorUK — and your free preview only shows a fraction of what the full analysis reveals.
+    </p>
+
+    ${poolDisplay ? `
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:20px;margin-bottom:24px;">
+      <p style="margin:0 0 4px;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Your combined distributable pool</p>
+      <p style="margin:0;color:#0f1e3c;font-size:26px;font-weight:700;">${htmlEscape(poolDisplay)}</p>
+      <p style="margin:6px 0 0;color:#94a3b8;font-size:12px;">Property equity + liquid assets. Pensions are modelled separately.</p>
+    </div>` : ''}
+
+    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6;">
+      The full analysis shows you whether you can actually <strong>live</strong> on each settlement option — including monthly surplus or deficit, a 5-year capital projection, and a plain-English Guided Summary written around your specific figures.
+    </p>
+
+    <p style="margin:0 0 6px;color:#0f1e3c;font-size:14px;font-weight:600;">Your full report includes:</p>
+    <ul style="margin:0 0 24px;padding-left:20px;color:#475569;font-size:14px;line-height:1.9;">
+      <li>Settlement scenario modelling — Sell &amp; Split, one party keeps the home, deferred sale</li>
+      <li>Full asset, pension, income, debt and cashflow analysis across all scenarios</li>
+      <li>5-year financial projections showing which options sustain you long-term</li>
+      <li>Monthly surplus or deficit — know if each settlement is liveable on your income</li>
+      <li>Financial Sustainability Index — a plain score for each scenario</li>
+      <li>Pressure points flagged — where each option creates risk</li>
+      <li>Guided plain-English Summary — written around your figures, not generic advice</li>
+      <li>Questions to raise with your solicitor, mortgage broker and pension adviser</li>
+      <li>Downloadable and printable report — yours to keep</li>
+    </ul>
+
+    <p style="margin:0 0 20px;color:#475569;font-size:14px;line-height:1.6;">
+      One-off payment of <strong>£79</strong> gives you <strong>unlimited access for 12 months</strong> — revisit as your situation develops, update figures, and rerun scenarios any time.
+    </p>
+
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 24px;">
+      <tr>
+        <td align="center" style="background:#c49b2a;border-radius:8px;">
+          <a href="${unlockUrl}" style="display:block;padding:18px 32px;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;">Unlock My Full Analysis — £79 →</a>
+        </td>
+      </tr>
+    </table>
+
+    <p style="margin:0;color:#94a3b8;font-size:12px;line-height:1.6;">
+      We will never share your details with solicitors or any third party. No follow-up calls. No spam.
+    </p>
+  `);
+
+  try {
+    await client.emails.send({
+      from: FROM,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: 'Your divorce financial model is still ready — see the full picture',
+      html,
+    });
+    console.log(`[email] Follow-up email sent to ${email}`);
+  } catch (err) {
+    console.error('[email] Failed to send follow-up email:', err);
+  }
+}
+
+export async function sendPromoEmail(
+  email: string,
+  unsubscribeToken: string,
+  assetPoolSnapshot: string | null
+): Promise<void> {
+  const client = getResend();
+  if (!client) {
+    console.warn('[email] RESEND_API_KEY not set — skipping promo email');
+    return;
+  }
+
+  const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
+  const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(unsubscribeToken)}`;
+  const poolDisplay = assetPoolSnapshot
+    ? `£${Number(assetPoolSnapshot).toLocaleString('en-GB')}`
+    : null;
+
+  const html = emailWrapper(`
+    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">Your personalised divorce financial model is still ready to unlock</h1>
+    <p style="margin:0 0 20px;color:#64748b;font-size:15px;line-height:1.6;">
+      To help you get the clarity you need, here's a limited discount:
+    </p>
+
+    <div style="background:#fefce8;border:2px solid #c49b2a;border-radius:8px;padding:20px 24px;margin-bottom:24px;text-align:center;">
+      <p style="margin:0 0 4px;color:#92400e;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Limited offer — 48 hours only</p>
+      <p style="margin:0 0 8px;color:#0f1e3c;font-size:28px;font-weight:800;letter-spacing:2px;">CLARITY15</p>
+      <p style="margin:0;color:#475569;font-size:14px;">Use this code at checkout for <strong>15% off</strong> your full report</p>
+    </div>
+
+    ${poolDisplay ? `
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:20px;margin-bottom:24px;">
+      <p style="margin:0 0 4px;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Your combined distributable pool</p>
+      <p style="margin:0;color:#0f1e3c;font-size:26px;font-weight:700;">${htmlEscape(poolDisplay)}</p>
+      <p style="margin:6px 0 0;color:#94a3b8;font-size:12px;">Property equity + liquid assets. Pensions are modelled separately.</p>
+    </div>` : ''}
+
+    <p style="margin:0 0 6px;color:#0f1e3c;font-size:14px;font-weight:600;">Your full report includes:</p>
+    <ul style="margin:0 0 24px;padding-left:20px;color:#475569;font-size:14px;line-height:1.9;">
+      <li>Settlement scenario modelling — Sell &amp; Split, one party keeps the home, deferred sale</li>
+      <li>Full asset, pension, income, debt and cashflow analysis across all scenarios</li>
+      <li>5-year financial projections showing which options sustain you long-term</li>
+      <li>Monthly surplus or deficit — know if each settlement is liveable on your income</li>
+      <li>Financial Sustainability Index — a plain score for each scenario</li>
+      <li>Pressure points flagged — where each option creates risk</li>
+      <li>Guided plain-English Summary — written around your figures, not generic advice</li>
+      <li>Questions to raise with your solicitor, mortgage broker and pension adviser</li>
+      <li>Downloadable and printable report — yours to keep</li>
+    </ul>
+
+    <p style="margin:0 0 20px;color:#475569;font-size:14px;line-height:1.6;">
+      One payment of <strong>£79</strong> (less your 15% with CLARITY15) gives you <strong>unlimited access for 12 months</strong> — revisit as your situation develops, update figures, and rerun scenarios any time.
+    </p>
+
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 12px;">
+      <tr>
+        <td align="center" style="background:#c49b2a;border-radius:8px;">
+          <a href="${unlockUrl}" style="display:block;padding:18px 32px;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;">Unlock My Full Analysis →</a>
+        </td>
+      </tr>
+    </table>
+    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">Enter code <strong>CLARITY15</strong> at checkout — offer expires in 48 hours</p>
+
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
+
+    <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
+      This report provides illustrative financial modelling only. It is not legal, financial, tax or mortgage advice. Always consult a qualified professional for your specific circumstances.
+    </p>
+    <p style="margin:8px 0 0;color:#94a3b8;font-size:11px;">
+      We will never share your details with solicitors or any third party. &middot;
+      <a href="${unsubscribeUrl}" style="color:#94a3b8;">Unsubscribe from these emails</a>
+    </p>
+  `);
+
+  try {
+    await client.emails.send({
+      from: FROM,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: 'Your divorce financial model is ready — 15% off for 48 hours (code: CLARITY15)',
+      html,
+    });
+    console.log(`[email] Promo email sent to ${email}`);
+  } catch (err) {
+    console.error('[email] Failed to send promo email:', err);
+  }
+}
+
 export async function sendEmailVerificationEmail(
   email: string,
   verificationToken: string

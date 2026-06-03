@@ -36,6 +36,9 @@ export const emailLeads = pgTable("email_leads", {
   verified: boolean("verified").notNull().default(false),
   verificationToken: varchar("verification_token"),
   createdAt: timestamp("created_at").defaultNow(),
+  unsubscribedAt: timestamp("unsubscribed_at"),
+  followup1SentAt: timestamp("followup1_sent_at"),
+  promoSentAt: timestamp("promo_sent_at"),
 });
 
 export const insertEmailLeadSchema = createInsertSchema(emailLeads).omit({ id: true, createdAt: true });
