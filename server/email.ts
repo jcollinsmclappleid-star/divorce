@@ -369,49 +369,38 @@ export async function sendFollowUpEmail(
     : null;
 
   const html = emailWrapper(`
-    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">Your financial model is still ready</h1>
-    <p style="margin:0 0 20px;color:#64748b;font-size:15px;line-height:1.6;">
-      You built your divorce financial model on DivorceCalculatorUK — and your free preview only shows a fraction of what the full analysis reveals.
+    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">You took a difficult first step</h1>
+
+    <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
+      Separation brings a lot of uncertainty — financial uncertainty often being the hardest part. Taking the time to actually sit down with your numbers, even just to see where things stand, takes courage.
+    </p>
+
+    <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7;">
+      Your figures are still saved. The free preview shows the shape of things — the full analysis goes further, showing you whether each settlement option is actually <em>liveable</em> on your income, month by month, over five years.
     </p>
 
     ${poolDisplay ? `
-    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:20px;margin-bottom:24px;">
-      <p style="margin:0 0 4px;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Your combined distributable pool</p>
+    <div style="background:#f8fafc;border-left:4px solid #c49b2a;padding:16px 20px;margin-bottom:24px;border-radius:0 6px 6px 0;">
+      <p style="margin:0 0 4px;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Your combined asset pool</p>
       <p style="margin:0;color:#0f1e3c;font-size:26px;font-weight:700;">${htmlEscape(poolDisplay)}</p>
-      <p style="margin:6px 0 0;color:#94a3b8;font-size:12px;">Property equity + liquid assets. Pensions are modelled separately.</p>
+      <p style="margin:6px 0 0;color:#94a3b8;font-size:12px;">Property equity + liquid assets. Pensions modelled separately.</p>
     </div>` : ''}
 
-    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6;">
-      The full analysis shows you whether you can actually <strong>live</strong> on each settlement option — including monthly surplus or deficit, a 5-year capital projection, and a plain-English Guided Summary written around your specific figures.
+    <p style="margin:0 0 24px;color:#475569;font-size:14px;line-height:1.7;">
+      No pressure to do anything right now. When you're ready to see the full picture, it's there for you.
     </p>
 
-    <p style="margin:0 0 6px;color:#0f1e3c;font-size:14px;font-weight:600;">Your full report includes:</p>
-    <ul style="margin:0 0 24px;padding-left:20px;color:#475569;font-size:14px;line-height:1.9;">
-      <li>Settlement scenario modelling — Sell &amp; Split, one party keeps the home, deferred sale</li>
-      <li>Full asset, pension, income, debt and cashflow analysis across all scenarios</li>
-      <li>5-year financial projections showing which options sustain you long-term</li>
-      <li>Monthly surplus or deficit — know if each settlement is liveable on your income</li>
-      <li>Financial Sustainability Index — a plain score for each scenario</li>
-      <li>Pressure points flagged — where each option creates risk</li>
-      <li>Guided plain-English Summary — written around your figures, not generic advice</li>
-      <li>Questions to raise with your solicitor, mortgage broker and pension adviser</li>
-      <li>Downloadable and printable report — yours to keep</li>
-    </ul>
-
-    <p style="margin:0 0 20px;color:#475569;font-size:14px;line-height:1.6;">
-      One-off payment of <strong>£79</strong> gives you <strong>unlimited access for 12 months</strong> — revisit as your situation develops, update figures, and rerun scenarios any time.
-    </p>
-
-    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 24px;">
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
       <tr>
         <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:18px 32px;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;">Unlock My Full Analysis — £79 →</a>
+          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">Return to my analysis</a>
         </td>
       </tr>
     </table>
+    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">One-off £79 · 12 months unlimited access</p>
 
     <p style="margin:0;color:#94a3b8;font-size:12px;line-height:1.6;">
-      We will never share your details with solicitors or any third party. No follow-up calls. No spam.
+      We will never share your details with solicitors or any third party.
     </p>
   `);
 
@@ -420,7 +409,7 @@ export async function sendFollowUpEmail(
       from: FROM,
       to: email,
       replyTo: REPLY_TO,
-      subject: 'Your divorce financial model is still ready — see the full picture',
+      subject: 'Your figures are still saved — no rush',
       html,
     });
     console.log(`[email] Follow-up email sent to ${email}`);
@@ -447,58 +436,50 @@ export async function sendPromoEmail(
     : null;
 
   const html = emailWrapper(`
-    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">Your personalised divorce financial model is still ready to unlock</h1>
-    <p style="margin:0 0 20px;color:#64748b;font-size:15px;line-height:1.6;">
-      To help you get the clarity you need, here's a limited discount:
+    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">A small something, in case it helps</h1>
+
+    <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
+      We know a divorce isn't cheap — between solicitors, mediators, and everything else, the costs add up quickly.
     </p>
 
-    <div style="background:#fefce8;border:2px solid #c49b2a;border-radius:8px;padding:20px 24px;margin-bottom:24px;text-align:center;">
-      <p style="margin:0 0 4px;color:#92400e;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Limited offer — 48 hours only</p>
-      <p style="margin:0 0 8px;color:#0f1e3c;font-size:28px;font-weight:800;letter-spacing:2px;">CLARITY15</p>
-      <p style="margin:0;color:#475569;font-size:14px;">Use this code at checkout for <strong>15% off</strong> your full report</p>
+    <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7;">
+      We'd like to offer you a small discount. No deadline, no pressure — use it when and if the time feels right.
+    </p>
+
+    <div style="background:#fefce8;border:1px solid #e9c65a;border-radius:8px;padding:20px 24px;margin-bottom:24px;text-align:center;">
+      <p style="margin:0 0 6px;color:#92400e;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Your discount code</p>
+      <p style="margin:0 0 8px;color:#0f1e3c;font-size:30px;font-weight:800;letter-spacing:3px;">CLARITY15</p>
+      <p style="margin:0;color:#64748b;font-size:13px;">15% off at checkout — £79 becomes £67.15</p>
     </div>
 
     ${poolDisplay ? `
-    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:20px;margin-bottom:24px;">
-      <p style="margin:0 0 4px;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Your combined distributable pool</p>
+    <div style="background:#f8fafc;border-left:4px solid #c49b2a;padding:16px 20px;margin-bottom:24px;border-radius:0 6px 6px 0;">
+      <p style="margin:0 0 4px;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Your combined asset pool</p>
       <p style="margin:0;color:#0f1e3c;font-size:26px;font-weight:700;">${htmlEscape(poolDisplay)}</p>
-      <p style="margin:6px 0 0;color:#94a3b8;font-size:12px;">Property equity + liquid assets. Pensions are modelled separately.</p>
+      <p style="margin:6px 0 0;color:#94a3b8;font-size:12px;">Property equity + liquid assets. Pensions modelled separately.</p>
     </div>` : ''}
 
-    <p style="margin:0 0 6px;color:#0f1e3c;font-size:14px;font-weight:600;">Your full report includes:</p>
-    <ul style="margin:0 0 24px;padding-left:20px;color:#475569;font-size:14px;line-height:1.9;">
-      <li>Settlement scenario modelling — Sell &amp; Split, one party keeps the home, deferred sale</li>
-      <li>Full asset, pension, income, debt and cashflow analysis across all scenarios</li>
-      <li>5-year financial projections showing which options sustain you long-term</li>
-      <li>Monthly surplus or deficit — know if each settlement is liveable on your income</li>
-      <li>Financial Sustainability Index — a plain score for each scenario</li>
-      <li>Pressure points flagged — where each option creates risk</li>
-      <li>Guided plain-English Summary — written around your figures, not generic advice</li>
-      <li>Questions to raise with your solicitor, mortgage broker and pension adviser</li>
-      <li>Downloadable and printable report — yours to keep</li>
-    </ul>
-
-    <p style="margin:0 0 20px;color:#475569;font-size:14px;line-height:1.6;">
-      One payment of <strong>£79</strong> (less your 15% with CLARITY15) gives you <strong>unlimited access for 12 months</strong> — revisit as your situation develops, update figures, and rerun scenarios any time.
+    <p style="margin:0 0 24px;color:#475569;font-size:14px;line-height:1.7;">
+      The full analysis shows you whether each settlement option is actually liveable on your income — month by month, over five years — so you can go into negotiations knowing your numbers, not guessing at them.
     </p>
 
-    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 12px;">
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
       <tr>
         <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:18px 32px;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;">Unlock My Full Analysis →</a>
+          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">Unlock my full analysis</a>
         </td>
       </tr>
     </table>
-    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">Enter code <strong>CLARITY15</strong> at checkout — offer expires in 48 hours</p>
+    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">Enter <strong>CLARITY15</strong> at checkout · 12 months unlimited access</p>
 
     <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
 
     <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
-      This report provides illustrative financial modelling only. It is not legal, financial, tax or mortgage advice. Always consult a qualified professional for your specific circumstances.
+      Illustrative modelling only — not legal, financial or tax advice. Always consult a qualified professional.
     </p>
     <p style="margin:8px 0 0;color:#94a3b8;font-size:11px;">
       We will never share your details with solicitors or any third party. &middot;
-      <a href="${unsubscribeUrl}" style="color:#94a3b8;">Unsubscribe from these emails</a>
+      <a href="${unsubscribeUrl}" style="color:#94a3b8;">Unsubscribe</a>
     </p>
   `);
 
@@ -507,7 +488,7 @@ export async function sendPromoEmail(
       from: FROM,
       to: email,
       replyTo: REPLY_TO,
-      subject: 'Your divorce financial model is ready — 15% off for 48 hours (code: CLARITY15)',
+      subject: 'A small discount, in case it helps — code CLARITY15',
       html,
     });
     console.log(`[email] Promo email sent to ${email}`);
@@ -530,40 +511,38 @@ export async function sendPensionInsightEmail(
   const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(unsubscribeToken)}`;
 
   const html = emailWrapper(`
-    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">One number most people overlook in a divorce</h1>
-    <p style="margin:0 0 20px;color:#64748b;font-size:15px;line-height:1.6;">
-      Of all the assets involved in a UK divorce, pensions are consistently the most underestimated — and the most mishandled.
+    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">The one asset that surprises most people</h1>
+
+    <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
+      Of everything involved in a UK divorce, pensions are the most underestimated — and the most easily overlooked in negotiations.
+    </p>
+
+    <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7;">
+      The figure that matters isn't the monthly income you'll eventually receive. It's the <strong>Cash Equivalent Transfer Value (CETV)</strong> — the lump-sum worth of the pension right now. In many divorces, it equals or exceeds the equity in the family home.
     </p>
 
     <div style="background:#f8fafc;border-left:4px solid #c49b2a;padding:16px 20px;margin-bottom:24px;border-radius:0 6px 6px 0;">
       <p style="margin:0;color:#0f1e3c;font-size:14px;line-height:1.7;">
-        The figure that matters isn't the monthly payment you'll eventually receive — it's the <strong>Cash Equivalent Transfer Value (CETV)</strong>. That's the lump-sum value of the pension today, and in many divorces it exceeds the equity in the family home.
+        Someone who doesn't know their CETV, or doesn't understand how pension sharing works, can walk away from a settlement significantly worse off — without ever realising it.
       </p>
     </div>
 
-    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6;">
-      Your DivorceCalculatorUK model already factors in pension sharing. The full analysis shows you:
+    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.7;">
+      Your model already includes pension figures. The full analysis shows you how different approaches to splitting or offsetting pensions change the real-terms outcome of each scenario — in plain language.
     </p>
 
-    <ul style="margin:0 0 24px;padding-left:20px;color:#475569;font-size:14px;line-height:1.9;">
-      <li>How pension sharing or offsetting affects each settlement scenario</li>
-      <li>The capital difference between taking pension vs. taking more property</li>
-      <li>Which option leaves you better placed over a 5-year horizon</li>
-      <li>The right questions to raise with a pension on divorce specialist (PODE)</li>
-    </ul>
-
-    <p style="margin:0 0 20px;color:#475569;font-size:14px;line-height:1.6;">
-      Your model is still saved. Unlock the full picture today — use <strong>CLARITY15</strong> at checkout for 15% off.
+    <p style="margin:0 0 24px;color:#475569;font-size:14px;line-height:1.7;">
+      If you'd like to see how it plays out in your specific figures, your analysis is still there whenever you're ready.
     </p>
 
-    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 12px;">
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
       <tr>
         <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;">Unlock My Full Analysis →</a>
+          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">See how pensions affect my settlement</a>
         </td>
       </tr>
     </table>
-    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">Use code <strong>CLARITY15</strong> at checkout · One-off £79 · 12 months unlimited access</p>
+    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">One-off £79 · Use code <strong>CLARITY15</strong> for 15% off · 12 months access</p>
 
     <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
     <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
@@ -577,7 +556,7 @@ export async function sendPensionInsightEmail(
       from: FROM,
       to: email,
       replyTo: REPLY_TO,
-      subject: 'The asset most people underestimate in a UK divorce',
+      subject: 'The one asset most people underestimate in a divorce',
       html,
     });
     console.log(`[email] Pension insight email sent to ${email}`);
@@ -600,33 +579,38 @@ export async function sendSustainabilityEmail(
   const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(unsubscribeToken)}`;
 
   const html = emailWrapper(`
-    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">The question your settlement really needs to answer</h1>
-    <p style="margin:0 0 20px;color:#64748b;font-size:15px;line-height:1.6;">
-      Most divorce settlements focus on how to split the assets. The harder question — the one that actually determines how your life looks in 3 years' time — is whether you can sustain what you're left with.
+    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">The question that keeps people up at night</h1>
+
+    <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
+      <em>"Will I actually be okay?"</em>
+    </p>
+
+    <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7;">
+      It's probably the thing people worry about most when a marriage ends. Not just in the short term — but in three years, five years. Will the settlement you agree to leave you on solid ground?
     </p>
 
     <div style="background:#f8fafc;border-left:4px solid #c49b2a;padding:16px 20px;margin-bottom:24px;border-radius:0 6px 6px 0;">
       <p style="margin:0;color:#0f1e3c;font-size:14px;line-height:1.7;">
-        A settlement that looks fair on paper can quietly drain your reserves within two years if your monthly outgoings exceed your income. The full analysis models exactly this — showing you the monthly surplus or deficit for each scenario, and whether your capital holds up over five years.
+        A settlement that looks fair on paper can quietly drain your reserves if your monthly outgoings exceed your income. The full analysis models this directly — showing you the monthly surplus or deficit for each scenario, and whether your capital holds up over five years.
       </p>
     </div>
 
-    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6;">
-      The <strong>Financial Sustainability Index</strong> in your full report gives each settlement option a plain score — so you can see at a glance which ones are liveable, which are marginal, and which quietly run your reserves down.
+    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.7;">
+      The <strong>Financial Sustainability Index</strong> gives each settlement option a plain score — so you can see at a glance which options are liveable, which are marginal, and which quietly run your reserves down.
     </p>
 
-    <p style="margin:0 0 20px;color:#475569;font-size:14px;line-height:1.6;">
-      You've already done the hard part — your figures are in. Unlock the full picture and see where each path actually leads.
+    <p style="margin:0 0 24px;color:#475569;font-size:14px;line-height:1.7;">
+      You've already put your figures in. If you'd like an answer to that question — even just for your own peace of mind — the full analysis is there when you're ready.
     </p>
 
-    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 12px;">
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
       <tr>
         <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;">Unlock My Full Analysis →</a>
+          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">See my full picture</a>
         </td>
       </tr>
     </table>
-    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">Use code <strong>CLARITY15</strong> at checkout for 15% off · One-off £79 · 12 months unlimited access</p>
+    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">One-off £79 · Use code <strong>CLARITY15</strong> for 15% off · 12 months access</p>
 
     <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
     <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
@@ -640,7 +624,7 @@ export async function sendSustainabilityEmail(
       from: FROM,
       to: email,
       replyTo: REPLY_TO,
-      subject: 'Can you actually live on your settlement? Here\'s how to find out',
+      subject: 'Will you actually be okay? Here\'s how to find out',
       html,
     });
     console.log(`[email] Sustainability email sent to ${email}`);
@@ -663,27 +647,28 @@ export async function sendFinalNudgeEmail(
   const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(unsubscribeToken)}`;
 
   const html = emailWrapper(`
-    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">A quick note before we go quiet</h1>
-    <p style="margin:0 0 20px;color:#64748b;font-size:15px;line-height:1.6;">
-      We won't keep emailing you after this — but we wanted to make sure you knew the full analysis is still there whenever you're ready.
+    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">We'll leave you to it</h1>
+
+    <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
+      We won't email you again after this.
     </p>
 
-    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6;">
-      Separation is rarely straightforward, and the timing isn't always right. If you're still working things through, that's completely normal. Your model is saved and the figures you entered are still in your browser — nothing is lost.
+    <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
+      We know that separation doesn't follow a timetable, and that sometimes you're simply not in the right headspace to look at numbers — even important ones. That's completely understandable.
     </p>
 
-    <p style="margin:0 0 20px;color:#475569;font-size:14px;line-height:1.6;">
-      When you're ready, your discount code <strong>CLARITY15</strong> still works at checkout — 15% off the full report, one-off £79, 12 months unlimited access.
+    <p style="margin:0 0 24px;color:#475569;font-size:15px;line-height:1.7;">
+      Your model is still saved. Your figures, your scenarios — they haven't gone anywhere. And if it ever helps to come back to them, the full analysis will be here. Code <strong>CLARITY15</strong> still works at checkout if you need it.
     </p>
 
-    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 12px;">
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
       <tr>
         <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;">Unlock My Full Analysis →</a>
+          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">Return to my analysis — whenever you're ready</a>
         </td>
       </tr>
     </table>
-    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">Code <strong>CLARITY15</strong> at checkout · No expiry pressure · We're here when you need it</p>
+    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">No rush. We're here if you need us.</p>
 
     <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
     <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
@@ -697,7 +682,7 @@ export async function sendFinalNudgeEmail(
       from: FROM,
       to: email,
       replyTo: REPLY_TO,
-      subject: 'We\'ll leave you to it — but your analysis is still here',
+      subject: 'We\'ll leave you to it — your analysis is here whenever you\'re ready',
       html,
     });
     console.log(`[email] Final nudge email sent to ${email}`);
