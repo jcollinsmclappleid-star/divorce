@@ -7,7 +7,7 @@ import { z } from "zod";
 import crypto from "crypto";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { seedDatabase } from "./seed";
-import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail, sendMagicLinkEmail, sendAdminNotification, sendPromoEmail } from "./email";
+import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail, sendMagicLinkEmail, sendAdminNotification } from "./email";
 import { db, pool } from "./db";
 import { emailLeads as emailLeadsTable, purchases as purchasesTable } from "@shared/schema";
 import { and, eq, isNull, isNotNull } from "drizzle-orm";
@@ -988,68 +988,6 @@ export async function registerRoutes(
       return res.send(`<!DOCTYPE html><html><body style="font-family:sans-serif;padding:40px;max-width:480px;margin:auto;color:#1e293b"><h2 style="color:#0f1e3c">You've been unsubscribed</h2><p>You've been removed from our mailing list and will not receive any further emails from DivorceCalculatorUK.</p><p style="color:#64748b;font-size:14px">If you change your mind, you can always return to <a href="https://divorcecalculatoruk.co.uk" style="color:#c49b2a">divorcecalculatoruk.co.uk</a> and start again.</p></body></html>`);
     } catch (err) {
       return res.status(400).send(`<!DOCTYPE html><html><body style="font-family:sans-serif;padding:40px;max-width:480px;margin:auto"><h2>Invalid link</h2><p>This unsubscribe link is not valid. Please contact support@divorcecalculatoruk.co.uk if you need help.</p></body></html>`);
-    }
-  });
-
-  app.post('/api/admin/send-promo', requireAdmin, async (req, res) => {
-    try {
-      const schema = z.object({
-        emails: z.array(z.string().email()).min(1).max(100),
-        dryRun: z.boolean().optional().default(false),
-        force: z.boolean().optional().default(false),
-      });
-      const { emails, dryRun, force } = schema.parse(req.body);
-
-      const paidResult = await db
-        .select({ email: purchasesTable.email })
-        .from(purchasesTable)
-        .where(and(eq(purchasesTable.status, 'paid'), isNotNull(purchasesTable.email)));
-      const paidEmails = new Set(paidResult.map((p) => p.email!.toLowerCase()));
-
-      const results: { email: string; status: string }[] = [];
-
-      for (const email of emails) {
-        const normalised = email.toLowerCase().trim();
-
-        if (!force && paidEmails.has(normalised)) {
-          results.push({ email, status: 'skipped_paid' });
-          continue;
-        }
-
-        const [lead] = await db
-          .select()
-          .from(emailLeadsTable)
-          .where(eq(emailLeadsTable.email, normalised));
-
-        if (!lead) {
-          results.push({ email, status: 'not_found' });
-          continue;
-        }
-
-        if (lead.unsubscribedAt) {
-          results.push({ email, status: 'skipped_unsubscribed' });
-          continue;
-        }
-
-        if (!dryRun) {
-          await sendPromoEmail(email, lead.id, lead.assetPoolSnapshot ?? null);
-          await db
-            .update(emailLeadsTable)
-            .set({ promoSentAt: new Date() })
-            .where(eq(emailLeadsTable.id, lead.id));
-        }
-
-        results.push({ email, status: dryRun ? 'dry_run_ok' : 'sent' });
-      }
-
-      console.log(`[admin] send-promo: ${JSON.stringify(results)}`);
-      return res.json({ results });
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        return res.status(400).json({ message: 'Invalid request', errors: err.errors });
-      }
-      console.error('[admin] send-promo error:', err);
-      return res.status(500).json({ message: 'Failed to send promo emails' });
     }
   });
 
