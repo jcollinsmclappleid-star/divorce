@@ -86,6 +86,13 @@ const FAQ_ITEMS = [
   },
 ];
 
+// Last day of current month — factually accurate offer window
+function getPromoExpiry() {
+  const now = new Date();
+  const last = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  return last.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+}
+
 export default function UnlockPage() {
   useDocumentTitle("Unlock Full Analysis | DivorceCalculatorUK");
   useNoIndex();
@@ -93,6 +100,7 @@ export default function UnlockPage() {
   const sessionToken = useSessionToken();
   const { hasAccess, isLoading } = useAccess();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const promoExpiry = getPromoExpiry();
 
   useEffect(() => {
     if (!isLoading && hasAccess) navigate("/results");
@@ -286,6 +294,13 @@ export default function UnlockPage() {
                   </div>
                   <p className="text-[10px] text-white/45">Core calculations in-browser</p>
                 </div>
+              </div>
+
+              {/* Promo code offer */}
+              <div className="rounded-xl bg-amber-950/40 border border-amber-500/30 px-4 py-3 text-center space-y-0.5">
+                <p className="text-[10px] text-amber-400/70 uppercase tracking-widest font-semibold">This month only — valid until {promoExpiry}</p>
+                <p className="text-2xl font-black tracking-[0.2em] text-amber-300">CLARITY15</p>
+                <p className="text-xs text-white/50">Enter at checkout for <span className="text-white/80 font-semibold">15% off</span> — £79 becomes £67.15</p>
               </div>
 
               <Button
