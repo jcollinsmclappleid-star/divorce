@@ -353,9 +353,9 @@ export async function sendAdminNotification(
   }
 }
 
-export async function sendFollowUpEmail(
+export async function sendCampaignEmail1(
   email: string,
-  assetPoolSnapshot: string | null
+  unsubscribeToken: string
 ): Promise<void> {
   const client = getResend();
   if (!client) {
