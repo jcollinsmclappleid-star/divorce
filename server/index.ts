@@ -195,8 +195,9 @@ app.use((req, res, next) => {
   await registerRoutes(httpServer, app);
   const { startRetentionCleanup } = await import("./cleanup");
   startRetentionCleanup();
-  const { startEmailScheduler } = await import("./email-scheduler");
-  startEmailScheduler();
+  // Email scheduler disabled
+  // const { startEmailScheduler } = await import("./email-scheduler");
+  // startEmailScheduler();
 
   app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
