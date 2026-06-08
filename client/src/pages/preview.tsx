@@ -187,7 +187,7 @@ export default function PreviewPage() {
             </Button>
             <div className="flex flex-col items-end gap-0.5">
               <UnlockButton size="sm" label="Unlock — £79" className="text-sm px-4 py-2 h-8" />
-              <p className="text-[10px] text-amber-500 font-semibold leading-none">Code CLARITY15 · 15% off this month</p>
+              <p className="text-[10px] text-amber-500 font-semibold leading-none whitespace-nowrap hidden sm:block">CLARITY15 · 15% off this month</p>
             </div>
           </div>
         </div>
@@ -226,9 +226,14 @@ export default function PreviewPage() {
                 </div>
               ))}
             </div>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
               <UnlockButton label="Unlock Full Analysis — £79" />
               <p className="text-xs text-white/40 self-center">Secured by Stripe · Instant access</p>
+            </div>
+            <div className="mt-3 inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/30 rounded-full px-3 py-1.5">
+              <span className="text-xs text-amber-300 font-semibold">Use code</span>
+              <span className="text-sm font-black tracking-widest text-amber-300">CLARITY15</span>
+              <span className="text-xs text-amber-400/70">for 15% off this month</span>
             </div>
           </div>
         </section>
