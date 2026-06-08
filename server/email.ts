@@ -211,33 +211,51 @@ export async function sendProgressSummaryEmail(
   const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
   const poolDisplay = htmlEscape(assetPoolSnapshot ? `£${Number(assetPoolSnapshot).toLocaleString('en-GB')}` : 'your figures');
 
-  const html = emailWrapper(`
-    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:22px;font-weight:700;">Your financial position has been modelled</h1>
-    <p style="margin:0 0 24px;color:#64748b;font-size:15px;">Here's a summary of what you entered.</p>
+  // Last day of the current month — factually accurate offer window
+  const now = new Date();
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const offerExpiry = htmlEscape(lastDay.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }));
 
-    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:20px;margin-bottom:24px;">
-      <p style="margin:0 0 4px;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Combined distributable pool</p>
-      <p style="margin:0;color:#0f1e3c;font-size:24px;font-weight:700;">${poolDisplay}</p>
+  const html = emailWrapper(`
+    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">Your financial model is ready</h1>
+
+    <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7;">
+      You've just done something most people going through a divorce never do — you sat down with the actual numbers. That matters.
+    </p>
+
+    <div style="background:#f8fafc;border-left:4px solid #c49b2a;padding:16px 20px;margin-bottom:24px;border-radius:0 6px 6px 0;">
+      <p style="margin:0 0 4px;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Your combined asset pool</p>
+      <p style="margin:0;color:#0f1e3c;font-size:28px;font-weight:700;">${poolDisplay}</p>
       <p style="margin:6px 0 0;color:#94a3b8;font-size:12px;">Property equity + liquid assets. Pensions modelled separately.</p>
     </div>
 
-    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.6;">
-      Your free preview shows the shape of your settlement. The full analysis shows you whether you can live on it — including monthly surplus or deficit per option, the Financial Sustainability Index, and 5-year capital projections.
+    <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
+      Your free preview shows the shape of your settlement. The full analysis goes further — it shows you whether each option is actually <strong>liveable on your income</strong>, with monthly surplus or deficit figures, a 5-year capital projection, and a plain-English summary written around your specific numbers.
     </p>
 
-    <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+    <p style="margin:0 0 6px;color:#475569;font-size:14px;line-height:1.7;">While you're here, we'd like to offer you a discount:</p>
+
+    <div style="background:#fefce8;border:1px solid #e9c65a;border-radius:8px;padding:18px 22px;margin-bottom:20px;text-align:center;">
+      <p style="margin:0 0 4px;color:#92400e;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">This month only — valid until ${offerExpiry}</p>
+      <p style="margin:6px 0 8px;color:#0f1e3c;font-size:30px;font-weight:800;letter-spacing:3px;">CLARITY15</p>
+      <p style="margin:0;color:#64748b;font-size:13px;">15% off at checkout — £79 becomes £67.15</p>
+    </div>
+
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
       <tr>
-        <td style="background:#c49b2a;border-radius:6px;">
-          <a href="${unlockUrl}" style="display:inline-block;padding:14px 28px;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;border-radius:6px;">Unlock Full Analysis — £79</a>
+        <td align="center" style="background:#c49b2a;border-radius:8px;">
+          <a href="${unlockUrl}" style="display:block;padding:18px 32px;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;">Unlock my full analysis</a>
         </td>
       </tr>
     </table>
+    <p style="margin:0 0 28px;text-align:center;color:#94a3b8;font-size:12px;">Enter <strong>CLARITY15</strong> at checkout · 12 months unlimited access</p>
 
     <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
 
     <p style="margin:0;color:#64748b;font-size:13px;line-height:1.6;">
-      Need to return to your session on a different device? Visit <a href="https://divorcecalculatoruk.co.uk/recover" style="color:#0f1e3c;">divorcecalculatoruk.co.uk/recover</a> and enter this email address.
+      Using a different device? Visit <a href="https://divorcecalculatoruk.co.uk/recover" style="color:#c49b2a;">divorcecalculatoruk.co.uk/recover</a> and enter this email address to pick up where you left off.
     </p>
+    <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;">We will never share your details with solicitors or any third party.</p>
   `);
 
   try {
@@ -245,7 +263,7 @@ export async function sendProgressSummaryEmail(
       from: FROM,
       to: email,
       replyTo: REPLY_TO,
-      subject: 'Your DivorceCalculatorUK financial summary',
+      subject: 'Your financial model is ready — 15% off this month (code: CLARITY15)',
       html,
     });
     console.log('[email] Progress summary email sent');
@@ -647,28 +665,28 @@ export async function sendFinalNudgeEmail(
   const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(unsubscribeToken)}`;
 
   const html = emailWrapper(`
-    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">We'll leave you to it</h1>
+    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">Wishing you well, whatever you decide</h1>
 
     <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
-      We won't email you again after this.
+      This will be our last email — we just wanted to check in one final time.
     </p>
 
     <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
-      We know that separation doesn't follow a timetable, and that sometimes you're simply not in the right headspace to look at numbers — even important ones. That's completely understandable.
+      Going through a separation is hard, and the financial side of it can feel overwhelming. We built this tool because we wanted people to have access to clear, honest numbers — without having to pay a solicitor just to understand where they stand.
     </p>
 
     <p style="margin:0 0 24px;color:#475569;font-size:15px;line-height:1.7;">
-      Your model is still saved. Your figures, your scenarios — they haven't gone anywhere. And if it ever helps to come back to them, the full analysis will be here. Code <strong>CLARITY15</strong> still works at checkout if you need it.
+      Whether or not the full analysis is right for you, we hope the time you spent on it gave you something useful. Your figures are still saved, and the full report is here whenever you need it. Code <strong>CLARITY15</strong> still works at checkout.
     </p>
 
     <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
       <tr>
         <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">Return to my analysis — whenever you're ready</a>
+          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">Return to my analysis</a>
         </td>
       </tr>
     </table>
-    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">No rush. We're here if you need us.</p>
+    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">Take care of yourself. We're here if you need us.</p>
 
     <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
     <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
@@ -682,7 +700,7 @@ export async function sendFinalNudgeEmail(
       from: FROM,
       to: email,
       replyTo: REPLY_TO,
-      subject: 'We\'ll leave you to it — your analysis is here whenever you\'re ready',
+      subject: 'Wishing you well — your analysis is here whenever you need it',
       html,
     });
     console.log(`[email] Final nudge email sent to ${email}`);
