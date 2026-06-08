@@ -86,13 +86,6 @@ const FAQ_ITEMS = [
   },
 ];
 
-// Last day of current month — factually accurate offer window
-function getPromoExpiry() {
-  const now = new Date();
-  const last = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  return last.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-}
-
 export default function UnlockPage() {
   useDocumentTitle("Unlock Full Analysis | DivorceCalculatorUK");
   useNoIndex();
@@ -100,7 +93,6 @@ export default function UnlockPage() {
   const sessionToken = useSessionToken();
   const { hasAccess, isLoading } = useAccess();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const promoExpiry = getPromoExpiry();
 
   useEffect(() => {
     if (!isLoading && hasAccess) navigate("/results");
@@ -191,6 +183,9 @@ export default function UnlockPage() {
           </Button>
           <p className="text-white/35 text-xs">
             One-time payment · 12 months access · Secured by Stripe
+          </p>
+          <p className="text-amber-300/80 text-xs font-medium">
+            Use code <span className="font-black tracking-wider">CLARITY15</span> at checkout for 15% off this month
           </p>
         </div>
       </section>
@@ -298,9 +293,9 @@ export default function UnlockPage() {
 
               {/* Promo code offer */}
               <div className="rounded-xl bg-amber-950/40 border border-amber-500/30 px-4 py-3 text-center space-y-0.5">
-                <p className="text-[10px] text-amber-400/70 uppercase tracking-widest font-semibold">This month only — valid until {promoExpiry}</p>
+                <p className="text-[10px] text-amber-400/70 uppercase tracking-widest font-semibold">This month</p>
                 <p className="text-2xl font-black tracking-[0.2em] text-amber-300">CLARITY15</p>
-                <p className="text-xs text-white/50">Enter at checkout for <span className="text-white/80 font-semibold">15% off</span> — £79 becomes £67.15</p>
+                <p className="text-xs text-white/50">Enter at checkout for <span className="text-white/80 font-semibold">15% off</span></p>
               </div>
 
               <Button
@@ -390,19 +385,24 @@ export default function UnlockPage() {
           <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
             Your figures are saved. Unlock your Settlement Analyser and Guided Intelligence Report now — both ready in seconds.
           </p>
-          <Button
-            size="lg"
-            onClick={handleCheckout}
-            disabled={checkoutLoading}
-            className="bg-gold hover:bg-gold/90 text-white border-0"
-            data-testid="button-checkout-secondary"
-          >
-            {checkoutLoading ? (
-              <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Redirecting to payment...</>
-            ) : (
-              <>Unlock Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" /></>
-            )}
-          </Button>
+          <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold px-3 py-1.5 rounded-full">
+            Use code <span className="font-black tracking-wider">CLARITY15</span> at checkout for 15% off this month
+          </div>
+          <div>
+            <Button
+              size="lg"
+              onClick={handleCheckout}
+              disabled={checkoutLoading}
+              className="bg-gold hover:bg-gold/90 text-white border-0"
+              data-testid="button-checkout-secondary"
+            >
+              {checkoutLoading ? (
+                <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Redirecting to payment...</>
+              ) : (
+                <>Unlock Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" /></>
+              )}
+            </Button>
+          </div>
           <p className="text-xs text-muted-foreground">England & Wales · Illustrative modelling only · Not legal or financial advice</p>
         </section>
 

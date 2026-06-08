@@ -25,13 +25,6 @@ import { ScenarioLeaderboard } from "@/components/scenario-leaderboard";
 
 const CHART_COLOURS = ["hsl(220,52%,22%)", "#0d9488", "#64748b"];
 
-// Last day of current month — factually accurate offer window
-function getPromoExpiry() {
-  const now = new Date();
-  const last = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  return last.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-}
-
 export default function PreviewPage() {
   useDocumentTitle("Your Divorce Financial Overview | DivorceCalculatorUK");
   useNoIndex();
@@ -44,7 +37,6 @@ export default function PreviewPage() {
   const [emailSubmitted, setEmailSubmitted] = useState(() => !!store.profile?.capturedEmail);
   const [emailLoading, setEmailLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const promoExpiry = getPromoExpiry();
 
   useEffect(() => {
     if (!isLoading && hasAccess) navigate("/results");
@@ -189,11 +181,14 @@ export default function PreviewPage() {
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
           <Logo size="sm" />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Button variant="ghost" size="sm" asChild>
               <Link href="/wizard" data-testid="button-edit-inputs-preview" onClick={scrollTop}>Edit Inputs</Link>
             </Button>
-            <UnlockButton size="sm" label="Unlock — £79" className="text-sm px-4 py-2 h-8" />
+            <div className="flex flex-col items-end gap-0.5">
+              <UnlockButton size="sm" label="Unlock — £79" className="text-sm px-4 py-2 h-8" />
+              <p className="text-[10px] text-amber-500 font-semibold leading-none">Code CLARITY15 · 15% off this month</p>
+            </div>
           </div>
         </div>
       </header>
@@ -778,9 +773,9 @@ export default function PreviewPage() {
               </div>
               {/* Promo code offer */}
               <div className="rounded-xl bg-amber-950/40 border border-amber-500/30 px-4 py-3 text-center space-y-0.5">
-                <p className="text-[10px] text-amber-400/70 uppercase tracking-widest font-semibold">This month only — valid until {promoExpiry}</p>
+                <p className="text-[10px] text-amber-400/70 uppercase tracking-widest font-semibold">This month</p>
                 <p className="text-2xl font-black tracking-[0.2em] text-amber-300">CLARITY15</p>
-                <p className="text-xs text-white/50">Enter at checkout for <span className="text-white/80 font-semibold">15% off</span> — £79 becomes £67.15</p>
+                <p className="text-xs text-white/50">Enter at checkout for <span className="text-white/80 font-semibold">15% off</span></p>
               </div>
 
               <UnlockButton className="w-full text-base font-semibold" />

@@ -211,10 +211,6 @@ export async function sendProgressSummaryEmail(
   const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
   const poolDisplay = htmlEscape(assetPoolSnapshot ? `£${Number(assetPoolSnapshot).toLocaleString('en-GB')}` : 'your figures');
 
-  // Last day of the current month — factually accurate offer window
-  const now = new Date();
-  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  const offerExpiry = htmlEscape(lastDay.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }));
 
   const html = emailWrapper(`
     <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">Your financial model is ready</h1>
@@ -236,9 +232,9 @@ export async function sendProgressSummaryEmail(
     <p style="margin:0 0 6px;color:#475569;font-size:14px;line-height:1.7;">While you're here, we'd like to offer you a discount:</p>
 
     <div style="background:#fefce8;border:1px solid #e9c65a;border-radius:8px;padding:18px 22px;margin-bottom:20px;text-align:center;">
-      <p style="margin:0 0 4px;color:#92400e;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">This month only — valid until ${offerExpiry}</p>
+      <p style="margin:0 0 4px;color:#92400e;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">This month</p>
       <p style="margin:6px 0 8px;color:#0f1e3c;font-size:30px;font-weight:800;letter-spacing:3px;">CLARITY15</p>
-      <p style="margin:0;color:#64748b;font-size:13px;">15% off at checkout — £79 becomes £67.15</p>
+      <p style="margin:0;color:#64748b;font-size:13px;">15% off at checkout</p>
     </div>
 
     <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
