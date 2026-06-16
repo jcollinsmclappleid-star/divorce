@@ -52,10 +52,16 @@ function useSeoMeta(title: string, description: string, path: string, pageTitle:
       createdMeta.push(meta);
     });
 
-    const canonical = document.createElement("link");
-    canonical.rel = "canonical";
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    const canonicalWasNew = !canonical;
+    const prevCanonicalHref = canonical?.href ?? "";
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.appendChild(canonical);
+    }
     canonical.href = fullUrl;
-    document.head.appendChild(canonical);
+    const canonicalRef = canonical;
 
     const articleSchema = document.createElement("script");
     articleSchema.type = "application/ld+json";
@@ -105,7 +111,11 @@ function useSeoMeta(title: string, description: string, path: string, pageTitle:
       createdMeta.forEach((meta) => {
         if (meta.parentNode) meta.parentNode.removeChild(meta);
       });
-      if (canonical.parentNode) canonical.parentNode.removeChild(canonical);
+      if (canonicalWasNew) {
+        if (canonicalRef.parentNode) canonicalRef.parentNode.removeChild(canonicalRef);
+      } else {
+        canonicalRef.href = prevCanonicalHref;
+      }
       if (articleSchema.parentNode) articleSchema.parentNode.removeChild(articleSchema);
       if (breadcrumbScript?.parentNode) breadcrumbScript.parentNode.removeChild(breadcrumbScript);
     };

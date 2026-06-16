@@ -1,0 +1,1 @@
+- [Canonical tag duplicate bug](canonical-tag-duplicate.md) — content-page-layout.tsx must find-and-update the existing canonical, not append a second one.
