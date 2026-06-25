@@ -1,0 +1,164 @@
+uick-add assumption tiles across the wizard
+Goal
+Add tap-to-apply assumption tiles on key wizard steps so users can complete intake quickly with sensible UK starting figures, then refine individual fields below. This pattern is proven on our RedundancyCalculatorUK wizard — adapt it for divorce/separation modelling.
+
+Success criteria: A user can reach a meaningful preview/report in under 5 minutes by tapping presets instead of typing every number from scratch.
+
+UX pattern (must follow)
+Callout panel at top of each quick-add section:
+
+Title: e.g. “Quick-add typical UK costs” or “Common post-separation assumptions”
+One-line helper: “Tap a tile to use a typical figure as a starting point — adjust any field below to match your situation.”
+Left border accent (border-l-4 border-rose-300 for expenses, border-cyan-300 for income)
+Tappable tile grid (grid-cols-2 sm:grid-cols-3 gap-2):
+
+Icon (lucide) + short label
+Inactive: ~£X/mo typical in muted text
+Active: live value in bold tabular nums with category colour; tile gets border-gold/50 bg-card shadow-sm
+Inactive hover: hover:border-primary/30 hover:bg-muted/60
+Behaviour:
+
+First tap → apply preset median/patch to form state
+Second tap on active tile → open inline edit OR focus the matching field below (pick one; inline edit preferred for expenses)
+Tiles never replace manual entry — full inputs/table remain below
+Disclaimer copy on every assumption block: planning figures only, not advice, not CMS/legal/tax assessment.
+
+Brand styling (DivorceCalculatorUK)
+Navy text: #1a3357
+Gold active state: border-gold/50, text-gold for “+ Add” hints
+Muted panels: bg-muted/40
+Match existing wizard components (wizard-shell, inline-confirm flash on save if available)
+Where to implement
+1. Living expenses step (priority — step 6)
+If SmartExpenseChips already exists, audit and complete it; otherwise build it.
+
+Per-party tabs: Party A / Party B / Shared (use profile names from store)
+Chip config (monthly UK medians, planning only):
+Category	Label	Median £/mo	Category key
+housing
+Rent / Housing
+950
+housing
+housing
+Council Tax
+165
+housing
+housing
+Gas, electric, water
+180
+housing
+living
+Food & groceries
+320
+living
+transport
+Transport / car
+220
+transport
+insurance
+Insurance
+65
+insurance
+child
+Childcare
+480
+child
+living
+Phone & internet
+50
+living
+living
+Clothing & personal
+90
+living
+other
+Leisure & social
+150
+other
+other
+Health & fitness
+60
+other
+Tap → addExpense({ name, amountAnnual: monthly * 12, category, owner, inflationLinked: true })
+Show running total per party tab
+“Add other” dashed tile for custom expenses
+Do not include mortgage here — mortgage comes from home/property step
+2. Income step (step 5 — StepIncome)
+Add IncomeAssumptionChips above income rows/dialog:
+
+Tile	Applies
+No maintenance assumed
+maintenance.monthlyAmount: 0
+Child maintenance ~£400/mo
+maintenance.monthlyAmount: 400 (label: planning only)
+Spousal maintenance ~£800/mo
+maintenance patch
+Part-time income ~£1,200/mo net
+add/update income row for active party
+Full-time ~£2,800/mo net
+add/update income row
+Zero earned income
+clear replacement income for party
+Also add income suggestion chips (not just dialog suggestions):
+
+Employment income, Self-employment, Rental income, State pension, Benefits (UC estimate ~£350/mo planning)
+3. Capital / assets step (step 3 — optional quick-add)
+Tiles for common starting points (user still edits below):
+
+Cash savings ~£8,500 (UK median household)
+ISA/investments ~£15,000
+Pension DC pot ~£50,000 (placeholder CETV)
+Vehicle ~£8,000
+Each tap opens pre-filled add-asset dialog or applies to empty slot.
+
+4. Home step (step 2 — optional)
+Scenario chips:
+
+“Stay in home — buyout TBD”
+“Sell and split proceeds”
+“One party keeps home” Pre-selects common housingScenario / assumption flags without filling numbers.
+5. Assumptions step (step 8)
+One-tap preset bundles:
+
+Conservative: lower growth, higher inflation, longer rehousing timeline
+Neutral: default medians
+Optimistic: faster income recovery, lower costs
+Technical requirements
+Reusable components in client/src/components/wizard/:
+smart-expense-chips.tsx (or enhance existing)
+income-assumption-chips.tsx (new)
+Optional: quick-add-asset-chips.tsx, assumption-preset-chips.tsx
+Config arrays at top of each file — no magic numbers inline in JSX
+Type-safe field keys mapped to store/schema (ExpenseInputSchema, IncomeInputSchema, etc.)
+data-testid on each chip: chip-expense-{key}-{owner}, chip-income-{id}
+Use existing useAppStore — do not introduce a second state layer
+Flash confirmation via useInlineConfirm on apply (“Saved — Council Tax added at £165/mo for Party A”)
+Reference implementation (RedundancyCalculatorUK)
+Mirror this simpler pattern where divorce doesn’t need inline edit yet:
+
+// Config
+const CHIPS = [{ field, label, median, icon, color }];
+// Logic
+const active = (values[field] ?? 0) > 0;
+onClick={() => onApply(field, active ? values[field] : chip.median)}
+// Wire-up
+<QuickAddChips values={inputs} onApply={(f, v) => setInputs({ [f]: v })} />
+<CurrencyInput ... />  // fields below stay editable
+Portable divorce-adapted version may exist at: client/src/components/wizard/quick-add-expense-chips-portable.tsx
+
+Do NOT
+Remove existing manual add/edit flows (table, dialogs, currency inputs)
+Treat presets as advice or guaranteed outcomes
+Block wizard progress if user skips quick-add
+Change calculation engine outputs unless wiring new inputs correctly
+Use redundancy-specific copy (“redundancy package”, “gap period”)
+Test plan
+Fresh wizard: tap 5 expense chips for Party A → totals update, can proceed
+Switch to Party B, add different set → independent totals
+Tap active chip → can edit amount (monthly/annual toggle if supported)
+Income chips apply maintenance + income patches without breaking tax model
+Manual override below chips always wins
+Mobile: 2-column grid readable, tabs scroll horizontally
+npm run check passes
+Deliverable
+Ship quick-add on expenses + income steps minimum. Asset/home/assumption presets are nice-to-have if timeboxed. Match DivorceCalculatorUK navy/gold styling and keep wizard completion time under 5 minutes for a typical user using presets.

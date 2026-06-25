@@ -27,6 +27,7 @@ import { useAccess } from "@/hooks/use-access";
 import { LivePoolConsole, MobilePoolChip } from "@/components/wizard/live-pool-console";
 import { StageInsightCard } from "@/components/wizard/stage-insight-card";
 import { SmartExpenseChips } from "@/components/wizard/smart-expense-chips";
+import { IncomeAssumptionChips } from "@/components/wizard/income-assumption-chips";
 import { useInlineConfirm, InlineConfirm } from "@/components/wizard/inline-confirm";
 
 const STEPS = [
@@ -1437,14 +1438,7 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
 
   return (
     <div className="space-y-6">
-      <div className="p-4 bg-muted/50 rounded-md space-y-2">
-        <p className="text-sm font-medium">Income sources</p>
-        <p className="text-xs text-muted-foreground">
-          Add each party's income sources. Enter <strong>annual gross</strong> (before tax) amounts. 
-          The model will calculate take-home pay using 2026/27 UK tax and NI rates. 
-          Include all regular income: employment, self-employment, benefits, rental income, dividends, etc.
-        </p>
-      </div>
+      <IncomeAssumptionChips />
 
       <div>
         <div className="flex items-center justify-between gap-2 mb-3">
