@@ -49,6 +49,7 @@ export default function MortgageDivorceCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Mortgage Divorce Calculator UK"
       subtitle="Model whether retaining the family home mortgage is sustainable on one income — and compare the sale vs keep decision by assessing post-settlement monthly financial position under different assumptions."
       documentTitle="Mortgage Divorce Calculator UK | DivorceCalculatorUK"

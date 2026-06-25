@@ -49,6 +49,7 @@ export default function DivorceCashflowCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Divorce Cashflow Calculator UK"
       subtitle="Model post-separation monthly cashflow for both parties under different settlement assumptions. See whether each party's income covers their outgoings — and where maintenance or capital adjustments may affect sustainability."
       documentTitle="Divorce Cashflow Calculator UK | DivorceCalculatorUK"

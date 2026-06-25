@@ -52,6 +52,7 @@ export default function FairDivorceSettlementCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Fair Divorce Settlement Calculator UK"
       subtitle="Compare different settlement scenarios side by side to understand the financial implications of each approach. This page helps you model scenarios — it does not decide what is legally fair or predict a court outcome."
       documentTitle="Fair Divorce Settlement Calculator UK | DivorceCalculatorUK"

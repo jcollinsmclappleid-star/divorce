@@ -57,6 +57,7 @@ export default function DivorceAssetSplitCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Divorce Asset Split Calculator UK"
       subtitle="Model how the matrimonial asset pool — property, savings, pensions, and investments — could be divided between the parties under different settlement assumptions."
       documentTitle="Divorce Asset Split Calculator UK | DivorceCalculatorUK"

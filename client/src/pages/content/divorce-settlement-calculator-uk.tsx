@@ -49,6 +49,7 @@ export default function DivorceSettlementCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Divorce Settlement Calculator UK"
       subtitle="Model the financial outcomes of different divorce settlement structures. Compare asset splits, income sustainability, and long-term financial positions side by side — before negotiating or attending mediation."
       documentTitle="Divorce Settlement Calculator UK | DivorceCalculatorUK"

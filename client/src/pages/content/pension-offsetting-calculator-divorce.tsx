@@ -49,6 +49,7 @@ export default function PensionOffsettingCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Pension Offsetting Calculator — Divorce UK"
       subtitle="Model pension offsetting scenarios — where one party keeps the pension while the other receives more from property or savings. Compare offsetting and pension sharing side by side to understand the financial trade-offs."
       documentTitle="Pension Offsetting Calculator Divorce UK | DivorceCalculatorUK"

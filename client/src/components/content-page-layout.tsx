@@ -28,6 +28,7 @@ interface ContentPageLayoutProps {
   relatedPages: RelatedPage[];
   children: React.ReactNode;
   breadcrumbs?: Breadcrumb[];
+  showProductShowcase?: boolean;
 }
 
 function useSeoMeta(title: string, description: string, path: string, pageTitle: string, breadcrumbs?: Breadcrumb[]) {
@@ -130,6 +131,7 @@ export function ContentPageLayout({
   relatedPages,
   children,
   breadcrumbs,
+  showProductShowcase = false,
 }: ContentPageLayoutProps) {
   useDocumentTitle(documentTitle);
   const [location, setLocation] = useLocation();
@@ -214,7 +216,7 @@ export function ContentPageLayout({
         {children}
       </article>
 
-      <section className="py-12 md:py-16 border-y border-border/40" data-testid="section-report-showcase">
+      {showProductShowcase && <section className="py-12 md:py-16 border-y border-border/40" data-testid="section-report-showcase">
         <div className="container mx-auto px-4 max-w-3xl">
           <p className="text-xs font-semibold tracking-wider uppercase text-primary mb-2">What the full report shows</p>
           <h2 className="text-xl md:text-2xl font-display font-bold mb-2">See the numbers, not just the concepts</h2>
@@ -302,7 +304,7 @@ export function ContentPageLayout({
             </div>
           </div>
         </div>
-      </section>
+      </section>}
 
       <section className="py-12 md:py-16 bg-primary border-y border-white/10" data-testid="section-calculator-cta">
         <div className="container mx-auto px-4 max-w-3xl">

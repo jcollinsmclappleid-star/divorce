@@ -49,6 +49,7 @@ export default function DivorceCalculatorUkPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Divorce Calculator UK"
       subtitle="Structured financial modelling for divorce settlements in England and Wales. Enter your assets, debts, incomes, and expenses — and compare what different settlements look like numerically."
       documentTitle="Divorce Calculator UK | DivorceCalculatorUK"

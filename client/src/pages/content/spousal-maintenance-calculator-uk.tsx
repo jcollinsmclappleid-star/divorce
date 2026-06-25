@@ -49,6 +49,7 @@ export default function SpousalMaintenanceCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Spousal Maintenance Calculator UK"
       subtitle="Model the monthly cashflow pressure of different spousal maintenance assumptions. See how maintenance transfers affect post-separation income sustainability for both the paying and receiving party."
       documentTitle="Spousal Maintenance Calculator UK | DivorceCalculatorUK"

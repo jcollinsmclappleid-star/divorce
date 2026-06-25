@@ -50,6 +50,7 @@ export default function DivorcePensionCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Divorce Pension Calculator UK"
       subtitle="Model how pension assets could be handled in a UK divorce settlement. Compare pension sharing and offsetting scenarios alongside property and savings to understand the full financial picture."
       documentTitle="Divorce Pension Calculator UK | DivorceCalculatorUK"

@@ -49,6 +49,7 @@ export default function EquitySplitDivorceCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Equity Split Divorce Calculator UK"
       subtitle="Model how property equity could be divided between the parties — under a sale, a buyout, or a deferred arrangement. Compare the financial implications of different equity split percentages and buyout amounts."
       documentTitle="Equity Split Divorce Calculator UK | DivorceCalculatorUK"

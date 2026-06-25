@@ -49,6 +49,7 @@ export default function HouseDivorceCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="House Divorce Calculator UK"
       subtitle="Model the financial implications of different property outcomes in your divorce. Compare selling, keeping, or deferring the family home — and see what each scenario means for both parties' financial positions."
       documentTitle="House Divorce Calculator UK | DivorceCalculatorUK"

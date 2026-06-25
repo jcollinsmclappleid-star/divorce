@@ -58,6 +58,7 @@ export default function FreeDivorceCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Free Divorce Calculator UK"
       subtitle="Model the financial implications of different divorce settlements at no cost. Enter your figures, compare scenarios, and understand the numbers before making any decisions."
       documentTitle="Free Divorce Calculator UK | DivorceCalculatorUK"

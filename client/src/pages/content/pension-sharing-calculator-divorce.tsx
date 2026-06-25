@@ -49,6 +49,7 @@ export default function PensionSharingCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Pension Sharing Calculator — Divorce UK"
       subtitle="Model the impact of different pension sharing percentages on overall asset distribution and long-term financial position. Compare pension sharing assumptions alongside property, savings, and income scenarios."
       documentTitle="Pension Sharing Calculator Divorce UK | DivorceCalculatorUK"

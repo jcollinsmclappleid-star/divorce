@@ -49,6 +49,7 @@ export default function CanIKeepHouseCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Can I Keep the House After Divorce? — Calculator"
       subtitle="Model whether retaining the family home is financially viable under your specific assumptions. Compare the 'keep' and 'sell' scenarios side by side — including affordability, buyout costs, and long-term sustainability. This page frames everything as scenario comparison, not a prediction of what you can or cannot do."
       documentTitle="Can I Keep the House After Divorce? Calculator UK | DivorceCalculatorUK"

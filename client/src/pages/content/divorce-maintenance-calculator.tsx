@@ -49,6 +49,7 @@ export default function DivorceMaintenanceCalculatorPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
+      showProductShowcase
       title="Divorce Maintenance Calculator UK"
       subtitle="Model the financial impact of both spousal and child maintenance on post-separation monthly income for both parties. Compare scenarios with and without maintenance to understand sustainability under different assumptions."
       documentTitle="Divorce Maintenance Calculator UK | DivorceCalculatorUK"
