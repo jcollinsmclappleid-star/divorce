@@ -1,0 +1,700 @@
+You are a senior SEO strategist, React/TypeScript engineer, UK divorce-finance UX copywriter, and conversion-rate optimisation specialist.
+
+I am building **DivorceCalculatorUK.co.uk**.
+
+The site already has a broad sitemap with many guide pages, including divorce financial settlement, pensions, property, mediation, maintenance, financial disclosure, clean break orders, consent orders, and related divorce finance topics.
+
+The issue:
+The site is still underweight on **exact calculator-intent SEO pages**. It has many guide-style pages, but users searching for calculators are closer to converting because they want a tool, not just information.
+
+Your job:
+Assess the current routes/pages/sitemap first, then build a stronger **calculator-intent SEO cluster** that feeds users into the existing divorce calculator and paid full report flow.
+
+Do not blindly create duplicate pages.
+Do not overwrite strong existing pages.
+Do not create thin doorway pages.
+
+The new pages must be distinct, useful and search-intent specific.
+
+Core positioning:
+DivorceCalculatorUK is a private, assumption-based divorce financial modelling tool for England and Wales. It helps users model settlement scenarios involving property, pensions, savings, investments, debts, income, housing and cashflow.
+
+It is not:
+
+* legal advice
+* financial advice
+* tax advice
+* pension advice
+* mortgage advice
+* investment advice
+* a prediction of court outcomes
+* a replacement for a solicitor, mediator, financial adviser, pension specialist or mortgage adviser
+
+Use careful wording:
+
+* “model”
+* “scenario”
+* “under these assumptions”
+* “may”
+* “could”
+* “planning model”
+* “private report”
+* “does not predict court outcomes”
+
+Avoid:
+
+* “you are entitled to”
+* “the court will award”
+* “you should accept”
+* “best settlement”
+* “guaranteed”
+* “legal advice”
+* “financial advice”
+* “pension advice”
+* “tax advice”
+* “mortgage advice”
+
+PHASE 1 — Audit existing site first
+
+Before implementing, inspect:
+
+1. Existing routes/pages.
+2. Existing sitemap.xml.
+3. Existing calculator pages.
+4. Existing guide pages.
+5. Existing paid report flow.
+6. Existing SEO metadata and canonical tags.
+7. Existing internal linking.
+8. Existing FAQ schema and structured data.
+9. Any duplicated or near-duplicated page copy.
+10. Any risky legal/financial advice language.
+
+Then produce:
+
+* Keep list
+* Enhance list
+* Add list
+* Avoid/merge list
+
+Important:
+If a proposed new page substantially overlaps with an existing page, either:
+
+* make the new page genuinely calculator-focused and distinct, or
+* improve the existing page instead, or
+* add a canonical strategy.
+
+PHASE 2 — Add priority calculator-intent SEO pages
+
+Build these new URLs first:
+
+1. `/free-divorce-calculator-uk`
+
+Target keyword:
+free divorce calculator UK
+
+Meta title:
+Free Divorce Calculator UK
+
+Meta description:
+Use a free UK divorce calculator to model property, pensions, savings, debts, income and settlement scenarios.
+
+H1:
+Free divorce calculator UK
+
+Primary CTA:
+Start free divorce calculator
+
+Search intent:
+Users looking for a free tool. This should be one of the main acquisition pages.
+
+Page must include:
+
+* short intro
+* calculator CTA above the fold
+* what the free calculator models
+* what the full paid report unlocks
+* example scenario
+* related calculators
+* FAQ
+* disclaimer
+
+2. `/divorce-settlement-calculator-uk`
+
+Target keyword:
+divorce settlement calculator UK
+
+Meta title:
+Divorce Settlement Calculator UK
+
+Meta description:
+Model divorce financial settlement scenarios across property, pensions, savings, debts and income.
+
+H1:
+Divorce settlement calculator UK
+
+Primary CTA:
+Model my divorce settlement
+
+Search intent:
+Core commercial calculator query.
+
+Page must include:
+
+* property
+* pensions
+* savings
+* debts
+* income
+* housing needs
+* clean break / ongoing support assumptions
+* CTA into existing full settlement calculator/report
+
+3. `/fair-divorce-settlement-calculator`
+
+Target keyword:
+fair divorce settlement calculator
+
+Meta title:
+Fair Divorce Settlement Calculator UK
+
+Meta description:
+Explore what a fair divorce settlement may look like under different property, pension, income and housing assumptions.
+
+H1:
+Fair divorce settlement calculator
+
+Primary CTA:
+Compare settlement scenarios
+
+Important:
+Do not imply the tool decides legal fairness or predicts a court outcome.
+
+Use language:
+“This page helps you compare settlement scenarios. It does not decide what is legally fair or what a court would order.”
+
+4. `/divorce-calculator-uk`
+
+Target keyword:
+divorce calculator UK
+
+Meta title:
+Divorce Calculator UK
+
+Meta description:
+Use a private UK divorce calculator to model settlement scenarios involving property, pensions, savings, debts and income.
+
+H1:
+Divorce calculator UK
+
+Primary CTA:
+Start divorce calculator
+
+Search intent:
+Generic exact-match calculator query.
+
+This can act as a simpler exact-match landing page that routes to the main full calculator.
+
+5. `/divorce-asset-split-calculator`
+
+Target keyword:
+divorce asset split calculator
+
+Meta title:
+Divorce Asset Split Calculator UK
+
+Meta description:
+Model how property, pensions, savings, investments and debts may be divided in divorce settlement scenarios.
+
+H1:
+Divorce asset split calculator
+
+Primary CTA:
+Model asset split
+
+Page must include:
+
+* matrimonial asset pool explanation
+* property
+* pensions
+* savings/investments
+* debts
+* business interests if already supported
+* net asset pool example
+* full report CTA
+
+6. `/divorce-pension-calculator`
+
+Target keyword:
+divorce pension calculator UK
+
+Meta title:
+Divorce Pension Calculator UK
+
+Meta description:
+Model how pension values, pension sharing and pension offsetting may affect divorce settlement scenarios.
+
+H1:
+Divorce pension calculator
+
+Primary CTA:
+Model pension scenarios
+
+Page must include:
+
+* pension value input concept
+* pension sharing
+* pension offsetting
+* pension vs property trade-off
+* warning that pension advice is not provided
+* links to existing pension pages
+
+7. `/pension-sharing-calculator-divorce`
+
+Target keyword:
+pension sharing calculator divorce
+
+Meta title:
+Pension Sharing Calculator Divorce UK
+
+Meta description:
+Estimate how a pension sharing percentage could affect divorce settlement scenarios under different assumptions.
+
+H1:
+Pension sharing calculator for divorce
+
+Primary CTA:
+Model pension sharing
+
+Page must include:
+
+* pension sharing percentage example
+* before/after pension value view
+* impact on total settlement model
+* no pension advice disclaimer
+
+8. `/pension-offsetting-calculator-divorce`
+
+Target keyword:
+pension offsetting calculator divorce
+
+Meta title:
+Pension Offsetting Calculator Divorce UK
+
+Meta description:
+Compare pension offsetting against property, savings and other marital assets in divorce settlement scenarios.
+
+H1:
+Pension offsetting calculator for divorce
+
+Primary CTA:
+Compare pension offsetting scenarios
+
+Page must include:
+
+* offsetting concept
+* pension vs property example
+* warning that pension values are not always directly equivalent to cash/property
+* full report CTA
+* no pension/financial advice disclaimer
+
+9. `/spousal-maintenance-calculator-uk`
+
+Target keyword:
+spousal maintenance calculator UK
+
+Meta title:
+Spousal Maintenance Calculator UK
+
+Meta description:
+Model possible spousal maintenance pressure using income, expenses and household assumptions.
+
+H1:
+Spousal maintenance calculator UK
+
+Primary CTA:
+Model income and maintenance scenarios
+
+Important:
+This page must be very carefully worded.
+
+Do not say:
+“Calculate what spousal maintenance you will receive/pay.”
+
+Say:
+“Model possible maintenance pressure under income and expense assumptions.”
+
+Include:
+
+* income
+* essential expenses
+* housing costs
+* child-related household costs
+* short-term vs longer-term pressure
+* no legal entitlement prediction
+* no court outcome prediction
+
+10. `/divorce-maintenance-calculator`
+
+Target keyword:
+divorce maintenance calculator
+
+Meta title:
+Divorce Maintenance Calculator UK
+
+Meta description:
+Estimate maintenance scenarios alongside property, pension and cashflow assumptions.
+
+H1:
+Divorce maintenance calculator
+
+Primary CTA:
+Model maintenance scenarios
+
+This page can be broader than spousal maintenance and should internally link to:
+
+* `/spousal-maintenance-calculator-uk`
+* existing child maintenance vs spousal maintenance page
+* income/cashflow calculator page
+
+11. `/house-divorce-calculator`
+
+Target keyword:
+house divorce calculator
+
+Meta title:
+House Divorce Calculator UK
+
+Meta description:
+Model how the family home, mortgage and equity may affect divorce settlement scenarios.
+
+H1:
+House divorce calculator
+
+Primary CTA:
+Model house scenarios
+
+Page must include:
+
+* property value
+* mortgage balance
+* equity
+* sale scenario
+* buyout scenario
+* deferred sale scenario if supported
+* mortgage affordability
+* links to existing house/property pages
+
+12. `/can-i-keep-the-house-after-divorce-calculator`
+
+Target keyword:
+can I keep the house after divorce calculator
+
+Meta title:
+Can I Keep the House After Divorce Calculator
+
+Meta description:
+Explore whether keeping the home may be possible under different equity, mortgage, pension and income assumptions.
+
+H1:
+Can I keep the house after divorce calculator
+
+Primary CTA:
+Compare house-retention scenarios
+
+Important:
+Do not promise that the user can or cannot keep the house. Frame as scenario modelling.
+
+13. `/mortgage-divorce-calculator`
+
+Target keyword:
+mortgage divorce calculator
+
+Meta title:
+Mortgage Divorce Calculator UK
+
+Meta description:
+Model mortgage affordability and housing pressure after separation or divorce.
+
+H1:
+Mortgage divorce calculator
+
+Primary CTA:
+Model mortgage pressure
+
+Page must include:
+
+* mortgage payment
+* affordability pressure
+* single-income scenario
+* sale vs keep scenario
+* transfer of equity link
+* no mortgage advice disclaimer
+
+14. `/equity-split-divorce-calculator`
+
+Target keyword:
+equity split divorce calculator
+
+Meta title:
+Equity Split Divorce Calculator UK
+
+Meta description:
+Model how home equity could be divided or offset in a divorce settlement.
+
+H1:
+Equity split divorce calculator
+
+Primary CTA:
+Model equity split
+
+Page must include:
+
+* property value
+* mortgage balance
+* net equity
+* proposed percentage split
+* buyout amount
+* offsetting against pensions/savings
+
+15. `/divorce-cashflow-calculator`
+
+Target keyword:
+divorce cashflow calculator
+
+Meta title:
+Divorce Cashflow Calculator UK
+
+Meta description:
+Model post-divorce cashflow under different settlement, housing and income assumptions.
+
+H1:
+Divorce cashflow calculator
+
+Primary CTA:
+Model cashflow scenarios
+
+Page must include:
+
+* income
+* housing costs
+* maintenance assumptions
+* essential costs
+* 12-month and 5-year cashflow concept
+* paid full report CTA
+
+PHASE 3 — Page structure requirements
+
+Each new page must include:
+
+1. SEO hero
+
+* exact keyword in H1
+* concise explanation
+* CTA above fold
+
+2. Calculator/tool CTA
+   Use the existing calculator route/report flow.
+   Do not create a separate broken calculator if the current engine already exists.
+
+3. “What this can model”
+   Use bullets specific to the page.
+
+4. “What this cannot decide”
+   Include non-advisory boundaries specific to the page.
+
+5. Example scenario
+   Create one realistic example using illustrative numbers.
+   Make clear it is an example only.
+
+6. Internal links
+   Add related calculator links and guide links.
+
+7. FAQ section
+   Minimum 4 FAQs per page.
+   Use FAQPage schema.
+
+8. Breadcrumbs
+   Add BreadcrumbList schema.
+
+9. Disclaimer
+   Use this or similar:
+
+“DivorceCalculatorUK is an assumption-based financial modelling tool. It does not provide legal, financial, tax, pension, mortgage or investment advice and does not predict court outcomes.”
+
+10. CTA to paid report
+    After useful free content, include:
+
+“Unlock the full private settlement report”
+
+Do not put the paid CTA before useful content.
+
+PHASE 4 — Internal linking rules
+
+Apply these internal links:
+
+All new calculator pages should link to:
+
+* `/divorce-financial-settlement-calculator-uk`
+* `/free-divorce-calculator-uk`
+* `/divorce-settlement-calculator-uk`
+
+Property pages should link to:
+
+* `/divorce-house-buyout-calculator-uk`
+* `/can-i-keep-the-house-after-divorce-uk`
+* `/transfer-of-equity-divorce-uk`
+* `/mortgage-divorce-calculator`
+* `/equity-split-divorce-calculator`
+
+Pension pages should link to:
+
+* `/how-are-pensions-divided-in-divorce-uk`
+* `/divorce-pension-split-calculator-uk`
+* `/divorce-pension-offsetting-uk`
+* `/pension-sharing-calculator-divorce`
+* `/pension-offsetting-calculator-divorce`
+
+Maintenance pages should link to:
+
+* `/spousal-maintenance-after-divorce-uk`
+* `/how-much-maintenance-after-divorce-uk`
+* `/child-maintenance-vs-spousal-maintenance-uk`
+* `/divorce-maintenance-calculator`
+* `/divorce-cashflow-calculator`
+
+Cashflow/needs pages should link to:
+
+* `/divorce-cashflow-calculator`
+* `/divorce-financial-modelling`
+* `/divorce-financial-checklist-before-mediation`
+
+PHASE 5 — Canonical strategy
+
+Do not canonical all calculator pages to one page unless they are near duplicates.
+
+Preferred approach:
+Make each new page unique enough to index.
+
+Use:
+
+* `/free-divorce-calculator-uk` for free-entry search intent.
+* `/divorce-settlement-calculator-uk` for main commercial calculator search.
+* `/divorce-calculator-uk` for generic exact-match calculator search.
+* `/divorce-financial-settlement-calculator-uk` as the detailed full modelling page.
+
+If any content overlaps too heavily, either:
+
+* rewrite it to be unique, or
+* canonical the weaker page to the stronger page, or
+* merge content.
+
+PHASE 6 — Update sitemap and technical SEO
+
+Update:
+
+* sitemap.xml
+* any sitemap generation logic
+* internal navigation if appropriate
+* footer calculator links if appropriate
+* related pages modules
+* page metadata
+* Open Graph metadata
+* canonical tags
+
+Ensure:
+
+* all public calculator pages are indexable
+* private report/results/checkout/admin pages are noindexed
+* no broken links
+* no duplicate H1s
+* no duplicated meta descriptions
+* no malformed structured data
+
+PHASE 7 — Conversion requirements
+
+Each calculator page should route to the monetisation flow.
+
+Conversion flow:
+
+1. User lands on calculator-intent SEO page.
+2. User gets useful explanatory content.
+3. User clicks into calculator or starts modelling.
+4. User sees free/basic output.
+5. User is offered paid full private report.
+6. If relevant, user is offered paid written clarity review.
+
+Do not make the page feel like a hard-sell landing page.
+The paid report CTA should feel like the natural next step.
+
+Suggested CTA copy:
+
+* “Start free calculator”
+* “Model my settlement”
+* “Compare scenarios”
+* “Unlock the full private report”
+* “Get a written clarity review”
+
+PHASE 8 — Design requirements
+
+Use the existing DivorceCalculatorUK design system.
+
+Pages should feel:
+
+* private
+* calm
+* premium
+* serious
+* useful
+* not alarmist
+* not legal-advice-like
+* not generic blog content
+
+Use:
+
+* clean page headers
+* comparison cards
+* calculator cards
+* scenario examples
+* FAQs
+* clear CTAs
+* internal link cards
+
+Avoid:
+
+* walls of text
+* aggressive sales copy
+* fear-based language
+* stock legal imagery
+* court/gavel clichés
+* claims about what a court will do
+
+PHASE 9 — Acceptance criteria
+
+This task is complete when:
+
+1. Existing sitemap and routes have been audited.
+2. Keep/enhance/add list has been provided.
+3. The 15 calculator-intent URLs have been added or enhanced.
+4. Each page has unique H1, meta title and meta description.
+5. Each page has useful unique content.
+6. Each page includes calculator CTA and paid report CTA.
+7. Each page has internal links to relevant existing pages.
+8. Each page has FAQ section and FAQPage schema.
+9. Breadcrumb schema is added.
+10. Sitemap.xml includes the new URLs.
+11. Canonicals are correct.
+12. No private/payment/report pages are accidentally indexable.
+13. No advisory or court-prediction language has been added.
+14. Build/typecheck passes.
+
+After implementation, report:
+
+1. Files changed.
+2. Pages added.
+3. Pages improved instead of duplicated.
+4. Canonicals added.
+5. Sitemap changes.
+6. Structured data added.
+7. Internal links added.
+8. Build/typecheck result.
+9. Any manual follow-ups.
