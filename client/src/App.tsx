@@ -27,6 +27,21 @@ const ClusterHouseBuyout = lazy(() => import("@/pages/content/cluster-house-buyo
 const ClusterPensionSplit = lazy(() => import("@/pages/content/cluster-pension-split"));
 const ClusterMortgageAffordability = lazy(() => import("@/pages/content/cluster-mortgage-affordability"));
 const ClusterMediationChecklist = lazy(() => import("@/pages/content/cluster-mediation-checklist"));
+const FreeDivorceCalculatorPage = lazy(() => import("@/pages/content/free-divorce-calculator-uk"));
+const DivorceCalculatorUkPage = lazy(() => import("@/pages/content/divorce-calculator-uk"));
+const DivorceSettlementCalculatorPage = lazy(() => import("@/pages/content/divorce-settlement-calculator-uk"));
+const FairDivorceSettlementCalculatorPage = lazy(() => import("@/pages/content/fair-divorce-settlement-calculator"));
+const DivorceAssetSplitCalculatorPage = lazy(() => import("@/pages/content/divorce-asset-split-calculator"));
+const EquitySplitDivorceCalculatorPage = lazy(() => import("@/pages/content/equity-split-divorce-calculator"));
+const DivorcePensionCalculatorPage = lazy(() => import("@/pages/content/divorce-pension-calculator"));
+const PensionSharingCalculatorPage = lazy(() => import("@/pages/content/pension-sharing-calculator-divorce"));
+const PensionOffsettingCalculatorPage = lazy(() => import("@/pages/content/pension-offsetting-calculator-divorce"));
+const SpousalMaintenanceCalculatorPage = lazy(() => import("@/pages/content/spousal-maintenance-calculator-uk"));
+const DivorceMaintenanceCalculatorPage = lazy(() => import("@/pages/content/divorce-maintenance-calculator"));
+const HouseDivorceCalculatorPage = lazy(() => import("@/pages/content/house-divorce-calculator"));
+const CanIKeepHouseCalculatorPage = lazy(() => import("@/pages/content/can-i-keep-the-house-after-divorce-calculator"));
+const MortgageDivorceCalculatorPage = lazy(() => import("@/pages/content/mortgage-divorce-calculator"));
+const DivorceCashflowCalculatorPage = lazy(() => import("@/pages/content/divorce-cashflow-calculator"));
 const Faq5050Automatic = lazy(() => import("@/pages/content/faq-5050-automatic"));
 const FaqKeepHouse = lazy(() => import("@/pages/content/faq-keep-house"));
 const FaqPensionsDivided = lazy(() => import("@/pages/content/faq-pensions-divided"));
@@ -319,6 +334,21 @@ function Router() {
       <Route path="/directors-loan-account-divorce-uk" component={DirectorsLoanDivorcePage} />
       <Route path="/divorce-in-scotland-financial-settlement" component={DivorceInScotlandPage} />
       <Route path="/divorce-in-northern-ireland-financial-settlement" component={DivorceInNorthernIrelandPage} />
+      <Route path="/free-divorce-calculator-uk" component={FreeDivorceCalculatorPage} />
+      <Route path="/divorce-calculator-uk" component={DivorceCalculatorUkPage} />
+      <Route path="/divorce-settlement-calculator-uk" component={DivorceSettlementCalculatorPage} />
+      <Route path="/fair-divorce-settlement-calculator" component={FairDivorceSettlementCalculatorPage} />
+      <Route path="/divorce-asset-split-calculator" component={DivorceAssetSplitCalculatorPage} />
+      <Route path="/equity-split-divorce-calculator" component={EquitySplitDivorceCalculatorPage} />
+      <Route path="/divorce-pension-calculator" component={DivorcePensionCalculatorPage} />
+      <Route path="/pension-sharing-calculator-divorce" component={PensionSharingCalculatorPage} />
+      <Route path="/pension-offsetting-calculator-divorce" component={PensionOffsettingCalculatorPage} />
+      <Route path="/spousal-maintenance-calculator-uk" component={SpousalMaintenanceCalculatorPage} />
+      <Route path="/divorce-maintenance-calculator" component={DivorceMaintenanceCalculatorPage} />
+      <Route path="/house-divorce-calculator" component={HouseDivorceCalculatorPage} />
+      <Route path="/can-i-keep-the-house-after-divorce-calculator" component={CanIKeepHouseCalculatorPage} />
+      <Route path="/mortgage-divorce-calculator" component={MortgageDivorceCalculatorPage} />
+      <Route path="/divorce-cashflow-calculator" component={DivorceCashflowCalculatorPage} />
       <Route path="/pricing" component={PricingPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/results">

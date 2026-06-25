@@ -239,6 +239,85 @@ export async function registerRoutes(
   </url>
 
   <!-- ═══════════════════════════════════════════════
+       TIER 2.5 (0.8) — Calculator-intent cluster pages
+       ═══════════════════════════════════════════════ -->
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/free-divorce-calculator-uk</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-calculator-uk</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-settlement-calculator-uk</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/fair-divorce-settlement-calculator</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-asset-split-calculator</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/equity-split-divorce-calculator</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-pension-calculator</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/pension-sharing-calculator-divorce</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/pension-offsetting-calculator-divorce</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/spousal-maintenance-calculator-uk</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-maintenance-calculator</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/house-divorce-calculator</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/can-i-keep-the-house-after-divorce-calculator</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/mortgage-divorce-calculator</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/divorce-cashflow-calculator</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- ═══════════════════════════════════════════════
        TIER 3 (0.8) — Supporting articles
        ═══════════════════════════════════════════════ -->
   <url>
