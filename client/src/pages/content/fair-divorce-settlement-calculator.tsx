@@ -134,6 +134,47 @@ export default function FairDivorceSettlementCalculatorPage() {
       </ContentSection>
 
       <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-4" data-testid="text-illustrative-example">
+          Illustrative Example: 50/50 vs 60/40
+        </h2>
+        <p className="text-muted-foreground mb-6 leading-relaxed">
+          Under these illustrative assumptions, a 10-percentage-point shift in the split ratio produces a material difference in each party's capital position. These figures are for illustration only.
+        </p>
+        <div className="rounded-lg border overflow-hidden mb-6" data-testid="table-fair-example">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-muted/50">
+                <th className="text-left px-4 py-3 font-semibold text-foreground">Settlement assumption</th>
+                <th className="text-right px-4 py-3 font-semibold text-foreground">Party A receives</th>
+                <th className="text-right px-4 py-3 font-semibold text-foreground">Party B receives</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              <tr>
+                <td className="px-4 py-2.5 text-muted-foreground">50/50 split (£300,000 pool)</td>
+                <td className="px-4 py-2.5 text-right font-medium">£150,000</td>
+                <td className="px-4 py-2.5 text-right font-medium">£150,000</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2.5 text-muted-foreground">60/40 split (needs-adjusted)</td>
+                <td className="px-4 py-2.5 text-right font-medium">£180,000</td>
+                <td className="px-4 py-2.5 text-right font-medium">£120,000</td>
+              </tr>
+              <tr className="bg-primary/5">
+                <td className="px-4 py-2.5 font-semibold text-foreground">Difference</td>
+                <td className="px-4 py-2.5 text-right font-semibold">+£30,000</td>
+                <td className="px-4 py-2.5 text-right font-semibold">−£30,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+          The calculator lets you model any percentage split — not just 50/50 or 60/40 — and compares the resulting capital and income positions for both parties simultaneously. Entering your own figures will produce outputs specific to your asset pool.
+        </p>
+        <InlineCTA label="Model your split scenarios" />
+      </ContentSection>
+
+      <ContentSection muted>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-4" data-testid="text-faq">
           Frequently Asked Questions
         </h2>

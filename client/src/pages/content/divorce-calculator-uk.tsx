@@ -144,6 +144,53 @@ export default function DivorceCalculatorUkPage() {
       </ContentSection>
 
       <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-4" data-testid="text-illustrative-example">
+          Illustrative Modelling Example
+        </h2>
+        <p className="text-muted-foreground mb-6 leading-relaxed">
+          Under these assumptions, here is how the calculator models a sell-and-split scenario for illustrative purposes only. Outcomes vary materially depending on the figures entered.
+        </p>
+        <div className="rounded-lg border overflow-hidden mb-4">
+          <table className="w-full text-sm" data-testid="table-example">
+            <thead>
+              <tr className="bg-muted/50">
+                <th className="text-left px-4 py-3 font-semibold text-foreground">Assumption</th>
+                <th className="text-right px-4 py-3 font-semibold text-foreground">Value</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              <tr><td className="px-4 py-2.5 text-muted-foreground">Property value</td><td className="px-4 py-2.5 text-right font-medium">£380,000</td></tr>
+              <tr><td className="px-4 py-2.5 text-muted-foreground">Outstanding mortgage</td><td className="px-4 py-2.5 text-right font-medium">£160,000</td></tr>
+              <tr><td className="px-4 py-2.5 text-muted-foreground">Estimated sale costs (2%)</td><td className="px-4 py-2.5 text-right font-medium">£7,600</td></tr>
+              <tr className="bg-primary/5"><td className="px-4 py-2.5 font-semibold text-foreground">Net equity</td><td className="px-4 py-2.5 text-right font-semibold">£212,400</td></tr>
+              <tr><td className="px-4 py-2.5 text-muted-foreground">Joint savings</td><td className="px-4 py-2.5 text-right font-medium">£40,000</td></tr>
+              <tr className="bg-primary/5"><td className="px-4 py-2.5 font-semibold text-foreground">Total divisible pool</td><td className="px-4 py-2.5 text-right font-semibold">£252,400</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-3 mb-4">
+          <Card data-testid="card-example-party-a">
+            <CardContent className="pt-4 pb-3">
+              <p className="text-xs font-semibold text-foreground mb-2">Party A — 50% share</p>
+              <p className="text-sm font-bold text-primary">£126,200</p>
+              <p className="text-xs text-muted-foreground mt-1">Net capital received under sell-and-split assumption</p>
+            </CardContent>
+          </Card>
+          <Card data-testid="card-example-party-b">
+            <CardContent className="pt-4 pb-3">
+              <p className="text-xs font-semibold text-foreground mb-2">Party B — 50% share</p>
+              <p className="text-sm font-bold text-primary">£126,200</p>
+              <p className="text-xs text-muted-foreground mt-1">Net capital received under sell-and-split assumption</p>
+            </CardContent>
+          </Card>
+        </div>
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          These are illustrative figures under a single scenario assumption. The full calculator also models income, tax, monthly cashflow, pension allocation, and up to four settlement scenarios simultaneously.
+        </p>
+        <InlineCTA label="Model your own figures" />
+      </ContentSection>
+
+      <ContentSection muted>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-4" data-testid="text-faq">
           Frequently Asked Questions
         </h2>

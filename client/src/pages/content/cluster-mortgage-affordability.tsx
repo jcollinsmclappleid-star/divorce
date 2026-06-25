@@ -43,6 +43,7 @@ const relatedPages = [
     href: "/both-names-on-mortgage-divorce-uk",
     badge: "Property",
   },
+  { title: "Mortgage Divorce Calculator UK", description: "Model mortgage repayments and affordability after separation.", href: "/mortgage-divorce-calculator", badge: "Calculator" },
   { title: "Preview the Full Financial Report", description: "Model mortgage affordability on a single income.", href: "/unlock", badge: "Report" },
 ];
 

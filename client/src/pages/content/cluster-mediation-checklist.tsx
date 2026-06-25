@@ -38,6 +38,7 @@ const relatedPages = [
     href: "/divorce-mediation-process-uk",
     badge: "Process",
   },
+  { title: "Divorce Cashflow Calculator UK", description: "Model post-separation monthly income and sustainability.", href: "/divorce-cashflow-calculator", badge: "Calculator" },
   { title: "Preview the Full Financial Report", description: "Understand what figures to bring to mediation.", href: "/unlock", badge: "Report" },
 ];
 

@@ -44,6 +44,8 @@ const relatedPages = [
     href: "/divorce-where-one-earns-more-uk",
     badge: "Situations",
   },
+  { title: "Divorce Asset Split Calculator", description: "Model how assets could be divided between parties numerically.", href: "/divorce-asset-split-calculator", badge: "Calculator" },
+  { title: "Divorce Settlement Calculator UK", description: "Comprehensive scenario modelling for all asset types.", href: "/divorce-settlement-calculator-uk", badge: "Calculator" },
   { title: "Preview the Full Financial Report", description: "See a full 50/50 split modelled with real figures.", href: "/unlock", badge: "Report" },
 ];
 

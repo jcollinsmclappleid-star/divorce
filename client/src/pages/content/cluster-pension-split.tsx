@@ -38,6 +38,7 @@ const relatedPages = [
     href: "/how-are-pensions-divided-in-divorce-uk",
     badge: "FAQ",
   },
+  { title: "Divorce Pension Calculator UK", description: "Model pension sharing, offsetting and division scenarios.", href: "/divorce-pension-calculator", badge: "Calculator" },
   { title: "Preview the Full Financial Report", description: "See how pension sharing works in a full settlement model.", href: "/unlock", badge: "Report" },
 ];
 

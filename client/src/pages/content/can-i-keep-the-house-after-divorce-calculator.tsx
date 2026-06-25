@@ -151,6 +151,57 @@ export default function CanIKeepHouseCalculatorPage() {
       </ContentSection>
 
       <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-4" data-testid="text-illustrative-example">
+          Illustrative Example: Keep vs Sell
+        </h2>
+        <p className="text-muted-foreground mb-6 leading-relaxed">
+          Under these illustrative assumptions, the two scenarios produce different capital and monthly cashflow outcomes. These figures are for illustration only.
+        </p>
+        <div className="rounded-lg border overflow-hidden mb-6" data-testid="table-keep-sell-example">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-muted/50">
+                <th className="text-left px-4 py-3 font-semibold text-foreground">Item</th>
+                <th className="text-right px-4 py-3 font-semibold text-foreground">Keep scenario</th>
+                <th className="text-right px-4 py-3 font-semibold text-foreground">Sell and split</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              <tr>
+                <td className="px-4 py-2.5 text-muted-foreground">Property value</td>
+                <td className="px-4 py-2.5 text-right">£350,000</td>
+                <td className="px-4 py-2.5 text-right">£350,000</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2.5 text-muted-foreground">Mortgage remaining</td>
+                <td className="px-4 py-2.5 text-right">£180,000</td>
+                <td className="px-4 py-2.5 text-right">Paid off on sale</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2.5 text-muted-foreground">Buyout required (50% equity split)</td>
+                <td className="px-4 py-2.5 text-right font-medium">£78,500</td>
+                <td className="px-4 py-2.5 text-right text-muted-foreground">n/a</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2.5 text-muted-foreground">Retaining party capital after</td>
+                <td className="px-4 py-2.5 text-right font-medium">£0 liquid (equity locked in property)</td>
+                <td className="px-4 py-2.5 text-right font-medium">~£78,500 cash</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2.5 text-muted-foreground">Est. monthly mortgage (sole name)</td>
+                <td className="px-4 py-2.5 text-right font-medium">~£940/month (25yr, 4.5%)</td>
+                <td className="px-4 py-2.5 text-right text-muted-foreground">No longer applies</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+          Keeping the home may preserve housing stability but can leave the retaining party with limited liquid capital and higher monthly commitments. Entering your own figures will produce outputs specific to your situation.
+        </p>
+        <InlineCTA label="Model keep vs sell with your figures" />
+      </ContentSection>
+
+      <ContentSection muted>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-4" data-testid="text-faq">
           Frequently Asked Questions
         </h2>

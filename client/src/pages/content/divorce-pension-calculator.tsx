@@ -145,6 +145,47 @@ export default function DivorcePensionCalculatorPage() {
         <InlineCTA label="Compare pension and settlement scenarios" />
       </ContentSection>
 
+      <ContentSection>
+        <h2 className="text-xl md:text-2xl font-display font-bold mb-4" data-testid="text-illustrative-example">
+          Illustrative Example: Sharing vs Offsetting
+        </h2>
+        <p className="text-muted-foreground mb-6 leading-relaxed">
+          Under these illustrative assumptions, the two main approaches to pension division produce materially different outcomes for each party's capital and retirement provision. These figures are for illustration only.
+        </p>
+        <div className="rounded-lg border overflow-hidden mb-6" data-testid="table-pension-example">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-muted/50">
+                <th className="text-left px-4 py-3 font-semibold text-foreground">Approach</th>
+                <th className="text-right px-4 py-3 font-semibold text-foreground">Party A (pension holder)</th>
+                <th className="text-right px-4 py-3 font-semibold text-foreground">Party B</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              <tr>
+                <td className="px-4 py-2.5 text-muted-foreground">Starting position</td>
+                <td className="px-4 py-2.5 text-right">Pension CETV: £200,000</td>
+                <td className="px-4 py-2.5 text-right">Pension CETV: £20,000</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2.5 text-muted-foreground">Sharing order (50% transfer)</td>
+                <td className="px-4 py-2.5 text-right font-medium">Pension: £100,000</td>
+                <td className="px-4 py-2.5 text-right font-medium">Pension: £120,000</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-2.5 text-muted-foreground">Offsetting (pension retained; Party B takes equity)</td>
+                <td className="px-4 py-2.5 text-right font-medium">Pension: £200,000 / Equity: £0</td>
+                <td className="px-4 py-2.5 text-right font-medium">Pension: £20,000 / Equity: +£90,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+          Offsetting requires comparing unlike assets — pension and property equity have very different tax treatment, growth characteristics, and accessibility. The calculator models both approaches using the figures you enter.
+        </p>
+        <InlineCTA label="Model your pension scenarios" />
+      </ContentSection>
+
       <ContentSection muted>
         <h2 className="text-xl md:text-2xl font-display font-bold mb-4" data-testid="text-faq">
           Frequently Asked Questions

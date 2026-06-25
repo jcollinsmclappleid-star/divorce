@@ -44,6 +44,8 @@ const relatedPages = [
     href: "/transfer-of-equity-divorce-uk",
     badge: "Property",
   },
+  { title: "House Divorce Calculator UK", description: "Compare all four property settlement scenarios with your figures.", href: "/house-divorce-calculator", badge: "Calculator" },
+  { title: "Can I Keep the House? Calculator", description: "Model keep vs sell and buyout affordability numerically.", href: "/can-i-keep-the-house-after-divorce-calculator", badge: "Calculator" },
   { title: "Preview the Full Financial Report", description: "Model a property buyout scenario with your figures.", href: "/unlock", badge: "Report" },
 ];
 
