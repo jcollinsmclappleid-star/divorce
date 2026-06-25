@@ -31,8 +31,8 @@ const faqItems = [
     answer: "Yes. The paying party's pension fund is reduced by the transfer amount. This means lower projected retirement income for the paying party. The net effect depends on the size of the transfer relative to the total pension, the age of both parties, and future contribution levels. Modelling the long-term income implications is relevant when evaluating pension sharing percentages.",
   },
   {
-    question: "Is pension sharing better than offsetting?",
-    answer: "It depends on the circumstances. Pension sharing gives each party their own pension and is generally considered the preferred approach for addressing large pension disparities. Offsetting (trading pension value against property or savings) is simpler but compares unlike assets — pension income in retirement and property equity now are not directly equivalent in financial terms. Independent advice is often warranted when choosing between them.",
+    question: "What are the implementation costs of a pension sharing order?",
+    answer: "Pension scheme administrators charge implementation fees for processing a pension sharing order. These fees vary widely by scheme — typically £500–£2,000, though some public sector schemes charge significantly more. Fees are often split between the parties or allocated by agreement. They should be factored into the overall settlement cost when evaluating pension sharing as an option.",
   },
 ];
 
