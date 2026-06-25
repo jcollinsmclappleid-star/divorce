@@ -3,7 +3,7 @@ import { useLocation, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowRight, ArrowLeft, ExternalLink, BarChart3, TrendingUp, FileText, SlidersHorizontal, Lightbulb, Download } from "lucide-react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { Logo } from "@/components/logo";
 import { SiteNav } from "@/components/site-nav";
@@ -214,6 +214,96 @@ export function ContentPageLayout({
         {children}
       </article>
 
+      <section className="py-12 md:py-16 border-y border-border/40" data-testid="section-report-showcase">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <p className="text-xs font-semibold tracking-wider uppercase text-primary mb-2">What the full report shows</p>
+          <h2 className="text-xl md:text-2xl font-display font-bold mb-2">See the numbers, not just the concepts</h2>
+          <p className="text-sm text-muted-foreground mb-8 leading-relaxed">
+            The free wizard builds your financial picture. The full report — unlocked for £79 — shows every scenario calculated with your actual figures.
+          </p>
+
+          <div className="rounded-xl border border-border bg-muted/30 overflow-hidden mb-8" data-testid="card-report-mockup">
+            <div className="px-4 py-3 border-b border-border/60 bg-muted/50 flex items-center justify-between">
+              <span className="text-xs font-semibold text-foreground">Scenario comparison — illustrative</span>
+              <Badge variant="outline" className="text-[10px]">Full report</Badge>
+            </div>
+            <div className="divide-y divide-border/40">
+              {[
+                { label: "Sell & Split (50/50)", capitalA: "£128,400", capitalB: "£128,400", incomeA: "£2,840/mo", incomeB: "£1,620/mo", highlight: false },
+                { label: "Party A keeps home", capitalA: "£0 equity + home", capitalB: "£256,800 cash", incomeA: "£2,840/mo", incomeB: "£1,620/mo", highlight: true },
+                { label: "Deferred sale (5 yr)", capitalA: "Occupies home", capitalB: "£128,400 future", incomeA: "£2,840/mo", incomeB: "£1,620/mo", highlight: false },
+              ].map((row, i) => (
+                <div key={i} className={`px-4 py-3 ${row.highlight ? "bg-primary/5" : ""}`}>
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-semibold text-foreground mb-1">{row.label}</p>
+                      <div className="flex gap-4 text-xs text-muted-foreground">
+                        <span>A: <span className="font-medium text-foreground">{row.capitalA}</span></span>
+                        <span>B: <span className="font-medium text-foreground">{row.capitalB}</span></span>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-[10px] text-muted-foreground mb-0.5">Net monthly income</p>
+                      <p className="text-xs text-foreground">A: <span className="font-semibold text-primary">{row.incomeA}</span></p>
+                      <p className="text-xs text-foreground">B: <span className="font-semibold text-primary">{row.incomeB}</span></p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="px-4 py-2.5 bg-muted/50 border-t border-border/60">
+              <p className="text-[10px] text-muted-foreground">Illustrative only. Your report uses the figures you enter — property, pensions, income, debts, and expenses.</p>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-3 mb-8">
+            {[
+              { icon: BarChart3, title: "Four settlement scenarios", desc: "Sell & split, two buyout options, and deferred sale — all calculated side by side." },
+              { icon: TrendingUp, title: "Income sustainability model", desc: "Post-tax monthly income vs outgoings for both parties under every scenario." },
+              { icon: SlidersHorizontal, title: "Stress test sliders", desc: "See how scenarios hold up if rates rise, property falls, or income changes." },
+              { icon: Lightbulb, title: "Guided summary", desc: "Plain-English interpretation of what each scenario means for each party." },
+              { icon: FileText, title: "Pension & asset breakdown", desc: "Liquid vs illiquid split, pension sharing and offsetting comparisons." },
+              { icon: Download, title: "PDF download", desc: "Shareable report with all scenarios, for use in mediation or solicitor meetings." },
+            ].map((f, i) => (
+              <div key={i} className="flex gap-3 items-start" data-testid={`feature-${i}`}>
+                <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                  <f.icon className="w-3.5 h-3.5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-foreground">{f.title}</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-lg border border-primary/20 bg-primary/5">
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-foreground">Full report — £79 one-time</p>
+              <p className="text-xs text-muted-foreground">12 months access · all scenarios · PDF download · no subscription</p>
+            </div>
+            <div className="flex gap-2 shrink-0">
+              <Button
+                size="sm"
+                className="bg-gold hover:bg-gold/90 text-white border-0 shadow-sm btn-shimmer"
+                onClick={() => setLocation("/wizard")}
+                data-testid="button-showcase-start"
+              >
+                Start free <ArrowRight className="w-3.5 h-3.5 ml-1" />
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setLocation("/preview")}
+                data-testid="button-showcase-preview"
+              >
+                Preview report
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-12 md:py-16 bg-primary border-y border-white/10" data-testid="section-calculator-cta">
         <div className="container mx-auto px-4 max-w-3xl">
           <p className="text-xs font-semibold tracking-wider uppercase text-gold mb-3">Model your own figures</p>
@@ -357,10 +447,20 @@ interface InlineCTAProps {
 export function InlineCTA({ label, href = "/wizard" }: InlineCTAProps) {
   const [, setLocation] = useLocation();
   return (
-    <div className="py-4">
+    <div className="py-4 flex flex-wrap items-center gap-x-4 gap-y-2">
       <Button onClick={() => setLocation(href)} data-testid="button-inline-cta">
         {label} <ArrowRight className="w-4 h-4 ml-1.5" />
       </Button>
+      <span className="text-xs text-muted-foreground">
+        Free to start &middot; full report £79 &middot;{" "}
+        <button
+          onClick={() => setLocation("/preview")}
+          className="text-primary underline-offset-2 hover:underline"
+          data-testid="button-inline-preview"
+        >
+          preview sample report
+        </button>
+      </span>
     </div>
   );
 }
