@@ -7,6 +7,7 @@ import { ArrowRight, ArrowLeft, ExternalLink, BarChart3, TrendingUp, FileText, S
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { Logo } from "@/components/logo";
 import { SiteNav } from "@/components/site-nav";
+import { LandingCommandConsole } from "@/components/landing-command-console";
 
 interface RelatedPage {
   title: string;
@@ -224,38 +225,8 @@ export function ContentPageLayout({
             The free wizard builds your financial picture. The full report — unlocked for £79 — shows every scenario calculated with your actual figures.
           </p>
 
-          <div className="rounded-xl border border-border bg-muted/30 overflow-hidden mb-8" data-testid="card-report-mockup">
-            <div className="px-4 py-3 border-b border-border/60 bg-muted/50 flex items-center justify-between">
-              <span className="text-xs font-semibold text-foreground">Scenario comparison — illustrative</span>
-              <Badge variant="outline" className="text-[10px]">Full report</Badge>
-            </div>
-            <div className="divide-y divide-border/40">
-              {[
-                { label: "Sell & Split (50/50)", capitalA: "£128,400", capitalB: "£128,400", incomeA: "£2,840/mo", incomeB: "£1,620/mo", highlight: false },
-                { label: "Party A keeps home", capitalA: "£0 equity + home", capitalB: "£256,800 cash", incomeA: "£2,840/mo", incomeB: "£1,620/mo", highlight: true },
-                { label: "Deferred sale (5 yr)", capitalA: "Occupies home", capitalB: "£128,400 future", incomeA: "£2,840/mo", incomeB: "£1,620/mo", highlight: false },
-              ].map((row, i) => (
-                <div key={i} className={`px-4 py-3 ${row.highlight ? "bg-primary/5" : ""}`}>
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-xs font-semibold text-foreground mb-1">{row.label}</p>
-                      <div className="flex gap-4 text-xs text-muted-foreground">
-                        <span>A: <span className="font-medium text-foreground">{row.capitalA}</span></span>
-                        <span>B: <span className="font-medium text-foreground">{row.capitalB}</span></span>
-                      </div>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <p className="text-[10px] text-muted-foreground mb-0.5">Net monthly income</p>
-                      <p className="text-xs text-foreground">A: <span className="font-semibold text-primary">{row.incomeA}</span></p>
-                      <p className="text-xs text-foreground">B: <span className="font-semibold text-primary">{row.incomeB}</span></p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="px-4 py-2.5 bg-muted/50 border-t border-border/60">
-              <p className="text-[10px] text-muted-foreground">Illustrative only. Your report uses the figures you enter — property, pensions, income, debts, and expenses.</p>
-            </div>
+          <div className="mb-8" data-testid="card-report-mockup">
+            <LandingCommandConsole />
           </div>
 
           <div className="grid sm:grid-cols-2 gap-3 mb-8">
