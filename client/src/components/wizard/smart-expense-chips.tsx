@@ -52,16 +52,32 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 type ExpenseOwner = "A" | "B" | "joint";
 
+function toStoreOwner(owner: ExpenseOwner): string {
+  return owner === "joint" ? "shared" : owner;
+}
+
+function expensesForOwner(expenses: Expense[], owner: ExpenseOwner): Expense[] {
+  return expenses.filter((e) => e.owner === toStoreOwner(owner));
+}
+
+function normalizeExpenseName(name: string): string {
+  return name.replace(/\s*\(starting estimate\)\s*$/i, "").trim().toLowerCase();
+}
+
 function findExpenseForChip(expenses: Expense[], chip: ChipDef, owner: ExpenseOwner): Expense | undefined {
-  const ownerExpenses = expenses.filter((e) => e.owner === owner);
-  // 1. Exact name match (current chip label)
-  const exact = ownerExpenses.find((e) => e.name === chip.name);
+  const storeOwner = owner === "joint" ? "shared" : owner;
+  const ownerExpenses = expenses.filter((e) => e.owner === storeOwner);
+  const chipName = chip.name.toLowerCase();
+  // 1. Exact name match (current chip label or legacy benchmark suffix)
+  const exact = ownerExpenses.find(
+    (e) => e.name === chip.name || normalizeExpenseName(e.name) === chipName
+  );
   if (exact) return exact;
   // 2. Alias substring match within the same category
   const lower = (s: string) => s.toLowerCase();
   return ownerExpenses.find((e) => {
     if (e.category !== chip.category) return false;
-    const n = lower(e.name);
+    const n = lower(normalizeExpenseName(e.name));
     return chip.aliases.some((a) => n.includes(a));
   });
 }
@@ -112,11 +128,9 @@ function ChipCard({ chip, expense, owner, onAdd, onUpdate, onRemove }: ChipCardP
   };
 
   const handleClick = () => {
-    if (!active) {
-      onAdd(chip.median);
-    } else {
-      setEditing(true);
-    }
+    setDraft(active ? initialAmount : chip.median);
+    setFreq(active ? initialFreq : "monthly");
+    setEditing(true);
   };
 
   return (
@@ -156,7 +170,6 @@ function ChipCard({ chip, expense, owner, onAdd, onUpdate, onRemove }: ChipCardP
                 if (e.key === "Enter") commit();
                 if (e.key === "Escape") setEditing(false);
               }}
-              onBlur={commit}
               className="h-7 text-sm px-2"
               data-testid={`input-chip-${chip.key}-${owner}`}
             />
@@ -175,6 +188,14 @@ function ChipCard({ chip, expense, owner, onAdd, onUpdate, onRemove }: ChipCardP
                 {f === "monthly" ? "/mo" : "/yr"}
               </button>
             ))}
+          </div>
+          <div className="flex gap-1 pt-0.5">
+            <Button type="button" size="sm" className="h-7 text-xs flex-1" onMouseDown={(e) => e.preventDefault()} onClick={commit} data-testid={`button-chip-save-${chip.key}-${owner}`}>
+              Save
+            </Button>
+            <Button type="button" size="sm" variant="ghost" className="h-7 text-xs" onMouseDown={(e) => e.preventDefault()} onClick={() => setEditing(false)} data-testid={`button-chip-cancel-${chip.key}-${owner}`}>
+              Cancel
+            </Button>
           </div>
           {active && (
             <button
@@ -199,7 +220,7 @@ function ChipCard({ chip, expense, owner, onAdd, onUpdate, onRemove }: ChipCardP
                 £{monthly.toLocaleString("en-GB")}
               </span>
               <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
-                /mo <Pencil className="w-2.5 h-2.5 opacity-60" />
+                /mo <Pencil className="w-2.5 h-2.5 opacity-60" aria-hidden />
               </span>
             </div>
           ) : (
@@ -207,7 +228,7 @@ function ChipCard({ chip, expense, owner, onAdd, onUpdate, onRemove }: ChipCardP
               <span className="text-[11px] text-muted-foreground">
                 ~£{chip.median}/mo typical
               </span>
-              <span className="text-[10px] text-gold font-semibold">+ Add</span>
+              <span className="text-[10px] text-gold font-semibold">Set amount</span>
             </div>
           )}
           <p className="text-[10px] text-muted-foreground/70 mt-1 leading-tight line-clamp-1">{chip.hint}</p>
@@ -217,11 +238,124 @@ function ChipCard({ chip, expense, owner, onAdd, onUpdate, onRemove }: ChipCardP
   );
 }
 
-interface SmartExpenseChipsProps {
-  advancedMode: boolean;
+interface CustomExpenseRowProps {
+  expense: Expense;
+  onUpdate: (monthly: number) => void;
+  onRemove: () => void;
 }
 
-export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
+function CustomExpenseRow({ expense, onUpdate, onRemove }: CustomExpenseRowProps) {
+  const initialFreq: "monthly" | "annual" = expense.amountAnnual % 12 !== 0 ? "annual" : "monthly";
+  const initialAmount =
+    initialFreq === "monthly" ? Math.round(expense.amountAnnual / 12) : Math.round(expense.amountAnnual);
+  const monthly = Math.round(expense.amountAnnual / 12);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(initialAmount);
+  const [freq, setFreq] = useState<"monthly" | "annual">(initialFreq);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editing) {
+      setDraft(initialAmount);
+      setFreq(initialFreq);
+      setTimeout(() => {
+        inputRef.current?.focus();
+        inputRef.current?.select();
+      }, 30);
+    }
+  }, [editing, initialAmount, initialFreq]);
+
+  const commit = () => {
+    const raw = Math.max(0, Math.round(draft || 0));
+    const monthlyEquivalent = freq === "monthly" ? raw : Math.round(raw / 12);
+    if (monthlyEquivalent === 0) {
+      onRemove();
+    } else {
+      onUpdate(monthlyEquivalent);
+    }
+    setEditing(false);
+  };
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: "auto" }}
+      exit={{ opacity: 0, height: 0 }}
+      className="flex items-center justify-between gap-2 px-3 py-2 bg-white border border-slate-200 rounded-md"
+      data-testid={`custom-expense-${expense.id}`}
+    >
+      {editing ? (
+        <div className="flex-1 space-y-2">
+          <p className="text-sm font-medium text-[#1a3357] truncate">{expense.name}</p>
+          <div className="flex items-center gap-1">
+            <span className="text-xs text-muted-foreground">£</span>
+            <Input
+              ref={inputRef}
+              type="number"
+              min={0}
+              value={draft || ""}
+              onChange={(e) => setDraft(parseInt(e.target.value) || 0)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") commit();
+                if (e.key === "Escape") setEditing(false);
+              }}
+              className="h-7 text-sm px-2"
+              data-testid={`input-custom-${expense.id}`}
+            />
+          </div>
+          <div className="flex gap-0.5 rounded-md bg-slate-100 p-0.5 text-[10px] font-medium" onMouseDown={(e) => e.preventDefault()}>
+            {(["monthly", "annual"] as const).map((f) => (
+              <button
+                key={f}
+                type="button"
+                onClick={() => setFreq(f)}
+                className={`flex-1 rounded px-1.5 py-0.5 transition-all ${
+                  freq === f ? "bg-white text-[#1a3357] shadow-sm" : "text-muted-foreground"
+                }`}
+              >
+                {f === "monthly" ? "/mo" : "/yr"}
+              </button>
+            ))}
+          </div>
+          <div className="flex gap-1">
+            <Button type="button" size="sm" className="h-7 text-xs" onClick={commit} data-testid={`button-save-custom-${expense.id}`}>
+              Save
+            </Button>
+            <Button type="button" size="sm" variant="ghost" className="h-7 text-xs" onClick={() => setEditing(false)}>
+              Cancel
+            </Button>
+            <button
+              type="button"
+              onClick={() => { onRemove(); setEditing(false); }}
+              className="text-[10px] text-rose-500 hover:text-rose-700 font-medium ml-auto"
+              data-testid={`button-remove-custom-${expense.id}`}
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <button type="button" onClick={() => setEditing(true)} className="min-w-0 flex-1 text-left">
+            <p className="text-sm font-medium text-[#1a3357] truncate">{expense.name}</p>
+            <p className="text-[10px] text-muted-foreground">{CATEGORY_LABELS[expense.category] ?? expense.category}</p>
+          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <button type="button" onClick={() => setEditing(true)} className="text-sm font-bold tabular-nums text-[#1a3357] hover:text-gold transition-colors" data-testid={`button-edit-custom-${expense.id}`}>
+              {formatCurrency(monthly)}/mo
+            </button>
+            <button onClick={() => onRemove()} className="p-1 text-rose-500 hover:text-rose-700" aria-label="Remove">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </>
+      )}
+    </motion.div>
+  );
+}
+
+export function SmartExpenseChips() {
   const { expenses, addExpense, updateExpense, removeExpense, profile } = useAppStore();
   const nameA = profile?.partyAName?.trim() || "Party A";
   const nameB = profile?.partyBName?.trim() || "Party B";
@@ -238,10 +372,10 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
       name: chip.name,
       amountAnnual: monthly * 12,
       category: chip.category,
-      owner,
+      owner: toStoreOwner(owner),
       inflationLinked: true,
     });
-    chipConfirm.flash(`Saved — ${chip.name} added at £${monthly.toLocaleString("en-GB")}/mo for ${ownerLabel(owner)}`);
+    chipConfirm.flash(`Saved — ${chip.name} at £${monthly.toLocaleString("en-GB")}/mo for ${ownerLabel(owner)}`);
   };
 
   const handleUpdate = (expense: Expense, monthly: number) => {
@@ -249,7 +383,7 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
     chipConfirm.flash(`Updated — ${expense.name} now £${monthly.toLocaleString("en-GB")}/mo`);
   };
 
-  const ownerExpenses = useMemo(() => expenses.filter((e) => e.owner === activeOwner), [expenses, activeOwner]);
+  const ownerExpenses = useMemo(() => expensesForOwner(expenses, activeOwner), [expenses, activeOwner]);
   const ownerCovered = useMemo(
     () => CHIPS.filter((c) => !!findExpenseForChip(expenses, c, activeOwner)).length,
     [expenses, activeOwner]
@@ -280,7 +414,7 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
       name: otherForm.name,
       amountAnnual: annual,
       category: otherForm.category,
-      owner: otherForm.owner,
+      owner: toStoreOwner(otherForm.owner),
       inflationLinked: true,
     });
     chipConfirm.flash(`Saved — ${otherForm.name} added for ${ownerLabel(otherForm.owner)}`);
@@ -291,10 +425,10 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
   return (
     <div className="space-y-5">
       <div className="p-4 bg-muted/40 rounded-md border-l-4 border-rose-300">
-        <p className="text-sm font-medium text-foreground mb-1">Tap a category to add it.</p>
+        <p className="text-sm font-medium text-foreground mb-1">Tap a category to set your amount.</p>
         <p className="text-xs text-muted-foreground leading-relaxed">
-          Each tile uses a typical UK monthly figure as a starting point — tap again to adjust to your own number.
-          Don't include mortgage payments here; those are calculated automatically.
+          Each tile opens with a typical UK monthly figure — change it to your own number before saving.
+          Tap any added tile again to adjust. Don't include mortgage payments here; those are calculated automatically.
         </p>
       </div>
 
@@ -302,8 +436,8 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
         {(["A", "B", "joint"] as const).map((owner) => {
           const isActive = activeOwner === owner;
           const label = ownerLabel(owner);
-          const count = expenses.filter((e) => e.owner === owner).length;
-          const total = Math.round(expenses.filter((e) => e.owner === owner).reduce((s, e) => s + e.amountAnnual, 0) / 12);
+          const count = expensesForOwner(expenses, owner).length;
+          const total = Math.round(expensesForOwner(expenses, owner).reduce((s, e) => s + e.amountAnnual, 0) / 12);
           return (
             <button
               key={owner}
@@ -372,26 +506,12 @@ export function SmartExpenseChips({ advancedMode }: SmartExpenseChipsProps) {
           <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Custom expenses for {ownerLabel(activeOwner)}</p>
           <AnimatePresence>
             {customExpenses.map((e) => (
-              <motion.div
+              <CustomExpenseRow
                 key={e.id}
-                layout
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="flex items-center justify-between gap-2 px-3 py-2 bg-white border border-slate-200 rounded-md"
-                data-testid={`custom-expense-${e.id}`}
-              >
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-[#1a3357] truncate">{e.name}</p>
-                  <p className="text-[10px] text-muted-foreground">{CATEGORY_LABELS[e.category] ?? e.category}</p>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-sm font-bold tabular-nums text-[#1a3357]">{formatCurrency(Math.round(e.amountAnnual / 12))}/mo</span>
-                  <button onClick={() => removeExpense(e.id)} className="p-1 text-rose-500 hover:text-rose-700" aria-label="Remove" data-testid={`button-remove-custom-${e.id}`}>
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </motion.div>
+                expense={e}
+                onUpdate={(monthly) => handleUpdate(e, monthly)}
+                onRemove={() => removeExpense(e.id)}
+              />
             ))}
           </AnimatePresence>
         </div>

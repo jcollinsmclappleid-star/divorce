@@ -202,7 +202,7 @@ export default function AboutPage() {
                   "Cashflow Resilience Indicator (CRI) scores",
                   "5-year capital projections",
                   "Stress testing sliders",
-                  "Downloadable PDF brief",
+                  "Downloadable Settlement Reality Check PDF",
                   "12 months unlimited re-runs",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-gold shrink-0 mt-0.5" />{f}</li>

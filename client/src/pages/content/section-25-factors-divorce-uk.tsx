@@ -167,7 +167,7 @@ export default function Section25FactorsPage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "How a court would weigh needs vs sharing in your specific case",
+            "How qualified legal advice might assess needs vs sharing in your specific case",
             "Whether your contributions or pre-marital wealth would be treated as significant",
             "What range of outcomes a judge would consider reasonable for your case",
           ].map((item, i) => (

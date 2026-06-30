@@ -1,0 +1,30 @@
+# Render.com staging service — does not affect Replit production.
+# Create a new Web Service, connect repo, use this blueprint or match settings manually.
+#
+# Docs: script/PRODUCTION_MIGRATION.md
+
+services:
+  - type: web
+    name: divorce-calculator-uk-staging
+    runtime: node
+    plan: starter
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: APP_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM_EMAIL
+        value: noreply@divorcecalculatoruk.co.uk
+      - key: DEV_BYPASS_PAYWALL
+        value: "true"

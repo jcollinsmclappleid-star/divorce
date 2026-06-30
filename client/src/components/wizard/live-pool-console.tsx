@@ -207,7 +207,7 @@ export function LivePoolConsole({ currentStep, stages }: LivePoolConsoleProps) {
       data-testid="aside-pool-console"
     >
       <div className="sticky top-24">
-        <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+        <div className="rounded-2xl bg-white border border-slate-200/80 shadow-lg shadow-primary/[0.06] overflow-hidden">
           <div className="px-3.5 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center gap-1.5">
             <TrendingUp className="w-3.5 h-3.5 text-gold" />
             <p className="text-[11px] font-bold text-[#1a3357] tracking-tight">Your financial pool</p>

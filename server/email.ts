@@ -139,6 +139,43 @@ export async function sendPurchaseConfirmationEmail(
   }
 }
 
+export async function sendReportSupportConfirmationEmail(
+  email: string,
+): Promise<void> {
+  const client = getResend();
+  if (!client) {
+    console.warn('[email] RESEND_API_KEY not set — skipping report support confirmation');
+    return;
+  }
+
+  const html = emailWrapper(`
+    <h1 style="margin:0 0 8px;color:#0f1e3c;font-size:24px;font-weight:700;">Report walkthrough support confirmed</h1>
+    <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.6;">Thank you for purchasing written email support. We will review your report context and reply by email — usually within 2–3 working days.</p>
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:16px 20px;margin-bottom:20px;">
+      <p style="margin:0 0 8px;color:#0f1e3c;font-size:14px;font-weight:600;">What to include in your reply</p>
+      <ul style="margin:0;padding-left:18px;color:#64748b;font-size:13px;line-height:1.7;">
+        <li>Which section of your report is unclear</li>
+        <li>Any figures you want sense-checked</li>
+        <li>Questions you are preparing for a professional</li>
+      </ul>
+    </div>
+    <p style="margin:0;color:#64748b;font-size:13px;line-height:1.6;">Reply to this thread or email <a href="mailto:support@divorcecalculatoruk.co.uk" style="color:#c49b2a;font-weight:600;">support@divorcecalculatoruk.co.uk</a> from the same address you used at checkout.</p>
+  `);
+
+  try {
+    await client.emails.send({
+      from: FROM,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: 'Report walkthrough support — payment confirmed',
+      html,
+    });
+    console.log('[email] Report support confirmation sent');
+  } catch (err) {
+    console.error('[email] Failed to send report support confirmation:', err);
+  }
+}
+
 export async function sendAccessRecoveryEmail(
   email: string,
   sessionToken: string,
@@ -328,7 +365,7 @@ const ADMIN_EMAIL = 'support@divorcecalculatoruk.co.uk';
 export async function sendAdminNotification(
   subject: string,
   bodyLines: { label: string; value: string }[],
-  eventType: 'purchase' | 'gdpr_delete' | 'lead_capture'
+  eventType: 'purchase' | 'gdpr_delete' | 'lead_capture' | 'report_support'
 ): Promise<void> {
   const client = getResend();
   if (!client) {
@@ -336,8 +373,8 @@ export async function sendAdminNotification(
     return;
   }
 
-  const badgeColour = eventType === 'purchase' ? '#15803d' : eventType === 'gdpr_delete' ? '#b91c1c' : '#1d4ed8';
-  const badgeLabel = eventType === 'purchase' ? 'New Purchase' : eventType === 'gdpr_delete' ? 'GDPR Delete Request' : 'New Lead Capture';
+  const badgeColour = eventType === 'purchase' ? '#15803d' : eventType === 'report_support' ? '#7c3aed' : eventType === 'gdpr_delete' ? '#b91c1c' : '#1d4ed8';
+  const badgeLabel = eventType === 'purchase' ? 'New Purchase' : eventType === 'report_support' ? 'Report Support' : eventType === 'gdpr_delete' ? 'GDPR Delete Request' : 'New Lead Capture';
 
   const rows = bodyLines.map(({ label, value }) => `
     <tr>

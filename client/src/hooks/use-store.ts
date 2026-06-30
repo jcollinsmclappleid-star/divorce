@@ -92,6 +92,8 @@ export interface Profile {
   processStage: string;
   mainPriority: string;
   capturedEmail: string;
+  calculationIntent: string;
+  offerStatus: string;
 }
 
 export interface StoreState {
@@ -147,6 +149,8 @@ const initialState: StoreState = {
     processStage: "",
     mainPriority: "",
     capturedEmail: "",
+    calculationIntent: "",
+    offerStatus: "",
   },
   maintenance: {
     included: false,
@@ -288,10 +292,16 @@ export const useAppStore = create<StoreState & AppActions>()(
           }
         }
         if (state && !state.profile) {
-          state.profile = { partyAName: "", partyBName: "", processStage: "", mainPriority: "", capturedEmail: "" };
+          state.profile = { partyAName: "", partyBName: "", processStage: "", mainPriority: "", capturedEmail: "", calculationIntent: "", offerStatus: "" };
         }
         if (state && state.profile && state.profile.capturedEmail === undefined) {
           state.profile.capturedEmail = "";
+        }
+        if (state && state.profile && state.profile.calculationIntent === undefined) {
+          state.profile.calculationIntent = "";
+        }
+        if (state && state.profile && state.profile.offerStatus === undefined) {
+          state.profile.offerStatus = "";
         }
         if (state && !state.maintenance) {
           state.maintenance = { included: false, monthlyAmount: 0, direction: "AtoB" };

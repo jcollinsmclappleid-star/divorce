@@ -15,6 +15,7 @@ const allowlist = [
   "express",
   "express-rate-limit",
   "express-session",
+  "helmet",
   "jsonwebtoken",
   "memorystore",
   "multer",
@@ -24,6 +25,7 @@ const allowlist = [
   "passport",
   "passport-local",
   "pg",
+  "resend",
   "stripe",
   "uuid",
   "ws",
@@ -45,6 +47,17 @@ async function buildAll() {
     ...Object.keys(pkg.devDependencies || {}),
   ];
   const externals = allDeps.filter((dep) => !allowlist.includes(dep));
+
+  await esbuild({
+    entryPoints: ["server/bootstrap.ts"],
+    platform: "node",
+    bundle: true,
+    format: "cjs",
+    outfile: "dist/bootstrap.cjs",
+    minify: true,
+    external: externals,
+    logLevel: "info",
+  });
 
   await esbuild({
     entryPoints: ["server/index.ts"],

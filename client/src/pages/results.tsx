@@ -4,8 +4,9 @@ import { useAppStore, StoreState } from "@/hooks/use-store";
 import { useEngine, ScenarioResult, ProjectionYear, RunwayResult } from "@/hooks/use-engine";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
-import { useAccess } from "@/hooks/use-access";
+import { useAccess, useSessionToken } from "@/hooks/use-access";
 import { GuidedSummaryPanel } from "@/components/guided-summary-panel";
+import { OptionalReportSupport } from "@/components/optional-report-support";
 import { Logo } from "@/components/logo";
 import { FsiGauge } from "@/components/fsi-gauge";
 import { SettlementConsole, buildConsoleScenarios } from "@/components/settlement-console";
@@ -140,6 +141,322 @@ function DetailCollapsible({ title, summary, children, defaultOpen = false, test
   );
 }
 
+function IntentRealityCheckPanel({
+  scenarios,
+  stabilityScores,
+  engine,
+  store,
+}: {
+  scenarios: ScenarioResult[];
+  stabilityScores: Record<string, StabilityResult>;
+  engine: ReturnType<typeof useEngine>;
+  store: StoreState;
+}) {
+  const selectedIntent = store.profile?.calculationIntent;
+  const scenarioRows = scenarios.map((scenario) => {
+    const snap = buildMonthlySnapshot(scenario, store, engine.taxA, engine.taxB, engine.cmsAnnual);
+    const stability = stabilityScores[scenario.id];
+    return {
+      scenario,
+      snap,
+      weakestSurplus: Math.min(snap.surplusA, snap.surplusB),
+      weakestResilience: Math.min(stability?.scoreA ?? 100, stability?.scoreB ?? 100),
+    };
+  });
+  const bestResilience = [...scenarioRows].sort((a, b) => b.weakestResilience - a.weakestResilience)[0];
+  const lowestCashflow = [...scenarioRows].sort((a, b) => a.weakestSurplus - b.weakestSurplus)[0];
+  const keepHome = scenarioRows
+    .filter((row) => row.scenario.id === "S2" || row.scenario.id === "S3")
+    .sort((a, b) => b.weakestSurplus - a.weakestSurplus)[0];
+
+  const pensions = store.assets.filter((a) => a.category === "pension");
+  const pensionA = pensions.filter((p) => p.owner === "A").reduce((s, p) => s + (p.cetv ?? p.currentValue ?? 0), 0);
+  const pensionB = pensions.filter((p) => p.owner === "B").reduce((s, p) => s + (p.cetv ?? p.currentValue ?? 0), 0);
+  const pensionGap = Math.abs(pensionA - pensionB);
+  const dataGaps = [
+    !store.assets.some((a) => a.category === "primary_home" && a.currentValue > 0) ? "property value" : "",
+    pensions.length === 0 ? "pension CETV values" : "",
+    store.incomes.length === 0 ? "income figures" : "",
+    store.expenses.length === 0 ? "post-separation expenses" : "",
+  ].filter(Boolean);
+
+  const splitLabel = `${Math.round(store.assumptions.splitRatio * 100)}:${Math.round((1 - store.assumptions.splitRatio) * 100)}`;
+  const pensionSplitLabel = `${Math.round(store.assumptions.splitPensionToA * 100)}:${Math.round((1 - store.assumptions.splitPensionToA) * 100)}`;
+  const totalDebt = store.liabilities.reduce((s, l) => s + l.balance, 0);
+  const grossGap = Math.abs((engine.taxA.gross ?? 0) - (engine.taxB.gross ?? 0));
+
+  const cards = [
+    {
+      intent: "offer_check",
+      icon: Target,
+      title: "Settlement Offer Check",
+      body: `Current model assumptions are ${splitLabel} for assets and ${pensionSplitLabel} for pensions. Use the sliders above to mirror the offer before comparing pressure points.`,
+      signal: bestResilience ? `Strongest resilience: ${SCENARIO_META[bestResilience.scenario.id]?.shortLabel ?? bestResilience.scenario.name}` : "Add figures to compare scenarios.",
+    },
+    {
+      intent: "fair_split",
+      icon: Target,
+      title: "50/50 Split Check",
+      body: `Current asset split is ${splitLabel}. Use the sliders above to compare 50/50 with the proposed or expected split.`,
+      signal: lowestCashflow ? `Weakest monthly headroom: ${formatCurrency(lowestCashflow.weakestSurplus)}/mo` : "Add figures to compare headroom.",
+    },
+    {
+      intent: "house_split",
+      icon: Home,
+      title: "Can I Keep The House?",
+      body: keepHome
+        ? `${SCENARIO_META[keepHome.scenario.id]?.shortLabel ?? keepHome.scenario.name} currently leaves the weaker monthly surplus at ${formatCurrency(keepHome.weakestSurplus)}/mo.`
+        : "Enable or review keep-home scenarios to see buyout and mortgage pressure.",
+      signal: engine.intermediate.netHomeEquity > 0 ? `Net home equity modelled: ${formatCurrency(engine.intermediate.netHomeEquity)}` : "Add property value and mortgage balance.",
+    },
+    {
+      intent: "children_housing",
+      icon: Home,
+      title: "Children & Housing",
+      body: store.children.numChildren > 0
+        ? `${store.children.numChildren} child${store.children.numChildren === 1 ? "" : "ren"} included. Compare housing pressure with child maintenance and monthly costs in the scenarios below.`
+        : "Add children and post-separation costs if housing needs are part of the pressure you want to understand.",
+      signal: keepHome ? `Best keep-home monthly headroom: ${formatCurrency(keepHome.weakestSurplus)}/mo` : "Review keep-home scenarios.",
+    },
+    {
+      intent: "pension_impact",
+      icon: PoundSterling,
+      title: "Pension Impact",
+      body: pensions.length > 0
+        ? `Pensions entered total ${formatCurrency(pensionA + pensionB)}, with an estimated gap of ${formatCurrency(pensionGap)} between the parties.`
+        : "No pension values are entered yet, so the results may miss a major settlement pressure point.",
+      signal: "Use CETV figures where available.",
+    },
+    {
+      intent: "income_gap",
+      icon: Activity,
+      title: "Income Gap",
+      body: grossGap > 0
+        ? `The gross income gap entered is ${formatCurrency(grossGap)}/yr. Monthly costs will show whether that becomes a shortfall.`
+        : "Add both income figures to see whether one side is left with weaker monthly resilience.",
+      signal: lowestCashflow ? `Lowest monthly surplus: ${formatCurrency(lowestCashflow.weakestSurplus)}/mo` : "Add income and expenses.",
+    },
+    {
+      intent: "debt_pressure",
+      icon: AlertTriangle,
+      title: "Debt Pressure",
+      body: totalDebt > 0
+        ? `Debts entered total ${formatCurrency(totalDebt)}. Check how liabilities affect the asset pool and monthly pressure.`
+        : "No debts are entered yet. Add loans, cards or other liabilities if they are relevant.",
+      signal: "Debt can change what a split really leaves behind.",
+    },
+    {
+      intent: "protect_position",
+      icon: AlertTriangle,
+      title: "Left-Short Risk",
+      body: lowestCashflow
+        ? `${SCENARIO_META[lowestCashflow.scenario.id]?.shortLabel ?? lowestCashflow.scenario.name} shows the weakest monthly headroom at ${formatCurrency(lowestCashflow.weakestSurplus)}/mo.`
+        : "Add income and expenses to reveal monthly pressure.",
+      signal: "Useful before professional discussions.",
+    },
+    {
+      intent: "first_private_view",
+      icon: Lightbulb,
+      title: "Missing Value Check",
+      body: dataGaps.length > 0
+        ? `For a stronger reality check, add: ${dataGaps.join(", ")}.`
+        : "Core inputs are populated, so the model can compare capital, pensions, income and monthly pressure.",
+      signal: "Better inputs make the report more useful.",
+    },
+  ];
+
+  return (
+    <Card className="border-primary/15 bg-gradient-to-br from-primary/[0.03] to-gold/[0.04]" data-testid="section-intent-reality-check">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Target className="w-4 h-4 text-primary" /> Settlement Reality Check Lenses
+            </CardTitle>
+            <CardDescription>
+              Fast views for the questions most people are trying to answer before solicitor, mediation or offer discussions.
+            </CardDescription>
+          </div>
+          {selectedIntent && (
+            <Badge variant="outline" className="border-gold/30 text-gold bg-gold/10">
+              Your selected lens: {cards.find((card) => card.intent === selectedIntent)?.title ?? selectedIntent}
+            </Badge>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {cards.map((card) => {
+            const Icon = card.icon;
+            const selected = selectedIntent === card.intent;
+            return (
+              <div
+                key={card.intent}
+                className={`rounded-lg border p-3 space-y-2 bg-white ${selected ? "border-gold shadow-sm" : "border-border/60"}`}
+                data-testid={`card-results-lens-${card.intent}`}
+              >
+                <div className="flex items-center gap-2">
+                  <Icon className={`w-4 h-4 ${selected ? "text-gold" : "text-primary"}`} />
+                  <h3 className="text-sm font-semibold">{card.title}</h3>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">{card.body}</p>
+                <p className="text-[11px] font-medium text-primary/80">{card.signal}</p>
+              </div>
+            );
+          })}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function SettlementPositionCheckPanel({
+  scenarios,
+  stabilityScores,
+  engine,
+  store,
+}: {
+  scenarios: ScenarioResult[];
+  stabilityScores: Record<string, StabilityResult>;
+  engine: ReturnType<typeof useEngine>;
+  store: StoreState;
+}) {
+  const scenarioRows = scenarios.map((scenario) => {
+    const snap = buildMonthlySnapshot(scenario, store, engine.taxA, engine.taxB, engine.cmsAnnual);
+    const stability = stabilityScores[scenario.id];
+    return {
+      scenario,
+      snap,
+      weakestSurplus: Math.min(snap.surplusA, snap.surplusB),
+      weakestResilience: Math.min(stability?.scoreA ?? 100, stability?.scoreB ?? 100),
+    };
+  });
+
+  const lowestCashflow = [...scenarioRows].sort((a, b) => a.weakestSurplus - b.weakestSurplus)[0];
+  const strongestResilience = [...scenarioRows].sort((a, b) => b.weakestResilience - a.weakestResilience)[0];
+  const keepHome = scenarioRows
+    .filter((row) => row.scenario.id === "S2" || row.scenario.id === "S3")
+    .sort((a, b) => b.weakestSurplus - a.weakestSurplus)[0];
+
+  const pensions = store.assets.filter((asset) => asset.category === "pension");
+  const pensionTotal = pensions.reduce((sum, pension) => sum + (pension.cetv ?? pension.currentValue ?? 0), 0);
+  const hasProperty = store.assets.some((asset) => asset.category === "primary_home" && asset.currentValue > 0);
+  const hasLiquidAssets = store.assets.some((asset) => asset.liquidity === "liquid" && asset.category !== "pension" && asset.currentValue > 0);
+  const hasDebts = store.liabilities.some((liability) => liability.balance > 0);
+  const totalDebt = store.liabilities.reduce((sum, liability) => sum + liability.balance, 0);
+  const grossGap = Math.abs((engine.taxA.gross ?? 0) - (engine.taxB.gross ?? 0));
+  const splitLabel = `${Math.round(store.assumptions.splitRatio * 100)}:${Math.round((1 - store.assumptions.splitRatio) * 100)}`;
+  const pensionSplitLabel = `${Math.round(store.assumptions.splitPensionToA * 100)}:${Math.round((1 - store.assumptions.splitPensionToA) * 100)}`;
+
+  const missingItems = [
+    !hasProperty ? "property value/equity" : "",
+    pensions.length === 0 ? "pension CETV values" : "",
+    !hasLiquidAssets ? "cash, savings or liquid reserves" : "",
+    store.incomes.length === 0 ? "income figures" : "",
+    store.expenses.length === 0 ? "post-separation expenses" : "",
+    !hasDebts ? "debts and liabilities, if any" : "",
+  ].filter(Boolean);
+
+  const hasBenchmarkExpenses = store.expenses.some((expense) => expense.name.toLowerCase().includes("starting estimate"));
+  const selectedLens = store.profile?.calculationIntent;
+  const childrenLabel = store.children.numChildren > 0
+    ? `${store.children.numChildren} child${store.children.numChildren === 1 ? "" : "ren"} included`
+    : "No children entered";
+
+  const cards = [
+    {
+      icon: Lightbulb,
+      title: "Missing Value Check",
+      body: missingItems.length > 0
+        ? `For a stronger first model, consider adding: ${missingItems.slice(0, 4).join(", ")}.`
+        : "Core inputs are populated across assets, pensions, income, expenses and liabilities.",
+      signal: hasBenchmarkExpenses
+        ? "Some expenses are starting estimates and can be replaced later."
+        : "Better inputs make the report more useful.",
+    },
+    {
+      icon: AlertTriangle,
+      title: "Left-Short Risk",
+      body: lowestCashflow
+        ? `${SCENARIO_META[lowestCashflow.scenario.id]?.shortLabel ?? lowestCashflow.scenario.name} currently shows the weakest monthly headroom at ${formatCurrency(lowestCashflow.weakestSurplus)}/mo.`
+        : "Add income and expenses to reveal monthly pressure for both parties.",
+      signal: strongestResilience
+        ? `Strongest resilience: ${SCENARIO_META[strongestResilience.scenario.id]?.shortLabel ?? strongestResilience.scenario.name}.`
+        : "Compare scenarios once figures are entered.",
+    },
+    {
+      icon: Target,
+      title: "Offer Trade-Off Check",
+      body: `Current assumptions model ${splitLabel} for assets and ${pensionSplitLabel} for pensions. Use the sliders to mirror an offer before reading the pressure points.`,
+      signal: totalDebt > 0
+        ? `${formatCurrency(totalDebt)} of liabilities are included in the model.`
+        : "Add debts if they are part of the proposal.",
+    },
+    {
+      icon: Home,
+      title: "Needs & Housing Pressure",
+      body: keepHome
+        ? `${childrenLabel}. Best keep-home monthly headroom currently shows ${formatCurrency(keepHome.weakestSurplus)}/mo.`
+        : `${childrenLabel}. Add or review keep-home scenarios to test housing and buyout pressure.`,
+      signal: hasProperty
+        ? `Net home equity modelled: ${formatCurrency(engine.intermediate.netHomeEquity)}.`
+        : "Add property value and mortgage balance if relevant.",
+    },
+    {
+      icon: FileText,
+      title: "Questions Before Agreeing",
+      body: grossGap > 0 || pensionTotal > 0
+        ? `Use the report to turn the ${grossGap > 0 ? `${formatCurrency(grossGap)}/yr income gap` : "income position"}${pensionTotal > 0 ? ` and ${formatCurrency(pensionTotal)} pension values` : ""} into specific questions for professionals.`
+        : "Use the report to convert your figures into questions for solicitor, mediation, mortgage and pension conversations.",
+      signal: "Preparation support only, not legal or financial advice.",
+    },
+  ];
+
+  return (
+    <Card className="border-gold/25 bg-gradient-to-br from-gold/[0.10] via-background to-primary/[0.04]" data-testid="section-settlement-position-check">
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div className="space-y-1">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Shield className="w-4 h-4 text-gold" /> Settlement Position Check
+            </CardTitle>
+            <CardDescription>
+              A preparation layer that highlights missing values, pressure points, trade-offs and professional questions without telling you what to accept.
+            </CardDescription>
+          </div>
+          {selectedLens && (
+            <Badge variant="outline" className="border-gold/30 bg-gold/10 text-gold">
+              Focus: {selectedLens.replace(/_/g, " ")}
+            </Badge>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-5">
+          {cards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <div key={card.title} className="rounded-lg border border-border/70 bg-white p-3 space-y-2 shadow-sm" data-testid={`card-position-check-${card.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-md bg-gold/10 text-gold flex items-center justify-center shrink-0">
+                    <Icon className="w-3.5 h-3.5" />
+                  </div>
+                  <h3 className="text-sm font-semibold leading-tight">{card.title}</h3>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">{card.body}</p>
+                <p className="text-[11px] font-medium text-primary/80 leading-relaxed">{card.signal}</p>
+              </div>
+            );
+          })}
+        </div>
+        <div className="rounded-md border border-amber-200 bg-amber-50/70 p-3 text-xs text-amber-900 leading-relaxed">
+          This check is designed to help you understand the numbers before solicitor, mediation, mortgage or pension discussions. It does not provide tactics, legal advice, financial advice, mortgage advice or a recommendation to accept or reject any proposal.
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function ResultsPage() {
   useDocumentTitle("Divorce Financial Modelling Results | DivorceCalculatorUK");
   useNoIndex();
@@ -147,6 +464,7 @@ export default function ResultsPage() {
   const { assumptions, updateAssumptions } = store;
   const engine = useEngine();
   const { hasAccess } = useAccess();
+  const sessionToken = useSessionToken();
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [viewLens, setViewLens] = useState<ViewLens>("liquidity");
 
@@ -199,6 +517,7 @@ export default function ResultsPage() {
   const setPreset = (split: number, pension: number) => {
     updateAssumptions({ splitRatio: split, splitPensionToA: pension });
   };
+  const projectionYearLabel = `${assumptions.projectionYears}-Year`;
 
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans overflow-x-hidden">
@@ -268,7 +587,7 @@ export default function ResultsPage() {
           <div className="space-y-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight" data-testid="text-results-title">
-                Structured Financial Brief
+                Settlement Reality Check Results
               </h1>
               <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed max-w-2xl">
                 Compare post-settlement financial positions under each scenario. Adjust the settlement ratio using the controls above. Select an analytical lens below to prioritise the relevant metrics.
@@ -276,6 +595,20 @@ export default function ResultsPage() {
             </div>
 
             <DecisionLensToggle viewLens={viewLens} setViewLens={setViewLens} />
+
+            <IntentRealityCheckPanel
+              scenarios={displayScenarios}
+              stabilityScores={stabilityScores}
+              engine={engine}
+              store={store}
+            />
+
+            <SettlementPositionCheckPanel
+              scenarios={displayScenarios}
+              stabilityScores={stabilityScores}
+              engine={engine}
+              store={store}
+            />
 
             <div className="p-4 rounded-md border border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800">
               <p className="text-sm text-blue-900 dark:text-blue-200 leading-relaxed" data-testid="text-guidance-callout">
@@ -304,7 +637,7 @@ export default function ResultsPage() {
                     partyAName={store.profile?.partyAName || "Party A"}
                     partyBName={store.profile?.partyBName || "Party B"}
                     chromeCaption="Settlement Command Console — your figures"
-                    footerText={`Live model · ${consoleScenarios.length} scenarios · stress tests · 5-year projection`}
+                    footerText={`Live model · ${consoleScenarios.length} scenarios · stress tests · ${projectionYearLabel.toLowerCase()} projection`}
                     testId="results-settlement-console"
                   />
                   <ScenarioLeaderboard
@@ -508,6 +841,7 @@ export default function ResultsPage() {
           )}
 
           <GuidedSummaryPanel hasAccess={hasAccess} />
+          {hasAccess && <OptionalReportSupport sessionToken={sessionToken} />}
         </div>
       </main>
 
@@ -1018,6 +1352,8 @@ function ExecutiveTable({
   store: StoreState;
   runways: Record<string, RunwayResult>;
 }) {
+  const projectionYearLabel = `${store.assumptions.projectionYears}-Year`;
+
   return (
     <Card data-testid="card-executive-table">
       <CardHeader className="pb-3">
@@ -1088,7 +1424,7 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={`even:bg-muted/30 ${viewLens === "liquidity" ? "!bg-primary/5" : ""}`}>
-                <TableCell className="font-medium text-muted-foreground"><>5-Year Reserves — Party A<InfoTip text="Whether Party A's liquid capital is projected to sustain their outgoings for at least 5 years based on current income, expenditure, and mortgage obligations." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>{projectionYearLabel} Reserves — Party A<InfoTip text={`Whether Party A's liquid capital is projected to sustain their outgoings for the ${store.assumptions.projectionYears}-year projection period based on current income, expenditure, and mortgage obligations.`} /></></TableCell>
                 {scenarios.map(s => {
                   const rw = runways[s.id];
                   return (
@@ -1101,7 +1437,7 @@ function ExecutiveTable({
                 })}
               </TableRow>
               <TableRow className={`even:bg-muted/30 ${viewLens === "liquidity" ? "!bg-primary/5" : ""}`}>
-                <TableCell className="font-medium text-muted-foreground"><>5-Year Reserves — Party B<InfoTip text="Whether Party B's liquid capital is projected to sustain their outgoings for at least 5 years based on current income, expenditure, and mortgage obligations." /></></TableCell>
+                <TableCell className="font-medium text-muted-foreground"><>{projectionYearLabel} Reserves — Party B<InfoTip text={`Whether Party B's liquid capital is projected to sustain their outgoings for the ${store.assumptions.projectionYears}-year projection period based on current income, expenditure, and mortgage obligations.`} /></></TableCell>
                 {scenarios.map(s => {
                   const rw = runways[s.id];
                   return (
@@ -1418,6 +1754,7 @@ function ScenarioDetailCard({
   const liquidityRatioB = expenseB > 0 ? scenario.liquidStartB / expenseB : 0;
 
   const runway = engine.runways[scenario.id];
+  const projectionYearLabel = `${store.assumptions.projectionYears}-Year`;
 
   const lowestA = projection ? Math.min(...projection.map(p => p.capitalA)) : scenario.liquidStartA;
   const lowestB = projection ? Math.min(...projection.map(p => p.capitalB)) : scenario.liquidStartB;
@@ -1559,7 +1896,7 @@ function ScenarioDetailCard({
 
         {projection && projection.length > 1 && (
           <DetailCollapsible
-            title="5-Year Capital Projection"
+            title={`${projectionYearLabel} Capital Projection`}
             summary={
               <span className="tabular-nums">
                 Lowest capital — A: <span className={`font-medium ${lowestA < 0 ? "text-red-600" : ""}`}>{formatCurrency(lowestA)}</span>
@@ -1596,7 +1933,7 @@ function ScenarioDetailCard({
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
-              <CapitalRunwaySection runway={runway} />
+              <CapitalRunwaySection runway={runway} projectionYears={store.assumptions.projectionYears} />
             </div>
           </DetailCollapsible>
         )}
@@ -1847,12 +2184,12 @@ function SourceOfFundsTable({ sourceOfFunds, scenario }: { sourceOfFunds: Source
   );
 }
 
-function CapitalRunwaySection({ runway }: { runway?: RunwayResult }) {
+function CapitalRunwaySection({ runway, projectionYears }: { runway?: RunwayResult; projectionYears: number }) {
   if (!runway) return null;
   return (
     <div className="space-y-3" data-testid="section-capital-runway">
       <h3 className="text-sm font-semibold flex items-center gap-1.5">
-        <TrendingUp className="w-3.5 h-3.5" /> Reserve Duration (5-Year Projection)
+        <TrendingUp className="w-3.5 h-3.5" /> Reserve Duration ({projectionYears}-Year Projection)
       </h3>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">

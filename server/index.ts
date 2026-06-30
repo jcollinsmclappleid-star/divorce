@@ -1,233 +1,28 @@
-import express, { type Request, Response, NextFunction } from "express";
-import helmet from "helmet";
-import session from "express-session";
-import connectPgSimple from "connect-pg-simple";
-import { registerRoutes } from "./routes";
-import { serveStatic } from "./static";
 import { createServer } from "http";
-import { runMigrations } from 'stripe-replit-sync';
-import { getStripeSync } from "./stripeClient";
-import { WebhookHandlers } from "./webhookHandlers";
-
-declare module "express-session" {
-  interface SessionData {
-    email?: string;
-  }
-}
-
-const app = express();
-const httpServer = createServer(app);
-
-const isDev = process.env.NODE_ENV !== "production";
-
-const cspDirectives: Record<string, any> = {
-  defaultSrc: ["'self'"],
-  scriptSrc: [
-    "'self'",
-    "https://js.stripe.com",
-    "https://checkout.stripe.com",
-    ...(isDev ? ["'unsafe-eval'", "'unsafe-inline'"] : []),
-  ],
-  styleSrc: ["'self'", "'unsafe-inline'"],
-  fontSrc: ["'self'"],
-  imgSrc: ["'self'", "data:", "https:"],
-  connectSrc: [
-    "'self'",
-    "https://api.stripe.com",
-    "https://checkout.stripe.com",
-    ...(isDev ? ["ws:", "wss:"] : []),
-  ],
-  frameSrc: ["https://js.stripe.com", "https://hooks.stripe.com"],
-  frameAncestors: ["'none'"],
-};
-
-if (!isDev) {
-  cspDirectives.upgradeInsecureRequests = [];
-}
-
-app.use(helmet({
-  contentSecurityPolicy: { directives: cspDirectives },
-  crossOriginEmbedderPolicy: false,
-  hsts: {
-    maxAge: 31536000,
-    includeSubDomains: true,
-    preload: true,
-  },
-  referrerPolicy: { policy: "strict-origin-when-cross-origin" },
-}));
-
-declare module "http" {
-  interface IncomingMessage {
-    rawBody: unknown;
-  }
-}
-
-export function log(message: string, source = "express") {
-  const formattedTime = new Date().toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
-  });
-
-  console.log(`${formattedTime} [${source}] ${message}`);
-}
-
-async function initStripe() {
-  const databaseUrl = process.env.DATABASE_URL;
-  if (!databaseUrl) {
-    throw new Error('DATABASE_URL environment variable is required for Stripe integration.');
-  }
-
-  try {
-    log('Initializing Stripe schema...', 'stripe');
-    await runMigrations({ databaseUrl });
-    log('Stripe schema ready', 'stripe');
-
-    const stripeSync = await getStripeSync();
-
-    const webhookBaseUrl = `https://${process.env.REPLIT_DOMAINS?.split(',')[0]}`;
-    try {
-      const result = await stripeSync.findOrCreateManagedWebhook(
-        `${webhookBaseUrl}/api/stripe/webhook`
-      );
-      log(`Webhook configured: ${result?.webhook?.url ?? 'unknown'}`, 'stripe');
-    } catch (webhookErr: any) {
-      log(`Webhook setup skipped (non-fatal): ${webhookErr.message}`, 'stripe');
-    }
-
-    stripeSync.syncBackfill()
-      .then(() => log('Stripe data synced', 'stripe'))
-      .catch((err: any) => console.error('Error syncing Stripe data:', err));
-  } catch (error) {
-    console.error('Failed to initialize Stripe:', error);
-  }
-}
-
-app.post(
-  '/api/stripe/webhook',
-  express.raw({ type: 'application/json' }),
-  async (req, res) => {
-    const signature = req.headers['stripe-signature'];
-    if (!signature) {
-      return res.status(400).json({ error: 'Missing stripe-signature' });
-    }
-
-    try {
-      const sig = Array.isArray(signature) ? signature[0] : signature;
-      if (!Buffer.isBuffer(req.body)) {
-        console.error('STRIPE WEBHOOK ERROR: req.body is not a Buffer');
-        return res.status(500).json({ error: 'Webhook processing error' });
-      }
-
-      await WebhookHandlers.processWebhook(req.body as Buffer, sig);
-      res.status(200).json({ received: true });
-    } catch (error: any) {
-      console.error('Webhook error:', error.message);
-      res.status(400).json({ error: 'Webhook processing error' });
-    }
-  }
-);
-
-app.use(
-  express.json({
-    verify: (req, _res, buf) => {
-      req.rawBody = buf;
-    },
-  }),
-);
-
-app.use(express.urlencoded({ extended: false }));
-
-// CRITICAL: behind Replit/Google's load balancer, the TLS terminates upstream
-// and the connection to Express is plain HTTP. Without trust proxy, express-session
-// sees req.secure=false and refuses to send the Set-Cookie header for secure cookies.
-// This is why the dfm.sid session cookie was never being set in production.
-app.set('trust proxy', 1);
-
-// Disable ETag generation on API routes so we never return 304 — 304 responses
-// strip Set-Cookie headers, breaking session establishment.
-app.set('etag', false);
-
-const PgSession = connectPgSimple(session);
-app.use(session({
-  store: new PgSession({
-    conString: process.env.DATABASE_URL,
-    createTableIfMissing: true,
-    tableName: 'user_sessions',
-    pruneSessionInterval: 60 * 60,
-  }),
-  secret: process.env.SESSION_SECRET || 'dfm-dev-secret',
-  resave: false,
-  saveUninitialized: false,
-  name: 'dfm.sid',
-  cookie: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 90 * 24 * 60 * 60 * 1000,
-    sameSite: 'lax',
-  },
-}));
-
-app.use((req, res, next) => {
-  const start = Date.now();
-  const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
-
-  const originalResJson = res.json;
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
-  };
-
-  res.on("finish", () => {
-    const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      log(`${req.method} ${path} ${res.statusCode} in ${duration}ms`);
-    }
-  });
-
-  next();
-});
+import { createApp } from "./bootstrap";
+import { log } from "./log";
 
 (async () => {
-  await initStripe();
-  await registerRoutes(httpServer, app);
-  const { startRetentionCleanup } = await import("./cleanup");
-  startRetentionCleanup();
-  // Email scheduler disabled
-  // const { startEmailScheduler } = await import("./email-scheduler");
-  // startEmailScheduler();
+  const app = await createApp();
 
-  app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
-
-    console.error("Internal Server Error:", err);
-
-    if (res.headersSent) {
-      return next(err);
-    }
-
-    return res.status(status).json({ message });
-  });
-
-  if (process.env.NODE_ENV === "production") {
-    serveStatic(app);
-  } else {
+  if (process.env.NODE_ENV !== "production") {
+    const httpServer = createServer(app);
     const { setupVite } = await import("./vite");
     await setupVite(httpServer, app);
+
+    const port = parseInt(process.env.PORT || "5000", 10);
+    httpServer.listen(port, "0.0.0.0", () => {
+      log(`serving on port ${port}`);
+      if (process.env.DEV_BYPASS_PAYWALL === "true") {
+        log("DEV_BYPASS_PAYWALL=true — paywall disabled for local development", "dev");
+      }
+    });
+    return;
   }
 
+  const httpServer = createServer(app);
   const port = parseInt(process.env.PORT || "5000", 10);
-  httpServer.listen(
-    {
-      port,
-      host: "0.0.0.0",
-      reusePort: true,
-    },
-    () => {
-      log(`serving on port ${port}`);
-    },
-  );
+  httpServer.listen(port, "0.0.0.0", () => {
+    log(`serving on port ${port}`);
+  });
 })();

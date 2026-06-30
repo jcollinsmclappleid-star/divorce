@@ -2,7 +2,7 @@ import { db } from "./db";
 import { emailLeads, purchases } from "@shared/schema";
 import { and, eq, isNull, isNotNull, gte } from "drizzle-orm";
 import { sendFollowUpEmail, sendPromoEmail, sendPensionInsightEmail, sendSustainabilityEmail, sendFinalNudgeEmail } from "./email";
-import { log } from "./index";
+import { log } from "./log";
 
 const THIRTY_MIN_MS = 30 * 60 * 1000;
 const BOOT_DELAY_MS = 20_000;

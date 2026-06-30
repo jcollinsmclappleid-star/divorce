@@ -1,7 +1,7 @@
 import { db, pool } from "./db";
 import { magicLinks, emailLeads, purchases } from "@shared/schema";
 import { lt, and, eq, isNotNull } from "drizzle-orm";
-import { log } from "./index";
+import { log } from "./log";
 
 const SIX_HOURS_MS = 6 * 60 * 60 * 1000;
 const BOOT_DELAY_MS = 15_000;

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, type ReactNode } from "react";
 import { useLocation } from "wouter";
 import { useAppStore, Asset, Liability, Income, Expense } from "@/hooks/use-store";
 import { useDocumentTitle } from "@/hooks/use-document-title";
@@ -19,15 +19,16 @@ import { Progress } from "@/components/ui/progress";
 import { AssetCategory, LiabilityCategory, Owner, ExpenseCategory } from "@shared/schema";
 import { formatCurrency, scrollTop } from "@/lib/utils";
 import {
-  ChevronLeft, ChevronRight, Heart, Home, Wallet, Landmark,
+  ChevronLeft, ChevronRight, ChevronDown, Heart, Home, Wallet, Landmark,
   Briefcase, Calculator, Plus, Trash2, Edit2, Check, Settings2,
-  Shield, Users, TrendingUp, ArrowRight, Receipt
+  Shield, Users, TrendingUp, ArrowRight, Receipt, SearchCheck
 } from "lucide-react";
 import { useAccess } from "@/hooks/use-access";
 import { LivePoolConsole, MobilePoolChip } from "@/components/wizard/live-pool-console";
 import { StageInsightCard } from "@/components/wizard/stage-insight-card";
 import { SmartExpenseChips } from "@/components/wizard/smart-expense-chips";
 import { IncomeAssumptionChips } from "@/components/wizard/income-assumption-chips";
+import { PensionQuickAdd } from "@/components/wizard/pension-quick-add";
 import { useInlineConfirm, InlineConfirm } from "@/components/wizard/inline-confirm";
 
 const STEPS = [
@@ -93,6 +94,189 @@ const STEP_COPY = [
   },
 ];
 
+const WIZARD_INTENTS = [
+  {
+    value: "first_private_view",
+    label: "I want a private first view",
+    hint: "Understand the financial picture before speaking to anyone.",
+  },
+  {
+    value: "offer_check",
+    label: "I need to check an offer",
+    hint: "Model what a proposed split could leave each person with.",
+  },
+  {
+    value: "fair_split",
+    label: "I want to test 50/50 or another split",
+    hint: "Check whether a percentage leaves both sides with workable outcomes.",
+  },
+  {
+    value: "house_split",
+    label: "I am worried about the house",
+    hint: "Focus on equity, buyout pressure and affordability.",
+  },
+  {
+    value: "children_housing",
+    label: "Children and housing are my main concern",
+    hint: "Check housing pressure, childcare context and monthly affordability.",
+  },
+  {
+    value: "pension_impact",
+    label: "I need to understand pensions",
+    hint: "Check whether pension value changes the settlement picture.",
+  },
+  {
+    value: "income_gap",
+    label: "One of us earns much less",
+    hint: "See how income imbalance affects cashflow and sustainability.",
+  },
+  {
+    value: "debt_pressure",
+    label: "I am worried debts will distort the split",
+    hint: "Include loans, cards and liabilities before comparing outcomes.",
+  },
+  {
+    value: "protect_position",
+    label: "I want to protect my position",
+    hint: "Look for pressure points, missing value and long-term risk.",
+  },
+];
+
+const WIZARD_INTENT_ALIASES: Record<string, string> = {
+  asset_split: "protect_position",
+  settlement: "fair_split",
+  mortgage_affordability: "house_split",
+  buyout: "house_split",
+};
+
+function normaliseWizardIntent(intent: string | null) {
+  if (!intent) return "";
+  return WIZARD_INTENT_ALIASES[intent] ?? intent;
+}
+
+const INTENT_STEP_COPY: Record<string, Partial<Record<number, { prompt: string; reassurance: string }>>> = {
+  offer_check: {
+    0: {
+      prompt: "Let's check what that settlement offer could really leave you with.",
+      reassurance: "Enter the offer as assumptions later in the wizard. The calculator helps you understand pressure points before you respond.",
+    },
+    2: {
+      prompt: "The house usually decides whether an offer feels possible or risky.",
+      reassurance: "Use the best property and mortgage figures you have. The offer check will test sale, keep-home and buyout pressure against your assumptions.",
+    },
+    8: {
+      prompt: "Set the split assumptions to mirror the offer you want to check.",
+      reassurance: "The results will not tell you whether to accept. They show what the offer may leave each person with and which questions to raise.",
+    },
+  },
+  fair_split: {
+    0: {
+      prompt: "Let's test whether 50/50 or another split is workable in practice.",
+      reassurance: "The calculator shows financial outcomes under different assumptions. It does not decide what is fair or what either person should accept.",
+    },
+    8: {
+      prompt: "Use these sliders to test 50/50, 60/40 or the split you want to compare.",
+      reassurance: "The next screen will show capital, pension, cashflow and resilience differences side by side.",
+    },
+  },
+  house_split: {
+    0: {
+      prompt: "Let's see whether the house can realistically work in the settlement.",
+      reassurance: "We will focus on equity, buyout pressure, mortgage affordability and cash reserves.",
+    },
+    2: {
+      prompt: "This is the key step for house split and buyout pressure.",
+      reassurance: "A current estimate is enough to start. The model uses property value, mortgage balance and sale costs to test the house scenarios.",
+    },
+    8: {
+      prompt: "Review the house and split assumptions before the affordability check.",
+      reassurance: "The results will compare sale versus keep-home outcomes and show where mortgage pressure may appear.",
+    },
+  },
+  children_housing: {
+    0: {
+      prompt: "Let's check the financial picture around children and housing.",
+      reassurance: "We will model housing, income, expenses and child maintenance assumptions as financial inputs, not legal advice about child arrangements.",
+    },
+    2: {
+      prompt: "Housing is usually the pressure point when children are involved.",
+      reassurance: "Add the property and mortgage details so the model can compare sale, keep-home and affordability pressure.",
+    },
+    7: {
+      prompt: "Add child maintenance assumptions if they are relevant.",
+      reassurance: "The model uses these figures for cashflow only. It is not a formal CMS assessment or legal advice.",
+    },
+    8: {
+      prompt: "Review the assumptions before checking housing and monthly pressure.",
+      reassurance: "The results will show whether each scenario appears workable month to month under the figures entered.",
+    },
+  },
+  pension_impact: {
+    0: {
+      prompt: "Let's check whether pensions change the settlement picture.",
+      reassurance: "If you do not have exact CETV figures yet, add estimates and refine later.",
+    },
+    4: {
+      prompt: "Pension values can change what looks fair on paper.",
+      reassurance: "Enter CETV figures where possible so the model can compare pension sharing and offset pressure.",
+    },
+    8: {
+      prompt: "Review the pension split separately from the asset split.",
+      reassurance: "This helps you see whether a property-heavy settlement hides a weaker pension outcome.",
+    },
+  },
+  income_gap: {
+    0: {
+      prompt: "Let's check how the income gap changes the settlement picture.",
+      reassurance: "Income, career breaks and monthly costs often decide whether a split is liveable after separation.",
+    },
+    5: {
+      prompt: "This is the key step for income imbalance.",
+      reassurance: "Enter gross income for each person. The model estimates take-home pay and compares monthly pressure across scenarios.",
+    },
+    6: {
+      prompt: "Living costs show whether the lower-income side is left short.",
+      reassurance: "Best estimates are fine. These numbers power the monthly surplus and resilience checks.",
+    },
+    8: {
+      prompt: "Review assumptions before testing income-gap pressure.",
+      reassurance: "The results will compare capital and monthly sustainability, not just headline asset percentages.",
+    },
+  },
+  debt_pressure: {
+    0: {
+      prompt: "Let's include debts before comparing any split.",
+      reassurance: "Debt can make a settlement that looks balanced on paper feel very different month to month.",
+    },
+    3: {
+      prompt: "Add debts, loans and credit cards so they are not missed.",
+      reassurance: "The model will show how liabilities affect the asset pool and each party's financial position.",
+    },
+    8: {
+      prompt: "Review the debt and split assumptions before the reality check.",
+      reassurance: "The results will help identify where liabilities create cashflow or reserve pressure.",
+    },
+  },
+  protect_position: {
+    0: {
+      prompt: "Let's look for pressure points before you agree anything.",
+      reassurance: "The model helps organise the numbers and identify financial questions, not legal tactics or advice.",
+    },
+    3: {
+      prompt: "This is where missing value often shows up.",
+      reassurance: "Add savings, investments and debts as best you can. The report can then flag gaps and pressure points to discuss.",
+    },
+    8: {
+      prompt: "Review the assumptions for missing value and left-short risk.",
+      reassurance: "The results will help you check cashflow, pensions, debts and property pressure before professional conversations.",
+    },
+  },
+};
+
+function getStepCopy(step: number, intent?: string) {
+  return INTENT_STEP_COPY[intent || ""]?.[step] ?? STEP_COPY[step];
+}
+
 const WIZARD_STAGES = [
   { label: "Your Assets", steps: [1, 2, 3], stageNum: 1 },
   { label: "Your Income", steps: [4, 5], stageNum: 2 },
@@ -110,15 +294,16 @@ export default function WizardPage() {
   useDocumentTitle("Build Your Financial Model | DivorceCalculatorUK");
   useNoIndex();
   const [currentStep, setCurrentStep] = useState(0);
-  const [advancedMode, setAdvancedMode] = useState(false);
   const [midJourneyEmailDismissed, setMidJourneyEmailDismissed] = useState(false);
   const [showMidJourneyEmail, setShowMidJourneyEmail] = useState(false);
   const [interstitial, setInterstitial] = useState<null | "afterAssets" | "afterIncome">(null);
   const [seenInterstitial, setSeenInterstitial] = useState<{ afterAssets: boolean; afterIncome: boolean }>({ afterAssets: false, afterIncome: false });
   const [, setLocation] = useLocation();
   const { hasAccess } = useAccess();
+  const calculationIntent = useAppStore((s) => s.profile.calculationIntent);
 
   const progress = ((currentStep) / (STEPS.length - 1)) * 100;
+  const stepCopy = getStepCopy(currentStep, calculationIntent);
 
   const goNext = useCallback(() => {
     scrollTop();
@@ -179,12 +364,12 @@ export default function WizardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col font-sans">
-      <div className="bg-primary/10 text-primary px-4 py-1.5 text-xs text-center font-medium border-b border-primary/20" data-testid="text-disclaimer">
-        Illustrative modelling only. Not legal, tax or financial advice.
+    <div className="min-h-screen flex flex-col font-sans bg-gradient-to-b from-slate-100 via-[#eef3f9] to-[#f4f7fb]">
+      <div className="bg-[hsl(220_52%_10%)] text-white/65 px-4 py-1.5 text-xs text-center font-medium" data-testid="text-disclaimer">
+        Illustrative modelling only <span className="text-gold/50 mx-1">·</span> Not legal, tax or financial advice
       </div>
 
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 shadow-sm">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between gap-4">
           <Logo size="md" />
 
@@ -212,8 +397,8 @@ export default function WizardPage() {
                           stepIdx < currentStep
                             ? `${STEP_META[stepIdx].dotBg} ${STEP_META[stepIdx].dotBorder} text-white`
                             : stepIdx === currentStep
-                            ? `${STEP_META[stepIdx].dotBg} ${STEP_META[stepIdx].dotBorder} text-white ring-2 ring-offset-1 ring-offset-background ring-current`
-                            : "border-muted-foreground/30 text-muted-foreground/50 bg-background"
+                            ? `${STEP_META[stepIdx].dotBg} ${STEP_META[stepIdx].dotBorder} text-white ring-2 ring-offset-1 ring-offset-white ring-current`
+                            : "border-slate-300/60 text-muted-foreground/50 bg-white"
                         }`}>
                           {stepIdx < currentStep ? <Check className="w-3 h-3" /> : stepIdx}
                         </div>
@@ -225,21 +410,11 @@ export default function WizardPage() {
             })}
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2">
-              <Label className="text-xs text-muted-foreground hidden sm:inline">Advanced</Label>
-              <Switch
-                checked={advancedMode}
-                onCheckedChange={setAdvancedMode}
-                data-testid="switch-advanced-mode"
-              />
-            </div>
-          </div>
         </div>
         <Progress value={progress} className={`h-1.5 rounded-none transition-all duration-500 ${STEP_META[currentStep].progressBar}`} data-testid="progress-bar" />
       </header>
 
-      <main className="flex-1 container mx-auto px-4 py-6 max-w-6xl">
+      <main className="flex-1 container mx-auto px-4 py-8 max-w-6xl">
         <div className="flex gap-8 items-start">
           <div className="flex-1 min-w-0 max-w-3xl mx-auto lg:mx-0">
             {(() => {
@@ -281,7 +456,7 @@ export default function WizardPage() {
                       {STEPS[currentStep].title}
                     </h1>
                     <p className="text-muted-foreground mt-1" data-testid="text-step-prompt">
-                      {STEP_COPY[currentStep].prompt}
+                      {stepCopy.prompt}
                     </p>
                   </div>
 
@@ -296,15 +471,15 @@ export default function WizardPage() {
                     </div>
                   )}
 
-                  <Card className={`mb-5 border-t-4 ${meta.borderTop} overflow-hidden`}>
+                  <Card className={`mb-5 border-t-4 ${meta.borderTop} overflow-hidden bg-white border border-slate-200/80 rounded-xl shadow-lg shadow-primary/[0.06]`}>
                     <CardContent className="pt-6">
-                      <StepContent step={currentStep} advancedMode={advancedMode} />
+                      <StepContent step={currentStep} />
                     </CardContent>
                   </Card>
 
-                  <div className={`p-3 bg-muted/40 rounded-md text-sm text-muted-foreground mb-6 flex items-start gap-2 border-l-4 ${meta.shieldBorder}`}>
+                  <div className={`p-3.5 bg-white/85 rounded-lg text-sm text-muted-foreground mb-6 flex items-start gap-2 border border-slate-200/70 shadow-sm border-l-4 ${meta.shieldBorder}`}>
                     <Shield className="w-4 h-4 mt-0.5 flex-shrink-0 text-muted-foreground/60" />
-                    <span>{STEP_COPY[currentStep].reassurance}</span>
+                    <span>{stepCopy.reassurance}</span>
                   </div>
 
                   <div className="flex items-center justify-between gap-4 pb-20 lg:pb-0">
@@ -410,16 +585,53 @@ function MidJourneyEmailCard({ onDismiss }: { onDismiss: () => void }) {
   );
 }
 
-function StepContent({ step, advancedMode }: { step: number; advancedMode: boolean }) {
+function OptionalRefinements({
+  title = "Optional refinements",
+  hint,
+  children,
+  testId,
+}: {
+  title?: string;
+  hint?: string;
+  children: ReactNode;
+  testId: string;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="rounded-md border border-border/60 bg-muted/20" data-testid={testId}>
+      <button
+        type="button"
+        className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left text-sm hover:bg-muted/40 transition-colors"
+        onClick={() => setOpen(!open)}
+        data-testid={`button-toggle-${testId}`}
+      >
+        <div>
+          <span className="font-medium text-foreground">{title}</span>
+          {hint && !open && (
+            <p className="text-xs text-muted-foreground mt-0.5">{hint}</p>
+          )}
+        </div>
+        <ChevronDown className={`w-4 h-4 shrink-0 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className="px-4 pb-4 pt-3 space-y-4 border-t border-border/40">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StepContent({ step }: { step: number }) {
   switch (step) {
     case 0: return <StepWelcome />;
-    case 1: return <StepSituation advancedMode={advancedMode} />;
-    case 2: return <StepHome advancedMode={advancedMode} />;
-    case 3: return <StepAssets advancedMode={advancedMode} />;
-    case 4: return <StepPensions advancedMode={advancedMode} />;
-    case 5: return <StepIncome advancedMode={advancedMode} />;
-    case 6: return <SmartExpenseChips advancedMode={advancedMode} />;
-    case 7: return <StepSupport advancedMode={advancedMode} />;
+    case 1: return <StepSituation />;
+    case 2: return <StepHome />;
+    case 3: return <StepAssets />;
+    case 4: return <StepPensions />;
+    case 5: return <StepIncome />;
+    case 6: return <SmartExpenseChips />;
+    case 7: return <StepSupport />;
     case 8: return <StepAssumptions />;
     default: return null;
   }
@@ -443,6 +655,23 @@ const MAIN_PRIORITIES = [
 
 function StepWelcome() {
   const { profile, updateProfile } = useAppStore();
+  const selectedIntent = WIZARD_INTENTS.find((intent) => intent.value === profile.calculationIntent);
+
+  useEffect(() => {
+    if (profile.calculationIntent) return;
+    try {
+      const homepageIntent = sessionStorage.getItem("dfm-homepage-intent");
+      if (homepageIntent) {
+        const normalisedIntent = normaliseWizardIntent(homepageIntent);
+        updateProfile({
+          calculationIntent: normalisedIntent,
+          offerStatus: normalisedIntent === "offer_check" ? "received" : profile.offerStatus,
+        });
+      }
+    } catch {
+      // Ignore storage access failures in private browsing modes.
+    }
+  }, [profile.calculationIntent, profile.offerStatus, updateProfile]);
 
   return (
     <div className="space-y-7">
@@ -463,6 +692,45 @@ function StepWelcome() {
             <span className="flex items-center gap-1.5"><Calculator className="w-3.5 h-3.5 text-cyan-500" /> Best estimates are fine</span>
             <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-gold" /> Under 5 minutes</span>
           </div>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        <Label className="font-medium flex items-center gap-1.5">
+          <SearchCheck className="w-3.5 h-3.5 text-primary" />
+          What are you trying to check today?
+        </Label>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {WIZARD_INTENTS.map((intent) => (
+            <button
+              key={intent.value}
+              type="button"
+              onClick={() => updateProfile({
+                calculationIntent: profile.calculationIntent === intent.value ? "" : intent.value,
+                offerStatus: intent.value === "offer_check" ? (profile.calculationIntent === intent.value ? "" : "received") : profile.offerStatus,
+              })}
+              className={`text-left rounded-lg border p-3 transition-colors ${
+                profile.calculationIntent === intent.value
+                  ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                  : "border-border bg-background hover:border-primary/50"
+              }`}
+              data-testid={`button-intent-${intent.value}`}
+            >
+              <span className="block text-sm font-semibold">{intent.label}</span>
+              <span className={`block text-xs mt-1 leading-relaxed ${
+                profile.calculationIntent === intent.value ? "text-primary-foreground/75" : "text-muted-foreground"
+              }`}>
+                {intent.hint}
+              </span>
+            </button>
+          ))}
+        </div>
+        <div className="rounded-lg border border-primary/10 bg-primary/5 px-3 py-2">
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            {selectedIntent
+              ? <>Selected path: <span className="font-medium text-foreground">{selectedIntent.label}</span>. We will tailor prompts and the report lens around this concern, without changing the underlying calculations.</>
+              : "Not sure? Choose the closest concern. You can still enter all figures and compare every scenario."}
+          </p>
         </div>
       </div>
 
@@ -558,7 +826,7 @@ function StepWelcome() {
   );
 }
 
-function StepSituation({ advancedMode }: { advancedMode: boolean }) {
+function StepSituation() {
   const { children, updateChildren, assumptions, updateAssumptions, profile } = useAppStore();
   const nameA = profile?.partyAName || "Party A";
   const nameB = profile?.partyBName || "Party B";
@@ -568,7 +836,7 @@ function StepSituation({ advancedMode }: { advancedMode: boolean }) {
       <div className="flex items-start gap-3 p-3 rounded-md bg-primary/5 border border-primary/10" data-testid="callout-privacy-step1">
         <Shield className="w-4 h-4 text-primary mt-0.5 shrink-0" />
         <p className="text-xs text-muted-foreground leading-relaxed">
-          <span className="font-medium text-foreground">Your privacy is protected.</span> All core calculations happen privately in your browser. If you choose to generate the Guided Intelligence Report later, only selected de-identified model figures are securely processed — no names, addresses or contact details are included.
+          <span className="font-medium text-foreground">Your privacy is protected.</span> All core calculations happen privately in your browser. If you choose to generate the Settlement Reality Check Report later, only selected de-identified model figures are securely processed — no names, addresses or contact details are included.
         </p>
       </div>
       <div className="space-y-4">
@@ -651,33 +919,24 @@ function StepSituation({ advancedMode }: { advancedMode: boolean }) {
         )}
       </div>
 
-      {advancedMode && (
-        <div className="space-y-4 pt-2">
-          <Separator />
-          <Label className="text-sm font-medium text-muted-foreground">Advanced Settings</Label>
-          <div className="flex items-center gap-3">
-            <Switch
-              checked={assumptions.includeTaxModel}
-              onCheckedChange={(v) => updateAssumptions({ includeTaxModel: v })}
-              data-testid="switch-tax-model"
-            />
-            <Label className="text-sm">Include UK tax/NI calculations</Label>
-          </div>
-          <div className="flex items-center gap-3">
-            <Switch
-              checked={assumptions.includeCMSEstimate}
-              onCheckedChange={(v) => updateAssumptions({ includeCMSEstimate: v })}
-              data-testid="switch-cms"
-            />
-            <Label className="text-sm">Include child maintenance estimate</Label>
-          </div>
+      <OptionalRefinements
+        testId="refinements-situation"
+        hint="Tax modelling settings"
+      >
+        <div className="flex items-center gap-3">
+          <Switch
+            checked={assumptions.includeTaxModel}
+            onCheckedChange={(v) => updateAssumptions({ includeTaxModel: v })}
+            data-testid="switch-tax-model"
+          />
+          <Label className="text-sm">Include UK tax/NI calculations</Label>
         </div>
-      )}
+      </OptionalRefinements>
     </div>
   );
 }
 
-function StepHome({ advancedMode }: { advancedMode: boolean }) {
+function StepHome() {
   const { assets, liabilities, addAsset, updateAsset, addLiability, updateLiability, profile } = useAppStore();
   const nameA = profile?.partyAName || "Party A";
   const nameB = profile?.partyBName || "Party B";
@@ -773,46 +1032,62 @@ function StepHome({ advancedMode }: { advancedMode: boolean }) {
               <span className="text-muted-foreground font-medium">Net sale equity</span>
               <span className="font-bold text-lg">{formatCurrency(netEquity)}</span>
             </div>
-            <p className="text-xs text-muted-foreground">Includes estimated estate agent and legal fees. Adjustable in advanced mode.</p>
+            <p className="text-xs text-muted-foreground">Includes estimated estate agent and legal fees. Expand optional refinements below to adjust.</p>
           </div>
         );
       })()}
 
-      {advancedMode && (
-        <div className="space-y-4 pt-2">
-          <Separator />
-          <Label className="text-sm font-medium text-muted-foreground">Advanced: Home Details</Label>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label className="text-sm">Ownership</Label>
-              <Select
-                value={home?.owner ?? "joint"}
-                onValueChange={(v) => home && updateAsset(home.id, { owner: v })}
-              >
-                <SelectTrigger data-testid="select-home-owner"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="joint">Joint</SelectItem>
-                  <SelectItem value="A">{nameA}</SelectItem>
-                  <SelectItem value="B">{nameB}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label className="text-sm">Sale costs (%)</Label>
-              <Input
-                type="number"
-                step={0.5}
-                value={((home?.saleCostPct ?? 0.03) * 100).toFixed(1)}
-                onChange={(e) => home && updateAsset(home.id, { saleCostPct: parseFloat(e.target.value) / 100 || 0.03 })}
-                data-testid="input-sale-cost-pct"
-              />
-            </div>
+      <OptionalRefinements
+        testId="refinements-home"
+        hint="Ownership and sale costs"
+      >
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label className="text-sm">Ownership</Label>
+            <Select
+              value={home?.owner ?? "joint"}
+              onValueChange={(v) => home && updateAsset(home.id, { owner: v })}
+            >
+              <SelectTrigger data-testid="select-home-owner"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="joint">Joint</SelectItem>
+                <SelectItem value="A">{nameA}</SelectItem>
+                <SelectItem value="B">{nameB}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label className="text-sm">Sale costs (%)</Label>
+            <Input
+              type="number"
+              step={0.5}
+              value={((home?.saleCostPct ?? 0.03) * 100).toFixed(1)}
+              onChange={(e) => home && updateAsset(home.id, { saleCostPct: parseFloat(e.target.value) / 100 || 0.03 })}
+              data-testid="input-sale-cost-pct"
+            />
           </div>
         </div>
-      )}
+      </OptionalRefinements>
     </div>
   );
 }
+
+const UK_ASSET_BENCHMARKS = [
+  { name: "Cash / savings", category: "cash", value: 4250 },
+  { name: "ISA / investments", category: "investments", value: 7500 },
+  { name: "Vehicle", category: "vehicle", value: 8000 },
+];
+
+const UK_JOINT_ASSET_BENCHMARKS = [
+  { name: "Joint savings account", category: "cash", value: 8500 },
+  { name: "ISA / investments (joint)", category: "investments", value: 15000 },
+];
+
+const UK_DEBT_BENCHMARKS = [
+  { name: "Credit card", category: "credit_card", balance: 2400 },
+  { name: "Personal loan", category: "loan", balance: 4500 },
+  { name: "Car finance", category: "loan", balance: 6500 },
+];
 
 const ASSET_SUGGESTIONS: { name: string; category: string; owner: string; hint: string }[] = [
   { name: "Joint Savings Account", category: "cash", owner: "joint", hint: "Current or savings accounts held jointly" },
@@ -842,7 +1117,7 @@ const DEBT_SUGGESTIONS: { name: string; category: string; owner: string; hint: s
   { name: "Overdraft (B)", category: "loan", owner: "B", hint: "Party B's arranged or unarranged overdraft balance" },
 ];
 
-function StepAssets({ advancedMode }: { advancedMode: boolean }) {
+function StepAssets() {
   const assetConfirm = useInlineConfirm();
   const liabilityConfirm = useInlineConfirm();
   const { assets, liabilities, addAsset, updateAsset, removeAsset, addLiability, updateLiability, removeLiability, profile } = useAppStore();
@@ -911,6 +1186,48 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
     setLiabilityDialogOpen(false);
   };
 
+  const applyBenchmarkAssets = (owner: "A" | "B" | "joint") => {
+    const existing = new Set(
+      assets
+        .filter((asset) => asset.category !== "primary_home" && asset.category !== "pension")
+        .filter((asset) => asset.owner === owner)
+        .map((asset) => asset.name.toLowerCase())
+    );
+    const benchmarks = owner === "joint" ? UK_JOINT_ASSET_BENCHMARKS : UK_ASSET_BENCHMARKS;
+    benchmarks.forEach((benchmark) => {
+      const name = `${benchmark.name} (starting estimate)`;
+      if (existing.has(name.toLowerCase())) return;
+      addAsset({
+        name,
+        currentValue: benchmark.value,
+        category: benchmark.category,
+        owner,
+        liquidity: benchmark.category === "vehicle" ? "illiquid" : "liquid",
+        saleCostPct: 0,
+        taxCostPct: 0,
+      });
+    });
+  };
+
+  const applyBenchmarkDebts = (owner: "A" | "B") => {
+    const existing = new Set(
+      liabilities
+        .filter((liability) => liability.category !== "mortgage")
+        .filter((liability) => liability.owner === owner)
+        .map((liability) => liability.name.toLowerCase())
+    );
+    UK_DEBT_BENCHMARKS.forEach((benchmark) => {
+      const name = `${benchmark.name} (starting estimate)`;
+      if (existing.has(name.toLowerCase())) return;
+      addLiability({
+        name,
+        balance: benchmark.balance,
+        category: benchmark.category,
+        owner,
+      });
+    });
+  };
+
   const unusedAssetSuggestions = ASSET_SUGGESTIONS;
   const unusedDebtSuggestions = DEBT_SUGGESTIONS;
 
@@ -921,6 +1238,47 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
         <p className="text-xs text-muted-foreground">
           Include all savings, investments, vehicles, business interests, and other valuable assets.
           Also add any debts besides the mortgage. These all feed into the settlement calculations.
+        </p>
+      </div>
+
+      <div className="rounded-lg border border-gold/25 bg-gold/10 p-4 space-y-4" data-testid="card-savings-benchmarks">
+        <div className="space-y-1">
+          <p className="text-sm font-semibold text-foreground">Quick starting point for savings &amp; assets</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            If you do not have exact balances yet, use typical UK planning figures now — then replace them with your statements when you have them. Pensions and the family home are handled on other steps.
+          </p>
+        </div>
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="bg-white"
+            onClick={() => applyBenchmarkAssets("A")}
+            data-testid="button-apply-savings-benchmark-a"
+          >
+            Use starting figures for {nameA}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="bg-white"
+            onClick={() => applyBenchmarkAssets("B")}
+            data-testid="button-apply-savings-benchmark-b"
+          >
+            Use starting figures for {nameB}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="bg-white"
+            onClick={() => applyBenchmarkAssets("joint")}
+            data-testid="button-apply-savings-benchmark-joint"
+          >
+            Use joint starting figures
+          </Button>
+        </div>
+        <p className="text-[11px] text-muted-foreground leading-relaxed">
+          Planning estimates only — not a valuation. Includes cash (~£4,250 each), ISA/investments (~£7,500 each), and vehicle (~£8,000 each), based on common UK household medians.
         </p>
       </div>
 
@@ -996,6 +1354,38 @@ function StepAssets({ advancedMode }: { advancedMode: boolean }) {
       )}
 
       <Separator />
+
+      <div className="rounded-lg border border-cyan-200/80 bg-cyan-50/50 p-4 space-y-4" data-testid="card-debt-benchmarks">
+        <div className="space-y-1">
+          <p className="text-sm font-semibold text-foreground">Quick starting point for other debts</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Only use this if you have non-mortgage debt but not exact balances yet. Skip if you have no credit cards, loans or car finance outside the mortgage.
+          </p>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="bg-white"
+            onClick={() => applyBenchmarkDebts("A")}
+            data-testid="button-apply-debt-benchmark-a"
+          >
+            Use debt starting figures for {nameA}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="bg-white"
+            onClick={() => applyBenchmarkDebts("B")}
+            data-testid="button-apply-debt-benchmark-b"
+          >
+            Use debt starting figures for {nameB}
+          </Button>
+        </div>
+        <p className="text-[11px] text-muted-foreground leading-relaxed">
+          Adds credit card (~£2,400), personal loan (~£4,500) and car finance (~£6,500) as editable placeholders. Replace with your statements.
+        </p>
+      </div>
 
       <div>
         <div className="flex items-center justify-between gap-2 mb-3">
@@ -1186,7 +1576,7 @@ const INCOME_SUGGESTIONS: { name: string; owner: string; hint: string }[] = [
   { name: "Other Benefits", owner: "A", hint: "Universal Credit, Tax Credits, or other state benefits" },
 ];
 
-function StepPensions({ advancedMode }: { advancedMode: boolean }) {
+function StepPensions() {
   const { assets, addAsset, updateAsset, removeAsset, profile } = useAppStore();
   const nameA = profile?.partyAName || "Party A";
   const nameB = profile?.partyBName || "Party B";
@@ -1247,6 +1637,8 @@ function StepPensions({ advancedMode }: { advancedMode: boolean }) {
           your pension provider. Pensions are split separately from other assets.
         </p>
       </div>
+
+      <PensionQuickAdd />
 
       <div className="flex items-center justify-between gap-2">
         <div>
@@ -1352,18 +1744,16 @@ function StepPensions({ advancedMode }: { advancedMode: boolean }) {
                   </SelectContent>
                 </Select>
               </div>
-              {advancedMode && (
-                <div className="space-y-2">
-                  <Label>Type</Label>
-                  <Select value={form.pensionType} onValueChange={(v) => setForm(f => ({ ...f, pensionType: v }))}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="DC">Defined Contribution</SelectItem>
-                      <SelectItem value="DB">Defined Benefit</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
+              <div className="space-y-2">
+                <Label>Type</Label>
+                <Select value={form.pensionType} onValueChange={(v) => setForm(f => ({ ...f, pensionType: v }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="DC">Defined Contribution</SelectItem>
+                    <SelectItem value="DB">Defined Benefit</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
           <DialogFooter>
@@ -1388,6 +1778,22 @@ const EXPENSE_SUGGESTIONS: { name: string; category: string; owner: string; hint
   { name: "Leisure & Social", category: "other", owner: "A", hint: "Hobbies, eating out, subscriptions" },
 ];
 
+const UK_EXPENSE_BENCHMARKS = [
+  { name: "Council Tax", category: "housing", monthly: 160 },
+  { name: "Utilities", category: "housing", monthly: 220 },
+  { name: "Food & Groceries", category: "living", monthly: 325 },
+  { name: "Transport", category: "transport", monthly: 225 },
+  { name: "Phone & Internet", category: "living", monthly: 80 },
+  { name: "Insurance", category: "insurance", monthly: 90 },
+  { name: "Clothing & Personal", category: "living", monthly: 140 },
+  { name: "Emergency / Miscellaneous", category: "other", monthly: 150 },
+];
+
+const UK_CHILD_EXPENSE_BENCHMARKS = [
+  { name: "Children's Food & Clothing", category: "child", monthly: 175 },
+  { name: "School / Activities", category: "child", monthly: 125 },
+];
+
 const CATEGORY_LABELS: Record<string, string> = {
   living: "Living",
   housing: "Housing",
@@ -1398,7 +1804,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   other: "Other",
 };
 
-function StepIncome({ advancedMode }: { advancedMode: boolean }) {
+function StepIncome() {
   const { incomes, addIncome, updateIncome, removeIncome, assumptions, updateAssumptions, profile, maintenance, updateMaintenance } = useAppStore();
   const nameA = profile?.partyAName || "Party A";
   const nameB = profile?.partyBName || "Party B";
@@ -1439,6 +1845,10 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
   return (
     <div className="space-y-6">
       <IncomeAssumptionChips />
+
+      <p className="text-[11px] text-muted-foreground leading-relaxed border-l-2 border-muted pl-3">
+        Take-home figures use simplified 2026/27 England/Wales income tax and employee NI — illustrative for divorce cashflow modelling, not tax advice or payslip accuracy.
+      </p>
 
       <div>
         <div className="flex items-center justify-between gap-2 mb-3">
@@ -1507,46 +1917,45 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
         </div>
       )}
 
-      {advancedMode && (
-        <div className="space-y-4 pt-2">
-          <Separator />
-          <Label className="text-sm font-medium text-muted-foreground">Override Take-Home Pay (Optional)</Label>
-          <p className="text-xs text-muted-foreground">
-            If you know the actual annual take-home pay (after tax, NI, and any deductions), enter it here. 
-            This will replace the model's estimated net income for that party. Leave blank to use the model's calculation.
-          </p>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label className="text-sm">{nameA} take-home ({"\u00A3"}/year)</Label>
-              <Input
-                type="number"
-                min={0}
-                placeholder="Leave blank for model estimate"
-                value={assumptions.overrideNetIncomeA ?? ""}
-                onChange={(e) => {
-                  const v = parseFloat(e.target.value);
-                  updateAssumptions({ overrideNetIncomeA: isNaN(v) || v <= 0 ? null : v });
-                }}
-                data-testid="input-override-net-a"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-sm">{nameB} take-home ({"\u00A3"}/year)</Label>
-              <Input
-                type="number"
-                min={0}
-                placeholder="Leave blank for model estimate"
-                value={assumptions.overrideNetIncomeB ?? ""}
-                onChange={(e) => {
-                  const v = parseFloat(e.target.value);
-                  updateAssumptions({ overrideNetIncomeB: isNaN(v) || v <= 0 ? null : v });
-                }}
-                data-testid="input-override-net-b"
-              />
-            </div>
+      <OptionalRefinements
+        testId="refinements-income"
+        hint="Override modelled take-home pay"
+      >
+        <p className="text-xs text-muted-foreground">
+          If you know the actual annual take-home pay (after tax, NI, and any deductions), enter it here.
+          This will replace the model's estimated net income for that party. Leave blank to use the model's calculation.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label className="text-sm">{nameA} take-home ({"\u00A3"}/year)</Label>
+            <Input
+              type="number"
+              min={0}
+              placeholder="Leave blank for model estimate"
+              value={assumptions.overrideNetIncomeA ?? ""}
+              onChange={(e) => {
+                const v = parseFloat(e.target.value);
+                updateAssumptions({ overrideNetIncomeA: isNaN(v) || v <= 0 ? null : v });
+              }}
+              data-testid="input-override-net-a"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label className="text-sm">{nameB} take-home ({"\u00A3"}/year)</Label>
+            <Input
+              type="number"
+              min={0}
+              placeholder="Leave blank for model estimate"
+              value={assumptions.overrideNetIncomeB ?? ""}
+              onChange={(e) => {
+                const v = parseFloat(e.target.value);
+                updateAssumptions({ overrideNetIncomeB: isNaN(v) || v <= 0 ? null : v });
+              }}
+              data-testid="input-override-net-b"
+            />
           </div>
         </div>
-      )}
+      </OptionalRefinements>
 
       <div className="space-y-3 pt-2">
         <Separator />
@@ -1630,8 +2039,8 @@ function StepIncome({ advancedMode }: { advancedMode: boolean }) {
   );
 }
 
-function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
-  const { expenses, addExpense, updateExpense, removeExpense, profile } = useAppStore();
+function StepExpenses() {
+  const { expenses, addExpense, updateExpense, removeExpense, profile, children } = useAppStore();
   const nameA = profile?.partyAName || "Party A";
   const nameB = profile?.partyBName || "Party B";
   const [expenseDialogOpen, setExpenseDialogOpen] = useState(false);
@@ -1674,6 +2083,29 @@ function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
     setExpenseDialogOpen(false);
   };
 
+  const applyBenchmarkExpenses = (owner: "A" | "B") => {
+    const existingNames = new Set(
+      expenses
+        .filter((expense) => expense.owner === owner)
+        .map((expense) => expense.name.toLowerCase())
+    );
+    const benchmarks = [
+      ...UK_EXPENSE_BENCHMARKS,
+      ...(children.numChildren > 0 ? UK_CHILD_EXPENSE_BENCHMARKS : []),
+    ];
+    benchmarks.forEach((benchmark) => {
+      const name = `${benchmark.name} (starting estimate)`;
+      if (existingNames.has(name.toLowerCase())) return;
+      addExpense({
+        name,
+        amountAnnual: benchmark.monthly * 12,
+        category: benchmark.category,
+        owner,
+        inflationLinked: true,
+      });
+    });
+  };
+
   const addedNames = new Set(expenses.map(e => e.name));
   const unusedSuggestions = EXPENSE_SUGGESTIONS.filter(s => !addedNames.has(s.name));
 
@@ -1689,6 +2121,38 @@ function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
           Estimate what each person's living costs will be <strong>after separation</strong>. 
           These feed into the sustainability and runway projections, helping you see whether each scenario is affordable long-term. 
           Don't include mortgage payments here - those are calculated automatically from your home details.
+        </p>
+      </div>
+
+      <div className="rounded-lg border border-gold/25 bg-gold/10 p-4 space-y-4" data-testid="card-expense-benchmarks">
+        <div className="space-y-1">
+          <p className="text-sm font-semibold text-foreground">We want your results to be realistic, not falsely reassuring.</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Leaving expenses at £0 can make your position look stronger than it really is. If you do not have exact figures yet, use these typical UK starting figures now, then return anytime to replace them with your own costs.
+          </p>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="bg-white"
+            onClick={() => applyBenchmarkExpenses("A")}
+            data-testid="button-apply-benchmark-a"
+          >
+            Use starting figures for {nameA}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="bg-white"
+            onClick={() => applyBenchmarkExpenses("B")}
+            data-testid="button-apply-benchmark-b"
+          >
+            Use starting figures for {nameB}
+          </Button>
+        </div>
+        <p className="text-[11px] text-muted-foreground leading-relaxed">
+          These are broad editable estimates, not official budgeting guidance. Housing/mortgage payments are handled elsewhere in the model.
         </p>
       </div>
 
@@ -1793,9 +2257,12 @@ function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
         </div>
       )}
 
-      {expenses.length === 0 && unusedSuggestions.length === 0 && (
-        <div className="text-center py-6 text-muted-foreground text-sm border-2 border-dashed rounded-lg">
-          Add post-separation living expenses to model sustainability.
+      {expenses.length === 0 && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50/80 p-4 text-sm text-amber-900" data-testid="warning-no-expenses">
+          <p className="font-medium">No living costs are added yet.</p>
+          <p className="text-xs leading-relaxed mt-1">
+            You can continue, but the results may look more comfortable than real life. Add your own costs, or use the starting figures above so the first model is more reliable.
+          </p>
         </div>
       )}
 
@@ -1874,7 +2341,7 @@ function StepExpenses({ advancedMode }: { advancedMode: boolean }) {
   );
 }
 
-function StepSupport({ advancedMode }: { advancedMode: boolean }) {
+function StepSupport() {
   const { assumptions, updateAssumptions } = useAppStore();
 
   return (
@@ -1919,43 +2386,43 @@ function StepSupport({ advancedMode }: { advancedMode: boolean }) {
         )}
       </div>
 
-      {advancedMode && (
-        <div className="space-y-4 pt-2">
-          <Separator />
-          <Label className="text-sm font-medium text-muted-foreground">Advanced: Cost Assumptions</Label>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label className="text-sm">Mortgage APR (%)</Label>
-              <Input
-                type="number"
-                step={0.25}
-                value={(assumptions.mortgageAPR * 100).toFixed(2)}
-                onChange={(e) => { const v = parseFloat(e.target.value); updateAssumptions({ mortgageAPR: isNaN(v) ? 0.05 : v / 100 }); }}
-                data-testid="input-mortgage-apr"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-sm">Mortgage term (years)</Label>
-              <Input
-                type="number"
-                min={5}
-                max={40}
-                value={assumptions.mortgageTermYears}
-                onChange={(e) => updateAssumptions({ mortgageTermYears: parseInt(e.target.value) || 25 })}
-                data-testid="input-mortgage-term"
-              />
-            </div>
+      <OptionalRefinements
+        testId="refinements-support"
+        hint="Mortgage rate and term assumptions"
+      >
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label className="text-sm">Mortgage APR (%)</Label>
+            <Input
+              type="number"
+              step={0.25}
+              value={(assumptions.mortgageAPR * 100).toFixed(2)}
+              onChange={(e) => { const v = parseFloat(e.target.value); updateAssumptions({ mortgageAPR: isNaN(v) ? 0.05 : v / 100 }); }}
+              data-testid="input-mortgage-apr"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label className="text-sm">Mortgage term (years)</Label>
+            <Input
+              type="number"
+              min={5}
+              max={40}
+              value={assumptions.mortgageTermYears}
+              onChange={(e) => updateAssumptions({ mortgageTermYears: parseInt(e.target.value) || 25 })}
+              data-testid="input-mortgage-term"
+            />
           </div>
         </div>
-      )}
+      </OptionalRefinements>
     </div>
   );
 }
 
 function StepAssumptions() {
-  const { assumptions, updateAssumptions, profile } = useAppStore();
+  const { assumptions, updateAssumptions, profile, updateProfile } = useAppStore();
   const nameA = profile?.partyAName || "Party A";
   const nameB = profile?.partyBName || "Party B";
+  const isOfferCheck = profile.calculationIntent === "offer_check" || profile.offerStatus === "received";
 
   const setPreset = (split: number, pension: number) => {
     updateAssumptions({ splitRatio: split, splitPensionToA: pension });
@@ -1963,10 +2430,53 @@ function StepAssumptions() {
 
   return (
     <div className="space-y-6">
+      <div className={`rounded-lg border p-4 space-y-3 ${
+        isOfferCheck ? "bg-gold/10 border-gold/30" : "bg-muted/30 border-border/50"
+      }`} data-testid="card-offer-check-pathway">
+        <div className="flex items-start gap-3">
+          <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
+            isOfferCheck ? "bg-gold/15 text-gold" : "bg-background text-muted-foreground"
+          }`}>
+            <SearchCheck className="w-4 h-4" />
+          </div>
+          <div className="space-y-2 flex-1">
+            <div>
+              <p className="text-sm font-semibold">Settlement offer check</p>
+              <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                If you have been given a proposal, set the sliders below to mirror the offer as closely as possible. The next screen will show what that assumption may leave each person with across property, pensions, cashflow and mortgage pressure.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                size="sm"
+                variant={isOfferCheck ? "default" : "outline"}
+                onClick={() => updateProfile({ calculationIntent: "offer_check", offerStatus: "received" })}
+                data-testid="button-offer-check-mode"
+              >
+                I have an offer to check
+              </Button>
+              <Button
+                size="sm"
+                variant={!isOfferCheck ? "default" : "outline"}
+                onClick={() => updateProfile({ offerStatus: "", calculationIntent: profile.calculationIntent === "offer_check" ? "" : profile.calculationIntent })}
+                data-testid="button-exploring-mode"
+              >
+                I am exploring options
+              </Button>
+            </div>
+            {isOfferCheck && (
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                This is a modelling view only. It does not decide whether the offer is fair, tell you what to accept, or predict a court outcome.
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
       <div className="space-y-4">
         <Label className="text-base font-semibold">How should assets be divided?</Label>
         <p className="text-sm text-muted-foreground">
-          Use the sliders below to explore different split ratios. The results on the next page will update based on these assumptions.
+          Use the sliders below to explore different split ratios. If you are checking an offer, set these as close as possible to the proposed property, asset and pension split.
         </p>
 
         <div className="flex flex-wrap gap-2">

@@ -23,6 +23,7 @@ import {
   Home,
   PiggyBank,
   AlertCircle,
+  Shield,
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -53,6 +54,7 @@ const BLOCK_META: Record<string, { color: string; icon: React.ElementType; borde
   "What Stands Out":                    { color: "text-gold",    icon: Sparkles,      borderColor: "border-l-gold/50" },
   "Scenario Interpretation":            { color: "text-cyan-600",icon: BookOpen,      borderColor: "border-l-cyan-400" },
   "Pressure Points":                    { color: "text-rose-500",icon: AlertCircle,   borderColor: "border-l-rose-400" },
+  "Settlement Position Check":           { color: "text-gold",    icon: Shield,        borderColor: "border-l-gold/50" },
   "Questions for Professionals":        { color: "text-cyan-600",icon: HelpCircle,    borderColor: "border-l-cyan-300" },
   "Missing Information & Model Confidence": { color: "text-amber-500", icon: FileSearch, borderColor: "border-l-amber-400" },
 };
@@ -142,6 +144,35 @@ function ProfessionalQuestions({ questions, hasProperty, hasPension }: Professio
   );
 }
 
+function PositionCheck({ check }: { check: NonNullable<GuidedSummary["position_check"]> }) {
+  const groups = [
+    { label: "Missing values", items: check.missing_values },
+    { label: "Left-short risk", items: check.left_short_risk },
+    { label: "Offer trade-offs", items: check.offer_trade_offs },
+    { label: "Housing and needs pressure", items: check.housing_needs_pressure },
+    { label: "Questions before agreeing", items: check.questions_before_agreeing },
+  ];
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      {groups
+        .filter((group) => group.items.length > 0)
+        .map((group) => (
+          <div key={group.label} className="rounded-md border bg-muted/20 p-3">
+            <p className="text-xs font-semibold text-foreground mb-2">{group.label}</p>
+            <ul className="space-y-1.5">
+              {group.items.map((item, i) => (
+                <li key={i} className="flex gap-2 text-sm text-muted-foreground">
+                  <span className="text-gold shrink-0 mt-0.5">•</span>
+                  <span className="leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+    </div>
+  );
+}
+
 interface GuidedSummaryPanelProps {
   hasAccess: boolean;
 }
@@ -204,10 +235,10 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-base font-semibold text-white">Guided Intelligence Report</h2>
-                <span className="text-[10px] text-white/50 bg-white/10 px-2 py-0.5 rounded-full font-medium">Intelligently generated</span>
+                <h2 className="text-base font-semibold text-white">Settlement Reality Check Report</h2>
+                <span className="text-[10px] text-white/50 bg-white/10 px-2 py-0.5 rounded-full font-medium">Personalised from your figures</span>
               </div>
-              <p className="text-xs text-white/45 mt-0.5">Plain-English analysis of your modelled figures</p>
+              <p className="text-xs text-white/45 mt-0.5">See what may leave you short before you agree</p>
             </div>
           </div>
           <ConfidenceBadge level={confidence} size="sm" />
@@ -218,12 +249,13 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
             <div className="p-4 border-b border-border/40 space-y-2">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">What you'll receive</p>
               {[
-                { icon: TrendingUp,   label: "Plain-English Overview",               desc: "What your estate means in plain language — and what the headline numbers tell you.",     borderColor: "border-l-primary/40" },
-                { icon: Sparkles,     label: "What Stands Out",                      desc: "The 3–5 most significant observations from your modelled figures.",                       borderColor: "border-l-gold/50" },
-                { icon: BookOpen,     label: "Scenario Interpretation",              desc: "A narrative explanation of each settlement option — what it means financially.",           borderColor: "border-l-cyan-400" },
-                { icon: AlertCircle,  label: "Pressure Points",                      desc: "Where each scenario could create financial strain — and which risks to watch.",            borderColor: "border-l-rose-400" },
-                { icon: HelpCircle,   label: "Questions for Professionals",          desc: "Tailored questions for your solicitor, mortgage broker, and pension specialist.",         borderColor: "border-l-cyan-300" },
-                { icon: FileSearch,   label: "Missing Information & Confidence",     desc: "What data gaps affect the analysis — and how confident the model is.",                    borderColor: "border-l-amber-400" },
+                { icon: TrendingUp,   label: "Plain-English Overview",               desc: "What the asset pool, income gap and available capital mean in real life.",                 borderColor: "border-l-primary/40" },
+                { icon: Sparkles,     label: "What Stands Out",                      desc: "The figures most likely to change the conversation, pulled from your numbers.",           borderColor: "border-l-gold/50" },
+                { icon: BookOpen,     label: "Scenario Interpretation",              desc: "What each option leaves each party with — capital, pension and monthly pressure.",        borderColor: "border-l-cyan-400" },
+                { icon: AlertCircle,  label: "Pressure Points",                      desc: "Where a settlement can look fair on paper but strain cashflow, housing or pensions.",      borderColor: "border-l-rose-400" },
+                { icon: Shield,       label: "Settlement Position Check",             desc: "Left-short risk, offer trade-offs, missing values and questions before agreeing.",        borderColor: "border-l-gold/50" },
+                { icon: HelpCircle,   label: "Questions for Professionals",          desc: "Specific questions to take to your solicitor, mediator, broker and pension expert.",      borderColor: "border-l-cyan-300" },
+                { icon: FileSearch,   label: "Missing Information & Confidence",     desc: "What needs checking before you rely on the figures in a serious discussion.",             borderColor: "border-l-amber-400" },
               ].map(({ icon: Icon, label, desc, borderColor }) => (
                 <div key={label} className={`border-l-4 ${borderColor} pl-3 py-1 flex items-start gap-2.5`}>
                   <Icon className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0 mt-0.5" />
@@ -244,11 +276,11 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/80 backdrop-blur-sm rounded-b-lg p-4">
                 <Lock className="w-5 h-5 text-muted-foreground" />
                 <p className="text-sm font-medium text-foreground text-center">
-                  Unlock full access to generate your Guided Intelligence Report
+                  Unlock the position check before you rely on the numbers
                 </p>
                 <Link href="/unlock">
                   <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90" data-testid="button-unlock-guided-summary">
-                    Unlock for £79
+                    Unlock report & position check — £79
                   </Button>
                 </Link>
               </div>
@@ -269,10 +301,10 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-semibold text-white">Guided Intelligence Report</h2>
-              <span className="text-[10px] text-white/50 bg-white/10 px-2 py-0.5 rounded-full font-medium">Intelligently generated</span>
+              <h2 className="text-base font-semibold text-white">Settlement Reality Check Report</h2>
+              <span className="text-[10px] text-white/50 bg-white/10 px-2 py-0.5 rounded-full font-medium">Personalised from your figures</span>
             </div>
-            <p className="text-xs text-white/50 mt-0.5">Plain-English analysis of your modelled figures</p>
+            <p className="text-xs text-white/50 mt-0.5">Pressure points, trade-offs and questions before agreeing</p>
           </div>
         </div>
         <ConfidenceBadge level={confidence} />
@@ -289,13 +321,14 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
             )}
             {/* Section preview */}
             <div className="space-y-2 mb-1">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Your report will include</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Before you agree, your report checks</p>
               <div className="grid sm:grid-cols-2 gap-1.5">
                 {[
                   { icon: TrendingUp,  label: "Plain-English Overview",          borderColor: "border-l-primary/40" },
                   { icon: Sparkles,    label: "What Stands Out",                 borderColor: "border-l-gold/50" },
                   { icon: BookOpen,    label: "Scenario Interpretation",         borderColor: "border-l-cyan-400" },
                   { icon: AlertCircle, label: "Pressure Points",                 borderColor: "border-l-rose-400" },
+                  { icon: Shield,      label: "Position Check",                  borderColor: "border-l-gold/50" },
                   { icon: HelpCircle,  label: "Questions for Professionals",     borderColor: "border-l-cyan-300" },
                   { icon: FileSearch,  label: "Missing Info & Confidence",       borderColor: "border-l-amber-400" },
                 ].map(({ icon: Icon, label, borderColor }) => (
@@ -309,9 +342,9 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
             <div className="flex items-start gap-3 p-3.5 rounded-lg bg-primary/5 border border-primary/10">
               <Sparkles className="w-4 h-4 text-primary/60 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <p className="text-xs font-medium text-foreground">Uses an intelligent analysis engine</p>
+                <p className="text-xs font-medium text-foreground">Built to prepare you for expensive conversations</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Your anonymous model figures are securely sent to produce the plain-English summary, pressure points, and professional questions. No names, addresses, contact details, documents or messages are ever included.
+                  Your anonymous model figures are securely sent to produce a plain-English position check: where the offer may leave pressure, what may be missing, and what to ask before you spend time with professionals. No names, addresses, contact details, documents or messages are ever included.
                 </p>
               </div>
             </div>
@@ -321,7 +354,7 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
               data-testid="button-generate-guided-summary"
             >
               <Sparkles className="w-4 h-4 mr-2" />
-              Generate Guided Intelligence Report
+              Generate my position check report
             </Button>
             <p className="text-[10px] text-muted-foreground/60">Usually takes 10–20 seconds · Uses your figures, not templates</p>
           </CardContent>
@@ -331,7 +364,7 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-4 h-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-              <p className="text-sm text-muted-foreground">Generating your guided summary — this usually takes 10–20 seconds…</p>
+              <p className="text-sm text-muted-foreground">Generating your Settlement Reality Check Report — this usually takes 10–20 seconds…</p>
             </div>
             <div className="space-y-2.5 animate-pulse">
               {[80, 65, 90, 55, 75].map((w, i) => (
@@ -354,6 +387,11 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
           <SummaryBlock icon={AlertCircle} title="Pressure Points" borderColor="border-l-rose-400">
             {formatTextBlock(guidedSummary.pressure_points)}
           </SummaryBlock>
+          {guidedSummary.position_check && (
+            <SummaryBlock icon={Shield} title="Settlement Position Check" borderColor="border-l-gold/50">
+              <PositionCheck check={guidedSummary.position_check} />
+            </SummaryBlock>
+          )}
           <SummaryBlock icon={HelpCircle} title="Questions for Professionals" borderColor="border-l-cyan-300">
             <ProfessionalQuestions
               questions={guidedSummary.questions_for_professionals}
@@ -389,7 +427,7 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
           </div>
 
           <p className="text-[10px] text-muted-foreground/60 italic">
-            This guided summary was produced by an intelligent analysis engine from the anonymous model figures you entered. It is illustrative only and is not legal, tax, or financial advice. Please consult qualified professionals before making any decisions.
+            This report was produced from the anonymous model figures you entered. It is illustrative only and is not legal, tax, or financial advice. Please consult qualified professionals before making any decisions.
           </p>
         </div>
       ) : null}

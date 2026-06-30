@@ -3,7 +3,6 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   ArrowLeft, ArrowRight, ArrowRightLeft, Sliders, Activity,
   TrendingUp, TrendingDown, Sparkles, Heart, Home, Wallet,
-  BarChart3,
 } from "lucide-react";
 import { RadialGauge } from "@/components/charts/radial-gauge";
 import { chartTheme, fmtK, gaugeColor } from "@/lib/chart-theme";
@@ -70,140 +69,168 @@ function InteractiveHint({ text }: { text: string }) {
   );
 }
 
-// ─── Lab 1: Scenario Comparison (light theme — distinct from hero console) ───
-function SettlementLab() {
-  const enriched = SAMPLE_SCENARIOS.map((s) => ({
-    ...s,
-    totalCap: s.capA + s.capB,
-    totalSur: s.surA + s.surB,
-    minCri: Math.min(s.criA, s.criB),
-  }));
-  const maxCap = Math.max(...enriched.map((r) => r.totalCap), 1);
-  const maxSur = Math.max(...enriched.map((r) => Math.abs(r.totalSur)), 1);
+// ─── Lab 4: 5-Year Monthly Cashflow Heatmap ────────────────────────────
+const HEATMAP_ROWS = [
+  { scenario: "Sell & Split", party: "A", surplus: 1333, startReserve: 99_203, tone: "blue" },
+  { scenario: "Sell & Split", party: "B", surplus: -500, startReserve: 121_247, tone: "emerald" },
+  { scenario: "A Keeps Home", party: "A", surplus: -491, startReserve: 0, tone: "blue" },
+  { scenario: "A Keeps Home", party: "B", surplus: -500, startReserve: 121_247, tone: "emerald" },
+  { scenario: "B Keeps Home", party: "A", surplus: 1333, startReserve: 99_203, tone: "blue" },
+  { scenario: "B Keeps Home", party: "B", surplus: -2324, startReserve: 0, tone: "emerald" },
+];
+
+const MONTH_MARKERS = ["Y1", "Y2", "Y3", "Y4", "Y5"];
+
+function monthlySurplus(baseSurplus: number, month: number) {
+  const year = Math.floor(month / 12);
+  const inflationDrag = year * (baseSurplus < 0 ? 65 : 45);
+  return baseSurplus - inflationDrag;
+}
+
+function heatClass(value: number) {
+  if (value <= -1500) return "bg-rose-700";
+  if (value <= -750) return "bg-rose-500";
+  if (value < 0) return "bg-amber-400";
+  if (value < 750) return "bg-emerald-300";
+  return "bg-emerald-600";
+}
+
+function reserveAfter(row: typeof HEATMAP_ROWS[number], monthIndex: number) {
+  let reserve = row.startReserve;
+  for (let m = 0; m <= monthIndex; m += 1) {
+    reserve += monthlySurplus(row.surplus, m);
+  }
+  return reserve;
+}
+
+function depletionMonth(row: typeof HEATMAP_ROWS[number]) {
+  for (let m = 0; m < 60; m += 1) {
+    if (reserveAfter(row, m) < 0) return m + 1;
+  }
+  return null;
+}
+
+function CashflowHeatmapLab() {
+  const rows = HEATMAP_ROWS.map((row) => {
+    const depletion = depletionMonth(row);
+    const yearFiveReserve = reserveAfter(row, 59);
+    return { ...row, depletion, yearFiveReserve };
+  });
 
   return (
-    <div className="relative" data-testid="lab1-comparison">
+    <div className="relative" data-testid="lab1-cashflow-heatmap">
       <div className="relative rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-        {/* Header */}
         <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-2">
-            <BarChart3 className="w-4 h-4 text-gold" />
-            <p className="text-[12px] font-bold text-[#1a3357] tracking-tight">Scenario Comparison</p>
-            <span className="text-[10px] text-[#1a3357]/50 font-mono">all 4 side-by-side</span>
+            <Activity className="w-4 h-4 text-gold" />
+            <p className="text-[12px] font-bold text-[#1a3357] tracking-tight">5-Year Monthly Cashflow Heatmap</p>
+            <span className="text-[10px] text-[#1a3357]/50 font-mono">60 months · both parties</span>
           </div>
           <InteractiveHint text="Sample figures — see your own after the wizard" />
         </div>
 
-        {/* Sub-header */}
-        <div className="px-4 py-2.5 bg-white border-b border-slate-100">
-          <p className="text-[10px] text-slate-500 leading-snug">
-            Each row shows the same three figures for one settlement option, calculated from the inputs entered. No option is presented as recommended.
-          </p>
+        <div className="px-4 py-3 bg-white border-b border-slate-100 grid md:grid-cols-[1.1fr_0.9fr] gap-3">
+          <div>
+            <p className="text-[10px] text-slate-500 leading-snug">
+              Each cell is one month of projected surplus after income, expenses and housing. Green months add to reserves; amber and red months consume reserves.
+            </p>
+          </div>
+          <div className="grid grid-cols-4 gap-1.5 text-[9px] font-semibold">
+            {[
+              { label: "+£750/mo", className: "bg-emerald-600 text-white" },
+              { label: "+£0–749", className: "bg-emerald-300 text-emerald-950" },
+              { label: "Deficit", className: "bg-amber-400 text-amber-950" },
+              { label: "High deficit", className: "bg-rose-500 text-white" },
+            ].map((item) => (
+              <span key={item.label} className={`rounded px-1.5 py-1 text-center ${item.className}`}>{item.label}</span>
+            ))}
+          </div>
         </div>
 
-        {/* Column header row */}
-        <div className="bg-white">
-          <div className="grid grid-cols-[1fr_auto] gap-3 px-4 py-2 border-b border-slate-100 bg-slate-50/60">
-            <span className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">Settlement option</span>
-            <span className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold text-right">Resilience band</span>
+        <div className="p-4 space-y-3 bg-white">
+          <div className="grid grid-cols-[120px_1fr_58px] gap-2 items-center">
+            <div />
+            <div className="grid grid-cols-5 gap-1">
+              {MONTH_MARKERS.map((m) => (
+                <span key={m} className="text-[9px] text-slate-400 font-mono text-center">{m}</span>
+              ))}
+            </div>
+            <span className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold text-right">Reserve</span>
           </div>
 
-          {enriched.map((s, i) => {
-            const capPct = (s.totalCap / maxCap) * 100;
-            const surPct = (Math.abs(s.totalSur) / maxSur) * 100;
-            const criColor = gaugeColor(s.minCri);
-
+          {rows.map((row, rowIndex) => {
             return (
               <motion.div
-                key={s.id}
+                key={`${row.scenario}-${row.party}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.35, delay: i * 0.05 }}
-                data-testid={`lab1-row-${s.id}`}
-                className="grid grid-cols-[1fr_auto] gap-3 px-4 py-3 border-b border-slate-100 last:border-0 items-center"
+                transition={{ duration: 0.35, delay: rowIndex * 0.04 }}
+                data-testid={`lab1-heatmap-row-${rowIndex}`}
+                className="grid grid-cols-[120px_1fr_58px] gap-2 items-center"
               >
-                <div className="min-w-0 space-y-1.5">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-[12px] font-bold text-[#1a3357] truncate">{s.name}</p>
-                    <span className="text-[9px] font-mono text-slate-400">A {fmtK(s.capA)} · B {fmtK(s.capB)}</span>
-                  </div>
-
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[9px] text-slate-500 w-14 shrink-0">Capital</span>
-                      <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                        <motion.div
-                          className="h-full bg-violet-500"
-                          initial={{ width: 0 }}
-                          animate={{ width: `${capPct}%` }}
-                          transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 }}
-                        />
-                      </div>
-                      <span className="text-[10px] font-mono font-semibold text-[#1a3357] tabular-nums w-16 text-right">£{Math.round(s.totalCap / 1000)}k</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[9px] text-slate-500 w-14 shrink-0">Surplus</span>
-                      <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                        <motion.div
-                          className={`h-full ${s.totalSur >= 0 ? "bg-emerald-500" : "bg-rose-500"}`}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${surPct}%` }}
-                          transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 + 0.05 }}
-                        />
-                      </div>
-                      <span className={`text-[10px] font-mono font-semibold tabular-nums w-16 text-right ${s.totalSur >= 0 ? "text-emerald-700" : "text-rose-700"}`}>
-                        {s.totalSur >= 0 ? "+" : "−"}£{Math.abs(s.totalSur).toLocaleString()}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[9px] text-slate-500 w-14 shrink-0">Resilience</span>
-                      <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                        <motion.div
-                          className="h-full"
-                          style={{ background: criColor.stroke }}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${s.minCri}%` }}
-                          transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 + 0.1 }}
-                        />
-                      </div>
-                      <span className="text-[10px] font-mono font-semibold tabular-nums w-16 text-right" style={{ color: criColor.stroke }}>
-                        {s.minCri}/100
-                      </span>
-                    </div>
-                  </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] font-bold text-[#1a3357] truncate">{row.scenario}</p>
+                  <p className={`text-[9px] font-semibold ${row.tone === "blue" ? "text-blue-600" : "text-emerald-600"}`}>Party {row.party} · {row.surplus >= 0 ? "+" : "−"}£{Math.abs(row.surplus).toLocaleString()}/mo start</p>
                 </div>
 
-                <div className="flex flex-col items-end gap-1 shrink-0">
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-[9px] uppercase tracking-wider font-bold border ${
-                      s.minCri >= 60
-                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                        : s.minCri >= 40
-                        ? "bg-amber-50 text-amber-700 border-amber-200"
-                        : "bg-rose-50 text-rose-700 border-rose-200"
-                    }`}
-                  >
-                    {criColor.label}
-                  </span>
+                <div className="grid grid-cols-5 gap-1">
+                  {MONTH_MARKERS.map((year, yearIndex) => (
+                    <div key={year} className="grid grid-cols-12 gap-[2px]">
+                      {Array.from({ length: 12 }).map((_, monthInYear) => {
+                        const monthIndex = yearIndex * 12 + monthInYear;
+                        const value = monthlySurplus(row.surplus, monthIndex);
+                        const isDepletion = row.depletion === monthIndex + 1;
+                        return (
+                          <span
+                            key={monthIndex}
+                            className={`h-3 rounded-[2px] ${heatClass(value)} ${isDepletion ? "ring-2 ring-slate-900 ring-offset-1" : ""}`}
+                            title={`${row.scenario} Party ${row.party}, month ${monthIndex + 1}: ${value >= 0 ? "+" : "−"}£${Math.abs(value).toLocaleString()}/mo`}
+                          />
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="text-right">
+                  <p className={`text-[10px] font-mono font-bold tabular-nums ${row.yearFiveReserve < 0 ? "text-rose-600" : "text-[#1a3357]"}`}>
+                    {fmtK(Math.max(row.yearFiveReserve, 0))}
+                  </p>
+                  <p className={`text-[8px] font-semibold ${row.depletion ? "text-rose-500" : "text-emerald-600"}`}>
+                    {row.depletion ? `M${row.depletion} empty` : "Sustains"}
+                  </p>
                 </div>
               </motion.div>
             );
           })}
+
+          <div className="grid sm:grid-cols-3 gap-2 pt-3 border-t border-slate-100">
+            {[
+              { label: "First red flag", value: "Party B keeps home", desc: "Large deficit from month 1", color: "text-rose-600" },
+              { label: "Most balanced cash", value: "Sell & Split", desc: "A strong, B still needs support", color: "text-amber-600" },
+              { label: "Why it matters", value: "Timing", desc: "A fair-looking split can fail monthly", color: "text-gold" },
+            ].map((item) => (
+              <div key={item.label} className="rounded-xl bg-slate-50 border border-slate-100 p-3">
+                <p className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">{item.label}</p>
+                <p className={`text-[12px] font-bold ${item.color}`}>{item.value}</p>
+                <p className="text-[10px] text-slate-500 leading-snug">{item.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Footer */}
         <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-200 flex flex-col gap-1">
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <div className="flex items-center gap-2">
               <Sparkles className="w-3 h-3 text-gold" />
               <span className="text-[10px] text-[#1a3357]/75 font-medium">
-                Bar widths are scaled to the largest figure across the four options for visual comparison only
+                The full analyser calculates this from your income, expense, housing and reserve assumptions
               </span>
             </div>
             <ArrowRight className="w-3.5 h-3.5 text-gold/60" />
           </div>
           <p className="text-[9px] text-[#1a3357]/55 italic leading-snug">
-            These are calculated facts from the figures entered — not a recommendation.
+            This is an illustrative visual, not a recommendation. Your paid report explains the pressure points behind the colours.
           </p>
         </div>
       </div>
@@ -211,7 +238,7 @@ function SettlementLab() {
   );
 }
 
-// ─── Lab 2: Asset Split Ratio Lab ──────────────────────────────────────
+// ─── Lab 1: Asset Split Ratio Lab ──────────────────────────────────────
 function SplitRatioLab() {
   const [share, setShare] = useState(50); // % to A
   const [interacted, setInteracted] = useState(false);
@@ -226,7 +253,7 @@ function SplitRatioLab() {
   const colB = gaugeColor(criB);
 
   return (
-    <ChromeWindow title="Lab 2 · Asset Split Ratio">
+    <ChromeWindow title="Lab 1 · Asset Split Ratio">
       <div className="px-4 pt-3 pb-3 border-b border-slate-100">
         <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
           <p className="text-[9px] uppercase tracking-[0.18em] text-slate-400 font-medium">Drag to change the split</p>
@@ -337,7 +364,7 @@ function SplitRatioLab() {
   );
 }
 
-// ─── Lab 3: Stress Test Lab ────────────────────────────────────────────
+// ─── Lab 2: Stress Test Lab ────────────────────────────────────────────
 const STRESS_DEFS = [
   { key: "rate"   as const, label: "Mortgage rate +1%", icon: TrendingUp,    surA: -154, surB: -142, criA: -12, criB: -14 },
   { key: "income" as const, label: "Income −5%",        icon: TrendingDown,  surA: -160, surB: -113, criA:  -9, criB: -11 },
@@ -359,7 +386,7 @@ function StressLab() {
   const minR = Math.min(criA, criB);
 
   return (
-    <ChromeWindow title="Lab 3 · Stress Test">
+    <ChromeWindow title="Lab 2 · Stress Test">
       <div className="px-4 pt-3 pb-3 border-b border-slate-100">
         <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
           <p className="text-[9px] uppercase tracking-[0.18em] text-slate-400 font-medium">Toggle real-world shocks</p>
@@ -467,7 +494,7 @@ function StressLab() {
   );
 }
 
-// ─── Lab 4: Spousal Maintenance Lab ────────────────────────────────────
+// ─── Lab 3: Spousal Maintenance Lab ────────────────────────────────────
 function MaintenanceLab() {
   const [amount, setAmount] = useState(0);
   const [interacted, setInteracted] = useState(false);
@@ -486,7 +513,7 @@ function MaintenanceLab() {
   const pctB = Math.min(100, (Math.abs(surB) / maxAbs) * 100);
 
   return (
-    <ChromeWindow title="Lab 4 · Spousal Maintenance Bridge">
+    <ChromeWindow title="Lab 3 · Spousal Maintenance Bridge">
       <div className="px-4 pt-3 pb-3 border-b border-slate-100">
         <div className="flex items-center justify-between mb-1 gap-2 flex-wrap">
           <p className="text-[9px] uppercase tracking-[0.18em] text-slate-400 font-medium">Adjust the monthly transfer</p>
@@ -582,7 +609,7 @@ function MaintenanceLab() {
               : aPasses && bPasses
               ? `A £${amount.toLocaleString()}/mo transfer keeps both parties in surplus — Party A retains buffer, Party B gains cushion.`
               : !aPasses
-              ? `A £${amount.toLocaleString()}/mo transfer pushes Party A into deficit. The court would weigh affordability against need.`
+              ? `A £${amount.toLocaleString()}/mo transfer pushes Party A into deficit. Affordability and need would require professional review.`
               : `Even with £${amount.toLocaleString()}/mo, Party B still falls short. A larger transfer or different capital settlement may be needed.`}
           </p>
         </div>
@@ -593,10 +620,10 @@ function MaintenanceLab() {
 
 // ─── Carousel container ────────────────────────────────────────────────
 const LABS = [
-  { id: "settlement",  title: "Scenario Comparison",    subtitle: "All 4 scenarios side-by-side",         Comp: SettlementLab },
   { id: "split",       title: "Asset Split Ratio",      subtitle: "Drag to change the 50/50 starting point", Comp: SplitRatioLab },
   { id: "stress",      title: "Stress Test",            subtitle: "Toggle real-world shocks",              Comp: StressLab },
   { id: "maintenance", title: "Maintenance Bridge",     subtitle: "Move money between parties",            Comp: MaintenanceLab },
+  { id: "cashflow",    title: "5-Year Cashflow",        subtitle: "Monthly surplus and reserve pressure", Comp: CashflowHeatmapLab },
 ];
 
 export function DemoCarousel({ variant = "light" }: { variant?: "light" | "dark" }) {

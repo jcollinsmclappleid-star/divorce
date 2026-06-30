@@ -141,7 +141,7 @@ export default function PreviewPage() {
     {
       id: "S4", name: "Deferred Sale", color: "#F59E0B",
       desc: "Property retained jointly then sold at a future date (Mesher-style arrangement).",
-      lockedMetrics: ["Annual running cost", "5-year capital gain", "Exit value estimate"],
+      lockedMetrics: ["Annual running cost", "Projected capital gain", "Exit value estimate"],
     },
   ];
 
@@ -362,7 +362,7 @@ export default function PreviewPage() {
           )}
         </section>
 
-        {/* ── Guided Intelligence Report — plain-English hook ── */}
+        {/* ── Settlement Reality Check Report — plain-English hook ── */}
         <section>
           <Card className="border-2 border-gold/30 overflow-hidden bg-gradient-to-br from-[hsl(220_52%_19%)] to-[hsl(220_52%_15%)]" data-testid="card-guided-summary-locked">
             <CardContent className="p-0">
@@ -372,8 +372,8 @@ export default function PreviewPage() {
                     <Sparkles className="w-4.5 h-4.5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-white">Guided Intelligence Report</p>
-                    <p className="text-[11px] text-white/50 mt-0.5">What your figures actually mean — in plain English</p>
+                    <p className="text-sm font-semibold text-white">Settlement Reality Check Report</p>
+                    <p className="text-[11px] text-white/50 mt-0.5">Know what may leave you short before you agree</p>
                   </div>
                 </div>
                 <span className="inline-flex items-center gap-1 text-[10px] bg-gold/15 text-gold border border-gold/30 px-2.5 py-1 rounded-full font-semibold shrink-0">
@@ -382,13 +382,13 @@ export default function PreviewPage() {
               </div>
               <div className="px-5 pt-4 pb-3 space-y-3">
                 <p className="text-xs text-white/60 leading-relaxed">
-                  Numbers tell you what. The Guided Intelligence Report tells you <em className="text-white/80 not-italic font-medium">so what</em> — plain-English commentary on your specific figures, where the pressure points are, and exactly what to ask your solicitor, mortgage broker, and pension adviser.
+                  Numbers tell you what. The Settlement Reality Check Report tells you <em className="text-white/80 not-italic font-medium">so what</em> — what the split really leaves each party with, where cashflow or housing pressure appears, what may be missing, and what to ask before spending paid professional time.
                 </p>
                 <div className="space-y-2">
                   {[
                     "What stands out about your estate and why it matters",
-                    "Which settlement option looks strongest — and where the risks lie",
-                    "Where the financial pressure points are for each party",
+                    "Where a headline split may hide cashflow, housing or pension pressure",
+                    "Left-short risk and missing values to check before agreeing",
                     "Tailored questions to raise with each professional",
                   ].map((line, i) => (
                     <div key={i} className="flex gap-2 text-xs text-white/55">
@@ -418,7 +418,7 @@ export default function PreviewPage() {
                       data-testid="button-unlock-guided-summary-preview"
                     >
                       <Lock className="w-4 h-4 text-gold" />
-                      Unlock your Guided Report
+                      Unlock your position check report
                       <ChevronRight className="w-4 h-4 text-muted-foreground" />
                     </button>
                   </div>
@@ -495,7 +495,7 @@ export default function PreviewPage() {
               </div>
               <div className="px-5 pb-4 pt-1">
                 <p className="text-[11px] text-muted-foreground/60 italic">
-                  Chart shows relative scenario positions. Exact figures, sustainability scores, and 5-year projections unlock after payment.
+                  Chart shows relative scenario positions. Exact figures, sustainability scores, and projection-period reserves unlock after payment.
                 </p>
               </div>
             </CardContent>
@@ -518,7 +518,7 @@ export default function PreviewPage() {
             </span>
             <h2 className="text-base font-semibold">Four settlement options — modelled for your figures</h2>
           </div>
-          <p className="text-sm text-muted-foreground">Your full analysis scores each option across capital position, monthly sustainability, and 5-year outlook. Unlock to see every figure.</p>
+          <p className="text-sm text-muted-foreground">Your full analysis scores each option across capital position, monthly sustainability, and projected reserve outlook. Unlock to see every figure.</p>
           <div className="grid gap-3 sm:grid-cols-2">
             {scenarios.map(sc => (
               <div
@@ -598,7 +598,7 @@ export default function PreviewPage() {
               {
                 num: "4.",
                 title: "Scenario Comparison Table",
-                desc: "All four scenarios side by side — liquid capital, pension, net position, mortgage, and 5-year reserve status for both parties.",
+                desc: "All four scenarios side by side — liquid capital, pension, net position, mortgage, and reserve status for both parties.",
                 color: "#2563EB",
                 locked: true,
               },
@@ -652,8 +652,8 @@ export default function PreviewPage() {
                 <Sparkles className="w-4 h-4 text-gold" />
               </div>
               <div>
-                <p className="text-sm font-semibold">Guided Intelligence Report</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Plain-English narrative, pressure points, and tailored questions for your solicitor, broker & pension adviser.</p>
+                <p className="text-sm font-semibold">Settlement Reality Check Report</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Left-short risk, offer trade-offs, missing values and tailored questions for your adviser conversations.</p>
               </div>
             </div>
             <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full shrink-0">
@@ -668,7 +668,7 @@ export default function PreviewPage() {
               data-testid="button-unlock-report-tiles"
             >
               <Lock className="w-4 h-4 text-gold" />
-              Unlock all sections — £79
+              Unlock my position check — £79
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
@@ -714,7 +714,7 @@ export default function PreviewPage() {
               </div>
               <div className="text-5xl font-bold tracking-tight text-gold pt-1" data-testid="text-price">£79</div>
               <div className="text-sm text-white/55">One-time payment. No subscription.</div>
-              <p className="text-xs text-white/35 italic">A single solicitor hour costs £250–£400. This gives you the clarity to walk in prepared.</p>
+              <p className="text-xs text-white/35 italic">A single solicitor hour costs £250–£400. Use this to walk in with the pressure points already mapped.</p>
             </div>
 
             {/* Two product blocks */}
@@ -725,7 +725,7 @@ export default function PreviewPage() {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-white">Settlement Analyser</p>
-                  <p className="text-[10px] text-white/45 mt-0.5 leading-relaxed">Four scenarios fully modelled — CRI scores, 5-year projections, mortgage checks and stress testing.</p>
+                  <p className="text-[10px] text-white/45 mt-0.5 leading-relaxed">Four scenarios fully modelled — CRI scores, reserve projections, mortgage checks and stress testing.</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -738,8 +738,8 @@ export default function PreviewPage() {
                   <Sparkles className="w-4 h-4 text-gold" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-white">Guided Intelligence Report</p>
-                  <p className="text-[10px] text-white/45 mt-0.5 leading-relaxed">Plain-English interpretation — what stands out, where the pressure points are, and tailored questions for your solicitor, broker and pension adviser.</p>
+                  <p className="text-xs font-bold text-white">Settlement Reality Check Report</p>
+                  <p className="text-[10px] text-white/45 mt-0.5 leading-relaxed">Plain-English position check — what stands out, where you may be left short, and questions for your solicitor, broker and pension adviser.</p>
                 </div>
               </div>
             </div>
@@ -764,10 +764,10 @@ export default function PreviewPage() {
                   "Full settlement comparison — all four options modelled and scored",
                   "Cashflow Resilience Indicator per party",
                   "Monthly cashflow view — income, housing costs, surplus/deficit",
-                  "5-year capital projections with charts",
+                  "Reserve projection charts",
                   "Mortgage pressure checks and affordability benchmarks",
-                  "Guided Intelligence Report — plain-English takeaways and questions for professionals",
-                  "Downloadable Structured Financial Brief (PDF)",
+                  "Settlement Reality Check Report — plain-English pressure points and questions for professionals",
+                  "Downloadable Settlement Reality Check PDF",
                   "12 months' access — unlimited re-runs as negotiations progress",
                 ].map(item => (
                   <div key={item} className="flex items-center gap-2 text-xs text-white/75">
@@ -864,9 +864,9 @@ export default function PreviewPage() {
                 "Net monthly income per party (post-tax)",
                 "Monthly surplus / deficit per scenario",
                 "Cashflow Resilience Indicator scores",
-                "5-year capital projection charts",
+                "Reserve projection charts",
                 "Housing feasibility benchmark",
-                "Guided Intelligence Report — plain-English takeaways and tailored questions",
+                "Settlement Reality Check Report — plain-English takeaways and tailored questions",
                 "Sensitivity stress-test sliders",
                 "Downloadable professional PDF",
                 "12 months' access — unlimited re-runs",

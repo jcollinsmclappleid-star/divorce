@@ -1,12 +1,24 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
-  Briefcase, BanknoteIcon, TrendingUp, TrendingDown, Minus,
-  Check, Pencil, HeartHandshake, Ban
+  Briefcase, TrendingUp, Minus,
+  Check, HeartHandshake, Ban
 } from "lucide-react";
 import { useAppStore, Income } from "@/hooks/use-store";
 import { useInlineConfirm, InlineConfirm } from "./inline-confirm";
 import { chartTheme } from "@/lib/chart-theme";
+import { loadConfig } from "@/lib/engine/config/loadConfig";
+import { calcIncomeTax } from "@/lib/engine/calc/incomeTax";
+import { calcNationalInsurance } from "@/lib/engine/calc/nationalInsurance";
+
+const taxConfig = loadConfig();
+
+function modelledNetMonthly(grossAnnual: number): number {
+  if (grossAnnual <= 0) return 0;
+  const tax = calcIncomeTax(grossAnnual, taxConfig);
+  const ni = calcNationalInsurance(grossAnnual, taxConfig);
+  return Math.round((grossAnnual - tax - ni) / 12);
+}
 
 /*
  * Salary presets — ONS Annual Survey of Hours & Earnings 2024
@@ -62,6 +74,30 @@ const SALARY_PRESETS: SalaryPreset[] = [
     netMonthlyEst: 4375,
     hint: "~£75,000/yr gross · top ~15% of earners",
     color: "#8B5CF6",
+  },
+  {
+    key: "senior",
+    label: "Senior earner",
+    grossAnnual: 100000,
+    netMonthlyEst: 5625,
+    hint: "~£100,000/yr gross · senior professional bracket",
+    color: "#6366F1",
+  },
+  {
+    key: "veryhigh",
+    label: "Very high earner",
+    grossAnnual: 125000,
+    netMonthlyEst: 6875,
+    hint: "~£125,000/yr gross · upper professional / executive",
+    color: "#EC4899",
+  },
+  {
+    key: "top",
+    label: "Top earner",
+    grossAnnual: 150000,
+    netMonthlyEst: 8125,
+    hint: "~£150,000/yr gross · top ~5% of UK earners",
+    color: "#F43F5E",
   },
 ];
 
@@ -150,8 +186,9 @@ interface SalaryChipProps {
 }
 
 function SalaryChip({ preset, active, currentGross, onClick }: SalaryChipProps) {
-  const Icon = preset.grossAnnual === 0 ? Ban : preset.grossAnnual >= 50000 ? TrendingUp : Briefcase;
+  const Icon = preset.grossAnnual === 0 ? Ban : preset.grossAnnual >= 75000 ? TrendingUp : Briefcase;
   const displayGross = active && currentGross !== undefined ? currentGross : preset.grossAnnual;
+  const hasSalary = preset.grossAnnual > 0;
 
   return (
     <motion.button
@@ -177,24 +214,28 @@ function SalaryChip({ preset, active, currentGross, onClick }: SalaryChipProps) 
         <Icon className="w-3.5 h-3.5 shrink-0" style={{ color: preset.color }} />
         <span className="text-xs font-semibold text-[#1a3357] truncate">{preset.label}</span>
       </div>
-      {active ? (
-        <div className="flex items-baseline justify-between gap-1">
-          <span className="text-base font-bold tabular-nums" style={{ color: preset.color }}>
-            {fmtK(displayGross)}<span className="text-[10px] font-normal text-muted-foreground">/yr</span>
-          </span>
-          <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
-            gross <Pencil className="w-2.5 h-2.5 opacity-60" />
-          </span>
-        </div>
-      ) : (
-        <div className="flex items-baseline justify-between gap-1">
-          <span className="text-[11px] text-muted-foreground">
-            {preset.grossAnnual > 0 ? fmtNet(preset.netMonthlyEst) : "—"} net est.
-          </span>
-          {preset.grossAnnual > 0 && (
-            <span className="text-[10px] text-gold font-semibold">+ Apply</span>
-          )}
-        </div>
+      <div className="flex items-baseline justify-between gap-1">
+        {hasSalary ? (
+          <>
+            <span
+              className="text-base font-bold tabular-nums"
+              style={{ color: active ? preset.color : "#1a3357" }}
+            >
+              {fmtK(displayGross)}
+              <span className="text-[10px] font-normal text-muted-foreground">/yr gross</span>
+            </span>
+            {!active && (
+              <span className="text-[10px] text-gold font-semibold">+ Apply</span>
+            )}
+          </>
+        ) : (
+          <span className="text-base font-bold text-[#1a3357]">£0</span>
+        )}
+      </div>
+      {hasSalary && (
+        <p className="text-[10px] text-muted-foreground mt-0.5 tabular-nums">
+          ~{fmtNet(modelledNetMonthly(preset.grossAnnual))} modelled net
+        </p>
       )}
       <p className="text-[10px] text-muted-foreground/70 mt-1 leading-tight line-clamp-1">
         {preset.hint}
@@ -358,11 +399,15 @@ export function IncomeAssumptionChips() {
       <div className="p-4 bg-muted/40 rounded-md border-l-4 border-cyan-300 space-y-1">
         <p className="text-sm font-medium text-foreground">Quick-add salary assumption</p>
         <p className="text-xs text-muted-foreground leading-relaxed">
-          Tap a tile to set a typical salary as a starting point — adjust the figure in the
-          income table below. Based on ONS 2024 earnings data. Net estimates are approximate
-          after 2026/27 UK tax &amp; NI. Planning figures only — not tax advice.
+          Tap a tile to set a typical gross salary as a starting point — adjust in the income table below.
+          Modelled take-home uses simplified 2026/27 England/Wales income tax and employee NI only (not tax advice).
         </p>
       </div>
+
+      <p className="text-[11px] text-muted-foreground leading-relaxed px-1">
+        Illustrative only: excludes Scottish rates, dividends, pension relief, benefits-in-kind, student loans, and other adjustments.
+        High earners may face a 40% marginal rate while the average effective rate looks lower (e.g. ~38% on £125k gross).
+      </p>
 
       <div className="flex items-center gap-2 border-b border-border/40 overflow-x-auto">
         {(["A", "B"] as const).map((owner) => {
@@ -394,7 +439,7 @@ export function IncomeAssumptionChips() {
 
       <InlineConfirm message={confirm.message} />
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
         {SALARY_PRESETS.map((preset) => (
           <SalaryChip
             key={preset.key}

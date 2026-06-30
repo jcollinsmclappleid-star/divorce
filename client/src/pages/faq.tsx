@@ -84,8 +84,8 @@ const FAQ_CATEGORIES = [
         a: "The stress test tool lets you adjust key financial assumptions — such as interest rates, monthly expenses, or house price changes — and immediately see how those changes affect each settlement option's CRI score and cashflow. It is designed to help you understand how resilient each option is to realistic changes in your circumstances.",
       },
       {
-        q: "What is the Structured Financial Brief?",
-        a: "The Structured Financial Brief is a downloadable PDF summary of your full analysis. It includes your asset pool breakdown, the net position for each settlement option, monthly surplus/deficit figures, and your CRI scores. It is designed to be a useful reference document for discussions with solicitors, mediators, or your own planning — not a formal financial statement.",
+        q: "What is the Settlement Reality Check PDF?",
+        a: "The Settlement Reality Check PDF is a downloadable summary of your full analysis. It includes your asset pool breakdown, the net position for each settlement option, monthly surplus/deficit figures, CRI scores, pressure points and professional questions. It is designed to be a useful reference document for discussions with solicitors, mediators, or your own planning — not a formal financial statement.",
       },
     ],
   },
@@ -111,7 +111,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "What does the free version include?",
-        a: "The free version includes the full 9-step financial wizard, entry of all assets and liabilities, and a preview of your total marital asset pool as a ring chart. The full settlement analysis — including CRI scores, monthly cashflow, stress testing, projections, and the PDF brief — requires a one-time payment of £79.",
+        a: "The free version includes the full 9-step financial wizard, entry of all assets and liabilities, and a preview of your total marital asset pool as a ring chart. The full settlement analysis — including CRI scores, monthly cashflow, stress testing, projections, and the Settlement Reality Check PDF — requires a one-time payment of £79.",
       },
       {
         q: "What support is available after purchase?",

@@ -25,8 +25,8 @@ const ANALYSER_FEATURES = [
     icon: TrendingUp,
     iconBg: "bg-violet-500/10",
     iconColor: "text-violet-500",
-    title: "5-year capital projections",
-    desc: "See how your capital position evolves under each scenario, with Cashflow Resilience Indicator scores and sustainability ratings.",
+    title: "Projection-period reserves",
+    desc: "See how liquid capital sustains or erodes under each scenario, with Cashflow Resilience Indicator scores and sustainability ratings.",
   },
   {
     icon: RefreshCw,
@@ -39,7 +39,7 @@ const ANALYSER_FEATURES = [
     icon: FileText,
     iconBg: "bg-primary/10",
     iconColor: "text-primary",
-    title: "Downloadable Structured Financial Brief",
+    title: "Downloadable Settlement Reality Check PDF",
     desc: "A print-ready PDF summarising your full analysis — useful for professional meetings and keeping your own records.",
   },
 ];
@@ -49,32 +49,32 @@ const REPORT_FEATURES = [
     icon: Sparkles,
     iconBg: "bg-gold/10",
     iconColor: "text-gold",
-    title: "Intelligently generated narrative",
-    desc: "Your figures run through our analysis engine and come back as a plain-English commentary — what stands out, where the financial pressure points are, and what to watch out for.",
+    title: "Know what to challenge before you agree",
+    desc: "Your figures come back as a plain-English position check — what stands out, where a headline split may leave pressure, and what needs checking before serious conversations.",
   },
   {
     icon: HelpCircle,
     iconBg: "bg-rose-500/10",
     iconColor: "text-rose-500",
-    title: "Tailored professional questions",
-    desc: "Bespoke questions to raise with your solicitor, mortgage broker, and pension adviser — produced from your specific numbers so you walk into every consultation prepared.",
+    title: "Walk into professional meetings prepared",
+    desc: "Specific questions for your solicitor, mediator, mortgage broker, and pension adviser — tied to your numbers so you do not waste paid time explaining the basics.",
   },
 ];
 
 const STEPS = [
   { n: "1", label: "Pay once — £79", sub: "Stripe-secured. Instant." },
   { n: "2", label: "Unlock your Settlement Analyser", sub: "All four scenarios. Access immediately." },
-  { n: "3", label: "Generate your Guided Intelligence Report", sub: "Intelligently produced from your figures." },
+  { n: "3", label: "Generate your Settlement Reality Check Report", sub: "Personalised from your figures." },
 ];
 
 const FAQ_ITEMS = [
   {
     question: "What happens after I pay?",
-    answer: "You get immediate access to both products — the Settlement Analyser (all four scenarios, 5-year projections, sustainability scores, stress-testing) and the Guided Intelligence Report. Your access lasts 12 months.",
+    answer: "You get immediate access to both products — the Settlement Analyser (all four scenarios, projection-period reserve modelling, sustainability scores, stress-testing) and the Settlement Reality Check Report. Your access lasts 12 months.",
   },
   {
     question: "Is my data safe?",
-    answer: "Core financial calculations run entirely in your browser. When you choose to generate the Guided Intelligence Report, only anonymous model figures are sent to our analysis engine — no names, addresses, or contact details are ever included.",
+    answer: "Core financial calculations run entirely in your browser. When you choose to generate the Settlement Reality Check Report, only anonymous model figures are sent to our analysis engine — no names, addresses, or contact details are ever included.",
   },
   {
     question: "Can I update my figures later?",
@@ -140,14 +140,14 @@ export default function UnlockPage() {
         </div>
         <div className="relative container mx-auto px-4 py-12 md:py-16 max-w-4xl text-center space-y-5">
           <Badge variant="outline" className="text-xs px-3 py-1 border-gold/50 text-gold bg-gold/10">
-            Your figures are entered · Both products unlock instantly
+            Your figures are entered · The position check is ready
           </Badge>
           <h1 className="text-3xl md:text-4xl font-display font-bold text-white leading-tight" data-testid="text-hero-headline">
-            Your financial picture is<br />
-            <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">ready to unlock.</span>
+            Before you agree,<br />
+            <span className="bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">see what the numbers really leave you with.</span>
           </h1>
           <p className="text-white/65 max-w-xl mx-auto text-sm leading-relaxed">
-            One payment unlocks two products: your <span className="text-white/85 font-medium">Settlement Analyser</span> — four scenarios modelled side-by-side with 5-year projections — and your <span className="text-white/85 font-medium">Guided Intelligence Report</span>, intelligently produced from your figures in plain English.
+            One payment unlocks the <span className="text-white/85 font-medium">Settlement Analyser</span> and your personalised <span className="text-white/85 font-medium">Settlement Reality Check Report</span>: left-short risk, offer trade-offs, missing values, and questions to raise before solicitor, mediation, mortgage or pension conversations.
           </p>
 
           {/* 3-step timeline */}
@@ -178,7 +178,7 @@ export default function UnlockPage() {
             {checkoutLoading ? (
               <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Redirecting to payment...</>
             ) : (
-              <>Unlock Full Analysis — £79 <ArrowRight className="w-4 h-4 ml-1.5" /></>
+              <>Unlock My Position Check — £79 <ArrowRight className="w-4 h-4 ml-1.5" /></>
             )}
           </Button>
           <p className="text-white/35 text-xs">
@@ -195,7 +195,7 @@ export default function UnlockPage() {
         {/* ── What you unlock ── */}
         <section data-testid="section-value-proposition" className="space-y-8">
           <div className="text-center space-y-2">
-            <h2 className="text-xl md:text-2xl font-display font-bold">Two products. One £79 payment.</h2>
+            <h2 className="text-xl md:text-2xl font-display font-bold">Two products. One clearer negotiating position.</h2>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">Unlock both instantly and revisit for 12 months — no subscription.</p>
           </div>
 
@@ -232,7 +232,7 @@ export default function UnlockPage() {
             <div className="flex-1 border-t border-dashed border-border/50" />
           </div>
 
-          {/* Product 2: Guided Intelligence Report */}
+          {/* Product 2: Settlement Reality Check Report */}
           <div className="rounded-2xl border border-gold/30 bg-gold/5 overflow-hidden shadow-sm">
             <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-gold/20 bg-gold/10">
               <div className="flex items-center gap-3">
@@ -240,8 +240,8 @@ export default function UnlockPage() {
                   <Sparkles className="w-4 h-4 text-gold" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-foreground">Guided Intelligence Report</p>
-                  <p className="text-[11px] text-muted-foreground">Intelligently produced from your figures by our analysis engine</p>
+                  <p className="text-sm font-bold text-foreground">Settlement Reality Check Report</p>
+                  <p className="text-[11px] text-muted-foreground">A position check generated from your figures</p>
                 </div>
               </div>
               <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-gold bg-gold/15 border border-gold/30 px-2 py-0.5 rounded-full uppercase tracking-wide shrink-0">
@@ -308,7 +308,7 @@ export default function UnlockPage() {
                 {checkoutLoading ? (
                   <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Redirecting to payment...</>
                 ) : (
-                  "Unlock Full Analysis — £79"
+                  "Unlock My Position Check — £79"
                 )}
               </Button>
 
@@ -383,7 +383,7 @@ export default function UnlockPage() {
         <section className="text-center space-y-4 pb-6" data-testid="section-reinforcement">
           <h2 className="text-lg font-display font-bold">Ready to see your full picture?</h2>
           <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-            Your figures are saved. Unlock your Settlement Analyser and Guided Intelligence Report now — both ready in seconds.
+            Your figures are saved. Unlock your Settlement Analyser and Settlement Reality Check Report now — both ready in seconds.
           </p>
           <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold px-3 py-1.5 rounded-full">
             Use code <span className="font-black tracking-wider">CLARITY15</span> at checkout for 15% off this month

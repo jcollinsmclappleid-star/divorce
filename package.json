@@ -4,11 +4,22 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_ENV=development tsx server/index.ts",
+    "dev": "NODE_ENV=development node --env-file=.env ./node_modules/tsx/dist/cli.mjs server/index.ts",
+    "dev:test": "NODE_ENV=development node --env-file=.env.test ./node_modules/tsx/dist/cli.mjs server/index.ts",
     "build": "tsx script/build.ts",
+    "vercel-build": "npm run build",
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
-    "db:push": "drizzle-kit push"
+    "test:guided-summary": "node --env-file=.env script/test-guided-summary.mjs",
+    "test:guided-summary:horizon": "TEST_PROJECTION_YEARS=7 node --env-file=.env script/test-guided-summary.mjs --no-save",
+    "test:e2e": "playwright test",
+    "db:push": "drizzle-kit push",
+    "db:copy:staging": "node --env-file=.env.production --env-file=.env.staging script/copy-production-to-neon.mjs --yes",
+    "stripe:setup-test-product": "node --env-file=.env.test script/create-stripe-test-product.mjs",
+    "stripe:listen": "stripe listen --forward-to localhost:5000/api/stripe/webhook",
+    "stripe:setup-support": "node --env-file=.env.cutover script/create-stripe-support-product.mjs",
+    "db:push:cutover": "node --env-file=.env.cutover ./node_modules/drizzle-kit/bin.cjs push --force",
+    "vercel:deploy": "bash script/push-vercel-env.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -85,6 +96,7 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@replit/vite-plugin-cartographer": "^0.4.4",
     "@replit/vite-plugin-dev-banner": "^0.1.1",
     "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
@@ -99,6 +111,7 @@
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "@types/ws": "^8.5.13",
+    "@vercel/node": "^5.8.22",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.20",
     "drizzle-kit": "^0.31.8",

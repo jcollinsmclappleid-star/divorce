@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { purchases, emailLeads, magicLinks, type Purchase, type InsertPurchase, type EmailLead, type MagicLink } from "@shared/schema";
+import { purchases, emailLeads, magicLinks, reportSupportPurchases, type Purchase, type InsertPurchase, type EmailLead, type MagicLink, type ReportSupportPurchase } from "@shared/schema";
 import { eq, and, sql, desc } from "drizzle-orm";
 
 export interface IStorage {
@@ -23,6 +23,14 @@ export interface IStorage {
   getMagicLinkByToken(token: string): Promise<MagicLink | undefined>;
   useMagicLink(id: string): Promise<MagicLink>;
   deleteMagicLinksByEmail(email: string): Promise<void>;
+
+  createReportSupportPurchase(data: {
+    sessionToken: string;
+    stripeCheckoutSessionId: string;
+  }): Promise<ReportSupportPurchase>;
+  getReportSupportByCheckoutSessionId(checkoutSessionId: string): Promise<ReportSupportPurchase | undefined>;
+  getPaidReportSupportBySessionToken(sessionToken: string): Promise<ReportSupportPurchase | undefined>;
+  markReportSupportPaid(id: string, paymentIntentId: string, email: string | null): Promise<ReportSupportPurchase>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -201,6 +209,53 @@ export class DatabaseStorage implements IStorage {
 
   async deleteMagicLinksByEmail(email: string): Promise<void> {
     await db.delete(magicLinks).where(eq(magicLinks.email, email.toLowerCase().trim()));
+  }
+
+  async createReportSupportPurchase(data: {
+    sessionToken: string;
+    stripeCheckoutSessionId: string;
+  }): Promise<ReportSupportPurchase> {
+    const [row] = await db.insert(reportSupportPurchases).values({
+      sessionToken: data.sessionToken,
+      stripeCheckoutSessionId: data.stripeCheckoutSessionId,
+      status: "pending",
+    }).returning();
+    return row;
+  }
+
+  async getReportSupportByCheckoutSessionId(checkoutSessionId: string): Promise<ReportSupportPurchase | undefined> {
+    const [row] = await db
+      .select()
+      .from(reportSupportPurchases)
+      .where(eq(reportSupportPurchases.stripeCheckoutSessionId, checkoutSessionId));
+    return row;
+  }
+
+  async getPaidReportSupportBySessionToken(sessionToken: string): Promise<ReportSupportPurchase | undefined> {
+    const [row] = await db
+      .select()
+      .from(reportSupportPurchases)
+      .where(
+        and(
+          eq(reportSupportPurchases.sessionToken, sessionToken),
+          eq(reportSupportPurchases.status, "paid"),
+        ),
+      );
+    return row;
+  }
+
+  async markReportSupportPaid(id: string, paymentIntentId: string, email: string | null): Promise<ReportSupportPurchase> {
+    const [updated] = await db
+      .update(reportSupportPurchases)
+      .set({
+        status: "paid",
+        stripePaymentIntentId: paymentIntentId,
+        email: email?.toLowerCase().trim() ?? null,
+        purchasedAt: new Date(),
+      })
+      .where(eq(reportSupportPurchases.id, id))
+      .returning();
+    return updated;
   }
 }
 

@@ -8,6 +8,8 @@ const ASSET_CATEGORY_LABELS: Record<string, string> = {
   investment_property: "Investment property",
   other_property: "Other property",
   pension: "Pension",
+  cash: "Cash / savings",
+  investments: "Investments",
   isa: "ISA / Cash ISA",
   stocks_shares: "Stocks & shares",
   savings: "Savings account",
@@ -19,6 +21,7 @@ const ASSET_CATEGORY_LABELS: Record<string, string> = {
 const LIABILITY_CATEGORY_LABELS: Record<string, string> = {
   mortgage: "Mortgage",
   personal_loan: "Personal loan",
+  loan: "Loan",
   credit_card: "Credit card",
   car_finance: "Car finance",
   student_loan: "Student loan",
@@ -62,22 +65,40 @@ export function buildPayload(
     balance: l.balance,
   }));
 
-  // Incomes — type label only, NO employer names or free-text
-  const incomesA = store.incomes
-    .filter((i) => i.owner === "A" || i.owner === "joint")
-    .map((i) => ({
+  const mapIncomes = (
+    partyIncomes: typeof store.incomes,
+    partyNetAnnual: number
+  ) => {
+    const totalGross = partyIncomes.reduce((sum, income) => sum + income.amountAnnualGross, 0);
+    return partyIncomes.map((i) => ({
       type: incomeCategoryLabel(i.name, i.taxTreatment),
       grossAnnual: i.amountAnnualGross,
-      netAnnual: engine.taxA.net > 0 ? engine.taxA.net : i.amountAnnualGross,
+      netAnnual: totalGross > 0
+        ? Math.round(partyNetAnnual * (i.amountAnnualGross / totalGross))
+        : Math.round(i.amountAnnualNet ?? i.amountAnnualGross),
     }));
+  };
 
-  const incomesB = store.incomes
-    .filter((i) => i.owner === "B" || i.owner === "joint")
-    .map((i) => ({
-      type: incomeCategoryLabel(i.name, i.taxTreatment),
-      grossAnnual: i.amountAnnualGross,
-      netAnnual: engine.taxB.net > 0 ? engine.taxB.net : i.amountAnnualGross,
-    }));
+  // Incomes — type label only, NO employer names or free-text
+  const incomesA = mapIncomes(
+    store.incomes.filter((i) => i.owner === "A" || i.owner === "joint"),
+    engine.taxA.net
+  );
+
+  const incomesB = mapIncomes(
+    store.incomes.filter((i) => i.owner === "B" || i.owner === "joint"),
+    engine.taxB.net
+  );
+
+  const expenseAnnualA = store.expenses
+    .filter((expense) => expense.owner === "A")
+    .reduce((sum, expense) => sum + expense.amountAnnual, 0);
+  const expenseAnnualB = store.expenses
+    .filter((expense) => expense.owner === "B")
+    .reduce((sum, expense) => sum + expense.amountAnnual, 0);
+  const expenseAnnualShared = store.expenses
+    .filter((expense) => expense.owner === "shared")
+    .reduce((sum, expense) => sum + expense.amountAnnual, 0);
 
   const hasPension = store.assets.some((a) => a.category === "pension");
   const pensionTotalCETV = store.assets
@@ -109,6 +130,8 @@ export function buildPayload(
       fundingGap: sc.fundingGap,
       monthlyMortgageA: sc.mortgageMonthlyA ?? 0,
       monthlyMortgageB: sc.mortgageMonthlyB ?? 0,
+      homeEquityA: sc.homeEquityA ?? 0,
+      homeEquityB: sc.homeEquityB ?? 0,
       runwayA: {
         sustained: runway?.partyA?.sustained ?? true,
         depletionYear: runway?.partyA?.depletionYear ?? null,
@@ -121,7 +144,10 @@ export function buildPayload(
   });
 
   return {
+    userIntent: store.profile.calculationIntent,
+    offerStatus: store.profile.offerStatus,
     splitRatio: store.assumptions.splitRatio,
+    projectionYears: store.assumptions.projectionYears,
     netEquity: engine.intermediate.netHomeEquity,
     totalAssets: store.assets.reduce((s, a) => s + a.currentValue, 0),
     totalLiabilities: store.liabilities.reduce((s, l) => s + l.balance, 0),
@@ -130,7 +156,13 @@ export function buildPayload(
     mortgageBalance: engine.intermediate.totalMortgage,
     assets,
     liabilities,
+    usesExpenseBenchmarks: store.expenses.some((expense) => expense.name.toLowerCase().includes("starting estimate")),
     incomes: { partyA: incomesA, partyB: incomesB },
+    expenses: {
+      partyAAnnual: expenseAnnualA,
+      partyBAnnual: expenseAnnualB,
+      sharedAnnual: expenseAnnualShared,
+    },
     hasProperty: store.assets.some(
       (a) => a.category === "primary_home" && a.currentValue > 0
     ),

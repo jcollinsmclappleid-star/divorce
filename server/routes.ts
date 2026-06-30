@@ -1,13 +1,13 @@
 import type { Express } from "express";
-import type { Server } from "http";
 import path from "path";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import crypto from "crypto";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { getAppBaseUrl } from "./appUrl";
 import { seedDatabase } from "./seed";
-import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail, sendMagicLinkEmail, sendAdminNotification, sendPromoEmail } from "./email";
+import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail, sendMagicLinkEmail, sendAdminNotification, sendPromoEmail, sendReportSupportConfirmationEmail } from "./email";
 import { db, pool } from "./db";
 import { emailLeads as emailLeadsTable, purchases as purchasesTable } from "@shared/schema";
 import { and, eq, isNull, isNotNull } from "drizzle-orm";
@@ -30,10 +30,32 @@ function rateLimit(key: string, maxAttempts: number, windowMs: number): boolean 
   return true;
 }
 
-export async function registerRoutes(
-  httpServer: Server,
-  app: Express
-): Promise<Server> {
+/** Local dev only — never enable in production. */
+function devBypassPaywall(): boolean {
+  return process.env.NODE_ENV !== "production" && process.env.DEV_BYPASS_PAYWALL === "true";
+}
+
+const DEV_ACCESS_RESPONSE = {
+  hasAccess: true,
+  expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+  purchasedAt: new Date().toISOString(),
+  devBypass: true,
+};
+
+export async function registerRoutes(app: Express): Promise<void> {
+
+  app.get("/api/health", async (_req, res) => {
+    try {
+      await pool.query("SELECT 1");
+      res.json({
+        ok: true,
+        db: "connected",
+        env: process.env.NODE_ENV ?? "development",
+      });
+    } catch {
+      res.status(503).json({ ok: false, db: "unavailable" });
+    }
+  });
 
   seedDatabase().catch(console.error);
 
@@ -512,8 +534,8 @@ export async function registerRoutes(
 
       const stripe = await getUncachableStripeClient();
 
-      // Use product ID directly for reliability
-      const productId = 'prod_U08zTEPeHZJAOf';
+      // Override via env when migrating off Replit (test vs live price IDs)
+      const productId = process.env.STRIPE_PRODUCT_ID || 'prod_U08zTEPeHZJAOf';
       const product = await stripe.products.retrieve(productId);
       if (!product) {
         console.error('Stripe product not found');
@@ -526,10 +548,10 @@ export async function registerRoutes(
         return res.status(500).json({ message: 'Payment price not configured. Please contact support.' });
       }
 
-      // Use the £79 price specifically
-      const priceId = 'price_1TBKqaDv8IzJrrwISpwdyA32';
+      // £79.00 — Stripe API uses pence: unit_amount 7900
+      const priceId = process.env.STRIPE_PRICE_ID || 'price_1TBKqaDv8IzJrrwISpwdyA32';
 
-      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const baseUrl = getAppBaseUrl(req);
 
       const logoUrl = 'https://divorcecalculatoruk.co.uk/og-image.png';
       if (!product.images || product.images.length === 0) {
@@ -609,12 +631,137 @@ export async function registerRoutes(
     }
   });
 
+  async function fulfillReportSupportCheckout(stripeSession: {
+    id: string;
+    payment_intent?: string | { id?: string } | null;
+    customer_details?: { email?: string | null } | null;
+  }) {
+    const support = await storage.getReportSupportByCheckoutSessionId(stripeSession.id);
+    if (!support || support.status === 'paid') return support;
+
+    const email = stripeSession.customer_details?.email ?? null;
+    const paymentIntentId = typeof stripeSession.payment_intent === 'string'
+      ? stripeSession.payment_intent
+      : stripeSession.payment_intent?.id ?? '';
+    const updated = await storage.markReportSupportPaid(
+      support.id,
+      paymentIntentId,
+      email,
+    );
+
+    if (email) {
+      sendReportSupportConfirmationEmail(email).catch(() => {});
+      sendAdminNotification('Report walkthrough support purchased', [
+        { label: 'Customer email', value: email },
+        { label: 'Support purchase ID', value: support.id },
+        { label: 'Analyser session', value: support.sessionToken },
+        { label: 'Amount', value: '£129' },
+        { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
+      ], 'report_support').catch(() => {});
+    }
+    return updated;
+  }
+
+  app.get('/api/support/status/:sessionToken', async (req, res) => {
+    try {
+      const { sessionToken } = req.params;
+      const paid = await storage.getPaidReportSupportBySessionToken(sessionToken);
+      res.json({ purchased: Boolean(paid), purchasedAt: paid?.purchasedAt ?? null });
+    } catch {
+      res.status(500).json({ message: 'Failed to fetch support status' });
+    }
+  });
+
+  app.post('/api/checkout/create-support', async (req, res) => {
+    try {
+      const { sessionToken } = req.body;
+      if (!sessionToken) {
+        return res.status(400).json({ message: 'sessionToken is required' });
+      }
+
+      if (devBypassPaywall()) {
+        return res.status(400).json({ message: 'Support checkout is disabled in dev bypass mode.' });
+      }
+
+      const mainPurchase = await storage.getPurchaseBySessionToken(sessionToken);
+      if (!mainPurchase) {
+        return res.status(403).json({ message: 'Active analyser access required before purchasing support.' });
+      }
+
+      const existing = await storage.getPaidReportSupportBySessionToken(sessionToken);
+      if (existing) {
+        return res.status(400).json({ message: 'Report walkthrough support already purchased for this session.' });
+      }
+
+      const priceId = process.env.STRIPE_SUPPORT_PRICE_ID;
+      if (!priceId) {
+        return res.status(500).json({ message: 'Support product not configured. Please contact support.' });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      const baseUrl = getAppBaseUrl(req);
+
+      const checkoutSession = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [{ price: priceId, quantity: 1 }],
+        mode: 'payment',
+        allow_promotion_codes: false,
+        success_url: `${baseUrl}/payment-success?support=1&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/results`,
+        custom_text: {
+          submit: { message: 'Written email support only — we help you read your report outputs, not legal advice.' },
+        },
+        metadata: {
+          sessionToken,
+          productKind: 'report_support',
+        },
+      });
+
+      await storage.createReportSupportPurchase({
+        sessionToken,
+        stripeCheckoutSessionId: checkoutSession.id,
+      });
+
+      res.json({ url: checkoutSession.url });
+    } catch (err: any) {
+      console.error('Support checkout error:', err?.message || err);
+      res.status(500).json({ message: err?.message || 'Failed to create support checkout session' });
+    }
+  });
+
+  app.post('/api/checkout/verify-support', async (req, res) => {
+    try {
+      const { checkoutSessionId } = req.body;
+      if (!checkoutSessionId) {
+        return res.status(400).json({ message: 'checkoutSessionId is required' });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      const session = await stripe.checkout.sessions.retrieve(checkoutSessionId);
+
+      if (session.payment_status === 'paid') {
+        await fulfillReportSupportCheckout(session);
+        const support = await storage.getReportSupportByCheckoutSessionId(checkoutSessionId);
+        return res.json({ status: 'paid', sessionToken: support?.sessionToken ?? null });
+      }
+
+      res.json({ status: session.payment_status });
+    } catch (err: any) {
+      console.error('Support verify error:', err);
+      res.status(500).json({ message: 'Failed to verify support payment' });
+    }
+  });
+
   app.get('/api/access/:sessionToken', async (req, res) => {
     try {
       // Disable HTTP caching — auth state must always be fresh, and Set-Cookie
       // headers can be dropped on 304 responses.
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
       res.setHeader('Pragma', 'no-cache');
+
+      if (devBypassPaywall()) {
+        return res.json(DEV_ACCESS_RESPONSE);
+      }
 
       const { sessionToken } = req.params;
       const purchase = await storage.getPurchaseBySessionToken(sessionToken);
@@ -792,7 +939,7 @@ export async function registerRoutes(
       const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
       await storage.createMagicLink(email, token, expiresAt);
 
-      const baseUrl = `${req.protocol}://${req.get('host')}`;
+      const baseUrl = getAppBaseUrl(req);
       sendMagicLinkEmail(email, token, baseUrl).catch(console.error);
 
       return res.json({ sent: true });
@@ -851,6 +998,14 @@ export async function registerRoutes(
     try {
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
       res.setHeader('Pragma', 'no-cache');
+
+      if (devBypassPaywall()) {
+        return res.json({
+          authenticated: true,
+          email: 'dev@local',
+          ...DEV_ACCESS_RESPONSE,
+        });
+      }
 
       const email = req.session?.email;
       if (!email) {
@@ -1218,6 +1373,26 @@ export async function registerRoutes(
               { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
             ], 'purchase').catch(() => {});
             console.log('[webhook] Purchase marked paid for', webhookEmail || session.id);
+          } else {
+            const support = await storage.getReportSupportByCheckoutSessionId(session.id);
+            if (support && support.status !== 'paid') {
+              const webhookEmail = session.customer_details?.email ?? null;
+              await storage.markReportSupportPaid(
+                support.id,
+                session.payment_intent as string || '',
+                webhookEmail,
+              );
+              if (webhookEmail) {
+                sendReportSupportConfirmationEmail(webhookEmail).catch(() => {});
+                sendAdminNotification('Report walkthrough support (Stripe webhook)', [
+                  { label: 'Customer email', value: webhookEmail },
+                  { label: 'Support purchase ID', value: support.id },
+                  { label: 'Amount', value: '£129' },
+                  { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
+                ], 'report_support').catch(() => {});
+              }
+              console.log('[webhook] Report support marked paid for', webhookEmail || session.id);
+            }
           }
         }
       }
@@ -1242,7 +1417,10 @@ export async function registerRoutes(
   const guidedSummaryPayloadSchema = z.object({
     sessionToken: z.string().min(1),
     payload: z.object({
+      userIntent: z.string().max(80).default(''),
+      offerStatus: z.string().max(80).default(''),
       splitRatio: z.number().min(0).max(1),
+      projectionYears: z.number().int().min(1).max(30).default(10),
       netEquity: z.number(),
       totalAssets: z.number(),
       totalLiabilities: z.number(),
@@ -1257,6 +1435,7 @@ export async function registerRoutes(
         category: z.string().max(60),
         balance: z.number(),
       })),
+      usesExpenseBenchmarks: z.boolean().default(false),
       incomes: z.object({
         partyA: z.array(z.object({
           type: z.string().max(60),
@@ -1269,6 +1448,11 @@ export async function registerRoutes(
           netAnnual: z.number(),
         })),
       }),
+      expenses: z.object({
+        partyAAnnual: z.number(),
+        partyBAnnual: z.number(),
+        sharedAnnual: z.number(),
+      }).default({ partyAAnnual: 0, partyBAnnual: 0, sharedAnnual: 0 }),
       hasProperty: z.boolean(),
       hasPension: z.boolean(),
       pensionTotalCETV: z.number(),
@@ -1293,6 +1477,8 @@ export async function registerRoutes(
         fundingGap: z.number().optional(),
         monthlyMortgageA: z.number().default(0),
         monthlyMortgageB: z.number().default(0),
+        homeEquityA: z.number().optional().default(0),
+        homeEquityB: z.number().optional().default(0),
         runwayA: z.object({ sustained: z.boolean(), depletionYear: z.number().nullable() }),
         runwayB: z.object({ sustained: z.boolean(), depletionYear: z.number().nullable() }),
       })),
@@ -1304,6 +1490,36 @@ export async function registerRoutes(
     }),
   });
 
+  const guidedSummaryResponseSchema = z.object({
+    overview: z.string().min(1),
+    what_stands_out: z.string().min(1),
+    scenario_interpretation: z.string().min(1),
+    pressure_points: z.string().min(1),
+    position_check: z.object({
+      missing_values: z.array(z.string().min(1)),
+      left_short_risk: z.array(z.string().min(1)),
+      offer_trade_offs: z.array(z.string().min(1)),
+      housing_needs_pressure: z.array(z.string().min(1)),
+      questions_before_agreeing: z.array(z.string().min(1)),
+    }),
+    questions_for_professionals: z.object({
+      solicitor_mediator: z.array(z.string().min(1)),
+      mortgage_broker: z.array(z.string().min(1)),
+      pension_expert: z.array(z.string().min(1)),
+    }),
+    missing_information: z.string().min(1),
+  });
+
+  const forbiddenGuidedSummaryPhrases = [
+    'you should accept',
+    'you should reject',
+    'you are entitled to',
+    'the court would',
+    'you should negotiate',
+    'hide assets',
+    'conceal assets',
+  ];
+
   app.post('/api/guided-summary', async (req, res) => {
     try {
       const parsed = guidedSummaryPayloadSchema.safeParse(req.body);
@@ -1313,13 +1529,15 @@ export async function registerRoutes(
 
       const { sessionToken, payload } = parsed.data;
 
-      // Verify paid access
-      const purchase = await storage.getPurchaseBySessionToken(sessionToken);
-      if (!purchase) {
-        return res.status(403).json({ message: 'No active purchase found for this session.' });
-      }
-      if (purchase.expiresAt && new Date() > new Date(purchase.expiresAt)) {
-        return res.status(403).json({ message: 'Your access has expired. Please renew to use this feature.' });
+      // Verify paid access (skipped in local dev when DEV_BYPASS_PAYWALL=true)
+      if (!devBypassPaywall()) {
+        const purchase = await storage.getPurchaseBySessionToken(sessionToken);
+        if (!purchase) {
+          return res.status(403).json({ message: 'No active purchase found for this session.' });
+        }
+        if (purchase.expiresAt && new Date() > new Date(purchase.expiresAt)) {
+          return res.status(403).json({ message: 'Your access has expired. Please renew to use this feature.' });
+        }
       }
 
       // Rate limit: max 3 calls per session per hour
@@ -1338,15 +1556,20 @@ export async function registerRoutes(
         : null;
       const borrowCapA = grossA > 0 ? Math.round(grossA * 4.5) : null;
       const borrowCapB = grossB > 0 ? Math.round(grossB * 4.5) : null;
+      const nonPensionSettlementPool = payload.netEquity + payload.totalLiquid;
 
       // Build the user prompt from the validated payload
       const userPrompt = `Here is the financial model data for this case. Generate a Guided Report Summary.
 
+USER INTENT: ${payload.userIntent || 'Not selected'}
+OFFER STATUS: ${payload.offerStatus || 'Not selected'}
 SPLIT RATIO: ${Math.round(payload.splitRatio * 100)}% to Party A, ${Math.round((1 - payload.splitRatio) * 100)}% to Party B
+MODELLED PROJECTION PERIOD: ${payload.projectionYears} years
 TOTAL ASSETS: £${payload.totalAssets.toLocaleString('en-GB')}
 TOTAL LIABILITIES: £${payload.totalLiabilities.toLocaleString('en-GB')}
 NET EQUITY (home after sale costs): £${payload.netEquity.toLocaleString('en-GB')}
-TOTAL LIQUID ASSETS (distributable pool): £${payload.totalLiquid.toLocaleString('en-GB')}
+LIQUID ASSETS BEFORE HOME SALE (cash/investments): £${payload.totalLiquid.toLocaleString('en-GB')}
+NON-PENSION SETTLEMENT POOL (net home equity + liquid assets): £${nonPensionSettlementPool.toLocaleString('en-GB')}
 ${payload.hasProperty && payload.propertyValue > 0 ? `PROPERTY VALUE: £${payload.propertyValue.toLocaleString('en-GB')}
 OUTSTANDING MORTGAGE BALANCE: £${payload.mortgageBalance.toLocaleString('en-GB')}
 LOAN TO VALUE (LTV): ${ltv}%` : ''}
@@ -1371,6 +1594,12 @@ BASE MONTHLY BUDGET SURPLUS (before mortgage, pre-scenario):
   Party A: £${payload.budget.monthlyA.toLocaleString('en-GB')}/mo
   Party B: £${payload.budget.monthlyB.toLocaleString('en-GB')}/mo
 
+POST-SEPARATION EXPENSES ENTERED:
+  Party A annual expenses: £${payload.expenses.partyAAnnual.toLocaleString('en-GB')} (≈ £${Math.round(payload.expenses.partyAAnnual / 12).toLocaleString('en-GB')}/mo)
+  Party B annual expenses: £${payload.expenses.partyBAnnual.toLocaleString('en-GB')} (≈ £${Math.round(payload.expenses.partyBAnnual / 12).toLocaleString('en-GB')}/mo)
+  Shared annual expenses: £${payload.expenses.sharedAnnual.toLocaleString('en-GB')} (≈ £${Math.round(payload.expenses.sharedAnnual / 12).toLocaleString('en-GB')}/mo)
+  Uses editable starting expense estimates: ${payload.usesExpenseBenchmarks ? 'Yes' : 'No'}
+
 HAS PROPERTY: ${payload.hasProperty ? 'Yes' : 'No'}
 HAS PENSION: ${payload.hasPension ? 'Yes' : 'No'}
 ${payload.hasPension ? `PENSION CETVs:
@@ -1385,14 +1614,16 @@ SCENARIOS MODELLED:
 ${payload.scenarios.filter(s => s.enabled).map(s => {
   const mtgA = s.monthlyMortgageA > 0 ? `\n  Monthly mortgage (Party A): £${Math.round(s.monthlyMortgageA).toLocaleString('en-GB')}/mo` : '';
   const mtgB = s.monthlyMortgageB > 0 ? `\n  Monthly mortgage (Party B): £${Math.round(s.monthlyMortgageB).toLocaleString('en-GB')}/mo` : '';
+  const homeA = s.homeEquityA > 0 ? ` + £${Math.round(s.homeEquityA).toLocaleString('en-GB')} home equity` : '';
+  const homeB = s.homeEquityB > 0 ? ` + £${Math.round(s.homeEquityB).toLocaleString('en-GB')} home equity` : '';
   const gap = s.fundingGap !== undefined && s.fundingGap > 0 ? `\n  Funding gap to cover buyout: £${s.fundingGap.toLocaleString('en-GB')}` : '';
   const afford = s.affordable !== undefined ? `\n  Mortgage within solo lending capacity: ${s.affordable ? 'Yes' : 'No'}` : '';
   return `
 Scenario: ${s.name}
-  Party A receives: £${s.liquidStartA.toLocaleString('en-GB')} liquid + £${s.pensionA.toLocaleString('en-GB')} pension = £${s.totalA.toLocaleString('en-GB')} total${mtgA}${mtgB}${afford}${gap}
-  Party B receives: £${s.liquidStartB.toLocaleString('en-GB')} liquid + £${s.pensionB.toLocaleString('en-GB')} pension = £${s.totalB.toLocaleString('en-GB')} total
-  Party A 10-year runway: ${s.runwayA.sustained ? 'Sustained' : `Depletes in year ${s.runwayA.depletionYear}`}
-  Party B 10-year runway: ${s.runwayB.sustained ? 'Sustained' : `Depletes in year ${s.runwayB.depletionYear}`}`;
+  Party A receives: £${s.liquidStartA.toLocaleString('en-GB')} liquid${homeA} + £${s.pensionA.toLocaleString('en-GB')} pension = £${s.totalA.toLocaleString('en-GB')} total${mtgA}${mtgB}${afford}${gap}
+  Party B receives: £${s.liquidStartB.toLocaleString('en-GB')} liquid${homeB} + £${s.pensionB.toLocaleString('en-GB')} pension = £${s.totalB.toLocaleString('en-GB')} total
+  Party A ${payload.projectionYears}-year runway: ${s.runwayA.sustained ? 'Sustained' : `Depletes in year ${s.runwayA.depletionYear}`}
+  Party B ${payload.projectionYears}-year runway: ${s.runwayB.sustained ? 'Sustained' : `Depletes in year ${s.runwayB.depletionYear}`}`;
 }).join('\n')}
 
 MODEL CONFIDENCE: ${payload.confidence}
@@ -1422,16 +1653,20 @@ Please generate the Guided Report Summary JSON now.`;
         return res.status(502).json({ message: 'The summary service returned an unexpected format. Please try again.' });
       }
 
-      // Validate required keys are present
-      const requiredKeys = ['overview', 'what_stands_out', 'scenario_interpretation', 'pressure_points', 'questions_for_professionals', 'missing_information'];
-      for (const key of requiredKeys) {
-        if (!summaryData[key]) {
-          return res.status(502).json({ message: 'The summary was incomplete. Please try again.' });
-        }
+      const validatedSummary = guidedSummaryResponseSchema.safeParse(summaryData);
+      if (!validatedSummary.success) {
+        return res.status(502).json({ message: 'The summary was incomplete. Please try again.' });
+      }
+
+      const summaryText = JSON.stringify(validatedSummary.data).toLowerCase();
+      const forbiddenPhrase = forbiddenGuidedSummaryPhrases.find((phrase) => summaryText.includes(phrase));
+      if (forbiddenPhrase) {
+        console.warn('[guided-summary] Rejected summary for forbidden phrase:', forbiddenPhrase);
+        return res.status(502).json({ message: 'The summary crossed a compliance boundary. Please try again.' });
       }
 
       return res.json({
-        ...summaryData,
+        ...validatedSummary.data,
         confidence: payload.confidence,
         generatedAt: new Date().toISOString(),
       });
@@ -1444,6 +1679,4 @@ Please generate the Guided Report Summary JSON now.`;
       return res.status(502).json({ message: 'Something went wrong generating your summary. Please try again.' });
     }
   });
-
-  return httpServer;
 }

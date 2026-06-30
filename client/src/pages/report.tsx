@@ -7,7 +7,7 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Printer, ChevronDown, List, TrendingUp, Wallet, Users, Home, Sparkles } from "lucide-react";
+import { ArrowLeft, Printer, ChevronDown, List, TrendingUp, Wallet, Users, Home, Sparkles, Shield } from "lucide-react";
 import {
   generateScenarioNarrative,
   buildSourceOfFunds,
@@ -157,7 +157,7 @@ function computeAllScenarios(engine: ReturnType<typeof useEngine>): ScenarioResu
 }
 
 export default function ReportPage() {
-  useDocumentTitle("Structured Divorce Financial Brief | DivorceCalculatorUK");
+  useDocumentTitle("Settlement Reality Check PDF | DivorceCalculatorUK");
   useNoIndex();
   const store = useAppStore();
   const engine = useEngine();
@@ -206,6 +206,7 @@ export default function ReportPage() {
 
   const totalAssets = store.assets.reduce((s, a) => s + a.currentValue, 0);
   const netWorthTotal = engine.netWorth.total;
+  const projectionYearLabel = `${store.assumptions.projectionYears}-Year`;
 
   return (
     <div className="min-h-screen bg-[#f8f9fb] text-gray-900">
@@ -295,6 +296,10 @@ export default function ReportPage() {
             Financial modelling highlights trade-offs. Each scenario reflects different implications for liquidity, leverage, and income variability.
           </p>
         </ReportSection>
+
+        {store.guidedSummary && store.guidedSummaryStatus === "done" && (
+          <GuidedSummaryReportSection summary={store.guidedSummary} />
+        )}
 
         <ReportSection
           id="exec-briefing"
@@ -430,7 +435,7 @@ export default function ReportPage() {
         <ReportSection
           id="section-comparison"
           title="4. Scenario Comparison — Executive Summary"
-          description="A side-by-side view of all settlement options: the capital each party receives, mortgage obligations, and 5-year reserve sustainability."
+          description={`A side-by-side view of all settlement options: the capital each party receives, mortgage obligations, and ${store.assumptions.projectionYears}-year reserve sustainability.`}
         >
           <p className="text-xs text-gray-500 mb-3">
             Split assumption: {pct(store.assumptions.splitRatio)} to Party A, {pct(1 - store.assumptions.splitRatio)} to Party B.
@@ -462,11 +467,11 @@ export default function ReportPage() {
               <ComparisonRow label="Monthly Mortgage Obligation — Party B" values={allScenarios.map(s => s.mortgageMonthlyB ?? 0)} />
               {allScenarios.map((_, i) => i === 0 ? (
                 <tr key="runway-header" className="border-b border-gray-200">
-                  <td className="py-1 text-gray-600 text-xs font-semibold" colSpan={allScenarios.length + 1}>5-Year Reserve Duration</td>
+                  <td className="py-1 text-gray-600 text-xs font-semibold" colSpan={allScenarios.length + 1}>{projectionYearLabel} Reserve Duration</td>
                 </tr>
               ) : null)}
               <tr className="border-b border-gray-100">
-                <td className="py-1 text-gray-600">5-Year Reserves — Party A</td>
+                <td className="py-1 text-gray-600">{projectionYearLabel} Reserves — Party A</td>
                 {allScenarios.map(s => {
                   const rw = engine.runways[s.id];
                   return (
@@ -479,7 +484,7 @@ export default function ReportPage() {
                 })}
               </tr>
               <tr className="border-b border-gray-100">
-                <td className="py-1 text-gray-600">5-Year Reserves — Party B</td>
+                <td className="py-1 text-gray-600">{projectionYearLabel} Reserves — Party B</td>
                 {allScenarios.map(s => {
                   const rw = engine.runways[s.id];
                   return (
@@ -594,7 +599,7 @@ export default function ReportPage() {
                 const runway = engine.runways[sc.id];
                 if (!runway) return null;
                 return (
-                  <ReportCollapsible title="Reserve Duration (5-Year Projection)">
+                  <ReportCollapsible title={`Reserve Duration (${projectionYearLabel} Projection)`}>
                     <div className="grid grid-cols-2 gap-6 text-sm">
                       <div>
                         <p className="font-medium text-gray-700 mb-1">Party A</p>
@@ -805,7 +810,9 @@ export default function ReportPage() {
               <li><span className="font-medium">Transaction costs:</span> Estimated selling costs (agent fees, conveyancing) are deducted from net equity in sale scenarios. Early repayment charges, stamp duty on purchase, legal fees for transfers, and moving costs are not separately modelled. Independent estimates for these items may be warranted.</li>
               <li><span className="font-medium">Pension valuations:</span> Pension values are entered by the user and treated as nominal CETV figures. No adjustment is made for pension type (defined benefit vs defined contribution), tax on drawdown, or actuarial factors. Pension sharing orders may result in different actual values.</li>
               <li><span className="font-medium">Capital gains tax:</span> No CGT liability is modelled on the disposal of investments or assets. The principal private residence exemption is assumed to apply to the family home. Independent tax review may be warranted where significant investment portfolios are involved.</li>
-              <li><span className="font-medium">Spousal maintenance:</span> Periodic spousal maintenance payments are not included in the model. Where spousal maintenance is applicable, net income and surplus figures may require adjustment to reflect those payments.</li>
+              <li><span className="font-medium">Spousal maintenance:</span> {store.maintenance.included && store.maintenance.monthlyAmount > 0
+                ? `An illustrative spousal maintenance transfer of ${fmt(store.maintenance.monthlyAmount)}/month is included in monthly surplus figures. This is a user-entered modelling assumption only, not an assessment of whether maintenance is appropriate or what amount may apply.`
+                : "Periodic spousal maintenance payments are not included in the model. Where spousal maintenance is applicable, net income and surplus figures may require adjustment to reflect those payments."}</li>
             </ul>
             </ReportCollapsible>
           </div>
@@ -824,10 +831,6 @@ export default function ReportPage() {
             <div><span className="font-semibold">Income Multiple:</span> <span className="text-gray-600">The ratio of mortgage required to gross annual income, used as a generalised lending capacity benchmark.</span></div>
           </div>
         </section>
-
-        {store.guidedSummary && store.guidedSummaryStatus === "done" && (
-          <GuidedSummaryReportSection summary={store.guidedSummary} />
-        )}
 
         <footer className="mt-12 pt-6 border-t border-gray-300 text-center space-y-2 pb-10">
           <div className="flex items-center justify-center gap-2 mb-2">
@@ -862,6 +865,14 @@ function GuidedSummaryReportSection({ summary }: { summary: GuidedSummary }) {
     { title: "Missing Information & Model Confidence", content: summary.missing_information, border: "border-l-amber-400/60" },
   ];
 
+  const positionGroups = summary.position_check ? [
+    { label: "Missing values", items: summary.position_check.missing_values },
+    { label: "Left-short risk", items: summary.position_check.left_short_risk },
+    { label: "Offer trade-offs", items: summary.position_check.offer_trade_offs },
+    { label: "Housing and needs pressure", items: summary.position_check.housing_needs_pressure },
+    { label: "Questions before agreeing", items: summary.position_check.questions_before_agreeing },
+  ].filter(group => group.items.length > 0) : [];
+
   const proGroups = [
     { label: "Solicitor / Mediator", questions: summary.questions_for_professionals.solicitor_mediator, show: true },
     { label: "Mortgage Broker",       questions: summary.questions_for_professionals.mortgage_broker,    show: hasProperty && (summary.questions_for_professionals.mortgage_broker?.length ?? 0) > 0 },
@@ -877,7 +888,7 @@ function GuidedSummaryReportSection({ summary }: { summary: GuidedSummary }) {
             <Sparkles className="w-4 h-4 text-gold" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-white uppercase tracking-widest">Guided Intelligence Report</h2>
+            <h2 className="text-sm font-bold text-white uppercase tracking-widest">Settlement Reality Check Report</h2>
             <p className="text-[10px] text-white/45 mt-0.5">Intelligently generated plain-English analysis of your modelled figures</p>
           </div>
         </div>
@@ -900,6 +911,29 @@ function GuidedSummaryReportSection({ summary }: { summary: GuidedSummary }) {
           </div>
         ))}
 
+        {positionGroups.length > 0 && (
+          <div className="border-l-4 border-l-yellow-500/50 pl-4 py-1">
+            <h4 className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-2 flex items-center gap-1.5">
+              <Shield className="w-3 h-3 text-yellow-600" /> Settlement Position Check
+            </h4>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {positionGroups.map(group => (
+                <div key={group.label} className="rounded-lg border border-gray-100 bg-gray-50/70 p-3">
+                  <p className="text-xs font-semibold text-gray-600 mb-1.5">{group.label}</p>
+                  <ul className="space-y-1">
+                    {group.items.map((item, i) => (
+                      <li key={i} className="flex gap-2 text-sm text-gray-700 leading-relaxed">
+                        <span className="text-yellow-600 shrink-0">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="border-l-4 border-l-cyan-400/50 pl-4 py-1">
           <h4 className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-2">Questions for Professionals</h4>
           <div className="space-y-4">
@@ -921,7 +955,7 @@ function GuidedSummaryReportSection({ summary }: { summary: GuidedSummary }) {
       </div>
 
       <p className="text-[10px] text-gray-400 italic mt-3">
-        This guided summary is illustrative and generated from the figures entered. It is not legal, tax, or financial advice.
+        This Settlement Reality Check Report is illustrative and generated from the figures entered. It is not legal, tax, or financial advice.
         Generated: {new Date(summary.generatedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.
       </p>
     </section>
@@ -939,6 +973,7 @@ function ReportTOC({
 }) {
   const fixed = [
     { id: "exec-summary",      num: "",   label: "Executive Overview" },
+    ...(hasGuidedSummary ? [{ id: "section-guided-summary", num: "", label: "Settlement Reality Check Report" }] : []),
     { id: "section-fin",       num: "1.", label: "Financial Position" },
     { id: "section-income",    num: "2.", label: "Income & Tax" },
     { id: "section-expenses",  num: "3.", label: "Projected Expenses" },
@@ -953,7 +988,6 @@ function ReportTOC({
     { id: "section-assumption-review", num: `${5 + scenarioCount}.`, label: "Assumption Review" },
     { id: "section-methodology",       num: `${6 + scenarioCount}.`, label: "Assumptions & Methodology" },
     { id: "section-glossary",          num: "",                       label: "Glossary" },
-    ...(hasGuidedSummary ? [{ id: "section-guided-summary", num: "", label: "Guided Intelligence Report" }] : []),
   ];
   const allItems = [...fixed, ...scenarioItems, ...tail];
 

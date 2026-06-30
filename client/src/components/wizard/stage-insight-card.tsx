@@ -81,6 +81,7 @@ export function StageInsightCard({ stage, onContinue }: StageInsightCardProps) {
   const engine = useEngine();
   const nameA = profile?.partyAName?.trim() || "Party A";
   const nameB = profile?.partyBName?.trim() || "Party B";
+  const intent = profile?.calculationIntent;
 
   const stageNum = stage === "afterAssets" ? 1 : 2;
   const stageLabel = stage === "afterAssets" ? "Stage 1 complete · Your Assets" : "Stage 2 complete · Your Income";
@@ -127,10 +128,9 @@ export function StageInsightCard({ stage, onContinue }: StageInsightCardProps) {
     const grossA = engine.taxA.gross;
     const grossB = engine.taxB.gross;
     const totalGross = grossA + grossB;
-    const totalTax = engine.taxA.incomeTax + engine.taxA.nationalInsurance + engine.taxB.incomeTax + engine.taxB.nationalInsurance;
     const totalNet = engine.taxA.net + engine.taxB.net;
-    const monthlyHousehold = totalNet / 12;
-    const effectiveRate = totalGross > 0 ? Math.round((totalTax / totalGross) * 100) : 0;
+    const monthlyA = engine.taxA.net / 12;
+    const monthlyB = engine.taxB.net / 12;
 
     slices = [
       { label: nameA, value: engine.taxA.net, color: chartTheme.color.a },
@@ -139,15 +139,56 @@ export function StageInsightCard({ stage, onContinue }: StageInsightCardProps) {
 
     stats = [
       { label: "Combined gross", value: fmtGbp(totalGross), color: chartTheme.color.gold, hint: "before tax & NI" },
-      { label: "Effective tax + NI", value: `${effectiveRate}%`, color: chartTheme.color.pressure },
-      { label: "Household take-home", value: `${fmtGbp(monthlyHousehold)}/mo`, color: chartTheme.color.sustain },
+      {
+        label: `${nameA} take-home`,
+        value: grossA > 0 ? `${fmtGbp(monthlyA)}/mo` : "Not entered",
+        color: chartTheme.color.a,
+        hint: grossA > 0 ? "modelled net" : undefined,
+      },
+      {
+        label: `${nameB} take-home`,
+        value: grossB > 0 ? `${fmtGbp(monthlyB)}/mo` : "Not entered",
+        color: chartTheme.color.b,
+        hint: grossB > 0 ? "modelled net" : undefined,
+      },
     ];
 
     sentence =
       totalNet > 0
-        ? `That's the income side modelled. Next we'll model post-separation living costs to see whether each scenario stays affordable.`
+        ? `That's the income side modelled using simplified UK tax/NI rules — take-home figures are illustrative, not payslip-accurate. Next we'll model post-separation living costs.`
         : `Income figures will power the sustainability side of the model. Add at least one income to see the take-home picture.`;
   }
+
+  const intentNote =
+    stage === "afterAssets" && intent === "offer_check"
+      ? "When you reach the assumptions step, mirror the offer as closely as possible so the results can pressure-check the proposed split."
+      : stage === "afterAssets" && intent === "fair_split"
+      ? "When you reach the assumptions step, test 50/50 against alternative splits so you can see the practical difference."
+      : stage === "afterAssets" && intent === "house_split"
+      ? "The house lens will use this equity position to compare sale, buyout and keep-home pressure."
+      : stage === "afterAssets" && intent === "children_housing"
+      ? "Income and costs come next. Together they show whether a housing-focused scenario appears workable month to month."
+      : stage === "afterAssets" && intent === "pension_impact"
+      ? "Pensions are next. Adding CETV figures helps reveal whether property-heavy options hide a weaker long-term position."
+      : stage === "afterAssets" && intent === "debt_pressure"
+      ? "Debt can change the real position quickly. Make sure loans, cards and liabilities are added before comparing outcomes."
+      : stage === "afterAssets" && intent === "protect_position"
+      ? "Use the next steps to add debts, pensions and income so the report can highlight missing value and pressure points."
+      : stage === "afterIncome" && intent === "offer_check"
+      ? "The next step is post-separation spending, which shows whether the proposed offer is liveable month to month."
+      : stage === "afterIncome" && intent === "fair_split"
+      ? "Living costs come next. They show whether the same headline percentage creates very different monthly pressure."
+      : stage === "afterIncome" && intent === "children_housing"
+      ? "Living costs and child assumptions come next, then the model can compare housing pressure and monthly headroom."
+      : stage === "afterIncome" && intent === "income_gap"
+      ? "Expenses come next. That is where the income gap becomes visible as monthly surplus or shortfall."
+      : stage === "afterIncome" && intent === "debt_pressure"
+      ? "Living costs come next, then the results can show whether debts and monthly commitments leave either side exposed."
+      : stage === "afterIncome" && intent === "protect_position"
+      ? "Living costs come next. That is where left-short risk usually becomes visible."
+      : stage === "afterIncome" && intent === "house_split"
+      ? "Living costs come next, then the model can test whether keeping the home leaves enough monthly headroom."
+      : "";
 
   return (
     <motion.div
@@ -156,7 +197,7 @@ export function StageInsightCard({ stage, onContinue }: StageInsightCardProps) {
       transition={{ duration: 0.45, ease: chartTheme.ease }}
       data-testid={`card-stage-insight-${stage}`}
     >
-      <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+      <div className="rounded-2xl bg-white border border-slate-200/80 shadow-lg shadow-primary/[0.06] overflow-hidden">
         <div className="px-5 py-3 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-gold" />
           <p className="text-[11px] font-bold tracking-widest uppercase text-[#1a3357]">{stageLabel}</p>
@@ -191,6 +232,11 @@ export function StageInsightCard({ stage, onContinue }: StageInsightCardProps) {
 
           <div className="rounded-lg bg-slate-50 border border-slate-200 px-4 py-3">
             <p className="text-sm text-[#1a3357]/85 leading-relaxed">{sentence}</p>
+            {intentNote && (
+              <p className="text-xs text-[#1a3357]/65 leading-relaxed mt-2 border-t border-slate-200 pt-2">
+                {intentNote}
+              </p>
+            )}
           </div>
 
           <div className="flex items-center justify-between gap-3 pt-1">

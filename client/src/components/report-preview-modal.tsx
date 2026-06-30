@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   X, ArrowRight, AlertTriangle, TrendingUp, TrendingDown, Sparkles,
   BookOpen, AlertCircle, FileSearch, Scale, Home, PiggyBank,
-  Wallet, Users, List, ChevronDown, ChevronUp, Sliders, Activity,
+  Wallet, Users, List, ChevronDown, ChevronUp, Sliders, Activity, Shield,
 } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -73,16 +73,16 @@ function Collapsible({ title, children, defaultOpen = false }: { title: string; 
 
 // ─── Sample executive dashboard (visual showcase at top of preview) ───
 const SAMPLE_SCENARIOS = [
-  { id: "S1", name: "Sell & Split",  short: "Sell & Split", capA: 89_750, capB: 89_750, surA: 2656, surB:  652, criA: 78, criB: 63, projection: [179_500, 188_900, 198_700, 208_200, 217_400, 226_800] },
-  { id: "S2", name: "A Keeps Home",  short: "A Keeps",      capA: 18_250, capB: 89_750, surA: 1026, surB:  652, criA: 52, criB: 71, projection: [108_000, 119_300, 131_800, 144_100, 156_700, 169_300] },
-  { id: "S3", name: "B Keeps Home",  short: "B Keeps",      capA: 89_750, capB: 18_250, surA: 2656, surB: -978, criA: 82, criB: 22, projection: [108_000, 102_000,  85_500,  69_400,  53_200,  37_500] },
-  { id: "S4", name: "Deferred Sale", short: "Deferred",     capA: 54_000, capB: 54_000, surA: 2666, surB:  662, criA: 71, criB: 54, projection: [108_000, 117_400, 127_500, 138_000, 149_100, 160_700] },
+  { id: "S1", name: "Sell & Split",  short: "Sell & Split", capA: 190_553, capB: 232_897, surA: 1333, surB: -500, criA: 76, criB: 48, projection: [220_450, 214_600, 207_800, 198_900, 188_400, 176_900] },
+  { id: "S2", name: "A Keeps Home",  short: "A Keeps",      capA: 264_350, capB: 232_897, surA: -491, surB: -500, criA: 32, criB: 48, projection: [121_247, 96_400, 70_800, 45_200, 20_100, -4_800] },
+  { id: "S3", name: "B Keeps Home",  short: "B Keeps",      capA: 190_553, capB: 284_650, surA: 1333, surB: -2324, criA: 76, criB: 18, projection: [99_203, 83_700, 66_900, 49_200, 30_100, 9_400] },
+  { id: "S4", name: "Deferred Sale", short: "Deferred",     capA: 205_000, capB: 250_000, surA: 1333, surB: -980, criA: 70, criB: 38, projection: [136_000, 124_500, 111_700, 98_400, 83_600, 67_800] },
 ];
 
 const SAMPLE_COMPOSITION = [
-  { label: "Property equity", value: 71_500,  color: "#A78BFA" },
-  { label: "Pension (CETV)",  value: 60_000,  color: "#22D3EE" },
-  { label: "Cash & savings",  value: 108_000, color: "#C9A84C" },
+  { label: "Property equity", value: 158_450, color: "#A78BFA" },
+  { label: "Pension (CETV)",  value: 203_000, color: "#22D3EE" },
+  { label: "Cash & savings",  value: 62_000,  color: "#C9A84C" },
 ];
 
 function MiniSparkline({ data, color = chartTheme.color.gold, height = 36, gradId = "mini-spark" }: { data: number[]; color?: string; height?: number; gradId?: string }) {
@@ -300,7 +300,7 @@ function StatStrip({ items, color }: { items: { label: string; value: string; wa
 
 const TOC_ITEMS = [
   { num: "",   label: "Executive Overview" },
-  { num: "",   label: "Guided Intelligence Report" },
+  { num: "",   label: "Settlement Reality Check Report" },
   { num: "1.", label: "Financial Position" },
   { num: "2.", label: "Income & Taxation" },
   { num: "3.", label: "Projected Expenses" },
@@ -386,8 +386,8 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
               </div>
               <div className="mt-5 grid grid-cols-3 gap-3">
                 {[
-                  { label: "Total Assets",    value: "£843,000", color: "text-cyan-300" },
-                  { label: "Net Worth",        value: "£253,000", color: "text-gold" },
+                  { label: "Total Assets",    value: "£750,000", color: "text-cyan-300" },
+                  { label: "Net Worth",        value: "£422,500", color: "text-gold" },
                   { label: "Scenarios",        value: "4",        color: "text-emerald-300" },
                 ].map(({ label, value, color }) => (
                   <div key={label} className="bg-white/8 border border-white/10 rounded-xl px-3 py-2.5">
@@ -402,7 +402,7 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                   <BookOpen className="w-3 h-3" /> Settlement Analyser
                 </div>
                 <div className="flex items-center gap-1.5 bg-gold/15 border border-gold/25 text-gold text-[10px] font-semibold px-3 py-1 rounded-full">
-                  <FileSearch className="w-3 h-3" /> Guided Intelligence Report
+                  <FileSearch className="w-3 h-3" /> Settlement Reality Check Report
                 </div>
               </div>
             </div>
@@ -461,10 +461,10 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
             {/* At a Glance */}
             <div className="grid grid-cols-2 gap-3 mb-5">
               {[
-                { icon: Wallet,   label: "Distributable pool",  value: "£179,500",             sub: "Property equity + liquid assets",      color: "text-cyan-600",   bg: "bg-cyan-50",   border: "border-cyan-100" },
-                { icon: Users,    label: "Gross income split",  value: "£126,000 vs £60,000",  sub: "Party A vs Party B (annual)",          color: "text-violet-600", bg: "bg-violet-50", border: "border-violet-100" },
+                { icon: Wallet,   label: "Non-pension pool",    value: "£220,450",             sub: "Net home equity + liquid assets",      color: "text-cyan-600",   bg: "bg-cyan-50",   border: "border-cyan-100" },
+                { icon: Users,    label: "Gross income split",  value: "£78,000 vs £34,000",   sub: "Party A vs Party B (annual)",          color: "text-violet-600", bg: "bg-violet-50", border: "border-violet-100" },
                 { icon: TrendingUp, label: "Take-home pay",     value: "£6,518/mo · £3,690/mo", sub: "After estimated tax & NI",            color: "text-emerald-600",bg: "bg-emerald-50",border: "border-emerald-100" },
-                { icon: Home,     label: "Property LTV",        value: "87%",                  sub: "High — affects transfer options",      color: "text-amber-600",  bg: "bg-amber-50",  border: "border-amber-100" },
+                { icon: Home,     label: "Property LTV",        value: "64%",                  sub: "Manageable, but affordability still matters", color: "text-amber-600",  bg: "bg-amber-50",  border: "border-amber-100" },
               ].map(({ icon: Icon, label, value, sub, color, bg, border }) => (
                 <div key={label} className={`rounded-lg border ${border} ${bg} px-3.5 py-3`}>
                   <div className="flex items-center gap-1.5 mb-1">
@@ -481,15 +481,15 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
               {[
                 {
                   heading: "Estate Overview",
-                  body: "This report presents an illustrative financial analysis of a marital estate comprising £843,000 in total assets, offset by £590,000 in liabilities, producing a combined net worth of £253,000. The primary residence, valued at £675,000, carries an outstanding mortgage of £590,000, leaving a net equity of only £71,500 after estimated sale costs. This represents approximately 80% of total assets and is the single largest component of the estate. Pension provision totals £60,000 by Cash Equivalent Transfer Value (CETV) and is treated separately from liquid assets within the modelling.",
+                  body: "This report presents an illustrative financial analysis of a marital estate comprising £750,000 in total assets, offset by £327,500 in liabilities, producing a combined net worth of £422,500. The primary residence, valued at £485,000, carries an outstanding mortgage of £312,000, leaving net equity of £158,450 after estimated sale costs. Liquid savings and investments add £62,000, creating a non-pension settlement pool of £220,450. Pension provision totals £203,000 by Cash Equivalent Transfer Value (CETV) and is treated separately from immediately available capital.",
                 },
                 {
                   heading: "Income & Tax Position",
-                  body: "Combined gross household income is £186,000 per annum. Party A earns 2.1× the income of Party B (£126,000 versus £60,000 gross), resulting in a material income disparity that affects post-separation sustainability. After applying estimated 2026/27 UK income tax and National Insurance, net incomes are £78,220 (Party A) and £44,284 (Party B) per annum. Child maintenance obligations, estimated at £4,944 per annum using the CMS formula, are factored into the projection model for approximately 7 further years.",
+                  body: "Combined gross household income is £112,000 per annum. Party A earns more than twice Party B's income (£78,000 versus £34,000 gross), creating a material difference in borrowing capacity and monthly resilience. Net incomes used in this sample are £55,000 (Party A) and £28,000 (Party B) per annum. Child maintenance is estimated at £168.25 per week and should be checked against the final care pattern and income evidence.",
                 },
                 {
                   heading: "Scenario Analysis",
-                  body: "The analysis models 4 settlement scenarios under a 50/50 asset division assumption. Under Sell & Split, both parties receive equal liquid capital of £89,750 and maintain positive monthly cashflows. Scenarios involving one party retaining the home introduce asymmetric capital positions — with the retaining party typically receiving significantly less liquid capital at settlement. The model indicates Party A's estimated solo borrowing capacity (4.5× gross income = £567,000) falls slightly short of the outstanding mortgage balance (£590,000), which may present a practical challenge in keep-home scenarios.",
+                  body: "The analysis models settlement scenarios under a 45/55 non-pension asset division assumption, with the larger share directed to Party B. Under Sell & Split, Party A receives £99,203 liquid capital and Party B receives £121,247. Keep-home scenarios create stronger pressure: Party A faces a £59,248 buyout funding gap, while Party B's estimated solo borrowing capacity (£153,000) is well below the £312,000 mortgage balance.",
                 },
                 {
                   heading: "Basis of Preparation",
@@ -508,12 +508,12 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
           <div className="flex items-center gap-3">
             <div className="flex-1 border-t border-dashed border-gray-200" />
             <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
-              <Sparkles className="w-3 h-3" /> Guided Intelligence Report
+              <Sparkles className="w-3 h-3" /> Settlement Reality Check Report
             </div>
             <div className="flex-1 border-t border-dashed border-gray-200" />
           </div>
 
-          {/* ── Guided Intelligence Report ── */}
+          {/* ── Settlement Reality Check Report ── */}
           <section>
             <div className="bg-gradient-to-r from-[hsl(220_52%_22%)] to-[hsl(220_52%_16%)] rounded-xl px-5 py-4 mb-5 flex items-center justify-between flex-wrap gap-3">
               <div className="flex items-center gap-3">
@@ -521,8 +521,8 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                   <Sparkles className="w-4 h-4 text-gold" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-white uppercase tracking-widest">Guided Intelligence Report</h3>
-                  <p className="text-[10px] text-white/40 mt-0.5">Intelligently generated plain-English interpretation of your figures</p>
+                  <h3 className="text-xs font-bold text-white uppercase tracking-widest">Settlement Reality Check Report</h3>
+                  <p className="text-[10px] text-white/40 mt-0.5">Plain-English position check generated from your modelled figures</p>
                 </div>
               </div>
               <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full shrink-0">Confidence: Medium</span>
@@ -533,7 +533,7 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
               <div className="border-l-4 border-l-blue-800/40 pl-4 py-1">
                 <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Plain-English Overview</p>
                 <p className="text-sm text-gray-700 leading-relaxed">
-                  The combined estate is dominated by the family home (£675,000), but the outstanding mortgage of £590,000 — representing an 87% loan-to-value ratio — means the net equity available for division is only £71,500 after estimated sale costs. When combined with liquid savings of £108,000, the total distributable pool is £179,500. The most financially balanced outcome appears to be Sell & Split, where both parties receive equal capital and maintain positive monthly cashflows. Scenarios involving one party retaining the home introduce significant pressure due to the high mortgage relative to individual incomes.
+                  The total assets in this model amount to £750,000 with liabilities of £327,500, leaving net home equity of £158,450 after sale costs. Liquid assets before selling the home total £62,000, creating a non-pension settlement pool of £220,450. Party A has a higher income (£78,000 gross) compared to Party B (£34,000 gross), and the model shows that keeping the home can quickly create cashflow and funding pressure despite the property having real equity.
                 </p>
                 <p className="text-xs text-gray-400 italic mt-2">Note: This is an illustrative summary based on fictional figures. Not legal, tax, or financial advice.</p>
               </div>
@@ -542,10 +542,10 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                 <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">What Stands Out</p>
                 <ul className="space-y-2">
                   {[
-                    "The outstanding mortgage of £590,000 on a £675,000 property represents an 87% loan-to-value ratio — leaving net equity of only £71,500 after estimated sale costs. Both parties start from a significantly weaker capital position than the headline asset value of £843,000 suggests.",
-                    "Party A earns more than twice Party B's gross income (£126,000 vs £60,000). This income disparity materially affects each party's ability to sustain housing costs and monthly outgoings after settlement.",
-                    "Party A's estimated solo borrowing capacity (4.5× gross = £567,000) falls £23,000 short of the outstanding mortgage balance (£590,000). A sole transfer to Party A's name may require a capital reduction or additional income evidence before lender approval.",
-                    "The pension values entered differ significantly (£42,000 for Party A vs £18,000 for Party B). The £24,000 gap may warrant review by a pension specialist, particularly if either pension is a defined benefit scheme where CETVs can understate true value.",
+                    "The outstanding mortgage is £312,000 on a £485,000 property, producing a 64% loan-to-value ratio and £158,450 of net equity after estimated sale costs.",
+                    "Party A's net monthly income is approximately £4,583, significantly higher than Party B's £2,333.",
+                    "Party B starts with a negative monthly budget position of around £500 before any mortgage costs, while Party A has a positive surplus of around £1,333.",
+                    "Pension CETVs differ materially: £155,000 for Party A versus £48,000 for Party B, before the modelled pension split.",
                   ].map((point, i) => (
                     <li key={i} className="flex gap-2 text-sm text-gray-700">
                       <span className="text-yellow-500/70 shrink-0 mt-0.5">•</span>
@@ -559,9 +559,9 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                 <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Pressure Points</p>
                 <ul className="space-y-2">
                   {[
-                    "Under 'B Keeps Home', Party B faces an estimated monthly deficit of £978 — meaning outgoings exceed net income each month. With only £18,250 in liquid capital, the model projects capital depletion within approximately 2 years. This scenario appears financially unsustainable without an additional income source or significant reduction in outgoings.",
-                    "Under 'A Keeps Home', Party A retains only £18,250 in liquid capital after funding the buyout — approximately 2.8 months of net income. This leaves very limited buffer for unexpected costs, legal fees, or early repayment charges.",
-                    "The mortgage balance slightly exceeds Party A's standard solo borrowing capacity. Lender affordability would need to be formally assessed before agreeing any keep-home arrangement.",
+                    "Party B faces a £37,203 funding gap to keep the home and the £1,824 monthly mortgage exceeds their estimated solo borrowing capacity.",
+                    "Party A can support the existing mortgage on a simple income-multiple check, but keeping the home still creates a £59,248 buyout funding gap and modelled reserve depletion in year 1.",
+                    "Party B's reserves deplete in year 8 under Sell & Split and in year 1 if Party B keeps the home, showing how a larger headline asset position can still leave cashflow pressure.",
                   ].map((point, i) => (
                     <li key={i} className="flex gap-2 text-sm text-gray-700">
                       <span className="text-rose-400 shrink-0 mt-0.5 font-bold">!</span>
@@ -571,6 +571,56 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                 </ul>
               </div>
 
+              <div className="border-l-4 border-l-yellow-500/50 pl-4 py-1">
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                  <Shield className="w-3 h-3 text-yellow-600" /> Settlement Position Check
+                </p>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {[
+                    {
+                      label: "Missing values",
+                      items: [
+                        "More precise post-separation expense details to replace starting estimates.",
+                        "Verification of property sale costs, transfer fees, credit-card and car-finance repayment plans.",
+                      ],
+                    },
+                    {
+                      label: "Left-short risk",
+                      items: [
+                        "Party B's reserves deplete by year 8 or year 1 depending on the scenario.",
+                        "Party A's reserves deplete in year 1 if they keep the home because the buyout and mortgage remove the cash buffer.",
+                      ],
+                    },
+                    {
+                      label: "Offer trade-offs",
+                      items: [
+                        "Party A trades liquid capital for home equity if keeping the property.",
+                        "Party B receives a larger modelled pension/capital allocation, but mortgage affordability and monthly deficit remain pressure points.",
+                      ],
+                    },
+                    {
+                      label: "Questions before agreeing",
+                      items: [
+                        "Can the buyout funding gaps (£59,248 for Party A, £37,203 for Party B) be realistically covered?",
+                        "How will child maintenance, actual living costs and debt repayments affect the monthly budgets?",
+                      ],
+                    },
+                  ].map(group => (
+                    <div key={group.label} className="rounded-lg border border-gray-100 bg-gray-50/70 p-3">
+                      <p className="text-xs font-semibold text-gray-600 mb-1.5">{group.label}</p>
+                      <ul className="space-y-1">
+                        {group.items.map((item, i) => (
+                          <li key={i} className="flex gap-2 text-sm text-gray-700 leading-relaxed">
+                            <span className="text-yellow-600 shrink-0">•</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="border-l-4 border-l-cyan-400/50 pl-4 py-1">
                 <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Questions for Professionals</p>
                 <div className="space-y-5">
@@ -578,24 +628,24 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                     {
                       icon: Scale, color: "text-primary/60", label: "Solicitor / Mediator",
                       questions: [
-                        "Under 'B Keeps Home', Party B faces a projected monthly deficit of £978 and capital depletion within approximately 2 years. Should any negotiated settlement include a minimum capital floor to protect against this outcome?",
-                        "The income disparity between parties (£126,000 vs £60,000 gross) is significant. Should spousal maintenance be considered alongside the capital settlement — and if so, what factors typically influence the amount and duration in cases with this income profile?",
-                        "Party A's pension CETV of £42,000 is more than double Party B's (£18,000). Would pension sharing or pension offsetting be more appropriate given the modest overall estate?",
+                        "Given Party A's gross income of £78,000 and Party B's £34,000, how might the income disparity affect maintenance or settlement discussions?",
+                        "How should the pension CETVs (£155,000 for Party A and £48,000 for Party B) be considered alongside the capital split?",
+                        "How can the buyout funding gaps of £59,248 and £37,203 be addressed legally and practically?",
                       ],
                     },
                     {
                       icon: Home, color: "text-emerald-600", label: "Mortgage Broker",
                       questions: [
-                        "Party A earns £126,000 gross — suggesting a solo borrowing capacity of approximately £567,000 (4.5× income). The outstanding balance is £590,000, which is £23,000 above this threshold. What options exist to bring the mortgage within a standard lending multiple?",
-                        "If the property is sold and Party B receives £89,750 in capital (Sell & Split), what would that support in terms of an independent purchase, and at what property value and loan-to-value?",
-                        "Does the existing mortgage carry an early repayment charge, and if so, how should this be factored into the net equity figure before settlement is finalised?",
+                        "Is Party A's estimated borrowing capacity of around £351,000 enough to cover the £312,000 mortgage plus any buyout borrowing?",
+                        "Given Party B's estimated borrowing capacity of around £153,000, what realistic mortgage options exist if they want to keep or rehouse?",
+                        "How sustainable is a £1,824 monthly mortgage payment against net monthly incomes of £4,583 and £2,333?",
                       ],
                     },
                     {
                       icon: PiggyBank, color: "text-violet-600", label: "Pension Expert",
                       questions: [
-                        "The CETVs entered are £42,000 (Party A) and £18,000 (Party B). Are these figures recent and do they represent the full actuarial value? If either pension is a defined benefit scheme, the CETV may significantly understate the true long-term benefit.",
-                        "Given the £24,000 gap in pension values, would pension offsetting or a pension sharing order produce a more practical and tax-efficient outcome?",
+                        "How can pension CETVs of £155,000 for Party A and £48,000 for Party B be divided or offset alongside housing needs?",
+                        "Are there alternative pension sharing options that improve Party B's long-term position without worsening short-term cashflow?",
                       ],
                     },
                   ].map(g => (
@@ -621,13 +671,13 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                 <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Missing Information & Model Confidence</p>
                 <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full border border-amber-400 text-amber-700 bg-amber-50 inline-block mb-2">Confidence: Medium</span>
                 <p className="text-sm text-gray-700 leading-relaxed">
-                  This sample model has medium confidence. Core income, property equity, liquid savings, and pension CETVs are included. However, the following are not modelled: transaction costs beyond the 2% sale cost estimate (legal fees, stamp duty on a new purchase, moving costs, early repayment charges), childcare costs beyond what was entered, and any actuarial pension assessment. The pension CETV figures are nominal values only — pension type, scheme rules, and normal retirement age are not assessed.
+                  This sample model has medium confidence. Core property value, mortgage balance, incomes and pension CETVs are included, but post-separation expenses use starting estimates rather than actual figures. Credit-card and car-finance repayment plans, precise transaction costs, and the full effect of child maintenance should be checked before relying on the runway and affordability figures.
                 </p>
               </div>
             </div>
 
             <p className="text-[10px] text-gray-400 italic mt-3">
-              This guided summary is illustrative only. It is not legal, tax, or financial advice. Always consult qualified professionals before making financial decisions.
+              This Settlement Reality Check Report is illustrative only. It is not legal, tax, or financial advice. Always consult qualified professionals before making financial decisions.
             </p>
           </section>
 
@@ -646,21 +696,22 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
                   <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-3">Assets</p>
-                  <Row label="Family Home" value="£675,000" sub="primary residence" />
-                  <Row label="Party A Pension (CETV)" value="£42,000" />
-                  <Row label="Party B Pension (CETV)" value="£18,000" />
-                  <Row label="Joint Savings" value="£58,000" />
-                  <Row label="Investments (ISA)" value="£50,000" />
-                  <Row label="Total Assets" value="£843,000" bold />
+                  <Row label="Family Home" value="£485,000" sub="primary residence" />
+                  <Row label="Party A Pension (CETV)" value="£155,000" />
+                  <Row label="Party B Pension (CETV)" value="£48,000" />
+                  <Row label="Joint Savings" value="£38,000" />
+                  <Row label="Investments (ISA)" value="£24,000" />
+                  <Row label="Total Assets" value="£750,000" bold />
                 </div>
                 <div>
                   <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-3">Liabilities & Net Position</p>
-                  <Row label="Outstanding Mortgage" value="(£590,000)" red />
-                  <Row label="Total Liabilities" value="(£590,000)" bold red />
+                  <Row label="Outstanding Mortgage" value="(£312,000)" red />
+                  <Row label="Credit Cards & Car Finance" value="(£15,500)" red />
+                  <Row label="Total Liabilities" value="(£327,500)" bold red />
                   <div className="mt-4 pt-3 border-t border-gray-200">
-                    <Row label="Combined Net Worth" value="£253,000" bold />
-                    <Row label="Net Property Equity (est. 2% sale costs)" value="£71,500" />
-                    <Row label="Distributable Settlement Pool" value="£179,500" bold sub="equity + liquid savings" green />
+                    <Row label="Combined Net Worth" value="£422,500" bold />
+                    <Row label="Net Property Equity (est. sale costs)" value="£158,450" />
+                    <Row label="Non-Pension Settlement Pool" value="£220,450" bold sub="equity + liquid savings" green />
                   </div>
                 </div>
               </div>
@@ -673,8 +724,8 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
               <div className="grid sm:grid-cols-2 gap-6">
                 {[
-                  { label: "Party A", gross: "£126,000", allowance: "£0", note: "tapered — income above £125,140", tax: "(£40,232)", ni: "(£7,548)", net: "£78,220", monthly: "≈ £6,518" },
-                  { label: "Party B", gross: "£60,000",  allowance: "£12,570", note: "", tax: "(£11,432)", ni: "(£4,284)", net: "£44,284", monthly: "≈ £3,690" },
+                  { label: "Party A", gross: "£78,000", allowance: "£12,570", note: "", tax: "(est.)", ni: "(est.)", net: "£55,000", monthly: "≈ £4,583" },
+                  { label: "Party B", gross: "£34,000", allowance: "£12,570", note: "", tax: "(est.)", ni: "(est.)", net: "£28,000", monthly: "≈ £2,333" },
                 ].map(col => (
                   <div key={col.label}>
                     <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-3">{col.label}</p>
@@ -760,7 +811,7 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
 
           {/* ── 4. Scenario Comparison ── */}
           <section>
-            <SectionHeader title="4. Scenario Comparison — Executive Summary" description="Side-by-side view of all settlement options: capital each party receives, mortgage obligations, and 5-year reserve sustainability." />
+            <SectionHeader title="4. Scenario Comparison — Executive Summary" description="Side-by-side view of all settlement options: capital each party receives, mortgage obligations, and 10-year reserve sustainability." />
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
               <p className="text-xs text-gray-500 mb-4">Split assumption: 50% / 50%. Pension split: 50% / 50%. Sale costs estimated at 2% of property value.</p>
               <div className="overflow-x-auto">
@@ -782,29 +833,29 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                   </thead>
                   <tbody>
                     {[
-                      { label: "Liquid Capital — A",      values: ["£89,750",   "£18,250",    "£89,750",    "£54,000"] },
-                      { label: "Liquid Capital — B",      values: ["£89,750",   "£89,750",    "£18,250",    "£54,000"] },
-                      { label: "Pension (CETV) — A",      values: ["£30,000",   "£30,000",    "£30,000",    "£30,000"] },
-                      { label: "Pension (CETV) — B",      values: ["£30,000",   "£30,000",    "£30,000",    "£30,000"] },
-                      { label: "Total Net Position — A",  values: ["£119,750",  "£133,250†",  "£119,750",   "£140,000‡"], bold: true },
-                      { label: "Total Net Position — B",  values: ["£119,750",  "£119,750",   "£133,250†",  "£140,000‡"], bold: true },
-                      { label: "Monthly Mortgage — A",    values: ["None",      "£3,280",     "None",       "£1,640"] },
-                      { label: "Monthly Mortgage — B",    values: ["None",      "None",       "£3,280",     "£1,640"] },
-                      { label: "Monthly Surplus — A",     values: ["+£2,656",   "+£1,026",    "+£2,656",    "+£2,666"], green: true },
-                      { label: "Monthly Surplus — B",     values: ["+£652",     "+£652",      "(£978)",     "+£662"],   mixed: true },
-                      { label: "CRI Score — A",           values: ["78/100",    "52/100",     "82/100",     "71/100"] },
-                      { label: "CRI Score — B",           values: ["63/100",    "71/100",     "22/100",     "54/100"] },
-                      { label: "5-Yr Reserves — A",       values: ["Sustained", "Sustained",  "Sustained",  "Sustained"], sustain: true },
-                      { label: "5-Yr Reserves — B",       values: ["Sustained", "Sustained",  "Yr 2 depletion", "Sustained"], sustainMixed: true },
+                      { label: "Liquid Capital — A",      values: ["£99,203",   "£0",         "£99,203",    "£74,000"] },
+                      { label: "Liquid Capital — B",      values: ["£121,247",  "£121,247",   "£0",         "£62,000"] },
+                      { label: "Pension (CETV) — A",      values: ["£91,350",   "£91,350",    "£91,350",    "£91,350"] },
+                      { label: "Pension (CETV) — B",      values: ["£111,650",  "£111,650",   "£111,650",   "£111,650"] },
+                      { label: "Total Net Position — A",  values: ["£190,553",  "£264,350†",  "£190,553",   "£205,000‡"], bold: true },
+                      { label: "Total Net Position — B",  values: ["£232,897",  "£232,897",   "£284,650†",  "£250,000‡"], bold: true },
+                      { label: "Monthly Mortgage — A",    values: ["None",      "£1,824",     "None",       "None"] },
+                      { label: "Monthly Mortgage — B",    values: ["None",      "None",       "£1,824",     "£1,824"] },
+                      { label: "Monthly Surplus — A",     values: ["+£1,333",   "(£491)",     "+£1,333",    "+£1,333"], mixed: true },
+                      { label: "Monthly Surplus — B",     values: ["(£500)",    "(£500)",     "(£2,324)",   "(£980)"],  mixed: true },
+                      { label: "CRI Score — A",           values: ["76/100",    "32/100",     "76/100",     "70/100"] },
+                      { label: "CRI Score — B",           values: ["48/100",    "48/100",     "18/100",     "38/100"] },
+                      { label: "10-Yr Reserves — A",      values: ["Sustained", "Yr 1 depletion", "Sustained", "Sustained"], sustainMixed: true },
+                      { label: "10-Yr Reserves — B",      values: ["Yr 8 depletion", "Yr 8 depletion", "Yr 1 depletion", "Yr 4 depletion"], sustainMixed: true },
                     ].map((row, i) => (
                       <tr key={i} className={`border-b border-gray-100 ${row.bold ? "bg-gray-50" : i % 2 === 0 ? "" : "bg-gray-50/40"}`}>
                         <td className={`py-1.5 px-2 text-gray-600 ${row.bold ? "font-semibold" : ""}`}>{row.label}</td>
                         {row.values.map((v, vi) => (
                           <td key={vi} className={`py-1.5 px-2 text-right tabular-nums ${row.bold ? "font-semibold" : ""} ${
-                            row.green ? "text-emerald-700" :
-                            row.mixed ? (v.startsWith("(") ? "text-rose-600" : "text-emerald-700") :
-                            row.sustain ? "text-emerald-600" :
-                            row.sustainMixed ? (v.includes("Yr") ? "text-amber-600" : "text-emerald-600") :
+                            ("green" in row && row.green) ? "text-emerald-700" :
+                            ("mixed" in row && row.mixed) ? (v.startsWith("(") ? "text-rose-600" : "text-emerald-700") :
+                            ("sustain" in row && row.sustain) ? "text-emerald-600" :
+                            ("sustainMixed" in row && row.sustainMixed) ? (v.includes("Yr") ? "text-amber-600" : "text-emerald-600") :
                             ""
                           }`}>{v}</td>
                         ))}
@@ -814,7 +865,7 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                 </table>
               </div>
               <p className="text-[10px] text-gray-400 mt-3">
-                † Includes £85,000 gross home equity (property value minus mortgage balance, before sale). ‡ Includes estimated deferred equity of ~£56,000 each after 3-year Mesher Order (2% annual growth assumed).
+                † Includes £173,000 gross home equity before sale costs. ‡ Illustrative deferred-sale values are estimated for display only.
               </p>
             </div>
           </section>
@@ -824,17 +875,17 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
             <SectionHeader title="5. Sell & Split — Detail" accent="#2563EB" description="A full breakdown of this settlement option: starting positions, monthly cashflow, sustainability, and key indicators." />
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
               <StatStrip color="#2563EB" items={[
-                { label: "A — Starting Capital", value: "£89,750" },
-                { label: "B — Starting Capital", value: "£89,750" },
-                { label: "A — Monthly Surplus",  value: "+£2,656/mo" },
-                { label: "B — Monthly Surplus",  value: "+£652/mo" },
-                { label: "A CRI Score",           value: "78/100" },
-                { label: "B CRI Score",           value: "63/100" },
+                { label: "A — Starting Capital", value: "£99,203" },
+                { label: "B — Starting Capital", value: "£121,247" },
+                { label: "A — Monthly Surplus",  value: "+£1,333/mo" },
+                { label: "B — Monthly Surplus",  value: "(£500/mo)" },
+                { label: "A CRI Score",           value: "76/100" },
+                { label: "B CRI Score",           value: "48/100" },
               ]} />
               <div>
                 <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Summary</h4>
                 <p className="text-sm text-gray-700 leading-relaxed">
-                  Under Sell & Split, the property is sold and net proceeds are divided equally. Both parties receive equal liquid capital (£89,750 each) and neither retains a mortgage. Both parties maintain a positive monthly surplus. Party A's significantly higher income produces a much stronger cash position (+£2,656/mo vs +£652/mo), but Party B's surplus, while smaller, remains positive throughout the projection period.
+                  Under Sell & Split, the property is sold and the non-pension settlement pool is split 45/55. Party A receives £99,203 of liquid capital and Party B receives £121,247, with neither party retaining the mortgage. Party A's income supports a monthly surplus, but Party B remains around £500 short each month before any further adjustments, which is why the report flags this as a useful negotiation and professional-advice point.
                 </p>
               </div>
               <Collapsible title="Source of Funds Breakdown" defaultOpen>
@@ -843,22 +894,20 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                     {
                       label: "Party A", color: "text-blue-600",
                       rows: [
-                        { l: "Share of property equity (50%)", v: "£35,750" },
-                        { l: "Share of joint savings (50%)",   v: "£29,000" },
-                        { l: "Share of ISA (50%)",             v: "£25,000" },
-                        { l: "Pension (CETV — 50%)",           v: "£30,000" },
+                        { l: "Share of net home equity (45%)", v: "£71,303" },
+                        { l: "Share of liquid assets (45%)",   v: "£27,900" },
+                        { l: "Pension allocation",             v: "£91,350" },
                       ],
-                      net: "£89,750",
+                      net: "£99,203",
                     },
                     {
                       label: "Party B", color: "text-emerald-600",
                       rows: [
-                        { l: "Share of property equity (50%)", v: "£35,750" },
-                        { l: "Share of joint savings (50%)",   v: "£29,000" },
-                        { l: "Share of ISA (50%)",             v: "£25,000" },
-                        { l: "Pension (CETV — 50%)",           v: "£30,000" },
+                        { l: "Share of net home equity (55%)", v: "£87,148" },
+                        { l: "Share of liquid assets (55%)",   v: "£34,100" },
+                        { l: "Pension allocation",             v: "£111,650" },
                       ],
-                      net: "£89,750",
+                      net: "£121,247",
                     },
                   ].map(col => (
                     <div key={col.label}>
@@ -883,8 +932,8 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
               <Collapsible title="Monthly Financial Position">
                 <div className="grid sm:grid-cols-2 gap-6 text-sm">
                   {[
-                    { label: "Party A", net: "£6,518/mo", cms: "Payable: (£412/mo)", expenses: "(£3,600/mo)", surplus: "+£2,656/mo", green: true },
-                    { label: "Party B", net: "£3,690/mo", cms: "Received: +£412/mo", expenses: "(£3,450/mo)", surplus: "+£652/mo", green: true },
+                    { label: "Party A", net: "£4,583/mo", cms: "Payable: estimated", expenses: "(£3,250/mo)", surplus: "+£1,333/mo", green: true },
+                    { label: "Party B", net: "£2,333/mo", cms: "Received: estimated", expenses: "(£2,833/mo)", surplus: "(£500/mo)", green: false },
                   ].map(p => (
                     <div key={p.label}>
                       <p className="font-medium text-gray-700 mb-1">{p.label}</p>
@@ -896,11 +945,11 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                   ))}
                 </div>
               </Collapsible>
-              <Collapsible title="Reserve Duration (5-Year Projection)">
+              <Collapsible title="Reserve Duration (10-Year Projection)">
                 <div className="grid sm:grid-cols-2 gap-4 text-sm">
                   {[
-                    { label: "Party A", start: "£89,750", lowest: "£89,750", status: "Sustained", green: true },
-                    { label: "Party B", start: "£89,750", lowest: "£89,750", status: "Sustained", green: true },
+                    { label: "Party A", start: "£99,203", lowest: "£99,203", status: "Sustained", green: true },
+                    { label: "Party B", start: "£121,247", lowest: "£0", status: "Yr 8 depletion", green: false },
                   ].map(p => (
                     <div key={p.label}>
                       <p className="font-medium text-gray-700 mb-1">{p.label}</p>
@@ -921,17 +970,17 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
             <SectionHeader title="6. A Keeps Home — Detail" accent="#10B981" description="A full breakdown of this settlement option: starting positions, monthly cashflow, sustainability, and key indicators." />
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
               <StatStrip color="#10B981" items={[
-                { label: "A — Starting Capital", value: "£18,250" },
-                { label: "B — Starting Capital", value: "£89,750" },
-                { label: "A — Monthly Surplus",  value: "+£1,026/mo" },
-                { label: "B — Monthly Surplus",  value: "+£652/mo" },
-                { label: "A CRI Score",           value: "52/100" },
-                { label: "B CRI Score",           value: "71/100" },
+                { label: "A — Starting Capital", value: "£0" },
+                { label: "B — Starting Capital", value: "£121,247" },
+                { label: "A — Monthly Surplus",  value: "(£491/mo)" },
+                { label: "B — Monthly Surplus",  value: "(£500/mo)" },
+                { label: "A CRI Score",           value: "32/100" },
+                { label: "B CRI Score",           value: "48/100" },
               ]} />
               <div>
                 <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Summary</h4>
                 <p className="text-sm text-gray-700 leading-relaxed">
-                  Party A retains the family home and funds a buyout of Party B's 50% equity share (£35,750) from liquid assets. After the buyout, Party A is left with £18,250 in cash — approximately 2.8 months of net income. The monthly mortgage of approximately £3,280 represents 50% of Party A's net monthly income. The model indicates the mortgage balance (£590,000) slightly exceeds Party A's estimated solo borrowing capacity (4.5× gross = £567,000), which may present a challenge when applying to transfer the mortgage into sole name.
+                  Party A keeps the family home, retains £173,000 of gross home equity and takes on the £1,824 monthly mortgage. The headline net position looks higher for Party A, but the model shows no liquid capital left after the buyout and a £59,248 funding gap. This is exactly the kind of option that can look attractive on paper while creating early reserve depletion.
                 </p>
               </div>
               <Collapsible title="Source of Funds Breakdown" defaultOpen>
@@ -940,21 +989,20 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                     {
                       label: "Party A", color: "text-emerald-600",
                       rows: [
-                        { l: "Share of liquid assets (50%)",        v: "£54,000" },
-                        { l: "Buyout payable to B (equity share)",   v: "(£35,750)", red: true },
-                        { l: "Home equity retained (in property)",   v: "£71,500", note: true },
-                        { l: "Pension (CETV — 50%)",                 v: "£30,000" },
+                        { l: "Liquid assets after buyout",           v: "£0" },
+                        { l: "Buyout funding gap",                   v: "(£59,248)", red: true },
+                        { l: "Home equity retained (in property)",   v: "£173,000", note: true },
+                        { l: "Pension allocation",                   v: "£91,350" },
                       ],
-                      net: "£18,250",
+                      net: "£0",
                     },
                     {
                       label: "Party B", color: "text-blue-600",
                       rows: [
-                        { l: "Share of liquid assets (50%)", v: "£54,000" },
-                        { l: "Buyout received from A",       v: "£35,750", green: true },
-                        { l: "Pension (CETV — 50%)",         v: "£30,000" },
+                        { l: "Liquid capital received",      v: "£121,247" },
+                        { l: "Pension allocation",           v: "£111,650" },
                       ],
-                      net: "£89,750",
+                      net: "£121,247",
                     },
                   ].map(col => (
                     <div key={col.label}>
@@ -983,21 +1031,21 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                 <div className="grid sm:grid-cols-2 gap-5">
                   {[
                     {
-                      label: "Party A", score: 52, color: "#F59E0B",
+                      label: "Party A", score: 32, color: "#F43F5E",
                       drivers: [
-                        { label: "Mortgage-to-net-income ratio",   value: "50% (£3,280 of £6,518)", status: "warn" },
-                        { label: "Liquid capital post-settlement", value: "Low (£18,250 = 2.8mo)", status: "warn" },
-                        { label: "Monthly surplus",                value: "+£1,026/mo",             status: "pass" },
-                        { label: "5-year reserve duration",        value: "Sustained",              status: "pass" },
+                        { label: "Mortgage-to-net-income ratio",   value: "40% (£1,824 of £4,583)", status: "warn" },
+                        { label: "Liquid capital post-settlement", value: "None after buyout",      status: "fail" },
+                        { label: "Monthly surplus",                value: "(£491/mo)",              status: "fail" },
+                        { label: "10-year reserve duration",       value: "Yr 1 depletion",         status: "fail" },
                       ],
                     },
                     {
-                      label: "Party B", score: 71, color: "#10B981",
+                      label: "Party B", score: 48, color: "#F59E0B",
                       drivers: [
-                        { label: "Housing cost (renting)",         value: "Manageable",             status: "pass" },
-                        { label: "Liquid capital post-settlement", value: "Strong (£89,750)",        status: "pass" },
-                        { label: "Monthly surplus",                value: "+£652/mo",               status: "pass" },
-                        { label: "5-year reserve duration",        value: "Sustained",              status: "pass" },
+                        { label: "Housing cost (renting)",         value: "Needs testing",          status: "warn" },
+                        { label: "Liquid capital post-settlement", value: "£121,247",               status: "pass" },
+                        { label: "Monthly surplus",                value: "(£500/mo)",              status: "fail" },
+                        { label: "10-year reserve duration",       value: "Yr 8 depletion",         status: "warn" },
                       ],
                     },
                   ].map(party => (
@@ -1024,11 +1072,11 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                 </div>
                 <p className="text-[10px] text-gray-400 italic mt-3">Illustrative model output. Not a suitability or lending assessment.</p>
               </Collapsible>
-              <Collapsible title="Reserve Duration (5-Year Projection)">
+              <Collapsible title="Reserve Duration (10-Year Projection)">
                 <div className="grid sm:grid-cols-2 gap-4 text-sm">
                   {[
-                    { label: "Party A", start: "£18,250", lowest: "£18,250", status: "Sustained", note: "Capital grows slowly from a low base. An unexpected cost in Year 1 or 2 could place significant pressure on finances.", green: true },
-                    { label: "Party B", start: "£89,750", lowest: "£89,750", status: "Sustained", note: "Positive trajectory throughout. Monthly surplus allows for continued capital growth.", green: true },
+                    { label: "Party A", start: "£0", lowest: "(£4,800)", status: "Yr 1 depletion", note: "The property is retained, but liquid reserves are effectively exhausted immediately.", green: false },
+                    { label: "Party B", start: "£121,247", lowest: "£0", status: "Yr 8 depletion", note: "Capital lasts longer, but the monthly deficit steadily erodes the cash buffer.", green: false },
                   ].map(p => (
                     <div key={p.label}>
                       <p className="font-medium text-gray-700 mb-1">{p.label}</p>
@@ -1046,30 +1094,30 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                 <div className="grid sm:grid-cols-2 gap-6 text-sm">
                   <div>
                     <p className="font-medium text-gray-700 mb-1">Party A</p>
-                    <p className="text-gray-500">Net Monthly Income: £6,518/mo</p>
-                    <p className="text-gray-500">Mortgage Obligation: £3,280/mo</p>
-                    <p className="text-gray-500">Child Maintenance (payable): (£412/mo)</p>
-                    <p className="text-gray-500">Total Expenses (non-housing): (£1,800/mo)</p>
-                    <p className="font-semibold text-emerald-600">Monthly Surplus: +£1,026/mo</p>
+                    <p className="text-gray-500">Net Monthly Income: £4,583/mo</p>
+                    <p className="text-gray-500">Mortgage Obligation: £1,824/mo</p>
+                    <p className="text-gray-500">Child Maintenance: estimated separately</p>
+                    <p className="text-gray-500">Total Expenses: (£3,250/mo)</p>
+                    <p className="font-semibold text-rose-600">Monthly Surplus: (£491/mo)</p>
                   </div>
                   <div>
                     <p className="font-medium text-gray-700 mb-1">Party B</p>
-                    <p className="text-gray-500">Net Monthly Income: £3,690/mo</p>
-                    <p className="text-gray-500">Child Maintenance (received): +£412/mo</p>
-                    <p className="text-gray-500">Rent (estimated): (£1,650/mo)</p>
-                    <p className="text-gray-500">Total Expenses (non-housing): (£1,800/mo)</p>
-                    <p className="font-semibold text-emerald-600">Monthly Surplus: +£652/mo</p>
+                    <p className="text-gray-500">Net Monthly Income: £2,333/mo</p>
+                    <p className="text-gray-500">Child Maintenance: estimated separately</p>
+                    <p className="text-gray-500">Rent / housing: to confirm</p>
+                    <p className="text-gray-500">Total Expenses: (£2,833/mo)</p>
+                    <p className="font-semibold text-rose-600">Monthly Surplus: (£500/mo)</p>
                   </div>
                 </div>
               </Collapsible>
               <Collapsible title="Indicative Lending Capacity Benchmark">
                 <div className="text-sm text-gray-600 space-y-0.5">
-                  <p className="text-amber-600 font-medium">Borderline — approaching lending threshold</p>
-                  <p>Mortgage Requirement: £590,000</p>
-                  <p>Income Multiple: 4.7× <span className="text-xs text-gray-400">(benchmark: 4.5× max)</span></p>
-                  <p>Available Deposit: £71,500 (11%)</p>
-                  <p>Mortgage-to-Net-Income Ratio: 50%</p>
-                  <p className="text-xs text-gray-400 mt-1">Party A's gross income of £126,000 supports an estimated solo borrowing capacity of approximately £567,000. The outstanding balance of £590,000 exceeds this threshold by approximately £23,000. A capital reduction or additional income evidence may be required before lender approval of a sole transfer.</p>
+                  <p className="text-amber-600 font-medium">Mortgage plausible, buyout funding not solved</p>
+                  <p>Mortgage Requirement: £312,000</p>
+                  <p>Income Multiple: 4.0× <span className="text-xs text-gray-400">(benchmark: 4.5× max)</span></p>
+                  <p>Buyout Funding Gap: £59,248</p>
+                  <p>Mortgage-to-Net-Income Ratio: 40%</p>
+                  <p className="text-xs text-gray-400 mt-1">Party A's gross income of £78,000 supports an estimated borrowing capacity of approximately £351,000, which covers the existing mortgage but may not cover the mortgage plus buyout funding. Formal lender assessment would be needed.</p>
                   <p className="text-xs text-gray-400 italic mt-1">Generalised income multiple illustration only. Not a lending assessment, mortgage advice, or credit approval indication.</p>
                 </div>
               </Collapsible>
@@ -1078,10 +1126,10 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                 <p className="text-[10px] text-gray-400 italic mb-2">Structured reflection points based on modelled outputs. Not recommendations or advice.</p>
                 <ul className="space-y-1">
                   {[
-                    "Mortgage obligations represent 50% of Party A's net monthly income. Income sustainability over the next 3–5 years may warrant further assessment.",
-                    "Party A's liquid capital of £18,250 covers approximately 2.8 months of net income. Contingency planning may warrant further assessment.",
-                    "The mortgage balance slightly exceeds Party A's estimated solo borrowing capacity by £23,000. Formal lender affordability assessment would be required before agreeing this arrangement.",
-                    "Party A's total net worth is concentrated primarily in property (85%). Reduced liquidity may be a relevant consideration for short-term financial flexibility.",
+                    "Mortgage obligations represent around 40% of Party A's net monthly income before other costs.",
+                    "Party A has no liquid capital left after the buyout in this sample, so contingency planning becomes central.",
+                    "The existing mortgage may be supportable, but the £59,248 buyout funding gap needs a realistic source.",
+                    "Party A's value is concentrated in the property, reducing short-term flexibility even where total net position looks higher.",
                   ].map((c, i) => (
                     <li key={i} className="text-sm text-gray-600 flex items-start gap-1.5">
                       <span className="text-gray-400 mt-0.5 shrink-0">{i + 1}.</span>
@@ -1098,9 +1146,9 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
             <SectionHeader title="Assumption Review Prompts" description="Questions to help stress-test the key assumptions — not recommendations, just structured prompts." />
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-3">
               {[
-                { q: "Are income projections stable?", a: "The model assumes Party A earns £126,000/yr and Party B earns £60,000/yr. Income stability over the projection period may warrant independent verification." },
+                { q: "Are income projections stable?", a: "The model assumes Party A earns £78,000/yr and Party B earns £34,000/yr. Income stability over the projection period may warrant independent verification." },
                 { q: "Are expense projections conservative?", a: "Expenses are inflated at 2.0% per year. Post-separation costs often differ materially from current spending patterns — particularly for the party moving into rented accommodation." },
-                { q: "Would a 1% interest rate increase materially affect comfort?", a: "The current model uses a 4.5% mortgage rate. Under A Keeps Home, a 1% rate rise would increase the monthly mortgage to approximately £3,560/mo — reducing Party A's monthly surplus to approximately £746/mo." },
+                { q: "Would a 1% interest rate increase materially affect comfort?", a: "The current model uses a 4.5% mortgage rate. Under A Keeps Home, a 1% rate rise would increase the monthly mortgage and deepen Party A's projected deficit." },
                 { q: "Have all material assets and liabilities been included?", a: "Additional accounts, liabilities, or income sources not included in this model may be relevant to the overall financial position. Early repayment charges on the mortgage are not separately modelled." },
               ].map(({ q, a }) => (
                 <div key={q} className="text-sm text-gray-600">
@@ -1117,11 +1165,11 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
               <div className="grid sm:grid-cols-2 gap-x-8 gap-y-0.5">
                 {[
-                  ["Asset Settlement Ratio",        "50% / 50%"],
-                  ["Pension Settlement Ratio",       "50% / 50%"],
+                  ["Asset Settlement Ratio",        "45% / 55%"],
+                  ["Pension Settlement Ratio",       "45% / 55%"],
                   ["Mortgage Interest Rate",         "4.5% p.a."],
                   ["Mortgage Term",                  "25 years remaining"],
-                  ["Monthly Repayment (£590k)",      "≈ £3,280/mo"],
+                  ["Monthly Repayment (£312k)",      "≈ £1,824/mo"],
                   ["Projection Period",              "10 years"],
                   ["Inflation / Growth Rate",        "2.0% p.a."],
                   ["Tax Model",                      "UK 2026/27 (HMRC)"],

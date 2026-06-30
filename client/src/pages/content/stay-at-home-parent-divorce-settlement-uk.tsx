@@ -147,7 +147,7 @@ export default function StayAtHomeParentPage() {
         <div className="space-y-3 mb-6">
           {[
             "Whether spousal maintenance will be awarded in your case, on what term and at what level",
-            "How a court would weigh your specific career sacrifice and earning capacity",
+            "How qualified legal advice might assess your career sacrifice and earning capacity",
             "Whether retaining the family home is the right answer for your situation",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">

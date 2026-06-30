@@ -49,7 +49,7 @@ const ANALYSER_FEATURES = [
 const REPORT_FEATURES = [
   { icon: Sparkles, title: "Intelligently generated plain-English narrative", desc: "Our analysis engine reads your figures and produces a commentary — what stands out, where the financial pressure points are, and what to watch out for.", color: { bg: "bg-gold/10", icon: "text-gold" } },
   { icon: HelpCircle, title: "Tailored professional questions", desc: "Bespoke questions to raise with your solicitor, mortgage broker, and pension adviser — produced from your specific numbers so you walk into every consultation prepared.", color: { bg: "bg-rose-50", icon: "text-rose-500" } },
-  { icon: FileText, title: "Downloadable Structured Financial Brief", desc: "A print-ready PDF of your full analysis — useful for professional meetings, your own records, or sharing with a mediator.", color: { bg: "bg-blue-50", icon: "text-blue-600" } },
+  { icon: FileText, title: "Downloadable Settlement Reality Check PDF", desc: "A print-ready PDF of your full analysis — useful for professional meetings, your own records, or sharing with a mediator.", color: { bg: "bg-blue-50", icon: "text-blue-600" } },
 ];
 
 const TRUST_ITEMS = [
@@ -146,7 +146,7 @@ export default function HowItWorksPage() {
               {
                 step: "03",
                 title: "Unlock both products",
-                desc: "One payment of £79 unlocks two products for 12 months: your Settlement Analyser (CRI scores, cashflow, stress testing, 5-year projections) and your Guided Intelligence Report — an intelligently generated plain-English analysis with tailored professional questions.",
+                desc: "One payment of £79 unlocks two products for 12 months: your Settlement Analyser (CRI scores, cashflow, stress testing, 5-year projections) and your Settlement Reality Check Report — a plain-English pressure check with tailored professional questions.",
                 tag: "£79 · 12-month access",
                 color: "bg-amber-50 border-amber-200",
                 tagColor: "text-amber-700 bg-amber-100 font-semibold",
@@ -264,13 +264,13 @@ export default function HowItWorksPage() {
             <div className="flex-1 border-t border-dashed border-border/50" />
           </div>
 
-          {/* Product 2: Guided Intelligence Report */}
+          {/* Product 2: Settlement Reality Check Report */}
           <div>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-7 h-7 rounded-lg bg-gold/15 flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-gold" />
               </div>
-              <h3 className="text-sm font-bold text-foreground uppercase tracking-wide">Guided Intelligence Report</h3>
+              <h3 className="text-sm font-bold text-foreground uppercase tracking-wide">Settlement Reality Check Report</h3>
               <span className="text-[10px] font-semibold text-gold bg-gold/10 border border-gold/20 px-2 py-0.5 rounded-full ml-1">Intelligently generated</span>
             </div>
             <div className="grid sm:grid-cols-3 gap-4">
@@ -299,14 +299,14 @@ export default function HowItWorksPage() {
         <div className="container mx-auto px-4 max-w-2xl text-center space-y-5">
           <h2 className="text-2xl md:text-3xl font-display font-bold">Two products. One payment. No subscription.</h2>
           <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-xl mx-auto">
-            Free to start. £79 unlocks your <strong>Settlement Analyser</strong> and your <strong>Guided Intelligence Report</strong> — both for 12 months.
+            Free to start. £79 unlocks your <strong>Settlement Analyser</strong> and your <strong>Settlement Reality Check Report</strong> — both for 12 months.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
             {[
               "4 settlement options fully modelled",
               "Cashflow Resilience Indicator (CRI) scores",
               "5-year projections & stress testing",
-              "Guided Intelligence Report",
+              "Settlement Reality Check Report",
               "12 months unlimited access",
             ].map((item) => (
               <span key={item} className="flex items-center gap-1.5 text-foreground">

@@ -20,9 +20,9 @@ const COMPARISON_ROWS = [
   { label: "5-year capital sustainability projections", group: "analyser", free: false },
   { label: "Monthly cash position (surplus/deficit) per scenario", group: "analyser", free: false },
   { label: "Sensitivity & stress-test analysis", group: "analyser", free: false },
-  { label: "Guided Intelligence Report — plain-English analysis", group: "report", free: false },
+  { label: "Settlement Reality Check Report — pressure points and plain-English analysis", group: "report", free: false },
   { label: "Tailored questions for your solicitor, broker & pension adviser", group: "report", free: false },
-  { label: "Downloadable Structured Financial Brief (PDF)", group: "report", free: false },
+  { label: "Downloadable Settlement Reality Check PDF", group: "report", free: false },
   { label: "12 months unlimited re-runs", group: "access", free: false },
 ];
 
@@ -44,10 +44,10 @@ const FAQ_ITEMS = [
 export default function PricingPage() {
   useDocumentTitle("Pricing — £79 One-Time | DivorceCalculatorUK");
   useMetaTags({
-    description: "One-time £79 for 12-month access to full divorce settlement analysis — Settlement Analyser and Guided Intelligence Report. England and Wales.",
+    description: "One-time £79 for 12-month access to full divorce settlement analysis — Settlement Analyser and Settlement Reality Check Report. England and Wales.",
     canonical: "https://divorcecalculatoruk.co.uk/pricing",
     ogTitle: "Divorce Calculator UK Pricing — £79 One-Time",
-    ogDescription: "Full settlement analysis for £79. Two products: Settlement Analyser and Guided Intelligence Report. England and Wales.",
+    ogDescription: "Full settlement analysis for £79. Two products: Settlement Analyser and Settlement Reality Check Report. England and Wales.",
     ogUrl: "https://divorcecalculatoruk.co.uk/pricing",
     ogType: "website",
   });
@@ -70,7 +70,7 @@ export default function PricingPage() {
             Two products. One price.
           </h1>
           <p className="text-muted-foreground max-w-lg mx-auto text-sm leading-relaxed">
-            Free to start — no sign-up. £79 unlocks both your <strong>Settlement Analyser</strong> and your <strong>Guided Intelligence Report</strong> for 12 months.
+            Free to start — no sign-up. £79 unlocks both your <strong>Settlement Analyser</strong> and your <strong>Settlement Reality Check Report</strong> for 12 months.
           </p>
         </section>
 
@@ -116,7 +116,7 @@ export default function PricingPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-sm font-bold text-foreground">Guided Intelligence Report</h3>
+                    <h3 className="text-sm font-bold text-foreground">Settlement Reality Check Report</h3>
                     <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-gold/10 text-gold border border-gold/20 font-semibold">
                       <Sparkles className="w-2.5 h-2.5" /> Intelligently generated
                     </span>
@@ -141,9 +141,9 @@ export default function PricingPage() {
                 "5-year capital depletion & sustainability projections",
                 "Monthly cash position (surplus/deficit) per scenario",
                 "Sensitivity analysis — which assumptions matter most",
-                "Guided Intelligence Report — plain-English analysis of your figures",
+                "Settlement Reality Check Report — pressure points and plain-English analysis of your figures",
                 "Tailored questions to raise with your solicitor, broker & pension adviser",
-                "Downloadable Structured Financial Brief (print-ready PDF)",
+                "Downloadable Settlement Reality Check PDF",
                 "12 months unlimited access — update figures any time",
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-2.5" data-testid={`text-paid-feature-${i}`}>
@@ -244,12 +244,12 @@ export default function PricingPage() {
                   </tr>
                 ))}
 
-                {/* Guided Intelligence Report group */}
+                {/* Settlement Reality Check Report group */}
                 <tr className="border-b border-border/40 bg-amber-50/60">
                   <td colSpan={3} className="py-2 px-6">
                     <div className="flex items-center gap-2">
                       <Sparkles className="w-3.5 h-3.5 text-gold" />
-                      <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wide">Guided Intelligence Report</span>
+                      <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wide">Settlement Reality Check Report</span>
                     </div>
                   </td>
                 </tr>

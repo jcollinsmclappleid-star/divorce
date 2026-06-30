@@ -146,7 +146,7 @@ export default function LongMarriageSettlementPage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "How a court would weigh sharing vs needs in your specific case",
+            "How qualified legal advice might assess sharing vs needs in your specific case",
             "Whether and to what extent any pre-marital wealth would be ring-fenced",
             "The likely term and level of any spousal maintenance order",
           ].map((item, i) => (
