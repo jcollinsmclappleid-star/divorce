@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect, type ReactNode } from "react";
-import { motion, useReducedMotion } from "framer-motion";
 import { useLocation } from "wouter";
 import { useAppStore, Asset, Liability, Income, Expense } from "@/hooks/use-store";
 import { useDocumentTitle } from "@/hooks/use-document-title";
@@ -31,7 +30,6 @@ import { SmartExpenseChips } from "@/components/wizard/smart-expense-chips";
 import { IncomeAssumptionChips } from "@/components/wizard/income-assumption-chips";
 import { PensionQuickAdd } from "@/components/wizard/pension-quick-add";
 import { useInlineConfirm, InlineConfirm } from "@/components/wizard/inline-confirm";
-import { StepVignette } from "@/components/wizard/step-vignettes";
 
 const STEPS = [
   { id: 0, title: "Welcome", icon: Heart },
@@ -295,7 +293,6 @@ function getStageForStep(step: number): number {
 export default function WizardPage() {
   useDocumentTitle("Build Your Financial Model | DivorceCalculatorUK");
   useNoIndex();
-  const reduced = useReducedMotion();
   const [currentStep, setCurrentStep] = useState(0);
   const [midJourneyEmailDismissed, setMidJourneyEmailDismissed] = useState(false);
   const [showMidJourneyEmail, setShowMidJourneyEmail] = useState(false);
@@ -440,39 +437,27 @@ export default function WizardPage() {
 
               return (
                 <>
-                  <div className="mb-5 flex gap-4 items-start justify-between">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-2.5">
-                        <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${meta.pillBg} ${meta.pillText}`} data-testid="text-step-category">
-                          <StepIcon className="w-3 h-3" />
-                          {meta.category}
-                        </span>
-                        <span className="text-xs font-medium text-muted-foreground lg:hidden" data-testid="text-step-progress">
-                          {currentStep === 0
-                            ? "Start"
-                            : getStageForStep(currentStep) > 0
-                              ? `Stage ${getStageForStep(currentStep)} of 3 · Step ${currentStep} of ${STEPS.length - 1}`
-                              : `Step ${currentStep} of ${STEPS.length - 1}`
-                          }
-                        </span>
-                      </div>
-                      <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground" data-testid="text-step-title">
-                        {STEPS[currentStep].title}
-                      </h1>
-                      <p className="text-muted-foreground mt-1" data-testid="text-step-prompt">
-                        {stepCopy.prompt}
-                      </p>
+                  <div className="mb-5">
+                    <div className="flex items-center justify-between mb-2.5">
+                      <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${meta.pillBg} ${meta.pillText}`} data-testid="text-step-category">
+                        <StepIcon className="w-3 h-3" />
+                        {meta.category}
+                      </span>
+                      <span className="text-xs font-medium text-muted-foreground lg:hidden" data-testid="text-step-progress">
+                        {currentStep === 0
+                          ? "Start"
+                          : getStageForStep(currentStep) > 0
+                            ? `Stage ${getStageForStep(currentStep)} of 3 · Step ${currentStep} of ${STEPS.length - 1}`
+                            : `Step ${currentStep} of ${STEPS.length - 1}`
+                        }
+                      </span>
                     </div>
-                    <motion.div
-                      key={currentStep}
-                      className="hidden sm:block shrink-0"
-                      initial={reduced ? false : { opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: reduced ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
-                      data-testid="step-vignette"
-                    >
-                      <StepVignette step={currentStep} />
-                    </motion.div>
+                    <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground" data-testid="text-step-title">
+                      {STEPS[currentStep].title}
+                    </h1>
+                    <p className="text-muted-foreground mt-1" data-testid="text-step-prompt">
+                      {stepCopy.prompt}
+                    </p>
                   </div>
 
                   {currentStep === 6 && showMidJourneyEmail && !midJourneyEmailDismissed && (
