@@ -22,6 +22,7 @@ import { SiteNav } from "@/components/site-nav";
 import { useMetaTags } from "@/hooks/use-meta-tags";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { LandingCommandConsole } from "@/components/landing-command-console";
+import { HeroMotifs } from "@/components/hero-motifs";
 import { DemoCarousel } from "@/components/demo-dashboards";
 import { AnimatedCounter } from "@/components/animated-counter";
 import { ScrollProgressBar } from "@/components/scroll-progress-bar";
@@ -243,6 +244,7 @@ export default function LandingPage() {
             <rect width="100%" height="100%" fill="url(#hero-dot-grid)" />
           </svg>
         </motion.div>
+        <HeroMotifs />
         <div className="container mx-auto px-4 pt-14 pb-20 md:pt-20 md:pb-28 relative">
           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 md:gap-14 items-center">
 
