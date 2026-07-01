@@ -21,6 +21,34 @@ if (!fromEmail.endsWith(`@${VERIFIED_DOMAIN}`)) {
 const FROM = `DivorceCalculatorUK <${fromEmail}>`;
 const REPLY_TO = 'support@divorcecalculatoruk.co.uk';
 
+const UNLOCK_URL = 'https://divorcecalculatoruk.co.uk/unlock';
+const RECOVER_URL = 'https://divorcecalculatoruk.co.uk/recover';
+const PREVIEW_URL = 'https://divorcecalculatoruk.co.uk/preview';
+const PRODUCT_CTA = 'Reveal my full answer — £79';
+const PRODUCT_FOOTER = 'One-off payment · Three reports + PDF · 12 months access';
+
+function nurtureUnsubscribeFooter(leadId: string): string {
+  const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(leadId)}`;
+  return `
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
+    <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
+      Illustrative modelling only — not legal, tax or financial advice. Always consult a qualified professional.
+      &nbsp;&middot;&nbsp;<a href="${unsubscribeUrl}" style="color:#94a3b8;">Unsubscribe</a>
+    </p>`;
+}
+
+function nurtureCtaBlock(href: string, label: string): string {
+  return `
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
+      <tr>
+        <td align="center" style="background:#c49b2a;border-radius:8px;">
+          <a href="${href}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">${label}</a>
+        </td>
+      </tr>
+    </table>
+    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">${PRODUCT_FOOTER}</p>`;
+}
+
 function htmlEscape(str: string): string {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -237,7 +265,8 @@ export async function sendAccessRecoveryEmail(
 
 export async function sendProgressSummaryEmail(
   email: string,
-  assetPoolSnapshot: string
+  assetPoolSnapshot: string,
+  leadId?: string,
 ): Promise<void> {
   const client = getResend();
   if (!client) {
@@ -245,12 +274,12 @@ export async function sendProgressSummaryEmail(
     return;
   }
 
-  const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
+  const unlockUrl = UNLOCK_URL;
   const poolDisplay = htmlEscape(assetPoolSnapshot ? `£${Number(assetPoolSnapshot).toLocaleString('en-GB')}` : 'your figures');
 
 
   const html = emailWrapper(`
-    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">Your financial model is ready</h1>
+    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">Your settlement snapshot is ready</h1>
 
     <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7;">
       You've just done something most people going through a divorce never do — you sat down with the actual numbers. That matters.
@@ -262,33 +291,36 @@ export async function sendProgressSummaryEmail(
       <p style="margin:6px 0 0;color:#94a3b8;font-size:12px;">Property equity + liquid assets. Pensions modelled separately.</p>
     </div>
 
-    <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
-      Your free preview shows the shape of your settlement. The full analysis goes further — it shows you whether each option is actually <strong>liveable on your income</strong>, with monthly surplus or deficit figures, a 5-year capital projection, and a plain-English summary written around your specific numbers.
+    <p style="margin:0 0 12px;color:#475569;font-size:15px;line-height:1.7;">
+      Your free snapshot shows the pool. <strong>Your Full Divorce Position</strong> (£79) goes further — three dedicated reports from your figures:
     </p>
 
-    <p style="margin:0 0 6px;color:#475569;font-size:14px;line-height:1.7;">While you're here, we'd like to offer you a discount:</p>
+    <ul style="margin:0 0 20px;padding-left:20px;color:#475569;font-size:14px;line-height:1.8;">
+      <li><strong>What each option leaves you with</strong> — capital, pension and monthly headroom under each settlement path</li>
+      <li><strong>What stands out in your case</strong> — the figures and trade-offs worth noticing before you reply</li>
+      <li><strong>What to check before you agree</strong> — questions to raise with a solicitor or adviser</li>
+    </ul>
 
-    <div style="background:#fefce8;border:1px solid #e9c65a;border-radius:8px;padding:18px 22px;margin-bottom:20px;text-align:center;">
-      <p style="margin:0 0 4px;color:#92400e;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">This month</p>
-      <p style="margin:6px 0 8px;color:#0f1e3c;font-size:30px;font-weight:800;letter-spacing:3px;">CLARITY15</p>
-      <p style="margin:0;color:#64748b;font-size:13px;">15% off at checkout</p>
-    </div>
+    <p style="margin:0 0 24px;color:#64748b;font-size:13px;line-height:1.6;">
+      Illustrative modelling only — not legal, tax or financial advice.
+    </p>
 
     <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
       <tr>
         <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:18px 32px;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;">Unlock my full analysis</a>
+          <a href="${unlockUrl}" style="display:block;padding:18px 32px;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;">Reveal my full answer — £79</a>
         </td>
       </tr>
     </table>
-    <p style="margin:0 0 28px;text-align:center;color:#94a3b8;font-size:12px;">Enter <strong>CLARITY15</strong> at checkout · 12 months unlimited access</p>
+    <p style="margin:0 0 28px;text-align:center;color:#94a3b8;font-size:12px;">One-off payment · Three reports + PDF · 12 months access</p>
 
     <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
 
     <p style="margin:0;color:#64748b;font-size:13px;line-height:1.6;">
-      Using a different device? Visit <a href="https://divorcecalculatoruk.co.uk/recover" style="color:#c49b2a;">divorcecalculatoruk.co.uk/recover</a> and enter this email address to pick up where you left off.
+      Using a different device? Visit <a href="${RECOVER_URL}" style="color:#c49b2a;">divorcecalculatoruk.co.uk/recover</a> and enter this email address to pick up where you left off.
     </p>
     <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;">We will never share your details with solicitors or any third party.</p>
+    ${leadId ? nurtureUnsubscribeFooter(leadId) : ''}
   `);
 
   try {
@@ -296,7 +328,7 @@ export async function sendProgressSummaryEmail(
       from: FROM,
       to: email,
       replyTo: REPLY_TO,
-      subject: 'Your financial model is ready — 15% off this month (code: CLARITY15)',
+      subject: 'Your settlement snapshot is ready — see what each path leaves you with',
       html,
     });
     console.log('[email] Progress summary email sent');
@@ -404,17 +436,17 @@ export async function sendAdminNotification(
   }
 }
 
-export async function sendFollowUpEmail(
+export async function sendNurtureReengageEmail(
   email: string,
-  assetPoolSnapshot: string | null
+  leadId: string,
+  assetPoolSnapshot: string | null,
 ): Promise<void> {
   const client = getResend();
   if (!client) {
-    console.warn('[email] RESEND_API_KEY not set — skipping follow-up email');
+    console.warn('[email] RESEND_API_KEY not set — skipping nurture re-engage email');
     return;
   }
 
-  const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
   const poolDisplay = assetPoolSnapshot
     ? `£${Number(assetPoolSnapshot).toLocaleString('en-GB')}`
     : null;
@@ -423,11 +455,11 @@ export async function sendFollowUpEmail(
     <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">You took a difficult first step</h1>
 
     <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
-      Separation brings a lot of uncertainty — financial uncertainty often being the hardest part. Taking the time to actually sit down with your numbers, even just to see where things stand, takes courage.
+      Separation brings a lot of uncertainty — financial uncertainty often being the hardest part. Taking the time to sit down with your numbers, even just to see where things stand, takes courage.
     </p>
 
     <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7;">
-      Your figures are still saved. The free preview shows the shape of things — the full analysis goes further, showing you whether each settlement option is actually <em>liveable</em> on your income, month by month, over five years.
+      Your figures are still saved. Your free snapshot shows the pool — <strong>Your Full Divorce Position</strong> shows what each settlement path actually leaves you with, month by month.
     </p>
 
     ${poolDisplay ? `
@@ -438,21 +470,11 @@ export async function sendFollowUpEmail(
     </div>` : ''}
 
     <p style="margin:0 0 24px;color:#475569;font-size:14px;line-height:1.7;">
-      No pressure to do anything right now. When you're ready to see the full picture, it's there for you.
+      No pressure to do anything right now. When you're ready, your three full reports are one step away.
     </p>
 
-    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
-      <tr>
-        <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">Return to my analysis</a>
-        </td>
-      </tr>
-    </table>
-    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">One-off £79 · 12 months unlimited access</p>
-
-    <p style="margin:0;color:#94a3b8;font-size:12px;line-height:1.6;">
-      We will never share your details with solicitors or any third party.
-    </p>
+    ${nurtureCtaBlock(UNLOCK_URL, PRODUCT_CTA)}
+    ${nurtureUnsubscribeFooter(leadId)}
   `);
 
   try {
@@ -463,75 +485,138 @@ export async function sendFollowUpEmail(
       subject: 'Your figures are still saved — no rush',
       html,
     });
-    console.log(`[email] Follow-up email sent to ${email}`);
+    console.log(`[email] Nurture re-engage email sent to ${email}`);
   } catch (err) {
-    console.error('[email] Failed to send follow-up email:', err);
+    console.error('[email] Failed to send nurture re-engage email:', err);
   }
 }
 
+export async function sendNurtureShareEmail(email: string, leadId: string): Promise<void> {
+  const client = getResend();
+  if (!client) {
+    console.warn('[email] RESEND_API_KEY not set — skipping nurture share email');
+    return;
+  }
+
+  const html = emailWrapper(`
+    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">Splitting the pool isn't the same as knowing your share</h1>
+
+    <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
+      A 50/50 split of assets doesn't always mean the same monthly outcome once housing, pensions and debt are applied. That's the gap most people only see after they've agreed.
+    </p>
+
+    <div style="background:#f8fafc;border-left:4px solid #c49b2a;padding:16px 20px;margin-bottom:24px;border-radius:0 6px 6px 0;">
+      <p style="margin:0;color:#0f1e3c;font-size:14px;line-height:1.7;">
+        Pensions are often the surprise. The Cash Equivalent Transfer Value (CETV) — the lump-sum worth today — can equal or exceed the equity in the family home. Without it in the picture, a split can look fair when it isn't.
+      </p>
+    </div>
+
+    <p style="margin:0 0 24px;color:#475569;font-size:14px;line-height:1.7;">
+      <strong>What Each Option Leaves You With</strong> shows your capital, pension and monthly position under each of the four settlement paths — built from the figures you already entered.
+    </p>
+
+    ${nurtureCtaBlock(UNLOCK_URL, 'See what each path leaves me with — £79')}
+    ${nurtureUnsubscribeFooter(leadId)}
+  `);
+
+  try {
+    await client.emails.send({
+      from: FROM,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: 'What your share looks like under each path',
+      html,
+    });
+    console.log(`[email] Nurture share email sent to ${email}`);
+  } catch (err) {
+    console.error('[email] Failed to send nurture share email:', err);
+  }
+}
+
+export async function sendNurtureHeadroomEmail(email: string, leadId: string): Promise<void> {
+  const client = getResend();
+  if (!client) {
+    console.warn('[email] RESEND_API_KEY not set — skipping nurture headroom email');
+    return;
+  }
+
+  const html = emailWrapper(`
+    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">The question behind every settlement split</h1>
+
+    <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
+      <em>"Will the money last?"</em>
+    </p>
+
+    <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7;">
+      It's probably what people worry about most — not just this month, but in a year or three. Will the settlement you agree to leave you on solid ground?
+    </p>
+
+    <div style="background:#f8fafc;border-left:4px solid #c49b2a;padding:16px 20px;margin-bottom:24px;border-radius:0 6px 6px 0;">
+      <p style="margin:0;color:#0f1e3c;font-size:14px;line-height:1.7;">
+        A split that looks fair on paper can still leave you short each month if outgoings exceed income. Your full reports model monthly headroom directly — so you can see which paths are liveable and which quietly run reserves down.
+      </p>
+    </div>
+
+    <p style="margin:0 0 24px;color:#475569;font-size:14px;line-height:1.7;">
+      You've already put your figures in. If you want that answer for your own peace of mind, it's there when you're ready.
+    </p>
+
+    ${nurtureCtaBlock(UNLOCK_URL, 'See my monthly picture — £79')}
+    ${nurtureUnsubscribeFooter(leadId)}
+  `);
+
+  try {
+    await client.emails.send({
+      from: FROM,
+      to: email,
+      replyTo: REPLY_TO,
+      subject: 'Will the money last? Here\'s how to find out',
+      html,
+    });
+    console.log(`[email] Nurture headroom email sent to ${email}`);
+  } catch (err) {
+    console.error('[email] Failed to send nurture headroom email:', err);
+  }
+}
+
+/** Admin manual send — maps to nurture headroom email. */
 export async function sendPromoEmail(
   email: string,
   unsubscribeToken: string,
-  assetPoolSnapshot: string | null
+  _assetPoolSnapshot: string | null,
 ): Promise<void> {
+  await sendNurtureHeadroomEmail(email, unsubscribeToken);
+}
+
+export async function sendNurtureQuestionsEmail(email: string, leadId: string): Promise<void> {
   const client = getResend();
   if (!client) {
-    console.warn('[email] RESEND_API_KEY not set — skipping promo email');
+    console.warn('[email] RESEND_API_KEY not set — skipping nurture questions email');
     return;
   }
 
-  const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
-  const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(unsubscribeToken)}`;
-  const poolDisplay = assetPoolSnapshot
-    ? `£${Number(assetPoolSnapshot).toLocaleString('en-GB')}`
-    : null;
-
   const html = emailWrapper(`
-    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">A small something, in case it helps</h1>
+    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">Before you reply to their offer</h1>
 
     <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
-      We know a divorce isn't cheap — between solicitors, mediators, and everything else, the costs add up quickly.
+      Most people want three things before they agree: to know their share, to know whether they'll be okay month to month, and to know what to ask a professional.
     </p>
 
-    <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7;">
-      We'd like to offer you a small discount. No deadline, no pressure — use it when and if the time feels right.
-    </p>
-
-    <div style="background:#fefce8;border:1px solid #e9c65a;border-radius:8px;padding:20px 24px;margin-bottom:24px;text-align:center;">
-      <p style="margin:0 0 6px;color:#92400e;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Your discount code</p>
-      <p style="margin:0 0 8px;color:#0f1e3c;font-size:30px;font-weight:800;letter-spacing:3px;">CLARITY15</p>
-      <p style="margin:0;color:#64748b;font-size:13px;">15% off at checkout — £79 becomes £67.15</p>
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:16px 20px;margin-bottom:24px;">
+      <p style="margin:0 0 8px;color:#0f1e3c;font-size:14px;font-weight:600;">Your full reports cover:</p>
+      <ul style="margin:0;padding-left:18px;color:#64748b;font-size:13px;line-height:1.8;">
+        <li>What stands out in your case — figures and trade-offs worth noticing</li>
+        <li>What's missing or assumed in the current split</li>
+        <li>Questions to raise with a solicitor or adviser before you agree</li>
+      </ul>
     </div>
 
-    ${poolDisplay ? `
-    <div style="background:#f8fafc;border-left:4px solid #c49b2a;padding:16px 20px;margin-bottom:24px;border-radius:0 6px 6px 0;">
-      <p style="margin:0 0 4px;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Your combined asset pool</p>
-      <p style="margin:0;color:#0f1e3c;font-size:26px;font-weight:700;">${htmlEscape(poolDisplay)}</p>
-      <p style="margin:6px 0 0;color:#94a3b8;font-size:12px;">Property equity + liquid assets. Pensions modelled separately.</p>
-    </div>` : ''}
-
     <p style="margin:0 0 24px;color:#475569;font-size:14px;line-height:1.7;">
-      The full analysis shows you whether each settlement option is actually liveable on your income — month by month, over five years — so you can go into negotiations knowing your numbers, not guessing at them.
+      Your snapshot is still saved. The three full reports turn your figures into a checklist you can actually use in conversation.
     </p>
 
-    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
-      <tr>
-        <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">Unlock my full analysis</a>
-        </td>
-      </tr>
-    </table>
-    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">Enter <strong>CLARITY15</strong> at checkout · 12 months unlimited access</p>
-
-    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
-
-    <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
-      Illustrative modelling only — not legal, financial or tax advice. Always consult a qualified professional.
-    </p>
-    <p style="margin:8px 0 0;color:#94a3b8;font-size:11px;">
-      We will never share your details with solicitors or any third party. &middot;
-      <a href="${unsubscribeUrl}" style="color:#94a3b8;">Unsubscribe</a>
-    </p>
+    ${nurtureCtaBlock(UNLOCK_URL, 'Get my questions list — £79')}
+    ${nurtureUnsubscribeFooter(leadId)}
   `);
 
   try {
@@ -539,163 +624,21 @@ export async function sendPromoEmail(
       from: FROM,
       to: email,
       replyTo: REPLY_TO,
-      subject: 'A small discount, in case it helps — code CLARITY15',
+      subject: 'Three things worth checking before you reply',
       html,
     });
-    console.log(`[email] Promo email sent to ${email}`);
+    console.log(`[email] Nurture questions email sent to ${email}`);
   } catch (err) {
-    console.error('[email] Failed to send promo email:', err);
+    console.error('[email] Failed to send nurture questions email:', err);
   }
 }
 
-export async function sendPensionInsightEmail(
-  email: string,
-  unsubscribeToken: string
-): Promise<void> {
+export async function sendNurtureFinalEmail(email: string, leadId: string): Promise<void> {
   const client = getResend();
   if (!client) {
-    console.warn('[email] RESEND_API_KEY not set — skipping pension insight email');
+    console.warn('[email] RESEND_API_KEY not set — skipping nurture final email');
     return;
   }
-
-  const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
-  const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(unsubscribeToken)}`;
-
-  const html = emailWrapper(`
-    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">The one asset that surprises most people</h1>
-
-    <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
-      Of everything involved in a UK divorce, pensions are the most underestimated — and the most easily overlooked in negotiations.
-    </p>
-
-    <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7;">
-      The figure that matters isn't the monthly income you'll eventually receive. It's the <strong>Cash Equivalent Transfer Value (CETV)</strong> — the lump-sum worth of the pension right now. In many divorces, it equals or exceeds the equity in the family home.
-    </p>
-
-    <div style="background:#f8fafc;border-left:4px solid #c49b2a;padding:16px 20px;margin-bottom:24px;border-radius:0 6px 6px 0;">
-      <p style="margin:0;color:#0f1e3c;font-size:14px;line-height:1.7;">
-        Someone who doesn't know their CETV, or doesn't understand how pension sharing works, can walk away from a settlement significantly worse off — without ever realising it.
-      </p>
-    </div>
-
-    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.7;">
-      Your model already includes pension figures. The full analysis shows you how different approaches to splitting or offsetting pensions change the real-terms outcome of each scenario — in plain language.
-    </p>
-
-    <p style="margin:0 0 24px;color:#475569;font-size:14px;line-height:1.7;">
-      If you'd like to see how it plays out in your specific figures, your analysis is still there whenever you're ready.
-    </p>
-
-    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
-      <tr>
-        <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">See how pensions affect my settlement</a>
-        </td>
-      </tr>
-    </table>
-    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">One-off £79 · Use code <strong>CLARITY15</strong> for 15% off · 12 months access</p>
-
-    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
-    <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
-      Illustrative modelling only — not legal, financial or tax advice. Always consult a qualified professional.
-      &nbsp;&middot;&nbsp;<a href="${unsubscribeUrl}" style="color:#94a3b8;">Unsubscribe</a>
-    </p>
-  `);
-
-  try {
-    await client.emails.send({
-      from: FROM,
-      to: email,
-      replyTo: REPLY_TO,
-      subject: 'The one asset most people underestimate in a divorce',
-      html,
-    });
-    console.log(`[email] Pension insight email sent to ${email}`);
-  } catch (err) {
-    console.error('[email] Failed to send pension insight email:', err);
-  }
-}
-
-export async function sendSustainabilityEmail(
-  email: string,
-  unsubscribeToken: string
-): Promise<void> {
-  const client = getResend();
-  if (!client) {
-    console.warn('[email] RESEND_API_KEY not set — skipping sustainability email');
-    return;
-  }
-
-  const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
-  const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(unsubscribeToken)}`;
-
-  const html = emailWrapper(`
-    <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">The question that keeps people up at night</h1>
-
-    <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
-      <em>"Will I actually be okay?"</em>
-    </p>
-
-    <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7;">
-      It's probably the thing people worry about most when a marriage ends. Not just in the short term — but in three years, five years. Will the settlement you agree to leave you on solid ground?
-    </p>
-
-    <div style="background:#f8fafc;border-left:4px solid #c49b2a;padding:16px 20px;margin-bottom:24px;border-radius:0 6px 6px 0;">
-      <p style="margin:0;color:#0f1e3c;font-size:14px;line-height:1.7;">
-        A settlement that looks fair on paper can quietly drain your reserves if your monthly outgoings exceed your income. The full analysis models this directly — showing you the monthly surplus or deficit for each scenario, and whether your capital holds up over five years.
-      </p>
-    </div>
-
-    <p style="margin:0 0 16px;color:#475569;font-size:14px;line-height:1.7;">
-      The <strong>Financial Sustainability Index</strong> gives each settlement option a plain score — so you can see at a glance which options are liveable, which are marginal, and which quietly run your reserves down.
-    </p>
-
-    <p style="margin:0 0 24px;color:#475569;font-size:14px;line-height:1.7;">
-      You've already put your figures in. If you'd like an answer to that question — even just for your own peace of mind — the full analysis is there when you're ready.
-    </p>
-
-    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
-      <tr>
-        <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">See my full picture</a>
-        </td>
-      </tr>
-    </table>
-    <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">One-off £79 · Use code <strong>CLARITY15</strong> for 15% off · 12 months access</p>
-
-    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
-    <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
-      Illustrative modelling only — not legal, financial or tax advice. Always consult a qualified professional.
-      &nbsp;&middot;&nbsp;<a href="${unsubscribeUrl}" style="color:#94a3b8;">Unsubscribe</a>
-    </p>
-  `);
-
-  try {
-    await client.emails.send({
-      from: FROM,
-      to: email,
-      replyTo: REPLY_TO,
-      subject: 'Will you actually be okay? Here\'s how to find out',
-      html,
-    });
-    console.log(`[email] Sustainability email sent to ${email}`);
-  } catch (err) {
-    console.error('[email] Failed to send sustainability email:', err);
-  }
-}
-
-export async function sendFinalNudgeEmail(
-  email: string,
-  unsubscribeToken: string
-): Promise<void> {
-  const client = getResend();
-  if (!client) {
-    console.warn('[email] RESEND_API_KEY not set — skipping final nudge email');
-    return;
-  }
-
-  const unlockUrl = 'https://divorcecalculatoruk.co.uk/unlock';
-  const unsubscribeUrl = `https://divorcecalculatoruk.co.uk/api/leads/unsubscribe?token=${htmlEscape(unsubscribeToken)}`;
 
   const html = emailWrapper(`
     <h1 style="margin:0 0 16px;color:#0f1e3c;font-size:22px;font-weight:700;line-height:1.3;">Wishing you well, whatever you decide</h1>
@@ -705,27 +648,23 @@ export async function sendFinalNudgeEmail(
     </p>
 
     <p style="margin:0 0 16px;color:#475569;font-size:15px;line-height:1.7;">
-      Going through a separation is hard, and the financial side of it can feel overwhelming. We built this tool because we wanted people to have access to clear, honest numbers — without having to pay a solicitor just to understand where they stand.
+      Going through a separation is hard, and the financial side can feel overwhelming. We built this tool so people could see clear, honest numbers — without paying a solicitor just to understand where they stand.
     </p>
 
     <p style="margin:0 0 24px;color:#475569;font-size:15px;line-height:1.7;">
-      Whether or not the full analysis is right for you, we hope the time you spent on it gave you something useful. Your figures are still saved, and the full report is here whenever you need it. Code <strong>CLARITY15</strong> still works at checkout.
+      Whether or not the full reports are right for you, we hope the time you spent on your figures gave you something useful. Your snapshot is still saved whenever you need it.
     </p>
 
     <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
       <tr>
         <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">Return to my analysis</a>
+          <a href="${PREVIEW_URL}" style="display:block;padding:16px 32px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">Return to my snapshot</a>
         </td>
       </tr>
     </table>
     <p style="margin:0 0 24px;text-align:center;color:#94a3b8;font-size:12px;">Take care of yourself. We're here if you need us.</p>
 
-    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0;" />
-    <p style="margin:0;color:#94a3b8;font-size:11px;line-height:1.6;">
-      Illustrative modelling only — not legal, financial or tax advice. Always consult a qualified professional.
-      &nbsp;&middot;&nbsp;<a href="${unsubscribeUrl}" style="color:#94a3b8;">Unsubscribe</a>
-    </p>
+    ${nurtureUnsubscribeFooter(leadId)}
   `);
 
   try {
@@ -733,14 +672,20 @@ export async function sendFinalNudgeEmail(
       from: FROM,
       to: email,
       replyTo: REPLY_TO,
-      subject: 'Wishing you well — your analysis is here whenever you need it',
+      subject: 'Wishing you well — your snapshot is here if you need it',
       html,
     });
-    console.log(`[email] Final nudge email sent to ${email}`);
+    console.log(`[email] Nurture final email sent to ${email}`);
   } catch (err) {
-    console.error('[email] Failed to send final nudge email:', err);
+    console.error('[email] Failed to send nurture final email:', err);
   }
 }
+
+/** @deprecated Legacy exports — use sendNurture* helpers. */
+export const sendFollowUpEmail = sendNurtureReengageEmail;
+export const sendPensionInsightEmail = sendNurtureShareEmail;
+export const sendSustainabilityEmail = sendNurtureHeadroomEmail;
+export const sendFinalNudgeEmail = sendNurtureFinalEmail;
 
 export async function sendEmailVerificationEmail(
   email: string,

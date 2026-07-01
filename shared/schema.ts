@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, jsonb, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, jsonb, timestamp, boolean, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { DivorceModelInputsSchema, Party, AssetCategory, LiabilityCategory, ExpenseCategory } from "./divorce_types";
@@ -49,10 +49,19 @@ export const emailLeads = pgTable("email_leads", {
   verificationToken: varchar("verification_token"),
   createdAt: timestamp("created_at").defaultNow(),
   unsubscribedAt: timestamp("unsubscribed_at"),
+  /** When this lead entered nurture v2 — each email is scheduled relative to this timestamp. */
+  nurtureEnrolledAt: timestamp("nurture_enrolled_at"),
+  /** 0 = not on v2 sequence; 2 = nurture v2 */
+  nurtureVersion: integer("nurture_version").notNull().default(0),
+  /** v2 day 3 — gentle re-engage */
   followup1SentAt: timestamp("followup1_sent_at"),
+  /** v2 day 14 — monthly headroom (column reused from legacy promo slot) */
   promoSentAt: timestamp("promo_sent_at"),
+  /** v2 day 7 — share / what each path leaves you with */
   followup2SentAt: timestamp("followup2_sent_at"),
+  /** v2 day 21 — questions before you agree */
   followup3SentAt: timestamp("followup3_sent_at"),
+  /** v2 day 35 — final sign-off */
   followup4SentAt: timestamp("followup4_sent_at"),
 });
 

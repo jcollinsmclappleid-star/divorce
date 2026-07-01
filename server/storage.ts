@@ -1,5 +1,6 @@
 import { db } from "./db";
 import { purchases, emailLeads, magicLinks, reportSupportPurchases, type Purchase, type InsertPurchase, type EmailLead, type MagicLink, type ReportSupportPurchase } from "@shared/schema";
+import { NURTURE_V2_VERSION } from "@shared/nurture-schedule";
 import { eq, and, sql, desc } from "drizzle-orm";
 
 export interface IStorage {
@@ -12,10 +13,12 @@ export interface IStorage {
   createPurchaseFromStripeSession(checkoutSessionId: string, paymentIntentId: string, email: string): Promise<Purchase>;
   extendPurchaseExpiry(purchaseId: string, months: number): Promise<Purchase>;
 
-  createEmailLead(email: string, firstName?: string, source?: string, verificationToken?: string): Promise<EmailLead>;
+  createEmailLead(email: string, firstName?: string, source?: string, verificationToken?: string, nurtureEnrolledAt?: Date): Promise<EmailLead>;
   getEmailLeadByEmail(email: string): Promise<EmailLead | undefined>;
   getEmailLeadByVerificationToken(token: string): Promise<EmailLead | undefined>;
   verifyEmailLead(id: string): Promise<EmailLead>;
+  enrollInNurtureV2(leadId: string, enrolledAt: Date, resetStages?: boolean): Promise<EmailLead>;
+  updateEmailLeadAssetPool(id: string, assetPoolSnapshot: string): Promise<EmailLead>;
   anonymisePurchasesByEmail(email: string): Promise<void>;
   deleteEmailLeadByEmail(email: string): Promise<void>;
 
@@ -135,13 +138,16 @@ export class DatabaseStorage implements IStorage {
       .returning();
     return updated;
   }
-  async createEmailLead(email: string, firstName?: string, source?: string, verificationToken?: string): Promise<EmailLead> {
+  async createEmailLead(email: string, firstName?: string, source?: string, verificationToken?: string, nurtureEnrolledAt?: Date): Promise<EmailLead> {
     const [lead] = await db.insert(emailLeads).values({
       email: email.toLowerCase().trim(),
       firstName: firstName ?? null,
       source: source ?? "free_guide",
       verified: false,
       verificationToken: verificationToken ?? null,
+      ...(nurtureEnrolledAt
+        ? { nurtureEnrolledAt, nurtureVersion: NURTURE_V2_VERSION }
+        : {}),
     }).returning();
     return lead;
   }
@@ -166,6 +172,36 @@ export class DatabaseStorage implements IStorage {
     const [updated] = await db
       .update(emailLeads)
       .set({ verified: true, verificationToken: null })
+      .where(eq(emailLeads.id, id))
+      .returning();
+    return updated;
+  }
+
+  async enrollInNurtureV2(leadId: string, enrolledAt: Date, resetStages = false): Promise<EmailLead> {
+    const [updated] = await db
+      .update(emailLeads)
+      .set({
+        nurtureEnrolledAt: enrolledAt,
+        nurtureVersion: NURTURE_V2_VERSION,
+        ...(resetStages
+          ? {
+              followup1SentAt: null,
+              followup2SentAt: null,
+              promoSentAt: null,
+              followup3SentAt: null,
+              followup4SentAt: null,
+            }
+          : {}),
+      })
+      .where(eq(emailLeads.id, leadId))
+      .returning();
+    return updated;
+  }
+
+  async updateEmailLeadAssetPool(id: string, assetPoolSnapshot: string): Promise<EmailLead> {
+    const [updated] = await db
+      .update(emailLeads)
+      .set({ assetPoolSnapshot })
       .where(eq(emailLeads.id, id))
       .returning();
     return updated;

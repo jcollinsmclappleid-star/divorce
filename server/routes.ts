@@ -13,6 +13,7 @@ import { db, pool } from "./db";
 import { emailLeads as emailLeadsTable, purchases as purchasesTable } from "@shared/schema";
 import { and, eq, isNull, isNotNull } from "drizzle-orm";
 import OpenAI from "openai";
+import { isNetNewNurtureLead } from "@shared/nurture-schedule";
 import { GUIDED_SUMMARY_SYSTEM_PROMPT } from "./guided-summary/prompt";
 import { hasForbiddenGuidedSummaryPhrase } from "./guided-summary/compliance";
 
@@ -1178,9 +1179,18 @@ export async function registerRoutes(app: Express): Promise<void> {
       const { email, firstName, source, assetPoolSnapshot } = schema.parse(req.body);
       const existing = await storage.getEmailLeadByEmail(email);
       const isSummarySource = source === 'preview_page' || source === 'wizard_preview';
+      const now = new Date();
+      const enrollNurture = isSummarySource && isNetNewNurtureLead(now, now);
+
       if (!existing) {
         const verificationToken = crypto.randomBytes(32).toString('hex');
-        await storage.createEmailLead(email, firstName, source, verificationToken);
+        const lead = await storage.createEmailLead(
+          email,
+          firstName,
+          source,
+          verificationToken,
+          enrollNurture ? now : undefined,
+        );
         sendAdminNotification('New email lead captured', [
           { label: 'Email', value: email },
           { label: 'Name', value: firstName || '—' },
@@ -1188,13 +1198,27 @@ export async function registerRoutes(app: Express): Promise<void> {
           { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
         ], 'lead_capture').catch(() => {});
         if (isSummarySource) {
-          await sendProgressSummaryEmail(email, assetPoolSnapshot || '');
-          await storage.verifyEmailLead((await storage.getEmailLeadByEmail(email))!.id);
+          if (assetPoolSnapshot) {
+            await storage.updateEmailLeadAssetPool(lead.id, assetPoolSnapshot);
+          }
+          await sendProgressSummaryEmail(email, assetPoolSnapshot || '', lead.id);
+          await storage.verifyEmailLead(lead.id);
         } else {
           await sendEmailVerificationEmail(email, verificationToken);
         }
       } else if (isSummarySource) {
-        await sendProgressSummaryEmail(email, assetPoolSnapshot || '');
+        let lead = existing;
+        if (assetPoolSnapshot) {
+          lead = await storage.updateEmailLeadAssetPool(lead.id, assetPoolSnapshot);
+        }
+        if (!lead.verified) {
+          await storage.verifyEmailLead(lead.id);
+        }
+        await sendProgressSummaryEmail(
+          email,
+          assetPoolSnapshot || lead.assetPoolSnapshot || '',
+          lead.id,
+        );
       }
       return res.json({ success: true });
     } catch (err) {

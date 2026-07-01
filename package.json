@@ -21,6 +21,8 @@
     "stripe:setup-support": "node --env-file=.env.cutover script/create-stripe-support-product.mjs",
     "stripe:sync-products": "node --env-file=.env.cutover script/sync-stripe-products.mjs",
     "stripe:verify-products": "node script/verify-stripe-products.mjs",
+    "nurture:enroll-v2": "node --env-file=.env.cutover script/enroll-nurture-v2.mjs",
+    "nurture:enroll-v2:apply": "node --env-file=.env.cutover script/enroll-nurture-v2.mjs --apply",
     "db:push:cutover": "node --env-file=.env.cutover ./node_modules/drizzle-kit/bin.cjs push --force",
     "vercel:deploy": "bash script/push-vercel-env.sh"
   },

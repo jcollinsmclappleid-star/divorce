@@ -234,6 +234,38 @@ test("wizard offer-check intent shows the assumptions offer-check panel", async 
   await expect(page.getByTestId("button-offer-check-mode")).toHaveClass(/bg-primary/);
 });
 
+test("wizard savings step supports owner tabs, entry panel and benchmark selection", async ({ page }) => {
+  await page.goto("/wizard");
+  await page.getByTestId("stepper-step-3").click();
+
+  await expect(page.getByTestId("text-step-title")).toContainText("Savings");
+  await expect(page.getByTestId("card-savings-benchmarks")).toBeVisible();
+
+  await page.getByTestId("button-apply-savings-benchmark-a").click();
+  await expect(page.getByTestId("button-apply-savings-benchmark-a")).toContainText("3 estimates");
+
+  await page.getByTestId("button-suggest-asset-isa").click();
+  await expect(page.getByTestId("wizard-entry-panel")).toBeVisible();
+  await page.getByTestId("input-entry-panel-value").fill("12000");
+  await page.getByTestId("button-save-entry-panel").click();
+  await expect(page.getByTestId("wizard-entry-panel")).toBeHidden();
+  await expect(page.getByTestId("button-suggest-asset-isa")).toContainText("£12,000");
+
+  await page.getByTestId("assets-owner-tab-B").click();
+  await page.getByTestId("button-suggest-asset-isa").click();
+  await expect(page.getByTestId("wizard-entry-panel")).toBeVisible();
+  await page.getByTestId("input-entry-panel-value").fill("8000");
+  await page.getByTestId("button-save-entry-panel").click();
+  await expect(page.getByTestId("button-suggest-asset-isa")).toContainText("£8,000");
+
+  await page.getByTestId("assets-owner-tab-joint").click();
+  await page.getByTestId("button-suggest-asset-joint_savings").click();
+  await expect(page.getByTestId("wizard-entry-panel")).toBeVisible();
+  await page.getByTestId("input-entry-panel-value").fill("15000");
+  await page.getByTestId("button-save-entry-panel").click();
+  await expect(page.getByTestId("button-suggest-asset-joint_savings")).toContainText("£15,000");
+});
+
 test("results page displays intent lenses and position check when layer 3 is expanded", async ({ page }) => {
   await page.addInitScript(
     ({ key, state }) => {
