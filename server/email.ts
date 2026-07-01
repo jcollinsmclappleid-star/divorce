@@ -24,7 +24,7 @@ const REPLY_TO = 'support@divorcecalculatoruk.co.uk';
 const UNLOCK_URL = 'https://divorcecalculatoruk.co.uk/unlock';
 const RECOVER_URL = 'https://divorcecalculatoruk.co.uk/recover';
 const PREVIEW_URL = 'https://divorcecalculatoruk.co.uk/preview';
-const PRODUCT_CTA = 'Reveal my full answer — £79';
+const PRODUCT_CTA = 'Show my full answer — £79';
 const PRODUCT_FOOTER = 'One-off payment · Three reports + PDF · 12 months access';
 
 function nurtureUnsubscribeFooter(leadId: string): string {
@@ -308,7 +308,7 @@ export async function sendProgressSummaryEmail(
     <table cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 8px;">
       <tr>
         <td align="center" style="background:#c49b2a;border-radius:8px;">
-          <a href="${unlockUrl}" style="display:block;padding:18px 32px;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;">Reveal my full answer — £79</a>
+          <a href="${unlockUrl}" style="display:block;padding:18px 32px;color:#ffffff;font-size:17px;font-weight:700;text-decoration:none;">Show my full answer — £79</a>
         </td>
       </tr>
     </table>

@@ -397,6 +397,7 @@ test("payment success unlocks results after verify", async ({ page }) => {
 });
 
 test("preview page shows snapshot and unlock CTA from seeded wizard state", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.addInitScript(
     ({ key, state }) => {
       localStorage.setItem(key, JSON.stringify({ state, version: 0 }));
@@ -427,7 +428,15 @@ test("preview page shows snapshot and unlock CTA from seeded wizard state", asyn
   );
   await expect(page.getByTestId("section-preview-snapshot")).toBeVisible();
   await expect(page.getByTestId("value-asset-pool")).toBeVisible();
+  await expect(page.getByTestId("preview-snapshot-breakdown")).toBeVisible();
+  await expect(page.getByTestId("card-preview-questions")).toBeVisible();
+  await expect(page.getByTestId("card-preview-questions")).toContainText("paid the majority of the mortgage");
+  await expect(page.getByTestId("card-preview-questions")).toContainText("paused my career to look after the children");
+  await expect(page.getByTestId("preview-settlement-comparison")).toBeVisible();
+  await expect(page.getByTestId("preview-comparison")).toBeVisible();
   await expect(page.getByTestId("button-unlock-preview-primary").first()).toContainText("£79");
+  await expect(page.getByTestId("button-unlock-preview-primary").first()).toContainText("Show");
+  await expect(page.getByTestId("text-preview-cta-reassurance").first()).toContainText("12 months access");
   await expect(page.getByTestId("text-intent-bridge")).toBeVisible();
 });
 

@@ -22,12 +22,18 @@ export const PRODUCT_TAGLINE =
 
 export const ANSWER_READY_HEADLINE = "Your answer is ready — built from your figures";
 
-export const DEFAULT_UNLOCK_CTA = `Reveal my full answer — ${PRODUCT_PRICE}`;
+export const DEFAULT_UNLOCK_CTA = `Show my full answer — ${PRODUCT_PRICE}`;
+
+/** Shown under primary unlock buttons on preview. */
+export const PREVIEW_CTA_REASSURANCE =
+  "12 months access · Edit your figures and re-run anytime · PDF included · No subscription";
+
+export const PREVIEW_CTA_REASSURANCE_SHORT = "12 months · Re-run anytime · No subscription";
 
 export type ConversionArchetype = "protector" | "optimiser" | "clarity";
 
 const CTA_BY_ARCHETYPE: Record<ConversionArchetype, string> = {
-  protector: `Reveal what my offer may be hiding — ${PRODUCT_PRICE}`,
+  protector: `Show what their offer hides — ${PRODUCT_PRICE}`,
   optimiser: `See my full share — ${PRODUCT_PRICE}`,
   clarity: `See what I could keep — ${PRODUCT_PRICE}`,
 };
@@ -75,6 +81,84 @@ export function getPreviewArchetypeSecret(intent?: string | null): string | null
 
 export const PREVIEW_SNAPSHOT_GAP =
   "Your snapshot shows the pool. Unlock shows what each path actually leaves you with — monthly and long-term.";
+
+export const PREVIEW_MORTGAGE_QUESTION =
+  "I paid the majority of the mortgage. Where does that show in the split?";
+
+export const PREVIEW_CAREER_CHILDREN_QUESTION =
+  "I paused my career to look after the children — will that show fairly in the split?";
+
+const PREVIEW_QUESTIONS_BY_INTENT: Record<string, string[]> = {
+  offer_check: [
+    "Is their offer actually fair once monthly bills are included?",
+    PREVIEW_MORTGAGE_QUESTION,
+    PREVIEW_CAREER_CHILDREN_QUESTION,
+    "What should I ask my solicitor before I reply?",
+  ],
+  house_split: [
+    "Can I afford to keep the house on one income after the split?",
+    PREVIEW_MORTGAGE_QUESTION,
+    PREVIEW_CAREER_CHILDREN_QUESTION,
+    "Everyone is focused on the house. What about pensions and long-term security?",
+  ],
+  protect_position: [
+    PREVIEW_MORTGAGE_QUESTION,
+    PREVIEW_CAREER_CHILDREN_QUESTION,
+    "I carried the mortgage, bills or debts. Where does that show in the numbers?",
+    "What am I missing before I agree?",
+  ],
+  debt_pressure: [
+    PREVIEW_MORTGAGE_QUESTION,
+    PREVIEW_CAREER_CHILDREN_QUESTION,
+    "Could this settlement leave me short once bills and debts hit?",
+    "I carried the mortgage, bills or debts. Where does that show in the numbers?",
+  ],
+  fair_split: [
+    "Is 50/50 still workable once childcare, housing and monthly bills are included?",
+    PREVIEW_MORTGAGE_QUESTION,
+    PREVIEW_CAREER_CHILDREN_QUESTION,
+    "How much is my share once pensions and housing are applied?",
+  ],
+  pension_impact: [
+    "Everyone is focused on the house. What about pensions and long-term security?",
+    PREVIEW_MORTGAGE_QUESTION,
+    PREVIEW_CAREER_CHILDREN_QUESTION,
+    "Is pension value being ignored for the house?",
+  ],
+  income_gap: [
+    PREVIEW_CAREER_CHILDREN_QUESTION,
+    "I gave up work or put my career on hold. What financial evidence should I have ready?",
+    PREVIEW_MORTGAGE_QUESTION,
+    "Where does the income gap show before I agree?",
+  ],
+  children_housing: [
+    "Will I have enough to live on with the children after separation?",
+    PREVIEW_CAREER_CHILDREN_QUESTION,
+    PREVIEW_MORTGAGE_QUESTION,
+    "Is 50/50 still workable once childcare, housing and monthly bills are included?",
+  ],
+  first_private_view: [
+    PREVIEW_MORTGAGE_QUESTION,
+    PREVIEW_CAREER_CHILDREN_QUESTION,
+    "How much is my share under each settlement path?",
+    "Is 50/50 still workable once childcare, housing and monthly bills are included?",
+  ],
+};
+
+const PREVIEW_QUESTIONS_DEFAULT: string[] = [
+  PREVIEW_MORTGAGE_QUESTION,
+  PREVIEW_CAREER_CHILDREN_QUESTION,
+  "Is 50/50 still workable once childcare, housing and monthly bills are included?",
+  "I gave up work or put my career on hold. What financial evidence should I have ready?",
+];
+
+/** Intent-matched question teasers for preview “questions in your head” card. */
+export function getPreviewQuestionTeasers(intent?: string | null): string[] {
+  if (intent && PREVIEW_QUESTIONS_BY_INTENT[intent]) {
+    return PREVIEW_QUESTIONS_BY_INTENT[intent]!.slice(0, 4);
+  }
+  return PREVIEW_QUESTIONS_DEFAULT;
+}
 
 export const PREVIEW_UNLOCK_PILLARS = [
   {

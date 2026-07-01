@@ -7,10 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   Lock, Check, Shield, ArrowRight, Loader2,
-  Eye, FileText, ChevronDown, BarChart3,
+  Eye, FileText, BarChart3, MessageCircle,
 } from "lucide-react";
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { useCheckout } from "@/hooks/use-checkout";
@@ -32,7 +31,10 @@ import {
   PREVIEW_UNLOCK_PILLARS,
   getPreviewIntentBridge,
   getPreviewUnansweredChecks,
+  getPreviewQuestionTeasers,
   getUnlockCta,
+  PREVIEW_CTA_REASSURANCE,
+  PREVIEW_CTA_REASSURANCE_SHORT,
 } from "@/lib/product-copy";
 
 const ReportPreviewModal = lazy(() =>
@@ -148,6 +150,63 @@ function ReportPage({
   );
 }
 
+function CtaReassurance({ className = "", inverted = false }: { className?: string; inverted?: boolean }) {
+  return (
+    <p
+      className={`text-[10px] md:text-xs text-center leading-relaxed ${
+        inverted ? "text-white/55" : "text-slate-500"
+      } ${className}`}
+      data-testid="text-preview-cta-reassurance"
+    >
+      {PREVIEW_CTA_REASSURANCE}
+    </p>
+  );
+}
+
+function PreviewQuestionsCard({
+  intent,
+  onUnlock,
+  checkoutLoading,
+}: {
+  intent: string | null | undefined;
+  onUnlock: () => void;
+  checkoutLoading: boolean;
+}) {
+  const questions = getPreviewQuestionTeasers(intent);
+  return (
+    <div
+      className="rounded-sm border border-violet-200/80 bg-gradient-to-br from-violet-50/80 to-white p-3.5 space-y-2.5"
+      data-testid="card-preview-questions"
+    >
+      <div className="flex items-center gap-2">
+        <MessageCircle className="w-4 h-4 text-violet-600 shrink-0" />
+        <p className="text-xs font-semibold text-violet-900">Questions in your head</p>
+      </div>
+      <ul className="space-y-1.5">
+        {questions.map((question) => (
+          <li
+            key={question}
+            className="flex items-start gap-2 rounded-sm border border-violet-100 bg-white px-2.5 py-2"
+          >
+            <Lock className="w-3 h-3 text-violet-400 shrink-0 mt-0.5" />
+            <p className="text-[11px] font-medium text-slate-800 leading-snug">{question}</p>
+          </li>
+        ))}
+      </ul>
+      <p className="text-[10px] text-muted-foreground text-center">+ 29 more checks mapped to your figures</p>
+      <button
+        type="button"
+        onClick={onUnlock}
+        disabled={checkoutLoading}
+        className="w-full text-center text-xs font-semibold text-violet-700 hover:text-violet-900 transition-colors py-1"
+        data-testid="button-preview-questions-unlock"
+      >
+        See my personalised checks →
+      </button>
+    </div>
+  );
+}
+
 function CompactReportList() {
   return (
     <div className="rounded-sm border border-gold/25 bg-gold/[0.06] p-4 space-y-3" data-testid="preview-report-list-compact">
@@ -179,8 +238,6 @@ export default function PreviewPage() {
   const [emailLoading, setEmailLoading] = useState(false);
   const { checkoutLoading, handleCheckout } = useCheckout(sessionToken);
   const [sampleReportOpen, setSampleReportOpen] = useState(false);
-  const [breakdownOpen, setBreakdownOpen] = useState(false);
-  const [consoleOpen, setConsoleOpen] = useState(false);
   const [showStickyCta, setShowStickyCta] = useState(false);
   const snapshotAnchorRef = useRef<HTMLDivElement>(null);
   const pricingRef = useRef<HTMLElement>(null);
@@ -532,6 +589,39 @@ export default function PreviewPage() {
                 </Card>
               </div>
 
+              {/* Mobile: full breakdown always visible */}
+              <div className="md:hidden space-y-3" data-testid="preview-snapshot-breakdown">
+                <Card className="border-slate-200 shadow-none rounded-sm">
+                  <CardContent className="pt-4 pb-3">
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Net property equity</p>
+                    <p className="text-xl font-bold tabular-nums text-slate-900 mt-1" data-testid="value-net-equity-mobile">
+                      {formatCurrency(intermediate.netHomeEquity)}
+                    </p>
+                    <p className="text-[10px] text-slate-500 mt-1">Property value less mortgage and estimated sale costs</p>
+                  </CardContent>
+                </Card>
+                {chartData.length > 0 && (
+                  <div className="space-y-2 rounded-sm border border-slate-200 bg-white p-3">
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Asset pool breakdown</p>
+                    {chartData.map((d, i) => (
+                      <div key={d.name} className="flex items-center justify-between text-xs px-0.5">
+                        <div className="flex items-center gap-2 text-slate-600">
+                          <div className="w-2 h-2 rounded-sm" style={{ background: CHART_COLOURS[i % CHART_COLOURS.length] }} />
+                          {d.name}
+                        </div>
+                        <span className="font-semibold tabular-nums">{formatCurrency(d.value)}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <p className="text-xs text-slate-500 leading-relaxed px-0.5" data-testid="text-interpretation-mobile">
+                  Based on what you&apos;ve entered, the combined distributable pool is{" "}
+                  <strong className="text-slate-800">{formatCurrency(combinedPool)}</strong>. Under a 50/50 split, each party
+                  would start from approximately <strong className="text-slate-800">{formatCurrency(halfPool)}</strong> — before
+                  housing arrangements and pension allocations are applied.
+                </p>
+              </div>
+
               <p className="text-sm text-slate-700 leading-relaxed font-medium md:font-normal" data-testid="text-intent-bridge">
                 {intentBridge}
               </p>
@@ -544,11 +634,12 @@ export default function PreviewPage() {
                 <PreviewUnansweredChecklist intent={unlockIntent} />
               </div>
 
-              {/* Mobile: primary CTA — before tease so it stays in first screen */}
+              {/* Mobile: primary CTA */}
               <div ref={snapshotAnchorRef} className="md:hidden space-y-2" data-testid="preview-mobile-cta">
                 <UnlockButton className="w-full text-sm whitespace-normal h-auto min-h-10 py-2.5 leading-snug" variant="gold" testId="button-unlock-preview-primary" />
-                <p className="text-[10px] text-slate-400 text-center leading-relaxed">
-                  Share · monthly headroom · questions to ask · {PRODUCT_PRICE} · 12 months
+                <CtaReassurance />
+                <p className="text-[10px] text-slate-400 text-center leading-relaxed italic">
+                  Your wizard inputs are saved — unlock once, revisit for a year.
                 </p>
               </div>
 
@@ -557,7 +648,7 @@ export default function PreviewPage() {
                 type="button"
                 onClick={handleCheckout}
                 disabled={checkoutLoading}
-                className="w-full text-left rounded-sm border border-slate-200 bg-gradient-to-r from-slate-50 to-white p-3 space-y-2"
+                className="w-full text-left rounded-sm border border-slate-200 bg-gradient-to-r from-slate-50 to-white p-3 space-y-2 md:mt-0"
                 data-testid="preview-locked-tease-mobile"
               >
                 <div className="flex items-center justify-between gap-2">
@@ -575,9 +666,11 @@ export default function PreviewPage() {
                   </span>
                   <span className="text-slate-300">·</span>
                   <span className="blur-[4px] select-none">Sell · Keep · Deferred</span>
-                  <span className="text-primary font-semibold ml-auto">Unlock my share &amp; monthly position →</span>
+                  <span className="text-primary font-semibold ml-auto">Show my share &amp; monthly position →</span>
                 </div>
               </button>
+
+              <PreviewQuestionsCard intent={unlockIntent} onUnlock={handleCheckout} checkoutLoading={checkoutLoading} />
 
               <div className="hidden md:block rounded-sm border border-slate-200 bg-slate-50/60 p-4 space-y-3">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
@@ -586,47 +679,12 @@ export default function PreviewPage() {
                 <PreviewUnlockPillars />
               </div>
 
-              {/* Mobile: collapsible full breakdown */}
-              <Collapsible open={breakdownOpen} onOpenChange={setBreakdownOpen} className="md:hidden">
-                <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 rounded-sm border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-700">
-                  See full breakdown
-                  <ChevronDown className={`w-4 h-4 transition-transform ${breakdownOpen ? "rotate-180" : ""}`} />
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pt-3 space-y-3">
-                  <Card className="border-slate-200 shadow-none rounded-sm">
-                    <CardContent className="pt-4 pb-3">
-                      <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Net property equity</p>
-                      <p className="text-xl font-bold tabular-nums text-slate-900 mt-1">
-                        {formatCurrency(intermediate.netHomeEquity)}
-                      </p>
-                    </CardContent>
-                  </Card>
-                  {chartData.length > 0 && (
-                    <div className="space-y-2">
-                      {chartData.map((d, i) => (
-                        <div key={d.name} className="flex items-center justify-between text-xs px-1">
-                          <div className="flex items-center gap-2 text-slate-600">
-                            <div className="w-2 h-2 rounded-sm" style={{ background: CHART_COLOURS[i % CHART_COLOURS.length] }} />
-                            {d.name}
-                          </div>
-                          <span className="font-semibold tabular-nums">{formatCurrency(d.value)}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  <p className="text-xs text-slate-500 leading-relaxed" data-testid="text-interpretation">
-                    Pool <strong>{formatCurrency(combinedPool)}</strong> · ~{formatCurrency(halfPool)} each at 50/50 before housing and pensions.
-                  </p>
-                </CollapsibleContent>
-              </Collapsible>
-
               {/* Desktop: full breakdown inline */}
               {snapshotBreakdown}
 
-              {/* Desktop: bridge CTA after snapshot */}
               <div className="hidden md:flex flex-col sm:flex-row gap-3 items-start sm:items-center pt-2 border-t border-slate-100">
                 <UnlockButton variant="primary" testId="button-unlock-preview-primary" />
-                <p className="text-xs text-slate-400">{PRODUCT_PRICE} one-off · 12 months · Secured by Stripe</p>
+                <CtaReassurance className="text-left sm:max-w-md" />
               </div>
             </div>
           </ReportPage>
@@ -642,30 +700,9 @@ export default function PreviewPage() {
                   locked
                 />
 
-                {/* Mobile: collapsed console */}
-                <Collapsible open={consoleOpen} onOpenChange={setConsoleOpen} className="md:hidden">
-                  <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 rounded-sm border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-semibold text-slate-700">
-                    Compare all 4 settlement options
-                    <ChevronDown className={`w-4 h-4 transition-transform ${consoleOpen ? "rotate-180" : ""}`} />
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="pt-3 space-y-3">
-                    <SettlementConsole
-                      scenarios={previewConsoleScenarios.slice(0, 2)}
-                      composition={previewComposition}
-                      partyAName={nameA}
-                      partyBName={nameB}
-                      locked
-                      onUnlock={handleCheckout}
-                      chromeCaption="Settlement comparison"
-                      footerText="Unlock to reveal exact figures"
-                      hideStress
-                      testId="preview-settlement-console-mobile"
-                    />
-                  </CollapsibleContent>
-                </Collapsible>
-
-                {/* Desktop: full console */}
-                <div className="hidden md:block space-y-5">
+                {/* Settlement comparison — always visible (all 4 options) */}
+                <div className="space-y-5" data-testid="preview-settlement-comparison">
+                  <p className="text-xs font-semibold text-slate-600 md:hidden">Compare all 4 settlement options</p>
                   <SettlementConsole
                     scenarios={previewConsoleScenarios}
                     composition={previewComposition}
@@ -800,6 +837,7 @@ export default function PreviewPage() {
 
               <div className="px-5 md:px-6 py-4 md:py-5 space-y-3 md:space-y-4">
                 <UnlockButton className="w-full text-base" variant="gold" />
+                <CtaReassurance inverted className="!text-[11px]" />
                 <p className="text-xs text-white/40 text-center">Secured by Stripe · Instant access</p>
                 <p className="text-xs text-white/35 text-center">
                   Already purchased?{" "}
@@ -862,6 +900,7 @@ export default function PreviewPage() {
         data-testid="preview-sticky-cta"
       >
         <UnlockButton className="w-full text-sm whitespace-normal h-auto min-h-10 py-2.5 leading-snug" variant="gold" testId="button-unlock-preview-sticky" />
+        <p className="text-[9px] text-slate-400 text-center mt-1.5 leading-relaxed">{PREVIEW_CTA_REASSURANCE_SHORT}</p>
       </div>
 
       {sampleReportOpen && (

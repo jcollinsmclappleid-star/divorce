@@ -693,6 +693,8 @@ export function getRelevantSettlementFactors(
 }
 
 export const REPORT_FACTOR_TEASERS = [
+  "I paid the majority of the mortgage. Where does that show in the split?",
+  "I paused my career to look after the children — will that show fairly in the split?",
   "I gave up work or put my career on hold. What financial evidence should I have ready?",
   "I carried the mortgage, bills or debts. Where does that show in the numbers?",
   "Everyone is focused on the house. What about pensions and long-term security?",
