@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useCheckout } from "@/hooks/use-checkout";
 import { useLocation, Link } from "wouter";
 import { useAccess, useSessionToken } from "@/hooks/use-access";
 import { Button } from "@/components/ui/button";
@@ -103,34 +104,11 @@ export default function UnlockPage() {
   const [, navigate] = useLocation();
   const sessionToken = useSessionToken();
   const { hasAccess, isLoading } = useAccess();
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const { checkoutLoading, handleCheckout } = useCheckout(sessionToken);
 
   useEffect(() => {
     if (!isLoading && hasAccess) navigate("/results");
   }, [hasAccess, isLoading, navigate]);
-
-  async function handleCheckout() {
-    setCheckoutLoading(true);
-    try {
-      const res = await fetch("/api/checkout/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionToken }),
-      });
-      const data = await res.json();
-      if (res.ok && data.url) {
-        window.location.href = data.url;
-      } else {
-        console.error("Checkout failed:", data.message || "Unknown error");
-        alert("Payment page failed to load. Please try again.");
-        setCheckoutLoading(false);
-      }
-    } catch (err) {
-      console.error("Checkout error:", err);
-      alert("An error occurred. Please try again.");
-      setCheckoutLoading(false);
-    }
-  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -197,9 +175,6 @@ export default function UnlockPage() {
           </Button>
           <p className="text-white/35 text-xs">
             One-time payment · 12 months access · Secured by Stripe
-          </p>
-          <p className="text-amber-300/80 text-xs font-medium">
-            Use code <span className="font-black tracking-wider">CLARITY15</span> at checkout for 15% off this month
           </p>
         </div>
       </section>
@@ -321,13 +296,6 @@ export default function UnlockPage() {
                 </div>
               </div>
 
-              {/* Promo code offer */}
-              <div className="rounded-xl bg-amber-950/40 border border-amber-500/30 px-4 py-3 text-center space-y-0.5">
-                <p className="text-[10px] text-amber-400/70 uppercase tracking-widest font-semibold">This month</p>
-                <p className="text-2xl font-black tracking-[0.2em] text-amber-300">CLARITY15</p>
-                <p className="text-xs text-white/50">Enter at checkout for <span className="text-white/80 font-semibold">15% off</span></p>
-              </div>
-
               <Button
                 className="w-full bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/30 text-base font-semibold"
                 size="lg"
@@ -415,9 +383,6 @@ export default function UnlockPage() {
           <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
             Your figures are saved. See what each scenario could leave you with — capital, pensions, monthly pressure — plus a source-backed preparation guide and questions to check before you agree.
           </p>
-          <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold px-3 py-1.5 rounded-full">
-            Use code <span className="font-black tracking-wider">CLARITY15</span> at checkout for 15% off this month
-          </div>
           <div>
             <Button
               size="lg"

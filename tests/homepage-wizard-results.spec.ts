@@ -195,13 +195,10 @@ test("homepage loads with expected title and H1", async ({ page }) => {
   );
 });
 
-test("homepage intent card opens the wizard and persists the selected intent", async ({ page }) => {
+test("homepage house intent chip opens the wizard and persists the selected intent", async ({ page }) => {
   await page.goto("/");
 
-  await page
-    .getByTestId("card-intent-house-split")
-    .getByRole("button", { name: /Calculate House Split/i })
-    .click();
+  await page.getByTestId("hero-chip-house_split").click();
 
   await expect(page).toHaveURL(/\/wizard$/);
   const selectedIntent = page.getByTestId("button-intent-house_split");
@@ -217,7 +214,7 @@ test("homepage intent card opens the wizard and persists the selected intent", a
 
   await expect.poll(() => dataLayerEvents(page)).toContainEqual(
     expect.objectContaining({
-      event: "homepage_intent_card_click",
+      event: "homepage_hero_chip_click",
       intent: "house_split",
     }),
   );
@@ -237,7 +234,7 @@ test("wizard offer-check intent shows the assumptions offer-check panel", async 
   await expect(page.getByTestId("button-offer-check-mode")).toHaveClass(/bg-primary/);
 });
 
-test("results page displays Settlement Reality Check Lenses and Position Check", async ({ page }) => {
+test("results page displays intent lenses and position check when layer 3 is expanded", async ({ page }) => {
   await page.addInitScript(
     ({ key, state }) => {
       localStorage.setItem(key, JSON.stringify({ state, version: 0 }));
@@ -247,18 +244,168 @@ test("results page displays Settlement Reality Check Lenses and Position Check",
 
   await page.goto("/results");
 
+  await expect(page.getByTestId("text-results-title")).toContainText(
+    "Your answer — built from your figures",
+  );
+
+  await page.getByTestId("button-toggle-layer-2").click();
+
   await expect(page.getByTestId("section-intent-reality-check")).toContainText(
-    "Settlement Reality Check Lenses",
+    "Quick lenses",
   );
   await expect(page.getByTestId("card-results-lens-offer_check")).toContainText(
-    "Settlement Offer Check",
-  );
-  await expect(page.getByTestId("section-settlement-position-check")).toContainText(
-    "Settlement Position Check",
+    "Offer Check",
   );
   await expect(page.getByTestId("section-settlement-position-check")).toContainText(
     "Offer Trade-Off Check",
   );
+});
+
+test("results page redirects to preview without paid access", async ({ page }) => {
+  await page.addInitScript(
+    ({ key, state }) => {
+      localStorage.setItem(key, JSON.stringify({ state, version: 0 }));
+    },
+    { key: STORAGE_KEY, state: seededModelState },
+  );
+
+  await page.route("**/api/auth/me", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ authenticated: false, hasAccess: false }),
+    });
+  });
+
+  await page.route("**/api/access/**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ hasAccess: false, reason: "no_purchase" }),
+    });
+  });
+
+  await page.goto("/results");
+  await expect(page).toHaveURL(/\/preview$/);
+});
+
+test("payment success unlocks results after verify", async ({ page }) => {
+  await page.addInitScript(
+    ({ key, state }) => {
+      localStorage.setItem(key, JSON.stringify({ state, version: 0 }));
+    },
+    { key: STORAGE_KEY, state: seededModelState },
+  );
+
+  const paidToken = "e2e-paid-session-token";
+  const accessState = { unlocked: false };
+
+  await page.unroute("**/api/auth/me");
+  await page.unroute("**/api/access/**");
+
+  await page.route("**/api/checkout/verify", async (route) => {
+    accessState.unlocked = true;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ status: "paid", sessionToken: paidToken }),
+    });
+  });
+
+  await page.route("**/api/auth/me", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        authenticated: accessState.unlocked,
+        hasAccess: accessState.unlocked,
+      }),
+    });
+  });
+
+  await page.route("**/api/access/**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(
+        accessState.unlocked
+          ? { hasAccess: true, purchasedAt: new Date().toISOString() }
+          : { hasAccess: false, reason: "no_purchase" },
+      ),
+    });
+  });
+
+  await page.goto("/payment-success?session_id=cs_test_e2e");
+  await expect(page.getByTestId("text-payment-confirmed")).toBeVisible();
+  await expect
+    .poll(async () => page.evaluate(() => localStorage.getItem("dfm-session-token")))
+    .toBe(paidToken);
+
+  await page.getByTestId("button-go-to-results").click();
+  await expect(page.getByTestId("text-results-title")).toBeVisible();
+  await expect(page).toHaveURL(/\/results$/);
+});
+
+test("preview page shows snapshot and unlock CTA from seeded wizard state", async ({ page }) => {
+  await page.addInitScript(
+    ({ key, state }) => {
+      localStorage.setItem(key, JSON.stringify({ state, version: 0 }));
+    },
+    { key: STORAGE_KEY, state: seededModelState },
+  );
+
+  await page.route("**/api/auth/me", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ authenticated: false, hasAccess: false }),
+    });
+  });
+
+  await page.route("**/api/access/**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ hasAccess: false, reason: "no_purchase" }),
+    });
+  });
+
+  await page.goto("/preview");
+
+  await expect(page.getByTestId("text-preview-title")).toContainText(
+    "Your answer is ready",
+  );
+  await expect(page.getByTestId("value-net-equity")).toBeVisible();
+  await expect(page.getByTestId("card-pricing-cta").getByTestId("button-unlock-pricing")).toContainText("£79");
+});
+
+test("unlock page shows pricing and checkout entry points", async ({ page }) => {
+  await page.unroute("**/api/auth/me");
+  await page.unroute("**/api/access/**");
+
+  await page.route("**/api/auth/me", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ authenticated: false, hasAccess: false }),
+    });
+  });
+
+  await page.route("**/api/access/**", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ hasAccess: false, reason: "no_purchase" }),
+    });
+  });
+
+  await page.goto("/unlock");
+
+  await expect(page).toHaveURL(/\/unlock$/);
+  await expect(page.getByTestId("text-price")).toContainText("£79");
+  await expect(page.getByTestId("button-checkout-hero")).toBeVisible();
+  await expect(page.getByTestId("badge-access-duration")).toContainText("Twelve Months");
+  await expect(page.getByTestId("link-recover")).toBeVisible();
 });
 
 test("homepage conversion analytics events are emitted", async ({ page }) => {
@@ -274,7 +421,7 @@ test("homepage conversion analytics events are emitted", async ({ page }) => {
   await page.goto("/");
   await page.getByTestId("button-hero-offer-check").click();
   await expect.poll(() => dataLayerEvents(page)).toContainEqual(
-    expect.objectContaining({ event: "homepage_offer_check_start", intent: "offer_check" }),
+    expect.objectContaining({ event: "homepage_hero_share_start", intent: "fair_split" }),
   );
 
   await page.goto("/");
@@ -284,13 +431,10 @@ test("homepage conversion analytics events are emitted", async ({ page }) => {
   );
 
   await page.goto("/");
-  await page
-    .getByTestId("card-intent-pension")
-    .getByRole("button", { name: /Check Pension Impact/i })
-    .click();
+  await page.getByTestId("hero-chip-pension_impact").click();
   await expect.poll(() => dataLayerEvents(page)).toContainEqual(
     expect.objectContaining({
-      event: "homepage_intent_card_click",
+      event: "homepage_hero_chip_click",
       intent: "pension_impact",
     }),
   );

@@ -12,6 +12,7 @@ import {
   AlertCircle, Eye, FileText,
 } from "lucide-react";
 import { useEffect, useState, lazy, Suspense } from "react";
+import { useCheckout } from "@/hooks/use-checkout";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { Logo } from "@/components/logo";
@@ -107,7 +108,7 @@ export default function PreviewPage() {
   const [email, setEmail] = useState("");
   const [emailSubmitted, setEmailSubmitted] = useState(() => !!store.profile?.capturedEmail);
   const [emailLoading, setEmailLoading] = useState(false);
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const { checkoutLoading, handleCheckout } = useCheckout(sessionToken);
   const [sampleReportOpen, setSampleReportOpen] = useState(false);
   const unlockIntent =
     store.profile?.calculationIntent ||
@@ -126,27 +127,6 @@ export default function PreviewPage() {
     if (!hasData) navigate("/");
   }, [hasData, navigate]);
   if (!hasData) return null;
-
-  async function handleCheckout() {
-    setCheckoutLoading(true);
-    try {
-      const res = await fetch("/api/checkout/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionToken }),
-      });
-      const data = await res.json();
-      if (res.ok && data.url) {
-        window.location.href = data.url;
-      } else {
-        alert("Payment page failed to load. Please try again.");
-        setCheckoutLoading(false);
-      }
-    } catch {
-      alert("An error occurred. Please try again.");
-      setCheckoutLoading(false);
-    }
-  }
 
   const { intermediate } = engine;
   const combinedPool = intermediate.totalLiquid + intermediate.netHomeEquity;

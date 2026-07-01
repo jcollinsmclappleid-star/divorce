@@ -202,7 +202,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background font-sans overflow-x-hidden" ref={revealRef}>
       <ScrollProgressBar />
-      <div className="bg-[hsl(220_52%_10%)] text-white/65 px-4 py-1.5 text-xs text-center font-medium" data-testid="text-disclaimer">
+      <div className="hidden md:block bg-[hsl(220_52%_10%)] text-white/65 px-4 py-1.5 text-xs text-center font-medium" data-testid="text-disclaimer">
         England &amp; Wales <span className="text-gold/50 mx-1">·</span> HMRC 2026/27 rates{" "}
         <span className="text-gold/50 mx-1">·</span> Illustrative modelling only{" "}
         <span className="text-gold/50 mx-1">·</span> Not legal, tax or financial advice
@@ -227,17 +227,17 @@ export default function LandingPage() {
             <rect width="100%" height="100%" fill="url(#hero-dot-grid)" />
           </svg>
         </motion.div>
-        <div className="container relative z-10 mx-auto px-4 pt-14 pb-20 md:pt-20 md:pb-28">
+        <div className="container relative z-10 mx-auto px-4 pt-8 pb-16 md:pt-20 md:pb-28">
           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 md:gap-14 items-center">
 
             {/* Left — copy */}
-            <div className="space-y-5">
-              <motion.div {...fadeUp(0)}>
+            <div className="space-y-4 md:space-y-5">
+              <motion.div {...fadeUp(0)} className="hidden md:block">
                 <Badge variant="outline" className="text-xs px-3 py-1 border-gold/50 text-gold bg-gold/10">
                   England &amp; Wales <span className="text-gold/50 mx-1">·</span> HMRC 2026/27 rates
                 </Badge>
               </motion.div>
-              <motion.p {...fadeUp(0.04)} className="text-sm text-gold/90 font-medium italic">
+              <motion.p {...fadeUp(0.04)} className="hidden md:block text-sm text-gold/90 font-medium italic">
                 {HERO_EYEBROW}
               </motion.p>
               <motion.h1
@@ -274,12 +274,16 @@ export default function LandingPage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  onClick={() => startFresh("offer_check", "homepage_offer_check_start")}
+                  onClick={() => startFresh("fair_split", "homepage_hero_share_start")}
                   data-testid="button-hero-offer-check"
                   className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white w-full sm:w-auto"
                 >
-                  Check an Offer Before I Reply
+                  Work Out My Share
                 </Button>
+
+                <p className="md:hidden text-[11px] text-white/45 text-center leading-relaxed">
+                  Illustrative modelling only · Not legal or financial advice
+                </p>
 
                 <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/10">
                   {HERO_CHIPS.map((chip) => {
