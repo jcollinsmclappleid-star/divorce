@@ -414,7 +414,44 @@ export default function WizardPage() {
           </div>
 
         </div>
-        <Progress value={progress} className={`h-1.5 rounded-none transition-all duration-500 ${STEP_META[currentStep].progressBar}`} data-testid="progress-bar" />
+
+        {/* Mobile: coloured step progression */}
+        <div className="md:hidden px-3 pb-2.5 bg-white border-b border-slate-100" data-testid="wizard-mobile-stepper">
+          <div className="flex items-center justify-between mb-2">
+            <span className={`text-[10px] font-bold uppercase tracking-wider ${STEP_META[currentStep].pillText}`}>
+              {currentStep === 0
+                ? "Getting started"
+                : WIZARD_STAGES.find((s) => s.steps.includes(currentStep))?.label ?? STEP_META[currentStep].category}
+            </span>
+            <span className="text-[10px] font-semibold text-muted-foreground tabular-nums">
+              {currentStep === 0 ? "Start" : `Step ${currentStep} of ${STEPS.length - 1}`}
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            {STEPS.map((_, stepIdx) => (
+              <button
+                key={stepIdx}
+                type="button"
+                onClick={() => { scrollTop(); setCurrentStep(stepIdx); }}
+                data-testid={`stepper-mobile-segment-${stepIdx}`}
+                className="flex-1 min-w-0 p-0"
+                aria-label={`Go to step ${stepIdx}: ${STEPS[stepIdx].title}`}
+              >
+                <div
+                  className={`h-2.5 w-full rounded-full transition-all duration-300 ${
+                    stepIdx < currentStep
+                      ? STEP_META[stepIdx].dotBg
+                      : stepIdx === currentStep
+                        ? `${STEP_META[stepIdx].dotBg} ring-2 ring-offset-1 ring-offset-white ring-slate-300`
+                        : "bg-slate-200"
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <Progress value={progress} className={`h-2 md:h-1.5 rounded-none transition-all duration-500 ${STEP_META[currentStep].progressBar}`} data-testid="progress-bar" />
       </header>
 
       <main className="flex-1 container mx-auto px-4 py-8 max-w-6xl">

@@ -375,8 +375,10 @@ test("preview page shows snapshot and unlock CTA from seeded wizard state", asyn
   await expect(page.getByTestId("text-preview-title")).toContainText(
     "Your answer is ready",
   );
-  await expect(page.getByTestId("value-net-equity")).toBeVisible();
-  await expect(page.getByTestId("card-pricing-cta").getByTestId("button-unlock-pricing")).toContainText("£79");
+  await expect(page.getByTestId("section-preview-snapshot")).toBeVisible();
+  await expect(page.getByTestId("value-asset-pool")).toBeVisible();
+  await expect(page.getByTestId("button-unlock-preview-primary").first()).toContainText("£79");
+  await expect(page.getByTestId("text-intent-bridge")).toBeVisible();
 });
 
 test("unlock page shows pricing and checkout entry points", async ({ page }) => {
