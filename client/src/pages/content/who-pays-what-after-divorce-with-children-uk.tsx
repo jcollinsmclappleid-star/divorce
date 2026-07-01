@@ -165,7 +165,7 @@ export default function WhoPaysAfterDivorcePage() {
           {[
             "The exact CMS child maintenance figure — this requires the paying parent's gross income and overnight stay data via the CMS calculator",
             "Whether spousal maintenance is appropriate in your specific circumstances",
-            "How a court would divide capital between two parents with very different income positions",
+            "How capital, income and housing pressure should be reviewed where parents have very different income positions",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />

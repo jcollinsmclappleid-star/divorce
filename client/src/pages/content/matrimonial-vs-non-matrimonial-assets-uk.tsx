@@ -32,16 +32,16 @@ const nonMatrimonial = [
 ];
 
 const factors = [
-  { title: "Length of marriage", desc: "The longer the marriage, the more difficult it becomes to ring-fence non-matrimonial wealth. In long marriages, the distinction often blurs and even pre-marital assets are commonly drawn into the matrimonial pot." },
-  { title: "Mingling and use", desc: "Non-matrimonial wealth that has been mingled with matrimonial assets — for example, an inheritance used to pay down the family mortgage — typically loses its protected status. Keeping non-matrimonial assets in separate accounts strengthens the ring-fencing argument." },
+  { title: "Length of marriage", desc: "The longer the marriage, the more difficult it becomes to keep non-matrimonial wealth separate. In long marriages, the distinction often blurs and even pre-marital assets are commonly drawn into the matrimonial pot." },
+  { title: "Mingling and use", desc: "Non-matrimonial wealth that has been mingled with matrimonial assets — for example, an inheritance used to pay down the family mortgage — typically loses its protected status. Keeping non-matrimonial assets in separate accounts strengthens the non-matrimonial argument." },
   { title: "Whether needs require it", desc: "Even where assets are clearly non-matrimonial, they can be drawn into the settlement if the matrimonial pot is insufficient to meet both parties' needs (especially housing needs). Needs trumps the matrimonial/non-matrimonial distinction." },
-  { title: "How clearly traceable the source is", desc: "Non-matrimonial wealth must be clearly identifiable. Where the source is clean and well-documented (e.g. a single inheritance into a separate account, never touched), ring-fencing is easier. Where it's been mixed with other money over years, it's much harder." },
+  { title: "How clearly traceable the source is", desc: "Non-matrimonial wealth must be clearly identifiable. Where the source is clean and well-documented (e.g. a single inheritance into a separate account, never touched), non-matrimonial treatment is easier. Where it's been mixed with other money over years, it's much harder." },
 ];
 
 const faqItems = [
   {
     question: "What's the difference between matrimonial and non-matrimonial assets?",
-    answer: "Matrimonial assets are wealth built up during the marriage as the joint product of the partnership. Non-matrimonial assets are wealth that pre-dates the marriage or comes from an external source (typically inheritance or family gift) and has been kept separate from the joint finances. The distinction matters because matrimonial assets are subject to sharing principles, while non-matrimonial assets can sometimes be ring-fenced.",
+    answer: "Matrimonial assets are wealth built up during the marriage as the joint product of the partnership. Non-matrimonial assets are wealth that pre-dates the marriage or comes from an external source, such as inheritance or family gift, and has been kept separate from the joint finances. The distinction matters because it can affect what needs separate legal review.",
   },
   {
     question: "Is the family home always matrimonial?",
@@ -49,7 +49,7 @@ const faqItems = [
   },
   {
     question: "What if I inherited money during the marriage and put it into our home?",
-    answer: "By doing so you have likely converted the inheritance from non-matrimonial to matrimonial — it has been mingled with a clearly matrimonial asset (the family home). The protection that ring-fencing might otherwise have offered is typically lost in that scenario.",
+    answer: "By doing so you have likely converted the inheritance from non-matrimonial to matrimonial — it has been mingled with a clearly matrimonial asset (the family home). The protection that non-matrimonial treatment might otherwise have offered is typically lost in that scenario.",
   },
   {
     question: "Does it matter whose name an asset is in?",
@@ -69,7 +69,7 @@ const relatedPages = [
   { title: "Pre-Marital Assets in Divorce UK", description: "Detailed guide to assets brought into the marriage.", href: "/pre-marital-assets-divorce-uk", badge: "Assets" },
   { title: "Is Inheritance Included in Divorce Settlement UK?", description: "How inherited wealth is treated.", href: "/is-inheritance-included-in-divorce-settlement-uk", badge: "Inheritance" },
   { title: "Section 25 Factors in UK Divorce", description: "The legal framework that interprets these distinctions.", href: "/section-25-factors-divorce-uk", badge: "Legal" },
-  { title: "Preview the Full Financial Report", description: "Model the impact of ring-fenced assets on your settlement.", href: "/unlock", badge: "Report" },
+  { title: "Preview the Full Financial Report", description: "Model the impact of separate-asset assumptions on your settlement.", href: "/unlock", badge: "Report" },
 ];
 
 export default function MatrimonialVsNonMatrimonialPage() {
@@ -77,9 +77,9 @@ export default function MatrimonialVsNonMatrimonialPage() {
   return (
     <ContentPageLayout
       title="Matrimonial vs Non-Matrimonial Assets in UK Divorce"
-      subtitle="The distinction between matrimonial and non-matrimonial assets often shapes the entire settlement. Matrimonial wealth is shared; non-matrimonial wealth can sometimes be ring-fenced — but only if it's been kept separate and the rest of the pot meets both parties' needs."
+      subtitle="The distinction between matrimonial and non-matrimonial assets often shapes the financial discussion. Matrimonial wealth and separate wealth need different evidence, and the answer depends on separation, mingling, needs and marriage length."
       documentTitle="Matrimonial vs Non-Matrimonial Assets UK | DivorceCalculatorUK"
-      metaDescription="Plain-English guide to matrimonial vs non-matrimonial assets in UK divorce — what's shared, what can be ring-fenced, the role of mingling, and how length of marriage affects the outcome."
+      metaDescription="Plain-English guide to matrimonial vs non-matrimonial assets in UK divorce — what needs separate review, the role of mingling, and how length of marriage affects the financial picture."
       relatedPages={relatedPages}
       breadcrumbs={[
         { name: "Home", href: "/" },
@@ -89,14 +89,14 @@ export default function MatrimonialVsNonMatrimonialPage() {
     >
       <ContentSection>
         <p className="text-muted-foreground leading-relaxed mb-6">
-          UK family law draws a distinction between matrimonial assets — wealth built up during the marriage as the joint product of the partnership — and non-matrimonial assets, which typically pre-date the marriage or come from an external source like inheritance. Matrimonial assets are subject to sharing principles. Non-matrimonial assets can sometimes be ring-fenced from the settlement. The line between the two is not always clear, and in long marriages the distinction often blurs.
+          UK family law draws a distinction between matrimonial assets — wealth built up during the marriage as the joint product of the partnership — and non-matrimonial assets, which typically pre-date the marriage or come from an external source like inheritance. Non-matrimonial assets need clear evidence and case-specific legal review. The line between the two is not always clear, and in long marriages the distinction often blurs.
         </p>
 
         <Card className="border-amber-200 bg-amber-50 mb-6">
           <CardContent className="pt-5">
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-amber-700">Even where assets are clearly non-matrimonial, they can be drawn into the settlement if needs (especially housing) cannot otherwise be met. Ring-fencing is never absolute — needs come first.</p>
+              <p className="text-sm text-amber-700">Even where assets are clearly non-matrimonial, they can be drawn into the settlement if needs (especially housing) cannot otherwise be met. Non-matrimonial treatment is not absolute — needs are a key factor.</p>
             </div>
           </CardContent>
         </Card>
@@ -122,11 +122,11 @@ export default function MatrimonialVsNonMatrimonialPage() {
             </div>
           ))}
         </div>
-        <InlineCTA label="Model Your Settlement With Ring-Fenced Assets" />
+        <InlineCTA label="Model Your Settlement With Separate-Asset Assumptions" />
       </ContentSection>
 
       <ContentSection>
-        <h2 className="text-2xl font-display font-bold mb-6">Four Factors That Decide Whether Ring-Fencing Holds</h2>
+        <h2 className="text-2xl font-display font-bold mb-6">Four Factors That Affect Non-Matrimonial Treatment</h2>
         <div className="space-y-4 mb-8">
           {factors.map((f, i) => (
             <Card key={i}>
@@ -160,10 +160,10 @@ export default function MatrimonialVsNonMatrimonialPage() {
         <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points</h2>
         <div className="space-y-3 mb-6">
           {[
-            { label: "The mingling trap", desc: "An inheritance paid into a joint account, or used to fund a deposit on the family home, is typically converted from non-matrimonial to matrimonial. Once mingled, the protection rarely survives." },
-            { label: "Long marriage erosion", desc: "Even pristine non-matrimonial assets may lose their protection in a 25-year marriage. The longer the partnership, the more the courts treat the wealth as the joint product of the marriage." },
-            { label: "Needs override sharing", desc: "If the matrimonial pot can't meet both parties' housing needs, non-matrimonial assets can be drawn in regardless of how clearly they were ring-fenced. Modest-asset cases rarely allow ring-fencing." },
-            { label: "Tracing problems", desc: "After many years and many transactions, tracing money from a non-matrimonial source into a current asset can be difficult or impossible. Without clear documentation, the ring-fencing argument is much harder to maintain." },
+            { label: "The mingling trap", desc: "An inheritance paid into a joint account, or used to fund a deposit on the family home, may become harder to treat separately. Once mingled, the evidence and legal analysis become more complex." },
+            { label: "Long marriage erosion", desc: "Even clearly separate assets may need fuller review in a 25-year marriage. The longer the partnership, the more important needs, resources and evidence become." },
+            { label: "Needs can affect separate-asset arguments", desc: "If the matrimonial pot cannot meet both parties' housing needs, separate assets may still need to be discussed. Modest-asset cases rarely leave much room for simple categorisation." },
+            { label: "Tracing problems", desc: "After many years and many transactions, tracing money from a non-matrimonial source into a current asset can be difficult or impossible. Without clear documentation, the separate-asset argument is much harder to assess." },
           ].map((p, i) => (
             <div key={i} className="p-4 rounded-lg border">
               <p className="text-sm font-semibold mb-1">{p.label}</p>
@@ -178,8 +178,8 @@ export default function MatrimonialVsNonMatrimonialPage() {
         <div className="space-y-3 mb-6">
           {[
             "Whether a particular asset would be treated as matrimonial or non-matrimonial in your case",
-            "How much weight a court would give to mingling or to the length of your marriage",
-            "Whether your needs case overrides the ring-fencing argument",
+            "How mingling or the length of your marriage should be evidenced and reviewed",
+            "Whether needs may affect any separate-asset argument",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
@@ -192,7 +192,7 @@ export default function MatrimonialVsNonMatrimonialPage() {
         <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
           <li>Which of our assets are realistically defensible as non-matrimonial?</li>
           <li>Has any non-matrimonial wealth been mingled in a way that loses its protection?</li>
-          <li>In our case, do needs override any ring-fencing argument?</li>
+          <li>In our case, do needs override any non-matrimonial argument?</li>
           <li>How does the length of our marriage affect the analysis?</li>
           <li>What documentation should we be gathering to support the source of any asset?</li>
         </ul>

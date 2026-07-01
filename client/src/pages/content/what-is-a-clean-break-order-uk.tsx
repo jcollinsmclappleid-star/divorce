@@ -35,8 +35,8 @@ const faqItems = [
     answer: "No. Child maintenance is separate and always remains variable through the Child Maintenance Service. A clean break order only applies to financial claims between the former spouses.",
   },
   {
-    question: "Is a clean break order always the best option?",
-    answer: "Not necessarily. If there is a significant income gap, an immediate clean break may leave one party genuinely unable to meet their needs. In those cases, a period of maintenance followed by a deferred clean break may be more appropriate.",
+    question: "Is a clean break order always suitable?",
+    answer: "Not necessarily. If there is a significant income gap, an immediate clean break may leave one party genuinely unable to meet their needs. In those cases, maintenance followed by a deferred clean break may need legal review.",
   },
   {
     question: "How does a clean break affect pensions?",

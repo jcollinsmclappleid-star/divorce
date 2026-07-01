@@ -4,12 +4,12 @@ import { AlertTriangle, CheckSquare, AlertCircle, PiggyBank } from "lucide-react
 import { ContentPageLayout, ContentSection, InlineCTA, useFaqJsonLd } from "@/components/content-page-layout";
 
 const points = [
-  { title: "Final salary = guaranteed income for life", desc: "A final salary (defined benefit) pension promises a fixed pension at retirement based on years of service and final pensionable pay. The investment risk and longevity risk sit with the scheme, not the member." },
-  { title: "CETV is not the same as cash value", desc: "The Cash Equivalent Transfer Value of a final salary pension is an actuarial calculation based on prescribed assumptions. It often understates the true lifetime value of the guaranteed income — sometimes by 30–50%." },
+  { title: "Final salary = defined income for life", desc: "A final salary (defined benefit) pension promises a fixed pension at retirement based on years of service and final pensionable pay. The investment risk and longevity risk sit with the scheme, not the member." },
+  { title: "CETV is not the same as cash value", desc: "The Cash Equivalent Transfer Value of a final salary pension is an actuarial calculation based on prescribed assumptions. It can understate the true lifetime value of the defined income — sometimes by 30–50%." },
   { title: "Pension sharing is the cleanest route", desc: "A pension sharing order debits a percentage from the member's CETV and credits it to the receiving party. The receiving party becomes either an internal member of the scheme (where allowed) or transfers the credit to a personal pension." },
-  { title: "Internal vs external transfer", desc: "Public-sector and many private DB schemes give the receiving party a credit within the scheme — preserving the DB nature of the benefits. Some private schemes require the credit to be transferred out, converting the guaranteed income into a DC pot at the receiving party's risk." },
-  { title: "Equality of CETV ≠ equality of income", desc: "Splitting two final-salary CETVs 50/50 rarely gives equal retirement income because of differences in age, accrual rate, normal pension age and revaluation rules. Equal income, not equal CETV, is usually the right target." },
-  { title: "PODE input is normally essential", desc: "For substantial DB pensions (CETV > ~£100k), a Pensions on Divorce Expert (PODE) report is normally essential to calculate the right sharing percentage and assess offsetting fairly." },
+  { title: "Internal vs external transfer", desc: "Public-sector and many private DB schemes give the receiving party a credit within the scheme — preserving the DB nature of the benefits. Some private schemes require the credit to be transferred out, converting the defined income into a DC pot at the receiving party's risk." },
+  { title: "Equality of CETV ≠ equality of income", desc: "Splitting two final-salary CETVs 50/50 rarely gives equal retirement income because of differences in age, accrual rate, normal pension age and revaluation rules. Income and CETV both need specialist review." },
+  { title: "PODE input is normally important", desc: "For substantial DB pensions (CETV > ~£100k), a Pensions on Divorce Expert (PODE) report may be needed to calculate a suitable sharing percentage and assess offsetting fairly." },
 ];
 
 const figures = [
@@ -20,14 +20,14 @@ const figures = [
   "Final pensionable pay and pay history",
   "Pension already in payment (if any)",
   "Tax-free cash entitlement at retirement",
-  "Any GMP (Guaranteed Minimum Pension) or contracted-out portion",
+  "Any GMP or contracted-out portion",
 ];
 
 const faqItems = [
-  { question: "How is a final salary pension valued in divorce?", answer: "By Cash Equivalent Transfer Value (CETV) — an actuarial calculation by the scheme of what your guaranteed pension is 'worth' in lump sum terms today. CETVs are calculated using prescribed assumptions (notably gilt yields) and often significantly understate the true lifetime value of the income, particularly for younger members of generous schemes." },
+  { question: "How is a final salary pension valued in divorce?", answer: "By Cash Equivalent Transfer Value (CETV) — an actuarial calculation by the scheme of what the defined pension is worth in lump sum terms today. CETVs are calculated using prescribed assumptions and can understate the true lifetime value of the income, particularly for younger members of generous schemes." },
   { question: "Can a final salary pension be split?", answer: "Yes. Pension sharing orders can be made against final salary pensions. After the order is sealed, the scheme implements the share within four months. The receiving party becomes either an internal member of the scheme or transfers the credit out to a personal pension, depending on the scheme rules." },
-  { question: "Should I aim for equal CETV or equal income?", answer: "Almost always equal income, not equal CETV. The CETV is just a proxy for value. The actual question — what proportion of the lifetime pension income each party will receive — depends on age, scheme rules and the receiving party's circumstances. A PODE report calculates the sharing percentage needed to produce equal income at retirement." },
-  { question: "What if the scheme makes me transfer the credit out?", answer: "Some private DB schemes do not accept internal pension credit members and require the receiving party to transfer the credit to a personal pension or SIPP. This converts a guaranteed income into a DC pot — the receiving party then bears all investment and longevity risk. This is a material disadvantage that should be reflected in the sharing percentage." },
+  { question: "Should I aim for equal CETV or equal income?", answer: "The CETV is just a proxy for value. The actual question — how lifetime pension income compares — depends on age, scheme rules and the receiving party's circumstances. A PODE report can calculate a sharing percentage for equal-income or other professionally reviewed assumptions." },
+  { question: "What if the scheme makes me transfer the credit out?", answer: "Some private DB schemes do not accept internal pension credit members and require the receiving party to transfer the credit to a personal pension or SIPP. This converts defined income into a DC pot, meaning the receiving party bears investment and longevity risk. This should be reviewed before assumptions are made." },
   { question: "Can I offset the final salary pension against the house instead?", answer: "Yes — but with significant caution. CETVs typically understate true value, so a face-value offset can substantially shortchange the party giving up the pension share. Where offsetting is used, a 20–35% utility discount is normally applied to the CETV, plus an actuarial uplift to reflect the understatement of value in the CETV itself." },
   { question: "What about pension already in payment?", answer: "A DB pension already being paid can still be subject to a pension sharing order. The CETV is calculated reflecting the income in payment. After the share, the member's pension is reduced and the receiving party gets their own pension from the scheme (sometimes immediately, sometimes from a later age, depending on scheme rules)." },
 ];
@@ -56,7 +56,7 @@ export default function FinalSalaryPensionDivorcePage() {
     >
       <ContentSection>
         <p className="text-muted-foreground leading-relaxed mb-6">
-          Final salary (defined benefit) pensions promise a guaranteed income for life. They are typically the most valuable — and most misunderstood — assets in UK divorce. The Cash Equivalent Transfer Value used in financial disclosure is just a proxy for the true lifetime value, and frequently understates it. Splitting a DB pension fairly requires understanding the difference between CETV and income, the scheme rules around internal vs external transfers, and the appropriate discount when offsetting against other assets.
+          Final salary (defined benefit) pensions provide defined income for life. They are often among the most valuable — and most misunderstood — assets in UK divorce. The Cash Equivalent Transfer Value used in financial disclosure is just a proxy for the true lifetime value, and can understate it. Reviewing a DB pension properly requires understanding the difference between CETV and income, the scheme rules around internal vs external transfers, and the appropriate adjustment when offsetting against other assets.
         </p>
         <Card className="border-amber-200 bg-amber-50 mb-6">
           <CardContent className="pt-5">
@@ -100,9 +100,9 @@ export default function FinalSalaryPensionDivorcePage() {
         <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points</h2>
         <div className="space-y-3 mb-6">
           {[
-            { label: "External-only transfer schemes", desc: "Some private DB schemes require the receiving party to transfer the credit out to a personal pension. This converts guaranteed income into investment risk — a material disadvantage that should be reflected in either a higher sharing percentage or appropriate offsetting." },
+            { label: "External-only transfer schemes", desc: "Some private DB schemes require the receiving party to transfer the credit out to a personal pension. This converts defined income into investment risk, which should be reviewed before comparing options." },
             { label: "Age and accrual rate differences", desc: "A 50-year-old with 20 years' service in a 1/60 scheme has a very different CETV-to-income relationship than a 40-year-old with 10 years in a 1/80 scheme. Equal CETV split rarely produces equal income." },
-            { label: "GMP and contracted-out portions", desc: "Older DB pensions often include a Guaranteed Minimum Pension (GMP) representing contracted-out periods. GMP rules around revaluation, equalisation and survivor benefits add complexity to sharing calculations." },
+            { label: "GMP and contracted-out portions", desc: "Older DB pensions often include GMP representing contracted-out periods. GMP rules around revaluation, equalisation and survivor benefits add complexity to sharing calculations." },
             { label: "Survivor benefits lost", desc: "Pension sharing creates a clean break — the receiving party gets their own pension. But survivor benefits that would have been paid to a future spouse on the member's death may be reduced or lost." },
           ].map((p, i) => (
             <div key={i} className="p-4 rounded-lg border">

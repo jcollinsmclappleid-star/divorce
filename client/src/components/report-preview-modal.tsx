@@ -14,6 +14,8 @@ import { chartTheme, fmtK, gaugeColor, densifyProjection, hashSeed } from "@/lib
 import { DemoCarousel } from "@/components/demo-dashboards";
 import { ScenarioLeaderboard } from "@/components/scenario-leaderboard";
 import type { ConsoleScenario } from "@/components/settlement-console";
+import { PRODUCT_NAMES } from "@/lib/product-copy";
+import { REPORT_FACTOR_TEASERS } from "@/lib/settlement-factors";
 
 interface ReportPreviewModalProps {
   open: boolean;
@@ -22,9 +24,14 @@ interface ReportPreviewModalProps {
 
 function SampleBadge() {
   return (
-    <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold px-3 py-1.5 rounded-full">
-      <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-      Sample report — fictional figures
+    <div className="inline-flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+      <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold px-3 py-1.5 rounded-full">
+        <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+        Sample: Reports 1 &amp; 2 · fictional figures
+      </div>
+      <span className="text-[10px] text-muted-foreground sm:max-w-[14rem] leading-snug">
+        {PRODUCT_NAMES.layerBeforeAgree} not included in this sample
+      </span>
     </div>
   );
 }
@@ -299,17 +306,19 @@ function StatStrip({ items, color }: { items: { label: string; value: string; wa
 }
 
 const TOC_ITEMS = [
-  { num: "",   label: "Executive Overview" },
-  { num: "",   label: "Settlement Reality Check Report" },
-  { num: "1.", label: "Financial Position" },
-  { num: "2.", label: "Income & Taxation" },
-  { num: "3.", label: "Projected Expenses" },
-  { num: "4.", label: "Scenario Comparison" },
-  { num: "5.", label: "Sell & Split — Detail" },
-  { num: "6.", label: "A Keeps Home — Detail" },
-  { num: "",   label: "Assumption Review" },
-  { num: "",   label: "Assumptions & Methodology" },
-  { num: "",   label: "Glossary" },
+  { num: "", label: "Executive Overview", layer: "analyser" as const },
+  { num: "", label: PRODUCT_NAMES.layerScenarios, layer: "analyser" as const },
+  { num: "1.", label: "Financial Position", layer: "analyser" as const },
+  { num: "2.", label: "Income & Taxation", layer: "analyser" as const },
+  { num: "3.", label: "Projected Expenses", layer: "analyser" as const },
+  { num: "4.", label: "Scenario Comparison", layer: "analyser" as const },
+  { num: "5.", label: "Sell & Split — Detail", layer: "analyser" as const },
+  { num: "6.", label: "A Keeps Home — Detail", layer: "analyser" as const },
+  { num: "", label: PRODUCT_NAMES.layerStandsOut, layer: "narrative" as const },
+  { num: "", label: PRODUCT_NAMES.layerBeforeAgree, layer: "prep" as const, locked: true },
+  { num: "", label: "Assumption Review", layer: "analyser" as const },
+  { num: "", label: "Assumptions & Methodology", layer: "analyser" as const },
+  { num: "", label: "Glossary", layer: "analyser" as const },
 ];
 
 export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
@@ -399,10 +408,10 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
               {/* Two-product badge strip */}
               <div className="mt-5 flex flex-wrap gap-2">
                 <div className="flex items-center gap-1.5 bg-cyan-400/15 border border-cyan-400/25 text-cyan-300 text-[10px] font-semibold px-3 py-1 rounded-full">
-                  <BookOpen className="w-3 h-3" /> Settlement Analyser
+                  <BookOpen className="w-3 h-3" /> {PRODUCT_NAMES.layerScenarios}
                 </div>
                 <div className="flex items-center gap-1.5 bg-gold/15 border border-gold/25 text-gold text-[10px] font-semibold px-3 py-1 rounded-full">
-                  <FileSearch className="w-3 h-3" /> Settlement Reality Check Report
+                  <FileSearch className="w-3 h-3" /> {PRODUCT_NAMES.layerStandsOut}
                 </div>
               </div>
             </div>
@@ -446,12 +455,34 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
               <span className="text-xs font-semibold uppercase tracking-widest text-gray-500">Contents</span>
             </div>
             <div className="p-4 grid grid-cols-2 gap-x-6 gap-y-0.5">
-              {TOC_ITEMS.map(({ num, label }) => (
-                <div key={label} className="flex items-baseline gap-1.5 py-0.5 text-xs text-gray-500">
+              {TOC_ITEMS.map(({ num, label, locked }) => (
+                <div key={label} className={`flex items-baseline gap-1.5 py-0.5 text-xs ${locked ? "text-amber-700/80" : "text-gray-500"}`}>
                   {num && <span className="text-[10px] text-gray-400 w-5 shrink-0 tabular-nums">{num}</span>}
-                  <span className={`leading-snug ${!num ? "pl-5" : ""}`}>{label}</span>
+                  <span className={`leading-snug ${!num ? "pl-5" : ""} ${locked ? "italic" : ""}`}>
+                    {label}
+                    {locked ? " · topics visible, detail locked in sample" : ""}
+                  </span>
                 </div>
               ))}
+            </div>
+            <div className="px-4 pb-4 border-t border-gray-100 pt-3">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-amber-700 mb-1">
+                {PRODUCT_NAMES.layerBeforeAgree} — not included in this sample
+              </p>
+              <p className="text-[10px] text-gray-500 leading-relaxed mb-2">
+                Answers the questions in your head — how much your share may be, what to verify, and what to ask before agreeing — personalised from your figures when you unlock.
+              </p>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-amber-700/80 mb-2">
+                Topic headings only (detail locked)
+              </p>
+              <ul className="grid grid-cols-2 gap-x-4 gap-y-1">
+                {REPORT_FACTOR_TEASERS.map((topic) => (
+                  <li key={topic} className="text-[10px] text-gray-500 flex gap-1.5">
+                    <span className="text-amber-500 shrink-0">◦</span>
+                    {topic}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
@@ -508,7 +539,7 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
           <div className="flex items-center gap-3">
             <div className="flex-1 border-t border-dashed border-gray-200" />
             <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
-              <Sparkles className="w-3 h-3" /> Settlement Reality Check Report
+              <Sparkles className="w-3 h-3" /> {PRODUCT_NAMES.layerStandsOut}
             </div>
             <div className="flex-1 border-t border-dashed border-gray-200" />
           </div>
@@ -521,7 +552,7 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
                   <Sparkles className="w-4 h-4 text-gold" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-white uppercase tracking-widest">Settlement Reality Check Report</h3>
+                  <h3 className="text-xs font-bold text-white uppercase tracking-widest">{PRODUCT_NAMES.layerStandsOut}</h3>
                   <p className="text-[10px] text-white/40 mt-0.5">Plain-English position check generated from your modelled figures</p>
                 </div>
               </div>
@@ -573,7 +604,7 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
 
               <div className="border-l-4 border-l-yellow-500/50 pl-4 py-1">
                 <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-                  <Shield className="w-3 h-3 text-yellow-600" /> Settlement Position Check
+                  <Shield className="w-3 h-3 text-yellow-600" /> {PRODUCT_NAMES.layerBeforeAgree}
                 </p>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {[
@@ -677,7 +708,7 @@ export function ReportPreviewModal({ open, onClose }: ReportPreviewModalProps) {
             </div>
 
             <p className="text-[10px] text-gray-400 italic mt-3">
-              This Settlement Reality Check Report is illustrative only. It is not legal, tax, or financial advice. Always consult qualified professionals before making financial decisions.
+              This {PRODUCT_NAMES.layerStandsOut} is illustrative only. It is not legal, tax, or financial advice. Always consult qualified professionals before making financial decisions.
             </p>
           </section>
 

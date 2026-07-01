@@ -56,7 +56,7 @@ const faqItems = [
   },
   {
     question: "Do I need a solicitor to divide property in a divorce?",
-    answer: "You are not legally required to use a solicitor, but given the sums involved and the legal complexity, independent legal advice is strongly recommended. At minimum, any agreement should be formalised in a court-approved consent order.",
+    answer: "You are not legally required to use a solicitor, but given the sums involved and the legal complexity, independent legal advice is important to consider. At minimum, any agreement should be formalised in a court-approved consent order.",
   },
 ];
 

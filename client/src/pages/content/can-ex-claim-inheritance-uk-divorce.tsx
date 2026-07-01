@@ -43,7 +43,7 @@ const faqItems = [
   },
   {
     question: "What if I inherited property, not cash?",
-    answer: "Inherited property is treated the same way as inherited cash — it may or may not be included depending on the factors above. If the inherited property has been used as the family home or rented out with joint income, ring-fencing becomes harder.",
+    answer: "Inherited property is treated the same way as inherited cash — it may or may not be included depending on the factors above. If the inherited property has been used as the family home or rented out with joint income, keeping it separate from the matrimonial pot becomes harder.",
   },
   {
     question: "Can a pre-nuptial agreement protect inheritance?",
@@ -65,7 +65,7 @@ export default function InheritanceClaimPage() {
       title="Can My Ex Claim My Inheritance in UK Divorce?"
       subtitle="Inheritance is not automatically protected from divorce claims in England and Wales. Whether your ex can claim it depends on when you received it, whether you mixed it with joint funds, and the length of your marriage."
       documentTitle="Can My Ex Claim My Inheritance in UK Divorce? | DivorceCalculatorUK"
-      metaDescription="Can your ex claim your inheritance in a UK divorce? Learn when inheritance is included or ring-fenced in a financial settlement in England and Wales."
+      metaDescription="Can your ex claim your inheritance in a UK divorce? Learn when inheritance may be included, how evidence matters, and what to check in England and Wales."
       relatedPages={relatedPages}
       breadcrumbs={[
         { name: "Home", href: "/" },
@@ -109,7 +109,7 @@ export default function InheritanceClaimPage() {
 
         <Card className="bg-primary/5 border-primary/20 mb-6">
           <CardContent className="pt-5">
-            <p className="text-sm text-muted-foreground">The longer the marriage and the greater the other party's financial need, the harder it is to ring-fence an inheritance. Courts have broad discretion, and there is no absolute rule. Where meeting the other party's reasonable financial needs — particularly housing needs for a parent with children — cannot be achieved without including the inheritance, courts may do so.</p>
+            <p className="text-sm text-muted-foreground">The longer the marriage and the greater the other party's financial need, the harder it is to treat an inheritance as non-matrimonial. Courts have broad discretion, and there is no absolute rule. Where meeting the other party's reasonable financial needs — particularly housing needs for a parent with children — cannot be achieved without including the inheritance, courts may do so.</p>
           </CardContent>
         </Card>
       </ContentSection>

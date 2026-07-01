@@ -23,8 +23,8 @@ const faqItems = [
     answer: "Not necessarily — capital division follows the Section 25 framework regardless of care arrangements. However, with 50/50 care, both parents have equal housing needs for the children, which affects how the court approaches the housing settlement. Both parents may need similar-sized accommodation.",
   },
   {
-    question: "Can my ex use custody as a tactic to get more money?",
-    answer: "Courts are alive to this risk. Arrangements for children are decided separately from financial matters and based on the children's welfare, not financial leverage. A pattern of using contact or custody as financial leverage can reflect poorly on a parent in court.",
+    question: "Can child arrangements be used as financial pressure?",
+    answer: "Child arrangements and financial matters are separate issues. If contact, care arrangements or money are being used as pressure, get specialist legal advice and keep the financial model focused on housing, childcare costs and cashflow.",
   },
   {
     question: "What happens to maintenance when children turn 18?",
@@ -139,10 +139,10 @@ export default function CustodyFinancialSettlementPage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "What care arrangement courts would order — custody decisions are made in separate proceedings based on the children's welfare",
+            "What care arrangement may be appropriate — child arrangements are separate from financial modelling and need specialist advice where disputed",
             "Whether spousal maintenance is appropriate in your circumstances — this depends on facts specific to your case",
-            "What level of housing the court would consider adequate for the children",
-            "Whether a Mesher Order (deferred sale) or immediate sale is more appropriate for your situation",
+            "What housing evidence should be checked for the children",
+            "Whether a Mesher Order (deferred sale) or immediate sale is suitable to discuss for your situation",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />

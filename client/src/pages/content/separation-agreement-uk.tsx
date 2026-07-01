@@ -37,7 +37,7 @@ const faqItems = [
   },
   {
     question: "Should both parties have separate solicitors?",
-    answer: "Yes. Each party taking independent legal advice from their own solicitor is one of the strongest factors in any agreement being upheld later. Sharing a solicitor creates a conflict of interest and undermines the agreement.",
+    answer: "Yes. Each party taking independent legal advice from their own solicitor is one of the strongest safeguards if an agreement is reviewed later. Sharing a solicitor creates a conflict of interest and undermines the agreement.",
   },
   {
     question: "What if circumstances change after we sign?",
@@ -144,8 +144,8 @@ export default function SeparationAgreementPage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "Whether a separation agreement is the right approach for your situation versus proceeding directly to divorce",
-            "How a court would treat the agreement if it were challenged later",
+            "Whether a separation agreement is suitable for your situation versus proceeding directly to divorce",
+            "How much weight the agreement may carry if it were challenged later",
             "Whether your proposed interim maintenance is realistic and sustainable",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">

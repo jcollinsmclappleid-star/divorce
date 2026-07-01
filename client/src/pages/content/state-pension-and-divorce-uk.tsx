@@ -4,7 +4,7 @@ import { AlertTriangle, CheckSquare, AlertCircle, PiggyBank } from "lucide-react
 import { ContentPageLayout, ContentSection, InlineCTA, useFaqJsonLd } from "@/components/content-page-layout";
 
 const points = [
-  { title: "New State Pension is not directly shareable", desc: "Since 6 April 2016, the new State Pension is paid based on each person's own National Insurance record. It cannot be split or shared on divorce. Each former spouse keeps their own NI-based entitlement." },
+  { title: "New State Pension is not directly shareable", desc: "Since 6 April 2016, the new State Pension is paid based on each person's own National Insurance record. It cannot be split or shared on divorce. Each former spouse keeps their own NI-based pension record." },
   { title: "Old basic State Pension and SERPS/S2P", desc: "For people reaching State Pension Age before 6 April 2016, the old basic State Pension and additional pension (SERPS or State Second Pension) applied. Pension sharing was technically possible but rarely used in practice." },
   { title: "NI credits during marriage matter", desc: "Years out of paid work caring for children (Child Benefit recipients) usually qualify for NI credits. These count towards the State Pension. Both parties should check their NI record on gov.uk to confirm credits have been awarded." },
   { title: "State Pension forecasts are essential disclosure", desc: "Both parties should request State Pension forecasts from gov.uk during financial disclosure. The forecast shows expected weekly amount at State Pension Age and what extra contributions could increase it." },
@@ -24,12 +24,12 @@ const figures = [
 ];
 
 const faqItems = [
-  { question: "Can the State Pension be split in divorce?", answer: "The new State Pension (for those reaching SPA on or after 6 April 2016) cannot be shared. It is based entirely on each individual's own NI record. Pre-2016 additional State Pension (SERPS / S2P) could technically be shared, but in practice it is rarely the right approach." },
-  { question: "What if my spouse stayed home with our children?", answer: "Years receiving Child Benefit usually entitle the recipient to National Insurance credits, which count towards the State Pension. The other party should check their NI record to ensure these credits were applied. Where Child Benefit was claimed in the higher earner's name, credits may need transferring." },
+  { question: "Can the State Pension be split in divorce?", answer: "The new State Pension (for those reaching SPA on or after 6 April 2016) cannot be shared. It is based entirely on each individual's own NI record. Pre-2016 additional State Pension (SERPS / S2P) could technically be shared, but in practice this needs specialist review." },
+  { question: "What if my spouse stayed home with our children?", answer: "Years receiving Child Benefit can provide National Insurance credits, which count towards the State Pension. The other party should check their NI record to ensure these credits were applied. Where Child Benefit was claimed in the higher earner's name, credits may need transferring." },
   { question: "Do I need a State Pension forecast for divorce?", answer: "Yes. Both parties should request forecasts from gov.uk as part of financial disclosure. The forecast shows the expected weekly amount at State Pension Age, NI gaps that could be filled, and the maximum amount achievable. It's essential context for assessing long-term retirement needs." },
   { question: "What happens to widow's benefits after divorce?", answer: "Once the final order (or pre-2022 decree absolute) is granted, you are no longer a spouse — so widow's benefits arising from the former spouse's NI record stop being available. This contrasts with bereavement during marriage, where bereavement support payments may apply." },
   { question: "Can I top up my National Insurance contributions to fix a gap?", answer: "Possibly. The standard rule is that voluntary Class 3 contributions can fill gaps for the last six tax years. Special concessions allowing back-payment to 2006 expired in April 2025. Check your NI record on gov.uk to see what gaps exist and what payments are available." },
-  { question: "Should the State Pension affect our overall settlement?", answer: "Indirectly, yes. Although it cannot be shared, the State Pension is a major part of each party's retirement income. Settlement design — particularly capital and other pension shares — should account for differences in expected State Pension entitlement so both parties have adequate retirement income." },
+  { question: "Should the State Pension affect our overall settlement?", answer: "Indirectly, yes. Although it cannot be shared, the State Pension is a major part of each party's retirement income. Settlement design — particularly capital and other pension shares — may need to account for differences in expected State Pension income." },
 ];
 
 const relatedPages = [
@@ -43,7 +43,7 @@ export default function StatePensionDivorcePage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
-      title="State Pension and Divorce UK — What Happens to Your Entitlement"
+      title="State Pension and Divorce UK — What Happens to Your Pension Record"
       subtitle="The new State Pension cannot be shared on divorce. But National Insurance credits during marriage, gaps in records, and forecasts all matter — especially for stay-at-home parents and silver divorces."
       documentTitle="State Pension and Divorce UK | DivorceCalculatorUK"
       metaDescription="State pension and divorce UK. Why the new State Pension can't be shared, how NI credits during marriage work, State Pension forecasts, and topping up gaps."
@@ -56,7 +56,7 @@ export default function StatePensionDivorcePage() {
     >
       <ContentSection>
         <p className="text-muted-foreground leading-relaxed mb-6">
-          Unlike workplace pensions, the new State Pension introduced on 6 April 2016 cannot be split or shared on divorce. Each party keeps their own State Pension based on their own National Insurance record. But that does not mean State Pension is irrelevant in divorce planning — far from it. Differences in NI records (often caused by years out of paid work raising children) can produce very different State Pension entitlements between former spouses, and these need to be factored into the overall settlement design.
+          Unlike workplace pensions, the new State Pension introduced on 6 April 2016 cannot be split or shared on divorce. Each party keeps their own State Pension based on their own National Insurance record. But that does not mean State Pension is irrelevant in divorce planning. Differences in NI records, often caused by years out of paid work raising children, can produce very different State Pension forecasts between former spouses, and these may need to be factored into the overall settlement discussion.
         </p>
         <Card className="border-amber-200 bg-amber-50 mb-6">
           <CardContent className="pt-5">
@@ -102,7 +102,7 @@ export default function StatePensionDivorcePage() {
           {[
             { label: "Inequality from caring years", desc: "Where one party gave up paid work to raise children, their State Pension may be substantially lower than the other party's. The overall settlement should typically compensate for this gap." },
             { label: "NI gaps that could be filled", desc: "Where someone has gaps in their NI record from years not working, voluntary contributions might be available to fill them. The cost is typically small relative to the lifetime State Pension uplift achieved." },
-            { label: "Contracted-out periods", desc: "Many people in occupational schemes were 'contracted out' of SERPS/S2P at various points. This affected State Pension entitlement under the old rules and can still affect transitional protection under the new rules." },
+            { label: "Contracted-out periods", desc: "Many people in occupational schemes were 'contracted out' of SERPS/S2P at various points. This affected State Pension calculations under the old rules and can still affect transitional calculations under the new rules." },
             { label: "Differences in State Pension Age", desc: "For couples with significant age differences, one party may reach State Pension Age years before the other. This affects when each party's full retirement income kicks in and how interim arrangements should work." },
           ].map((p, i) => (
             <div key={i} className="p-4 rounded-lg border">

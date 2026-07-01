@@ -65,7 +65,7 @@ export default function DivorceMaintenanceCalculatorPage() {
           <CardContent className="pt-5 pb-4 flex gap-3">
             <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <p className="text-sm text-amber-700 leading-relaxed">
-              This calculator models maintenance as a monthly cashflow transfer. It does not calculate what a court would order, and does not constitute legal or financial advice. Spousal maintenance is assessed on individual needs and ability to pay. Child maintenance is calculated by the Child Maintenance Service using a statutory formula.
+              This calculator models maintenance as a monthly cashflow transfer. It does not calculate a legal outcome, and does not constitute legal or financial advice. Spousal maintenance is assessed on individual needs and ability to pay. Child maintenance is calculated by the Child Maintenance Service using a statutory formula.
             </p>
           </CardContent>
         </Card>

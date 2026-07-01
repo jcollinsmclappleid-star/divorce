@@ -53,7 +53,7 @@ export default function Cluster5050Split() {
   return (
     <ContentPageLayout
       title="Divorce 50/50 Split Calculator UK"
-      subtitle="Model what an equal allocation of net marital assets would look like numerically. A 50/50 scenario provides a neutral baseline for structured comparison — it does not determine legal entitlement."
+      subtitle="Model what an equal allocation of net marital assets would look like numerically. A 50/50 scenario provides a neutral baseline for structured comparison — it does not determine legal rights."
       documentTitle="Divorce 50/50 Split Calculator UK | DivorceCalculatorUK"
       metaDescription="Use our 50/50 divorce split calculator to model equal asset division scenarios in England & Wales. Compare liquidity, pensions, and property allocations."
       relatedPages={relatedPages}
@@ -251,7 +251,7 @@ export default function Cluster5050Split() {
             </AccordionTrigger>
             <AccordionContent>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                There is no statutory requirement for equal division in England & Wales. While the House of Lords in White v White (2001) established equality as a "yardstick" or cross-check, outcomes remain discretionary. Courts assess multiple factors under Section 25 of the Matrimonial Causes Act 1973, and the final allocation depends on the specific circumstances of each case. Equal division may be the outcome in many long-marriage cases, but it is not guaranteed.
+                There is no statutory requirement for equal division in England & Wales. While the House of Lords in White v White (2001) established equality as a "yardstick" or cross-check, outcomes remain discretionary. Courts assess multiple factors under Section 25 of the Matrimonial Causes Act 1973, and the final allocation depends on the specific circumstances of each case. Equal division may be discussed in many long-marriage cases, but it is not automatic.
               </p>
             </AccordionContent>
           </AccordionItem>

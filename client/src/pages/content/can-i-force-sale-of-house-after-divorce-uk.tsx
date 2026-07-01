@@ -24,7 +24,7 @@ const faqItems = [
   },
   {
     question: "Can children stop the sale of the family home?",
-    answer: "Courts take children's welfare seriously and may defer a sale where they live in the property. However, this does not permanently prevent sale — it may defer it. A Mesher Order or Martin Order can provide for a deferred sale while protecting the occupying parent and children.",
+    answer: "Children's housing can be a relevant issue and may lead to discussion about deferred sale options. A Mesher Order or Martin Order is a specialist legal structure, so get advice before assuming a sale will happen immediately or be delayed.",
   },
   {
     question: "What if my ex lives in the house and won't leave?",
@@ -156,8 +156,8 @@ export default function ForceSaleHousePage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "Whether a court would order immediate sale or a deferred arrangement given the specific circumstances",
-            "Whether a Mesher or Martin Order is more appropriate for your situation",
+            "Whether immediate sale or a deferred arrangement is suitable to discuss given the specific circumstances",
+            "Whether a Mesher or Martin Order should be raised with a solicitor for your situation",
             "What the enforcement timeline and costs would be in your specific court centre",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">

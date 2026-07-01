@@ -6,9 +6,9 @@ import { ContentPageLayout, ContentSection, InlineCTA, useFaqJsonLd } from "@/co
 const points = [
   { title: "What CETV stands for", desc: "Cash Equivalent Transfer Value — the lump sum the pension scheme would pay if you transferred your benefits out today. It is the standard valuation figure used in UK divorce financial disclosure on Form E." },
   { title: "DC pensions: CETV is reasonably accurate", desc: "For defined contribution (workplace or personal) pensions, the CETV is essentially the current pot value. It reflects what the pension is actually worth and is a fair basis for division." },
-  { title: "DB pensions: CETV often understates real value", desc: "For defined benefit (final salary or career-average) pensions, the CETV is an actuarial calculation of what your guaranteed income is 'worth' today. It commonly understates real lifetime value by 30–50%, especially for younger members or generous public-sector schemes." },
-  { title: "How to request a CETV", desc: "Members are entitled to one free CETV per year. Request it in writing from the pension scheme administrator. DC schemes typically respond within 10 working days; DB schemes can take up to 3 months." },
-  { title: "CETV and equality of income", desc: "Splitting two pensions 50/50 by CETV does not guarantee equal income at retirement. The age, benefit structure and revaluation rules of each scheme matter enormously. For substantial pensions, actuarial input is needed." },
+  { title: "DB pensions: CETV often understates real value", desc: "For defined benefit (final salary or career-average) pensions, the CETV is an actuarial calculation of what your defined retirement income is worth today. It commonly understates real lifetime value by 30–50%, especially for younger members or generous public-sector schemes." },
+  { title: "How to request a CETV", desc: "Members can usually request one free CETV per year. Request it in writing from the pension scheme administrator. DC schemes typically respond within 10 working days; DB schemes can take up to 3 months." },
+  { title: "CETV and equality of income", desc: "Splitting two pensions 50/50 by CETV does not automatically produce equal income at retirement. The age, benefit structure and revaluation rules of each scheme matter enormously. For substantial pensions, actuarial input is needed." },
   { title: "CETV vs offsetting against the house", desc: "CETV-to-property offsetting is one of the most common — and most error-prone — settlement approaches. Specialist advice (Pensions on Divorce Expert) is normally needed where CETVs are above ~£100k." },
 ];
 
@@ -18,16 +18,16 @@ const figures = [
   "Date of joining the scheme (matrimonial vs pre-marital portion)",
   "Normal retirement age and current age of member",
   "Whether the pension is in payment or deferred",
-  "Any guaranteed minimum pension (GMP) or protected rights",
-  "Tax-free cash entitlement at retirement",
+  "Any GMP or protected rights",
+  "Tax-free cash option at retirement",
   "Any pension protections (LTA fixed protection, enhanced protection)",
 ];
 
 const faqItems = [
   { question: "What is a CETV in divorce?", answer: "Cash Equivalent Transfer Value — the lump sum a pension scheme calculates as the current value of your pension benefits, for the purposes of transferring them out. It is the figure you must disclose on Form E in financial proceedings and is the starting point for pension sharing or offsetting." },
   { question: "Why does my DB pension CETV seem so low?", answer: "Defined benefit CETVs are an actuarial calculation, not a market value. They are typically calculated using gilt yield discount rates, which can make the CETV look much lower than the lifetime cash value of the income the pension will actually pay. Public-sector DB pensions in particular often have CETVs that significantly understate real value." },
-  { question: "How do I request a CETV?", answer: "Write to the pension scheme administrator (or use their online portal) requesting a 'Cash Equivalent Transfer Value for divorce purposes'. You are entitled to one free CETV per year. DC schemes typically respond within days; DB schemes can take up to three months under regulatory timeframes." },
-  { question: "Is the CETV the right figure to use in a settlement?", answer: "For DC pensions, broadly yes. For DB pensions, the CETV is the legal disclosure figure but rarely the right figure to base offsetting on. Equality of CETV does not equal equality of retirement income. A Pensions on Divorce Expert (PODE) report is normally needed for substantial DB pensions." },
+  { question: "How do I request a CETV?", answer: "Write to the pension scheme administrator or use their online portal requesting a Cash Equivalent Transfer Value for divorce purposes. Members can usually request one free CETV per year. DC schemes typically respond within days; DB schemes can take up to three months under regulatory timeframes." },
+  { question: "Is the CETV the appropriate figure to use in a settlement?", answer: "For DC pensions, broadly yes. For DB pensions, the CETV is the legal disclosure figure but may not reflect lifetime income on its own. Equality of CETV does not equal equality of retirement income. A Pensions on Divorce Expert (PODE) report is commonly used for substantial DB pensions." },
   { question: "Can a CETV change while we negotiate?", answer: "Yes. CETVs are calculated at a point in time and reflect market conditions, scheme assumptions and individual circumstances. They typically need refreshing if more than three months old. A material change in gilt yields can move CETVs by 10–20% in either direction over a year." },
   { question: "What happens to my CETV after a pension sharing order?", answer: "The court order specifies a percentage of the CETV to be transferred to the receiving party. The scheme then 'debits' the member's benefits and 'credits' the receiving party — either as a member of the same scheme (internal transfer) or as a transfer to a separate scheme. Implementation typically takes 4 months from the sealed order." },
 ];

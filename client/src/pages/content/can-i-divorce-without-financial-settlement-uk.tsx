@@ -152,7 +152,7 @@ export default function DivorceWithoutFinancialSettlementPage() {
         <div className="space-y-3 mb-6">
           {[
             "Whether a clean break is achievable in your specific circumstances — this depends on assets, income, and needs",
-            "What the court would consider a fair settlement — the calculator models scenarios, not legal outcomes",
+            "How a qualified professional may assess fairness in your circumstances — the calculator models scenarios, not legal outcomes",
             "Whether you need a full consent order or just a simple clean break — a solicitor's view may be relevant",
             "The tax implications of different settlement structures — professional advice may be needed",
           ].map((item, i) => (

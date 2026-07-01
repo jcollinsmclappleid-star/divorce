@@ -14,9 +14,9 @@ import {
 } from "@/components/content-page-layout";
 
 const trustTypes = [
-  { title: "Bare trust", desc: "The beneficiary is absolutely entitled to the trust assets. The court typically treats bare trust assets as belonging directly to that party — they are part of the matrimonial pot in the usual way." },
-  { title: "Discretionary trust", desc: "The trustees have discretion over which beneficiaries benefit and when. The court looks at how the trust has historically been used — if a beneficiary has effectively had access to the trust, it may be treated as a 'resource' available to them." },
-  { title: "Life interest / interest in possession trust", desc: "A beneficiary has a right to income (or use) for life, with capital passing to others on death. The court typically takes the income stream into account; the underlying capital is treated more cautiously." },
+  { title: "Bare trust", desc: "A bare trust can be different from a discretionary structure because the beneficiary's interest is more direct. Whether and how it is reflected in a settlement discussion needs case-specific legal review." },
+  { title: "Discretionary trust", desc: "The trustees have discretion over which beneficiaries benefit and when. A professional review may look at the trust history, previous distributions and whether it appears to be a practical financial resource." },
+  { title: "Life interest / interest in possession trust", desc: "A beneficiary may have an income or use interest for life, with capital passing to others later. The income stream and underlying capital may need separate legal and trust advice." },
   { title: "Family / dynastic trusts", desc: "Long-standing family trusts created by previous generations are typically treated more cautiously by the court — the beneficiary may have no realistic control over distributions." },
   { title: "Trusts created by a spouse", desc: "Where a trust has been created by one of the spouses (particularly close to divorce), courts have powers to set it aside as a 'reviewable disposition' under s.37 Matrimonial Causes Act 1973." },
   { title: "Offshore trusts", desc: "Trusts based in jurisdictions like Jersey, Guernsey or the Channel Islands face additional enforcement and disclosure complexities — but English courts can and do take them into account where they are a resource available to a beneficiary spouse." },
@@ -51,7 +51,7 @@ const faqItems = [
 
 const relatedPages = [
   { title: "Pre-marital Assets in Divorce", description: "How non-matrimonial assets are treated.", href: "/pre-marital-assets-divorce-uk", badge: "Assets" },
-  { title: "Matrimonial vs Non-Matrimonial Assets", description: "What can be ring-fenced from the settlement.", href: "/matrimonial-vs-non-matrimonial-assets-uk", badge: "Assets" },
+  { title: "Matrimonial vs Non-Matrimonial Assets", description: "How different asset categories may be reviewed.", href: "/matrimonial-vs-non-matrimonial-assets-uk", badge: "Assets" },
   { title: "Form E Financial Disclosure", description: "What you need to disclose about beneficial trust interests.", href: "/form-e-financial-disclosure-uk", badge: "Disclosure" },
   { title: "Preview the Full Financial Report", description: "Model settlement scenarios with trust resources.", href: "/unlock", badge: "Report" },
 ];
@@ -128,8 +128,8 @@ export default function TrustAssetsDivorcePage() {
         <div className="space-y-3 mb-6">
           {[
             { label: "Trustee cooperation (or lack of it)", desc: "Trustees may be reluctant to provide information or attend court. This can slow proceedings significantly. Where trustees are based offshore, enforcement of any disclosure order is harder." },
-            { label: "The 'resource' analysis", desc: "Even where the spouse has no legal entitlement to trust assets, a court may treat them as available if past distributions suggest they will continue. This analysis is highly fact-specific." },
-            { label: "Pre/post nuptial agreements that address trust interests", desc: "Where a pre-nup or post-nup explicitly addresses trust interests, courts will typically give it weight provided the usual conditions are met." },
+            { label: "The 'resource' analysis", desc: "Even where a spouse has no fixed right to trust assets, past distributions and practical access may be relevant to a professional review. This analysis is highly fact-specific." },
+            { label: "Pre/post nuptial agreements that address trust interests", desc: "Where a pre-nup or post-nup explicitly addresses trust interests, it may carry weight if the usual safeguards were followed and the outcome remains fair." },
             { label: "Costs and complexity", desc: "Trust cases often require both family law and trust counsel, and may involve cross-border proceedings. The cost of litigating these issues can be significant." },
           ].map((p, i) => (
             <div key={i} className="p-4 rounded-lg border">
@@ -158,9 +158,9 @@ export default function TrustAssetsDivorcePage() {
         <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
         <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
           <li>How is the court likely to treat my (or my spouse's) trust interest?</li>
-          <li>What disclosure will trustees be expected to provide?</li>
+          <li>What trust information should we ask a solicitor about before relying on the figures?</li>
           <li>Could a particular trust be at risk of being set aside?</li>
-          <li>How should we negotiate around trust interests we don't fully understand?</li>
+          <li>What questions should we raise about trust interests we do not fully understand?</li>
           <li>Do we need separate trust counsel alongside family law advice?</li>
         </ul>
         <InlineCTA label="Model Settlement Scenarios With and Without Trust Resources" />

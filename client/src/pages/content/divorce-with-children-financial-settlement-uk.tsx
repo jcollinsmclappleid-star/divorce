@@ -23,8 +23,8 @@ const priorities = [
 
 const faqItems = [
   {
-    question: "Does the parent who keeps the children get more of the assets?",
-    answer: "Not automatically — but courts do prioritise housing needs of the parent caring for children. If the only way to house the children is to let the primary carer keep the family home (or receive a greater share of equity), courts are very likely to order this, even if it means an unequal capital split overall.",
+    question: "Do children change the asset and housing picture?",
+    answer: "Not automatically by a fixed percentage, but children's housing and childcare needs can be important. If one route is designed around keeping children housed, property, equity, income and affordability all need to be modelled and reviewed with a solicitor.",
   },
   {
     question: "Who pays for the children financially after divorce?",
@@ -35,8 +35,8 @@ const faqItems = [
     answer: "Child maintenance can be agreed by consent (a child maintenance order) but must be reviewed or replaced every 12 months if either party applies to the CMS. You can agree a figure, but either party can later use the CMS — courts cannot permanently exclude CMS jurisdiction over child maintenance.",
   },
   {
-    question: "Can my ex use custody to get more assets?",
-    answer: "Courts do not make financial decisions based on who 'wins' care arrangements. Care arrangements reflect children's welfare first. Financial settlements reflect needs, resources, and contributions. The two processes are separate, though care arrangements do affect the housing needs calculation in the financial settlement.",
+    question: "Can care arrangements affect the financial model?",
+    answer: "Care arrangements and financial settlements are separate issues, but care patterns can affect housing and childcare cost assumptions. Keep the model focused on needs, resources, costs and cashflow, and take advice where care arrangements are disputed.",
   },
   {
     question: "What is a school fees order?",

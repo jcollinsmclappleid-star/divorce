@@ -7,7 +7,7 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Printer, ChevronDown, List, TrendingUp, Wallet, Users, Home, Sparkles, Shield } from "lucide-react";
+import { ArrowLeft, Printer, ChevronDown, List, TrendingUp, Wallet, Users, Home, Sparkles, Shield, Scale, FileText } from "lucide-react";
 import {
   generateScenarioNarrative,
   buildSourceOfFunds,
@@ -25,6 +25,12 @@ import { FsiGauge } from "@/components/fsi-gauge";
 import { ExecutiveBriefing } from "@/components/report/executive-briefing";
 import { ScenarioLeaderboard } from "@/components/scenario-leaderboard";
 import { buildConsoleScenarios } from "@/components/settlement-console";
+import {
+  getRelevantSettlementFactors,
+  getSettlementFactorGroups,
+  type SettlementFactor,
+  type SettlementFactorGroup,
+} from "@/lib/settlement-factors";
 
 const SCENARIO_META: Record<string, { label: string; shortLabel: string; color: string }> = {
   S1: { label: "Sell & Split", shortLabel: "Sell & Split", color: "#2563EB" },
@@ -207,6 +213,8 @@ export default function ReportPage() {
   const totalAssets = store.assets.reduce((s, a) => s + a.currentValue, 0);
   const netWorthTotal = engine.netWorth.total;
   const projectionYearLabel = `${store.assumptions.projectionYears}-Year`;
+  const relevantFactors = getRelevantSettlementFactors(store, engine);
+  const factorGroups = getSettlementFactorGroups();
 
   return (
     <div className="min-h-screen bg-[#f8f9fb] text-gray-900">
@@ -296,6 +304,8 @@ export default function ReportPage() {
             Financial modelling highlights trade-offs. Each scenario reflects different implications for liquidity, leverage, and income variability.
           </p>
         </ReportSection>
+
+        <ReportRelevantFactorsSection factors={relevantFactors} groups={factorGroups} />
 
         {store.guidedSummary && store.guidedSummaryStatus === "done" && (
           <GuidedSummaryReportSection summary={store.guidedSummary} />
@@ -846,6 +856,135 @@ export default function ReportPage() {
   );
 }
 
+function getReportSourceBadgeText(sourceLabel?: string) {
+  if (!sourceLabel) return null;
+  if (sourceLabel.includes("Matrimonial Causes")) return "MCA 1973";
+  if (sourceLabel.includes("Child Maintenance")) return "CMS";
+  if (sourceLabel.includes("MoneyHelper")) return "MoneyHelper";
+  if (sourceLabel.includes("Form E")) return "Form E";
+  if (sourceLabel.includes("GOV.UK")) return "GOV.UK";
+  return sourceLabel;
+}
+
+function ReportSourceBadge({ factor }: { factor: SettlementFactor }) {
+  const label = getReportSourceBadgeText(factor.sourceLabel);
+  if (!label || !factor.sourceUrl) return null;
+  return (
+    <a
+      href={factor.sourceUrl}
+      target="_blank"
+      rel="noreferrer"
+      title={factor.sourceLabel}
+      className="inline-flex items-center gap-1 text-[9px] font-semibold uppercase tracking-wide text-yellow-700 bg-yellow-50 border border-yellow-100 rounded-full px-2 py-0.5 shrink-0 print:text-gray-500 print:border-gray-200 print:bg-white"
+    >
+      <FileText className="h-2.5 w-2.5" />
+      {label}
+    </a>
+  );
+}
+
+function ReportFactorGuideCard({ factor }: { factor: SettlementFactor }) {
+  return (
+    <div className="rounded-lg border border-gray-100 bg-gray-50/70 p-3 break-inside-avoid">
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="text-xs font-semibold text-gray-800">{factor.userQuestion ?? factor.title}</p>
+          <p className="mt-1 text-xs text-gray-600 leading-relaxed">{factor.fact}</p>
+        </div>
+        <ReportSourceBadge factor={factor} />
+      </div>
+      <p className="mt-1.5 text-xs text-blue-900/75 leading-relaxed">{factor.whyItMatters}</p>
+      <div className="mt-2 grid gap-2 sm:grid-cols-2">
+        {factor.figuresToCheck?.length ? (
+          <div className="rounded-md bg-white border border-gray-100 p-2">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">Figures to check</p>
+            <ul className="mt-1 space-y-0.5 text-[11px] text-gray-600">
+              {factor.figuresToCheck.slice(0, 5).map((item) => <li key={item}>• {item}</li>)}
+            </ul>
+          </div>
+        ) : null}
+        {factor.documentsToGather?.length ? (
+          <div className="rounded-md bg-white border border-gray-100 p-2">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">Evidence to gather</p>
+            <ul className="mt-1 space-y-0.5 text-[11px] text-gray-600">
+              {factor.documentsToGather.slice(0, 5).map((item) => <li key={item}>• {item}</li>)}
+            </ul>
+          </div>
+        ) : null}
+      </div>
+      {factor.professionalQuestions?.length ? (
+        <div className="mt-2 rounded-md border border-cyan-100 bg-cyan-50/60 p-2">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-cyan-700">Questions to raise</p>
+          <ul className="mt-1 space-y-1 text-[11px] text-cyan-950/75 leading-relaxed">
+            {factor.professionalQuestions.slice(0, 3).map((question) => <li key={question}>• {question}</li>)}
+          </ul>
+        </div>
+      ) : null}
+      {factor.discussWith?.length ? (
+        <div className="mt-2">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">Discuss with</p>
+          <div className="mt-1 flex flex-wrap gap-1">
+            {factor.discussWith.map((person) => (
+              <span key={person} className="rounded-full bg-white border border-gray-100 px-2 py-0.5 text-[10px] text-gray-500">
+                {person}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
+      {factor.sourceSummary ? (
+        <p className="mt-2 text-[10px] text-gray-500 leading-relaxed border-t border-gray-100 pt-2">
+          Source note: {factor.sourceSummary}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function ReportRelevantFactorsSection({
+  factors,
+  groups,
+}: {
+  factors: SettlementFactor[];
+  groups: SettlementFactorGroup[];
+}) {
+  return (
+    <section id="section-relevant-factors" className="mb-8 break-inside-avoid scroll-mt-20" data-testid="section-report-relevant-factors">
+      <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-8 h-8 rounded-lg bg-yellow-50 border border-yellow-100 flex items-center justify-center shrink-0">
+            <Scale className="w-4 h-4 text-yellow-600" />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-gray-900 uppercase tracking-widest">Question-Led Preparation Guide</h2>
+            <p className="text-xs text-gray-500 leading-relaxed mt-1">
+              Fixed source-backed content surfaced from approved rules, not AI. It is designed to help you spot the figures, evidence and professional questions to check; it is not advice, does not predict an outcome, and does not suggest any particular share.
+            </p>
+          </div>
+        </div>
+        <h3 className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-2">Most relevant to the figures entered</h3>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {factors.map((factor) => <ReportFactorGuideCard key={factor.title} factor={factor} />)}
+        </div>
+        <h3 className="mt-5 text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-2">Navigation guide: browse the full fixed library</h3>
+        <div className="space-y-4">
+          {groups.map((group) => (
+            <div key={group.id} className="rounded-lg border border-gray-100 bg-white p-3">
+              <p className="text-xs font-semibold text-gray-800">{group.title}</p>
+              <p className="mt-1 text-xs text-gray-500 leading-relaxed">{group.intro}</p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                {group.items.map((item) => (
+                  <ReportFactorGuideCard key={item.title} factor={item} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function GuidedSummaryReportSection({ summary }: { summary: GuidedSummary }) {
   const hasProperty = summary.questions_for_professionals.mortgage_broker?.length > 0;
   const hasPension = summary.questions_for_professionals.pension_expert?.length > 0;
@@ -973,6 +1112,7 @@ function ReportTOC({
 }) {
   const fixed = [
     { id: "exec-summary",      num: "",   label: "Executive Overview" },
+    { id: "section-relevant-factors", num: "", label: "Question-Led Preparation Guide" },
     ...(hasGuidedSummary ? [{ id: "section-guided-summary", num: "", label: "Settlement Reality Check Report" }] : []),
     { id: "section-fin",       num: "1.", label: "Financial Position" },
     { id: "section-income",    num: "2.", label: "Income & Tax" },

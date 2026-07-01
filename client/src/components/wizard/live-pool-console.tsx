@@ -41,7 +41,8 @@ function usePoolFigures() {
       .filter((l) => l.category !== "mortgage")
       .reduce((s, l) => s + (l.balance ?? 0), 0);
     const combinedPool = propertyEquity + liquidAssets + pensions - otherDebts;
-    return { propertyEquity, liquidAssets, pensions, otherDebts, combinedPool };
+    const poolComponents = propertyEquity + liquidAssets + pensions;
+    return { propertyEquity, liquidAssets, pensions, otherDebts, combinedPool, poolComponents };
   }, [assets, liabilities]);
 }
 
@@ -64,6 +65,8 @@ function PoolDial({ value }: { value: number }) {
   const endA = Math.PI * 2.15;
   const sweep = endA - startA;
   const fillA = startA + sweep * pct;
+  const svgHeight = Math.round(size * 0.78);
+  const tuck = 6;
 
   const arc = (from: number, to: number) => {
     const sx = cx + r * Math.cos(from);
@@ -75,33 +78,33 @@ function PoolDial({ value }: { value: number }) {
   };
 
   return (
-    <div className="relative flex flex-col items-center">
-      <svg width={size} height={size * 0.78} viewBox={`0 0 ${size} ${size * 0.78}`}>
+    <div className="flex flex-col items-center">
+      <svg
+        width={size}
+        height={svgHeight}
+        viewBox={`0 0 ${size} ${svgHeight}`}
+        className="block shrink-0"
+        role="img"
+        aria-hidden="true"
+      >
         <path d={arc(startA, endA)} stroke="rgba(15,27,45,0.08)" strokeWidth={sw} fill="none" strokeLinecap="round" />
-        <motion.path
+        <path
           d={arc(startA, fillA)}
-          key={target}
           stroke={chartTheme.color.gold}
           strokeWidth={sw}
           fill="none"
           strokeLinecap="round"
-          initial={false}
-          animate={{ d: arc(startA, fillA) }}
-          transition={{ duration: 0.6, ease: chartTheme.ease }}
         />
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center pt-2">
-        <motion.p
-          key={Math.round(value / 100)}
-          initial={{ opacity: 0.7, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3, ease: chartTheme.ease }}
-          className="text-xl font-bold tabular-nums leading-none"
+      {/* Value below arc — HTML only so £1.16m is never clipped by the stroke */}
+      <div className="flex flex-col items-center text-center leading-none" style={{ marginTop: -tuck }}>
+        <p
+          className="text-lg font-bold tabular-nums"
           style={{ color: chartTheme.color.gold, fontFamily: chartTheme.font.serif, letterSpacing: "-0.02em" }}
           data-testid="text-pool-total"
         >
           {fmtPool(value)}
-        </motion.p>
+        </p>
         <p className="text-[9px] uppercase tracking-widest text-[#1a3357]/60 font-semibold mt-1">Combined pool</p>
         <p className="text-[9px] text-[#1a3357]/45 mt-0.5 tabular-nums">of {fmtPool(target)} milestone</p>
       </div>
@@ -109,24 +112,37 @@ function PoolDial({ value }: { value: number }) {
   );
 }
 
-function CategoryBar({ label, value, max, icon: Icon, color }: { label: string; value: number; max: number; icon: typeof Home; color: string }) {
-  const pct = max > 0 ? Math.min(100, (value / max) * 100) : 0;
+function CategoryBar({
+  label,
+  value,
+  total,
+  icon: Icon,
+  color,
+}: {
+  label: string;
+  value: number;
+  total: number;
+  icon: typeof Home;
+  color: string;
+}) {
+  const pct = total > 0 && value > 0 ? Math.min(100, (value / total) * 100) : 0;
+
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[10px] text-[#1a3357]/70 font-medium flex items-center gap-1">
-          <Icon className="w-2.5 h-2.5" style={{ color }} />
-          {label}
+        <span className="text-[10px] text-[#1a3357]/70 font-medium flex items-center gap-1 min-w-0">
+          <Icon className="w-2.5 h-2.5 shrink-0" style={{ color }} />
+          <span className="truncate">{label}</span>
         </span>
-        <span className="text-[10px] font-mono font-semibold text-[#1a3357] tabular-nums">{fmtPool(value)}</span>
+        <span className="text-[10px] font-mono font-semibold text-[#1a3357] tabular-nums shrink-0">{fmtPool(value)}</span>
       </div>
-      <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
-        <motion.div
-          className="h-full"
-          style={{ background: color }}
-          initial={{ width: 0 }}
-          animate={{ width: `${pct}%` }}
-          transition={{ duration: 0.55, ease: chartTheme.ease }}
+      <div className="h-1.5 w-full rounded-full bg-slate-100 overflow-hidden">
+        <div
+          className="h-full rounded-full transition-[width] duration-500 ease-out"
+          style={{
+            width: pct > 0 ? `${Math.max(pct, 3)}%` : "0%",
+            backgroundColor: color,
+          }}
         />
       </div>
     </div>
@@ -170,16 +186,16 @@ function StagesStrip({ currentStep, stages }: { currentStep: number; stages: Liv
 
 function ConsoleBody({ currentStep, stages }: LivePoolConsoleProps) {
   const fig = usePoolFigures();
-  const max = Math.max(fig.propertyEquity, fig.liquidAssets, fig.pensions, 1);
+  const poolTotal = Math.max(fig.poolComponents, 1);
 
   return (
     <div className="space-y-3">
       <PoolDial value={fig.combinedPool} />
 
       <div className="space-y-2 pt-1">
-        <CategoryBar label="Property equity" value={fig.propertyEquity} max={max} icon={Home} color="#F43F5E" />
-        <CategoryBar label="Liquid assets" value={fig.liquidAssets} max={max} icon={Wallet} color="#F59E0B" />
-        <CategoryBar label="Pensions" value={fig.pensions} max={max} icon={Landmark} color="#10B981" />
+        <CategoryBar label="Property equity" value={fig.propertyEquity} total={poolTotal} icon={Home} color="#F43F5E" />
+        <CategoryBar label="Liquid assets" value={fig.liquidAssets} total={poolTotal} icon={Wallet} color="#F59E0B" />
+        <CategoryBar label="Pensions" value={fig.pensions} total={poolTotal} icon={Landmark} color="#10B981" />
         {fig.otherDebts > 0 && (
           <div className="flex items-center justify-between text-[10px] pt-0.5 border-t border-slate-100">
             <span className="text-[#1a3357]/60">Other debts</span>

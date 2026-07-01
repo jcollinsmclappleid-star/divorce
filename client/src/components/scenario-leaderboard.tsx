@@ -108,12 +108,10 @@ export function ScenarioLeaderboard({
                     {/* Capital */}
                     <div className="flex items-center gap-2">
                       <span className="text-[9px] text-slate-500 w-14 shrink-0">Capital</span>
-                      <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                        <motion.div
-                          className="h-full bg-violet-500"
-                          initial={{ width: 0 }}
-                          animate={{ width: `${capPct}%` }}
-                          transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 }}
+                      <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden min-w-0">
+                        <div
+                          className="h-full bg-violet-500 rounded-full transition-all duration-700 ease-out"
+                          style={{ width: `${capPct}%` }}
                         />
                       </div>
                       <span className={`text-[10px] font-mono font-semibold text-[#1a3357] tabular-nums w-16 text-right ${blur}`}>
@@ -123,12 +121,10 @@ export function ScenarioLeaderboard({
                     {/* Surplus */}
                     <div className="flex items-center gap-2">
                       <span className="text-[9px] text-slate-500 w-14 shrink-0">Surplus</span>
-                      <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                        <motion.div
-                          className={`h-full ${s.totalSur >= 0 ? "bg-emerald-500" : "bg-rose-500"}`}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${surPct}%` }}
-                          transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 + 0.05 }}
+                      <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden min-w-0">
+                        <div
+                          className={`h-full rounded-full transition-all duration-700 ease-out ${s.totalSur >= 0 ? "bg-emerald-500" : "bg-rose-500"}`}
+                          style={{ width: `${surPct}%` }}
                         />
                       </div>
                       <span className={`text-[10px] font-mono font-semibold tabular-nums w-16 text-right ${s.totalSur >= 0 ? "text-emerald-700" : "text-rose-700"} ${blur}`}>
@@ -138,13 +134,10 @@ export function ScenarioLeaderboard({
                     {/* Resilience */}
                     <div className="flex items-center gap-2">
                       <span className="text-[9px] text-slate-500 w-14 shrink-0">Resilience</span>
-                      <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                        <motion.div
-                          className="h-full"
-                          style={{ background: criColor.stroke }}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${s.minCri}%` }}
-                          transition={{ duration: 0.6, ease: chartTheme.ease, delay: i * 0.05 + 0.1 }}
+                      <div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden min-w-0">
+                        <div
+                          className="h-full rounded-full transition-all duration-700 ease-out"
+                          style={{ width: `${s.minCri}%`, background: criColor.stroke }}
                         />
                       </div>
                       <span className={`text-[10px] font-mono font-semibold tabular-nums w-16 text-right ${blur}`} style={{ color: criColor.stroke }}>

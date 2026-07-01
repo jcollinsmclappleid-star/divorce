@@ -19,7 +19,7 @@ const considerations = [
   { title: "Liquidity vs paper value", desc: "A business may be valuable on paper but produce limited cash to extract. Settlements often need to be structured around what cash can actually be released without damaging the business — sometimes via deferred payments, earn-outs or asset transfers in lieu of cash." },
   { title: "Director's loan accounts and retained profits", desc: "Money owed to a director, or profits retained in a company, are typically treated as part of the wealth available. Drawings strategy in the run-up to disclosure is closely scrutinised." },
   { title: "Ongoing income for maintenance", desc: "Where spousal or child maintenance is a feature, the unpredictability of self-employment income complicates the calculation. Maintenance terms may be tied to a percentage of income or include a review mechanism." },
-  { title: "Pre-marital business growth", desc: "If the business pre-dates the marriage, the original value may be ring-fenced as non-matrimonial. But growth in the business during the marriage is typically matrimonial and subject to sharing." },
+  { title: "Pre-marital business growth", desc: "If the business pre-dates the marriage, the original value and growth during the marriage may need separate valuation and legal review." },
 ];
 
 const figures = [
@@ -132,7 +132,7 @@ export default function SelfEmployedDivorcePage() {
             { label: "Liquidity gap", desc: "A business may be valuable on paper but generate limited cash to extract. Settlements often need creative structuring — deferred payments, earn-outs, or asset transfers in lieu — to bridge the gap between fair value and what cash is available." },
             { label: "Forensic accountant cost and time", desc: "Joint expert valuations are valuable but cost typically £5,000–£15,000+ and add months to the timetable. For very small businesses, the cost may not be proportionate; for larger ones, it's usually unavoidable." },
             { label: "Future income volatility", desc: "Spousal maintenance based on a single year's profits can become unsustainable if the business has a bad year. Maintenance terms with review mechanisms or income-percentage clauses are sometimes used to manage this." },
-            { label: "Pre-marital vs matrimonial business value", desc: "If the business pre-dated the marriage, the split between pre-marital value (potentially ring-fenced) and matrimonial growth (subject to sharing) is often disputed. Forensic accountants typically address this directly in their valuation." },
+            { label: "Pre-marital vs matrimonial business value", desc: "If the business pre-dated the marriage, the split between pre-marital value and matrimonial growth is often disputed. Forensic accountants typically address this directly in their valuation." },
           ].map((p, i) => (
             <div key={i} className="p-4 rounded-lg border">
               <p className="text-sm font-semibold mb-1">{p.label}</p>

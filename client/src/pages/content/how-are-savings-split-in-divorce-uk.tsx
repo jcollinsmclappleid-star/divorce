@@ -95,7 +95,7 @@ export default function SavingsSplitPage() {
         <Card className="border-amber-200 bg-amber-50 mb-6">
           <CardContent className="pt-5">
             <p className="text-sm font-semibold text-amber-800 mb-1">Pre-Marital Savings</p>
-            <p className="text-sm text-amber-700">Savings that clearly predate the marriage — and can be evidenced by bank statements — have a stronger argument for ring-fencing. However, in longer marriages or where financial need is high, courts may still include them. The longer a marriage and the greater the other party's need, the harder ring-fencing becomes.</p>
+            <p className="text-sm text-amber-700">Savings that clearly predate the marriage — and can be evidenced by bank statements — have a stronger argument for non-matrimonial treatment. However, in longer marriages or where financial need is high, courts may still include them. The longer a marriage and the greater the other party's need, the harder it becomes to keep them separate.</p>
           </CardContent>
         </Card>
       </ContentSection>

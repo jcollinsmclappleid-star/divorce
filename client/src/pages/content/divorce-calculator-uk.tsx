@@ -16,7 +16,7 @@ import {
 const faqItems = [
   {
     question: "What does a divorce calculator actually calculate?",
-    answer: "A divorce financial calculator models the numerical implications of different settlement assumptions. It computes net equity (property value minus mortgage and sale costs), distributes assets between parties under different scenarios, applies UK income tax and National Insurance to gross incomes, and shows post-separation monthly income for each party. It does not determine legal entitlement or predict court outcomes.",
+    answer: "A divorce financial calculator models the numerical implications of different settlement assumptions. It computes net equity (property value minus mortgage and sale costs), distributes assets between parties under different scenarios, applies UK income tax and National Insurance to gross incomes, and shows post-separation monthly income for each party. It does not determine legal rights or predict court outcomes.",
   },
   {
     question: "Do UK divorce courts use a calculator to decide settlements?",

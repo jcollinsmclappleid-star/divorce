@@ -128,7 +128,7 @@ export default function DivorceAndTheFamilyBusinessPage() {
         <div className="space-y-3 mb-6">
           {[
             { label: "Valuation range, not point estimate", desc: "Business valuations are inherently uncertain — particularly for SME owner-managed businesses. Treating a single number as definitive misrepresents the position. The negotiation should reflect a realistic range." },
-            { label: "Liquidity vs paper value", desc: "A business may be 'worth' a large amount on paper but actually generate very limited cash for the owner. The court typically recognises this gap — fully extracting paper value can be impossible without selling." },
+            { label: "Liquidity vs paper value", desc: "A business may be 'worth' a large amount on paper but actually generate very limited cash for the owner. Liquidity, extraction tax and sale risk need separate professional review." },
             { label: "Tax leakage on extraction", desc: "Extracting cash from a private company typically triggers tax — CGT on share sales, dividend tax on distributions, and so on. The other spouse's offset value may need to reflect this." },
             { label: "Disruption to the business itself", desc: "Drawn-out litigation, removal of the owner's focus, and the threat of forced sale can all damage the business itself. Alternative dispute resolution (mediation, arbitration, collaborative law) is often a better fit for business cases." },
           ].map((p, i) => (
@@ -144,7 +144,7 @@ export default function DivorceAndTheFamilyBusinessPage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "The actual valuation a court would adopt — that requires expert evidence",
+            "The valuation range an expert may support from the available evidence",
             "Whether forced sale of your business is a realistic outcome",
             "How tax would land on a particular extraction strategy",
           ].map((item, i) => (

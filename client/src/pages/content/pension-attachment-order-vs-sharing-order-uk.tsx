@@ -25,10 +25,10 @@ const figures = [
 
 const faqItems = [
   { question: "What's the difference between a pension sharing order and an attachment order?", answer: "A pension sharing order transfers a percentage of the pension to the receiving party as their own benefit — a clean break. An attachment order earmarks a share of the member's pension to be paid to the receiving party when the pension comes into payment — keeping the parties tied together financially. Sharing is now the standard; attachment is rare." },
-  { question: "Why is pension sharing usually preferred?", answer: "Because it creates a clean break. The receiving party has their own pension benefit they control; they do not depend on the member to draw the pension; remarriage does not forfeit the entitlement; and on the member's death they keep their share rather than losing future payments. Sharing is generally fairer and more certain than attachment." },
+  { question: "Why is pension sharing usually preferred?", answer: "Because it creates a clean break. The receiving party has their own pension benefit they control; they do not depend on the member to draw the pension; remarriage does not forfeit the benefit; and on the member's death they keep their share rather than losing future payments. Sharing is generally more certain than attachment." },
   { question: "When is an attachment order used?", answer: "Rarely. Attachment may be considered where the pension scheme is overseas and does not accept UK pension sharing orders, where there are very specific tax or scheme-rule advantages, or where the parties want to delay any change of benefit ownership for personal reasons. In most cases sharing is preferable." },
   { question: "Can attachment orders include lump sums?", answer: "Yes. An attachment order can apply to the member's pension income, the tax-free lump sum at retirement, or both. Lump sum attachment orders end on the receiving party's death and are usually replaced in modern practice by lump sum payments out of the matrimonial pot." },
-  { question: "What happens to an attachment order if my ex remarries?", answer: "Attachment orders for pension income typically end on the receiving party's remarriage. This is a major reason why attachment is now rarely used — the receiving party loses the entitlement permanently if they remarry. Pension sharing has no equivalent forfeiture." },
+  { question: "What happens to an attachment order if my ex remarries?", answer: "Attachment orders for pension income typically end on the receiving party's remarriage. This is a major reason why attachment is now rarely used — the receiving party loses those payments permanently if they remarry. Pension sharing has no equivalent forfeiture." },
   { question: "Can we mix sharing and attachment in one settlement?", answer: "Theoretically yes — different orders can apply to different schemes — but it is uncommon. Most modern financial settlements use pension sharing for all relevant pensions, with attachment reserved for unusual cases where sharing is unavailable." },
 ];
 
@@ -131,7 +131,7 @@ export default function PensionAttachmentVsSharingPage() {
         <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
           <li>Does the scheme accept pension sharing orders?</li>
           <li>Are there any reasons to prefer attachment over sharing?</li>
-          <li>What happens to the receiving party's entitlement on remarriage or member's death?</li>
+          <li>What happens to the receiving party's benefit on remarriage or member's death?</li>
           <li>Are there overseas pensions that need a different approach?</li>
           <li>How is the member's pension drawdown choice protected if attachment is used?</li>
         </ul>

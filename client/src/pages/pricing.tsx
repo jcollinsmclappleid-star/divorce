@@ -10,6 +10,7 @@ import { useMetaTags } from "@/hooks/use-meta-tags";
 import { SiteNav } from "@/components/site-nav";
 import { scrollTop } from "@/lib/utils";
 import { useAppStore } from "@/hooks/use-store";
+import { PRODUCT_NAMES, PRODUCT_PRICE, PRODUCT_TAGLINE } from "@/lib/product-copy";
 
 const COMPARISON_ROWS = [
   { label: "Run the full financial model", group: "analyser", free: true },
@@ -20,9 +21,10 @@ const COMPARISON_ROWS = [
   { label: "5-year capital sustainability projections", group: "analyser", free: false },
   { label: "Monthly cash position (surplus/deficit) per scenario", group: "analyser", free: false },
   { label: "Sensitivity & stress-test analysis", group: "analyser", free: false },
-  { label: "Settlement Reality Check Report — pressure points and plain-English analysis", group: "report", free: false },
+  { label: `${PRODUCT_NAMES.layerStandsOut} — scenario outcomes and plain-English analysis`, group: "report", free: false },
+  { label: `${PRODUCT_NAMES.layerBeforeAgree} — career, bills, home, pensions, children (source-backed)`, group: "report", free: false },
   { label: "Tailored questions for your solicitor, broker & pension adviser", group: "report", free: false },
-  { label: "Downloadable Settlement Reality Check PDF", group: "report", free: false },
+  { label: PRODUCT_NAMES.pdf, group: "report", free: false },
   { label: "12 months unlimited re-runs", group: "access", free: false },
 ];
 
@@ -44,10 +46,10 @@ const FAQ_ITEMS = [
 export default function PricingPage() {
   useDocumentTitle("Pricing — £79 One-Time | DivorceCalculatorUK");
   useMetaTags({
-    description: "One-time £79 for 12-month access to full divorce settlement analysis — Settlement Analyser and Settlement Reality Check Report. England and Wales.",
+    description: `One-time ${PRODUCT_PRICE} for 12-month access to full divorce settlement analysis — ${PRODUCT_NAMES.fullPosition}. England and Wales.`,
     canonical: "https://divorcecalculatoruk.co.uk/pricing",
     ogTitle: "Divorce Calculator UK Pricing — £79 One-Time",
-    ogDescription: "Full settlement analysis for £79. Two products: Settlement Analyser and Settlement Reality Check Report. England and Wales.",
+    ogDescription: `Full settlement analysis for ${PRODUCT_PRICE}. ${PRODUCT_TAGLINE} England and Wales.`,
     ogUrl: "https://divorcecalculatoruk.co.uk/pricing",
     ogType: "website",
   });
@@ -67,10 +69,13 @@ export default function PricingPage() {
             One-time payment · No subscription
           </div>
           <h1 className="text-3xl md:text-4xl font-display font-bold tracking-tight" data-testid="text-pricing-title">
-            Two products. One price.
+            Three answers. One price.
           </h1>
           <p className="text-muted-foreground max-w-lg mx-auto text-sm leading-relaxed">
-            Free to start — no sign-up. £79 unlocks both your <strong>Settlement Analyser</strong> and your <strong>Settlement Reality Check Report</strong> for 12 months.
+            Free to start — no sign-up. {PRODUCT_PRICE} unlocks {PRODUCT_NAMES.fullPosition} for 12 months: {PRODUCT_NAMES.layerScenarios.toLowerCase()}, {PRODUCT_NAMES.layerStandsOut.toLowerCase()}, and {PRODUCT_NAMES.layerBeforeAgree.toLowerCase()}.
+          </p>
+          <p className="text-muted-foreground/70 max-w-lg mx-auto text-xs leading-relaxed">
+            Illustrative modelling only — not legal or financial advice.
           </p>
         </section>
 
@@ -95,7 +100,7 @@ export default function PricingPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-sm font-bold text-foreground">Settlement Analyser</h3>
+                    <h3 className="text-sm font-bold text-foreground">{PRODUCT_NAMES.layerScenarios}</h3>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-muted-foreground font-medium">Included</span>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 leading-relaxed">Four settlement scenarios modelled side-by-side — with Cashflow Resilience Indicator (CRI) scores, 5-year projections, mortgage pressure checks and stress-testing.</p>
@@ -116,12 +121,12 @@ export default function PricingPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-sm font-bold text-foreground">Settlement Reality Check Report</h3>
+                    <h3 className="text-sm font-bold text-foreground">{PRODUCT_NAMES.layerStandsOut}</h3>
                     <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-gold/10 text-gold border border-gold/20 font-semibold">
                       <Sparkles className="w-2.5 h-2.5" /> Intelligently generated
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">A plain-English analysis of your figures — what stands out, where the financial pressure lies, and tailored questions for your solicitor, broker and pension adviser.</p>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">See what each scenario could leave you with — what stands out, where monthly pressure may appear — plus a source-backed preparation guide and tailored questions for your solicitor, broker and pension adviser.</p>
                 </div>
               </div>
             </div>
@@ -141,9 +146,10 @@ export default function PricingPage() {
                 "5-year capital depletion & sustainability projections",
                 "Monthly cash position (surplus/deficit) per scenario",
                 "Sensitivity analysis — which assumptions matter most",
-                "Settlement Reality Check Report — pressure points and plain-English analysis of your figures",
+                `${PRODUCT_NAMES.layerStandsOut} — scenario outcomes and plain-English analysis of your figures`,
+                `${PRODUCT_NAMES.layerBeforeAgree} — career, bills, home, pensions, children and missing evidence`,
                 "Tailored questions to raise with your solicitor, broker & pension adviser",
-                "Downloadable Settlement Reality Check PDF",
+                PRODUCT_NAMES.pdf,
                 "12 months unlimited access — update figures any time",
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-2.5" data-testid={`text-paid-feature-${i}`}>
@@ -226,7 +232,7 @@ export default function PricingPage() {
                   <td colSpan={3} className="py-2 px-6">
                     <div className="flex items-center gap-2">
                       <BarChart3 className="w-3.5 h-3.5 text-cyan-600" />
-                      <span className="text-[11px] font-bold text-cyan-700 uppercase tracking-wide">Settlement Analyser</span>
+                      <span className="text-[11px] font-bold text-cyan-700 uppercase tracking-wide">{PRODUCT_NAMES.layerScenarios}</span>
                     </div>
                   </td>
                 </tr>
@@ -249,7 +255,7 @@ export default function PricingPage() {
                   <td colSpan={3} className="py-2 px-6">
                     <div className="flex items-center gap-2">
                       <Sparkles className="w-3.5 h-3.5 text-gold" />
-                      <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wide">Settlement Reality Check Report</span>
+                      <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wide">{PRODUCT_NAMES.layerStandsOut}</span>
                     </div>
                   </td>
                 </tr>

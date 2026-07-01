@@ -99,6 +99,9 @@ const PensionOffsettingPage = lazy(() => import("@/pages/content/divorce-pension
 const SpousalMaintenancePage = lazy(() => import("@/pages/content/spousal-maintenance-after-divorce-uk"));
 const TransferOfEquityPage = lazy(() => import("@/pages/content/transfer-of-equity-divorce-uk"));
 const WhatAmIEntitledToPage = lazy(() => import("@/pages/content/what-am-i-entitled-to-in-divorce-uk"));
+const HowMuchWillIGetDivorcePage = lazy(() => import("@/pages/content/how-much-will-i-get-divorce-uk"));
+const CareerSacrificeDivorcePage = lazy(() => import("@/pages/content/career-sacrifice-divorce-settlement-uk"));
+const WomanGaveUpCareerDivorcePage = lazy(() => import("@/pages/content/woman-gave-up-career-divorce-uk"));
 const FormEDisclosurePage = lazy(() => import("@/pages/content/form-e-financial-disclosure-uk"));
 const Section25FactorsPage = lazy(() => import("@/pages/content/section-25-factors-divorce-uk"));
 const StayAtHomeParentPage = lazy(() => import("@/pages/content/stay-at-home-parent-divorce-settlement-uk"));
@@ -258,6 +261,9 @@ function Router() {
       <Route path="/spousal-maintenance-after-divorce-uk" component={SpousalMaintenancePage} />
       <Route path="/transfer-of-equity-divorce-uk" component={TransferOfEquityPage} />
       <Route path="/what-am-i-entitled-to-in-divorce-uk" component={WhatAmIEntitledToPage} />
+      <Route path="/how-much-will-i-get-divorce-uk" component={HowMuchWillIGetDivorcePage} />
+      <Route path="/career-sacrifice-divorce-settlement-uk" component={CareerSacrificeDivorcePage} />
+      <Route path="/woman-gave-up-career-divorce-uk" component={WomanGaveUpCareerDivorcePage} />
       <Route path="/form-e-financial-disclosure-uk" component={FormEDisclosurePage} />
       <Route path="/section-25-factors-divorce-uk" component={Section25FactorsPage} />
       <Route path="/stay-at-home-parent-divorce-settlement-uk" component={StayAtHomeParentPage} />

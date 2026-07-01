@@ -34,7 +34,7 @@ const faqItems = [
   },
   {
     question: "Does the calculator give legal advice?",
-    answer: "No. This is a financial modelling tool, not a legal or financial advice service. It illustrates what different settlement assumptions would look like numerically. Outputs should not be treated as legal entitlement or predictions of what a court would award.",
+    answer: "No. This is a financial modelling tool, not a legal or financial advice service. It illustrates what different settlement assumptions would look like numerically. Outputs should not be treated as legal rights analysis or predictions of legal outcomes.",
   },
   {
     question: "Can both parties use the same calculator?",

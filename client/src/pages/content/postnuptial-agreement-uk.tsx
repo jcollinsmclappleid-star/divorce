@@ -15,7 +15,7 @@ import {
 
 const triggers = [
   { title: "Arrival of children", desc: "Many couples revisit their financial arrangements after children arrive — particularly where one partner steps back from work and the income/asset balance changes." },
-  { title: "Significant inheritance or windfall", desc: "An inheritance received during the marriage often prompts a post-nup, particularly to ring-fence the inheritance from any future settlement." },
+  { title: "Significant inheritance or windfall", desc: "An inheritance received during the marriage often prompts a post-nup, particularly to document how the inheritance should be treated if the marriage ends." },
   { title: "Starting or selling a business", desc: "A new business venture brings risk and value that one party often wants to address explicitly. A sale of a business creates wealth that may need allocating." },
   { title: "Reconciliation after a difficult period", desc: "Some couples enter a post-nup as part of rebuilding their relationship — providing certainty about financial outcomes if things don't recover." },
   { title: "Move to or from the UK", desc: "Where the family relocates, a post-nup can address how assets in different jurisdictions will be treated." },
@@ -61,7 +61,7 @@ export default function PostnuptialAgreementPage() {
   return (
     <ContentPageLayout
       title="Postnuptial Agreement UK: When and Why Couples Use Them"
-      subtitle="Post-nups are signed during marriage and address how finances would be divided in the event of divorce. Like pre-nups, they're not automatically binding but are usually upheld if properly drafted."
+      subtitle="Post-nups are signed during marriage and address how finances would be divided in the event of divorce. Like pre-nups, they are not automatically binding, but they can carry weight when properly drafted."
       documentTitle="Postnuptial Agreement UK | DivorceCalculatorUK"
       metaDescription="A clear guide to UK postnuptial agreements — when couples use them, the conditions courts look for, and how they sit alongside pre-nups and separation agreements."
       relatedPages={relatedPages}
@@ -144,8 +144,8 @@ export default function PostnuptialAgreementPage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "Whether a particular post-nup would be upheld in your specific circumstances",
-            "How a court would treat the agreement if circumstances have substantially changed since signing",
+            "How much weight a particular post-nup may carry in your specific circumstances",
+            "How changed circumstances since signing may affect the agreement",
             "Whether you have grounds to set aside or vary an existing post-nup",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
@@ -161,7 +161,7 @@ export default function PostnuptialAgreementPage() {
           <li>How should the agreement handle future children, inheritance or business growth?</li>
           <li>How often should we review or update the agreement?</li>
           <li>What disclosure should we exchange before signing?</li>
-          <li>How can we structure the agreement to maximise its likelihood of being upheld?</li>
+          <li>What safeguards should be checked so the agreement is properly prepared?</li>
         </ul>
         <InlineCTA label="Model Settlement Scenarios With Post-nup Assumptions" />
       </ContentSection>

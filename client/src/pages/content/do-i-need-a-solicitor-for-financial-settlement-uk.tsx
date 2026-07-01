@@ -16,7 +16,7 @@ const faqItems = [
   { question: "What does a financial consent order cost?", answer: "The court fee for filing a consent order is currently £58 (check GOV.UK for the latest figure). Solicitor drafting fees vary widely — typically a few hundred pounds for a straightforward case to several thousand for complex ones. Many family law firms offer fixed-fee consent orders where the substance has been agreed via mediation." },
   { question: "Is mediation cheaper than using a solicitor?", answer: "Generally yes — mediation fees are usually shared between the parties and the process is faster than full solicitor-led negotiation or court proceedings. The Family Mediation Voucher scheme has provided up to £500 per family towards the cost of mediation; check GOV.UK for current eligibility. A first 'MIAM' (mediation information meeting) is required before applying to court for financial relief in most cases." },
   { question: "Can I just write our agreement down ourselves?", answer: "You can — but it will not be legally binding without a sealed consent order. A handwritten or solicitor-drafted private agreement (sometimes called a 'separation agreement') is persuasive evidence of intentions but does not bar future financial claims. Only a court-approved consent order achieves a clean break." },
-  { question: "When is a solicitor genuinely essential?", answer: "Where there are significant pensions, business interests, complex assets, international elements, suspected hidden assets, or any element of coercion or domestic abuse, professional advice is strongly recommended. Where your spouse already has a solicitor, the balance of expertise becomes a real concern." },
+  { question: "When is a solicitor especially important?", answer: "Where there are significant pensions, business interests, complex assets, international elements, suspected hidden assets, or any element of coercion or domestic abuse, professional advice is important to consider. Where your spouse already has a solicitor, the balance of expertise becomes a real concern." },
   { question: "What's the cheapest safe route?", answer: "For amicable couples with modest, transparent assets: complete the divorce via GOV.UK; use mediation to agree the financial substance; instruct a solicitor on a fixed fee to draft and file a consent order. Total cost is typically a few hundred pounds for the divorce + mediation fees + a fixed fee for the order — far cheaper than separate solicitor representation throughout." },
 ];
 
@@ -87,7 +87,7 @@ export default function DoINeedSolicitorPage() {
       <ContentSection muted>
         <h2 className="text-2xl font-display font-bold mb-4">What the calculator cannot do for you</h2>
         <div className="space-y-3 mb-6">
-          {["Draft or file a consent order", "Negotiate with your spouse on your behalf", "Predict what a court would order in your specific case"].map((item, i) => (
+          {["Draft or file a consent order", "Negotiate with your spouse on your behalf", "Predict legal outcomes in your specific case"].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
               {item}

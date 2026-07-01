@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, TrendingUp, Activity, BarChart3, Gauge } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { FsiGauge } from "@/components/fsi-gauge";
 import {
   ResponsiveContainer,
   BarChart,
@@ -156,15 +157,13 @@ function CashflowPanel() {
         <p className="text-[10px] text-muted-foreground mb-2">Cashflow Resilience Indicator (CRI) · this scenario</p>
         <div className="grid grid-cols-2 gap-3">
           {[
-            { name: "Alex",   score: 71, bg: "bg-emerald-50 border-emerald-200", color: "text-emerald-600", label: "Sustainable"      },
-            { name: "Jordan", score: 62, bg: "bg-amber-50 border-amber-200",     color: "text-amber-600",   label: "Attention needed" },
-          ].map((p, i) => (
-            <div key={i} className={`rounded-lg border px-3 py-2 ${p.bg} text-center`}>
+            { name: "Alex",   score: 71, bg: "bg-emerald-50 border-emerald-200", label: "Sustainable",      labelColor: "text-emerald-700" },
+            { name: "Jordan", score: 62, bg: "bg-amber-50 border-amber-200",     label: "Attention needed", labelColor: "text-amber-700"   },
+          ].map((p) => (
+            <div key={p.name} className={`rounded-lg border px-2 pt-2 pb-1.5 flex flex-col items-center ${p.bg}`}>
               <p className="text-[10px] text-muted-foreground font-medium">{p.name}</p>
-              <p className={`text-lg font-bold tabular-nums ${p.color}`}>
-                {p.score}<span className="text-[10px] font-normal">/100</span>
-              </p>
-              <p className={`text-[9px] font-medium ${p.color}`}>{p.label}</p>
+              <FsiGauge score={p.score} size={96} showLabel={false} />
+              <p className={`text-[9px] font-medium -mt-0.5 ${p.labelColor}`}>{p.label}</p>
             </div>
           ))}
         </div>
@@ -224,34 +223,10 @@ function ProjectionPanel() {
   );
 }
 
-function MiniArcGauge({ score, color, trackColor }: { score: number; color: string; trackColor: string }) {
-  // Pure arc SVG — no text inside, avoiding any overlap
-  const W = 120, H = 64;
-  const cx = 60, cy = 62, r = 52, sw = 11;
-  const toRad = (deg: number) => (deg * Math.PI) / 180;
-  const pt = (deg: number) => `${cx + r * Math.cos(toRad(deg))} ${cy + r * Math.sin(toRad(deg))}`;
-  const endDeg = 180 - (score / 100) * 180;
-  const bgPath   = `M ${pt(180)} A ${r} ${r} 0 0 1 ${pt(0)}`;
-  const fillPath = score > 0 ? `M ${pt(180)} A ${r} ${r} 0 ${score > 50 ? 1 : 0} 1 ${pt(endDeg)}` : "";
-  return (
-    <div className="relative flex flex-col items-center">
-      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
-        <path d={bgPath}   fill="none" stroke={trackColor} strokeWidth={sw} strokeLinecap="round" />
-        {fillPath && <path d={fillPath} fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round" />}
-      </svg>
-      {/* Score sits below the arc arms — in HTML, guaranteed no SVG overlap */}
-      <div className="flex flex-col items-center -mt-1">
-        <span className="text-2xl font-bold tabular-nums leading-none" style={{ color }}>{score}</span>
-        <span className="text-[10px] text-muted-foreground leading-none mt-0.5">/100</span>
-      </div>
-    </div>
-  );
-}
-
 function FsiPanel() {
   const parties = [
-    { name: "Alex",   score: 78, color: "#059669", trackColor: "#D1FAE5", bg: "bg-emerald-50 border-emerald-200", label: "Sustainable",      labelColor: "text-emerald-700" },
-    { name: "Jordan", score: 54, color: "#D97706", trackColor: "#FEF3C7", bg: "bg-amber-50 border-amber-200",   label: "Attention needed", labelColor: "text-amber-700"   },
+    { name: "Alex",   score: 78, bg: "bg-emerald-50 border-emerald-200", label: "Sustainable",      labelColor: "text-emerald-700" },
+    { name: "Jordan", score: 54, bg: "bg-amber-50 border-amber-200",   label: "Attention needed", labelColor: "text-amber-700"   },
   ];
   return (
     <div className="flex flex-col h-full">
@@ -265,7 +240,7 @@ function FsiPanel() {
         {parties.map((p) => (
           <div key={p.name} className={`flex-1 rounded-xl border px-2 pt-3 pb-2 flex flex-col items-center ${p.bg}`}>
             <p className="text-[11px] font-semibold text-foreground mb-1">{p.name}</p>
-            <MiniArcGauge score={p.score} color={p.color} trackColor={p.trackColor} />
+            <FsiGauge score={p.score} size={110} showLabel={false} />
             <p className={`text-[10px] font-semibold mt-0.5 ${p.labelColor}`}>{p.label}</p>
           </div>
         ))}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { gaugeColor } from "@/lib/chart-theme";
 
 interface RadialGaugeProps {
@@ -10,6 +10,10 @@ interface RadialGaugeProps {
   testId?: string;
 }
 
+/**
+ * Wide-arc resilience gauge used in marketing consoles.
+ * Score is rendered in HTML below the arc — never inside the SVG.
+ */
 export function RadialGauge({
   score,
   size = 180,
@@ -18,11 +22,16 @@ export function RadialGauge({
   animate = true,
   testId,
 }: RadialGaugeProps) {
+  const uid = useId().replace(/:/g, "");
   const [val, setVal] = useState(animate ? 0 : score);
+
   useEffect(() => {
-    if (!animate) { setVal(score); return; }
+    if (!animate) {
+      setVal(score);
+      return;
+    }
     const start = performance.now();
-    const from = val;
+    const from = 0;
     const to = Math.max(0, Math.min(100, score));
     const dur = 1100;
     let raf = 0;
@@ -34,70 +43,100 @@ export function RadialGauge({
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [score, animate]);
 
-  const cx = size / 2, cy = size / 2 + size * 0.08;
+  const cx = size / 2;
+  const cy = size / 2 + size * 0.08;
   const r = size * 0.4;
   const sw = size * 0.085;
   const startA = Math.PI * 0.85;
   const endA = Math.PI * 2.15;
   const sweep = endA - startA;
   const fillA = startA + sweep * (val / 100);
+  const svgHeight = Math.round(size * 0.78);
+  const tuck = Math.max(4, Math.round(size * 0.05));
 
   const arc = (from: number, to: number) => {
-    const sx = cx + r * Math.cos(from), sy = cy + r * Math.sin(from);
-    const ex = cx + r * Math.cos(to),   ey = cy + r * Math.sin(to);
+    const sx = cx + r * Math.cos(from);
+    const sy = cy + r * Math.sin(from);
+    const ex = cx + r * Math.cos(to);
+    const ey = cy + r * Math.sin(to);
     const large = Math.abs(to - from) > Math.PI ? 1 : 0;
     return `M ${sx} ${sy} A ${r} ${r} 0 ${large} 1 ${ex} ${ey}`;
   };
 
   const c = gaugeColor(score);
-  const gid = `gauge-grad-${Math.round(score * 1000)}`;
+  const gid = `gauge-grad-${uid}`;
 
-  // Tick positions across the arc
   const ticks = Array.from({ length: 11 }, (_, i) => {
     const a = startA + sweep * (i / 10);
-    const inner = r - sw * 0.6, outer = r + sw * 0.05;
+    const inner = r - sw * 0.6;
+    const outer = r + sw * 0.05;
     return {
-      x1: cx + inner * Math.cos(a), y1: cy + inner * Math.sin(a),
-      x2: cx + outer * Math.cos(a), y2: cy + outer * Math.sin(a),
+      x1: cx + inner * Math.cos(a),
+      y1: cy + inner * Math.sin(a),
+      x2: cx + outer * Math.cos(a),
+      y2: cy + outer * Math.sin(a),
       active: i / 10 <= val / 100,
     };
   });
 
   return (
     <div className="flex flex-col items-center" data-testid={testId ?? "radial-gauge"}>
-      <svg width={size} height={size * 0.78} viewBox={`0 0 ${size} ${size * 0.78}`} role="img" aria-label={`Score ${Math.round(score)} of 100`}>
-        <defs>
-          <linearGradient id={gid} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"   stopColor={c.stroke} stopOpacity={0.6} />
-            <stop offset="60%"  stopColor={c.stroke} stopOpacity={1} />
-            <stop offset="100%" stopColor={c.stroke} stopOpacity={1} />
-          </linearGradient>
-          <filter id={`${gid}-glow`} x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="2.4" result="b" />
-            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
-        </defs>
-        <path d={arc(startA, endA)} stroke="rgba(15,27,45,0.07)" strokeWidth={sw} fill="none" strokeLinecap="round" />
-        <path d={arc(startA, fillA)} stroke={`url(#${gid})`} strokeWidth={sw} fill="none" strokeLinecap="round" filter={`url(#${gid}-glow)`} />
-        {tickMarks && ticks.map((t, i) => (
-          <line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
-            stroke={t.active ? c.stroke : "rgba(15,27,45,0.18)"}
-            strokeWidth={i % 5 === 0 ? 1.4 : 0.8}
-            strokeLinecap="round"
-            opacity={t.active ? 1 : 0.55} />
-        ))}
-        <text x={cx} y={cy + size * 0.02} textAnchor="middle" fontSize={size * 0.26} fontWeight={700}
-          fill={c.stroke} fontFamily='"Fraunces", Georgia, serif' style={{ letterSpacing: "-0.02em" }}>
-          {Math.round(val)}
-        </text>
-        <text x={cx} y={cy + size * 0.18} textAnchor="middle" fontSize={size * 0.075} fill="#6B7280" fontFamily='"Inter", sans-serif'>
-          / 100
-        </text>
-      </svg>
-      {label && <span className="text-[11px] font-semibold tracking-wide mt-0.5" style={{ color: c.stroke }}>{label}</span>}
+      <div className="flex flex-col items-center">
+        <svg
+          width={size}
+          height={svgHeight}
+          viewBox={`0 0 ${size} ${svgHeight}`}
+          className="block shrink-0"
+          role="img"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient id={gid} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor={c.stroke} stopOpacity={0.6} />
+              <stop offset="60%" stopColor={c.stroke} stopOpacity={1} />
+              <stop offset="100%" stopColor={c.stroke} stopOpacity={1} />
+            </linearGradient>
+          </defs>
+          <path d={arc(startA, endA)} stroke="rgba(15,27,45,0.07)" strokeWidth={sw} fill="none" strokeLinecap="round" />
+          <path d={arc(startA, fillA)} stroke={`url(#${gid})`} strokeWidth={sw} fill="none" strokeLinecap="round" />
+          {tickMarks &&
+            ticks.map((t, i) => (
+              <line
+                key={i}
+                x1={t.x1}
+                y1={t.y1}
+                x2={t.x2}
+                y2={t.y2}
+                stroke={t.active ? c.stroke : "rgba(15,27,45,0.18)"}
+                strokeWidth={i % 5 === 0 ? 1.4 : 0.8}
+                strokeLinecap="round"
+                opacity={t.active ? 1 : 0.55}
+              />
+            ))}
+        </svg>
+        <div
+          className="flex flex-col items-center text-center leading-none"
+          style={{ marginTop: -tuck }}
+          aria-label={`Score ${Math.round(score)} out of 100`}
+        >
+          <span
+            className="font-bold tabular-nums font-display"
+            style={{ color: c.stroke, fontSize: size * 0.22, letterSpacing: "-0.02em" }}
+          >
+            {Math.round(val)}
+          </span>
+          <span className="text-muted-foreground mt-0.5" style={{ fontSize: size * 0.07 }}>
+            / 100
+          </span>
+        </div>
+      </div>
+      {label ? (
+        <span className="text-[11px] font-semibold tracking-wide mt-1 text-center" style={{ color: c.stroke }}>
+          {label}
+        </span>
+      ) : null}
     </div>
   );
 }

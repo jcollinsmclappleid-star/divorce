@@ -42,7 +42,7 @@ const faqItems = [
 
 const relatedPages = [
   { title: "What is a Consent Order in UK Divorce?", description: "How the consent order document works and what it includes.", href: "/what-is-a-consent-order-uk-divorce", badge: "Legal Orders" },
-  { title: "What is a Clean Break Order UK?", description: "How the clean break clause provides permanent financial protection.", href: "/what-is-a-clean-break-order-uk", badge: "Legal Orders" },
+  { title: "What is a Clean Break Order UK?", description: "How the clean break clause closes future financial claims.", href: "/what-is-a-clean-break-order-uk", badge: "Legal Orders" },
   { title: "When is a Divorce Financial Settlement Legally Binding?", description: "Understanding exactly when the consent order takes effect.", href: "/when-is-divorce-financial-settlement-legally-binding-uk", badge: "Legal" },
   { title: "Preview the Full Financial Report", description: "Understand what your settlement covers before agreeing to any consent order.", href: "/unlock", badge: "Report" },
 ];
@@ -52,7 +52,7 @@ export default function ConsentVsCleanBreakPage() {
   return (
     <ContentPageLayout
       title="Consent Order vs Clean Break Order UK: What's the Difference?"
-      subtitle="These two terms are often confused — but they are not the same thing. A consent order is the legal document; a clean break is a provision within it. Understanding the distinction helps you know exactly what protection you need."
+      subtitle="These two terms are often confused — but they are not the same thing. A consent order is the legal document; a clean break is a provision within it. Understanding the distinction helps you know what needs checking."
       documentTitle="Consent Order vs Clean Break Order UK | DivorceCalculatorUK"
       metaDescription="Clear explanation of the difference between a consent order and a clean break order in UK divorce — what each term means, what each covers, and which you need."
       relatedPages={relatedPages}
@@ -87,7 +87,7 @@ export default function ConsentVsCleanBreakPage() {
               </div>
               <p className="text-sm text-muted-foreground">A clean break order is not a separate document — it is a specific provision within a consent order. The clean break clause dismisses all future financial claims between the parties permanently.</p>
               <p className="text-sm text-muted-foreground">A consent order without a clean break clause deals with the financial division but leaves income claims (maintenance) open. A consent order with a clean break dismisses everything — capital and income claims — permanently.</p>
-              <p className="text-sm font-medium">Think of it as: the protection clause inside the container.</p>
+              <p className="text-sm font-medium">Think of it as: the future-claims clause inside the container.</p>
             </CardContent>
           </Card>
         </div>
@@ -148,7 +148,7 @@ export default function ConsentVsCleanBreakPage() {
           {[
             { label: "Assuming a clean break is always achievable", desc: "Where there is a significant income gap — particularly after a long marriage with a career sacrificed by one partner — a clean break may not be immediately achievable. Maintenance for a transitional period is common." },
             { label: "Leaving financial claims open without a consent order", desc: "Many divorces proceed without a consent order. Both parties may intend to 'sort it out later'. Without a consent order, all claims remain permanently open — including claims on future inheritances, property acquisitions, or business success." },
-            { label: "Not understanding the difference until it is too late", desc: "Some people believe they have a 'clean break' because they verbally agreed or exchanged emails. Only a court-approved consent order with a clean break clause provides the legal protection. Informal agreements are not enforceable." },
+            { label: "Not understanding the difference until it is too late", desc: "Some people believe they have a 'clean break' because they verbally agreed or exchanged emails. A court-approved consent order with a clean break clause is the formal route for closing future financial claims. Informal agreements are not enforceable in the same way." },
           ].map((p, i) => (
             <div key={i} className="p-4 rounded-lg border">
               <p className="text-sm font-semibold mb-1">{p.label}</p>
@@ -164,7 +164,7 @@ export default function ConsentVsCleanBreakPage() {
           {[
             "Whether a clean break is legally achievable in your specific circumstances — this requires a professional assessment of needs and ability to pay",
             "Whether a deferred clean break with a fixed maintenance term is more appropriate than an immediate clean break",
-            "What a court would order if you cannot agree on whether a clean break is fair",
+            "How to discuss clean-break fairness with a solicitor if you cannot agree",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />

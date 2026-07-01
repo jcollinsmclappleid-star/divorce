@@ -15,7 +15,7 @@ import {
 
 const issues = [
   { title: "Disclosure obligation extends worldwide", desc: "Form E requires disclosure of all assets, wherever located. Failing to disclose offshore accounts, properties or company interests carries the same consequences as failing to disclose UK assets." },
-  { title: "Currency and valuation", desc: "Foreign assets need to be valued in pounds for the matrimonial pot. Exchange rates fluctuate — and the court typically uses values close to the date of the final hearing or order." },
+  { title: "Currency and valuation", desc: "Foreign assets need to be valued in pounds for the matrimonial pot. Exchange rates fluctuate, so valuation dates and currency assumptions should be checked carefully." },
   { title: "Foreign tax considerations", desc: "Selling or transferring offshore assets can trigger tax in the country where they are located, in addition to any UK tax. Both need to be modelled when working out net value." },
   { title: "Enforcement against foreign assets", desc: "An English court order can be made against a UK-resident party covering foreign assets — but enforcing it internationally requires recognition by the foreign court. This adds time, cost and uncertainty." },
   { title: "Common Reporting Standard (CRS) information", desc: "Information about offshore accounts is now routinely shared with HMRC under CRS. This significantly reduces the practical scope for hiding assets but doesn't replace formal disclosure in divorce." },
@@ -145,7 +145,7 @@ export default function OffshoreAssetsDivorcePage() {
         <div className="space-y-3 mb-6">
           {[
             "Whether England is the right forum for your divorce given international links",
-            "How a particular foreign court would respond to an English order",
+            "How enforcement and recognition may work in the relevant foreign jurisdiction",
             "The exact foreign tax treatment of a particular transfer or sale",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">

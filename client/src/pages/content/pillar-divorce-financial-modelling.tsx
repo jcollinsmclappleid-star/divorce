@@ -85,7 +85,7 @@ const modellingBenefits = [
 ];
 
 const professionalAdvice = [
-  { icon: Gavel, label: "Family Solicitor", description: "Provides legal advice on entitlement, court process, and binding agreements under the Matrimonial Causes Act 1973." },
+  { icon: Gavel, label: "Family Solicitor", description: "Provides legal advice on rights, court process, and binding agreements under the Matrimonial Causes Act 1973." },
   { icon: UserCheck, label: "Accredited Mediator", description: "Facilitates structured negotiation between parties to reach mutually acceptable financial arrangements." },
   { icon: PiggyBank, label: "Financial Adviser", description: "Provides regulated advice on pensions, investments, tax planning, and long-term financial sustainability." },
 ];
@@ -244,7 +244,7 @@ export default function PillarDivorceFinancialModelling() {
                 <span className="text-sm font-semibold">Not Predicting Court Outcomes</span>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Courts exercise broad discretion under the Matrimonial Causes Act 1973. No calculator or modelling tool can replicate judicial reasoning or predict what a court may determine. Modelling illustrates the numerical consequences of hypothetical assumptions — it does not forecast legal outcomes.
+                Financial remedies involve broad discretion under the Matrimonial Causes Act 1973. No calculator or modelling tool can replicate legal reasoning or predict a legal outcome. Modelling illustrates the numerical consequences of hypothetical assumptions — it does not forecast case results.
               </p>
             </CardContent>
           </Card>
@@ -255,7 +255,7 @@ export default function PillarDivorceFinancialModelling() {
                 <span className="text-sm font-semibold">Not Replacing Legal Advice</span>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Financial modelling does not assess legal rights, entitlements, or procedural requirements. It cannot determine whether an agreement is enforceable or whether specific disclosure obligations have been met. Independent legal advice from a qualified family solicitor remains essential for binding decisions.
+                Financial modelling does not assess legal rights, legal options, or procedural requirements. It cannot determine whether an agreement is enforceable or whether specific disclosure obligations have been met. Independent legal advice from a qualified family solicitor remains essential for binding decisions.
               </p>
             </CardContent>
           </Card>
@@ -346,10 +346,10 @@ export default function PillarDivorceFinancialModelling() {
               Pensions may represent a significant proportion of total wealth. Two broad mechanisms are often discussed: pension sharing (division of pension fund value) and offsetting (retaining pension in exchange for other assets). Modelling illustrates long-term retirement impact, liquidity differences, and short-term capital availability trade-offs.
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Pension sharing involves a court order that transfers a percentage of one party's pension to the other, creating a separate pension credit in the recipient's name. The Cash Equivalent Transfer Value (CETV) is commonly used as a reference figure, though CETVs for defined benefit schemes may not fully capture the underlying value of guaranteed income in retirement. Actuarial analysis may be warranted for complex pension arrangements.
+              Pension sharing involves a court order that transfers a percentage of one party's pension to the other, creating a separate pension credit in the recipient's name. The Cash Equivalent Transfer Value (CETV) is commonly used as a reference figure, though CETVs for defined benefit schemes may not fully capture the underlying value of defined retirement income. Actuarial analysis may be warranted for complex pension arrangements.
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Offsetting involves one party retaining their pension entitlement while the other receives a greater share of non-pension assets (such as property equity or savings) to compensate. This approach avoids the administrative complexity of pension sharing but introduces a fundamental comparison challenge: pension wealth is illiquid and deferred, while property or cash is accessible now. Modelling can illustrate the nominal value trade-off, though independent financial advice may be warranted to assess the true equivalence.
+              Offsetting involves one party retaining their pension while the other receives a greater share of non-pension assets, such as property equity or savings, to balance the modelled values. This approach avoids the administrative complexity of pension sharing but introduces a fundamental comparison challenge: pension wealth is illiquid and deferred, while property or cash is accessible now. Modelling can illustrate the nominal value trade-off, though independent financial advice may be warranted to assess the true equivalence.
             </p>
             <ExternalLinkButton href="https://www.gov.uk/pension-sharing-when-you-divorce">
               GOV.UK: Pension sharing orders
@@ -505,7 +505,7 @@ export default function PillarDivorceFinancialModelling() {
           Asset division alone does not determine financial stability. Structured modelling examines post-division net income, estimated essential expenditure, interest rate sensitivity, income multiple benchmarks, and 5-year sustainability indicators.
         </p>
         <p className="text-xs text-muted-foreground leading-relaxed mb-4">
-          Lending benchmarks referenced are generalised illustrations, not lending decisions or guarantees. Sustainability modelling highlights potential pressure points under stated assumptions.
+          Lending benchmarks referenced are generalised illustrations, not lending decisions. Sustainability modelling highlights potential pressure points under stated assumptions.
         </p>
         <InlineCTA label="Run sustainability modelling" />
       </ContentSection>
@@ -536,7 +536,7 @@ export default function PillarDivorceFinancialModelling() {
                 <span className="text-sm font-semibold">Martin Orders</span>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                A Martin order is similar but typically applies where there are no dependent children. The sale is deferred until the occupying party remarries, cohabits, dies, or voluntarily chooses to sell. These orders are less common and tend to arise in cases where the occupying party has limited housing alternatives. The departing party's capital remains tied up in the property for an indefinite period, which may affect their ability to purchase alternative housing. This trade-off between immediate capital access and deferred entitlement is a key consideration that modelling can help illustrate.
+                A Martin order is similar but typically applies where there are no dependent children. The sale is deferred until the occupying party remarries, cohabits, dies, or voluntarily chooses to sell. These orders are less common and tend to arise in cases where the occupying party has limited housing alternatives. The departing party's capital remains tied up in the property for an indefinite period, which may affect their ability to purchase alternative housing. This trade-off between immediate capital access and deferred sale proceeds is a key consideration that modelling can help illustrate.
               </p>
             </CardContent>
           </Card>
@@ -560,7 +560,7 @@ export default function PillarDivorceFinancialModelling() {
             </AccordionTrigger>
             <AccordionContent>
               <ul className="space-y-1.5 text-sm text-muted-foreground">
-                <li>Does not determine legal entitlement or assess fairness</li>
+                <li>Does not determine legal rights or assess fairness</li>
                 <li>Does not predict court outcomes or replicate judicial reasoning</li>
                 <li>Cannot incorporate judicial discretion under the Matrimonial Causes Act 1973</li>
                 <li>No behavioural or negotiation dynamics modelling</li>

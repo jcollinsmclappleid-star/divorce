@@ -229,7 +229,7 @@ export default function ClusterMortgageAffordability() {
           Important Note
         </h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          This modelling provides generalised illustrations only. It does not constitute mortgage advice, a lending decision, or a guarantee of borrowing capacity. Independent mortgage advice from a regulated adviser may be warranted before making property retention decisions.
+          This modelling provides generalised illustrations only. It does not constitute mortgage advice, a lending decision, or a promise of borrowing capacity. Independent mortgage advice from a regulated adviser may be warranted before making property retention decisions.
         </p>
       </ContentSection>
     </ContentPageLayout>

@@ -144,9 +144,9 @@ export default function ChildArrangementsOrderPage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "What arrangements would be in the welfare interests of your child",
-            "Whether you should apply for a CAO or rely on an informal arrangement",
-            "How a court would assess any safeguarding or harm concerns",
+            "What arrangements may need specialist advice in light of your child's welfare",
+            "Whether to ask a solicitor about a CAO or an informal arrangement",
+            "How safeguarding or harm concerns should be raised with a qualified professional",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />

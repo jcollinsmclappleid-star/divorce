@@ -118,11 +118,11 @@ export default function SeoPensionsPage() {
                 <tbody>
                   {[
                     ["Type", "Workplace pension / SIPP / stakeholder", "Final salary / career average"],
-                    ["What you're entitled to", "A pot of money", "An income at retirement"],
+                    ["What it provides", "A pot of money", "An income at retirement"],
                     ["Value shown on statement", "Pot value", "CETV (transfer value)"],
                     ["CETV reliability", "CETV ≈ actual value", "CETV often understates true value"],
-                    ["Actuary needed?", "Rarely", "Often recommended"],
-                    ["Complexity for divorce", "Lower", "Higher — specialist advice strongly recommended"],
+                    ["Actuary needed?", "Rarely", "Often worth checking"],
+                    ["Complexity for divorce", "Lower", "Higher — specialist advice is important to consider"],
                   ].map(([feature, dc, db], i) => (
                     <tr key={i} className={`border-b last:border-0 ${i % 2 === 0 ? "" : "bg-muted/20"}`}>
                       <td className="p-3 font-medium">{feature}</td>
@@ -154,8 +154,8 @@ export default function SeoPensionsPage() {
             <h2 className="text-2xl font-semibold text-foreground">Frequently asked questions</h2>
             <Accordion type="single" collapsible data-testid="faq-accordion">
               {[
-                ["Is my state pension included?", "The state pension cannot be shared in divorce proceedings. However, you may be able to inherit some of your spouse's state pension entitlement built up before April 2016. Check gov.uk for your state pension forecast."],
-                ["Do I need an actuary?", "For straightforward Defined Contribution pensions, probably not. For significant Defined Benefit pensions (particularly public sector schemes), a pension actuary's report is strongly recommended and may be required by the court."],
+                ["Is my state pension included?", "The state pension cannot be shared in divorce proceedings. However, pre-2016 additional State Pension rules can be complex. Check GOV.UK for your State Pension forecast and ask a professional if this is material."],
+                ["Do I need an actuary?", "For straightforward Defined Contribution pensions, probably not. For significant Defined Benefit pensions, particularly public sector schemes, a pension actuary's report is often important to consider and may be required in formal proceedings."],
                 ["What if my partner hides their pension?", "In court proceedings, full financial disclosure is required. Pension providers must respond to court disclosure requests. Failure to disclose is treated seriously by courts."],
                 ["Can I get my ex-partner's pension without a court order?", "No. A pension sharing order must be made by a court and served on the pension scheme. Pension providers will not act without a formal order."],
                 ["What happens to pension payments already being received?", "If a pension is already in payment, the options are different. An earmarking order or pension sharing order can still be made, but the mechanics differ. Take specialist advice."],

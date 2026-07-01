@@ -38,7 +38,7 @@ const faqItems = [
   },
   {
     question: "Can I write my own consent order?",
-    answer: "You can attempt to draft your own, but it must be in the exact legal format required by the court. Any errors may mean it is rejected. Given the sums at stake, professional drafting is strongly recommended.",
+    answer: "You can attempt to draft your own, but it must be in the exact legal format required by the court. Any errors may mean it is rejected. Given the sums at stake, professional drafting is important to consider.",
   },
   {
     question: "Can a consent order be changed after it is approved?",

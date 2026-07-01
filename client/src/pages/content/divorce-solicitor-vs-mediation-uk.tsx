@@ -46,7 +46,7 @@ export default function SolicitorVsMediationPage() {
       title="Divorce Solicitor vs Mediation UK: Which is Right for You?"
       subtitle="Solicitors and mediators play different roles in divorce. Knowing when to use each — and when you need both — helps you navigate efficiently and avoid unnecessary cost."
       documentTitle="Divorce Solicitor vs Mediation UK: When to Use Which | DivorceCalculatorUK"
-      metaDescription="Compare divorce solicitors vs mediation in the UK — what each offers, costs, when you need one or both, and how to choose the right approach for your situation."
+      metaDescription="Compare divorce solicitors vs mediation in the UK — what each offers, costs, when you might use one or both, and what to check for your situation."
       relatedPages={relatedPages}
       breadcrumbs={[
         { name: "Home", href: "/" },

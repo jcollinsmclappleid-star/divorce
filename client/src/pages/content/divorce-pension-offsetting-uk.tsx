@@ -26,15 +26,15 @@ const faqItems = [
   },
   {
     question: "Can the State Pension be divided in divorce?",
-    answer: "No — the State Pension cannot be shared or offset in divorce proceedings. However, it can be taken into account in the broader settlement. Since April 2016, each spouse's State Pension entitlement is calculated individually based on their own National Insurance record. You may be able to build up your NI record through NI credits during the marriage.",
+    answer: "No — the State Pension cannot be shared or offset in divorce proceedings. However, it can be taken into account in the broader settlement. Since April 2016, each spouse's State Pension is calculated individually based on their own National Insurance record. You may be able to build up your NI record through NI credits during the marriage.",
   },
   {
-    question: "Is pension offsetting always a good idea?",
-    answer: "Not necessarily. Property and pension have very different tax treatment: property is generally accessible now, while pension income is taxed in retirement. Offsetting £100,000 of pension against £100,000 of equity in the family home may not be an equal exchange in real terms. Many financial planners and courts have moved toward pension sharing as the preferred approach where possible.",
+    question: "Is pension offsetting suitable in every case?",
+    answer: "Not necessarily. Property and pension have very different tax treatment: property is generally accessible now, while pension income is taxed in retirement. Offsetting £100,000 of pension against £100,000 of equity in the family home may not be an equal exchange in real terms. Pension sharing is often used where possible, but offsetting can still be appropriate after modelling both routes.",
   },
   {
     question: "Do I need a financial adviser for pension sharing?",
-    answer: "For complex pensions — particularly defined benefit (final salary) pensions — taking advice from a pension specialist or independent financial adviser is strongly recommended. The CETV for a defined benefit pension can significantly undervalue the true benefit, and the actuarial complexities require expertise.",
+    answer: "For complex pensions — particularly defined benefit (final salary) pensions — advice from a pension specialist or independent financial adviser is important to consider. The CETV for a defined benefit pension can significantly undervalue the true benefit, and the actuarial complexities require expertise.",
   },
 ];
 
@@ -69,7 +69,7 @@ export default function PensionOffsettingPage() {
           <CardContent className="pt-5">
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-amber-700">Pension values at the time of valuation may not reflect their true long-term worth — particularly for defined benefit (final salary) pensions. The CETV can significantly understate the actual pension income entitlement. Independent actuarial advice is recommended for significant defined benefit pensions.</p>
+              <p className="text-sm text-amber-700">Pension values at the time of valuation may not reflect their true long-term worth — particularly for defined benefit (final salary) pensions. The CETV can significantly understate the actual retirement income the pension would provide. Independent actuarial advice is commonly used for significant defined benefit pensions.</p>
             </div>
           </CardContent>
         </Card>

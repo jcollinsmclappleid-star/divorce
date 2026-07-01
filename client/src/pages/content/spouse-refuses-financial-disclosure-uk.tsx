@@ -152,8 +152,8 @@ export default function SpouseRefusesDisclosurePage() {
         <div className="space-y-3 mb-6">
           {[
             "What assets the other party actually holds — the calculator uses figures you provide",
-            "Whether court proceedings are the right strategy in your specific situation",
-            "What the court would award based on estimated or partial figures",
+            "Whether court proceedings are suitable in your specific situation",
+            "How estimated or partial figures may affect any professional assessment",
             "Whether a third-party disclosure order would be granted in your case",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">

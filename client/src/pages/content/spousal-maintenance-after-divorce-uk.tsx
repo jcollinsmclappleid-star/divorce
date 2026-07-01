@@ -162,7 +162,7 @@ export default function SpousalMaintenancePage() {
         <div className="space-y-3 mb-6">
           {[
             "Whether maintenance is appropriate in your specific circumstances — this depends on needs, ability to pay, and the overall settlement structure",
-            "What a court would consider a reasonable duration or amount for maintenance in your case",
+            "What maintenance duration or amount assumptions a solicitor may want to review in your case",
             "Whether a capitalised clean break is achievable given the available assets",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">

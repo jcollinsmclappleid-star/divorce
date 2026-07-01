@@ -46,7 +46,7 @@ const faqItems = [
   },
   {
     question: "Do I have to disclose assets I owned before the marriage?",
-    answer: "Yes — disclosure covers everything you own and owe, regardless of when you acquired it. The question of whether pre-marital or inherited assets should be ring-fenced from the settlement is a separate one decided after disclosure is complete.",
+    answer: "Yes — disclosure covers everything you own and owe, regardless of when you acquired it. Whether pre-marital or inherited assets need separate treatment is a different legal question that comes after full disclosure.",
   },
   {
     question: "How long does completing Form E typically take?",

@@ -4,7 +4,7 @@ import { AlertTriangle, CheckSquare, AlertCircle, Scale } from "lucide-react";
 import { ContentPageLayout, ContentSection, InlineCTA, useFaqJsonLd } from "@/components/content-page-layout";
 
 const points = [
-  { title: "FDA is the first listed hearing in financial remedy", desc: "After Form A is issued, the court typically lists the First Directions Appointment 12–16 weeks later. By then both parties should have exchanged Form Es and a Statement of Issues." },
+  { title: "FDA is the first listed hearing in financial remedy", desc: "After Form A is issued, the First Directions Appointment is often listed around 12–16 weeks later. By then both parties should have exchanged Form Es and a Statement of Issues." },
   { title: "Procedural, not substantive", desc: "The FDA is about getting the case ready, not deciding it. The court reviews disclosure, identifies what's missing, addresses any expert evidence needed, and lists the FDR (and provisionally the final hearing)." },
   { title: "Form E exchange must be complete", desc: "Both parties should have filed and exchanged Form Es at least 35 days before FDA. Failure to comply, or significantly incomplete Form Es, can attract court criticism and costs." },
   { title: "Questionnaires and replies", desc: "Each party files a Questionnaire on the other's Form E (essentially a request for further information). The court considers proportionality of questions and orders replies by a deadline before FDR." },

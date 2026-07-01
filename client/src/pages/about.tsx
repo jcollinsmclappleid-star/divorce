@@ -22,7 +22,7 @@ const COVERS = [
 ];
 
 const NOT_LIST = [
-  "Not legal advice — does not predict what a court would order or assess legal entitlement",
+  "Not legal advice — does not predict legal outcomes or assess legal rights",
   "Not financial advice — not regulated by the FCA or authorised to provide investment or financial planning recommendations",
   "Not tax advice — applies a simplified income tax and NI model only; excludes CGT, dividend rates, Scottish rates and many reliefs",
   "Not a lending assessment — affordability benchmarks are illustrative income multiples only, not lender decisions",
@@ -145,7 +145,7 @@ export default function AboutPage() {
           <span className="inline-flex items-center bg-amber-100 text-amber-700 text-xs font-semibold px-2.5 py-1 rounded-full mb-1">Legal basis</span>
           <h2 className="text-2xl font-display font-bold">Matrimonial Causes Act 1973</h2>
           <p className="text-muted-foreground leading-relaxed">
-            The modelling framework reflects English and Welsh family law under the Matrimonial Causes Act 1973, which gives courts broad discretion to achieve a fair outcome considering needs, contributions, and the welfare of children. This tool models financial structures and outcomes — it does not replicate judicial discretion, predict court orders, or assess legal entitlement.
+            The modelling framework reflects English and Welsh family law under the Matrimonial Causes Act 1973, which involves broad discretion around needs, contributions, and the welfare of children. This tool models financial structures and outcomes — it does not replicate judicial discretion, predict court orders, or assess legal rights.
           </p>
           <p className="text-muted-foreground leading-relaxed">
             This tool is not applicable to Scottish law, which operates under different legislation.

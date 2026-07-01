@@ -33,14 +33,14 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold text-foreground">1. About This Service</h2>
             <p>DivorceCalculatorUK is an online financial modelling tool that generates illustrative, scenario-based projections for individuals navigating separation and divorce. The Tool produces outputs based solely on data you enter and assumptions you configure.</p>
-            <p>The Service is provided on an "as is" and "as available" basis. We do not guarantee that the Service will be uninterrupted, error-free, or available at all times. We reserve the right to modify, suspend, or discontinue the Service at any time without prior notice.</p>
+            <p>The Service is provided on an "as is" and "as available" basis. We do not promise that the Service will be uninterrupted, error-free, or available at all times. We reserve the right to modify, suspend, or discontinue the Service at any time without prior notice.</p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground">2. Important Disclaimer</h2>
             <p className="font-medium text-foreground">This Tool does not provide legal advice, tax advice, or regulated financial advice. It is not authorised or regulated by the Financial Conduct Authority (FCA), the Solicitors Regulation Authority (SRA), or any other professional regulatory body.</p>
             <p>The Service does not provide regulated financial advice under the Financial Services and Markets Act 2000 (FSMA). The Tool does not recommend specific financial products, lenders, investments, or settlement structures and does not assess suitability for any regulated financial arrangement.</p>
-            <p>This tool does not predict court outcomes, judicial discretion, legal entitlement, or settlement fairness. It models financial structures only.</p>
+            <p>This tool does not predict court outcomes, judicial discretion, legal rights, or settlement fairness. It models financial structures only.</p>
             <p>All outputs are illustrative models only. They must not be relied upon as the basis for any legal, financial, or tax decision. Any decisions related to divorce financial settlements may warrant independent professional review by a qualified solicitor, financial adviser, or tax professional.</p>
           </section>
 
@@ -86,7 +86,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold text-foreground">4. No Advisory Relationship</h2>
             <p>Use of this Tool does not create any professional-client, advisory, fiduciary, or other similar relationship between you and DivorceCalculatorUK, its operators, directors, employees, or any affiliated party. No duty of care arises from your use of this Tool.</p>
-            <p>The Tool does not assess the suitability, fairness, or appropriateness of any financial settlement for your individual circumstances. It does not predict court outcomes, assess legal entitlement, evaluate creditworthiness, or provide mortgage eligibility assessments.</p>
+            <p>The Tool does not assess the suitability, fairness, or appropriateness of any financial settlement for your individual circumstances. It does not predict court outcomes, assess legal rights, evaluate creditworthiness, or provide mortgage eligibility assessments.</p>
           </section>
 
           <section>
@@ -121,7 +121,7 @@ export default function TermsPage() {
             <h2 className="text-xl font-semibold text-foreground">8. Cancellation and Refunds</h2>
             <p>
               Our full <Link href="/refund-policy" className="underline text-primary">Refund Policy</Link> is
-              published separately and sets out your rights in detail, including our 7-day money-back guarantee,
+              published separately and sets out your rights in detail, including our 7-day money-back refund policy,
               your statutory right to cancel under the Consumer Contracts Regulations 2013, and your rights under the Consumer Rights Act 2015.
               Nothing in these Terms of Use limits your statutory rights as a consumer.
             </p>

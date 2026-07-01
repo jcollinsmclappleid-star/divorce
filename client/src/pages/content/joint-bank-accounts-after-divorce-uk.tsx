@@ -103,7 +103,7 @@ export default function JointBankAccountsPage() {
         <div className="space-y-3 mb-6">
           <div className="p-3 rounded-lg border bg-background text-sm text-muted-foreground flex items-start gap-2">
             <Banknote className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-            Keeping a ring-fenced amount in the joint account for bills only, with both parties contributing proportionally
+            Keeping a reserved amount in the joint account for bills only, with both parties contributing proportionally
           </div>
           <div className="p-3 rounded-lg border bg-background text-sm text-muted-foreground flex items-start gap-2">
             <Banknote className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />

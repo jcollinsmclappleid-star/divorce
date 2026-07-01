@@ -22,8 +22,8 @@ const FAQ_CATEGORIES = [
         a: "No. This platform provides illustrative financial analysis only. It is not authorised or regulated by the FCA, SRA, or any other professional body. The outputs are illustrative models, not predictions, recommendations, or legal assessments. Independent professional advice may be warranted before making any decisions.",
       },
       {
-        q: "Does this predict what I will receive in court?",
-        a: "No. This platform does not predict court outcomes, judicial discretion, legal entitlement, or settlement fairness. It shows the financial structure of each settlement option only. A court considers a wide range of factors — including needs, contributions, and the welfare of children — that are beyond the scope of any financial model.",
+        q: "Does this predict a legal outcome?",
+        a: "No. This platform does not predict court outcomes, judicial discretion, legal rights, or settlement fairness. It shows the financial structure of each settlement option only. A court considers a wide range of factors — including needs, contributions, and the welfare of children — that are beyond the scope of any financial model.",
       },
       {
         q: "How accurate are the tax calculations?",
@@ -115,7 +115,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "What support is available after purchase?",
-        a: "Email support is available at support@divorcecalculatoruk.co.uk. Our support covers: how to use the platform and its features, understanding what the figures and scores on screen mean, recovering access to your account, and billing or technical issues. We are not able to provide financial advice, legal advice, tax advice, or guidance on what settlement you should accept — those questions require a qualified solicitor or regulated financial adviser.",
+        a: "Email support is available at support@divorcecalculatoruk.co.uk. Our support covers: how to use the platform and its features, understanding what the figures and scores on screen mean, recovering access to your account, and billing or technical issues. We are not able to provide financial advice, legal advice, tax advice, or guidance on what settlement to rely on — those questions require a qualified solicitor or regulated financial adviser.",
       },
     ],
   },

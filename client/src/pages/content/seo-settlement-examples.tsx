@@ -114,7 +114,7 @@ export default function SeoSettlementExamplesPage() {
             <div className="flex items-start gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
               <p className="text-sm text-amber-900">
-                All examples below are entirely illustrative and presented for educational purposes only. They do not represent actual cases, and the outcomes shown are not predictions of what a court would order. Every case is decided on its specific facts.
+                All examples below are entirely illustrative and presented for educational purposes only. They do not represent actual cases, and the outcomes shown are not predictions of any legal outcome. Every case is specific to its facts.
               </p>
             </div>
           </div>
@@ -140,7 +140,7 @@ export default function SeoSettlementExamplesPage() {
                 "Pension sharing order to equalise pension accrual during marriage",
                 "No property or housing issues",
               ]}
-              note="Short marriage, similar earning capacities, no children. Courts typically favour a clean break and broadly equal division of marital assets only. Pre-marital savings may be ring-fenced."
+              note="Short marriage, similar earning capacities, no children. A professional discussion may focus on clean-break feasibility, what was built during the marriage, and whether any pre-marital savings need separate review."
               accentBorder="border-t-cyan-400"
               accentBg="bg-cyan-100"
               accentText="text-cyan-700"

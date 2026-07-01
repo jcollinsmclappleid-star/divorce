@@ -33,7 +33,7 @@ const faqItems = [
   },
   {
     question: "If my spouse earns nothing, do they get half of everything?",
-    answer: "The starting point is still equal sharing of matrimonial assets — regardless of who earned more. However, courts may depart from equality where a shorter marriage means less entitlement, or where needs can be met with less than half. The zero-income spouse is not automatically entitled to half — but is also not automatically excluded from a substantial share.",
+    answer: "There is no automatic percentage. Income, needs, housing, children, pension gaps, the asset pool and the length of the marriage can all affect the financial discussion. A non-earning spouse is not automatically allocated a set share, but their needs and contributions may still be important facts to review with a solicitor.",
   },
   {
     question: "Can I protect my future earnings after separation?",
@@ -45,7 +45,7 @@ const faqItems = [
   },
   {
     question: "Does the income gap affect the pension division?",
-    answer: "Yes, significantly. Where one party's income was much lower throughout the marriage — often because they took on childcare or supported the higher earner's career — they will typically have a smaller pension. Courts regularly address this through pension sharing orders as part of the overall capital settlement.",
+    answer: "It can be important. Where one party's income was much lower throughout the marriage — often because they took on childcare or supported the higher earner's career — they may have a smaller pension. Pension sharing, offsetting and long-term security should be discussed with a qualified professional as part of the overall financial picture.",
   },
 ];
 
@@ -163,7 +163,7 @@ export default function DivorceIncomeInequalityPage() {
         <div className="space-y-3 mb-6">
           {[
             "Whether spousal maintenance is appropriate in your specific circumstances — this depends on needs, ability to pay, and the overall settlement",
-            "What amount or duration of maintenance a court would consider reasonable",
+            "What maintenance assumptions a solicitor may want to review against needs and ability to pay",
             "Whether a capitalised clean break is achievable given the available assets",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">

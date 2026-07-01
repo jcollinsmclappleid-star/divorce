@@ -20,7 +20,7 @@ const debtTypes = [
   { type: "Personal loans", note: "Treated as the liability of whoever took them out, but considered in the overall settlement." },
   { type: "Overdrafts", note: "Joint overdrafts must be addressed; individual ones factor into the financial picture." },
   { type: "Car finance", note: "Usually in one name; the debt follows the asset." },
-  { type: "Business debts", note: "More complex; depends on business structure and personal guarantees." },
+  { type: "Business debts", note: "More complex; depends on business structure and any personal liability." },
 ];
 
 const faqItems = [
@@ -123,7 +123,7 @@ export default function WhatHappensToDebtsPage() {
         <Card className="border-amber-200 bg-amber-50">
           <CardContent className="pt-5">
             <p className="text-sm font-semibold text-amber-800 mb-1">If Your Ex Defaults on an Agreed Debt</p>
-            <p className="text-sm text-amber-700">If a court order states your ex will pay a joint debt and they default, the creditor can still come after you. Your only recourse is to take legal action against your ex for breach of the court order — but this takes time and money, and the damage to your credit file may already have been done. This is why closing or converting joint accounts before or at the point of divorce is strongly advisable.</p>
+            <p className="text-sm text-amber-700">If a court order states your ex is responsible for a joint debt and they default, the creditor can still come after you. Enforcing the order can take time and money, and credit-file damage may already have happened. This is why joint accounts and debt arrangements should be checked carefully before or at the point of divorce.</p>
           </CardContent>
         </Card>
 

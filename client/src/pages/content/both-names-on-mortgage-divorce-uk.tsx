@@ -36,7 +36,7 @@ const faqItems = [
   },
   {
     question: "What if my ex refuses to pay their share of the mortgage?",
-    answer: "The lender will pursue both parties. Contact the lender immediately if mortgage payments are at risk. You may need to apply for a court order to force sale or transfer. You could also pay to protect your credit record and seek reimbursement through the courts.",
+    answer: "The lender can pursue both parties. Contact the lender if mortgage payments are at risk. You may need legal advice about sale, transfer, interim payments or reimbursement. Some people make temporary payments to avoid credit-record damage, but that should be documented and discussed with a professional.",
   },
   {
     question: "How long does a transfer of equity take?",
@@ -158,7 +158,7 @@ export default function BothNamesOnMortgagePage() {
         <div className="space-y-3 mb-6">
           {[
             "Whether a lender will approve a sole re-mortgage — this requires a mortgage assessment",
-            "What a court would order regarding the property if the parties cannot agree",
+            "How property options should be reviewed if the parties cannot agree",
             "The specific tax implications of the transfer — professional advice may be needed",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">

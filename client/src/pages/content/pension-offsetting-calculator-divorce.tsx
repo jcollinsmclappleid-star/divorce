@@ -23,7 +23,7 @@ const faqItems = [
     answer: "Pension and property are fundamentally different assets. Pension funds are locked until minimum pension age, tax-advantaged, and subject to income tax on drawdown. Property equity is accessible (subject to sale) and subject to Capital Gains Tax on disposal above the annual allowance. A pound of pension CETV does not have the same economic value today as a pound of property equity — particularly after accounting for the different tax treatments.",
   },
   {
-    question: "Is pension offsetting the right approach?",
+    question: "Is pension offsetting suitable to discuss?",
     answer: "It depends on the circumstances. Offsetting may be appropriate where one party has an urgent housing need, or where the pension holder strongly wishes to preserve their pension structure. However, the risk of comparing unlike assets means that a nominal 'equal' offset may not produce genuinely equivalent financial outcomes. The calculator models the numbers — whether it represents a sound economic exchange requires professional analysis.",
   },
   {

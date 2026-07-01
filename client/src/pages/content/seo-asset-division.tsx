@@ -69,8 +69,8 @@ export default function SeoAssetDivisionPage() {
               {[
                 ["Financial resources", "Each party's current and likely future assets, income, and earning capacity"],
                 ["Financial needs and obligations", "Living costs, housing needs, obligations to children"],
-                ["Standard of living", "The lifestyle enjoyed during the marriage — context, not a guarantee"],
-                ["Age and length of marriage", "Short marriages may result in pre-marital assets being ring-fenced"],
+                ["Standard of living", "The lifestyle enjoyed during the marriage — context, not a fixed result"],
+                ["Age and length of marriage", "Short marriages may make pre-marital asset evidence more important"],
                 ["Contributions", "Financial and non-financial — homemaking and child-rearing count equally"],
                 ["Disabilities or health", "May affect earning capacity and financial needs"],
                 ["Conduct", "Rarely relevant; only if it would be inequitable to disregard it"],
@@ -101,9 +101,9 @@ export default function SeoAssetDivisionPage() {
                     ["Family home", "Usually the primary focus. Options: sell, buyout, defer."],
                     ["Other property", "Investment properties treated as marital assets if acquired during marriage."],
                     ["Pensions (accrued during marriage)", "Significant — often the second-largest asset. Shared by pension sharing order, offsetting, or earmarking."],
-                    ["ISAs, savings, investments", "Marital if accumulated during marriage. Pre-marital may be ring-fenced in short marriages."],
-                    ["Business interests", "Valued (often by an independent accountant). May be ring-fenced if pre-marital, but often partially included."],
-                    ["Inheritances/gifts", "Received during marriage: courts have discretion. Received before marriage: more likely ring-fenced."],
+                    ["ISAs, savings, investments", "Marital if accumulated during marriage. Pre-marital value may need separate evidence in short marriages."],
+                    ["Business interests", "Valued, often by an independent accountant. Pre-marital value and marital growth may need separate review."],
+                    ["Inheritances/gifts", "Timing, use, mingling and needs all affect how these are reviewed."],
                     ["Debts and liabilities", "Included as negative assets. Joint debts are both parties' responsibility."],
                   ].map(([asset, treatment], i) => (
                     <tr key={i} className={`border-b last:border-0 ${i % 2 === 0 ? "" : "bg-muted/20"}`}>

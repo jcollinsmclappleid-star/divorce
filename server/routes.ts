@@ -13,6 +13,7 @@ import { emailLeads as emailLeadsTable, purchases as purchasesTable } from "@sha
 import { and, eq, isNull, isNotNull } from "drizzle-orm";
 import OpenAI from "openai";
 import { GUIDED_SUMMARY_SYSTEM_PROMPT } from "./guided-summary/prompt";
+import { hasForbiddenGuidedSummaryPhrase } from "./guided-summary/compliance";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
@@ -88,6 +89,22 @@ export async function registerRoutes(app: Express): Promise<void> {
        ═══════════════════════════════════════════════ -->
   <url>
     <loc>https://divorcecalculatoruk.co.uk/divorce-financial-settlement-calculator-uk</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/how-much-will-i-get-divorce-uk</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/career-sacrifice-divorce-settlement-uk</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/woman-gave-up-career-divorce-uk</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://divorcecalculatoruk.co.uk/what-am-i-entitled-to-in-divorce-uk</loc>
     <priority>0.9</priority>
   </url>
   <url>
@@ -1495,13 +1512,6 @@ export async function registerRoutes(app: Express): Promise<void> {
     what_stands_out: z.string().min(1),
     scenario_interpretation: z.string().min(1),
     pressure_points: z.string().min(1),
-    position_check: z.object({
-      missing_values: z.array(z.string().min(1)),
-      left_short_risk: z.array(z.string().min(1)),
-      offer_trade_offs: z.array(z.string().min(1)),
-      housing_needs_pressure: z.array(z.string().min(1)),
-      questions_before_agreeing: z.array(z.string().min(1)),
-    }),
     questions_for_professionals: z.object({
       solicitor_mediator: z.array(z.string().min(1)),
       mortgage_broker: z.array(z.string().min(1)),
@@ -1510,15 +1520,165 @@ export async function registerRoutes(app: Express): Promise<void> {
     missing_information: z.string().min(1),
   });
 
-  const forbiddenGuidedSummaryPhrases = [
-    'you should accept',
-    'you should reject',
-    'you are entitled to',
-    'the court would',
-    'you should negotiate',
-    'hide assets',
-    'conceal assets',
-  ];
+  type GuidedSummaryPayload = z.infer<typeof guidedSummaryPayloadSchema>["payload"];
+  type GuidedSummaryAiResponse = z.infer<typeof guidedSummaryResponseSchema>;
+  type DeterministicPositionCheck = {
+    missing_values: string[];
+    left_short_risk: string[];
+    offer_trade_offs: string[];
+    housing_needs_pressure: string[];
+    questions_before_agreeing: string[];
+  };
+  type GuidedSummaryResponse = GuidedSummaryAiResponse & {
+    position_check: DeterministicPositionCheck;
+  };
+
+  const formatGBP = (value: number) => `£${Math.round(value).toLocaleString('en-GB')}`;
+
+  function buildDeterministicPositionCheck(
+    payload: GuidedSummaryPayload,
+    derived: {
+      grossA: number;
+      grossB: number;
+      netAnnualA: number;
+      netAnnualB: number;
+      ltv: number | null;
+      borrowCapA: number | null;
+      borrowCapB: number | null;
+      nonPensionSettlementPool: number;
+    }
+  ): DeterministicPositionCheck {
+    const enabledScenarios = payload.scenarios.filter((scenario) => scenario.enabled);
+    const depletedRunways = enabledScenarios.flatMap((scenario) => [
+      ...(!scenario.runwayA.sustained ? [`Party A reserve depletion in year ${scenario.runwayA.depletionYear} under ${scenario.name}`] : []),
+      ...(!scenario.runwayB.sustained ? [`Party B reserve depletion in year ${scenario.runwayB.depletionYear} under ${scenario.name}`] : []),
+    ]);
+    const missingValues = [
+      ...(payload.hasPension ? ["Check that pension CETV figures are current and entered for every pension."] : ["No pension CETV figures are entered, so pension comparison cannot be tested in this model."]),
+      ...(payload.hasProperty ? ["Check the property value, mortgage balance and sale cost assumptions against current evidence."] : ["No property value is entered, so home or rehousing pressure cannot be tested."]),
+      ...(payload.usesExpenseBenchmarks ? ["Replace editable starting expense estimates with actual monthly bills when available."] : ["Core expense inputs have been entered; check they reflect post-separation costs rather than current household costs."]),
+    ];
+
+    return {
+      missing_values: missingValues,
+      left_short_risk: [
+        payload.budget.monthlyA < 0 ? `Party A has a base monthly deficit of ${formatGBP(Math.abs(payload.budget.monthlyA))} before scenario-specific mortgage effects.` : `Party A base monthly surplus is ${formatGBP(payload.budget.monthlyA)} before scenario-specific mortgage effects.`,
+        payload.budget.monthlyB < 0 ? `Party B has a base monthly deficit of ${formatGBP(Math.abs(payload.budget.monthlyB))} before scenario-specific mortgage effects.` : `Party B base monthly surplus is ${formatGBP(payload.budget.monthlyB)} before scenario-specific mortgage effects.`,
+        ...depletedRunways.slice(0, 2),
+      ],
+      offer_trade_offs: [
+        `Current model split is ${Math.round(payload.splitRatio * 100)}% to Party A and ${Math.round((1 - payload.splitRatio) * 100)}% to Party B.`,
+        "Compare liquid cash, pension value and monthly surplus together rather than relying on one headline percentage.",
+        ...(payload.hasPension ? ["Pension values are modelled separately from liquid assets so property-heavy outcomes can be compared with pension-heavy outcomes."] : []),
+      ],
+      housing_needs_pressure: payload.hasProperty
+        ? [
+            `Property value entered: ${formatGBP(payload.propertyValue)}; mortgage balance entered: ${formatGBP(payload.mortgageBalance)}${derived.ltv !== null ? `; loan to value ${derived.ltv}%` : ""}.`,
+            ...(derived.borrowCapA !== null ? [`Party A benchmark solo borrowing capacity is approximately ${formatGBP(derived.borrowCapA)} based on 4.5x gross income.`] : []),
+            ...(derived.borrowCapB !== null ? [`Party B benchmark solo borrowing capacity is approximately ${formatGBP(derived.borrowCapB)} based on 4.5x gross income.`] : []),
+          ]
+        : ["Housing pressure cannot be tested because no property value is entered."],
+      questions_before_agreeing: [
+        "Are all property, pension, debt, income and expense figures current enough to rely on for discussion?",
+        "Which scenario creates the weakest monthly cashflow position under the current assumptions?",
+        "What figures would change most if pension CETVs, property valuation or expenses are updated?",
+        "Which professional should check any assumptions that materially affect the model?",
+      ],
+    };
+  }
+
+  function buildSafeGuidedSummary(
+    payload: GuidedSummaryPayload,
+    derived: {
+      grossA: number;
+      grossB: number;
+      netAnnualA: number;
+      netAnnualB: number;
+      ltv: number | null;
+      borrowCapA: number | null;
+      borrowCapB: number | null;
+      nonPensionSettlementPool: number;
+    }
+  ): GuidedSummaryResponse {
+    const enabledScenarios = payload.scenarios.filter((scenario) => scenario.enabled);
+    const pensionGap = Math.abs(payload.pensionCETVPartyA - payload.pensionCETVPartyB);
+    const monthlyGap = Math.abs(payload.budget.monthlyA - payload.budget.monthlyB);
+    const fundingGaps = enabledScenarios.filter((scenario) => (scenario.fundingGap ?? 0) > 0);
+    const depletedRunways = enabledScenarios.flatMap((scenario) => [
+      ...(!scenario.runwayA.sustained ? [`Party A reserve depletion in year ${scenario.runwayA.depletionYear} under ${scenario.name}`] : []),
+      ...(!scenario.runwayB.sustained ? [`Party B reserve depletion in year ${scenario.runwayB.depletionYear} under ${scenario.name}`] : []),
+    ]);
+
+    const whatStandsOut = [
+      `• Total assets entered: ${formatGBP(payload.totalAssets)}; total liabilities entered: ${formatGBP(payload.totalLiabilities)}.`,
+      `• Non-pension settlement pool modelled: ${formatGBP(derived.nonPensionSettlementPool)} (${formatGBP(payload.netEquity)} net home equity plus ${formatGBP(payload.totalLiquid)} liquid assets).`,
+      ...(payload.hasProperty && derived.ltv !== null
+        ? [`• Property value entered: ${formatGBP(payload.propertyValue)} with ${formatGBP(payload.mortgageBalance)} mortgage balance (${derived.ltv}% loan to value).`]
+        : []),
+      ...(payload.hasPension
+        ? [`• Pension Cash Equivalent Transfer Values entered: Party A ${formatGBP(payload.pensionCETVPartyA)}, Party B ${formatGBP(payload.pensionCETVPartyB)}.`]
+        : []),
+      ...(derived.grossA > 0 || derived.grossB > 0
+        ? [`• Gross incomes entered: Party A ${formatGBP(derived.grossA)} and Party B ${formatGBP(derived.grossB)} per year.`]
+        : []),
+    ].slice(0, 5);
+
+    const scenarioInterpretation = enabledScenarios.map((scenario) => {
+      const mortgageLines = [
+        scenario.monthlyMortgageA > 0 ? `Party A modelled mortgage payment: ${formatGBP(scenario.monthlyMortgageA)} per month.` : "",
+        scenario.monthlyMortgageB > 0 ? `Party B modelled mortgage payment: ${formatGBP(scenario.monthlyMortgageB)} per month.` : "",
+        scenario.affordable !== undefined ? `The model marks mortgage affordability as ${scenario.affordable ? "within" : "outside"} the benchmark used.` : "",
+      ].filter(Boolean).join(" ");
+      const runwayA = scenario.runwayA.sustained
+        ? `Party A reserves are sustained over ${payload.projectionYears} years`
+        : `Party A reserves deplete in year ${scenario.runwayA.depletionYear}`;
+      const runwayB = scenario.runwayB.sustained
+        ? `Party B reserves are sustained over ${payload.projectionYears} years`
+        : `Party B reserves deplete in year ${scenario.runwayB.depletionYear}`;
+      return `${scenario.name}: Party A modelled total ${formatGBP(scenario.totalA)} (${formatGBP(scenario.liquidStartA)} liquid, ${formatGBP(scenario.pensionA)} pension). Party B modelled total ${formatGBP(scenario.totalB)} (${formatGBP(scenario.liquidStartB)} liquid, ${formatGBP(scenario.pensionB)} pension). ${mortgageLines} ${runwayA}; ${runwayB}.`;
+    }).join("\n");
+
+    const pressurePoints = [
+      ...(fundingGaps.length > 0
+        ? fundingGaps.map((scenario) => `• ${scenario.name} shows a modelled funding gap of ${formatGBP(scenario.fundingGap ?? 0)}.`)
+        : []),
+      ...(depletedRunways.length > 0 ? depletedRunways.slice(0, 2).map((line) => `• ${line}.`) : []),
+      ...(monthlyGap > 0 ? [`• Base monthly budget surplus differs by ${formatGBP(monthlyGap)} between the parties before scenario-specific mortgage effects.`] : []),
+      ...(payload.hasPension && pensionGap > 0 ? [`• Pension CETV gap entered between parties is ${formatGBP(pensionGap)}.`] : []),
+      ...(payload.usesExpenseBenchmarks ? [`• Some living costs are editable starting estimates, so actual bills may change the pressure shown.`] : []),
+    ].slice(0, 4);
+
+    return {
+      overview: `This is a deterministic financial summary based on the figures entered. The model includes ${formatGBP(payload.totalAssets)} of assets, ${formatGBP(payload.totalLiabilities)} of liabilities, ${formatGBP(payload.netEquity)} of net home equity and ${formatGBP(payload.totalLiquid)} of liquid assets before home sale. The non-pension settlement pool used for comparison is ${formatGBP(derived.nonPensionSettlementPool)}. Gross incomes entered are Party A ${formatGBP(derived.grossA)} and Party B ${formatGBP(derived.grossB)} per year.\nNote: This is an illustrative summary based on the figures entered. It is not legal, tax, or financial advice. Please consult qualified professionals before making any decisions.`,
+      what_stands_out: whatStandsOut.join("\n"),
+      scenario_interpretation: scenarioInterpretation || "No enabled scenarios were available to interpret from the submitted model.",
+      pressure_points: pressurePoints.length > 0
+        ? pressurePoints.join("\n")
+        : "• No major numerical pressure point was identified from the submitted figures, but values should still be checked before relying on the model.",
+      position_check: buildDeterministicPositionCheck(payload, derived),
+      questions_for_professionals: {
+        solicitor_mediator: [
+          `How should we understand the modelled capital positions under the current ${Math.round(payload.splitRatio * 100)}/${Math.round((1 - payload.splitRatio) * 100)} split assumption?`,
+          `What further information is needed before relying on the entered asset total of ${formatGBP(payload.totalAssets)} and liability total of ${formatGBP(payload.totalLiabilities)}?`,
+          ...(payload.hasPension ? [`How should the entered pension CETVs of Party A ${formatGBP(payload.pensionCETVPartyA)} and Party B ${formatGBP(payload.pensionCETVPartyB)} be checked before discussions?`] : []),
+        ],
+        mortgage_broker: payload.hasProperty
+          ? [
+              `Does the mortgage balance of ${formatGBP(payload.mortgageBalance)} look supportable against Party A gross income of ${formatGBP(derived.grossA)} and Party B gross income of ${formatGBP(derived.grossB)}?`,
+              ...(derived.borrowCapA !== null ? [`How does Party A's approximate ${formatGBP(derived.borrowCapA)} income-multiple benchmark compare with any keep-home scenario?`] : []),
+              ...(derived.borrowCapB !== null ? [`How does Party B's approximate ${formatGBP(derived.borrowCapB)} income-multiple benchmark compare with any keep-home scenario?`] : []),
+            ]
+          : [],
+        pension_expert: payload.hasPension
+          ? [
+              `Are the entered pension CETV figures current for Party A (${formatGBP(payload.pensionCETVPartyA)}) and Party B (${formatGBP(payload.pensionCETVPartyB)})?`,
+              "Is any specialist pension valuation needed before comparing pension value with property or liquid assets?",
+            ]
+          : [],
+      },
+      missing_information: `Model confidence is ${payload.confidence}. ${payload.usesExpenseBenchmarks ? "Some living costs are editable starting estimates and should be replaced with actual figures when available. " : ""}The most important checks are current property values, mortgage balances, pension CETVs, debts, income evidence and realistic post-separation expenses. This section is generated from fixed rules if AI output is unavailable or unsafe.`,
+    };
+  }
 
   app.post('/api/guided-summary', async (req, res) => {
     try {
@@ -1630,46 +1790,88 @@ MODEL CONFIDENCE: ${payload.confidence}
 
 Please generate the Guided Report Summary JSON now.`;
 
-      const response = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
-        messages: [
-          { role: "system", content: GUIDED_SUMMARY_SYSTEM_PROMPT },
-          { role: "user", content: userPrompt },
-        ],
-        temperature: 0.4,
-        max_tokens: 3000,
-        response_format: { type: "json_object" },
+      const safeSummary = buildSafeGuidedSummary(payload, {
+        grossA,
+        grossB,
+        netAnnualA,
+        netAnnualB,
+        ltv,
+        borrowCapA,
+        borrowCapB,
+        nonPensionSettlementPool,
       });
 
-      const raw = response.choices[0]?.message?.content;
-      if (!raw) {
-        return res.status(502).json({ message: 'The summary service returned an empty response. Please try again.' });
-      }
-
-      let summaryData: Record<string, unknown>;
       try {
-        summaryData = JSON.parse(raw);
-      } catch {
-        return res.status(502).json({ message: 'The summary service returned an unexpected format. Please try again.' });
-      }
+        const response = await openai.chat.completions.create({
+          model: "gpt-4.1-mini",
+          messages: [
+            { role: "system", content: GUIDED_SUMMARY_SYSTEM_PROMPT },
+            { role: "user", content: userPrompt },
+          ],
+          temperature: 0.2,
+          max_tokens: 3000,
+          response_format: { type: "json_object" },
+        });
 
-      const validatedSummary = guidedSummaryResponseSchema.safeParse(summaryData);
-      if (!validatedSummary.success) {
-        return res.status(502).json({ message: 'The summary was incomplete. Please try again.' });
-      }
+        const raw = response.choices[0]?.message?.content;
+        if (!raw) {
+          console.warn('[guided-summary] Empty AI response; using deterministic fallback.');
+          return res.json({
+            ...safeSummary,
+            confidence: payload.confidence,
+            generatedAt: new Date().toISOString(),
+          });
+        }
 
-      const summaryText = JSON.stringify(validatedSummary.data).toLowerCase();
-      const forbiddenPhrase = forbiddenGuidedSummaryPhrases.find((phrase) => summaryText.includes(phrase));
-      if (forbiddenPhrase) {
-        console.warn('[guided-summary] Rejected summary for forbidden phrase:', forbiddenPhrase);
-        return res.status(502).json({ message: 'The summary crossed a compliance boundary. Please try again.' });
-      }
+        let summaryData: Record<string, unknown>;
+        try {
+          summaryData = JSON.parse(raw);
+        } catch {
+          console.warn('[guided-summary] Invalid AI JSON; using deterministic fallback.');
+          return res.json({
+            ...safeSummary,
+            confidence: payload.confidence,
+            generatedAt: new Date().toISOString(),
+          });
+        }
 
-      return res.json({
-        ...validatedSummary.data,
-        confidence: payload.confidence,
-        generatedAt: new Date().toISOString(),
-      });
+        const validatedSummary = guidedSummaryResponseSchema.safeParse(summaryData);
+        if (!validatedSummary.success) {
+          console.warn('[guided-summary] Incomplete AI summary; using deterministic fallback.');
+          return res.json({
+            ...safeSummary,
+            confidence: payload.confidence,
+            generatedAt: new Date().toISOString(),
+          });
+        }
+
+        const forbiddenPhrase = hasForbiddenGuidedSummaryPhrase(validatedSummary.data);
+        if (forbiddenPhrase) {
+          console.warn('[guided-summary] Rejected AI summary for forbidden phrase; using deterministic fallback:', forbiddenPhrase);
+          return res.json({
+            ...safeSummary,
+            confidence: payload.confidence,
+            generatedAt: new Date().toISOString(),
+          });
+        }
+
+        return res.json({
+          ...validatedSummary.data,
+          position_check: safeSummary.position_check,
+          confidence: payload.confidence,
+          generatedAt: new Date().toISOString(),
+        });
+      } catch (err: unknown) {
+        if (err && typeof err === 'object' && 'status' in err && (err as { status: number }).status === 429) {
+          return res.status(429).json({ message: 'The summary service is busy. Please try again in a moment.' });
+        }
+        console.warn('[guided-summary] AI generation failed; using deterministic fallback.', err);
+        return res.json({
+          ...safeSummary,
+          confidence: payload.confidence,
+          generatedAt: new Date().toISOString(),
+        });
+      }
 
     } catch (err: unknown) {
       console.error('Guided summary error:', err);

@@ -4,19 +4,19 @@ import { Heart, PoundSterling, AlertCircle, CheckSquare, ExternalLink } from "lu
 import { ContentPageLayout, ContentSection, InlineCTA, useFaqJsonLd } from "@/components/content-page-layout";
 
 const factors = [
-  { label: "A 25-year marriage is squarely a long marriage", desc: "By this point any meaningful pre-marital/matrimonial property distinction has usually faded. The whole pool is typically treated as matrimonial for sharing purposes — equal division is the strong starting point under English and Welsh case law." },
-  { label: "Retirement is in view — pensions matter most", desc: "After 25 years one or both spouses may be approaching retirement. Pension provision becomes one of the most important parts of the settlement. Pension sharing orders aimed at broadly equalising retirement income are routine in long marriages." },
+  { label: "A 25-year marriage is squarely a long marriage", desc: "By this point any pre-marital/matrimonial property distinction may be much less clear. The whole pool, including pensions, usually needs careful review alongside needs and retirement security." },
+  { label: "Retirement is in view — pensions matter most", desc: "After 25 years one or both spouses may be approaching retirement. Pension provision becomes one of the most important parts of the settlement discussion, and specialist pension input may be needed." },
   { label: "Career and caring contributions are weighted equally", desc: "Section 25(2)(f) of the Matrimonial Causes Act 1973 treats financial and non-financial contributions equally. The spouse who built a career and the spouse who supported it are not viewed differently when the matrimonial pool is shared." },
-  { label: "Standard of living is a strong reference point", desc: "Courts consider the standard of living enjoyed by the family before the breakdown when assessing needs. After a long marriage at a comfortable standard of living, both parties' reasonable needs are typically pegged closer to that level — within what the assets can support." },
-  { label: "Spousal maintenance — including longer-term — is realistic", desc: "Where one spouse cannot achieve genuine financial independence at the time of the divorce (age, health, long career break), longer-term or even joint-lives maintenance remains possible. Courts still prefer to capitalise the need into a lump sum where the assets allow." },
+  { label: "Standard of living is a strong reference point", desc: "Section 25 includes the standard of living enjoyed by the family before the breakdown. After a long marriage at a comfortable standard of living, that history may be relevant to needs, within what the assets can support." },
+  { label: "Spousal maintenance may need review", desc: "Where one spouse cannot achieve genuine financial independence at the time of divorce because of age, health or a long career break, maintenance assumptions need case-specific professional advice." },
 ];
 
 const faqItems = [
-  { question: "What is a wife entitled to after 25 years of marriage in the UK?", answer: "After a marriage of this length the strong starting point in England and Wales is equal sharing of the entire matrimonial pool, including all pensions. Departures from equality need a clear justification — usually housing needs, ill health, or a serious imbalance in needs that cannot be met by an equal split." },
-  { question: "Is a 50/50 split the most likely outcome after 25 years?", answer: "Equal sharing of capital and pensions is the typical starting point. The actual division may not look 50/50 on every line item — for example, the family home may be allocated 60/40 to allow the primary spouse to remain there, balanced by 40/60 of the pensions. The aim is broad overall equality, not equality of every individual asset." },
-  { question: "Will I get half my husband's pension after 25 years?", answer: "Pension sharing orders aimed at broadly equalising pension assets are routine in long marriages. The percentage shared depends on the relative pension values, the ages of the parties, and what other capital is available to balance the settlement. A pensions on divorce expert (PODE) report is normally needed in any case with significant pensions." },
-  { question: "Is long-term spousal maintenance still likely?", answer: "It can be — particularly where the receiving spouse is older, in poor health, or has been out of the workforce for many years and cannot reasonably rebuild full-time earnings. Courts still favour a clean break where the assets allow the need to be capitalised into a lump sum payment." },
-  { question: "Do inherited assets count after such a long marriage?", answer: "Inherited assets remain non-matrimonial in principle, but after 25 years they are more likely to have been mingled into family use — used to pay down the mortgage, fund holidays, or support the children. The longer they have been treated as joint family resources, the more likely they will be drawn into the sharing pool." },
+  { question: "What financial checks matter after 25 years of marriage in the UK?", answer: "After a marriage of this length, the entire matrimonial pool, pensions, housing, health, retirement security and maintenance assumptions usually need careful review. There is still no automatic percentage that applies to every case." },
+  { question: "Is a 50/50 split automatic after 25 years?", answer: "No. Sharing may be an important reference point, but the actual structure may not look 50/50 on every line item. Property, pensions, liquidity and rehousing need to be modelled together and reviewed with a professional." },
+  { question: "Should my husband's pension be checked after 25 years?", answer: "Yes, if pension values are meaningful. Pension sharing or offsetting may be central in long marriages, but the percentage depends on pension values, ages, scheme types and other capital. A pensions on divorce expert (PODE) report may be needed." },
+  { question: "Should long-term spousal maintenance be checked?", answer: "Yes, particularly where one spouse is older, in poor health, or has been out of the workforce for many years and cannot reasonably rebuild full-time earnings. Any maintenance assumption should be reviewed with a solicitor." },
+  { question: "Do inherited assets count after such a long marriage?", answer: "Inherited assets may still matter, but after 25 years they may have been mingled into family use — used to pay down the mortgage, fund holidays, or support the children. Evidence, timing and needs should all be reviewed." },
   { question: "Is the position different in Scotland or Northern Ireland?", answer: "Yes. Scotland's Family Law (Scotland) Act 1985 generally only shares matrimonial property accumulated between marriage and separation, with equal sharing the presumption. Spousal maintenance ('periodical allowance') is generally limited to three years. Northern Ireland's regime is broadly similar to England and Wales but operates under different legislation. Always take jurisdiction-specific advice." },
 ];
 
@@ -31,16 +31,16 @@ export default function WifeEntitled25YearsPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
-      title="What Is a Wife Entitled to After 25 Years of Marriage in the UK?"
-      subtitle="A long marriage with retirement in view. Equal sharing of the entire matrimonial pool — including pensions — is the typical starting point. Pensions and standard of living drive most of the detail."
-      documentTitle="Wife Entitled to After 25 Years Marriage UK | DivorceCalculatorUK"
-      metaDescription="What is a wife entitled to after 25 years of marriage in the UK? How equal sharing, pension sharing, spousal maintenance and standard of living shape a long-marriage settlement."
+      title="Financial Position After 25 Years of Marriage in the UK"
+      subtitle="A long marriage with retirement in view. Pensions, housing, liquidity, health and standard of living usually need careful review before relying on any headline split."
+      documentTitle="Financial Position After 25 Years Marriage UK | DivorceCalculatorUK"
+      metaDescription="Financial checks after 25 years of marriage in the UK — how pension sharing, maintenance assumptions, standard of living and section 25 factors may shape the discussion."
       relatedPages={relatedPages}
-      breadcrumbs={[{ name: "Home", href: "/" }, { name: "Guides", href: "/divorce-financial-guides" }, { name: "Entitled After 25 Years", href: "/wife-entitled-divorce-uk-after-25-years" }]}
+      breadcrumbs={[{ name: "Home", href: "/" }, { name: "Guides", href: "/divorce-financial-guides" }, { name: "25-Year Marriage Checks", href: "/wife-entitled-divorce-uk-after-25-years" }]}
     >
       <ContentSection>
         <p className="text-muted-foreground leading-relaxed mb-6">
-          After 25 years the law treats almost all the assets and pensions as part of the shared matrimonial pool. Equal division is the strong starting point in England and Wales. The big practical questions are how to handle pensions, how to ensure both parties can rehouse, and whether spousal maintenance is needed alongside the capital split.
+          After 25 years, almost all assets and pensions may need to be reviewed as part of the shared financial picture. The big practical questions are how to handle pensions, how both parties can rehouse, and whether any maintenance assumption needs professional advice alongside the capital split.
         </p>
         <h2 className="text-2xl font-display font-bold mt-8 mb-4">How a long marriage is approached</h2>
         <div className="space-y-3 mb-6">
@@ -64,7 +64,7 @@ export default function WifeEntitled25YearsPage() {
             <p className="text-sm font-semibold">Fictional 25-year marriage, both in their late 50s</p>
             <div className="space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2"><Heart className="w-4 h-4 text-primary" /><span>Family home equity £500k, husband's pension CETV £600k, wife's pension CETV £100k, joint savings £80k. Children adult and independent.</span></div>
-              <div className="flex items-center gap-2"><PoundSterling className="w-4 h-4 text-primary" /><span>Total pool ≈ £1.28m. An equal-sharing outcome ≈ £640k each, typically achieved through a substantial pension sharing order alongside a property and savings allocation that lets both parties rehouse comfortably.</span></div>
+              <div className="flex items-center gap-2"><PoundSterling className="w-4 h-4 text-primary" /><span>Total pool ≈ £1.28m. The model can test an equal-sharing assumption of roughly £640k each, then a solicitor or pension expert can review whether pension sharing, property and savings assumptions need adjustment.</span></div>
             </div>
             <p className="text-xs text-muted-foreground">Illustrative only — every case turns on its specific facts.</p>
           </CardContent>
@@ -86,7 +86,7 @@ export default function WifeEntitled25YearsPage() {
       <ContentSection muted>
         <h2 className="text-2xl font-display font-bold mb-4">What the calculator cannot decide</h2>
         <div className="space-y-3 mb-6">
-          {["The right pension sharing percentage — that needs a PODE report on your specific schemes", "Whether longer-term spousal maintenance is appropriate or capitalisable", "How a court would treat your specific inherited or pre-marital assets after a long marriage"].map((item, i) => (
+          {["The pension sharing assumptions to check — that may need a PODE report on your specific schemes", "Whether longer-term spousal maintenance is appropriate or capitalisable", "How inherited or pre-marital assets should be reviewed after a long marriage"].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
               {item}

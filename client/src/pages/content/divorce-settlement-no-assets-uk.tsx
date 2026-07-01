@@ -16,7 +16,7 @@ import {
 const faqItems = [
   {
     question: "Do I still need a consent order if we have no assets?",
-    answer: "Yes. Even if you have no assets now, a clean break consent order protects you from future claims. Without one, your ex could make a financial claim if one of you acquires significant assets later — through a lottery win, inheritance, business success, or property purchase.",
+    answer: "Yes. Even if you have no assets now, a clean break consent order is the formal route for closing future financial claims. Without one, future claims may remain possible if one of you later acquires significant assets — for example through a lottery win, inheritance, business success, or property purchase.",
   },
   {
     question: "Can I get a consent order for free if there are no assets?",
@@ -54,7 +54,7 @@ export default function DivorceNoAssetsPage() {
       title="Divorce Settlement With No Assets UK"
       subtitle="If you have no significant assets, divorce finances may seem straightforward — but leaving financial claims legally open can create serious problems in the future. Here is what you need to do even in a low-asset divorce."
       documentTitle="Divorce Settlement With No Assets UK | DivorceCalculatorUK"
-      metaDescription="Understand what happens in a UK divorce with no assets — why you still need a clean break consent order, how debts are handled, and how to protect your financial future."
+      metaDescription="Understand what happens in a UK divorce with no assets — why a clean break consent order may still matter, how debts are handled, and what to check before leaving claims open."
       relatedPages={relatedPages}
       breadcrumbs={[
         { name: "Home", href: "/" },
@@ -161,7 +161,7 @@ export default function DivorceNoAssetsPage() {
           {[
             "Whether a clean break is legally achievable given any income or maintenance considerations",
             "Whether any pension values are significant enough to require a formal pension sharing order",
-            "What a court would order if the parties' situations are very unequal",
+            "How unequal income or needs should be reviewed if the parties' situations are very different",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />

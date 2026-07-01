@@ -48,7 +48,7 @@ const faqItems = [
   },
   {
     question: "How do you split RSUs that haven't vested yet?",
-    answer: "Several approaches: deferred division on actual vesting (with the receiving party getting a defined share); upfront capitalised value (typically with a discount for vesting risk); or offsetting against other matrimonial assets at present value. The right approach depends on the size of the awards and the parties' attitudes to risk.",
+    answer: "Several approaches may be discussed: deferred division on actual vesting, upfront capitalised value with a discount for vesting risk, or offsetting against other matrimonial assets at present value. The suitable route depends on the size of the awards and the parties' attitudes to risk.",
   },
   {
     question: "Are stock options treated the same as RSUs?",

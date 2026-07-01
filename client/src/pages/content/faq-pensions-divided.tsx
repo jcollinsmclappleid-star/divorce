@@ -171,7 +171,7 @@ export default function FAQPensionsDivided() {
           An important distinction exists between the State Pension and private or workplace pensions in the context of divorce. The State Pension cannot be shared or split as part of a divorce financial order. Pension sharing orders apply only to private and occupational pensions.
         </p>
         <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-          However, State Pension entitlement may still be a relevant consideration in the overall financial picture. Each party's National Insurance contribution record determines their State Pension amount. Where one party has a significantly reduced contribution record — for example, due to time spent as a primary carer — this may affect their retirement income and could be a factor in the overall settlement assessment.
+          However, State Pension forecasts may still be a relevant consideration in the overall financial picture. Each party's National Insurance contribution record determines their State Pension amount. Where one party has a significantly reduced contribution record — for example, due to time spent as a primary carer — this may affect their retirement income and could be a factor in the overall settlement assessment.
         </p>
         <Card className="bg-muted/40" data-testid="card-state-pension">
           <CardContent className="pt-5 pb-4">
@@ -186,11 +186,11 @@ export default function FAQPensionsDivided() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5 shrink-0">-</span>
-                    National Insurance credits (including credits for caring responsibilities) affect entitlement
+                    National Insurance credits, including credits for caring responsibilities, affect State Pension forecasts
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5 shrink-0">-</span>
-                    Disparities in State Pension entitlement may be relevant to the overall financial settlement
+                    Disparities in State Pension forecasts may be relevant to the overall financial settlement
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5 shrink-0">-</span>

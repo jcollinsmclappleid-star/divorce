@@ -13,17 +13,17 @@ const myths = [
 
 const faqItems = [
   { question: "Is there an average divorce settlement amount in the UK?", answer: "There is no published official 'average' figure. The Ministry of Justice publishes Family Court statistics, but they do not aggregate financial-remedy outcomes by amount. Settlement values vary enormously based on assets, income, length of marriage, and whether children are involved. Any figure presented as 'the average' should be treated with scepticism." },
-  { question: "What percentage of assets does a wife typically get?", answer: "There is no fixed percentage. Courts apply the section 25 factors in each case. In a long marriage with substantial assets above what either party 'needs', the sharing principle points to roughly equal division. In a needs case (most cases), the lower-earning party — often the primary carer for children — may receive more than half the capital to ensure they can house themselves and the children." },
+  { question: "What percentage of assets does a wife typically get?", answer: "There is no fixed percentage. Section 25 factors are applied to the specific facts. In a long marriage with substantial assets above what either party needs, sharing may be an important reference point. In needs-led cases, housing, income, children and practical affordability can matter more than a headline percentage." },
   { question: "Does a 50/50 split apply by default in England and Wales?", answer: "No. Equal sharing is a starting point for matrimonial property, not a default outcome. Section 25 of the Matrimonial Causes Act 1973 requires the court to consider needs, resources, contributions, length of marriage, and the welfare of any minor children — and needs often override equal sharing in practice." },
   { question: "Is the law the same across the UK?", answer: "No. England and Wales operate one regime under the Matrimonial Causes Act 1973. Scotland operates a different regime under the Family Law (Scotland) Act 1985 — broadly only matrimonial property acquired during the marriage is shared, with a presumption of equal division. Northern Ireland has its own legislation broadly similar to England and Wales. Always check the jurisdiction that applies to your case." },
   { question: "Where can I find official UK family court data?", answer: "The Ministry of Justice publishes quarterly Family Court Statistics on GOV.UK. These include numbers of divorce applications, financial-remedy applications, and timelines — but not aggregated settlement amounts. The Nuffield Foundation's 'Fair Shares' research (2023) is the most comprehensive published study of actual divorce financial outcomes in England and Wales." },
-  { question: "Can the calculator tell me what my settlement will be worth?", answer: "No tool can predict what a court would order or what your spouse will agree to. The Divorce Calculator UK is a modelling tool — it shows you what different splits would mean for both parties' net capital, monthly cashflow, and 5-year financial position. The actual settlement is a negotiated outcome (or a court order based on section 25) — the model helps you understand the range of possibilities." },
+  { question: "Can the calculator tell me what my settlement will be worth?", answer: "No tool can predict a legal outcome or what your spouse will agree to. The Divorce Calculator UK is a modelling tool — it shows you what different splits would mean for both parties' net capital, monthly cashflow, and 5-year financial position. The actual settlement is case-specific — the model helps you understand the numerical range to discuss." },
 ];
 
 const relatedPages = [
-  { title: "What Am I Entitled to in Divorce UK?", description: "How section 25 factors shape your entitlement — and why there is no fixed formula.", href: "/what-am-i-entitled-to-in-divorce-uk", badge: "Entitlement" },
+  { title: "What Financial Checks Matter in Divorce UK?", description: "How section 25 factors shape the financial discussion — and why there is no fixed formula.", href: "/what-am-i-entitled-to-in-divorce-uk", badge: "Checks" },
   { title: "Section 25 Factors Explained", description: "The eight statutory factors English courts apply to every financial settlement.", href: "/section-25-factors-divorce-uk", badge: "Law" },
-  { title: "Is a 50/50 Split Automatic?", description: "Why equal sharing is a starting point, not a guaranteed outcome.", href: "/is-50-50-split-automatic-uk", badge: "Splits" },
+  { title: "Is a 50/50 Split Automatic?", description: "Why equal sharing is a reference point, not a fixed outcome.", href: "/is-50-50-split-automatic-uk", badge: "Splits" },
   { title: "Settlement Examples by Scenario", description: "Worked illustrative examples across short, medium and long marriages.", href: "/divorce-settlement-examples-uk", badge: "Examples" },
 ];
 
@@ -100,9 +100,9 @@ export default function AverageDivorceSettlementPage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the calculator cannot decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "What share of the matrimonial pool a court would award you on your specific facts",
+            "How your share of the matrimonial pool may be discussed on your specific facts",
             "Whether your spouse will agree to the figures you put forward",
-            "How a judge would weigh non-matrimonial property, contributions or conduct",
+            "How non-matrimonial property, contributions or conduct may need legal review",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />

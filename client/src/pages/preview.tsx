@@ -22,6 +22,15 @@ import {
 } from "recharts";
 import { SettlementConsole, buildConsoleScenarios } from "@/components/settlement-console";
 import { ScenarioLeaderboard } from "@/components/scenario-leaderboard";
+import { SectionIllustration } from "@/components/section-illustration";
+import { LockedAnswerSections } from "@/components/locked-answer-sections";
+import { AnswerReadinessStrip } from "@/components/product-stack-visual";
+import { REPORT_FACTOR_TEASERS } from "@/lib/settlement-factors";
+import {
+  ANSWER_READY_HEADLINE,
+  PRODUCT_NAMES,
+  getUnlockCta,
+} from "@/lib/product-copy";
 
 const CHART_COLOURS = ["hsl(220,52%,22%)", "#0d9488", "#64748b"];
 
@@ -37,6 +46,10 @@ export default function PreviewPage() {
   const [emailSubmitted, setEmailSubmitted] = useState(() => !!store.profile?.capturedEmail);
   const [emailLoading, setEmailLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const unlockIntent =
+    store.profile?.calculationIntent ||
+    (typeof sessionStorage !== "undefined" ? sessionStorage.getItem("dfm-homepage-intent") : null);
+  const unlockCta = getUnlockCta(unlockIntent);
 
   useEffect(() => {
     if (!isLoading && hasAccess) navigate("/results");
@@ -160,7 +173,7 @@ export default function PreviewPage() {
     setEmailSubmitted(true);
   }
 
-  const UnlockButton = ({ size = "lg", className = "", label = "Unlock My Full Analysis — £79" }: { size?: "lg" | "sm"; className?: string; label?: string }) => (
+  const UnlockButton = ({ size = "lg", className = "", label = unlockCta }: { size?: "lg" | "sm"; className?: string; label?: string }) => (
     <Button
       size={size}
       onClick={handleCheckout}
@@ -186,7 +199,7 @@ export default function PreviewPage() {
               <Link href="/wizard" data-testid="button-edit-inputs-preview" onClick={scrollTop}>Edit Inputs</Link>
             </Button>
             <div className="flex flex-col items-end gap-0.5">
-              <UnlockButton size="sm" label="Unlock — £79" className="text-sm px-4 py-2 h-8" />
+              <UnlockButton size="sm" className="text-sm px-4 py-2 h-8" />
               <p className="text-[10px] text-amber-500 font-semibold leading-none whitespace-nowrap hidden sm:block">CLARITY15 · 15% off this month</p>
             </div>
           </div>
@@ -206,11 +219,16 @@ export default function PreviewPage() {
                 {combinedPool > 0 ? `Pool: ${formatCurrency(combinedPool)}` : "Your figures loaded"}
               </span>
             </div>
+            <p className="text-[11px] uppercase tracking-widest text-gold/80 font-semibold mb-2">Your Settlement Snapshot</p>
             <h1 className="text-2xl md:text-3xl font-display font-bold text-white leading-tight mb-2" data-testid="text-preview-title">
-              Your personalised financial report is ready.
+              {ANSWER_READY_HEADLINE}
             </h1>
-            <p className="text-white/65 text-sm max-w-xl leading-relaxed mb-5">
-              Every settlement option has been modelled from the figures you entered. Unlock the full structured analysis — scored, projected, and explained in plain English.
+            <p className="text-white/65 text-sm max-w-xl leading-relaxed mb-4">
+              Your figures already contain the answer. Reveal {PRODUCT_NAMES.fullPosition.toLowerCase()} to see what you could keep, what stands out, and what to check before you agree.
+            </p>
+            <AnswerReadinessStrip className="mb-5" />
+            <p className="text-white/40 text-xs max-w-xl leading-relaxed mb-5">
+              Illustrative modelling only — not legal or financial advice.
             </p>
             {/* What's waiting strip */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
@@ -227,7 +245,7 @@ export default function PreviewPage() {
               ))}
             </div>
             <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-              <UnlockButton label="Unlock Full Analysis — £79" />
+              <UnlockButton />
               <p className="text-xs text-white/40 self-center">Secured by Stripe · Instant access</p>
             </div>
             <div className="mt-3 inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/30 rounded-full px-3 py-1.5">
@@ -372,7 +390,7 @@ export default function PreviewPage() {
                     <Sparkles className="w-4.5 h-4.5 text-gold" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-white">Settlement Reality Check Report</p>
+                    <p className="text-sm font-semibold text-white">{PRODUCT_NAMES.layerStandsOut}</p>
                     <p className="text-[11px] text-white/50 mt-0.5">Know what may leave you short before you agree</p>
                   </div>
                 </div>
@@ -382,11 +400,12 @@ export default function PreviewPage() {
               </div>
               <div className="px-5 pt-4 pb-3 space-y-3">
                 <p className="text-xs text-white/60 leading-relaxed">
-                  Numbers tell you what. The Settlement Reality Check Report tells you <em className="text-white/80 not-italic font-medium">so what</em> — what the split really leaves each party with, where cashflow or housing pressure appears, what may be missing, and what to ask before spending paid professional time.
+                  Numbers tell you what. {PRODUCT_NAMES.layerStandsOut} tells you <em className="text-white/80 not-italic font-medium">so what</em> — what the split really leaves each party with, which source-backed checks apply, where pressure appears, and what to ask before spending paid professional time.
                 </p>
                 <div className="space-y-2">
                   {[
                     "What stands out about your estate and why it matters",
+                    `${PRODUCT_NAMES.layerBeforeAgree}: career, bills, home, pensions, children, debts and missing evidence`,
                     "Where a headline split may hide cashflow, housing or pension pressure",
                     "Left-short risk and missing values to check before agreeing",
                     "Tailored questions to raise with each professional",
@@ -398,19 +417,21 @@ export default function PreviewPage() {
                   ))}
                 </div>
                 <div className="relative pt-1">
-                  <div className="blur-[4px] select-none pointer-events-none space-y-1.5">
-                    {[
-                      "The combined estate is concentrated in property, which drives settlement complexity.",
-                      "There is a material income disparity between the two parties which affects post-settlement sustainability.",
-                      "Scenario 2 (A Keeps Home) may create significant affordability pressure based on income multiple analysis.",
-                    ].map((line, i) => (
-                      <div key={i} className="flex gap-2 text-xs text-white/50">
-                        <span className="text-white/30 shrink-0 mt-0.5">•</span>
+                  <div className="space-y-1.5">
+                    {REPORT_FACTOR_TEASERS.slice(0, 2).map((line, i) => (
+                      <div key={i} className="flex gap-2 text-xs text-white/70">
+                        <Check className="w-3 h-3 text-emerald-400 shrink-0 mt-0.5" />
+                        <span>{line}</span>
+                      </div>
+                    ))}
+                    {REPORT_FACTOR_TEASERS.slice(2).map((line, i) => (
+                      <div key={i} className="flex gap-2 text-xs text-white/50 blur-[3px] select-none">
+                        <Lock className="w-3 h-3 shrink-0 mt-0.5 opacity-60" />
                         <span>{line}</span>
                       </div>
                     ))}
                   </div>
-                  <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="mt-3 flex justify-center">
                     <button
                       onClick={handleCheckout}
                       disabled={checkoutLoading}
@@ -418,7 +439,7 @@ export default function PreviewPage() {
                       data-testid="button-unlock-guided-summary-preview"
                     >
                       <Lock className="w-4 h-4 text-gold" />
-                      Unlock your position check report
+                      {unlockCta}
                       <ChevronRight className="w-4 h-4 text-muted-foreground" />
                     </button>
                   </div>
@@ -556,121 +577,22 @@ export default function PreviewPage() {
           </div>
         </section>
 
-        {/* ── Full report structure — locked tiles ── */}
-        <section className="space-y-3" data-testid="section-locked-report-tiles">
+        {/* ── Three conversion layers — locked ── */}
+        <section className="relative overflow-hidden space-y-3 rounded-2xl py-2" data-testid="section-locked-report-tiles">
+          <SectionIllustration variant="ledger-reveal" fill tone="background" />
+          <div className="relative z-10 space-y-3">
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full">
               <Lock className="w-3 h-3" /> Locked
             </span>
-            <h2 className="text-base font-semibold">Your full structured report — ready to unlock</h2>
+            <h2 className="text-base font-semibold">{PRODUCT_NAMES.fullPosition} — ready to reveal</h2>
           </div>
-          <p className="text-sm text-muted-foreground">Every section below is calculated from your figures. Unlock to see the complete analysis.</p>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {[
-              {
-                num: "Exec",
-                title: "Executive Overview",
-                desc: "At-a-Glance stat cards (distributable pool, income split, take-home pay, LTV) plus a plain-English estate narrative.",
-                color: "#1e3a5f",
-                locked: true,
-              },
-              {
-                num: "1.",
-                title: "Financial Position Summary",
-                desc: `All ${store.assets.length > 0 ? store.assets.length : "your"} assets and liabilities laid out — individual values, combined net worth, and distributable pool.`,
-                color: "#0891b2",
-                locked: false,
-              },
-              {
-                num: "2.",
-                title: "Income & Taxation Summary",
-                desc: "Gross income, personal allowance, income tax and NI — take-home pay for both parties under 2026/27 rates.",
-                color: "#7c3aed",
-                locked: true,
-              },
-              {
-                num: "3.",
-                title: "Projected Monthly Expenditure",
-                desc: "Your expenses inflated annually — monthly and annual totals used across all surplus/deficit calculations.",
-                color: "#059669",
-                locked: true,
-              },
-              {
-                num: "4.",
-                title: "Scenario Comparison Table",
-                desc: "All four scenarios side by side — liquid capital, pension, net position, mortgage, and reserve status for both parties.",
-                color: "#2563EB",
-                locked: true,
-              },
-              {
-                num: "5–7.",
-                title: "Scenario Detail Pages",
-                desc: "Per-scenario: Source of Funds breakdown, Cashflow Resilience Indicator, Reserve Duration, Monthly Financial Position, Lending Capacity, and Scenario Considerations.",
-                color: "#10B981",
-                locked: true,
-              },
-              {
-                num: "8.",
-                title: "Assumption Review Prompts",
-                desc: "Structured questions to stress-test income stability, expense accuracy, interest rate sensitivity, and asset completeness.",
-                color: "#F59E0B",
-                locked: true,
-              },
-              {
-                num: "9.",
-                title: "Assumptions & Methodology",
-                desc: "All rates and parameters used — mortgage APR, inflation, tax model scope, CMS calculation, and explicit model limitations.",
-                color: "#6B7280",
-                locked: true,
-              },
-            ].map((tile) => (
-              <div
-                key={tile.title}
-                className={`relative rounded-xl border border-border/60 bg-white overflow-hidden ${tile.locked ? "cursor-pointer hover:shadow-md transition-shadow" : ""}`}
-                onClick={tile.locked ? handleCheckout : undefined}
-                data-testid={`tile-section-${tile.title.toLowerCase().replace(/\s+/g, "-")}`}
-              >
-                <div className="absolute top-0 left-0 right-0 h-1" style={{ background: tile.color }} />
-                <div className="pt-4 pb-3.5 px-4">
-                  <div className="flex items-start justify-between gap-2 mb-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-bold tabular-nums text-muted-foreground/60 w-7 shrink-0">{tile.num}</span>
-                      <p className="text-sm font-semibold text-foreground">{tile.title}</p>
-                    </div>
-                    {tile.locked
-                      ? <Lock className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
-                      : <Check className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />}
-                  </div>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed pl-9">{tile.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="rounded-xl border-2 border-dashed border-gold/30 bg-gold/5 p-4 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gold/15 flex items-center justify-center shrink-0">
-                <Sparkles className="w-4 h-4 text-gold" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold">Settlement Reality Check Report</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Left-short risk, offer trade-offs, missing values and tailored questions for your adviser conversations.</p>
-              </div>
-            </div>
-            <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full shrink-0">
-              <Lock className="w-3 h-3" /> Included
-            </span>
-          </div>
-          <div className="text-center">
-            <button
-              onClick={handleCheckout}
-              disabled={checkoutLoading}
-              className="inline-flex items-center gap-2 bg-primary text-white text-sm font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-primary/90 transition-all hover:shadow-lg"
-              data-testid="button-unlock-report-tiles"
-            >
-              <Lock className="w-4 h-4 text-gold" />
-              Unlock my position check — £79
-              <ChevronRight className="w-4 h-4" />
-            </button>
+          <LockedAnswerSections
+            onUnlock={handleCheckout}
+            checkoutLoading={checkoutLoading}
+            intent={unlockIntent}
+            showFactorTopics
+          />
           </div>
         </section>
 
@@ -704,13 +626,14 @@ export default function PreviewPage() {
         </section>
 
         {/* ── Pricing CTA ── */}
-        <section>
-          <div className="rounded-2xl bg-primary border border-white/10 shadow-2xl overflow-hidden" data-testid="card-pricing-cta">
+        <section className="relative overflow-hidden rounded-2xl">
+          <SectionIllustration variant="balance-ledger" fill tone="background" />
+          <div className="relative z-10 rounded-2xl bg-primary border border-white/10 shadow-2xl overflow-hidden" data-testid="card-pricing-cta">
 
             {/* Price hero */}
             <div className="px-6 pt-6 pb-4 text-center border-b border-white/10 space-y-1.5">
               <div className="inline-flex items-center gap-1.5 bg-gold/15 text-gold border border-gold/30 text-xs font-semibold px-3 py-1 rounded-full">
-                Two products · One price · 12 months access
+                Three answers · One price · 12 months access
               </div>
               <div className="text-5xl font-bold tracking-tight text-gold pt-1" data-testid="text-price">£79</div>
               <div className="text-sm text-white/55">One-time payment. No subscription.</div>
@@ -724,7 +647,7 @@ export default function PreviewPage() {
                   <BarChart3 className="w-4 h-4 text-cyan-300" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-white">Settlement Analyser</p>
+                  <p className="text-xs font-bold text-white">{PRODUCT_NAMES.layerScenarios}</p>
                   <p className="text-[10px] text-white/45 mt-0.5 leading-relaxed">Four scenarios fully modelled — CRI scores, reserve projections, mortgage checks and stress testing.</p>
                 </div>
               </div>
@@ -738,8 +661,8 @@ export default function PreviewPage() {
                   <Sparkles className="w-4 h-4 text-gold" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-white">Settlement Reality Check Report</p>
-                  <p className="text-[10px] text-white/45 mt-0.5 leading-relaxed">Plain-English position check — what stands out, where you may be left short, and questions for your solicitor, broker and pension adviser.</p>
+                  <p className="text-xs font-bold text-white">{PRODUCT_NAMES.layerStandsOut}</p>
+                  <p className="text-[10px] text-white/45 mt-0.5 leading-relaxed">What stands out in your case — monthly pressure, left-short risk, missing values — plus {PRODUCT_NAMES.layerBeforeAgree.toLowerCase()} and questions for your solicitor, broker and pension adviser.</p>
                 </div>
               </div>
             </div>
@@ -766,8 +689,9 @@ export default function PreviewPage() {
                   "Monthly cashflow view — income, housing costs, surplus/deficit",
                   "Reserve projection charts",
                   "Mortgage pressure checks and affordability benchmarks",
-                  "Settlement Reality Check Report — plain-English pressure points and questions for professionals",
-                  "Downloadable Settlement Reality Check PDF",
+                  `${PRODUCT_NAMES.layerStandsOut} — pressure points and trade-offs`,
+                  `${PRODUCT_NAMES.layerBeforeAgree} — source-backed checks and professional questions`,
+                  PRODUCT_NAMES.pdf,
                   "12 months' access — unlimited re-runs as negotiations progress",
                 ].map(item => (
                   <div key={item} className="flex items-center gap-2 text-xs text-white/75">
@@ -838,7 +762,7 @@ export default function PreviewPage() {
         <div className="grid sm:grid-cols-2 gap-4">
           <Card data-testid="card-tier-free">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Free Preview (you're here)</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">{PRODUCT_NAMES.snapshot} (you're here)</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               {[
@@ -856,7 +780,7 @@ export default function PreviewPage() {
 
           <Card className="border-gold/30 bg-gold/5" data-testid="card-tier-full">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-gold">Full Structured Analysis (£79)</CardTitle>
+              <CardTitle className="text-sm font-medium text-gold">{PRODUCT_NAMES.fullPosition} (£79)</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               {[
@@ -866,7 +790,7 @@ export default function PreviewPage() {
                 "Cashflow Resilience Indicator scores",
                 "Reserve projection charts",
                 "Housing feasibility benchmark",
-                "Settlement Reality Check Report — plain-English takeaways and tailored questions",
+                `${PRODUCT_NAMES.layerStandsOut} — plain-English takeaways and tailored questions`,
                 "Sensitivity stress-test sliders",
                 "Downloadable professional PDF",
                 "12 months' access — unlimited re-runs",

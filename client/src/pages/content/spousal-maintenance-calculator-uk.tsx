@@ -65,7 +65,7 @@ export default function SpousalMaintenanceCalculatorPage() {
           <CardContent className="pt-5 pb-4 flex gap-3">
             <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <p className="text-sm text-amber-700 leading-relaxed">
-              This calculator models possible maintenance pressure — it does not calculate what you will receive or pay, and does not predict what a court would order. Spousal maintenance in England and Wales is assessed on a needs and ability-to-pay basis specific to each couple's circumstances. Independent legal advice is relevant for maintenance decisions.
+              This calculator models possible maintenance pressure — it does not calculate a maintenance award, and does not predict a legal outcome. Spousal maintenance in England and Wales is assessed on a needs and ability-to-pay basis specific to each couple's circumstances. Independent legal advice is relevant for maintenance decisions.
             </p>
           </CardContent>
         </Card>
@@ -139,7 +139,7 @@ export default function SpousalMaintenanceCalculatorPage() {
                 </div>
               </div>
             </div>
-            <p className="text-xs text-muted-foreground mt-4 leading-relaxed">Illustrative only. These figures do not constitute advice on what a court would order or what amount is appropriate.</p>
+            <p className="text-xs text-muted-foreground mt-4 leading-relaxed">Illustrative only. These figures do not constitute advice on any legal outcome or what amount is appropriate.</p>
           </CardContent>
         </Card>
       </ContentSection>

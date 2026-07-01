@@ -16,9 +16,9 @@ import {
 const principles = [
   { title: "Equal sharing as the starting point", desc: "In long marriages, equal sharing of matrimonial assets is the established starting point — established by the House of Lords in White v White (2000) and reinforced in subsequent cases. Departures from equality require a good reason." },
   { title: "All matrimonial assets are in the pot", desc: "Wealth built during a long marriage — whether in one party's name or another's — is treated as the joint product of the partnership. This includes pensions, businesses, savings, and the home." },
-  { title: "Pre-marital wealth often blurs into the pot", desc: "The longer the marriage, the harder it is to keep pre-marital assets ring-fenced. Inherited assets used for the family, or pre-marital homes that became the family home, are commonly treated as matrimonial after long periods." },
-  { title: "Pension equalisation is central", desc: "Long marriages typically involve substantial pension build-up, often unevenly distributed between the parties. Pension sharing orders are common and frequently the largest single transfer in the settlement." },
-  { title: "Spousal maintenance is more likely", desc: "Where one party has reduced earning capacity after a long career break — typically the parent who took on caring responsibilities — spousal maintenance is more commonly awarded, sometimes for an extended term." },
+  { title: "Pre-marital wealth often blurs into the pot", desc: "The longer the marriage, the harder it can be to treat pre-marital assets separately. Inherited assets used for the family, or pre-marital homes that became the family home, need careful evidence and advice after long periods." },
+  { title: "Pension equalisation is central", desc: "Long marriages often involve substantial pension build-up, sometimes unevenly distributed between the parties. Pension sharing or offsetting may be one of the largest issues to review." },
+  { title: "Spousal maintenance may need review", desc: "Where one party has reduced earning capacity after a long career break — often the parent who took on caring responsibilities — maintenance assumptions need case-specific advice." },
   { title: "Compensation principle may apply", desc: "Where one party gave up a clear career path to support the family, compensation principles can come into play — recognising that the future earnings sacrifice was made for the partnership." },
 ];
 
@@ -36,15 +36,15 @@ const figures = [
 const faqItems = [
   {
     question: "How long is a 'long' marriage in UK divorce?",
-    answer: "Marriages of 15 years or more are typically treated as long, with cases of 10–15 years often falling somewhere in between. The longer the marriage, the more strongly the equal sharing principle applies and the more difficult it becomes to ring-fence pre-marital wealth.",
+    answer: "Marriages of 15 years or more are typically treated as long, with cases of 10–15 years often falling somewhere in between. The longer the marriage, the more strongly the equal sharing principle applies and the more difficult it becomes to keep pre-marital wealth separate from the matrimonial pot.",
   },
   {
     question: "Is the asset split always 50/50 in a long marriage?",
-    answer: "No. Equal sharing is the starting point, not the rule. Departures occur where one party's needs require more (especially housing needs), where there is non-matrimonial wealth that should be ring-fenced, or where one party has substantially weaker future earning capacity. The actual split varies case by case.",
+    answer: "No. Equal sharing can be an important reference point, not a rule. Needs, housing, non-matrimonial wealth, pensions and future earning capacity all need case-specific review. The actual split varies case by case.",
   },
   {
     question: "What about my pension built up before the marriage?",
-    answer: "Pre-marital pension accrual can sometimes be ring-fenced — but the longer the marriage, the harder this is to maintain. In a 25-year marriage, even pension contributions from before the marriage are often drawn into the matrimonial pot for sharing purposes.",
+    answer: "Pre-marital pension accrual may need separate evidence, but the longer the marriage, the more complex that distinction becomes. In a 25-year marriage, pension contributions from before the marriage should be reviewed with a pension expert or solicitor before assumptions are made.",
   },
   {
     question: "Will I have to pay spousal maintenance for life?",
@@ -52,7 +52,7 @@ const faqItems = [
   },
   {
     question: "What about inherited wealth received during the marriage?",
-    answer: "Inheritance received during a long marriage and used for the family — for example, paying off the mortgage or funding a home extension — is typically treated as matrimonial. Inheritance kept separate and not used for joint purposes has more chance of being ring-fenced, but even then long marriages can blur the distinction.",
+    answer: "Inheritance received during a long marriage and used for the family — for example, paying off the mortgage or funding a home extension — may be harder to treat separately. Inheritance kept separate and not used for joint purposes still needs evidence and legal review because long marriages can blur the distinction.",
   },
   {
     question: "Does my contribution as the higher earner give me more?",
@@ -62,7 +62,7 @@ const faqItems = [
 
 const relatedPages = [
   { title: "Short Marriage Divorce Settlement UK", description: "How outcomes differ in marriages under 5 years.", href: "/short-marriage-divorce-settlement-uk", badge: "Comparison" },
-  { title: "What Am I Entitled to in a Divorce UK?", description: "The framework that produces these outcomes.", href: "/what-am-i-entitled-to-in-divorce-uk", badge: "Entitlement" },
+  { title: "What Financial Checks Matter in Divorce UK?", description: "The framework behind these issues.", href: "/what-am-i-entitled-to-in-divorce-uk", badge: "Checks" },
   { title: "Pension Sharing vs Pension Offsetting", description: "Two common ways to handle pension equalisation.", href: "/pension-sharing-vs-offsetting-uk", badge: "Pensions" },
   { title: "Preview the Full Financial Report", description: "Model long-marriage settlement scenarios with your figures.", href: "/unlock", badge: "Report" },
 ];
@@ -84,7 +84,7 @@ export default function LongMarriageSettlementPage() {
     >
       <ContentSection>
         <p className="text-muted-foreground leading-relaxed mb-6">
-          The length of a marriage is a statutory factor in UK divorce settlements. In long marriages — typically 15 years or more — the equal sharing of matrimonial wealth is the established starting point. The longer the marriage, the more strongly this principle applies, the more difficult it becomes to ring-fence pre-marital wealth, and the more likely it is that pension equalisation will be central to the outcome.
+          The length of a marriage is a statutory factor in UK divorce settlements. In long marriages — typically 15 years or more — the equal sharing of matrimonial wealth is the established starting point. The longer the marriage, the more strongly this principle applies, the more difficult it becomes to keep pre-marital wealth separate, and the more likely it is that pension equalisation will be central to the outcome.
         </p>
 
         <Card className="border-amber-200 bg-amber-50 mb-6">
@@ -147,8 +147,8 @@ export default function LongMarriageSettlementPage() {
         <div className="space-y-3 mb-6">
           {[
             "How qualified legal advice might assess sharing vs needs in your specific case",
-            "Whether and to what extent any pre-marital wealth would be ring-fenced",
-            "The likely term and level of any spousal maintenance order",
+            "Whether any pre-marital wealth needs separate evidence and review",
+            "What maintenance assumptions should be checked with a solicitor",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />

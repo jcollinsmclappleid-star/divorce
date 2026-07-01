@@ -29,7 +29,7 @@ const principles = [
   "Equal sharing is a starting point in long marriages — but not a rule",
   "Needs (especially housing) are typically met before sharing principles apply",
   "Compensation may be relevant where one party has given up career prospects",
-  "Pre-marital, inherited and gifted assets can sometimes be ring-fenced",
+  "Pre-marital, inherited and gifted assets may need separate evidence and review",
   "A clean break is preferred where it is fair and achievable",
   "Financial misconduct is taken into account only in exceptional cases",
   "Cases are decided on their own facts — outcomes are highly fact-specific",
@@ -63,7 +63,7 @@ const faqItems = [
 ];
 
 const relatedPages = [
-  { title: "What Am I Entitled to in a Divorce UK?", description: "How the factors typically play out in practice.", href: "/what-am-i-entitled-to-in-divorce-uk", badge: "Entitlement" },
+  { title: "What Financial Checks Matter in Divorce UK?", description: "How the factors may play out in practice.", href: "/what-am-i-entitled-to-in-divorce-uk", badge: "Checks" },
   { title: "Matrimonial vs Non-Matrimonial Assets", description: "How courts decide what counts as shared wealth.", href: "/matrimonial-vs-non-matrimonial-assets-uk", badge: "Assets" },
   { title: "Financial Remedy Proceedings UK", description: "The court process where Section 25 is applied.", href: "/financial-remedy-proceedings-uk", badge: "Court" },
   { title: "Preview the Full Financial Report", description: "See the financial picture across multiple settlement scenarios.", href: "/unlock", badge: "Report" },
@@ -151,7 +151,7 @@ export default function Section25FactorsPage() {
         <div className="space-y-3 mb-6">
           {[
             { label: "Needs vs sharing tension", desc: "In modest-asset cases the entire pot may be needed to meet both parties' housing and income needs — leaving no room for sharing principles to operate. In larger asset cases, sharing of matrimonial wealth becomes the dominant principle." },
-            { label: "Treatment of pre-marital wealth", desc: "Wealth one party brought into the marriage can be argued as 'non-matrimonial' and ring-fenced — but this protection erodes over time, especially in long marriages where wealth has been mingled or used for the family." },
+            { label: "Treatment of pre-marital wealth", desc: "Wealth one party brought into the marriage may be argued as non-matrimonial, but the evidence can become weaker over time, especially in long marriages where wealth has been mingled or used for the family." },
             { label: "Pension division", desc: "Pensions accrued during the marriage are matrimonial property. Where pension values are very different between parties (often the case where one was a stay-at-home parent), the equalisation question becomes central." },
             { label: "Standard of living during the marriage", desc: "If the family enjoyed a high standard of living, both parties typically expect to maintain something close to it post-divorce. Where the resources don't stretch to two such households, both parties usually face some adjustment downward." },
           ].map((p, i) => (
@@ -169,7 +169,7 @@ export default function Section25FactorsPage() {
           {[
             "How qualified legal advice might assess needs vs sharing in your specific case",
             "Whether your contributions or pre-marital wealth would be treated as significant",
-            "What range of outcomes a judge would consider reasonable for your case",
+            "What range of issues a solicitor may want to review for your case",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />

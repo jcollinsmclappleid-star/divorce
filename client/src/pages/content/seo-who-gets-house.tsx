@@ -143,12 +143,12 @@ export default function SeoWhoGetsHousePage() {
           <InlineCTA label="Compare all four housing scenarios using your own figures" />
 
           <section className="space-y-4">
-            <h2 className="text-2xl font-semibold text-foreground">How courts decide</h2>
+            <h2 className="text-2xl font-semibold text-foreground">What housing issues to check</h2>
             <p className="text-muted-foreground leading-relaxed">
-              Where parties cannot agree, courts prioritise the housing needs of dependent children first. The parent with primary care will typically be prioritised for the family home — but only if they can afford to maintain it. Courts will not make an order that is unaffordable for the party retaining the property.
+              Where parties cannot agree, children's housing needs, affordability, income and practical mortgage capacity can become important issues. A keep-home route still needs to be tested against the cost of maintaining the property.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              Where children are not involved, the court looks at each party's ability to rehouse from their share, their respective incomes, and whether a clean break is achievable.
+              Where children are not involved, the practical checks often include each party's ability to rehouse from their share, their respective incomes, and whether a clean break appears workable.
             </p>
           </section>
 

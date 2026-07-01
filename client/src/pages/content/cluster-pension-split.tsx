@@ -167,7 +167,7 @@ export default function ClusterPensionSplit() {
               <div>
                 <h3 className="text-sm font-semibold text-foreground mb-2">Defined Benefit (DB)</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-2">
-                  DB schemes provide a guaranteed income in retirement, typically calculated as a proportion of final or career-average salary multiplied by years of service. The pension provider bears the investment risk.
+                  DB schemes provide defined income in retirement, typically calculated as a proportion of final or career-average salary multiplied by years of service. The pension provider bears the investment risk.
                 </p>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-2">
                   The cash equivalent transfer value (CETV) is the scheme's estimate of the capital cost of providing the promised benefits. However, CETVs may significantly understate or overstate the true economic value of DB pension rights, particularly in the current interest rate environment.

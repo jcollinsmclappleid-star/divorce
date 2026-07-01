@@ -18,7 +18,7 @@ const timeline = [
   { phase: "Legal divorce application", timing: "When ready", desc: "File online at MyHMCTS (gov.uk). Either party can apply (joint applications are possible since 2022). No minimum separation period required under the Divorce, Dissolution and Separation Act 2020." },
   { phase: "Financial disclosure", timing: "Early in process", desc: "Exchange financial information informally (if negotiating privately) or formally through Form E (in court proceedings). This takes 4–12 weeks depending on complexity." },
   { phase: "Negotiations or mediation", timing: "Months 1–6", desc: "Negotiate a settlement through mediation, collaborative law, or solicitor correspondence. If agreement is reached, proceed to consent order." },
-  { phase: "Conditional Order", timing: "~6 weeks after divorce application accepted", desc: "The court grants the Conditional Order (formerly Decree Nisi). This does not end the marriage — it is a declaration that the court is satisfied you are entitled to divorce. It is usually a paper exercise with no court attendance." },
+  { phase: "Conditional Order", timing: "~6 weeks after divorce application accepted", desc: "The Conditional Order (formerly Decree Nisi) confirms the divorce can proceed. This does not end the marriage. It is usually a paper exercise with no court attendance." },
   { phase: "Financial consent order submitted", timing: "Typically around or after Conditional Order", desc: "The consent order is drafted, signed, and submitted with Form D81 to the Family Court. Allow 4–8 weeks for court approval." },
   { phase: "Final Order", timing: "6+ weeks after Conditional Order", desc: "The Final Order (formerly Decree Absolute) formally ends the marriage. Apply for this at least 43 days after the Conditional Order. Many people wait until the financial consent order is in place first." },
   { phase: "Implementation", timing: "Immediately after Final Order and consent order approval", desc: "Implement the settlement — property transfer, pension sharing, account closures, maintenance payments. Full implementation typically takes 2–4 months." },
@@ -158,7 +158,7 @@ export default function DivorceTimelinePage() {
           {[
             "What the right timing is for your specific situation — this depends on your circumstances and goals",
             "Whether to apply for the Final Order before or after the financial settlement is resolved",
-            "What the court timetable looks like in your local court centre at the current time",
+            "What the current local Family Court timetable looks like",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />

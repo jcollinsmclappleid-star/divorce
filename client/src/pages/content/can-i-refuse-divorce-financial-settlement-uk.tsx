@@ -16,7 +16,7 @@ import {
 const faqItems = [
   {
     question: "Can I simply refuse to engage with financial settlement proceedings?",
-    answer: "You can refuse to engage, but courts can proceed without you. The other party may apply for a financial remedy order and the court can decide the settlement based on the information available. Parties who disengage often find themselves at a disadvantage, as the court will not have their side of the story. Independent legal advice on the consequences of non-engagement is strongly recommended.",
+    answer: "You can refuse to engage, but financial remedy proceedings may continue without full input from both sides. That can leave decisions being made from incomplete information. Independent legal advice is important before choosing not to engage.",
   },
   {
     question: "Can I refuse a consent order I previously agreed to?",
@@ -142,7 +142,7 @@ export default function RefuseSettlementPage() {
         <div className="space-y-3 mb-6">
           {[
             { label: "Settlement feels emotionally unacceptable even if financially reasonable", desc: "Divorce settlements often feel unfair to one or both parties because the emotional context is so charged. Viewing the numbers objectively — what does the law actually say? — is key to separating emotion from financial reality." },
-            { label: "Being presented with a fait accompli", desc: "If the other party's solicitor has drafted a consent order and is pressing you to sign quickly, you are entitled to take independent legal advice. Never sign under time pressure without understanding what you are agreeing to." },
+            { label: "Being presented with a fait accompli", desc: "If the other party's solicitor has drafted a consent order and is pressing you to sign quickly, take time to seek independent legal advice and understand what you are being asked to sign." },
             { label: "Not understanding the implications", desc: "A consent order is final and binding. Not understanding what you are agreeing to — particularly around pensions, maintenance, and clean break provisions — can have long-term consequences." },
           ].map((p, i) => (
             <div key={i} className="p-4 rounded-lg border">
@@ -159,7 +159,7 @@ export default function RefuseSettlementPage() {
           {[
             "Whether the proposed settlement is legally fair in your circumstances — this requires a solicitor's assessment",
             "Whether you have grounds to challenge a consent order you have already signed",
-            "What the court would order in your specific case if you proceeded",
+            "How a solicitor may assess litigation risk if you proceeded",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
@@ -170,10 +170,10 @@ export default function RefuseSettlementPage() {
 
         <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
         <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
-          <li>Based on the figures, is the proposal within the range of what a court might order?</li>
+          <li>Based on the figures, is the proposal within a range worth discussing with a solicitor?</li>
           <li>What are my options if I believe the proposed settlement is genuinely disproportionate?</li>
           <li>What are the realistic costs and timelines if I decide to contest?</li>
-          <li>Are there any aspects of the proposal I should be particularly concerned about long-term?</li>
+          <li>Are there any long-term aspects of the proposal I should ask a solicitor to review?</li>
         </ul>
         <InlineCTA label="Model a Counter-Proposal With Your Own Figures" />
       </ContentSection>

@@ -39,29 +39,31 @@ const faqItems = [
     answer: "No — the opposite. UK courts have repeatedly confirmed that homemaking and child-rearing are recognised contributions to the marriage, equal in value to financial contributions. Your years out of paid work are typically a factor in your favour in the settlement assessment.",
   },
   {
-    question: "Am I entitled to half the pensions?",
-    answer: "Pensions accrued during the marriage are matrimonial assets and form part of the settlement. Equalisation through a pension sharing order is common where one party has a much larger pension than the other — but the actual split depends on overall asset position, ages, and other factors.",
+    question: "Should pensions be checked if I stayed at home?",
+    answer: "Yes. Pensions accrued during the marriage can be important, especially where one party has a much larger pension than the other. Pension sharing or offsetting should be discussed with a qualified professional where the gap is meaningful.",
   },
   {
     question: "Can I stay in the family home with the children?",
-    answer: "Often yes, particularly while the children are young. Options include: outright transfer of the home (with offsetting elsewhere), retaining a share with deferred sale (Mesher order) until the children are independent, or a buyout if affordable. The right approach depends on overall finances and what's fair given housing needs.",
+    answer: "It depends on affordability, housing needs and the wider asset picture. Options to discuss may include transfer, deferred sale, sale and split, or buyout if affordable. The suitable route depends on overall finances and legal advice.",
   },
   {
     question: "Will I get spousal maintenance?",
-    answer: "It depends on whether you can meet your own income needs from the capital provided plus your own earning capacity. Where there is a clear income shortfall and the working spouse has surplus income, maintenance is common — sometimes for a fixed term to allow time to return to work, sometimes longer in long marriages.",
+    answer: "It depends on whether you can meet your own income needs from the capital provided plus your own earning capacity. Where there is a clear income shortfall and the working spouse has surplus income, maintenance is sometimes discussed — sometimes for a fixed term to allow time to return to work, sometimes longer in long marriages. A solicitor can explain what factors may be relevant in your case.",
   },
   {
     question: "What if I never returned to work and have no earning record?",
-    answer: "This is recognised in the settlement. The court considers your realistic earning capacity going forward, not just current earnings. Long career breaks reduce earning capacity, and this typically results in a more generous capital and/or maintenance award. Compensation principles can also apply where career sacrifices were made for the family.",
+    answer: "This is recognised in the settlement. The court considers your realistic earning capacity going forward, not just current earnings. Long career breaks reduce earning capacity, and this may be a factor when courts weigh capital and maintenance. Compensation principles can also arise in some cases where career sacrifices were made for the family — whether they apply is fact-specific and requires legal advice.",
   },
   {
     question: "Should I get back into work before the financial settlement?",
-    answer: "Returning to work demonstrates earning capacity and is generally viewed positively. However, taking the wrong job under pressure can prejudice your position by making your earning capacity look higher than it is sustainably. Take advice on the right approach for your circumstances.",
+    answer: "Work timing is case-specific. Returning to work can affect income and cashflow assumptions, but unsuitable work under pressure may not reflect sustainable earning capacity. Take advice before treating work timing as a settlement strategy.",
   },
 ];
 
 const relatedPages = [
   { title: "Spousal Maintenance After Divorce UK", description: "How ongoing maintenance is calculated and awarded.", href: "/spousal-maintenance-after-divorce-uk", badge: "Maintenance" },
+  { title: "Career Sacrifice Divorce Settlement UK", description: "How career breaks may be weighed alongside pensions and housing.", href: "/career-sacrifice-divorce-settlement-uk", badge: "Career" },
+  { title: "Woman Who Gave Up Her Career — Divorce UK", description: "Understanding your position before you negotiate.", href: "/woman-gave-up-career-divorce-uk", badge: "Career" },
   { title: "Divorce Where One Earns More UK", description: "How income disparity affects the financial settlement.", href: "/divorce-where-one-earns-more-uk", badge: "Income" },
   { title: "Mesher vs Martin Order UK", description: "Deferred sale arrangements that let one parent stay in the home.", href: "/mesher-vs-martin-order-uk", badge: "Property" },
   { title: "Preview the Full Financial Report", description: "Model your settlement including pension equalisation and maintenance.", href: "/unlock", badge: "Report" },

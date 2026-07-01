@@ -51,7 +51,7 @@ export default function RefundPolicyPage() {
           <section>
             <h2 className="text-xl font-semibold text-foreground">2. Your Right to Cancel</h2>
             <p>
-              <strong className="text-foreground">7-Day Money-Back Guarantee:</strong> We offer a full
+              <strong className="text-foreground">7-Day Money-Back Refund:</strong> We offer a full
               no-questions-asked refund within 7 days of purchase. Email{" "}
               <a href="mailto:support@divorcecalculatoruk.co.uk" className="text-primary underline underline-offset-2">
                 support@divorcecalculatoruk.co.uk
@@ -59,7 +59,7 @@ export default function RefundPolicyPage() {
               with your purchase details and we will process the refund promptly.
             </p>
             <p>
-              In addition to our commercial guarantee, you have statutory rights under the
+              In addition to our commercial refund policy, you have statutory rights under the
               Consumer Contracts (Information, Cancellation and Additional Charges) Regulations
               2013. These provide a right to cancel a distance purchase and receive a full
               refund, without giving any reason.
@@ -70,7 +70,7 @@ export default function RefundPolicyPage() {
               proceeding through payment and accessing the results, you consent to the immediate
               supply of digital content and acknowledge that the statutory right to cancel is
               waived at that point — consistent with standard practice for immediately delivered
-              digital products under UK consumer law. Our 7-day commercial guarantee applies
+              digital products under UK consumer law. Our 7-day commercial refund policy applies
               regardless.
             </p>
             <p>

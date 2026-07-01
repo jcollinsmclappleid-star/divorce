@@ -21,11 +21,11 @@ const faqItems = [
   },
   {
     question: "What is a CETV (Cash Equivalent Transfer Value)?",
-    answer: "A CETV is the pension scheme's estimate of the capital value needed to replicate the pension's benefits if transferred to another provider. For defined contribution schemes, this is broadly the fund value. For defined benefit (final salary) schemes, the CETV is a calculated figure that may significantly understate the true economic value of the pension income entitlement.",
+    answer: "A CETV is the pension scheme's estimate of the capital value needed to replicate the pension's benefits if transferred to another provider. For defined contribution schemes, this is broadly the fund value. For defined benefit (final salary) schemes, the CETV is a calculated figure that may significantly understate the true economic value of the retirement income the pension would provide.",
   },
   {
     question: "Can the State Pension be divided in divorce?",
-    answer: "No. The State Pension cannot be shared or offset in divorce proceedings. Each spouse builds their own State Pension entitlement through their National Insurance record. Since April 2016, the 'new State Pension' is calculated individually — you cannot inherit or share your spouse's entitlement. This can be factored into the broader settlement as context, but it is not a divisible asset.",
+    answer: "No. The State Pension cannot be shared or offset in divorce proceedings. Each spouse builds their own State Pension through their National Insurance record. Since April 2016, the 'new State Pension' is calculated individually — you cannot inherit or share your spouse's forecast. Request a State Pension forecast from GOV.UK for both parties; this can be factored into the broader settlement as context, but it is not a divisible asset.",
   },
   {
     question: "Is pension sharing or offsetting better?",

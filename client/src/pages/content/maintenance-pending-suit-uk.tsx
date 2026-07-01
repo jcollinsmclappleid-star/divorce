@@ -127,7 +127,7 @@ export default function MaintenancePendingSuitPage() {
         <h2 className="text-2xl font-display font-bold mb-4">Common Pressure Points</h2>
         <div className="space-y-3 mb-6">
           {[
-            { label: "Budget realism", desc: "Padding the interim budget to maximise the MPS award is common — and almost always counter-productive. The paying party's solicitors will scrutinise it line by line, and an inflated budget damages credibility on every other point." },
+            { label: "Budget realism", desc: "Inflating the interim budget is risky and can be counter-productive. The paying party's solicitors may scrutinise it line by line, and an inflated budget can damage credibility on every other point." },
             { label: "Variable or unpredictable income", desc: "Where the paying party is self-employed, has variable bonus income, or controls a private company, the 'ability to pay' analysis becomes much harder. Disputes over historical drawings and lifestyle are common." },
             { label: "Length of separation before MPS", desc: "MPS is most powerful when applied for promptly. Long delays (e.g. months of struggling on inadequate income) make it harder to evidence the immediate need and can affect the level awarded." },
             { label: "Knock-on to final settlement", desc: "The MPS amount often influences the final spousal maintenance position. Setting MPS too high or too low can shape the substantive negotiation in unhelpful ways." },
@@ -144,9 +144,9 @@ export default function MaintenancePendingSuitPage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "The level of MPS a court would order in your specific circumstances",
+            "The level of MPS a solicitor may consider realistic in your specific circumstances",
             "Whether your particular income needs schedule will be accepted",
-            "Whether you should also apply for a Legal Services Payment Order",
+            "Whether to ask a solicitor about a Legal Services Payment Order",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />

@@ -138,7 +138,7 @@ export default function ExDoesntAgreeSettlementPage() {
         <div className="space-y-3 mb-6">
           {[
             { label: "Emotional rather than financial objections", desc: "Disagreements are often driven by principle or emotion rather than financial logic. Modelling the actual numbers can depersonalise discussions and shift focus to what is financially reasonable." },
-            { label: "One party underestimating what the court would order", desc: "Courts rarely produce radically one-sided outcomes. If your ex's position is significantly more favourable to them than the FDR indication would be, the costs of fighting may not justify their position." },
+            { label: "One party underestimating litigation risk", desc: "A professional review can compare the proposal with the financial evidence, FDR indication if there is one, and likely costs of continuing the dispute." },
             { label: "Legal costs eating into the settlement", desc: "Every month of delay or escalation costs money. Contested final hearings can cost each party £20,000–£100,000 — funds that could have been part of the settlement itself." },
             { label: "Property valuation disputes", desc: "Disagreement about property value is common. Instructing a joint surveyor is usually quicker and cheaper than two separate valuations plus a dispute." },
           ].map((p, i) => (
@@ -155,7 +155,7 @@ export default function ExDoesntAgreeSettlementPage() {
         <div className="space-y-3 mb-6">
           {[
             "Whether your ex's position is legally reasonable — that requires a solicitor's assessment",
-            "What a judge would award at an FDR or final hearing in your specific case",
+            "How a solicitor may assess the risks of an FDR or final hearing in your specific case",
             "Whether mediation is appropriate in your circumstances (particularly where there are safety concerns)",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
@@ -167,7 +167,7 @@ export default function ExDoesntAgreeSettlementPage() {
 
         <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
         <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
-          <li>Based on the figures, is my ex's position within the range of what a court might order?</li>
+          <li>Based on the figures, is my ex's position within a range worth discussing with a solicitor?</li>
           <li>At what point is it more cost-effective to apply to court than continue negotiating?</li>
           <li>What is the realistic litigation risk if we proceed to a final hearing?</li>
           <li>Could an FDR indication resolve things without going all the way to a contested hearing?</li>

@@ -41,11 +41,11 @@ const CHAPTERS = [
     number: 1,
     title: "How UK Divorce Finances Are Decided",
     content: `
-When a marriage ends in England or Wales, the law requires a "fair" financial settlement — but the courts have wide discretion about what that means in practice. There is no automatic formula, no fixed starting point, and no guarantee of a 50/50 split.
+When a marriage ends in England or Wales, the law requires a "fair" financial settlement — but there is wide discretion about what that means in practice. There is no automatic formula and no fixed 50/50 answer.
 
 The starting point under the Matrimonial Causes Act 1973 is to achieve "financial need" first. Only if all needs are met does the court consider equality. The key factors a court considers include:
 
-**The welfare of any children.** If there are dependent children, their housing and financial stability comes first. The parent with primary care will typically be prioritised for the family home where possible.
+**The welfare of any children.** If there are dependent children, their housing and financial stability can be central. The model helps you test whether a keep-home or rehousing route appears workable from the figures entered.
 
 **Financial needs, obligations, and responsibilities.** Each party's current and future financial needs are central. A party who gave up a career to care for children will have needs the court takes seriously.
 
@@ -57,7 +57,7 @@ The starting point under the Matrimonial Causes Act 1973 is to achieve "financia
 
 **Conduct.** Only rarely does the court take conduct into account — and only where it would be "inequitable to disregard it." Financial misconduct (hiding assets, running up debt) is the most common exception.
 
-**Duration of the marriage.** Short marriages (under 5 years) may result in the court "ring-fencing" pre-marital assets. Long marriages typically lead to more equal division.
+**Duration of the marriage.** Short marriages (under 5 years) may see pre-marital assets treated as non-matrimonial in some cases. Long marriages typically involve more equal division of matrimonial wealth.
 
 The key takeaway: understanding the principles doesn't tell you the outcome. But understanding the framework helps you enter negotiations with realistic expectations — and a clearer sense of where to focus.
     `,
@@ -77,7 +77,7 @@ The family home is often the most emotionally charged asset in a divorce — and
 
 **Option 4: Transfer to one party with no buyout.** Sometimes one party receives the home in lieu of other assets (e.g., the other party retains the pension). This requires careful modelling — the property may not be liquid when needed, and pensions have their own access rules.
 
-The right option depends on income levels, mortgage capacity, other assets, children's needs, and each party's long-term financial situation. Modelling the numbers — rather than negotiating from position — often reveals which options are financially workable and which are not.
+The option that works depends on income levels, mortgage capacity, other assets, children's needs, and each party's long-term financial situation. Modelling the numbers — rather than negotiating from position — often reveals which options are financially workable and which are not.
     `,
   },
   {
@@ -87,7 +87,7 @@ The right option depends on income levels, mortgage capacity, other assets, chil
     content: `
 Pensions are frequently the second-largest asset in a divorce — sometimes larger than the family home — yet they are often poorly understood and easy to undervalue.
 
-**What gets divided?** Usually only the portion of pension value built up during the marriage is considered a marital asset. Pre-marital and post-separation pension growth may be ring-fenced, depending on circumstances.
+**What gets divided?** Usually the pension value built up during the marriage is central to the discussion. Pre-marital and post-separation pension growth may need separate evidence and professional review, depending on circumstances.
 
 **The three main options for pensions:**
 
@@ -95,7 +95,7 @@ Pensions are frequently the second-largest asset in a divorce — sometimes larg
 
 *Pension offsetting.* Instead of dividing the pension, one party receives more of another asset (commonly the home) in lieu. This avoids the complexity of pension sharing but requires careful valuation — £100,000 of pension is not worth the same as £100,000 of house equity, because pension income is taxed on drawdown and typically not accessible until later life.
 
-*Earmarking (attachment orders).* Less commonly used. One party receives a share of the other's pension at the time they draw it. The problem: it doesn't achieve a clean break, and entitlement can cease on death or remarriage.
+*Earmarking (attachment orders).* Less commonly used. One party receives a share of the other's pension at the time they draw it. The problem: it doesn't achieve a clean break, and payments can cease on death or remarriage.
 
 **How are pensions valued?** The Cash Equivalent Transfer Value (CETV) is the starting point — it's the amount the pension scheme would pay to transfer the pension elsewhere. However, Defined Benefit (DB) pensions (final salary or career average) are often worth significantly more than the CETV implies. Specialist pension actuaries can produce an "Offsetting Report" for complex cases.
 
@@ -115,7 +115,7 @@ Capital allocation (who gets what) is only half the picture. The other half is m
 
 **Housing costs.** If either party is renting, this is likely the largest single cost. If one party retains the home with a mortgage, the mortgage payment must be sustainable from their income. As a generalised illustration, a common affordability benchmark is that the mortgage payment should not exceed approximately 35–40% of net monthly income — though this varies by lender.
 
-**Child maintenance.** If there are dependent children, the non-resident parent will typically pay child maintenance under the Child Maintenance Service (CMS) basic-rate formula. This is based on gross weekly income of the paying parent, with rates set at:
+**Child maintenance.** If there are dependent children, the Child Maintenance Service (CMS) calculator may be relevant for cashflow modelling. The basic-rate formula is based on gross weekly income of the paying parent, with rates set at:
 - 12% for 1 child
 - 16% for 2 children  
 - 19% for 3 or more children

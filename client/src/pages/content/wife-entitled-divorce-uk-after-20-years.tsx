@@ -5,17 +5,17 @@ import { ContentPageLayout, ContentSection, InlineCTA, useFaqJsonLd } from "@/co
 
 const factors = [
   { label: "Twenty years is a long marriage", desc: "By this point the assets, pensions and lifestyle of the parties are typically deeply intertwined. The pre-marital/marital distinction is much weaker — the longer the marriage, the more 'all assets become matrimonial' for practical sharing purposes." },
-  { label: "Equal sharing is the strong starting point", desc: "Following White v White (2000) and Miller; McFarlane (2006), equal division of the matrimonial pool — including pensions — is the typical starting point for a long marriage. Departures from equality need a clear justification." },
-  { label: "Pensions are usually addressed in full", desc: "After a 20-year marriage it is normal for pension sharing orders to be considered to broadly equalise pension provision in retirement, particularly where one spouse contributed less because of caring responsibilities." },
-  { label: "Spousal maintenance is more likely than after a shorter marriage", desc: "Where one spouse cannot reasonably achieve financial independence at the time of the divorce — for example because of age, ill health or a long career break — longer-term or even joint-lives maintenance remains possible, though courts still favour a clean break where the assets allow capitalisation." },
-  { label: "Standard of living during the marriage is a real factor", desc: "Section 25(2)(c) of the Matrimonial Causes Act 1973 requires the court to consider the standard of living enjoyed by the family before the breakdown. After 20 years that standard is well established and forms part of the needs analysis." },
+  { label: "Sharing is an important reference point", desc: "Following White v White (2000) and Miller; McFarlane (2006), sharing of the matrimonial pool — including pensions — is often central in long-marriage discussions. The detail still depends on needs, resources and evidence." },
+  { label: "Pensions usually need full attention", desc: "After a 20-year marriage, pension sharing or offsetting should usually be checked carefully, particularly where one spouse contributed less because of caring responsibilities." },
+  { label: "Spousal maintenance may need review", desc: "Where one spouse cannot reasonably achieve financial independence at the time of divorce — for example because of age, ill health or a long career break — maintenance assumptions need case-specific advice." },
+  { label: "Standard of living during the marriage is a real factor", desc: "Section 25(2)(c) of the Matrimonial Causes Act 1973 includes the standard of living enjoyed by the family before the breakdown. After 20 years that history may form part of the needs discussion." },
 ];
 
 const faqItems = [
-  { question: "What is a wife entitled to after 20 years of marriage in the UK?", answer: "There is no fixed percentage, but after a 20-year marriage equal division of the matrimonial pool — including pensions — is the typical starting point under English and Welsh law. Departures from equality usually reflect housing needs, the welfare of any minor children, or significant non-matrimonial property." },
-  { question: "Is the wife entitled to half the husband's pension after 20 years?", answer: "Not automatically, but pension sharing aimed at broadly equalising retirement income is common after a long marriage. The exact percentage of a pension shared depends on the values, the parties' ages, and what other assets are available to balance the overall settlement. A pensions on divorce expert (PODE) is often instructed to advise on the right share." },
-  { question: "What about spousal maintenance after 20 years?", answer: "More likely than after a shorter marriage, particularly where one spouse has been out of the workforce for an extended period. Courts still prefer a clean break where the capital allows the maintenance need to be capitalised into a lump sum, but ongoing periodical payments — sometimes long-term — remain a real possibility." },
-  { question: "Are inheritances and pre-marital assets safe after 20 years?", answer: "Less so than after a short marriage. The longer the marriage and the more those assets have been mingled into family use (e.g. an inherited sum used to reduce the mortgage), the more likely they are to be treated as part of the sharing pool — though the source of the asset can still influence the eventual division." },
+  { question: "What financial checks matter after 20 years of marriage in the UK?", answer: "There is no fixed percentage, but after a 20-year marriage the matrimonial pool, pensions, housing and retirement security usually need careful review. Needs, children, health and non-matrimonial property can all affect the discussion." },
+  { question: "Should the husband's pension be checked after 20 years?", answer: "Yes, where pensions are meaningful. Pension sharing or offsetting may be relevant after a long marriage. The values, ages, scheme types and other assets should be checked, and a pensions on divorce expert (PODE) may be needed." },
+  { question: "What about spousal maintenance after 20 years?", answer: "It may need review, particularly where one spouse has been out of the workforce for an extended period. Any ongoing payment or capitalised maintenance assumption should be treated as case-specific until reviewed by a solicitor." },
+  { question: "Do inheritances and pre-marital assets still matter after 20 years?", answer: "They can, but the longer the marriage and the more those assets have been mingled into family use, the more complex the review becomes. The source of the asset can still be relevant, but it needs evidence and advice." },
   { question: "Does adultery or fault affect the financial split?", answer: "Almost never. England and Wales now has a no-fault divorce system under the Divorce, Dissolution and Separation Act 2020, and conduct only affects the financial outcome where it is so extreme that ignoring it would be inequitable. The reason for the breakdown is generally irrelevant to the financial settlement." },
   { question: "Is the position different in Scotland?", answer: "Yes. Scotland's Family Law (Scotland) Act 1985 focuses on matrimonial property accumulated between marriage and the relevant date (usually separation), with equal sharing the presumption. There is no equivalent of long-term joint-lives spousal maintenance — Scottish 'periodical allowance' is normally limited to three years post-divorce." },
 ];
@@ -31,18 +31,18 @@ export default function WifeEntitled20YearsPage() {
   useFaqJsonLd(faqItems);
   return (
     <ContentPageLayout
-      title="What Is a Wife Entitled to After 20 Years of Marriage in the UK?"
-      subtitle="A long marriage. The strong starting point is equal sharing of the matrimonial pool — including pensions — with departures only where there is a clear justification."
-      documentTitle="Wife Entitled to After 20 Years Marriage UK | DivorceCalculatorUK"
-      metaDescription="What a wife is entitled to after 20 years of marriage in the UK — how equal sharing, pensions, spousal maintenance and section 25 factors apply to a long marriage."
+      title="Financial Position After 20 Years of Marriage in the UK"
+      subtitle="A long marriage. The matrimonial pool, pensions, housing and retirement security usually need careful review before relying on any headline percentage."
+      documentTitle="Financial Position After 20 Years Marriage UK | DivorceCalculatorUK"
+      metaDescription="Financial checks after 20 years of marriage in the UK — how sharing, pensions, maintenance assumptions and section 25 factors may shape the discussion."
       relatedPages={relatedPages}
-      breadcrumbs={[{ name: "Home", href: "/" }, { name: "Guides", href: "/divorce-financial-guides" }, { name: "Entitled After 20 Years", href: "/wife-entitled-divorce-uk-after-20-years" }]}
+      breadcrumbs={[{ name: "Home", href: "/" }, { name: "Guides", href: "/divorce-financial-guides" }, { name: "20-Year Marriage Checks", href: "/wife-entitled-divorce-uk-after-20-years" }]}
     >
       <ContentSection>
         <p className="text-muted-foreground leading-relaxed mb-6">
           After two decades of marriage the lives, finances and pensions of both spouses are typically heavily intertwined. The pre-marital/matrimonial distinction matters far less than after a short marriage. The strong starting point is equal sharing of the matrimonial pool — but needs and pensions still drive the detail.
         </p>
-        <h2 className="text-2xl font-display font-bold mt-8 mb-4">How courts approach a 20-year marriage</h2>
+        <h2 className="text-2xl font-display font-bold mt-8 mb-4">What to check after a 20-year marriage</h2>
         <div className="space-y-3 mb-6">
           {factors.map((f, i) => (
             <div key={i} className="flex gap-3 p-4 rounded-lg border">
@@ -64,7 +64,7 @@ export default function WifeEntitled20YearsPage() {
             <p className="text-sm font-semibold">Fictional 20-year marriage, children now teenagers</p>
             <div className="space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2"><Heart className="w-4 h-4 text-primary" /><span>Family home equity £400k, husband's pension CETV £350k, wife's pension CETV £80k, joint ISAs £40k. Wife worked part-time for 12 years.</span></div>
-              <div className="flex items-center gap-2"><PoundSterling className="w-4 h-4 text-primary" /><span>Equal sharing as a starting point: total pool ≈ £870k, equal share ≈ £435k each. Likely structured via a pension sharing order to broadly equalise pensions, plus a property and savings allocation that lets both parties rehouse.</span></div>
+              <div className="flex items-center gap-2"><PoundSterling className="w-4 h-4 text-primary" /><span>The model can test an equal-sharing assumption: total pool ≈ £870k, equal share ≈ £435k each. A solicitor or pension expert can advise whether pension sharing, property allocation and rehousing assumptions need adjustment.</span></div>
             </div>
             <p className="text-xs text-muted-foreground">Illustrative only — every case turns on its facts.</p>
           </CardContent>
@@ -86,7 +86,7 @@ export default function WifeEntitled20YearsPage() {
       <ContentSection muted>
         <h2 className="text-2xl font-display font-bold mb-4">What the calculator cannot decide</h2>
         <div className="space-y-3 mb-6">
-          {["The exact percentage to share each pension — that needs a pensions on divorce expert (PODE) report in most cases", "Whether long-term spousal maintenance is appropriate or whether the need can be capitalised", "How a court would treat any inherited or pre-marital assets in your specific case"].map((item, i) => (
+          {["The pension sharing assumptions to check — that may need a pensions on divorce expert (PODE) report", "Whether long-term spousal maintenance is appropriate or whether the need can be capitalised", "How inherited or pre-marital assets should be reviewed in your specific case"].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
               {item}

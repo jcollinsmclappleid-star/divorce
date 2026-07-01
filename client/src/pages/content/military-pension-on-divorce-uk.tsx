@@ -4,7 +4,7 @@ import { AlertTriangle, CheckSquare, AlertCircle, PiggyBank } from "lucide-react
 import { ContentPageLayout, ContentSection, InlineCTA, useFaqJsonLd } from "@/components/content-page-layout";
 
 const points = [
-  { title: "Three armed forces pension schemes", desc: "Service personnel may have benefits in AFPS 75, AFPS 05 and AFPS 15. The schemes have substantially different rules — particularly around immediate pension entitlement, lump sums and early departure payments." },
+  { title: "Three armed forces pension schemes", desc: "Service personnel may have benefits in AFPS 75, AFPS 05 and AFPS 15. The schemes have substantially different rules — particularly around immediate pension eligibility, lump sums and early departure payments." },
   { title: "AFPS 75 — generous and complex", desc: "Closed to new entrants in 2005. Provides immediate pension on completion of 22 years' service for other ranks (or 16 for officers). Lump sum of 3x annual pension. Complex 'reserved' rights for those who left before pension age." },
   { title: "AFPS 05 — career average lite", desc: "Open from April 2005 to April 2015. 1/70 accrual on final pensionable earnings, normal pension age 55, lump sum of 3x annual pension. Early Departure Payment available from age 40 with 18+ years' service." },
   { title: "AFPS 15 — career average", desc: "All current service personnel build benefits in AFPS 15. Accrual rate 1/47, normal pension age = State Pension Age (with EDP from age 40 with 20+ years' service). Revalued in service by CPI plus 1.5%." },
@@ -25,7 +25,7 @@ const figures = [
 
 const faqItems = [
   { question: "Can a military pension be split on divorce?", answer: "Yes. All three armed forces pension schemes (AFPS 75, AFPS 05, AFPS 15) accept pension sharing orders. The receiving party becomes a pension credit member of the relevant scheme with their own benefits." },
-  { question: "How is a military pension valued?", answer: "By CETV, calculated by Veterans UK (the pension administrator). CETVs for AFPS 75 in particular often significantly understate real lifetime value because the immediate pension on completion of qualifying service is a substantial and immediate income, not just a long-deferred entitlement." },
+  { question: "How is a military pension valued?", answer: "By CETV, calculated by Veterans UK (the pension administrator). CETVs for AFPS 75 in particular often significantly understate real lifetime value because the immediate pension on completion of qualifying service is a substantial and immediate income, not just a long-deferred benefit." },
   { question: "What about Early Departure Payments?", answer: "EDPs (lump sum and income paid before normal pension age in AFPS 05 and AFPS 15) are factored into the CETV. Where a service person is approaching EDP eligibility or already receiving an EDP, the impact on the divorce CETV needs careful actuarial input." },
   { question: "Does McCloud affect military pension divorces?", answer: "Yes. Like other public-sector schemes, the McCloud remedy gives service personnel a choice between legacy (AFPS 75 or 05) and AFPS 15 benefits for the 2015–2022 'remedy period'. CETVs must reflect the higher figure but the choice is not made until retirement." },
   { question: "Can my ex receive a share even if they are not in the forces?", answer: "Yes. The receiving party becomes a pension credit member of the AFPS scheme regardless of their own occupation. Their share is held in the scheme and paid as a pension at the relevant retirement age." },
@@ -132,7 +132,7 @@ export default function MilitaryPensionDivorcePage() {
           <li>Do we need a PODE report on the AFPS pensions?</li>
           <li>How is the EDP being treated in the CETV?</li>
           <li>What is the impact of the McCloud remedy on our settlement?</li>
-          <li>Are any benefits attributable to service injury and ringfenced?</li>
+          <li>Do any benefits attributable to service injury need separate review?</li>
           <li>Should we share or offset, given the AFPS 75 immediate pension features?</li>
         </ul>
         <InlineCTA label="Compare Settlement Scenarios" />

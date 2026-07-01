@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, type ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useLocation } from "wouter";
 import { useAppStore, Asset, Liability, Income, Expense } from "@/hooks/use-store";
 import { useDocumentTitle } from "@/hooks/use-document-title";
@@ -30,6 +31,7 @@ import { SmartExpenseChips } from "@/components/wizard/smart-expense-chips";
 import { IncomeAssumptionChips } from "@/components/wizard/income-assumption-chips";
 import { PensionQuickAdd } from "@/components/wizard/pension-quick-add";
 import { useInlineConfirm, InlineConfirm } from "@/components/wizard/inline-confirm";
+import { WizardStepIllustration, getWizardConcept } from "@/components/section-illustration";
 
 const STEPS = [
   { id: 0, title: "Welcome", icon: Heart },
@@ -57,31 +59,31 @@ const STEP_META = [
 
 const STEP_COPY = [
   {
-    prompt: "Let's build your financial picture together.",
-    reassurance: "All core calculations happen privately in your browser. Best estimates are fine throughout. You can refine figures as you go."
+    prompt: "See what your situation could leave you with — privately, before you talk to anyone.",
+    reassurance: "No solicitor needed to start. Enter rough figures and the model shows your position in plain English. Best estimates are fine throughout."
   },
   {
-    prompt: "A few baseline details to shape your model.",
-    reassurance: "Take it step by step — a rough sense of your situation is all you need here. You can always come back and adjust these details later."
+    prompt: "These details shape what your share could look like across property, pensions and capital.",
+    reassurance: "Take it step by step — a rough sense of your situation is all you need. You can refine figures as you go."
   },
   {
-    prompt: "The family home is usually the largest asset in any settlement.",
-    reassurance: "A rough figure is fine here — Rightmove, Zoopla, or a recent estate agent's view works. Your solicitor will want a formal valuation later, but estimates get you 90% of the way."
+    prompt: "The family home is usually the largest asset — and a big part of what you could receive or keep.",
+    reassurance: "A rough figure is fine here — Rightmove, Zoopla, or a recent estate agent's view works. Estimates get you most of the way before any formal valuation."
   },
   {
-    prompt: "Savings, investments, and any debts outside the mortgage.",
-    reassurance: "Don't worry about precision — bank statements or rough figures work well. The model shows relative impact across scenarios, not an exact penny count."
+    prompt: "Savings, investments and debts all count towards what is in the pot to divide.",
+    reassurance: "Don't worry about precision — bank statements or rough figures work well. The model shows how each asset affects your share across scenarios."
   },
   {
-    prompt: "Pensions are often the most valuable asset in a divorce — easy to overlook.",
+    prompt: "Pensions are often the most valuable asset — and the easiest to overlook when asking 'what will I get?'",
     reassurance: "If you have a recent pension statement, the Cash Equivalent Transfer Value (CETV) is the number to use. Estimates are fine if you don't have it to hand."
   },
   {
-    prompt: "Income figures power the sustainability calculations.",
+    prompt: "Income drives whether any split is actually liveable — not just what looks fair on paper.",
     reassurance: "Enter gross (before tax) income — the model calculates take-home automatically using 2026/27 UK tax rates. Rough figures still produce meaningful results."
   },
   {
-    prompt: "Monthly costs after separation — the key to knowing if each option is liveable.",
+    prompt: "Monthly costs show whether the outcome leaves you enough to live on — the question behind 'how much will I get?'",
     reassurance: "Best estimates are completely fine here. These figures tell the model whether each settlement scenario leaves you covering your bills long-term."
   },
   {
@@ -89,8 +91,8 @@ const STEP_COPY = [
     reassurance: "Child maintenance is estimated using the standard CMS formula based on your income figures. These are indicative — not a formal CMS calculation."
   },
   {
-    prompt: "Everything's in place — review your assumptions below.",
-    reassurance: "Take a moment to check the figures look right. When you're ready, your full financial picture is one click away."
+    prompt: "Your full picture is ready — see what your figures could leave you with.",
+    reassurance: "The preview shows your share across scenarios for free. Unlock the £79 Settlement Reality Check Report when you want to see what each option could leave you with — plus the source-backed preparation guide and questions to raise before agreeing."
   },
 ];
 
@@ -171,12 +173,12 @@ const INTENT_STEP_COPY: Record<string, Partial<Record<number, { prompt: string; 
   },
   fair_split: {
     0: {
-      prompt: "Let's test whether 50/50 or another split is workable in practice.",
-      reassurance: "The calculator shows financial outcomes under different assumptions. It does not decide what is fair or what either person should accept.",
+      prompt: "Let's see what your share could look like — across the house, pensions, savings and monthly costs.",
+      reassurance: "You do not need a solicitor to start. The calculator shows what different splits could leave you with before you negotiate or accept an offer.",
     },
     8: {
       prompt: "Use these sliders to test 50/50, 60/40 or the split you want to compare.",
-      reassurance: "The next screen will show capital, pension, cashflow and resilience differences side by side.",
+      reassurance: "The next screen shows what each option could leave you with — capital, pension, cashflow and monthly pressure side by side.",
     },
   },
   house_split: {
@@ -259,8 +261,8 @@ const INTENT_STEP_COPY: Record<string, Partial<Record<number, { prompt: string; 
   },
   protect_position: {
     0: {
-      prompt: "Let's look for pressure points before you agree anything.",
-      reassurance: "The model helps organise the numbers and identify financial questions, not legal tactics or advice.",
+      prompt: "Let's see what your position looks like before you agree — or respond to an offer without the full picture.",
+      reassurance: "No solicitor needed to start. The model organises your numbers and shows what could leave you short across property, pensions and monthly costs.",
     },
     3: {
       prompt: "This is where missing value often shows up.",
@@ -293,6 +295,7 @@ function getStageForStep(step: number): number {
 export default function WizardPage() {
   useDocumentTitle("Build Your Financial Model | DivorceCalculatorUK");
   useNoIndex();
+  const reduced = useReducedMotion();
   const [currentStep, setCurrentStep] = useState(0);
   const [midJourneyEmailDismissed, setMidJourneyEmailDismissed] = useState(false);
   const [showMidJourneyEmail, setShowMidJourneyEmail] = useState(false);
@@ -420,6 +423,7 @@ export default function WizardPage() {
             {(() => {
               const meta = STEP_META[currentStep];
               const StepIcon = meta.icon;
+              const concept = getWizardConcept(currentStep);
 
               if (interstitial) {
                 return (
@@ -436,7 +440,8 @@ export default function WizardPage() {
               }
 
               return (
-                <>
+                <div className="relative">
+                  <div className="relative z-10">
                   <div className="mb-5">
                     <div className="flex items-center justify-between mb-2.5">
                       <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${meta.pillBg} ${meta.pillText}`} data-testid="text-step-category">
@@ -452,12 +457,27 @@ export default function WizardPage() {
                         }
                       </span>
                     </div>
-                    <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground" data-testid="text-step-title">
-                      {STEPS[currentStep].title}
-                    </h1>
-                    <p className="text-muted-foreground mt-1" data-testid="text-step-prompt">
-                      {stepCopy.prompt}
-                    </p>
+                    <div className="flex items-start justify-between gap-3 sm:gap-4">
+                      <div className="min-w-0 flex-1">
+                        <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground" data-testid="text-step-title">
+                          {STEPS[currentStep].title}
+                        </h1>
+                        <p className="text-muted-foreground mt-1" data-testid="text-step-prompt">
+                          {stepCopy.prompt}
+                        </p>
+                      </div>
+                      {!interstitial && (
+                        <motion.div
+                          key={currentStep}
+                          initial={reduced ? false : { opacity: 0, scale: 0.96 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: reduced ? 0 : 0.35 }}
+                          className="shrink-0"
+                        >
+                          <WizardStepIllustration concept={concept} />
+                        </motion.div>
+                      )}
+                    </div>
                   </div>
 
                   {currentStep === 6 && showMidJourneyEmail && !midJourneyEmailDismissed && (
@@ -479,7 +499,12 @@ export default function WizardPage() {
 
                   <div className={`p-3.5 bg-white/85 rounded-lg text-sm text-muted-foreground mb-6 flex items-start gap-2 border border-slate-200/70 shadow-sm border-l-4 ${meta.shieldBorder}`}>
                     <Shield className="w-4 h-4 mt-0.5 flex-shrink-0 text-muted-foreground/60" />
-                    <span>{stepCopy.reassurance}</span>
+                    <span>
+                      {stepCopy.reassurance}
+                      <span className="block mt-1 text-xs text-foreground/70">
+                        Report focus: {concept.reportHook}
+                      </span>
+                    </span>
                   </div>
 
                   <div className="flex items-center justify-between gap-4 pb-20 lg:pb-0">
@@ -507,7 +532,8 @@ export default function WizardPage() {
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </Button>
                   </div>
-                </>
+                  </div>
+                </div>
               );
             })()}
           </div>

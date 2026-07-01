@@ -23,8 +23,8 @@ const faqItems = [
     answer: "Courts focus primarily on children under 18 (or in education). As children get older, the resident parent's need to stay in the family home or receive additional support reduces. When the youngest child reaches 18, a Mesher Order typically triggers a sale, and maintenance may reduce or end.",
   },
   {
-    question: "Does having children mean I get more than half?",
-    answer: "Not automatically. The primary carer often receives more of the property to ensure adequate housing for the children — but courts balance this against the other party's housing needs too. The overall settlement reflects the specific circumstances of each family.",
+    question: "Do children change the financial picture?",
+    answer: "Not automatically. Children can make housing and monthly cashflow more important, but the financial picture still depends on both households' needs, income, assets and practical affordability. This guide explains modelling considerations, not a predicted split.",
   },
   {
     question: "Are children's financial needs included in the divorce settlement?",
@@ -152,7 +152,7 @@ export default function ChildrenChangeSettlementPage() {
             "What care arrangement would be ordered — this is decided in separate proceedings based on the children's welfare",
             "Whether a Mesher Order or immediate sale is more appropriate for your specific situation",
             "Whether spousal maintenance is appropriate or what amount would be considered reasonable",
-            "What housing standard the court would consider adequate for the children in your area",
+            "What housing evidence and local cost assumptions should be checked for the children in your area",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />

@@ -6,7 +6,7 @@ import { ContentPageLayout, ContentSection, InlineCTA, useFaqJsonLd } from "@/co
 const points = [
   { title: "London is the 'divorce capital'", desc: "England and Wales is widely considered one of the most generous jurisdictions in the world for the financially weaker spouse — particularly in long marriages. International couples with a UK connection often see significant differences in outcomes versus continental jurisdictions." },
   { title: "Equal sharing as a starting point", desc: "After White v White (2000) and Miller/McFarlane (2006), equal sharing of matrimonial assets is the default starting point in long-marriage HNW cases. Departures from equality require a principled basis — typically needs of one party, or a non-matrimonial origin of specific assets." },
-  { title: "Matrimonial vs non-matrimonial property", desc: "Inherited wealth, pre-marital assets and gifts are usually treated as non-matrimonial. They may be ringfenced — but only to the extent the matrimonial pot meets both parties' needs. In long marriages, non-matrimonial property is often partly 'mingled' and harder to ringfence." },
+  { title: "Matrimonial vs non-matrimonial property", desc: "Inherited wealth, pre-marital assets and gifts may need separate review. Needs, mingling and the length of the marriage can all affect how those assets are discussed." },
   { title: "Business interests need specialist valuation", desc: "Owner-managed businesses, partnership interests and private equity stakes require forensic accounting valuations and detailed scrutiny of how value should be split. Liquidity is usually limited, so structuring (deferred payments, share transfers, earn-outs) matters." },
   { title: "Trusts, structures and offshore assets", desc: "HNW divorces frequently involve trusts (UK and offshore), corporate structures and assets held in non-UK jurisdictions. Disclosure obligations apply to all of these. Hiding assets is rarely successful — costs and adverse inferences make it counter-productive." },
   { title: "Costs are higher but proportionate", desc: "HNW financial remedy proceedings can cost £100k+ per side through to a final hearing — but as a percentage of the matrimonial pot this is usually small. Conduct of litigation matters: the court can and does make adverse cost orders against parties who litigate unreasonably." },
@@ -34,8 +34,8 @@ const faqItems = [
 
 const relatedPages = [
   { title: "Section 25 Factors Divorce UK", description: "The legal framework that drives every settlement.", href: "/section-25-factors-divorce-uk", badge: "Law" },
-  { title: "Matrimonial vs Non-Matrimonial Assets UK", description: "What can and cannot be ringfenced.", href: "/matrimonial-vs-non-matrimonial-assets-uk", badge: "Assets" },
-  { title: "Pre-Marital Assets Divorce UK", description: "Protecting wealth brought into the marriage.", href: "/pre-marital-assets-divorce-uk", badge: "Assets" },
+  { title: "Matrimonial vs Non-Matrimonial Assets UK", description: "What may need separate review.", href: "/matrimonial-vs-non-matrimonial-assets-uk", badge: "Assets" },
+  { title: "Pre-Marital Assets Divorce UK", description: "Evidence for wealth brought into the marriage.", href: "/pre-marital-assets-divorce-uk", badge: "Assets" },
   { title: "Preview the Full Financial Report", description: "Model complex settlement scenarios.", href: "/unlock", badge: "Report" },
 ];
 
@@ -101,8 +101,8 @@ export default function HighNetWorthDivorcePage() {
         <div className="space-y-3 mb-6">
           {[
             { label: "Liquidity vs paper value", desc: "A £20m business may be worth £20m on paper but yield far less in cash without affecting the underlying enterprise. Settlements often involve deferred payments, share transfers or earn-outs to bridge the liquidity gap." },
-            { label: "Mingling of non-matrimonial property", desc: "Inherited or pre-marital wealth used to buy the family home or fund family lifestyle is typically partly mingled. Ringfencing arguments depend heavily on how cleanly property was kept separate during the marriage." },
-            { label: "Forum disputes", desc: "International couples often have a choice of jurisdictions. Where to issue first matters enormously — England and Wales is often more generous to the weaker party than continental jurisdictions. 'First past the post' to issue is sometimes decisive." },
+            { label: "Mingling of non-matrimonial property", desc: "Inherited or pre-marital wealth used to buy the family home or fund family lifestyle may be harder to treat separately. Separate-asset arguments depend heavily on how cleanly property was kept separate during the marriage." },
+            { label: "Forum disputes", desc: "International couples may have jurisdiction issues to resolve. Where proceedings are issued can materially affect process and outcome, so specialist advice is important." },
             { label: "Litigation conduct and costs", desc: "The court can and does make adverse cost orders where one party litigates unreasonably, fails to engage with FDR, or makes manifestly unrealistic offers. HNW litigation strategy needs to be reasonable as well as robust." },
           ].map((p, i) => (
             <div key={i} className="p-4 rounded-lg border">
@@ -129,10 +129,10 @@ export default function HighNetWorthDivorcePage() {
         </div>
         <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
         <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
-          <li>Do we have a jurisdiction question — and if so where should proceedings be issued?</li>
+          <li>Do we have a jurisdiction question that needs specialist advice?</li>
           <li>What forensic accountancy, pension and trust expert input is needed?</li>
-          <li>How should non-matrimonial assets be ringfenced in our circumstances?</li>
-          <li>Is our pre-nup or post-nup likely to be given decisive weight?</li>
+          <li>How should non-matrimonial asset evidence be reviewed in our circumstances?</li>
+          <li>How much weight may our pre-nup or post-nup carry?</li>
           <li>What is the realistic litigation budget through to FDR and (if needed) final hearing?</li>
         </ul>
         <InlineCTA label="Compare Settlement Scenarios" />

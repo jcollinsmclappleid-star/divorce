@@ -163,8 +163,8 @@ export default function MesherVsMartinOrderPage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "Whether a Mesher or Martin order is the right approach for your situation",
-            "How a court would draft the trigger events for your case",
+            "Whether a Mesher or Martin order is suitable for your situation",
+            "How trigger events should be drafted and checked in your case",
             "What property value will be at the future trigger event",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
@@ -176,7 +176,7 @@ export default function MesherVsMartinOrderPage() {
 
         <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
         <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
-          <li>Is a deferred sale really the best option, or could we make an outright sale work?</li>
+          <li>Is a deferred sale suitable to discuss, or could we make an outright sale work?</li>
           <li>What trigger events would be appropriate for our situation?</li>
           <li>How should mortgage payments be allocated during the deferral?</li>
           <li>What protections should be built in for the non-resident party's interests?</li>

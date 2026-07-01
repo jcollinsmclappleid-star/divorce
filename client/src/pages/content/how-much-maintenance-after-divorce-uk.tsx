@@ -38,7 +38,7 @@ const faqItems = [
   },
   {
     question: "What happens to maintenance if I remarry?",
-    answer: "Spousal maintenance automatically ends on the recipient's remarriage. If you are the recipient, remarrying ends your entitlement. The payer does not need to apply to court — the obligation ceases automatically.",
+    answer: "Spousal maintenance automatically ends on the recipient's remarriage. If you are the recipient, remarrying ends the maintenance order. The payer does not need to apply to court — the obligation ceases automatically.",
   },
   {
     question: "Can maintenance be exchanged for a capital payment instead?",

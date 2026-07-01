@@ -48,7 +48,7 @@ const faqItems = [
   },
   {
     question: "What if the crypto value changes between disclosure and settlement?",
-    answer: "This is a real risk and a common dispute. Some settlements lock in the valuation at a specific date; others split in kind so both parties share the upside and downside; others use a moving valuation with a specified completion date. The right approach depends on the size of the holding and the parties' attitudes to risk.",
+    answer: "This is a real risk and a common dispute. Some settlements lock in the valuation at a specific date; others split in kind so both parties share the upside and downside; others use a moving valuation with a specified completion date. The suitable route depends on the size of the holding and the parties' attitudes to risk.",
   },
   {
     question: "Are NFTs and DeFi positions matrimonial assets too?",

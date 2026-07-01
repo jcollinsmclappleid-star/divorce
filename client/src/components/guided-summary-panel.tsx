@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useAppStore } from "@/hooks/use-store";
 import { useEngine } from "@/hooks/use-engine";
-import { useSessionToken } from "@/hooks/use-access";
-import { buildPayload } from "@/lib/guided-summary/buildPayload";
 import { computeConfidence } from "@/lib/guided-summary/computeConfidence";
 import type { GuidedSummary } from "@/lib/guided-summary/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import {
   BookOpen,
   Sparkles,
@@ -24,8 +23,22 @@ import {
   PiggyBank,
   AlertCircle,
   Shield,
+  FileText,
 } from "lucide-react";
 import { Link } from "wouter";
+import { DEFAULT_UNLOCK_CTA, PRODUCT_NAMES } from "@/lib/product-copy";
+import { useGuidedSummaryGenerate } from "@/hooks/use-guided-summary-generate";
+import { OPENAI_GENERATION_DISCLOSURE, GenerateReportCard } from "@/components/generate-report-card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { SectionIllustration } from "@/components/section-illustration";
+import {
+  getRelevantSettlementFactors,
+  getSettlementFactorGroups,
+  REPORT_FACTOR_TEASERS,
+  type SettlementFactor,
+  type SettlementFactorGroup,
+} from "@/lib/settlement-factors";
 
 interface ConfidenceBadgeProps {
   level: "High" | "Medium" | "Low";
@@ -173,46 +186,205 @@ function PositionCheck({ check }: { check: NonNullable<GuidedSummary["position_c
   );
 }
 
-interface GuidedSummaryPanelProps {
-  hasAccess: boolean;
+function getSourceBadgeText(sourceLabel?: string) {
+  if (!sourceLabel) return null;
+  if (sourceLabel.includes("Matrimonial Causes")) return "MCA 1973";
+  if (sourceLabel.includes("Child Maintenance")) return "CMS";
+  if (sourceLabel.includes("MoneyHelper")) return "MoneyHelper";
+  if (sourceLabel.includes("Form E")) return "Form E";
+  if (sourceLabel.includes("GOV.UK")) return "GOV.UK";
+  return sourceLabel;
 }
 
-export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
+function SourceBadge({ factor }: { factor: SettlementFactor }) {
+  const label = getSourceBadgeText(factor.sourceLabel);
+  if (!label) return null;
+  return (
+    <span
+      title={factor.sourceLabel}
+      className="inline-flex shrink-0 items-center gap-1 rounded-full border border-gold/20 bg-gold/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-gold"
+    >
+      <FileText className="h-2.5 w-2.5" />
+      {label}
+    </span>
+  );
+}
+
+function FactorList({
+  title,
+  items,
+}: {
+  title: string;
+  items?: string[];
+}) {
+  if (!items?.length) return null;
+  return (
+    <div className="rounded-md bg-slate-50 p-2">
+      <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">{title}</p>
+      <ul className="mt-1 space-y-1 text-[11px] text-slate-600 leading-relaxed">
+        {items.slice(0, 5).map((item) => (
+          <li key={item} className="flex gap-1.5">
+            <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-slate-300" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function FactorGuideCard({
+  factor,
+  defaultOpen = false,
+}: {
+  factor: SettlementFactor;
+  defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <article className="rounded-lg border border-white/80 bg-white/95 p-3 shadow-sm shadow-black/[0.02]">
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        className="w-full text-left"
+        data-testid={`button-factor-guide-${factor.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+      >
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold text-foreground">{factor.userQuestion ?? factor.title}</p>
+            <p className="mt-1 text-[11px] text-muted-foreground leading-relaxed">{factor.fact}</p>
+          </div>
+          <div className="flex shrink-0 items-center gap-1.5">
+            <SourceBadge factor={factor} />
+            {open
+              ? <ChevronUp className="h-3.5 w-3.5 text-muted-foreground/60" />
+              : <ChevronDown className="h-3.5 w-3.5 text-muted-foreground/60" />}
+          </div>
+        </div>
+      </button>
+      <p className="mt-1.5 text-[11px] text-primary/80 leading-relaxed">{factor.whyItMatters}</p>
+      {open ? (
+        <div className="mt-3 space-y-2">
+          <div className="grid gap-2 sm:grid-cols-2">
+            <FactorList title="Figures to check" items={factor.figuresToCheck} />
+            <FactorList title="Evidence to gather" items={factor.documentsToGather} />
+          </div>
+          {factor.professionalQuestions?.length ? (
+            <div className="rounded-md border border-cyan-100 bg-cyan-50/60 p-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-cyan-700">Questions to raise</p>
+              <ul className="mt-1 space-y-1 text-[11px] text-cyan-900/75 leading-relaxed">
+                {factor.professionalQuestions.slice(0, 3).map((question) => (
+                  <li key={question} className="flex gap-1.5">
+                    <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-cyan-300" />
+                    <span>{question}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {factor.discussWith?.length ? (
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">Discuss with</p>
+              <div className="mt-1 flex flex-wrap gap-1">
+                {factor.discussWith.map((person) => (
+                  <span key={person} className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[10px] text-slate-600">
+                    {person}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+          {factor.sourceSummary ? (
+            <div className="rounded-md border border-slate-100 bg-slate-50/70 p-2 text-[10px] text-slate-500 leading-relaxed">
+              <p>Source note: {factor.sourceSummary}</p>
+              {factor.sourceUrl ? (
+                <a href={factor.sourceUrl} target="_blank" rel="noreferrer" className="mt-1 inline-flex font-semibold text-gold hover:underline">
+                  Open source
+                </a>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+    </article>
+  );
+}
+
+function RelevantFactorsCard({
+  factors,
+  groups,
+}: {
+  factors: SettlementFactor[];
+  groups: SettlementFactorGroup[];
+}) {
+  const defaultGroupValue = groups[0] ? [groups[0].id] : [];
+  return (
+    <div className="rounded-xl border border-gold/25 bg-gold/[0.04] p-4 space-y-4" data-testid="card-relevant-settlement-factors">
+      <div className="flex items-start gap-2.5">
+        <Scale className="w-4 h-4 text-gold shrink-0 mt-0.5" />
+        <div>
+          <p className="text-sm font-semibold text-foreground">{PRODUCT_NAMES.layerBeforeAgree}</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Fixed source-backed content selected from approved rules. The AI does not write or alter this section; use it to prepare better professional conversations.
+          </p>
+        </div>
+      </div>
+      {factors.length > 0 && (
+        <div>
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-gold">Most relevant to the figures entered</p>
+            <span className="rounded-full bg-white/80 px-2 py-0.5 text-[10px] text-muted-foreground">Tap a card to expand</span>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {factors.map((factor, index) => (
+              <FactorGuideCard key={factor.title} factor={factor} defaultOpen={index === 0} />
+            ))}
+          </div>
+        </div>
+      )}
+      <Accordion type="multiple" defaultValue={defaultGroupValue} className="space-y-2">
+        {groups.map((group) => (
+          <AccordionItem key={group.id} value={group.id} className="rounded-lg border border-slate-200/80 bg-white px-3">
+            <AccordionTrigger className="py-3 text-left hover:no-underline">
+              <div className="pr-3">
+                <p className="text-xs font-semibold text-foreground">{group.title}</p>
+                <p className="mt-1 text-[11px] font-normal text-muted-foreground leading-relaxed">{group.intro}</p>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pb-3">
+              <div className="grid gap-2 sm:grid-cols-2">
+                {group.items.map((item) => (
+                  <FactorGuideCard key={item.title} factor={item} />
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </div>
+  );
+}
+
+interface GuidedSummaryPanelProps {
+  hasAccess: boolean;
+  /** When true, hide duplicate section header (parent accordion owns the title). */
+  embedded?: boolean;
+}
+
+export function GuidedSummaryPanel({ hasAccess, embedded = false }: GuidedSummaryPanelProps) {
   const store = useAppStore();
   const engine = useEngine();
-  const sessionToken = useSessionToken();
-  const { guidedSummary, guidedSummaryStatus, setGuidedSummary, setGuidedSummaryStatus } = store;
+  const { guidedSummary, guidedSummaryStatus, errorMessage, generate, resetForRegenerate } = useGuidedSummaryGenerate();
 
   const confidence = computeConfidence(store, engine);
   const hasProperty = store.assets.some((a) => a.category === "primary_home" && a.currentValue > 0);
   const hasPension = store.assets.some((a) => a.category === "pension");
+  const relevantFactors = getRelevantSettlementFactors(store, engine);
+  const factorGroups = getSettlementFactorGroups();
 
   const [confirmRegenerate, setConfirmRegenerate] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const generate = async () => {
-    setErrorMessage(null);
-    setGuidedSummaryStatus("loading");
-    try {
-      const payload = buildPayload(store, engine);
-      const res = await fetch("/api/guided-summary", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionToken, payload }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || `Request failed (${res.status})`);
-      }
-      const data: GuidedSummary = await res.json();
-      setGuidedSummary(data);
-      setGuidedSummaryStatus("done");
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
-      setErrorMessage(msg);
-      setGuidedSummaryStatus("error");
-    }
-  };
+  const [regenerateConsent, setRegenerateConsent] = useState(false);
 
   const handleGenerate = () => {
     if (guidedSummaryStatus === "done") setConfirmRegenerate(true);
@@ -220,22 +392,27 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
   };
 
   const handleConfirmRegenerate = () => {
+    if (!regenerateConsent) return;
     setConfirmRegenerate(false);
-    setGuidedSummary(null);
+    setRegenerateConsent(false);
+    resetForRegenerate();
     generate();
   };
 
   if (!hasAccess) {
     return (
-      <div className="mt-8" data-testid="section-guided-summary-locked">
-        <div className="bg-gradient-to-r from-primary to-[hsl(220_52%_28%)] rounded-xl px-5 py-4 mb-4 flex items-center justify-between flex-wrap gap-3">
+      <div className={`relative overflow-hidden rounded-2xl ${embedded ? "" : "mt-8"}`} data-testid="section-guided-summary-locked">
+        <SectionIllustration variant="ledger-reveal" fill tone="background" />
+        <div className="relative z-10 space-y-4">
+        {!embedded ? (
+        <div className="bg-gradient-to-r from-primary to-[hsl(220_52%_28%)] rounded-xl px-5 py-4 flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center shrink-0">
               <BookOpen className="w-4 h-4 text-gold" />
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-base font-semibold text-white">Settlement Reality Check Report</h2>
+                <h2 className="text-base font-semibold text-white">{PRODUCT_NAMES.layerStandsOut}</h2>
                 <span className="text-[10px] text-white/50 bg-white/10 px-2 py-0.5 rounded-full font-medium">Personalised from your figures</span>
               </div>
               <p className="text-xs text-white/45 mt-0.5">See what may leave you short before you agree</p>
@@ -243,6 +420,7 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
           </div>
           <ConfidenceBadge level={confidence} size="sm" />
         </div>
+        ) : null}
         <Card className="border-border/60 overflow-hidden">
           <CardContent className="p-0">
             {/* Section preview list */}
@@ -251,9 +429,10 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
               {[
                 { icon: TrendingUp,   label: "Plain-English Overview",               desc: "What the asset pool, income gap and available capital mean in real life.",                 borderColor: "border-l-primary/40" },
                 { icon: Sparkles,     label: "What Stands Out",                      desc: "The figures most likely to change the conversation, pulled from your numbers.",           borderColor: "border-l-gold/50" },
+                { icon: Scale,        label: PRODUCT_NAMES.layerBeforeAgree,       desc: "Fixed source-backed sections on career, bills, home, pensions, children and offers — figures, evidence and professional questions to check.",        borderColor: "border-l-gold/50" },
                 { icon: BookOpen,     label: "Scenario Interpretation",              desc: "What each option leaves each party with — capital, pension and monthly pressure.",        borderColor: "border-l-cyan-400" },
                 { icon: AlertCircle,  label: "Pressure Points",                      desc: "Where a settlement can look fair on paper but strain cashflow, housing or pensions.",      borderColor: "border-l-rose-400" },
-                { icon: Shield,       label: "Settlement Position Check",             desc: "Left-short risk, offer trade-offs, missing values and questions before agreeing.",        borderColor: "border-l-gold/50" },
+                { icon: Shield,       label: PRODUCT_NAMES.layerBeforeAgree,             desc: "Left-short risk, offer trade-offs, missing values and questions before agreeing.",        borderColor: "border-l-gold/50" },
                 { icon: HelpCircle,   label: "Questions for Professionals",          desc: "Specific questions to take to your solicitor, mediator, broker and pension expert.",      borderColor: "border-l-cyan-300" },
                 { icon: FileSearch,   label: "Missing Information & Confidence",     desc: "What needs checking before you rely on the figures in a serious discussion.",             borderColor: "border-l-amber-400" },
               ].map(({ icon: Icon, label, desc, borderColor }) => (
@@ -269,31 +448,35 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
             {/* Blurred teaser + unlock */}
             <div className="relative">
               <div className="p-4 blur-sm select-none pointer-events-none" aria-hidden>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Based on the figures entered, the combined estate is dominated by property, which carries a significant mortgage relative to the available equity. The income disparity between the two parties means post-settlement sustainability will vary considerably depending on which scenario is adopted...
-                </p>
+                <div className="space-y-1.5">
+                  {REPORT_FACTOR_TEASERS.slice(0, 3).map((line) => (
+                    <p key={line} className="text-sm text-muted-foreground leading-relaxed">{line}</p>
+                  ))}
+                </div>
               </div>
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/80 backdrop-blur-sm rounded-b-lg p-4">
                 <Lock className="w-5 h-5 text-muted-foreground" />
                 <p className="text-sm font-medium text-foreground text-center">
-                  Unlock the position check before you rely on the numbers
+                  See what each scenario could leave you with — plus the preparation guide
                 </p>
                 <Link href="/unlock">
                   <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90" data-testid="button-unlock-guided-summary">
-                    Unlock report & position check — £79
+                    {DEFAULT_UNLOCK_CTA}
                   </Button>
                 </Link>
               </div>
             </div>
           </CardContent>
         </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mt-8" data-testid="section-guided-summary">
+    <div className={embedded ? "" : "mt-8"} data-testid="section-guided-summary">
       {/* Premium header */}
+      {!embedded ? (
       <div className="bg-gradient-to-r from-primary to-[hsl(220_52%_28%)] rounded-xl px-5 py-4 mb-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center shrink-0">
@@ -301,7 +484,7 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-semibold text-white">Settlement Reality Check Report</h2>
+              <h2 className="text-base font-semibold text-white">{PRODUCT_NAMES.layerStandsOut}</h2>
               <span className="text-[10px] text-white/50 bg-white/10 px-2 py-0.5 rounded-full font-medium">Personalised from your figures</span>
             </div>
             <p className="text-xs text-white/50 mt-0.5">Pressure points, trade-offs and questions before agreeing</p>
@@ -309,62 +492,21 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
         </div>
         <ConfidenceBadge level={confidence} />
       </div>
+      ) : null}
 
       {guidedSummaryStatus === "idle" || guidedSummaryStatus === "error" ? (
-        <Card className="border-border/60" data-testid="card-guided-summary-generate">
-          <CardContent className="p-5 space-y-4">
-            {guidedSummaryStatus === "error" && errorMessage && (
-              <div className="flex items-start gap-2 p-3 rounded-lg bg-rose-50 border border-rose-200">
-                <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                <p className="text-sm text-rose-700">{errorMessage}</p>
-              </div>
-            )}
-            {/* Section preview */}
-            <div className="space-y-2 mb-1">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Before you agree, your report checks</p>
-              <div className="grid sm:grid-cols-2 gap-1.5">
-                {[
-                  { icon: TrendingUp,  label: "Plain-English Overview",          borderColor: "border-l-primary/40" },
-                  { icon: Sparkles,    label: "What Stands Out",                 borderColor: "border-l-gold/50" },
-                  { icon: BookOpen,    label: "Scenario Interpretation",         borderColor: "border-l-cyan-400" },
-                  { icon: AlertCircle, label: "Pressure Points",                 borderColor: "border-l-rose-400" },
-                  { icon: Shield,      label: "Position Check",                  borderColor: "border-l-gold/50" },
-                  { icon: HelpCircle,  label: "Questions for Professionals",     borderColor: "border-l-cyan-300" },
-                  { icon: FileSearch,  label: "Missing Info & Confidence",       borderColor: "border-l-amber-400" },
-                ].map(({ icon: Icon, label, borderColor }) => (
-                  <div key={label} className={`border-l-4 ${borderColor} pl-2.5 py-0.5 flex items-center gap-1.5`}>
-                    <Icon className="w-3 h-3 text-muted-foreground/50 shrink-0" />
-                    <span className="text-xs text-foreground/65">{label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex items-start gap-3 p-3.5 rounded-lg bg-primary/5 border border-primary/10">
-              <Sparkles className="w-4 h-4 text-primary/60 shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <p className="text-xs font-medium text-foreground">Built to prepare you for expensive conversations</p>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Your anonymous model figures are securely sent to produce a plain-English position check: where the offer may leave pressure, what may be missing, and what to ask before you spend time with professionals. No names, addresses, contact details, documents or messages are ever included.
-                </p>
-              </div>
-            </div>
-            <Button
-              onClick={handleGenerate}
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
-              data-testid="button-generate-guided-summary"
-            >
-              <Sparkles className="w-4 h-4 mr-2" />
-              Generate my position check report
-            </Button>
-            <p className="text-[10px] text-muted-foreground/60">Usually takes 10–20 seconds · Uses your figures, not templates</p>
-          </CardContent>
-        </Card>
+        <GenerateReportCard
+          variant="inline"
+          status={guidedSummaryStatus}
+          errorMessage={errorMessage}
+          onGenerate={generate}
+        />
       ) : guidedSummaryStatus === "loading" ? (
         <Card className="border-border/60" data-testid="card-guided-summary-loading">
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-4 h-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-              <p className="text-sm text-muted-foreground">Generating your Settlement Reality Check Report — this usually takes 10–20 seconds…</p>
+              <p className="text-sm text-muted-foreground">Generating {PRODUCT_NAMES.layerStandsOut} — this usually takes 10–20 seconds…</p>
             </div>
             <div className="space-y-2.5 animate-pulse">
               {[80, 65, 90, 55, 75].map((w, i) => (
@@ -381,6 +523,7 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
           <SummaryBlock icon={Sparkles} title="What Stands Out" borderColor="border-l-gold/50">
             {formatTextBlock(guidedSummary.what_stands_out)}
           </SummaryBlock>
+          <RelevantFactorsCard factors={relevantFactors} groups={factorGroups} />
           <SummaryBlock icon={BookOpen} title="Scenario Interpretation" borderColor="border-l-cyan-400">
             {formatTextBlock(guidedSummary.scenario_interpretation)}
           </SummaryBlock>
@@ -388,7 +531,7 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
             {formatTextBlock(guidedSummary.pressure_points)}
           </SummaryBlock>
           {guidedSummary.position_check && (
-            <SummaryBlock icon={Shield} title="Settlement Position Check" borderColor="border-l-gold/50">
+            <SummaryBlock icon={Shield} title={PRODUCT_NAMES.layerBeforeAgree} borderColor="border-l-gold/50">
               <PositionCheck check={guidedSummary.position_check} />
             </SummaryBlock>
           )}
@@ -408,17 +551,32 @@ export function GuidedSummaryPanel({ hasAccess }: GuidedSummaryPanelProps) {
 
           <div className="pt-1 border-t border-border/40 flex flex-col sm:flex-row items-start sm:items-center gap-3">
             {confirmRegenerate ? (
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 rounded-lg bg-amber-50 border border-amber-200 w-full">
-                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                <p className="text-xs text-amber-700 flex-1">Regenerating will replace your current summary. Are you sure?</p>
+              <div className="flex flex-col gap-3 p-3 rounded-lg bg-amber-50 border border-amber-200 w-full">
+                <div className="flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <p className="text-xs text-amber-800 flex-1 leading-relaxed">
+                    Regenerating replaces your current narrative and sends anonymous figures to OpenAI again.
+                  </p>
+                </div>
+                <p className="text-[11px] text-amber-900/80 leading-relaxed">{OPENAI_GENERATION_DISCLOSURE}</p>
+                <div className="flex items-start gap-2">
+                  <Checkbox
+                    id="regenerate-openai-consent"
+                    checked={regenerateConsent}
+                    onCheckedChange={(v) => setRegenerateConsent(v === true)}
+                  />
+                  <Label htmlFor="regenerate-openai-consent" className="text-xs font-normal leading-relaxed cursor-pointer">
+                    I understand anonymous figures will be sent to OpenAI again.
+                  </Label>
+                </div>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => setConfirmRegenerate(false)} data-testid="button-cancel-regenerate">Cancel</Button>
-                  <Button size="sm" onClick={handleConfirmRegenerate} data-testid="button-confirm-regenerate">Regenerate</Button>
+                  <Button size="sm" variant="outline" onClick={() => { setConfirmRegenerate(false); setRegenerateConsent(false); }} data-testid="button-cancel-regenerate">Cancel</Button>
+                  <Button size="sm" disabled={!regenerateConsent} onClick={handleConfirmRegenerate} data-testid="button-confirm-regenerate">Regenerate</Button>
                 </div>
               </div>
             ) : (
               <>
-                <Button variant="outline" size="sm" onClick={handleGenerate} data-testid="button-regenerate-guided-summary">
+                <Button variant="outline" size="sm" onClick={() => setConfirmRegenerate(true)} data-testid="button-regenerate-guided-summary">
                   <RefreshCw className="w-3.5 h-3.5 mr-1.5" /> Regenerate
                 </Button>
                 <p className="text-xs text-muted-foreground">Use if you've updated your inputs significantly. Limit: 3 per hour.</p>

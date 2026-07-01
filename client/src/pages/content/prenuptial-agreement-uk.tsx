@@ -33,7 +33,7 @@ const faqItems = [
   },
   {
     question: "What does a pre-nup typically cover?",
-    answer: "It usually identifies pre-marital assets (so they can be ring-fenced as non-matrimonial), addresses how matrimonial wealth built during the marriage will be divided, and sometimes covers spousal maintenance, inheritance protection and arrangements for any children of previous relationships. Provisions affecting child arrangements are not generally enforceable — those decisions remain with the court.",
+    answer: "It usually identifies pre-marital assets, addresses how matrimonial wealth built during the marriage will be divided, and sometimes covers spousal maintenance, inheritance planning and arrangements for any children of previous relationships. Provisions affecting child arrangements are not generally enforceable and need separate legal advice.",
   },
   {
     question: "Can a pre-nup be challenged later?",
@@ -87,7 +87,7 @@ export default function PrenuptialAgreementPage() {
       </ContentSection>
 
       <ContentSection muted>
-        <h2 className="text-2xl font-display font-bold mb-6">Conditions Courts Typically Look For</h2>
+        <h2 className="text-2xl font-display font-bold mb-6">Safeguards to Check Before Relying on a Pre-Nup</h2>
         <div className="space-y-4 mb-6">
           {conditions.map((c, i) => (
             <Card key={i}>
@@ -144,8 +144,8 @@ export default function PrenuptialAgreementPage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "Whether a particular pre-nup would be upheld in your specific circumstances",
-            "How a court would treat a pre-nup signed many years ago in the light of today's circumstances",
+            "How much weight a particular pre-nup may carry in your specific circumstances",
+            "How a pre-nup signed many years ago may need to be reviewed against today's circumstances",
             "Whether the conditions for a binding pre-nup have been satisfied in your case",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
@@ -157,7 +157,7 @@ export default function PrenuptialAgreementPage() {
 
         <h2 className="text-2xl font-display font-bold mt-6 mb-4">Questions Worth Raising With a Professional</h2>
         <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
-          <li>How likely is our pre-nup to be upheld if the marriage ends?</li>
+          <li>How much weight might our pre-nup carry if the marriage ends?</li>
           <li>Do we need to update our pre-nup after our recent change in circumstances?</li>
           <li>How should the agreement handle assets we acquire jointly during marriage?</li>
           <li>What provision should be made for children if we have any?</li>

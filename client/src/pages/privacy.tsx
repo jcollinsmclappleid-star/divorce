@@ -244,7 +244,7 @@ export default function PrivacyPage() {
               <li>Session tokens are randomly generated and contain no personal information</li>
               <li>Server access is restricted and monitored</li>
             </ul>
-            <p>No method of electronic transmission or storage is completely secure. While we take reasonable precautions to protect your data, we cannot guarantee absolute security.</p>
+            <p>No method of electronic transmission or storage is completely secure. While we take reasonable precautions to protect your data, absolute security cannot be promised.</p>
             <p><strong>Personal data breaches:</strong> In the event of a personal data breach that is likely to result in a risk to your rights and freedoms, we will notify the Information Commissioner's Office within 72 hours of becoming aware, in accordance with Article 33 of the UK GDPR. Where the breach is likely to result in a high risk to you, we will also notify you directly without undue delay, in accordance with Article 34.</p>
           </section>
 

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useLocation, Link } from "wouter";
 import { useAppStore, StoreState } from "@/hooks/use-store";
 import { useEngine, ScenarioResult, ProjectionYear, RunwayResult } from "@/hooks/use-engine";
@@ -11,6 +11,10 @@ import { Logo } from "@/components/logo";
 import { FsiGauge } from "@/components/fsi-gauge";
 import { SettlementConsole, buildConsoleScenarios } from "@/components/settlement-console";
 import { ScenarioLeaderboard } from "@/components/scenario-leaderboard";
+import { useGuidedSummaryGenerate } from "@/hooks/use-guided-summary-generate";
+import { GenerateReportCard, scrollToGenerateReportCard } from "@/components/generate-report-card";
+import { ResultsOutputsBar, ResultsLayerAccordion } from "@/components/results-overview";
+import { PRODUCT_NAMES, PRODUCT_TAGLINE } from "@/lib/product-copy";
 import { PREMIUM_TOOLTIP_STYLE } from "@/components/premium-tooltip";
 import { calcMortgagePayment } from "@/lib/engine/calc/mortgage";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -30,7 +34,7 @@ import {
   Calculator, ChevronLeft, ChevronRight, ChevronDown, Check, X, AlertTriangle,
   TrendingUp, Edit, Shield, ArrowDown, ArrowUp, Minus,
   PoundSterling, Home, Info, Lightbulb, BarChart3, Eye,
-  Target, Activity, Building2, FileText
+  Target, Activity, Building2, FileText, Download, Sparkles,
 } from "lucide-react";
 import {
   generateScenarioNarrative,
@@ -189,7 +193,7 @@ function IntentRealityCheckPanel({
     {
       intent: "offer_check",
       icon: Target,
-      title: "Settlement Offer Check",
+      title: "Offer Check",
       body: `Current model assumptions are ${splitLabel} for assets and ${pensionSplitLabel} for pensions. Use the sliders above to mirror the offer before comparing pressure points.`,
       signal: bestResilience ? `Strongest resilience: ${SCENARIO_META[bestResilience.scenario.id]?.shortLabel ?? bestResilience.scenario.name}` : "Add figures to compare scenarios.",
     },
@@ -259,7 +263,7 @@ function IntentRealityCheckPanel({
       icon: Lightbulb,
       title: "Missing Value Check",
       body: dataGaps.length > 0
-        ? `For a stronger reality check, add: ${dataGaps.join(", ")}.`
+        ? `For a stronger read, add: ${dataGaps.join(", ")}.`
         : "Core inputs are populated, so the model can compare capital, pensions, income and monthly pressure.",
       signal: "Better inputs make the report more useful.",
     },
@@ -271,10 +275,10 @@ function IntentRealityCheckPanel({
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div>
             <CardTitle className="text-base flex items-center gap-2">
-              <Target className="w-4 h-4 text-primary" /> Settlement Reality Check Lenses
+              <Target className="w-4 h-4 text-primary" /> Quick lenses — {PRODUCT_NAMES.layerBeforeAgree}
             </CardTitle>
             <CardDescription>
-              Fast views for the questions most people are trying to answer before solicitor, mediation or offer discussions.
+              Fast views for the questions most people check before solicitor, mediation or offer discussions.
             </CardDescription>
           </div>
           {selectedIntent && (
@@ -418,10 +422,10 @@ function SettlementPositionCheckPanel({
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div className="space-y-1">
             <CardTitle className="text-base flex items-center gap-2">
-              <Shield className="w-4 h-4 text-gold" /> Settlement Position Check
+              <Shield className="w-4 h-4 text-gold" /> {PRODUCT_NAMES.layerBeforeAgree}
             </CardTitle>
             <CardDescription>
-              A preparation layer that highlights missing values, pressure points, trade-offs and professional questions without telling you what to accept.
+              Source-backed checks on missing values, pressure points, trade-offs and professional questions — without telling you what to accept.
             </CardDescription>
           </div>
           {selectedLens && (
@@ -458,15 +462,43 @@ function SettlementPositionCheckPanel({
 }
 
 export default function ResultsPage() {
-  useDocumentTitle("Divorce Financial Modelling Results | DivorceCalculatorUK");
+  useDocumentTitle(`${PRODUCT_NAMES.fullPosition} | DivorceCalculatorUK`);
   useNoIndex();
   const store = useAppStore();
   const { assumptions, updateAssumptions } = store;
   const engine = useEngine();
   const { hasAccess } = useAccess();
   const sessionToken = useSessionToken();
+  const {
+    guidedSummaryStatus,
+    errorMessage: guidedSummaryError,
+    generate: generateGuidedSummary,
+  } = useGuidedSummaryGenerate();
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [viewLens, setViewLens] = useState<ViewLens>("liquidity");
+  const [openLayers, setOpenLayers] = useState<Record<number, boolean>>({});
+
+  const reportNeedsAction = hasAccess && guidedSummaryStatus !== "done" && guidedSummaryStatus !== "loading";
+  const pdfNarrativeReady = guidedSummaryStatus === "done";
+
+  useEffect(() => {
+    if (reportNeedsAction) {
+      setOpenLayers((prev) => ({ ...prev, 1: true }));
+    }
+  }, [reportNeedsAction]);
+
+  useEffect(() => {
+    if (pdfNarrativeReady) {
+      setOpenLayers((prev) => ({ ...prev, 1: true }));
+    }
+  }, [pdfNarrativeReady]);
+
+  const handleOpenLayer = useCallback((index: number) => {
+    setOpenLayers((prev) => ({ ...prev, [index]: true }));
+    requestAnimationFrame(() => {
+      document.getElementById(`results-layer-${index}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, []);
 
   const allScenarios = computeAllScenarios(engine);
   const displayScenarios = allScenarios.filter(s => s.id !== "S4");
@@ -514,6 +546,37 @@ export default function ResultsPage() {
     ].filter(c => c.value > 0);
   }, [store.assets, engine.intermediate]);
 
+  const poolLabel = formatCurrency(engine.intermediate.netHomeEquity + engine.intermediate.totalLiquid);
+
+  const scenarioSummary = useMemo(() => {
+    if (consoleScenarios.length === 0) return "Model your figures to compare settlement options";
+    const ranked = [...consoleScenarios].sort(
+      (a, b) => Math.min(b.resilienceA, b.resilienceB) - Math.min(a.resilienceA, a.resilienceB),
+    );
+    const best = ranked[0];
+    const split = `${Math.round(assumptions.splitRatio * 100)}/${Math.round((1 - assumptions.splitRatio) * 100)} asset split`;
+    return best
+      ? `${best.shortName ?? best.name} leads on resilience · ${split} · ${consoleScenarios.length} scenarios`
+      : `${split} · ${consoleScenarios.length} scenarios`;
+  }, [consoleScenarios, assumptions.splitRatio]);
+
+  const prepSummary = "8 intent lenses · 5 position-check cards · topics to raise before agreeing";
+
+  const narrativeLayerStatus = !hasAccess
+    ? "locked" as const
+    : guidedSummaryStatus === "loading"
+      ? "loading" as const
+      : guidedSummaryStatus === "done"
+        ? "ready" as const
+        : "action" as const;
+
+  const narrativeSummary =
+    guidedSummaryStatus === "done"
+      ? "Overview, pressure points, and professional questions generated"
+      : guidedSummaryStatus === "loading"
+        ? "Generating plain-English narrative from your figures…"
+        : "Generate to add narrative — read in Section 2 below or in PDF once done";
+
   const setPreset = (split: number, pension: number) => {
     updateAssumptions({ splitRatio: split, splitPensionToA: pension });
   };
@@ -530,11 +593,29 @@ export default function ResultsPage() {
         <div className="container mx-auto px-4 h-14 flex items-center justify-between gap-4">
           <Logo size="md" />
           <div className="flex items-center gap-2 flex-wrap">
-            <Link href="/report">
-              <Button variant="outline" size="sm" data-testid="button-download-report">
-                <FileText className="w-4 h-4 mr-1" /> Download Report
-              </Button>
-            </Link>
+            {hasAccess && (
+              <div className="hidden sm:flex items-center gap-2">
+                {!pdfNarrativeReady && (
+                  <Button
+                    size="sm"
+                    className="bg-primary hover:bg-primary/90 text-white font-semibold"
+                    onClick={scrollToGenerateReportCard}
+                    data-testid="button-generate-report-header"
+                  >
+                    <Sparkles className="w-4 h-4 mr-1" /> Generate
+                  </Button>
+                )}
+                <Link href="/report">
+                  <Button
+                    size="sm"
+                    className="bg-gold hover:bg-gold/90 text-white border-0 shadow-md shadow-gold/15 font-semibold"
+                    data-testid="button-download-report"
+                  >
+                    <Download className="w-4 h-4 mr-1" /> Download PDF
+                  </Button>
+                </Link>
+              </div>
+            )}
             <Link href="/wizard">
               <Button variant="outline" size="sm" data-testid="button-edit-inputs">
                 <Edit className="w-4 h-4 mr-1" /> Edit Inputs
@@ -586,36 +667,35 @@ export default function ResultsPage() {
         <div className="space-y-10">
           <div className="space-y-4">
             <div>
+              <p className="text-[11px] uppercase tracking-widest text-gold font-semibold mb-1">{PRODUCT_NAMES.fullPosition}</p>
               <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight" data-testid="text-results-title">
-                Settlement Reality Check Results
+                Your answer — built from your figures
               </h1>
               <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed max-w-2xl">
-                Compare post-settlement financial positions under each scenario. Adjust the settlement ratio using the controls above. Select an analytical lens below to prioritise the relevant metrics.
+                {PRODUCT_TAGLINE}
               </p>
             </div>
 
-            <DecisionLensToggle viewLens={viewLens} setViewLens={setViewLens} />
+            {hasAccess && (
+              <div className="sticky top-[8.5rem] z-30 -mx-1 px-1">
+                <GenerateReportCard
+                  status={guidedSummaryStatus}
+                  errorMessage={guidedSummaryError}
+                  onGenerate={generateGuidedSummary}
+                />
+              </div>
+            )}
 
-            <IntentRealityCheckPanel
-              scenarios={displayScenarios}
-              stabilityScores={stabilityScores}
-              engine={engine}
-              store={store}
+            <ResultsOutputsBar
+              poolLabel={poolLabel}
+              scenarioSummary={scenarioSummary}
+              prepSummary={prepSummary}
+              guidedSummaryStatus={guidedSummaryStatus}
+              hasAccess={hasAccess}
+              pdfNarrativeReady={pdfNarrativeReady}
+              onOpenLayer={handleOpenLayer}
+              onGenerateReport={scrollToGenerateReportCard}
             />
-
-            <SettlementPositionCheckPanel
-              scenarios={displayScenarios}
-              stabilityScores={stabilityScores}
-              engine={engine}
-              store={store}
-            />
-
-            <div className="p-4 rounded-md border border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800">
-              <p className="text-sm text-blue-900 dark:text-blue-200 leading-relaxed" data-testid="text-guidance-callout">
-                <Info className="w-4 h-4 inline mr-1.5 -mt-0.5" />
-                The table below compares the allocated capital position for each party under each settlement scenario. Select the <span className="inline-flex items-center"><Info className="w-3 h-3 mx-0.5" /></span> information icons for supplementary definitions. Use the settlement ratio controls to model alternative distributions.
-              </p>
-            </div>
 
             {store.maintenance?.included && store.maintenance.monthlyAmount > 0 && (
               <div className="p-3 rounded-md border border-amber-200 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-800 flex items-start gap-2" data-testid="banner-maintenance">
@@ -629,6 +709,21 @@ export default function ResultsPage() {
 
           {displayScenarios.length > 0 ? (
             <>
+              <ResultsLayerAccordion
+                layerIndex={0}
+                id="results-layer-0"
+                title={PRODUCT_NAMES.layerScenarios}
+                description="Capital, pension share, monthly surplus and reserve outlook for all settlement options."
+                summary={scenarioSummary}
+                status="ready"
+                open={openLayers[0]}
+                onOpenChange={(open) => setOpenLayers((prev) => ({ ...prev, 0: open }))}
+              >
+              <DecisionLensToggle viewLens={viewLens} setViewLens={setViewLens} />
+              <div className="p-3 rounded-md border border-blue-200/80 bg-blue-50/40 text-xs text-blue-900 leading-relaxed" data-testid="text-guidance-callout">
+                <Info className="w-3.5 h-3.5 inline mr-1 -mt-0.5" />
+                Compare allocated capital under each scenario. Use the split controls at the top of the page to model different offers.
+              </div>
               {consoleScenarios.length > 0 && consoleComposition.length > 0 && (
                 <div className="mb-6 space-y-6">
                   <SettlementConsole
@@ -636,7 +731,7 @@ export default function ResultsPage() {
                     composition={consoleComposition}
                     partyAName={store.profile?.partyAName || "Party A"}
                     partyBName={store.profile?.partyBName || "Party B"}
-                    chromeCaption="Settlement Command Console — your figures"
+                    chromeCaption={`${PRODUCT_NAMES.layerScenarios} — your figures`}
                     footerText={`Live model · ${consoleScenarios.length} scenarios · stress tests · ${projectionYearLabel.toLowerCase()} projection`}
                     testId="results-settlement-console"
                   />
@@ -644,7 +739,7 @@ export default function ResultsPage() {
                     scenarios={consoleScenarios}
                     partyAName={store.profile?.partyAName || "Party A"}
                     partyBName={store.profile?.partyBName || "Party B"}
-                    title="Scenario Comparison — your figures"
+                    title={`${PRODUCT_NAMES.layerScenarios} — your figures`}
                     caption="all scenarios side-by-side"
                     footerText="Capital, monthly surplus, and the weakest party's resilience for each option"
                     testId="results-comparison"
@@ -663,7 +758,7 @@ export default function ResultsPage() {
               />
 
               <div>
-                <h2 className="text-xl font-display font-bold mb-1 tracking-tight">Scenario Analysis</h2>
+                <h3 className="text-lg font-display font-semibold mb-1 tracking-tight">Per-scenario detail</h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   Select a scenario below for detailed analysis — including capital allocation, source of funds breakdown, monthly financial position, and financial sustainability indicator.
                 </p>
@@ -830,6 +925,7 @@ export default function ResultsPage() {
                   </div>
                 </div>
               </CollapsibleSection>
+              </ResultsLayerAccordion>
             </>
           ) : (
             <Card>
@@ -840,7 +936,62 @@ export default function ResultsPage() {
             </Card>
           )}
 
-          <GuidedSummaryPanel hasAccess={hasAccess} />
+          <ResultsLayerAccordion
+            layerIndex={1}
+            id="results-layer-1"
+            title={PRODUCT_NAMES.layerStandsOut}
+            description="Plain-English overview of what stands out, where pressure appears, and what may leave either side short."
+            summary={narrativeSummary}
+            status={narrativeLayerStatus}
+            open={openLayers[1]}
+            onOpenChange={(open) => setOpenLayers((prev) => ({ ...prev, 1: open }))}
+            headerAction={
+              hasAccess && guidedSummaryStatus === "done" ? (
+                <Link href="/report" onClick={(e) => e.stopPropagation()}>
+                  <Button size="sm" variant="outline" className="h-8 text-xs border-gold/40 text-gold hidden sm:inline-flex">
+                    <Download className="w-3 h-3 mr-1" /> PDF
+                  </Button>
+                </Link>
+              ) : reportNeedsAction ? (
+                <Button
+                  size="sm"
+                  className="h-8 text-xs hidden sm:inline-flex"
+                  onClick={(e) => { e.stopPropagation(); scrollToGenerateReportCard(); }}
+                >
+                  <Sparkles className="w-3 h-3 mr-1" /> Generate
+                </Button>
+              ) : undefined
+            }
+          >
+            <GuidedSummaryPanel hasAccess={hasAccess} embedded />
+          </ResultsLayerAccordion>
+
+          {displayScenarios.length > 0 && (
+            <ResultsLayerAccordion
+              layerIndex={2}
+              id="results-layer-2"
+              title={PRODUCT_NAMES.layerBeforeAgree}
+              description="Source-backed checks, evidence to gather, and questions to raise before you agree."
+              summary={prepSummary}
+              status={hasAccess ? "ready" : "locked"}
+              open={openLayers[2]}
+              onOpenChange={(open) => setOpenLayers((prev) => ({ ...prev, 2: open }))}
+            >
+              <IntentRealityCheckPanel
+                scenarios={displayScenarios}
+                stabilityScores={stabilityScores}
+                engine={engine}
+                store={store}
+              />
+              <SettlementPositionCheckPanel
+                scenarios={displayScenarios}
+                stabilityScores={stabilityScores}
+                engine={engine}
+                store={store}
+              />
+            </ResultsLayerAccordion>
+          )}
+
           {hasAccess && <OptionalReportSupport sessionToken={sessionToken} />}
         </div>
       </main>
@@ -1366,7 +1517,7 @@ function ExecutiveTable({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="hidden lg:block overflow-x-auto max-h-[520px]">
+        <div className="hidden lg:block overflow-x-auto overflow-y-auto max-h-[520px]">
           <Table>
             <TableHeader className="sticky top-0 z-10">
               <TableRow className="bg-primary hover:bg-primary">
@@ -1454,8 +1605,8 @@ function ExecutiveTable({
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
                   return (
-                    <TableCell key={s.id} className="text-center">
-                      <FsiGauge score={st?.scoreA ?? 100} size={80} />
+                    <TableCell key={s.id} className="text-center align-middle">
+                      <FsiGauge score={st?.scoreA ?? 100} size={80} showLabel={false} />
                     </TableCell>
                   );
                 })}
@@ -1465,8 +1616,8 @@ function ExecutiveTable({
                 {scenarios.map(s => {
                   const st = stabilityScores[s.id];
                   return (
-                    <TableCell key={s.id} className="text-center">
-                      <FsiGauge score={st?.scoreB ?? 100} size={80} />
+                    <TableCell key={s.id} className="text-center align-middle">
+                      <FsiGauge score={st?.scoreB ?? 100} size={80} showLabel={false} />
                     </TableCell>
                   );
                 })}
@@ -2287,10 +2438,11 @@ function CompositionChart({ scenario }: { scenario: ScenarioResult }) {
 }
 
 function ScoreBar({ score }: { score: number }) {
-  const barColor = score >= 80 ? "bg-green-500" : score >= 60 ? "bg-amber-500" : "bg-red-500";
+  const pct = Math.max(0, Math.min(100, Number.isFinite(score) ? score : 0));
+  const barColor = pct >= 80 ? "bg-green-500" : pct >= 60 ? "bg-amber-500" : "bg-red-500";
   return (
-    <div className="bg-muted rounded-full h-2 mt-1">
-      <div className={`${barColor} h-2 rounded-full transition-all`} style={{ width: `${Math.min(100, score)}%` }} />
+    <div className="bg-muted rounded-full h-2 mt-1 overflow-hidden">
+      <div className={`${barColor} h-full rounded-full transition-all`} style={{ width: `${pct}%` }} />
     </div>
   );
 }

@@ -102,7 +102,7 @@ export default function TransferOfEquityPage() {
         <h2 className="text-2xl font-display font-bold mt-6 mb-4">Key Mortgage Considerations</h2>
         <div className="space-y-3 mb-6">
           {[
-            "The remaining party must pass affordability checks on their sole income — including any spousal maintenance they will receive",
+            "The remaining party must pass affordability checks on their sole income — including any spousal maintenance assumption being relied on",
             "The mortgage lender must formally agree to release the departing party from the mortgage liability",
             "You may need to remortgage to a new product to achieve the release — which may be at a higher rate than the current deal",
             "If the existing mortgage is in a fixed rate period, early repayment charges may apply to a remortgage",

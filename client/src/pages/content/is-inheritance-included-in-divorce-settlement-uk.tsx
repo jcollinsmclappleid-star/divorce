@@ -20,7 +20,7 @@ const faqItems = [
   },
   {
     question: "Does keeping inheritance in a separate account protect it?",
-    answer: "Keeping inherited funds in a sole account that was never mixed with joint funds provides a stronger argument for ring-fencing — particularly in shorter marriages. However, courts consider all circumstances and there is no absolute protection.",
+    answer: "Keeping inherited funds in a sole account that was never mixed with joint funds provides a stronger argument for non-matrimonial treatment — particularly in shorter marriages. However, courts consider all circumstances and there is no absolute protection.",
   },
   {
     question: "What is 'mingling' of inheritance funds?",
@@ -32,7 +32,7 @@ const faqItems = [
   },
   {
     question: "Does the length of the marriage affect whether inheritance is included?",
-    answer: "Yes — significantly. In a short marriage, inheritance received before or during the marriage may be more easily ring-fenced as non-matrimonial. In a long marriage, the distinction between matrimonial and non-matrimonial assets erodes over time and courts are more likely to include inherited assets in the overall pot.",
+    answer: "Yes — significantly. In a short marriage, inheritance received before or during the marriage may be easier to discuss as non-matrimonial. In a long marriage, the distinction between matrimonial and non-matrimonial assets can erode over time, especially where needs or mingling are relevant.",
   },
   {
     question: "Can the calculator model scenarios with and without inheritance included?",
@@ -54,7 +54,7 @@ export default function InheritanceSettlementPage() {
       title="Is Inheritance Included in Divorce Settlement UK?"
       subtitle="Courts in England and Wales can include inheritance in a divorce settlement, but they do not do so automatically. The answer depends on when it was received, how it was used, the length of your marriage, and financial need."
       documentTitle="Is Inheritance Included in Divorce Settlement UK? | DivorceCalculatorUK"
-      metaDescription="Find out whether inheritance is included in a UK divorce settlement. Learn the legal framework, when inheritance can be ring-fenced, and when courts include it."
+      metaDescription="Find out whether inheritance is included in a UK divorce settlement. Learn the legal framework, when inheritance may need separate review, and when it may be part of the wider financial picture."
       relatedPages={relatedPages}
       breadcrumbs={[
         { name: "Home", href: "/" },
@@ -68,7 +68,7 @@ export default function InheritanceSettlementPage() {
         </p>
 
         <h2 className="text-2xl font-display font-bold mt-8 mb-4">The Legal Framework</h2>
-        <p className="text-muted-foreground leading-relaxed mb-4">The starting principle is that matrimonial assets — built up during the marriage from the efforts of either spouse — are shared equally. Non-matrimonial assets (including inheritance) may be excluded, but this is not guaranteed.</p>
+        <p className="text-muted-foreground leading-relaxed mb-4">The starting principle is that matrimonial assets — built up during the marriage from the efforts of either spouse — are usually central to the sharing discussion. Non-matrimonial assets, including inheritance, need case-specific review and clear evidence.</p>
 
         <div className="space-y-4 mb-6">
           <Card>
@@ -80,7 +80,7 @@ export default function InheritanceSettlementPage() {
           <Card>
             <CardContent className="pt-5 space-y-2">
               <p className="text-sm font-semibold">Where the inheritance was 'mingled' with joint funds</p>
-              <p className="text-sm text-muted-foreground">If you inherited money and paid it into a joint account, used it to pay off the joint mortgage, or invested it in the family home, it has almost certainly become a matrimonial asset. Courts look at whether the inheritance retained its separate identity — if it is mixed with joint funds, ring-fencing becomes very difficult.</p>
+              <p className="text-sm text-muted-foreground">If you inherited money and paid it into a joint account, used it to pay off the joint mortgage, or invested it in the family home, it has almost certainly become a matrimonial asset. Courts look at whether the inheritance retained its separate identity — if it is mixed with joint funds, keeping it separate becomes very difficult.</p>
             </CardContent>
           </Card>
           <Card>
@@ -100,7 +100,7 @@ export default function InheritanceSettlementPage() {
               <Scale className="w-4 h-4 text-primary" />
               <p className="text-sm font-semibold">Short marriages</p>
             </div>
-            <p className="text-sm text-muted-foreground">In a short marriage (broadly under 5 years), courts are more willing to return each party to their pre-marital financial position. An inheritance received before or during a short marriage that was kept entirely separate has a stronger argument for ring-fencing.</p>
+            <p className="text-sm text-muted-foreground">In a short marriage (broadly under 5 years), courts are more willing to return each party to their pre-marital financial position. An inheritance received before or during a short marriage that was kept entirely separate has a stronger argument for non-matrimonial treatment.</p>
           </div>
           <div className="p-4 rounded-lg border bg-background">
             <div className="flex items-center gap-2 mb-1">
@@ -145,7 +145,7 @@ export default function InheritanceSettlementPage() {
           {[
             { label: "Inheritance used for the family home", desc: "If inherited funds were used to buy or improve the family home, those funds are likely now matrimonial — the home was a joint asset regardless of the source of the purchase funds." },
             { label: "Long marriages where the distinction has eroded", desc: "In a 20-year marriage, arguing that assets received 10 years ago are still distinctly 'non-matrimonial' becomes progressively more difficult. Courts look at how the parties treated the assets during the marriage." },
-            { label: "Needs overriding non-matrimonial arguments", desc: "Even a clear inheritance ring-fencing argument may be overridden if the other party's housing or income needs cannot be met without including it — particularly where children are involved." },
+            { label: "Needs overriding non-matrimonial arguments", desc: "Even a clear non-matrimonial inheritance argument may be overridden if the other party's housing or income needs cannot be met without including it — particularly where children are involved." },
           ].map((p, i) => (
             <div key={i} className="p-4 rounded-lg border">
               <p className="text-sm font-semibold mb-1">{p.label}</p>
@@ -159,8 +159,8 @@ export default function InheritanceSettlementPage() {
         <h2 className="text-2xl font-display font-bold mb-4">What the Calculator Cannot Decide</h2>
         <div className="space-y-3 mb-6">
           {[
-            "Whether a court would treat a specific inheritance as matrimonial or non-matrimonial — this is a legal assessment on the specific facts",
-            "The weight a court would give to non-matrimonial arguments in your case given the marriage length and circumstances",
+            "Whether a specific inheritance should be discussed as matrimonial or non-matrimonial — this is a legal assessment on the specific facts",
+            "How non-matrimonial arguments may be reviewed in your case given the marriage length and circumstances",
             "Whether financial need would override a non-matrimonial argument in your situation",
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-2 p-3 rounded-lg border bg-background text-sm text-muted-foreground">
@@ -174,7 +174,7 @@ export default function InheritanceSettlementPage() {
         <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5 mb-6">
           <li>Is there a credible argument that this inheritance is non-matrimonial given how it was used?</li>
           <li>Would the other party's financial needs override a non-matrimonial argument in our case?</li>
-          <li>What evidence would strengthen the case for ring-fencing the inheritance?</li>
+          <li>What evidence would strengthen the case for treating the inheritance as non-matrimonial?</li>
           <li>Should the inheritance be modelled as included or excluded when calculating the overall settlement?</li>
         </ul>
         <InlineCTA label="Model With and Without the Inheritance in the Asset Pool" />

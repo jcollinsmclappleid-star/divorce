@@ -53,7 +53,7 @@ const faqItems = [
   },
   {
     question: "Can £1 of pension be swapped for £1 of cash in offsetting?",
-    answer: "Generally no. £1 of pension and £1 of cash are not equivalent — pension money is taxed differently, locked away until retirement age, and (for defined benefit pensions) provides a guaranteed income stream. Most settlements use an adjustment factor (sometimes called a 'utility ratio') when offsetting pension against cash. Specialist actuarial advice is often used.",
+    answer: "Generally no. £1 of pension and £1 of cash are not equivalent — pension money is taxed differently, locked away until retirement age, and, for defined benefit pensions, may provide defined retirement income. Most settlements use an adjustment factor, sometimes called a utility ratio, when offsetting pension against cash. Specialist actuarial advice is often used.",
   },
   {
     question: "How long does pension sharing take to implement?",
@@ -93,14 +93,14 @@ export default function PensionSharingVsOffsettingPage() {
     >
       <ContentSection>
         <p className="text-muted-foreground leading-relaxed mb-6">
-          Pensions are often the largest or second-largest asset in a UK divorce — frequently larger than the family home. There are two main ways to address pension inequality between divorcing parties: pension sharing (split the pension itself) and pension offsetting (keep the pension and give the other party more of other assets). They look superficially similar but produce very different outcomes for the receiving party. Choosing the right approach often determines retirement security.
+          Pensions are often the largest or second-largest asset in a UK divorce — frequently larger than the family home. There are two main ways to address pension inequality between divorcing parties: pension sharing and pension offsetting. They look superficially similar but produce very different retirement and liquidity outcomes, so the suitable route needs careful review.
         </p>
 
         <Card className="border-amber-200 bg-amber-50 mb-6">
           <CardContent className="pt-5">
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-amber-700">£1 of pension is not equivalent to £1 of cash. Pension money is locked away until retirement age, taxed differently, and (for defined benefit schemes) provides guaranteed income for life. Offsetting £-for-£ typically short-changes the receiving party. Specialist actuarial advice is often essential.</p>
+              <p className="text-sm text-amber-700">£1 of pension is not equivalent to £1 of cash. Pension money is locked away until retirement age, taxed differently, and, for defined benefit schemes, may provide defined retirement income. Offsetting £-for-£ can create uneven outcomes. Specialist actuarial advice is often important.</p>
             </div>
           </CardContent>
         </Card>
