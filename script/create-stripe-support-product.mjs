@@ -37,8 +37,10 @@ const stripe = new Stripe(key, { apiVersion: "2025-11-17.clover" });
 
 const product = await stripe.products.create({
   name: "Report Walkthrough Support",
-  description: "DivorceCalculatorUK — written email support to sense-check your report outputs (£129 one-off)",
+  description:
+    "Optional written email support after your full report — sense-check your inputs and help you read the modelling outputs. Modelling support only; not legal, financial, mortgage or tax advice. One-off £129.",
   images: ["https://divorcecalculatoruk.co.uk/og-image.png"],
+  metadata: { type: "report_support" },
 });
 
 const price = await stripe.prices.create({

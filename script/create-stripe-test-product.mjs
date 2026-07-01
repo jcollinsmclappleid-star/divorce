@@ -22,9 +22,11 @@ if (key.startsWith("sk_live_")) {
 const stripe = new Stripe(key, { apiVersion: "2025-11-17.clover" });
 
 const product = await stripe.products.create({
-  name: "Settlement Reality Check Report",
-  description: "DivorceCalculatorUK — analyser + AI Reality Check Report (TEST)",
+  name: "Your Full Divorce Position",
+  description:
+    "Three reports + PDF from your figures: what each settlement path leaves you with (capital and monthly headroom), what stands out in your case, and what to check before you agree. 12 months access. Illustrative modelling only — not legal, tax or financial advice. (TEST)",
   images: ["https://divorcecalculatoruk.co.uk/og-image.png"],
+  metadata: { type: "one_time_access", duration_months: "12" },
 });
 
 const price = await stripe.prices.create({

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Verify £79 product/price IDs in .env.cutover against live Stripe account. */
+/** Verify £79 and £129 product/price IDs in .env.cutover against Stripe account. */
 import Stripe from "stripe";
 import fs from "fs";
 import path from "path";
@@ -25,17 +25,28 @@ if (!key) {
 }
 
 const stripe = new Stripe(key, { apiVersion: "2025-11-17.clover" });
-const productId = process.env.STRIPE_PRODUCT_ID;
-const priceId = process.env.STRIPE_PRICE_ID;
 
-try {
+async function verifyProduct(label, productId, priceId, expectedAmount) {
   const product = await stripe.products.retrieve(productId);
   const price = await stripe.prices.retrieve(priceId);
-  console.log("£79 product OK:", product.name, "| price:", price.unit_amount, price.currency);
-  if (price.unit_amount !== 7900) {
-    console.warn("WARNING: price unit_amount is not 7900 (£79)");
+  console.log(`${label} OK:`, product.name, "| price:", price.unit_amount, price.currency);
+  if (price.unit_amount !== expectedAmount) {
+    console.warn(`WARNING: ${label} price unit_amount is not ${expectedAmount}`);
   }
+  if (!product.images?.length) {
+    console.warn(`WARNING: ${label} product has no logo image`);
+  }
+}
+
+try {
+  await verifyProduct("£79 product", process.env.STRIPE_PRODUCT_ID, process.env.STRIPE_PRICE_ID, 7900);
+  await verifyProduct(
+    "£129 support product",
+    process.env.STRIPE_SUPPORT_PRODUCT_ID,
+    process.env.STRIPE_SUPPORT_PRICE_ID,
+    12900,
+  );
 } catch (err) {
-  console.error("£79 product/price check failed:", err.message);
+  console.error("Product/price check failed:", err.message);
   process.exit(1);
 }

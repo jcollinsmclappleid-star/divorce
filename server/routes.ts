@@ -5,6 +5,7 @@ import { api } from "@shared/routes";
 import { z } from "zod";
 import crypto from "crypto";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { ensureStripeProductPresentation, ensureStripeProductPresentationForPrice } from "./stripeProductPresentation";
 import { getAppBaseUrl } from "./appUrl";
 import { seedDatabase } from "./seed";
 import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail, sendMagicLinkEmail, sendAdminNotification, sendPromoEmail, sendReportSupportConfirmationEmail } from "./email";
@@ -570,10 +571,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
       const baseUrl = getAppBaseUrl(req);
 
-      const logoUrl = 'https://divorcecalculatoruk.co.uk/og-image.png';
-      if (!product.images || product.images.length === 0) {
-        await stripe.products.update(productId, { images: [logoUrl] });
-      }
+      await ensureStripeProductPresentation(stripe, productId, 'main');
 
       const checkoutSession = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -717,6 +715,8 @@ export async function registerRoutes(app: Express): Promise<void> {
 
       const stripe = await getUncachableStripeClient();
       const baseUrl = getAppBaseUrl(req);
+
+      await ensureStripeProductPresentationForPrice(stripe, priceId, 'support');
 
       const checkoutSession = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
