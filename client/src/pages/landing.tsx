@@ -3,15 +3,14 @@ import { useLocation, Link } from "wouter";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { scrollTop } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import {
   ArrowRight,
   Briefcase,
   Lock, Shield, TrendingUp, Check,
-  Eye, Home, SearchCheck, Scale, ChevronDown,
-  Coins, Receipt, Users, ShieldCheck, Laptop,
+  Home, SearchCheck, Scale,
+  Coins, ShieldCheck, Laptop,
 } from "lucide-react";
 const ReportPreviewModal = lazy(() => import("@/components/report-preview-modal").then(m => ({ default: m.ReportPreviewModal })));
 import { EXAMPLE_SCENARIOS } from "@/lib/exampleScenarios";
@@ -21,11 +20,11 @@ import { SiteNav } from "@/components/site-nav";
 import { useMetaTags } from "@/hooks/use-meta-tags";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { LandingCommandConsole } from "@/components/landing-command-console";
-import { SectionIllustration } from "@/components/section-illustration";
 import { DemoCarousel } from "@/components/demo-dashboards";
 import { ScrollProgressBar } from "@/components/scroll-progress-bar";
 import { FullPositionValueShowcase } from "@/components/full-position-value-showcase";
-import { LandingReportPreviews } from "@/components/landing-report-previews";
+import { HomepagePlatformSection } from "@/components/homepage-platform-section";
+import { HomepageReportPortfolio } from "@/components/homepage-report-portfolio";
 import {
   HERO_CHIPS,
   HERO_EYEBROW,
@@ -33,73 +32,6 @@ import {
   PRODUCT_PRICE,
   PRODUCT_TAGLINE,
 } from "@/lib/product-copy";
-
-/** Unified concern picker — nine cards, each starts the wizard only. */
-const HOMEPAGE_CONCERN_CARDS = [
-  {
-    icon: Eye,
-    tag: "Share clarity",
-    q: "I need to know what I could get.",
-    a: "Model your share across the house, pensions, savings and monthly position — before you negotiate or accept an offer.",
-    intent: "fair_split",
-  },
-  {
-    icon: Home,
-    tag: "Home pressure",
-    q: "Can I keep the house — or afford to buy them out?",
-    a: "Model equity, mortgage pressure, sale vs buyout and what staying or moving leaves you with monthly.",
-    intent: "house_split",
-  },
-  {
-    icon: TrendingUp,
-    tag: "Pension risk",
-    q: "What happens to my pension — am I giving up too much?",
-    a: "Compare pension split vs offsetting and see how pension value affects capital, monthly pressure and long-term security.",
-    intent: "pension_impact",
-  },
-  {
-    icon: Briefcase,
-    tag: "Career & children",
-    q: "I gave up my career or looked after the children — does that count?",
-    a: "Time out of work, homemaking and pension gaps surface in your report as evidence prompts and questions to raise — not advice or promises.",
-    intent: "income_gap",
-  },
-  {
-    icon: SearchCheck,
-    tag: "Offer check",
-    q: "Is their offer actually workable?",
-    a: "Mirror the proposed split and see what it leaves each person with across capital, pensions, cashflow and affordability.",
-    intent: "offer_check",
-  },
-  {
-    icon: Scale,
-    tag: "Reality check",
-    q: "Is 50/50 actually fair once bills are included?",
-    a: "A headline percentage can hide different outcomes once property, pensions, debt and monthly bills are modelled side by side.",
-    intent: "fair_split",
-  },
-  {
-    icon: Receipt,
-    tag: "Often overlooked",
-    q: "I paid most of the mortgage and bills — does that count?",
-    a: "See where your contributions show in the numbers, what evidence helps, and how it affects capital vs monthly outcomes.",
-    intent: "protect_position",
-  },
-  {
-    icon: Coins,
-    tag: "Entitlement",
-    q: "What am I entitled to in a divorce?",
-    a: "Compare what each scenario leaves you with across property, pensions, debts and living costs — not a generic percentage.",
-    intent: "fair_split",
-  },
-  {
-    icon: Users,
-    tag: "With children",
-    q: "Will I have enough to live on with the kids?",
-    a: "Model housing, maintenance pressure, childcare costs and monthly surplus so you can see whether an offer is workable day to day.",
-    intent: "children_housing",
-  },
-];
 
 const HERO_CHIP_ICONS = {
   coins: Coins,
@@ -268,7 +200,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background font-sans" ref={revealRef}>
+    <div className="min-h-screen bg-background font-sans overflow-x-hidden" ref={revealRef}>
       <ScrollProgressBar />
       <div className="bg-[hsl(220_52%_10%)] text-white/65 px-4 py-1.5 text-xs text-center font-medium" data-testid="text-disclaimer">
         England &amp; Wales <span className="text-gold/50 mx-1">·</span> HMRC 2026/27 rates{" "}
@@ -325,8 +257,8 @@ export default function LandingPage() {
                   />
                 </span>
               </motion.h1>
-              <motion.p {...fadeUp(0.18)} className="text-base md:text-lg text-white/70 leading-relaxed">
-                This UK divorce settlement calculator shows what your share could look like across the house, pensions, debts and monthly costs — privately, in under 5 minutes, before you pay for a solicitor or accept an offer.
+              <motion.p {...fadeUp(0.18)} className="text-sm md:text-lg text-white/70 leading-relaxed">
+                UK divorce settlement calculator that models your share across the house, pensions, debts and monthly costs — then answers the real questions in your head with three tailored reports from your figures. Private, free to start, ready in under 5 minutes — before you pay for a solicitor or accept an offer.
               </motion.p>
 
               {/* CTAs */}
@@ -440,6 +372,11 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <HomepagePlatformSection
+        onStart={() => startFresh("first_private_view", "homepage_concern_primary_click")}
+        onScrollToPricing={scrollToPricing}
+      />
+
       {/* ── Live dashboard — directly under hero ── */}
       <section
         className="py-12 md:py-14 bg-slate-50 border-b border-border/30 overflow-hidden"
@@ -501,91 +438,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Unified concern picker + report previews ── */}
-      <section className="relative overflow-hidden py-14 md:py-16 bg-white border-b border-border/50" data-testid="section-concern-picker">
-        <SectionIllustration variant="house" fill tone="background" />
-        <div className="container relative z-10 mx-auto px-4 max-w-6xl">
-          <div className="text-center mb-10 space-y-4 max-w-3xl mx-auto" data-reveal>
-            <Badge variant="secondary" className="bg-gold/10 text-gold border border-gold/20">
-              We say the questions in your head
-            </Badge>
-            <h2 className="text-2xl md:text-3xl font-display font-bold">
-              What does this mean for me?
-            </h2>
-            <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-              You&apos;re not wondering about technical pension jargon. You want to know whether you can keep the house, what your share might be, whether their offer leaves you short, and whether what you paid in counts. We ask those questions out loud — then our calculator and reports answer them from your figures.
-            </p>
-            <p className="text-sm md:text-base text-foreground/80 leading-relaxed font-medium">
-              {PRODUCT_TAGLINE}
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
-            {HOMEPAGE_CONCERN_CARDS.map((item, i) => (
-              <Card key={item.q} className="group border-border/70 bg-background shadow-sm hover:border-gold/40 hover:shadow-md transition-all" data-reveal>
-                <CardContent className="p-5 space-y-3">
-                  <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:bg-gold/10 group-hover:text-gold transition-colors">
-                      <item.icon className="w-4 h-4" />
-                    </div>
-                    <span className="inline-flex rounded-full bg-primary/5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
-                      {item.tag}
-                    </span>
-                  </div>
-                  <p className="text-base font-display font-bold text-foreground leading-snug">{item.q}</p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => startFresh(item.intent, "homepage_concern_card_start")}
-                    className="w-full justify-between"
-                    data-testid={`button-concern-${i}`}
-                  >
-                    Start with this <ArrowRight className="w-3.5 h-3.5" />
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Sample report + preparation guide previews */}
-          <div className="space-y-5 mb-10" data-reveal>
-            <div className="text-center space-y-2 max-w-2xl mx-auto">
-              <h3 className="text-xl md:text-2xl font-display font-bold text-foreground">
-                Three reports — see what you get before you pay
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Your {PRODUCT_PRICE} unlock includes three dedicated reports plus a combined PDF export — not one generic document.
-              </p>
-            </div>
-            <LandingReportPreviews
-              onOpenFullSample={() => setSampleReportOpen(true)}
-              onScrollToPricing={scrollToPricing}
-            />
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3" data-reveal>
-            <Button
-              size="lg"
-              onClick={() => startFresh("offer_check", "homepage_concern_primary_click")}
-              className="bg-primary hover:bg-primary/90 text-white w-full sm:w-auto"
-              data-testid="button-concern-primary"
-            >
-              Not sure yet — start with my figures <ArrowRight className="w-4 h-4 ml-1.5" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={scrollToPricing}
-              className="w-full sm:w-auto border-gold/40 text-foreground hover:bg-gold/5"
-              data-testid="button-concern-to-pricing"
-            >
-              See everything for {PRODUCT_PRICE}
-              <ChevronDown className="w-4 h-4 ml-1.5" />
-            </Button>
-          </div>
-        </div>
-      </section>
+      <HomepageReportPortfolio
+        onOpenFullSample={() => setSampleReportOpen(true)}
+        onScrollToPricing={scrollToPricing}
+      />
 
       <FullPositionValueShowcase
         onStartFree={() => startFresh("fair_split", "homepage_showcase_start")}

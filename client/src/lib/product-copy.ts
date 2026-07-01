@@ -50,7 +50,7 @@ export function getUnlockCta(intent?: string | null): string {
   return CTA_BY_INTENT[intent] ?? DEFAULT_UNLOCK_CTA;
 }
 
-export const HERO_EYEBROW = "The question in your head — answered from your figures";
+export const HERO_EYEBROW = "Model the split. Get the answers. Before you agree.";
 
 export const HERO_CHIPS: { label: string; intent: string; icon: "coins" | "home" | "search" | "scale" | "pension" | "briefcase" }[] = [
   { label: "How much will I get?", intent: "fair_split", icon: "coins" },
