@@ -25,6 +25,9 @@ export interface AssetTemplate {
   icon: LucideIcon;
   ownerScope: OwnerScope;
   liquidity: "liquid" | "illiquid";
+  /** Typical UK planning figure shown when tile opens */
+  typical: number;
+  color: string;
 }
 
 export interface DebtTemplate {
@@ -34,6 +37,8 @@ export interface DebtTemplate {
   hint: string;
   icon: LucideIcon;
   ownerScope: OwnerScope;
+  typical: number;
+  color: string;
 }
 
 export const UK_ASSET_BENCHMARKS = [
@@ -61,6 +66,8 @@ export const INDIVIDUAL_ASSET_TEMPLATES: AssetTemplate[] = [
     icon: PiggyBank,
     ownerScope: "individual",
     liquidity: "liquid",
+    typical: 4250,
+    color: "#10B981",
     hint: "Current or easy-access accounts in one person's name",
   },
   {
@@ -70,6 +77,8 @@ export const INDIVIDUAL_ASSET_TEMPLATES: AssetTemplate[] = [
     icon: TrendingUp,
     ownerScope: "individual",
     liquidity: "liquid",
+    typical: 7500,
+    color: "#3B82F6",
     hint: "Individual Savings Account — use your latest statement value",
   },
   {
@@ -79,6 +88,8 @@ export const INDIVIDUAL_ASSET_TEMPLATES: AssetTemplate[] = [
     icon: TrendingUp,
     ownerScope: "individual",
     liquidity: "liquid",
+    typical: 10000,
+    color: "#6366F1",
     hint: "Share portfolios or platforms (e.g. Hargreaves Lansdown, Vanguard)",
   },
   {
@@ -88,6 +99,8 @@ export const INDIVIDUAL_ASSET_TEMPLATES: AssetTemplate[] = [
     icon: Car,
     ownerScope: "individual",
     liquidity: "illiquid",
+    typical: 8000,
+    color: "#06B6D4",
     hint: "Car, motorbike or other vehicle — trade-in or private sale value",
   },
   {
@@ -97,6 +110,8 @@ export const INDIVIDUAL_ASSET_TEMPLATES: AssetTemplate[] = [
     icon: Briefcase,
     ownerScope: "individual",
     liquidity: "illiquid",
+    typical: 25000,
+    color: "#8B5CF6",
     hint: "Share of a business — recent valuation or accountant's estimate",
   },
 ];
@@ -109,6 +124,8 @@ export const JOINT_ASSET_TEMPLATES: AssetTemplate[] = [
     icon: PiggyBank,
     ownerScope: "joint",
     liquidity: "liquid",
+    typical: 8500,
+    color: "#10B981",
     hint: "Current or savings accounts held jointly",
   },
   {
@@ -118,6 +135,8 @@ export const JOINT_ASSET_TEMPLATES: AssetTemplate[] = [
     icon: TrendingUp,
     ownerScope: "joint",
     liquidity: "liquid",
+    typical: 15000,
+    color: "#3B82F6",
     hint: "Investment or ISA accounts held in both names",
   },
   {
@@ -127,6 +146,8 @@ export const JOINT_ASSET_TEMPLATES: AssetTemplate[] = [
     icon: Landmark,
     ownerScope: "joint",
     liquidity: "liquid",
+    typical: 5000,
+    color: "#EAB308",
     hint: "NS&I Premium Bonds — check your NS&I balance",
   },
   {
@@ -136,6 +157,8 @@ export const JOINT_ASSET_TEMPLATES: AssetTemplate[] = [
     icon: Home,
     ownerScope: "joint",
     liquidity: "illiquid",
+    typical: 200000,
+    color: "#F59E0B",
     hint: "Investment or rental property — current market value estimate",
   },
   {
@@ -145,6 +168,8 @@ export const JOINT_ASSET_TEMPLATES: AssetTemplate[] = [
     icon: Gem,
     ownerScope: "joint",
     liquidity: "illiquid",
+    typical: 5000,
+    color: "#EC4899",
     hint: "High-value items such as jewellery, art or collections",
   },
 ];
@@ -156,6 +181,8 @@ export const INDIVIDUAL_DEBT_TEMPLATES: DebtTemplate[] = [
     category: "credit_card",
     icon: CreditCard,
     ownerScope: "individual",
+    typical: 2400,
+    color: "#F43F5E",
     hint: "Outstanding credit card balance",
   },
   {
@@ -164,6 +191,8 @@ export const INDIVIDUAL_DEBT_TEMPLATES: DebtTemplate[] = [
     category: "loan",
     icon: Car,
     ownerScope: "individual",
+    typical: 6500,
+    color: "#06B6D4",
     hint: "HP, PCP or other vehicle finance",
   },
   {
@@ -172,6 +201,8 @@ export const INDIVIDUAL_DEBT_TEMPLATES: DebtTemplate[] = [
     category: "loan",
     icon: GraduationCap,
     ownerScope: "individual",
+    typical: 15000,
+    color: "#8B5CF6",
     hint: "Student loan balance (Plan 1, 2, or postgrad)",
   },
   {
@@ -180,6 +211,8 @@ export const INDIVIDUAL_DEBT_TEMPLATES: DebtTemplate[] = [
     category: "loan",
     icon: Landmark,
     ownerScope: "individual",
+    typical: 1500,
+    color: "#F59E0B",
     hint: "Arranged or unarranged overdraft balance",
   },
   {
@@ -188,6 +221,8 @@ export const INDIVIDUAL_DEBT_TEMPLATES: DebtTemplate[] = [
     category: "tax",
     icon: Receipt,
     ownerScope: "individual",
+    typical: 2000,
+    color: "#64748B",
     hint: "Outstanding liability to HMRC",
   },
 ];
@@ -199,6 +234,8 @@ export const JOINT_DEBT_TEMPLATES: DebtTemplate[] = [
     category: "loan",
     icon: CreditCard,
     ownerScope: "joint",
+    typical: 4500,
+    color: "#F43F5E",
     hint: "Bank or building society loan in joint names",
   },
 ];

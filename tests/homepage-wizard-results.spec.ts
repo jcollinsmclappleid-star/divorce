@@ -234,7 +234,7 @@ test("wizard offer-check intent shows the assumptions offer-check panel", async 
   await expect(page.getByTestId("button-offer-check-mode")).toHaveClass(/bg-primary/);
 });
 
-test("wizard savings step supports owner tabs, entry panel and benchmark selection", async ({ page }) => {
+test("wizard savings step supports owner tabs, inline chips and benchmark selection", async ({ page }) => {
   await page.goto("/wizard");
   await page.getByTestId("stepper-step-3").click();
 
@@ -244,26 +244,44 @@ test("wizard savings step supports owner tabs, entry panel and benchmark selecti
   await page.getByTestId("button-apply-savings-benchmark-a").click();
   await expect(page.getByTestId("button-apply-savings-benchmark-a")).toContainText("3 estimates");
 
-  await page.getByTestId("button-suggest-asset-isa").click();
-  await expect(page.getByTestId("wizard-entry-panel")).toBeVisible();
-  await page.getByTestId("input-entry-panel-value").fill("12000");
-  await page.getByTestId("button-save-entry-panel").click();
-  await expect(page.getByTestId("wizard-entry-panel")).toBeHidden();
-  await expect(page.getByTestId("button-suggest-asset-isa")).toContainText("£12,000");
+  await page.getByTestId("chip-asset-isa-A").click();
+  await page.getByTestId("input-chip-asset-isa-A").fill("12000");
+  await page.getByTestId("button-chip-save-asset-isa-A").click();
+  await expect(page.getByTestId("chip-asset-isa-A")).toContainText("£12,000");
 
   await page.getByTestId("assets-owner-tab-B").click();
-  await page.getByTestId("button-suggest-asset-isa").click();
-  await expect(page.getByTestId("wizard-entry-panel")).toBeVisible();
-  await page.getByTestId("input-entry-panel-value").fill("8000");
-  await page.getByTestId("button-save-entry-panel").click();
-  await expect(page.getByTestId("button-suggest-asset-isa")).toContainText("£8,000");
+  await page.getByTestId("chip-asset-isa-B").click();
+  await page.getByTestId("input-chip-asset-isa-B").fill("8000");
+  await page.getByTestId("button-chip-save-asset-isa-B").click();
+  await expect(page.getByTestId("chip-asset-isa-B")).toContainText("£8,000");
 
   await page.getByTestId("assets-owner-tab-joint").click();
-  await page.getByTestId("button-suggest-asset-joint_savings").click();
-  await expect(page.getByTestId("wizard-entry-panel")).toBeVisible();
-  await page.getByTestId("input-entry-panel-value").fill("15000");
-  await page.getByTestId("button-save-entry-panel").click();
-  await expect(page.getByTestId("button-suggest-asset-joint_savings")).toContainText("£15,000");
+  await page.getByTestId("chip-asset-joint_savings-joint").click();
+  await page.getByTestId("input-chip-asset-joint_savings-joint").fill("15000");
+  await page.getByTestId("button-chip-save-asset-joint_savings-joint").click();
+  await expect(page.getByTestId("chip-asset-joint_savings-joint")).toContainText("£15,000");
+});
+
+test("wizard income step supports owner tabs, inline chips and salary benchmarks", async ({ page }) => {
+  await page.goto("/wizard");
+  await page.getByTestId("stepper-step-5").click();
+
+  await expect(page.getByTestId("text-step-title")).toContainText("Income");
+  await expect(page.getByTestId("card-salary-benchmarks")).toBeVisible();
+
+  await page.getByTestId("button-apply-salary-benchmark-median-a").click();
+  await expect(page.getByTestId("chip-income-salary-A")).toContainText("£35k");
+
+  await page.getByTestId("chip-income-self_employment-A").click();
+  await page.getByTestId("input-chip-income-self_employment-A").fill("32000");
+  await page.getByTestId("button-chip-save-income-self_employment-A").click();
+  await expect(page.getByTestId("chip-income-self_employment-A")).toContainText("£32k");
+
+  await page.getByTestId("income-owner-tab-B").click();
+  await page.getByTestId("chip-income-salary-B").click();
+  await page.getByTestId("input-chip-income-salary-B").fill("42000");
+  await page.getByTestId("button-chip-save-income-salary-B").click();
+  await expect(page.getByTestId("chip-income-salary-B")).toContainText("£42k");
 });
 
 test("results page displays intent lenses and position check when layer 3 is expanded", async ({ page }) => {

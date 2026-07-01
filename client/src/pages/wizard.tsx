@@ -28,7 +28,7 @@ import { useAccess } from "@/hooks/use-access";
 import { LivePoolConsole, MobilePoolChip } from "@/components/wizard/live-pool-console";
 import { StageInsightCard } from "@/components/wizard/stage-insight-card";
 import { SmartExpenseChips } from "@/components/wizard/smart-expense-chips";
-import { IncomeAssumptionChips } from "@/components/wizard/income-assumption-chips";
+import { StepIncomeEmployment } from "@/components/wizard/step-income-employment";
 import { StepSavingsDebts } from "@/components/wizard/step-savings-debts";
 import { PensionQuickAdd } from "@/components/wizard/pension-quick-add";
 import { useInlineConfirm, InlineConfirm } from "@/components/wizard/inline-confirm";
@@ -693,7 +693,7 @@ function StepContent({ step }: { step: number }) {
     case 2: return <StepHome />;
     case 3: return <StepSavingsDebts />;
     case 4: return <StepPensions />;
-    case 5: return <StepIncome />;
+    case 5: return <StepIncomeEmployment />;
     case 6: return <SmartExpenseChips />;
     case 7: return <StepSupport />;
     case 8: return <StepAssumptions />;
@@ -1145,19 +1145,6 @@ const PENSION_SUGGESTIONS: { name: string; owner: string; pensionType: string; h
   { name: "State Pension Top-up", owner: "A", pensionType: "DC", hint: "Additional voluntary contributions to the State Pension" },
 ];
 
-const INCOME_SUGGESTIONS: { name: string; owner: string; hint: string }[] = [
-  { name: "Salary (A)", owner: "A", hint: "Annual gross salary before tax — check your payslip or P60" },
-  { name: "Salary (B)", owner: "B", hint: "Party B's annual gross salary before tax" },
-  { name: "Self-Employment (A)", owner: "A", hint: "Net profit from self-employment (before personal tax)" },
-  { name: "Self-Employment (B)", owner: "B", hint: "Party B's net profit from self-employment (before personal tax)" },
-  { name: "Rental Income (A)", owner: "A", hint: "Gross annual rent received — use the figure before mortgage costs" },
-  { name: "Rental Income (B)", owner: "B", hint: "Party B's gross annual rental income from investment property" },
-  { name: "Dividends (A)", owner: "A", hint: "Annual dividend income from shares or company ownership" },
-  { name: "Dividends (B)", owner: "B", hint: "Party B's annual dividend income" },
-  { name: "Child Benefit", owner: "A", hint: "Annual Child Benefit received (tax-free up to income threshold)" },
-  { name: "Other Benefits", owner: "A", hint: "Universal Credit, Tax Credits, or other state benefits" },
-];
-
 function StepPensions() {
   const { assets, addAsset, updateAsset, removeAsset, profile } = useAppStore();
   const nameA = profile?.partyAName || "Party A";
@@ -1386,240 +1373,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   other: "Other",
 };
 
-function StepIncome() {
-  const { incomes, addIncome, updateIncome, removeIncome, assumptions, updateAssumptions, profile, maintenance, updateMaintenance } = useAppStore();
-  const nameA = profile?.partyAName || "Party A";
-  const nameB = profile?.partyBName || "Party B";
-  const [incomeDialogOpen, setIncomeDialogOpen] = useState(false);
-  const [editingIncome, setEditingIncome] = useState<Income | null>(null);
-  const incomeConfirm = useInlineConfirm();
-
-  const [incomeForm, setIncomeForm] = useState({ name: "", amountAnnualGross: 0, owner: "A" as string });
-
-  const openAddIncome = (suggestion?: typeof INCOME_SUGGESTIONS[0]) => {
-    setEditingIncome(null);
-    if (suggestion) {
-      setIncomeForm({ name: suggestion.name, amountAnnualGross: 0, owner: suggestion.owner });
-    } else {
-      setIncomeForm({ name: "", amountAnnualGross: 0, owner: "A" });
-    }
-    setIncomeDialogOpen(true);
-  };
-
-  const openEditIncome = (i: Income) => {
-    setEditingIncome(i);
-    setIncomeForm({ name: i.name, amountAnnualGross: i.amountAnnualGross, owner: i.owner });
-    setIncomeDialogOpen(true);
-  };
-
-  const saveIncome = () => {
-    if (!incomeForm.name) return;
-    if (editingIncome) {
-      updateIncome(editingIncome.id, incomeForm);
-    } else {
-      addIncome({ ...incomeForm, taxTreatment: "use_tax_model" });
-    }
-    setIncomeDialogOpen(false);
-  };
-
-  const unusedIncomeSuggestions = INCOME_SUGGESTIONS;
-
-  return (
-    <div className="space-y-6">
-      <IncomeAssumptionChips />
-
-      <p className="text-[11px] text-muted-foreground leading-relaxed border-l-2 border-muted pl-3">
-        Take-home figures use simplified 2026/27 England/Wales income tax and employee NI — illustrative for divorce cashflow modelling, not tax advice or payslip accuracy.
-      </p>
-
-      <div>
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <Label className="text-base font-semibold">Income sources</Label>
-          <Button variant="outline" size="sm" onClick={() => openAddIncome()} data-testid="button-add-income">
-            <Plus className="w-4 h-4 mr-1" /> Add Custom
-          </Button>
-        </div>
-
-        {incomes.length === 0 && unusedIncomeSuggestions.length === 0 ? (
-          <div className="text-center py-6 text-muted-foreground text-sm border-2 border-dashed rounded-lg">
-            Add income sources for both parties.
-          </div>
-        ) : incomes.length === 0 ? null : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Source</TableHead>
-                <TableHead>Earner</TableHead>
-                <TableHead className="text-right">Annual Gross</TableHead>
-                <TableHead className="w-[70px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {incomes.map((i) => (
-                <TableRow key={i.id}>
-                  <TableCell className="font-medium">{i.name}</TableCell>
-                  <TableCell><Badge variant="secondary" className="text-xs">Party {i.owner}</Badge></TableCell>
-                  <TableCell className="text-right tabular-nums">{formatCurrency(i.amountAnnualGross)}</TableCell>
-                  <TableCell>
-                    <div className="flex justify-end gap-1">
-                      <Button variant="ghost" size="icon" onClick={() => openEditIncome(i)}>
-                        <Edit2 className="w-3 h-3" />
-                      </Button>
-                      <Button variant="ghost" size="icon" onClick={() => removeIncome(i.id)}>
-                        <Trash2 className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </div>
-
-      {unusedIncomeSuggestions.length > 0 && (
-        <div className="space-y-2">
-          <Label className="text-sm text-muted-foreground">Common income types to consider</Label>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {unusedIncomeSuggestions.map((s) => (
-              <button
-                key={s.name}
-                onClick={() => openAddIncome(s)}
-                className="flex items-start gap-3 p-3 text-left border rounded-md hover-elevate transition-colors"
-                data-testid={`button-suggest-income-${s.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
-              >
-                <Plus className="w-4 h-4 mt-0.5 text-muted-foreground shrink-0" />
-                <div>
-                  <span className="text-sm font-medium">{s.name}</span>
-                  <p className="text-xs text-muted-foreground mt-0.5">{s.hint}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <OptionalRefinements
-        testId="refinements-income"
-        hint="Override modelled take-home pay"
-      >
-        <p className="text-xs text-muted-foreground">
-          If you know the actual annual take-home pay (after tax, NI, and any deductions), enter it here.
-          This will replace the model's estimated net income for that party. Leave blank to use the model's calculation.
-        </p>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label className="text-sm">{nameA} take-home ({"\u00A3"}/year)</Label>
-            <Input
-              type="number"
-              min={0}
-              placeholder="Leave blank for model estimate"
-              value={assumptions.overrideNetIncomeA ?? ""}
-              onChange={(e) => {
-                const v = parseFloat(e.target.value);
-                updateAssumptions({ overrideNetIncomeA: isNaN(v) || v <= 0 ? null : v });
-              }}
-              data-testid="input-override-net-a"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label className="text-sm">{nameB} take-home ({"\u00A3"}/year)</Label>
-            <Input
-              type="number"
-              min={0}
-              placeholder="Leave blank for model estimate"
-              value={assumptions.overrideNetIncomeB ?? ""}
-              onChange={(e) => {
-                const v = parseFloat(e.target.value);
-                updateAssumptions({ overrideNetIncomeB: isNaN(v) || v <= 0 ? null : v });
-              }}
-              data-testid="input-override-net-b"
-            />
-          </div>
-        </div>
-      </OptionalRefinements>
-
-      <div className="space-y-3 pt-2">
-        <Separator />
-        <div className="space-y-2">
-          <Label className="text-sm font-medium">Spousal maintenance</Label>
-          <p className="text-xs text-muted-foreground">If one party is likely to pay the other ongoing maintenance, include an estimate here. This affects the monthly surplus/deficit figures in your analysis.</p>
-          <div className="flex items-center gap-3">
-            <Switch
-              checked={maintenance?.included ?? false}
-              onCheckedChange={(v) => updateMaintenance({ included: v })}
-              data-testid="switch-maintenance"
-            />
-            <Label className="text-sm">Is spousal maintenance likely to be part of this settlement?</Label>
-          </div>
-        </div>
-        {maintenance?.included && (
-          <div className="space-y-3 p-4 bg-muted/30 rounded-md">
-            <div className="space-y-2">
-              <Label className="text-sm">Estimated monthly maintenance amount (£)</Label>
-              <p className="text-xs text-muted-foreground">If you're unsure, use a rough estimate — you can re-run the model at any time.</p>
-              <Input
-                type="number"
-                min={0}
-                value={maintenance.monthlyAmount || ""}
-                onChange={(e) => { const v = parseFloat(e.target.value); updateMaintenance({ monthlyAmount: isNaN(v) ? 0 : v }); }}
-                data-testid="input-maintenance-amount"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-sm">Direction of payment</Label>
-              <Select
-                value={maintenance.direction}
-                onValueChange={(v: "AtoB" | "BtoA") => updateMaintenance({ direction: v })}
-              >
-                <SelectTrigger data-testid="select-maintenance-direction">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="AtoB">{nameA} pays {nameB}</SelectItem>
-                  <SelectItem value="BtoA">{nameB} pays {nameA}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <Dialog open={incomeDialogOpen} onOpenChange={setIncomeDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{editingIncome ? "Edit Income" : "Add Income"}</DialogTitle>
-            <DialogDescription>Enter annual gross income details.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>Source name</Label>
-              <Input value={incomeForm.name} onChange={(e) => setIncomeForm(f => ({ ...f, name: e.target.value }))} placeholder="e.g. Salary" data-testid="input-income-name" />
-            </div>
-            <div className="space-y-2">
-              <Label>Annual gross ({"\u00A3"})</Label>
-              <Input type="number" value={incomeForm.amountAnnualGross || ""} onChange={(e) => { const v = parseFloat(e.target.value); setIncomeForm(f => ({ ...f, amountAnnualGross: isNaN(v) ? 0 : v })); }} onBlur={(e) => { const v = parseFloat(e.target.value); if (!isNaN(v) && v > 0) incomeConfirm.flash(`Saved — ${formatCurrency(Math.round(v / 12))}/mo gross before tax`); }} data-testid="input-income-amount" />
-              <InlineConfirm message={incomeConfirm.message} />
-            </div>
-            <div className="space-y-2">
-              <Label>Earner</Label>
-              <Select value={incomeForm.owner} onValueChange={(v) => setIncomeForm(f => ({ ...f, owner: v }))}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="A">{nameA}</SelectItem>
-                  <SelectItem value="B">{nameB}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button onClick={saveIncome} data-testid="button-save-income">Save</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-}
 
 function StepExpenses() {
   const { expenses, addExpense, updateExpense, removeExpense, profile, children } = useAppStore();
