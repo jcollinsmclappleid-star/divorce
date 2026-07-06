@@ -2,10 +2,10 @@ import type Stripe from "stripe";
 import {
   STRIPE_CHECKOUT_LOGO_URL,
   STRIPE_MAIN_PRODUCT,
-  STRIPE_SUPPORT_PRODUCT,
+  STRIPE_EXPERT_REVIEW_PRODUCT,
 } from "@shared/stripe-product-copy";
 
-type ProductKind = "main" | "support";
+type ProductKind = "main" | "expert_review";
 
 const COPY_BY_KIND: Record<ProductKind, { name: string; description: string; metadata: Record<string, string> }> = {
   main: {
@@ -13,10 +13,10 @@ const COPY_BY_KIND: Record<ProductKind, { name: string; description: string; met
     description: STRIPE_MAIN_PRODUCT.description,
     metadata: { ...STRIPE_MAIN_PRODUCT.metadata },
   },
-  support: {
-    name: STRIPE_SUPPORT_PRODUCT.name,
-    description: STRIPE_SUPPORT_PRODUCT.description,
-    metadata: { ...STRIPE_SUPPORT_PRODUCT.metadata },
+  expert_review: {
+    name: STRIPE_EXPERT_REVIEW_PRODUCT.name,
+    description: STRIPE_EXPERT_REVIEW_PRODUCT.description,
+    metadata: { ...STRIPE_EXPERT_REVIEW_PRODUCT.metadata },
   },
 };
 

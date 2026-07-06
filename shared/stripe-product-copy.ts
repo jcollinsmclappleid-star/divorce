@@ -12,11 +12,14 @@ export const STRIPE_MAIN_PRODUCT = {
   },
 } as const;
 
-export const STRIPE_SUPPORT_PRODUCT = {
-  name: "Report Walkthrough Support",
+export const STRIPE_EXPERT_REVIEW_PRODUCT = {
+  name: "Position Review",
   description:
-    "Optional written email support after your full report — sense-check your inputs and help you read the modelling outputs. Modelling support only; not legal, financial, mortgage or tax advice. One-off £129.",
+    "Written briefing on your modelled divorce position — input checks, scenario commentary, pressure points, and focused questions before you agree or reply. Requires Your Full Divorce Position (£79). Modelling support only; not legal, financial, mortgage or tax advice. One-off £249.",
   metadata: {
-    type: "report_support",
+    type: "expert_review",
   },
 } as const;
+
+/** @deprecated Use STRIPE_EXPERT_REVIEW_PRODUCT */
+export const STRIPE_SUPPORT_PRODUCT = STRIPE_EXPERT_REVIEW_PRODUCT;

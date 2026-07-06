@@ -16,8 +16,8 @@ export const purchases = pgTable("purchases", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-/** Optional £129 report walkthrough support — separate from main £79 purchase. */
-export const reportSupportPurchases = pgTable("report_support_purchases", {
+/** Optional £249 expert position review — separate from main £79 purchase. */
+export const expertReviewPurchases = pgTable("expert_review_purchases", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   sessionToken: varchar("session_token").notNull(),
   stripeCheckoutSessionId: text("stripe_checkout_session_id"),
@@ -25,6 +25,8 @@ export const reportSupportPurchases = pgTable("report_support_purchases", {
   email: text("email"),
   status: text("status").notNull().default("pending"),
   purchasedAt: timestamp("purchased_at"),
+  intakeData: jsonb("intake_data"),
+  intakeCompletedAt: timestamp("intake_completed_at"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -86,7 +88,7 @@ export const Owner = Party;
 
 export type Purchase = typeof purchases.$inferSelect;
 export type InsertPurchase = z.infer<typeof insertPurchaseSchema>;
-export type ReportSupportPurchase = typeof reportSupportPurchases.$inferSelect;
+export type ExpertReviewPurchase = typeof expertReviewPurchases.$inferSelect;
 export type AppState = z.infer<typeof AppStateSchema>;
 
 export { AssetCategory, LiabilityCategory, ExpenseCategory };

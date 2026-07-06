@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
- * Create the £129 live Stripe product for report walkthrough support.
+ * Create the £249 live Stripe product for Expert Position Review.
  * Run once after pasting STRIPE_SECRET_KEY into .env.cutover.
  *
  * Usage:
- *   npm run stripe:setup-support
+ *   npm run stripe:setup-expert-review
  */
 
 import Stripe from "stripe";
@@ -36,22 +36,26 @@ if (!key) {
 const stripe = new Stripe(key, { apiVersion: "2025-11-17.clover" });
 
 const product = await stripe.products.create({
-  name: "Report Walkthrough Support",
+  name: "Expert Position Review",
   description:
-    "Optional written email support after your full report — sense-check your inputs and help you read the modelling outputs. Modelling support only; not legal, financial, mortgage or tax advice. One-off £129.",
+    "Human-reviewed written briefing on your modelled divorce position — input checks, scenario commentary, pressure points, and focused questions before you agree or reply. Requires Your Full Divorce Position (£79). Modelling support only; not legal, financial, mortgage or tax advice. One-off £249.",
   images: ["https://divorcecalculatoruk.co.uk/og-image.png"],
-  metadata: { type: "report_support" },
+  metadata: { type: "expert_review" },
 });
 
 const price = await stripe.prices.create({
   product: product.id,
-  unit_amount: 12900,
+  unit_amount: 24900,
   currency: "gbp",
 });
 
 console.log("");
-console.log("£129 support product created. Add to .env.cutover:");
+console.log("£249 Expert Position Review product created. Add to .env.cutover:");
 console.log("");
+console.log(`STRIPE_EXPERT_REVIEW_PRODUCT_ID=${product.id}`);
+console.log(`STRIPE_EXPERT_REVIEW_PRICE_ID=${price.id}`);
+console.log("");
+console.log("(Legacy aliases — optional, code falls back to STRIPE_SUPPORT_* if unset)");
 console.log(`STRIPE_SUPPORT_PRODUCT_ID=${product.id}`);
 console.log(`STRIPE_SUPPORT_PRICE_ID=${price.id}`);
 console.log("");

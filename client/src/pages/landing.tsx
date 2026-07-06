@@ -105,7 +105,7 @@ const HOMEPAGE_FAQS = [
   },
   {
     q: "What does email support include?",
-    a: "Platform and billing support is included. Optional paid report walkthrough support (£129, email only) can help you understand the calculator output and sense-check inputs after you have generated your report. It cannot provide legal, financial, mortgage or tax advice, or tell you what settlement to accept.",
+    a: "Platform and billing support is included free. After you unlock your full report, you can optionally add Position Review (£249) — a written briefing on your modelled figures, delivered within 5 working days. Modelling support only; not legal, financial, mortgage or tax advice.",
   },
 ];
 

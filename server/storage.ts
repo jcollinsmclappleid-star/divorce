@@ -1,5 +1,6 @@
 import { db } from "./db";
-import { purchases, emailLeads, magicLinks, reportSupportPurchases, type Purchase, type InsertPurchase, type EmailLead, type MagicLink, type ReportSupportPurchase } from "@shared/schema";
+import { purchases, emailLeads, magicLinks, expertReviewPurchases, type Purchase, type InsertPurchase, type EmailLead, type MagicLink, type ExpertReviewPurchase } from "@shared/schema";
+import type { ExpertReviewIntake } from "@shared/expert-review-intake";
 import { NURTURE_V2_VERSION } from "@shared/nurture-schedule";
 import { eq, and, sql, desc } from "drizzle-orm";
 
@@ -27,13 +28,14 @@ export interface IStorage {
   useMagicLink(id: string): Promise<MagicLink>;
   deleteMagicLinksByEmail(email: string): Promise<void>;
 
-  createReportSupportPurchase(data: {
+  createExpertReviewPurchase(data: {
     sessionToken: string;
     stripeCheckoutSessionId: string;
-  }): Promise<ReportSupportPurchase>;
-  getReportSupportByCheckoutSessionId(checkoutSessionId: string): Promise<ReportSupportPurchase | undefined>;
-  getPaidReportSupportBySessionToken(sessionToken: string): Promise<ReportSupportPurchase | undefined>;
-  markReportSupportPaid(id: string, paymentIntentId: string, email: string | null): Promise<ReportSupportPurchase>;
+  }): Promise<ExpertReviewPurchase>;
+  getExpertReviewByCheckoutSessionId(checkoutSessionId: string): Promise<ExpertReviewPurchase | undefined>;
+  getPaidExpertReviewBySessionToken(sessionToken: string): Promise<ExpertReviewPurchase | undefined>;
+  markExpertReviewPaid(id: string, paymentIntentId: string, email: string | null): Promise<ExpertReviewPurchase>;
+  saveExpertReviewIntake(sessionToken: string, intake: ExpertReviewIntake): Promise<ExpertReviewPurchase>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -247,11 +249,11 @@ export class DatabaseStorage implements IStorage {
     await db.delete(magicLinks).where(eq(magicLinks.email, email.toLowerCase().trim()));
   }
 
-  async createReportSupportPurchase(data: {
+  async createExpertReviewPurchase(data: {
     sessionToken: string;
     stripeCheckoutSessionId: string;
-  }): Promise<ReportSupportPurchase> {
-    const [row] = await db.insert(reportSupportPurchases).values({
+  }): Promise<ExpertReviewPurchase> {
+    const [row] = await db.insert(expertReviewPurchases).values({
       sessionToken: data.sessionToken,
       stripeCheckoutSessionId: data.stripeCheckoutSessionId,
       status: "pending",
@@ -259,38 +261,58 @@ export class DatabaseStorage implements IStorage {
     return row;
   }
 
-  async getReportSupportByCheckoutSessionId(checkoutSessionId: string): Promise<ReportSupportPurchase | undefined> {
+  async getExpertReviewByCheckoutSessionId(checkoutSessionId: string): Promise<ExpertReviewPurchase | undefined> {
     const [row] = await db
       .select()
-      .from(reportSupportPurchases)
-      .where(eq(reportSupportPurchases.stripeCheckoutSessionId, checkoutSessionId));
+      .from(expertReviewPurchases)
+      .where(eq(expertReviewPurchases.stripeCheckoutSessionId, checkoutSessionId));
     return row;
   }
 
-  async getPaidReportSupportBySessionToken(sessionToken: string): Promise<ReportSupportPurchase | undefined> {
+  async getPaidExpertReviewBySessionToken(sessionToken: string): Promise<ExpertReviewPurchase | undefined> {
     const [row] = await db
       .select()
-      .from(reportSupportPurchases)
+      .from(expertReviewPurchases)
       .where(
         and(
-          eq(reportSupportPurchases.sessionToken, sessionToken),
-          eq(reportSupportPurchases.status, "paid"),
+          eq(expertReviewPurchases.sessionToken, sessionToken),
+          eq(expertReviewPurchases.status, "paid"),
         ),
       );
     return row;
   }
 
-  async markReportSupportPaid(id: string, paymentIntentId: string, email: string | null): Promise<ReportSupportPurchase> {
+  async markExpertReviewPaid(id: string, paymentIntentId: string, email: string | null): Promise<ExpertReviewPurchase> {
     const [updated] = await db
-      .update(reportSupportPurchases)
+      .update(expertReviewPurchases)
       .set({
         status: "paid",
         stripePaymentIntentId: paymentIntentId,
         email: email?.toLowerCase().trim() ?? null,
         purchasedAt: new Date(),
       })
-      .where(eq(reportSupportPurchases.id, id))
+      .where(eq(expertReviewPurchases.id, id))
       .returning();
+    return updated;
+  }
+
+  async saveExpertReviewIntake(sessionToken: string, intake: ExpertReviewIntake): Promise<ExpertReviewPurchase> {
+    const [updated] = await db
+      .update(expertReviewPurchases)
+      .set({
+        intakeData: intake,
+        intakeCompletedAt: new Date(),
+      })
+      .where(
+        and(
+          eq(expertReviewPurchases.sessionToken, sessionToken),
+          eq(expertReviewPurchases.status, "paid"),
+        ),
+      )
+      .returning();
+    if (!updated) {
+      throw new Error("Expert review purchase not found or not paid");
+    }
     return updated;
   }
 }

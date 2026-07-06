@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AssetCategory, LiabilityCategory } from "@shared/schema";
 import { cn, formatCurrency } from "@/lib/utils";
 import { useInlineConfirm, InlineConfirm } from "@/components/wizard/inline-confirm";
+import { WizardPartySelector } from "@/components/wizard/wizard-party-selector";
 import { chartTheme } from "@/lib/chart-theme";
 import {
   UK_ASSET_BENCHMARKS,
@@ -434,6 +435,29 @@ export function StepSavingsDebts() {
   const ownerAssetTotal = ownerAssets.reduce((s, a) => s + a.currentValue, 0);
   const ownerDebtTotal = ownerDebts.reduce((s, l) => s + l.balance, 0);
 
+  const assetTabMeta = useMemo(() => {
+    const meta: Partial<Record<WizardOwner, { count: number; totalLabel: string }>> = {};
+    for (const owner of ["A", "B", "joint"] as const) {
+      const items = nonHomeAssets.filter((a) => a.owner === owner);
+      meta[owner] = {
+        count: items.length,
+        totalLabel: formatCurrency(items.reduce((s, a) => s + a.currentValue, 0)),
+      };
+    }
+    return meta;
+  }, [nonHomeAssets]);
+
+  const debtTabMeta = useMemo(() => {
+    const meta: Partial<Record<WizardOwner, { totalLabel: string }>> = {};
+    for (const owner of ["A", "B", "joint"] as const) {
+      const total = nonMortgageLiabilities
+        .filter((l) => l.owner === owner)
+        .reduce((s, l) => s + l.balance, 0);
+      meta[owner] = { totalLabel: formatCurrency(total) };
+    }
+    return meta;
+  }, [nonMortgageLiabilities]);
+
   const applyBenchmarkAssets = (owner: WizardOwner) => {
     const existing = new Set(nonHomeAssets.filter((a) => a.owner === owner).map((a) => a.name.toLowerCase()));
     const benchmarks = owner === "joint" ? UK_JOINT_ASSET_BENCHMARKS : UK_ASSET_BENCHMARKS;
@@ -527,32 +551,15 @@ export function StepSavingsDebts() {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 border-b border-border/40 overflow-x-auto">
-        {(["A", "B", "joint"] as const).map((owner) => {
-          const isActive = activeOwner === owner;
-          const count = nonHomeAssets.filter((a) => a.owner === owner).length;
-          const total = nonHomeAssets.filter((a) => a.owner === owner).reduce((s, a) => s + a.currentValue, 0);
-          return (
-            <button
-              key={owner}
-              type="button"
-              onClick={() => setActiveOwner(owner)}
-              data-testid={`assets-owner-tab-${owner}`}
-              className={cn(
-                "relative px-4 py-2.5 text-sm font-semibold transition-colors -mb-px border-b-2 whitespace-nowrap",
-                isActive ? "border-gold text-[#1a3357]" : "border-transparent text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {ownerLabel(owner, nameA, nameB)}
-              {count > 0 && (
-                <span className="ml-2 text-[10px] font-mono text-muted-foreground">
-                  {count} · {formatCurrency(total)}
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
+      <WizardPartySelector
+        owners={["A", "B", "joint"]}
+        activeOwner={activeOwner}
+        onChange={setActiveOwner}
+        nameA={nameA}
+        nameB={nameB}
+        tabMeta={assetTabMeta}
+        testIdPrefix="assets"
+      />
 
       <InlineConfirm message={chipConfirm.message} />
 
@@ -626,6 +633,17 @@ export function StepSavingsDebts() {
       )}
 
       <Separator />
+
+      <WizardPartySelector
+        owners={["A", "B", "joint"]}
+        activeOwner={activeOwner}
+        onChange={setActiveOwner}
+        nameA={nameA}
+        nameB={nameB}
+        tabMeta={debtTabMeta}
+        testIdPrefix="debts"
+        variant="inline"
+      />
 
       <div className="rounded-lg border border-cyan-200/80 bg-cyan-50/50 p-4 space-y-4" data-testid="card-debt-benchmarks">
         <div className="space-y-1">

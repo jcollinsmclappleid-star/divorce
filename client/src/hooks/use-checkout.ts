@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 
+type CheckoutOptions = {
+  includeExpertReview?: boolean;
+};
+
 /** Stripe checkout — resets loading when user navigates back from payment page (bfcache). */
 export function useCheckout(sessionToken: string | null | undefined) {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -17,13 +21,16 @@ export function useCheckout(sessionToken: string | null | undefined) {
     };
   }, []);
 
-  const handleCheckout = useCallback(async () => {
+  const handleCheckout = useCallback(async (options?: CheckoutOptions) => {
     setCheckoutLoading(true);
     try {
       const res = await fetch("/api/checkout/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionToken }),
+        body: JSON.stringify({
+          sessionToken,
+          includeExpertReview: options?.includeExpertReview ?? false,
+        }),
       });
       const data = await res.json();
       if (res.ok && data.url) {

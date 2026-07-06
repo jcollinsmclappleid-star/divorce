@@ -4,6 +4,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import NotFoundPage from "@/pages/not-found";
 import LandingPage from "@/pages/landing";
 import { AccessGate } from "@/components/access-gate";
@@ -16,6 +17,7 @@ const PreviewPage = lazy(() => import("@/pages/preview"));
 const UnlockPage = lazy(() => import("@/pages/unlock"));
 const PricingPage = lazy(() => import("@/pages/pricing"));
 const PaymentSuccessPage = lazy(() => import("@/pages/payment-success"));
+const ExpertReviewIntakePage = lazy(() => import("@/pages/expert-review-intake"));
 const PrivacyPage = lazy(() => import("@/pages/privacy"));
 const TermsPage = lazy(() => import("@/pages/terms"));
 const MethodologyPage = lazy(() => import("@/pages/methodology"));
@@ -193,6 +195,11 @@ function Router() {
       <Route path="/preview" component={PreviewPage} />
       <Route path="/unlock" component={UnlockPage} />
       <Route path="/payment-success" component={PaymentSuccessPage} />
+      <Route path="/expert-review/intake">
+        <AccessGate>
+          <ExpertReviewIntakePage />
+        </AccessGate>
+      </Route>
       <Route path="/privacy" component={PrivacyPage} />
       <Route path="/terms" component={TermsPage} />
       <Route path="/methodology" component={MethodologyPage} />
@@ -383,6 +390,7 @@ function App() {
       <TooltipProvider delayDuration={100}>
         <Toaster />
         <Router />
+        <CookieConsentBanner />
       </TooltipProvider>
     </QueryClientProvider>
   );

@@ -20,7 +20,6 @@ const HIGH_CETV_FROM_500K = [
   500_000, 600_000, 700_000, 800_000, 900_000, 1_000_000,
 ] as const;
 
-/** Merge type-specific lower tiers with £500k–£1m in £100k steps. */
 function buildCetvFigures(base: number[]): number[] {
   return Array.from(new Set([...base, ...HIGH_CETV_FROM_500K])).sort((a, b) => a - b);
 }
@@ -74,19 +73,30 @@ function fmtCetvTile(value: number): string {
   return formatCurrency(value);
 }
 
-export function PensionQuickAdd() {
+type PensionQuickAddProps = {
+  owner?: PensionOwner;
+  onOwnerChange?: (owner: PensionOwner) => void;
+};
+
+export function PensionQuickAdd({ owner: controlledOwner, onOwnerChange }: PensionQuickAddProps = {}) {
   const { addAsset, profile } = useAppStore();
   const confirm = useInlineConfirm();
   const nameA = profile?.partyAName || "Party A";
   const nameB = profile?.partyBName || "Party B";
 
-  const [owner, setOwner] = useState<PensionOwner>("A");
+  const [internalOwner, setInternalOwner] = useState<PensionOwner>("A");
+  const owner = controlledOwner ?? internalOwner;
+  const setOwner = (next: PensionOwner) => {
+    onOwnerChange?.(next);
+    if (controlledOwner === undefined) setInternalOwner(next);
+  };
+
   const [selectedTypeKey, setSelectedTypeKey] = useState<string | null>(null);
 
   const selectedType = PENSION_TYPE_OPTIONS.find((option) => option.key === selectedTypeKey);
+  const ownerLabel = owner === "A" ? nameA : nameB;
 
   const addPension = (type: PensionTypeOption, cetv: number) => {
-    const ownerLabel = owner === "A" ? nameA : nameB;
     addAsset({
       name: `${type.label} — ${fmtCetvTile(cetv)} (starting estimate)`,
       category: "pension",
@@ -109,40 +119,42 @@ export function PensionQuickAdd() {
       <div className="space-y-1">
         <p className="text-sm font-semibold text-foreground">Fast add — pick type, then CETV</p>
         <p className="text-xs text-muted-foreground leading-relaxed">
-          Choose whose pension you are adding, tap a pension type, then tap a typical CETV figure. Replace with your statement later.
+          Adding for <strong className="text-foreground">{ownerLabel}</strong>. Tap a pension type, then a typical CETV figure. Replace with your statement later.
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-        <span className="text-xs font-medium text-muted-foreground shrink-0">Whose pension?</span>
-        <div className="inline-flex rounded-md border bg-white p-0.5">
-          <button
-            type="button"
-            onClick={() => setOwner("A")}
-            className={cn(
-              "px-3 py-1.5 text-sm rounded-sm transition-colors",
-              owner === "A" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
-            )}
-            data-testid="button-pension-owner-a"
-          >
-            {nameA}
-          </button>
-          <button
-            type="button"
-            onClick={() => setOwner("B")}
-            className={cn(
-              "px-3 py-1.5 text-sm rounded-sm transition-colors",
-              owner === "B" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
-            )}
-            data-testid="button-pension-owner-b"
-          >
-            {nameB}
-          </button>
+      {controlledOwner === undefined ? (
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <span className="text-xs font-medium text-muted-foreground shrink-0">Whose pension?</span>
+          <div className="inline-flex rounded-md border bg-white p-0.5">
+            <button
+              type="button"
+              onClick={() => setOwner("A")}
+              className={cn(
+                "px-3 py-1.5 text-sm rounded-sm transition-colors",
+                owner === "A" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+              )}
+              data-testid="button-pension-owner-a"
+            >
+              {nameA}
+            </button>
+            <button
+              type="button"
+              onClick={() => setOwner("B")}
+              className={cn(
+                "px-3 py-1.5 text-sm rounded-sm transition-colors",
+                owner === "B" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+              )}
+              data-testid="button-pension-owner-b"
+            >
+              {nameB}
+            </button>
+          </div>
         </div>
-      </div>
+      ) : null}
 
       <div className="space-y-2">
-        <p className="text-xs font-medium text-muted-foreground">1. Pension type</p>
+        <p className="text-xs font-medium text-muted-foreground">1. Pension type ({ownerLabel})</p>
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {PENSION_TYPE_OPTIONS.map((type) => {
             const Icon = type.icon;
@@ -156,7 +168,7 @@ export function PensionQuickAdd() {
                   "flex items-start gap-2.5 p-3 text-left rounded-md border transition-colors bg-white",
                   active
                     ? "border-gold/50 shadow-sm ring-1 ring-gold/20"
-                    : "border-border hover:border-primary/30 hover:bg-muted/30"
+                    : "border-border hover:border-primary/30 hover:bg-muted/30",
                 )}
                 data-testid={`button-pension-type-${type.key}`}
               >
@@ -174,7 +186,7 @@ export function PensionQuickAdd() {
       {selectedType && (
         <div className="space-y-2 pt-1 border-t border-emerald-200/60">
           <p className="text-xs font-medium text-muted-foreground">
-            2. Typical CETV for {selectedType.label.toLowerCase()} ({owner === "A" ? nameA : nameB})
+            2. Typical CETV for {selectedType.label.toLowerCase()} — <strong className="text-foreground">{ownerLabel}</strong>
           </p>
           <div className="flex flex-wrap gap-2">
             {selectedType.figures.map((cetv) => (

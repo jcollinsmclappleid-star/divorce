@@ -18,7 +18,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { AssetCategory, LiabilityCategory, Owner, ExpenseCategory } from "@shared/schema";
-import { formatCurrency, scrollTop } from "@/lib/utils";
+import { formatCurrency, scrollTop, cn } from "@/lib/utils";
 import {
   ChevronLeft, ChevronRight, ChevronDown, Heart, Home, Wallet, Landmark,
   Briefcase, Calculator, Plus, Trash2, Edit2, Check, Settings2,
@@ -31,6 +31,7 @@ import { SmartExpenseChips } from "@/components/wizard/smart-expense-chips";
 import { StepIncomeEmployment } from "@/components/wizard/step-income-employment";
 import { StepSavingsDebts } from "@/components/wizard/step-savings-debts";
 import { PensionQuickAdd } from "@/components/wizard/pension-quick-add";
+import { WizardPartySelector } from "@/components/wizard/wizard-party-selector";
 import { useInlineConfirm, InlineConfirm } from "@/components/wizard/inline-confirm";
 import { WizardStepIllustration, getWizardConcept } from "@/components/section-illustration";
 
@@ -100,8 +101,8 @@ const STEP_COPY = [
 const WIZARD_INTENTS = [
   {
     value: "first_private_view",
-    label: "I want a private first view",
-    hint: "Understand the financial picture before speaking to anyone.",
+    label: "I want to see what I will get",
+    hint: "Model your share across the house, pensions and monthly costs before anyone else weighs in.",
   },
   {
     value: "offer_check",
@@ -738,64 +739,85 @@ function StepWelcome() {
   }, [profile.calculationIntent, profile.offerStatus, updateProfile]);
 
   return (
-    <div className="space-y-7">
-      <div className="relative rounded-xl bg-gradient-to-br from-primary/[0.07] via-primary/[0.03] to-gold/[0.05] border border-primary/10 p-6 overflow-hidden">
+    <div className="space-y-5">
+      <div className="relative rounded-xl bg-gradient-to-br from-primary/[0.07] via-primary/[0.03] to-gold/[0.05] border border-primary/10 p-5 overflow-hidden">
         <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{
           backgroundImage: "repeating-linear-gradient(45deg, hsl(var(--primary)) 0, hsl(var(--primary)) 1px, transparent 0, transparent 50%)",
           backgroundSize: "16px 16px"
         }} />
         <div className="relative">
-          <h2 className="text-2xl sm:text-3xl font-display font-bold text-foreground leading-snug mb-2">
+          <h2 className="text-xl sm:text-2xl font-display font-bold text-foreground leading-snug mb-1.5">
             Let's build your financial picture.
           </h2>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-lg">
-            Answer a few questions about your situation. All core calculations happen privately in your browser.
+            Answer a few questions — calculations stay private in your browser.
           </p>
-          <div className="flex flex-wrap gap-4 mt-4 text-xs text-muted-foreground/70">
-            <span className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-emerald-500" /> Privately calculated</span>
-            <span className="flex items-center gap-1.5"><Calculator className="w-3.5 h-3.5 text-cyan-500" /> Best estimates are fine</span>
-            <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-gold" /> Under 5 minutes</span>
+          <div className="flex flex-wrap gap-3 mt-3 text-xs text-muted-foreground/70">
+            <span className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5 text-emerald-500" /> Private</span>
+            <span className="flex items-center gap-1.5"><Calculator className="w-3.5 h-3.5 text-cyan-500" /> Estimates OK</span>
+            <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-gold" /> ~5 min</span>
           </div>
         </div>
       </div>
 
-      <div className="space-y-3">
-        <Label className="font-medium flex items-center gap-1.5">
+      <div className="space-y-2">
+        <Label htmlFor="wizard-intent" className="font-medium flex items-center gap-1.5">
           <SearchCheck className="w-3.5 h-3.5 text-primary" />
           What are you trying to check today?
         </Label>
-        <div className="grid gap-2 sm:grid-cols-2">
-          {WIZARD_INTENTS.map((intent) => (
-            <button
-              key={intent.value}
-              type="button"
-              onClick={() => updateProfile({
-                calculationIntent: profile.calculationIntent === intent.value ? "" : intent.value,
-                offerStatus: intent.value === "offer_check" ? (profile.calculationIntent === intent.value ? "" : "received") : profile.offerStatus,
-              })}
-              className={`text-left rounded-lg border p-3 transition-colors ${
-                profile.calculationIntent === intent.value
-                  ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                  : "border-border bg-background hover:border-primary/50"
-              }`}
-              data-testid={`button-intent-${intent.value}`}
-            >
-              <span className="block text-sm font-semibold">{intent.label}</span>
-              <span className={`block text-xs mt-1 leading-relaxed ${
-                profile.calculationIntent === intent.value ? "text-primary-foreground/75" : "text-muted-foreground"
-              }`}>
-                {intent.hint}
-              </span>
-            </button>
-          ))}
-        </div>
-        <div className="rounded-lg border border-primary/10 bg-primary/5 px-3 py-2">
+        <Select
+          value={profile.calculationIntent || ""}
+          onValueChange={(value) =>
+            updateProfile({
+              calculationIntent: value,
+              offerStatus: value === "offer_check" ? "received" : profile.offerStatus,
+            })
+          }
+        >
+          <SelectTrigger
+            id="wizard-intent"
+            className={cn(
+              "h-11 text-left border-2 transition-all duration-200",
+              profile.calculationIntent
+                ? "border-gold/50 bg-gradient-to-br from-gold/[0.09] via-white to-primary/[0.05] shadow-[0_0_0_1px_rgba(201,168,76,0.12)] font-medium text-foreground"
+                : "border-dashed border-primary/35 hover:border-primary/55 hover:bg-primary/[0.03]",
+            )}
+            data-testid="select-wizard-intent"
+          >
+            <SelectValue placeholder="Choose your main concern…" />
+          </SelectTrigger>
+          <SelectContent className="p-1.5 border-primary/20 shadow-xl shadow-primary/10 max-h-[min(26rem,var(--radix-select-content-available-height))]">
+            {WIZARD_INTENTS.map((intent) => (
+              <SelectItem
+                key={intent.value}
+                value={intent.value}
+                textValue={intent.label}
+                data-testid={`select-intent-option-${intent.value}`}
+                className={cn(
+                  "my-0.5 cursor-pointer rounded-lg border border-transparent py-2 pl-9 pr-3",
+                  "transition-all duration-150",
+                  "data-[highlighted]:border-primary/25 data-[highlighted]:bg-primary/[0.06] data-[highlighted]:shadow-sm",
+                  "data-[state=checked]:border-gold/45 data-[state=checked]:bg-gold/[0.08] data-[state=checked]:shadow-[0_0_0_1px_rgba(201,168,76,0.2)]",
+                  "focus:bg-primary/[0.06]",
+                )}
+              >
+                <span className="flex flex-col gap-0.5 py-0.5 text-left">
+                  <span className="text-sm font-semibold leading-snug text-foreground">{intent.label}</span>
+                  <span className="text-[11px] font-normal leading-snug text-muted-foreground">{intent.hint}</span>
+                </span>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {selectedIntent ? (
           <p className="text-xs text-muted-foreground leading-relaxed">
-            {selectedIntent
-              ? <>Selected path: <span className="font-medium text-foreground">{selectedIntent.label}</span>. We will tailor prompts and the report lens around this concern, without changing the underlying calculations.</>
-              : "Not sure? Choose the closest concern. You can still enter all figures and compare every scenario."}
+            {selectedIntent.hint} We tailor prompts around this — calculations stay the same.
           </p>
-        </div>
+        ) : (
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Not sure? Pick the closest match. You can still enter all figures and compare every scenario.
+          </p>
+        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -808,71 +830,67 @@ function StepWelcome() {
             className="text-base h-11"
             data-testid="input-party-a-name"
           />
-          <p className="text-xs text-muted-foreground">Used to personalise your model</p>
         </div>
         <div className="space-y-2">
-          <Label className="font-medium">What shall we call the other party?</Label>
+          <Label className="font-medium">Other party</Label>
           <Input
             value={profile.partyBName}
             onChange={(e) => updateProfile({ partyBName: e.target.value })}
-            placeholder="e.g. My ex, Sarah, My husband"
+            placeholder="e.g. Taylor"
             className="text-base h-11"
             data-testid="input-party-b-name"
           />
-          <p className="text-xs text-muted-foreground">A name or description — whatever feels right</p>
         </div>
       </div>
 
-      <div className="space-y-3">
-        <Label className="font-medium flex items-center gap-1.5">
-          <Heart className="w-3.5 h-3.5 text-rose-400" />
-          Where are you in the process? <span className="text-muted-foreground text-xs font-normal">(optional)</span>
-        </Label>
-        <div className="flex flex-wrap gap-2">
-          {PROCESS_STAGES.map((stage) => (
-            <button
-              key={stage.value}
-              type="button"
-              onClick={() => updateProfile({ processStage: profile.processStage === stage.value ? "" : stage.value })}
-              className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
-                profile.processStage === stage.value
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
-              }`}
-              data-testid={`button-stage-${stage.value}`}
-            >
-              {stage.label}
-            </button>
-          ))}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label className="font-medium text-sm">
+            Where are you in the process? <span className="text-muted-foreground font-normal">(optional)</span>
+          </Label>
+          <Select
+            value={profile.processStage || "none"}
+            onValueChange={(v) => updateProfile({ processStage: v === "none" ? "" : v })}
+          >
+            <SelectTrigger className="h-10" data-testid="select-process-stage">
+              <SelectValue placeholder="Select stage…" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">Not specified</SelectItem>
+              {PROCESS_STAGES.map((stage) => (
+                <SelectItem key={stage.value} value={stage.value} data-testid={`select-stage-option-${stage.value}`}>
+                  {stage.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label className="font-medium text-sm">
+            What matters most? <span className="text-muted-foreground font-normal">(optional)</span>
+          </Label>
+          <Select
+            value={profile.mainPriority || "none"}
+            onValueChange={(v) => updateProfile({ mainPriority: v === "none" ? "" : v })}
+          >
+            <SelectTrigger className="h-10" data-testid="select-main-priority">
+              <SelectValue placeholder="Select priority…" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">Not specified</SelectItem>
+              {MAIN_PRIORITIES.map((priority) => (
+                <SelectItem key={priority.value} value={priority.value} data-testid={`select-priority-option-${priority.value}`}>
+                  {priority.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
-      <div className="space-y-3">
-        <Label className="font-medium flex items-center gap-1.5">
-          What matters most to you right now? <span className="text-muted-foreground text-xs font-normal">(optional)</span>
-        </Label>
-        <div className="flex flex-wrap gap-2">
-          {MAIN_PRIORITIES.map((priority) => (
-            <button
-              key={priority.value}
-              type="button"
-              onClick={() => updateProfile({ mainPriority: profile.mainPriority === priority.value ? "" : priority.value })}
-              className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${
-                profile.mainPriority === priority.value
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
-              }`}
-              data-testid={`button-priority-${priority.value}`}
-            >
-              {priority.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="space-y-2 border-t pt-5">
-        <Label className="text-sm font-medium flex items-center gap-1.5">
-          Save your progress by email <span className="text-muted-foreground text-xs font-normal">(optional)</span>
+      <div className="space-y-2 border-t pt-4">
+        <Label className="text-sm font-medium">
+          Save progress by email <span className="text-muted-foreground text-xs font-normal">(optional)</span>
         </Label>
         <Input
           type="email"
@@ -880,11 +898,8 @@ function StepWelcome() {
           value={profile.capturedEmail || ""}
           onChange={(e) => updateProfile({ capturedEmail: e.target.value })}
           data-testid="input-wizard-email"
-          className="max-w-sm"
+          className="max-w-sm h-10"
         />
-        <p className="text-xs text-muted-foreground">
-          We'll email your combined pool total when you reach the preview. No spam, no account needed.
-        </p>
       </div>
     </div>
   );
@@ -1151,6 +1166,7 @@ function StepPensions() {
   const nameB = profile?.partyBName || "Party B";
   const pensions = assets.filter(a => a.category === "pension");
   const pensionConfirm = useInlineConfirm();
+  const [activeOwner, setActiveOwner] = useState<"A" | "B">("A");
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Asset | null>(null);
@@ -1207,7 +1223,16 @@ function StepPensions() {
         </p>
       </div>
 
-      <PensionQuickAdd />
+      <WizardPartySelector
+        owners={["A", "B"]}
+        activeOwner={activeOwner}
+        onChange={setActiveOwner}
+        nameA={nameA}
+        nameB={nameB}
+        testIdPrefix="pension"
+      />
+
+      <PensionQuickAdd owner={activeOwner} onOwnerChange={setActiveOwner} />
 
       <div className="flex items-center justify-between gap-2">
         <div>

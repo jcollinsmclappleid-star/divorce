@@ -5,6 +5,28 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
+import { clearCookieConsent } from "@/lib/cookie-consent";
+
+function CookiePreferencesButton() {
+  function handleReset() {
+    clearCookieConsent();
+    window.location.reload();
+  }
+
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      onClick={handleReset}
+      className="mt-3"
+      data-testid="button-cookie-preferences"
+    >
+      Manage cookie preferences
+    </Button>
+  );
+}
+
 function DataDeletionForm() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -85,7 +107,7 @@ export default function PrivacyPage() {
         <h1 className="text-3xl font-display font-bold mb-8" data-testid="text-privacy-title">Privacy Policy</h1>
 
         <div className="prose prose-sm max-w-none space-y-6 text-muted-foreground">
-          <p className="text-foreground font-medium">Last updated: May 2026</p>
+          <p className="text-foreground font-medium">Last updated: July 2026</p>
           <p>This Privacy Policy explains how DivorceCalculatorUK ("we", "us", "our") collects, uses, stores, and protects your personal data when you use our website and financial modelling tool ("the Service"). It applies to all visitors and users of the Service.</p>
           <p>This policy is provided in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018. By using the Service, you acknowledge that you have read and understood this Privacy Policy. This Privacy Policy should be read in conjunction with our <Link href="/terms" className="underline text-primary">Terms of Use</Link>.</p>
 
@@ -117,8 +139,8 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-6 space-y-1">
               <li>We do not collect your name, telephone number, or postal address (unless you choose to include them in emails to us)</li>
               <li>We do not require account registration or login</li>
-              <li>We do not use tracking cookies, advertising cookies, or third-party analytics services</li>
-              <li>We do not collect biometric data, location data, or device identifiers beyond standard server logs</li>
+              <li>We do not use advertising cookies or sell your data to third parties</li>
+              <li>We do not collect biometric data, precise location data, or device identifiers beyond standard server logs and optional analytics (see Section 13)</li>
             </ul>
           </section>
 
@@ -127,7 +149,7 @@ export default function PrivacyPage() {
             <p>Under Article 6 of the UK GDPR, we process your personal data on the following lawful bases:</p>
             <ul className="list-disc pl-6 space-y-1">
               <li><strong>Contract (Article 6(1)(b)):</strong> Processing of session tokens, payment records, and email addresses is necessary for the performance of our contract with you — specifically, to provide and manage access to the Service following your purchase, send transactional emails (confirmations, recovery links, expiry notifications), and support your access recovery requests.</li>
-              <li><strong>Consent (Article 6(1)(a)):</strong> When you choose to use the optional Settlement Reality Check Report feature, the transmission of de-identified model figures to our server and to our third-party language model sub-processor is based on your explicit consent, given by clicking the report generation button after being shown a clear notice of what will be processed. You may withdraw this consent at any time by not using the feature — any previously generated report is stored locally in your browser only and is not retained by us.</li>
+              <li><strong>Consent (Article 6(1)(a)):</strong> When you choose to use the optional Settlement Reality Check Report feature, the transmission of de-identified model figures to our server and to our third-party language model sub-processor is based on your explicit consent, given by clicking the report generation button after being shown a clear notice of what will be processed. You may withdraw this consent at any time by not using the feature — any previously generated report is stored locally in your browser only and is not retained by us. Optional analytics cookies (Google Analytics) are also processed on the basis of your consent, which you can give or refuse via the cookie banner.</li>
               <li><strong>Legitimate interests (Article 6(1)(f)):</strong> Processing of server access logs is necessary for our legitimate interests in maintaining the security, stability, and integrity of the Service, and for fraud prevention. We have assessed that this processing does not override your rights and freedoms given the limited and non-identifying nature of the data collected.</li>
               <li><strong>Legal obligation (Article 6(1)(c)):</strong> We may retain certain records (such as payment transaction records) where required to comply with applicable tax, accounting, or regulatory obligations.</li>
             </ul>
@@ -149,6 +171,7 @@ export default function PrivacyPage() {
               <li><strong>Transactional emails:</strong> To send you purchase confirmation, access recovery links, and access expiry notifications at the email address you provide or which is provided by Stripe during checkout</li>
               <li><strong>Access recovery:</strong> To store and verify your email address when you request access recovery, enabling you to regain access to your purchase across devices</li>
               <li><strong>Security and fraud prevention:</strong> To monitor for unauthorised access, abuse, or fraudulent activity using server access logs</li>
+              <li><strong>Website analytics (with consent):</strong> If you accept analytics cookies, to understand how visitors use the site and improve the Service. Analytics data is aggregated and does not include the financial figures you enter into the calculator</li>
               <li><strong>Legal and regulatory compliance:</strong> To retain records where required by applicable law</li>
             </ul>
             <p>We do not use your data for marketing, profiling, or any purpose not listed above. We do not send marketing emails or newsletters.</p>
@@ -162,6 +185,7 @@ export default function PrivacyPage() {
               <li><strong>Stripe (payment processor):</strong> When you make a payment, your payment card details and email address are submitted directly from your browser to Stripe. We do not receive or handle your card details. Stripe processes your payment data as an independent data controller under its own <a href="https://stripe.com/gb/privacy" target="_blank" rel="noopener noreferrer" className="underline text-primary">Privacy Policy</a>.</li>
               <li><strong>Resend (email service provider):</strong> To send you transactional emails (purchase confirmations, access recovery links, magic link sign-in emails, free guide verification, and progress summary emails), we share your email address with Resend, a third-party email service provider. We also use Resend to send internal operational alerts to our administrator email when a purchase, lead capture, or data deletion request is processed; these alerts include the relevant email address as the subject of the event. Resend processes email addresses solely for the purpose of delivering these messages and does not use them for marketing or any other purpose. Resend acts as a data processor under their <a href="https://resend.com/privacy" target="_blank" rel="noopener noreferrer" className="underline text-primary">Privacy Policy</a>.</li>
               <li><strong>OpenAI (Settlement Reality Check Report sub-processor):</strong> When you choose to use the optional Settlement Reality Check Report feature, selected de-identified model figures are forwarded to OpenAI for processing. OpenAI acts as a data processor under a data processing agreement. The figures transmitted contain no names, contact details, addresses, or free-text personal information. OpenAI does not use API-submitted data to train its models under its standard API data processing terms. See Section 8 for full details.</li>
+              <li><strong>Google Analytics (analytics, with consent):</strong> If you accept analytics cookies, we use Google Analytics to collect aggregated usage data (such as pages visited, approximate location at country level, device type, and browser). Google acts as a data processor under its <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline text-primary">Privacy Policy</a>. We configure IP anonymisation. Analytics cookies are not set unless you click Accept on the cookie banner. You can decline analytics cookies and still use the Service.</li>
               <li><strong>Hosting infrastructure:</strong> The Service is hosted on cloud infrastructure. Our hosting provider processes server access logs and other data as a data processor acting on our instructions. They do not have independent access to or use of your data.</li>
               <li><strong>Legal requirements:</strong> We may disclose personal data where required to do so by law, regulation, legal process, or enforceable governmental request, or to protect our rights, property, or safety, or the rights, property, or safety of others.</li>
             </ul>
@@ -275,18 +299,32 @@ export default function PrivacyPage() {
             <p>We would appreciate the opportunity to address your concerns before you approach the ICO.</p>
           </section>
 
-          <section>
+          <section id="cookies">
             <h2 className="text-xl font-semibold text-foreground">13. Cookies and Local Storage</h2>
-            <p>This Service does not use cookies for tracking, advertising, or analytics purposes, and we do not display a cookie banner because no consent-requiring cookies are set.</p>
-            <p>We use browser localStorage (a client-side storage mechanism) for the following essential purposes only:</p>
+            <p>We use a small number of cookies and browser storage mechanisms. Some are strictly necessary for the Service to work; optional analytics cookies are only set if you accept them via the cookie banner shown on your first visit.</p>
+
+            <p className="font-medium mt-3">Strictly necessary (no consent required):</p>
             <ul className="list-disc pl-6 space-y-1">
-              <li><strong>Session token:</strong> To identify your browser session and verify access entitlements</li>
-              <li><strong>Application state:</strong> To store your financial modelling data locally so that your progress is preserved between visits</li>
-              <li><strong>User preferences:</strong> To store display preferences such as light/dark mode</li>
+              <li><strong>Session token (localStorage):</strong> An anonymised identifier to verify access entitlements after purchase</li>
+              <li><strong>Application state (localStorage):</strong> Your financial modelling data, stored locally so progress is preserved between visits</li>
+              <li><strong>User preferences (localStorage):</strong> Display preferences such as light/dark mode</li>
+              <li><strong>Cookie consent choice (localStorage):</strong> Records whether you accepted or declined optional analytics cookies</li>
+              <li><strong>Authenticated session cookie (<code>dfm.sid</code>):</strong> If you use magic link sign-in, a single HttpOnly cookie maintains your session. Required for that feature only.</li>
             </ul>
-            <p>If you choose to use the optional magic link sign-in flow, we set a single strictly necessary HttpOnly cookie (<code>dfm.sid</code>) to maintain your authenticated session. This cookie is required for the sign-in feature to function and is not used for any other purpose.</p>
-            <p>These mechanisms are classified as strictly necessary for the functioning of the Service under the Privacy and Electronic Communications Regulations 2003 (PECR) and do not require consent.</p>
-            <p>Stripe, our payment processor, may set its own cookies when you interact with the payment page. These are governed by Stripe's cookie policy.</p>
+            <p className="mt-2">These are classified as strictly necessary under the Privacy and Electronic Communications Regulations 2003 (PECR) and do not require consent.</p>
+
+            <p className="font-medium mt-3">Optional analytics cookies (consent required):</p>
+            <p>If you click <strong>Accept</strong> on the cookie banner, we load Google Analytics (measurement ID G-26BB9XFNH5) to understand aggregated site usage — for example which pages are visited and how users move through the wizard. Analytics does not receive the financial figures you enter into the calculator. If you click <strong>Decline</strong>, analytics cookies are not set and Google Analytics is not loaded; the site still works fully. You can change your choice at any time using the button below.</p>
+            <ul className="list-disc pl-6 space-y-1 mt-2">
+              <li><strong>Provider:</strong> Google Ireland Limited / Google LLC (Google Analytics)</li>
+              <li><strong>Purpose:</strong> Aggregated website usage statistics to improve the Service</li>
+              <li><strong>Retention:</strong> As determined by Google Analytics cookie lifetimes (typically up to 2 years for some identifiers). See <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener noreferrer" className="underline text-primary">Google&apos;s cookie information</a>.</li>
+              <li><strong>Lawful basis:</strong> Consent (Article 6(1)(a) UK GDPR)</li>
+            </ul>
+            <CookiePreferencesButton />
+
+            <p className="font-medium mt-4">Payment cookies:</p>
+            <p>Stripe, our payment processor, may set its own cookies when you interact with the checkout page. These are governed by Stripe&apos;s <a href="https://stripe.com/gb/cookie-settings" target="_blank" rel="noopener noreferrer" className="underline text-primary">cookie policy</a>.</p>
           </section>
 
           <section>

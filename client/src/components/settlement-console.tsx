@@ -26,6 +26,10 @@ export interface SettlementConsoleProps {
   composition: { label: string; value: number; color: string }[];
   partyAName?: string;
   partyBName?: string;
+  /** Scenario chip row opens on this id when provided (e.g. S3 = Party B keeps). */
+  defaultScenarioId?: string;
+  /** Label above scenario chips — use on preview to signal interactivity. */
+  chipPrompt?: string;
   /** When true, blurs key metrics and shows an unlock overlay */
   locked?: boolean;
   onUnlock?: () => void;
@@ -66,6 +70,8 @@ export function SettlementConsole({
   composition,
   partyAName = "Party A",
   partyBName = "Party B",
+  defaultScenarioId,
+  chipPrompt = "Switch settlement scenario",
   locked = false,
   onUnlock,
   chromeCaption = "Settlement Command Console",
@@ -73,7 +79,11 @@ export function SettlementConsole({
   hideStress = false,
   testId = "settlement-console",
 }: SettlementConsoleProps) {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(() => {
+    if (!defaultScenarioId) return 0;
+    const idx = scenarios.findIndex((s) => s.id === defaultScenarioId);
+    return idx >= 0 ? idx : 0;
+  });
   const [stress, setStress] = useState<Record<StressKey, boolean>>({ rate: false, income: false, house: false });
   const stressKey = `${stress.rate ? 1 : 0}-${stress.income ? 1 : 0}-${stress.house ? 1 : 0}`;
 
@@ -116,13 +126,16 @@ export function SettlementConsole({
 
         {/* Scenario chips */}
         <div className="px-4 pt-4 pb-3 border-b border-slate-100">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-slate-400 font-medium mb-2">Switch settlement scenario</p>
-          <div className="flex gap-1.5 flex-wrap">
+          <p className="text-[9px] uppercase tracking-[0.18em] text-slate-400 font-medium mb-2">{chipPrompt}</p>
+          <div className="flex gap-1.5 flex-wrap" role="tablist" aria-label="Settlement scenarios">
             {safeScenarios.map((s, i) => {
               const isActive = i === Math.min(active, safeScenarios.length - 1);
               return (
                 <button
                   key={s.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
                   onClick={() => setActive(i)}
                   data-testid={`chip-scenario-${s.id}`}
                   aria-pressed={isActive}

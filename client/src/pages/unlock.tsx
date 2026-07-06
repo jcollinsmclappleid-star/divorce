@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCheckout } from "@/hooks/use-checkout";
 import { useLocation, Link } from "wouter";
 import { useAccess, useSessionToken } from "@/hooks/use-access";
@@ -16,7 +16,9 @@ import { useNoIndex } from "@/hooks/use-noindex";
 import { SectionIllustration } from "@/components/section-illustration";
 import { ProductStackVisual } from "@/components/product-stack-visual";
 import { REPORT_FACTOR_TEASERS } from "@/lib/settlement-factors";
-import { DEFAULT_UNLOCK_CTA, PRODUCT_NAMES, PRODUCT_PRICE } from "@/lib/product-copy";
+import { DEFAULT_UNLOCK_CTA, PRODUCT_NAMES, PRODUCT_PRICE, POSITION_REVIEW_CHECKOUT_INTENTS, POSITION_REVIEW_PRICE, POSITION_REVIEW_CHECKOUT_CTA } from "@/lib/product-copy";
+import { useAppStore } from "@/hooks/use-store";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const ANALYSER_FEATURES = [
   {
@@ -105,6 +107,12 @@ export default function UnlockPage() {
   const sessionToken = useSessionToken();
   const { hasAccess, isLoading } = useAccess();
   const { checkoutLoading, handleCheckout } = useCheckout(sessionToken);
+  const calculationIntent = useAppStore((s) => s.profile?.calculationIntent);
+  const [includeExpertReview, setIncludeExpertReview] = useState(false);
+
+  const showExpertReviewAddOn = POSITION_REVIEW_CHECKOUT_INTENTS.has(calculationIntent ?? "");
+
+  const onCheckout = () => handleCheckout({ includeExpertReview: showExpertReviewAddOn && includeExpertReview });
 
   useEffect(() => {
     if (!isLoading && hasAccess) navigate("/results");
@@ -162,7 +170,7 @@ export default function UnlockPage() {
 
           <Button
             size="lg"
-            onClick={handleCheckout}
+            onClick={onCheckout}
             disabled={checkoutLoading}
             data-testid="button-checkout-hero"
             className="bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/25 text-base font-semibold mt-2"
@@ -296,10 +304,28 @@ export default function UnlockPage() {
                 </div>
               </div>
 
+              {showExpertReviewAddOn && (
+                <label
+                  className="flex items-start gap-3 rounded-xl border border-gold/30 bg-gold/[0.08] p-3 text-left cursor-pointer"
+                  data-testid="label-expert-review-addon"
+                >
+                  <Checkbox
+                    checked={includeExpertReview}
+                    onCheckedChange={(v) => setIncludeExpertReview(v === true)}
+                    className="mt-0.5"
+                    data-testid="checkbox-expert-review-addon"
+                  />
+                  <span className="text-xs text-white/85 leading-relaxed">
+                    <span className="font-semibold text-gold">{POSITION_REVIEW_CHECKOUT_CTA}</span>
+                    {" "}— written briefing before you reply or mediate. Delivered within 5 working days.
+                  </span>
+                </label>
+              )}
+
               <Button
                 className="w-full bg-gold hover:bg-gold/90 text-white border-0 shadow-lg shadow-gold/30 text-base font-semibold"
                 size="lg"
-                onClick={handleCheckout}
+                onClick={onCheckout}
                 disabled={checkoutLoading}
                 data-testid="button-checkout"
               >
@@ -386,7 +412,7 @@ export default function UnlockPage() {
           <div>
             <Button
               size="lg"
-              onClick={handleCheckout}
+              onClick={onCheckout}
               disabled={checkoutLoading}
               className="bg-gold hover:bg-gold/90 text-white border-0"
               data-testid="button-checkout-secondary"

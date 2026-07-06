@@ -3,36 +3,34 @@ import { useAppStore } from "@/hooks/use-store";
 import { useEngine } from "@/hooks/use-engine";
 import { useAccess, useSessionToken } from "@/hooks/use-access";
 import { formatCurrency, scrollTop } from "@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Lock, Check, Shield, ArrowRight, Loader2,
-  Eye, FileText, BarChart3, MessageCircle,
+  Eye, FileText, MessageCircle, MousePointerClick,
 } from "lucide-react";
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { useCheckout } from "@/hooks/use-checkout";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { Logo } from "@/components/logo";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { SettlementConsole, buildConsoleScenarios } from "@/components/settlement-console";
 import { ScenarioLeaderboard } from "@/components/scenario-leaderboard";
 import { SectionIllustration } from "@/components/section-illustration";
 import { ReportPortfolioBundle } from "@/components/homepage-report-portfolio";
-import { buildMonthlySnapshot } from "@/lib/insights/monthlySnapshot";
+import { PreviewSnapshotDashboard, PreviewUnlockRevealsDashboard } from "@/components/preview-position-dashboard";
 import {
   ANSWER_READY_HEADLINE,
   PRODUCT_LAYERS,
   PRODUCT_NAMES,
   PRODUCT_PRICE,
-  PREVIEW_SNAPSHOT_GAP,
   PREVIEW_UNLOCK_PILLARS,
+  PREVIEW_PRIMARY_UNLOCK_CTA,
+  PREVIEW_HEADER_UNLOCK_CTA_MOBILE,
   getPreviewIntentBridge,
-  getPreviewUnansweredChecks,
   getPreviewQuestionTeasers,
-  getUnlockCta,
   PREVIEW_CTA_REASSURANCE,
   PREVIEW_CTA_REASSURANCE_SHORT,
 } from "@/lib/product-copy";
@@ -50,29 +48,6 @@ const PREVIEW_INTENT_HOOKS: Record<string, string> = {
   protect_position: "You wanted to know whether your contributions count.",
   children_housing: "You wanted to know if you can afford to live on with the kids.",
 };
-
-function PreviewUnansweredChecklist({ intent }: { intent: string | null | undefined }) {
-  const items = getPreviewUnansweredChecks(intent);
-  return (
-    <ul className="space-y-2" data-testid="preview-unanswered-checklist">
-      {items.map((item) => (
-        <li key={item.label} className="flex items-start gap-2.5 text-xs leading-relaxed">
-          {item.included ? (
-            <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-          ) : (
-            <Lock className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
-          )}
-          <span className={item.included ? "text-slate-600" : "text-slate-800 font-medium"}>
-            {item.label}
-            {!item.included && (
-              <span className="text-primary font-semibold ml-1">· unlock</span>
-            )}
-          </span>
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 function PreviewUnlockPillars({ compact = false }: { compact?: boolean }) {
   return (
@@ -98,8 +73,6 @@ function PreviewUnlockPillars({ compact = false }: { compact?: boolean }) {
     </div>
   );
 }
-
-const CHART_COLOURS = ["hsl(220,52%,22%)", "#0d9488", "#64748b"];
 
 function ReportChapterHeader({
   number,
@@ -163,6 +136,23 @@ function CtaReassurance({ className = "", inverted = false }: { className?: stri
   );
 }
 
+function SectionCtaBlock({
+  children,
+  reassurance = false,
+  className = "",
+}: {
+  children: React.ReactNode;
+  reassurance?: boolean;
+  className?: string;
+}) {
+  return (
+    <div className={`space-y-2 ${className}`}>
+      {children}
+      {reassurance ? <CtaReassurance /> : null}
+    </div>
+  );
+}
+
 function PreviewQuestionsCard({
   intent,
   onUnlock,
@@ -175,34 +165,51 @@ function PreviewQuestionsCard({
   const questions = getPreviewQuestionTeasers(intent);
   return (
     <div
-      className="rounded-sm border border-violet-200/80 bg-gradient-to-br from-violet-50/80 to-white p-3.5 space-y-2.5"
+      className="overflow-hidden rounded-xl border border-slate-800/10 shadow-[0_4px_24px_rgba(15,23,42,0.06)]"
       data-testid="card-preview-questions"
     >
-      <div className="flex items-center gap-2">
-        <MessageCircle className="w-4 h-4 text-violet-600 shrink-0" />
-        <p className="text-xs font-semibold text-violet-900">Questions in your head</p>
+      <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-3.5 py-3">
+        <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-violet-500/90 to-purple-400/80" />
+        <div className="flex items-center gap-2">
+          <MessageCircle className="w-4 h-4 text-violet-300 shrink-0" />
+          <p className="text-sm font-semibold text-white">Personalised checks for your situation</p>
+        </div>
+        <p className="mt-1 text-[10px] text-white/55 leading-relaxed pl-6">
+          Mapped to your figures — evidence prompts and questions before you agree.
+        </p>
       </div>
+      <div className="bg-gradient-to-b from-violet-50/40 to-white p-3 space-y-2">
       <ul className="space-y-1.5">
         {questions.map((question) => (
           <li
             key={question}
-            className="flex items-start gap-2 rounded-sm border border-violet-100 bg-white px-2.5 py-2"
+            className="flex items-start gap-2 rounded-lg border border-violet-100/80 bg-white/90 px-2.5 py-2"
           >
             <Lock className="w-3 h-3 text-violet-400 shrink-0 mt-0.5" />
             <p className="text-[11px] font-medium text-slate-800 leading-snug">{question}</p>
           </li>
         ))}
       </ul>
-      <p className="text-[10px] text-muted-foreground text-center">+ 29 more checks mapped to your figures</p>
-      <button
+      <p className="text-[10px] text-muted-foreground text-center">+ 29 more checks in your full report</p>
+      <Button
         type="button"
         onClick={onUnlock}
         disabled={checkoutLoading}
-        className="w-full text-center text-xs font-semibold text-violet-700 hover:text-violet-900 transition-colors py-1"
+        className="w-full bg-gold hover:bg-gold/90 text-white border-0 font-semibold text-sm h-10"
         data-testid="button-preview-questions-unlock"
       >
-        See my personalised checks →
-      </button>
+        {checkoutLoading ? (
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            Redirecting…
+          </>
+        ) : (
+          <>
+            {PREVIEW_PRIMARY_UNLOCK_CTA} <ArrowRight className="w-4 h-4 ml-1.5" />
+          </>
+        )}
+      </Button>
+      </div>
     </div>
   );
 }
@@ -211,7 +218,7 @@ function CompactReportList() {
   return (
     <div className="rounded-sm border border-gold/25 bg-gold/[0.06] p-4 space-y-3" data-testid="preview-report-list-compact">
       <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-        Unlock answers the three things snapshot can&apos;t
+        What unlock reveals
       </p>
       <PreviewUnlockPillars compact />
       <div className="flex gap-2.5 items-start pt-1 border-t border-gold/20">
@@ -245,7 +252,7 @@ export default function PreviewPage() {
   const unlockIntent =
     store.profile?.calculationIntent ||
     (typeof sessionStorage !== "undefined" ? sessionStorage.getItem("dfm-homepage-intent") : null);
-  const unlockCta = getUnlockCta(unlockIntent);
+  const unlockCta = PREVIEW_PRIMARY_UNLOCK_CTA;
   const intentHook =
     (unlockIntent && PREVIEW_INTENT_HOOKS[unlockIntent]) ||
     "Your figures are loaded — your snapshot is below.";
@@ -320,17 +327,6 @@ export default function PreviewPage() {
     formatCurrency,
   );
 
-  const monthlyTease = (() => {
-    if (engine.scenarios.length === 0) return null;
-    let weakest = Infinity;
-    for (const scenario of engine.scenarios) {
-      const snap = buildMonthlySnapshot(scenario, store, engine.taxA, engine.taxB, engine.cmsAnnual);
-      weakest = Math.min(weakest, snap.surplusA, snap.surplusB);
-    }
-    if (!Number.isFinite(weakest)) return null;
-    return Math.round(weakest);
-  })();
-
   const previewConsoleScenarios = buildConsoleScenarios([
     {
       id: "S1", name: "Sell & Split", shortName: "Sell & Split",
@@ -401,21 +397,25 @@ export default function PreviewPage() {
     label = unlockCta,
     variant = "gold",
     testId = "button-unlock-pricing",
+    showArrow = true,
   }: {
     size?: "lg" | "sm";
     className?: string;
     label?: string;
-    variant?: "gold" | "primary";
+    variant?: "gold" | "primary" | "outline";
     testId?: string;
+    showArrow?: boolean;
   }) => (
     <Button
       size={size}
-      onClick={handleCheckout}
+      onClick={() => handleCheckout()}
       disabled={checkoutLoading}
       className={
         variant === "primary"
           ? `bg-primary hover:bg-primary/90 text-white font-semibold ${className}`
-          : `bg-gold hover:bg-gold/90 text-white border-0 shadow-md font-semibold ${className}`
+          : variant === "outline"
+            ? `bg-white border border-slate-300 text-slate-800 hover:bg-slate-50 font-semibold shadow-sm ${className}`
+            : `bg-gold hover:bg-gold/90 text-white border-0 shadow-md font-semibold ${className}`
       }
       data-testid={testId}
     >
@@ -426,58 +426,11 @@ export default function PreviewPage() {
         </>
       ) : (
         <>
-          {label} <ArrowRight className="w-4 h-4 ml-1.5" />
+          {label}
+          {showArrow ? <ArrowRight className="w-4 h-4 ml-1.5 shrink-0" /> : null}
         </>
       )}
     </Button>
-  );
-
-  const snapshotBreakdown = chartTotal > 0 && (
-    <>
-      <Card data-testid="card-asset-breakdown" className="border-slate-200 shadow-none rounded-sm hidden md:block">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-slate-600">Asset pool breakdown</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="w-36 h-36 shrink-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={chartData} cx="50%" cy="50%" innerRadius={40} outerRadius={58} dataKey="value" strokeWidth={2}>
-                    {chartData.map((_, i) => (
-                      <Cell key={i} fill={CHART_COLOURS[i % CHART_COLOURS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(v: number) => formatCurrency(v)} />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="space-y-2.5 flex-1 w-full">
-              {chartData.map((d, i) => (
-                <div key={d.name} className="flex items-center justify-between gap-2 text-sm">
-                  <div className="flex items-center gap-2 text-slate-600">
-                    <div className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: CHART_COLOURS[i % CHART_COLOURS.length] }} />
-                    {d.name}
-                  </div>
-                  <div className="text-right tabular-nums">
-                    <span className="font-semibold text-slate-800">{formatCurrency(d.value)}</span>
-                    <span className="text-xs text-slate-400 ml-1">({Math.round((d.value / chartTotal) * 100)}%)</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="mt-4 p-3.5 bg-slate-50 rounded-sm border border-slate-100">
-            <p className="text-sm text-slate-600 leading-relaxed" data-testid="text-interpretation">
-              Based on what you&apos;ve entered, the combined distributable pool is{" "}
-              <strong className="text-slate-900">{formatCurrency(combinedPool)}</strong>. Under a 50/50 split, each party
-              would start from approximately <strong className="text-slate-900">{formatCurrency(halfPool)}</strong> — before
-              housing arrangements and pension allocations are applied.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    </>
   );
 
   return (
@@ -485,17 +438,25 @@ export default function PreviewPage() {
       <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 safe-area-inset-top">
         <div className="max-w-4xl mx-auto flex items-center justify-between gap-2 px-3 sm:px-4 py-2.5 sm:py-3 min-w-0">
           <Logo size="sm" />
-          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-            <Button variant="ghost" size="sm" asChild className="text-slate-600 px-2 h-8 text-xs sm:text-sm">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0 min-w-0">
+            <Button variant="ghost" size="sm" asChild className="text-slate-600 px-2 h-8 text-xs sm:text-sm shrink-0">
               <Link href="/wizard" data-testid="button-edit-inputs-preview" onClick={scrollTop}>
                 Edit
               </Link>
             </Button>
             <UnlockButton
               size="sm"
-              className="hidden sm:inline-flex text-sm px-3 md:px-4 h-8 max-w-[11rem] truncate"
+              className="inline-flex sm:hidden shrink-0 text-xs px-2.5 h-8 font-semibold whitespace-nowrap"
               variant="primary"
-              label={`Unlock · ${PRODUCT_PRICE}`}
+              label={PREVIEW_HEADER_UNLOCK_CTA_MOBILE}
+              showArrow={false}
+              testId="button-unlock-header-mobile"
+            />
+            <UnlockButton
+              size="sm"
+              className="hidden sm:inline-flex text-xs md:text-sm px-2.5 md:px-3 h-8 max-w-[10.5rem] sm:max-w-none whitespace-normal leading-tight py-1"
+              variant="primary"
+              label={PREVIEW_PRIMARY_UNLOCK_CTA}
               testId="button-unlock-header"
             />
           </div>
@@ -535,215 +496,101 @@ export default function PreviewPage() {
 
           {/* ── Snapshot: reward first ── */}
           <ReportPage data-testid="section-preview-snapshot">
-            <div className="px-4 md:px-6 py-4 md:py-7 space-y-4 md:space-y-5">
-              <ReportChapterHeader
-                number="Your snapshot"
-                title="Your figures, totalled"
-                subtitle="Calculated from your inputs — yours to keep before unlock."
-              />
-
-              {/* Snapshot stats — one grid, responsive labels */}
-              <div className="grid grid-cols-2 gap-2 md:gap-4" data-testid="preview-snapshot-hero">
-                <Card data-testid="card-asset-pool" className="border-slate-200 shadow-none rounded-sm col-span-1">
-                  <CardHeader className="pb-1 md:pb-2 pt-3 md:pt-6 px-3 md:px-6">
-                    <CardTitle className="text-[9px] md:text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
-                      Combined pool
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="px-3 md:px-6 pb-3 md:pb-6 pt-0">
-                    <p
-                      className="text-lg md:text-2xl font-bold tabular-nums text-slate-900"
-                      data-testid="value-asset-pool"
-                    >
-                      {formatCurrency(combinedPool)}
-                    </p>
-                    <p className="text-[10px] md:text-xs text-slate-500 mt-1 hidden md:block">
-                      Property equity plus liquid assets and savings
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card className="border-slate-200 shadow-none rounded-sm col-span-1 md:hidden">
-                  <CardHeader className="pb-1 pt-3 px-3">
-                    <CardTitle className="text-[9px] font-semibold text-slate-500 uppercase tracking-wider">
-                      ~50/50 starting point
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="px-3 pb-3 pt-0">
-                    <p className="text-lg font-bold tabular-nums text-slate-900" data-testid="value-half-pool">
-                      {formatCurrency(halfPool)}
-                    </p>
-                  </CardContent>
-                </Card>
-                <Card data-testid="card-net-equity" className="border-slate-200 shadow-none rounded-sm col-span-1 hidden md:block">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
-                      Net property equity
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-2xl font-bold tabular-nums text-slate-900" data-testid="value-net-equity">
-                      {formatCurrency(intermediate.netHomeEquity)}
-                    </p>
-                    <p className="text-xs text-slate-500 mt-1">Property value less mortgage and estimated sale costs</p>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Mobile: full breakdown always visible */}
-              <div className="md:hidden space-y-3" data-testid="preview-snapshot-breakdown">
-                <Card className="border-slate-200 shadow-none rounded-sm">
-                  <CardContent className="pt-4 pb-3">
-                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Net property equity</p>
-                    <p className="text-xl font-bold tabular-nums text-slate-900 mt-1" data-testid="value-net-equity-mobile">
-                      {formatCurrency(intermediate.netHomeEquity)}
-                    </p>
-                    <p className="text-[10px] text-slate-500 mt-1">Property value less mortgage and estimated sale costs</p>
-                  </CardContent>
-                </Card>
-                {chartData.length > 0 && (
-                  <div className="space-y-2 rounded-sm border border-slate-200 bg-white p-3">
-                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Asset pool breakdown</p>
-                    {chartData.map((d, i) => (
-                      <div key={d.name} className="flex items-center justify-between text-xs px-0.5">
-                        <div className="flex items-center gap-2 text-slate-600">
-                          <div className="w-2 h-2 rounded-sm" style={{ background: CHART_COLOURS[i % CHART_COLOURS.length] }} />
-                          {d.name}
-                        </div>
-                        <span className="font-semibold tabular-nums">{formatCurrency(d.value)}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                <p className="text-xs text-slate-500 leading-relaxed px-0.5" data-testid="text-interpretation-mobile">
-                  Based on what you&apos;ve entered, the combined distributable pool is{" "}
-                  <strong className="text-slate-800">{formatCurrency(combinedPool)}</strong>. Under a 50/50 split, each party
-                  would start from approximately <strong className="text-slate-800">{formatCurrency(halfPool)}</strong> — before
-                  housing arrangements and pension allocations are applied.
-                </p>
-              </div>
-
-              <p className="text-sm text-slate-700 leading-relaxed font-medium md:font-normal" data-testid="text-intent-bridge">
-                {intentBridge}
-              </p>
-              <p className="text-xs text-slate-500 leading-relaxed">{PREVIEW_SNAPSHOT_GAP}</p>
-
-              <div className="rounded-sm border border-slate-200 bg-slate-50/80 p-3 md:p-4">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500 mb-2.5">
-                  Still unanswered from your question
-                </p>
-                <PreviewUnansweredChecklist intent={unlockIntent} />
-              </div>
-
-              {/* Mobile: primary CTA */}
-              <div ref={snapshotAnchorRef} className="md:hidden space-y-2" data-testid="preview-mobile-cta">
-                <UnlockButton className="w-full text-sm whitespace-normal h-auto min-h-10 py-2.5 leading-snug" variant="gold" testId="button-unlock-preview-primary" />
-                <CtaReassurance />
-                <p className="text-[10px] text-slate-400 text-center leading-relaxed italic">
-                  Your wizard inputs are saved — unlock once, revisit for a year.
-                </p>
-              </div>
-
-              {/* Monthly / runway locked tease */}
-              <button
-                type="button"
-                onClick={handleCheckout}
-                disabled={checkoutLoading}
-                className="w-full text-left rounded-sm border border-slate-200 bg-gradient-to-r from-slate-50 to-white p-3 space-y-2 md:mt-0"
-                data-testid="preview-locked-tease-mobile"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <BarChart3 className="w-4 h-4 text-primary shrink-0" />
-                    <p className="text-xs font-semibold text-slate-800">
-                      Monthly headroom · 5-year reserve outlook
-                    </p>
-                  </div>
-                  <Lock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                </div>
-                <div className="flex flex-wrap gap-2 text-[10px] text-slate-500 items-center">
-                  <span className="blur-[4px] select-none tabular-nums">
-                    {monthlyTease != null ? formatCurrency(monthlyTease) : "£680"}/mo weakest
-                  </span>
-                  <span className="text-slate-300">·</span>
-                  <span className="blur-[4px] select-none">Sell · Keep · Deferred</span>
-                  <span className="text-primary font-semibold ml-auto">Show my share &amp; monthly position →</span>
-                </div>
-              </button>
-
-              <PreviewQuestionsCard intent={unlockIntent} onUnlock={handleCheckout} checkoutLoading={checkoutLoading} />
-
-              <div className="hidden md:block rounded-sm border border-slate-200 bg-slate-50/60 p-4 space-y-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
-                  Unlock answers the three things snapshot can&apos;t
-                </p>
-                <PreviewUnlockPillars />
-              </div>
-
-              {/* Desktop: full breakdown inline */}
-              {snapshotBreakdown}
-
-              <div className="hidden md:flex flex-col sm:flex-row gap-3 items-start sm:items-center pt-2 border-t border-slate-100">
-                <UnlockButton variant="primary" testId="button-unlock-preview-primary" />
-                <CtaReassurance className="text-left sm:max-w-md" />
-              </div>
-            </div>
-          </ReportPage>
-
-          {/* ── Locked dashboards ── */}
-          {previewComposition.length > 0 && previewConsoleScenarios.length > 0 && (
-            <ReportPage data-testid="section-locked-console">
-              <div className="px-4 md:px-6 py-4 md:py-7 space-y-4 md:space-y-5">
-                <ReportChapterHeader
-                  number="What unlock reveals"
-                  title="Which option leaves you strongest — and for how long?"
-                  subtitle="Exact capital, monthly surplus and reserve outlook for all four paths — from your figures."
-                  locked
+            <div className="px-3 md:px-6 py-4 md:py-7 space-y-4 md:space-y-5">
+              <div className="space-y-3" data-testid="preview-position-dashboard">
+                <PreviewSnapshotDashboard
+                  combinedPool={combinedPool}
+                  halfPool={halfPool}
+                  netHomeEquity={intermediate.netHomeEquity}
+                  chartData={chartData}
+                  chartTotal={chartTotal}
+                  intentBridge={intentBridge}
                 />
 
-                {/* Settlement comparison — always visible (all 4 options) */}
-                <div className="space-y-5" data-testid="preview-settlement-comparison">
-                  <p className="text-xs font-semibold text-slate-600 md:hidden">Compare all 4 settlement options</p>
-                  <SettlementConsole
-                    scenarios={previewConsoleScenarios}
-                    composition={previewComposition}
-                    partyAName={nameA}
-                    partyBName={nameB}
-                    locked
-                    onUnlock={handleCheckout}
-                    chromeCaption="Settlement comparison"
-                    footerText="Unlock to reveal exact figures, surplus and resilience scoring"
-                    hideStress
-                    testId="preview-settlement-console"
+                <SectionCtaBlock>
+                  <UnlockButton
+                    variant="outline"
+                    className="w-full text-sm whitespace-normal h-auto min-h-10 py-2.5 leading-snug"
+                    label="See my share across all paths — £79"
+                    testId="button-unlock-after-snapshot"
                   />
-                  <div className="pt-2 border-t border-slate-100">
-                    <p className="text-xs font-semibold text-slate-600 mb-3">Side-by-side scenario view</p>
-                    <ScenarioLeaderboard
-                      scenarios={previewConsoleScenarios}
-                      partyAName={nameA}
-                      partyBName={nameB}
-                      locked
-                      onUnlock={handleCheckout}
-                      caption="locked preview · all 4 side-by-side"
-                      footerText="Unlock to reveal exact capital, surplus, and resilience figures"
-                      testId="preview-comparison"
-                    />
-                  </div>
-                </div>
+                </SectionCtaBlock>
 
-                <div className="flex justify-center md:justify-start">
-                  <button
-                    type="button"
-                    onClick={handleCheckout}
-                    disabled={checkoutLoading}
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
-                    data-testid="button-unlock-scenarios"
-                  >
-                    <Lock className="w-3.5 h-3.5" /> Unlock to see my numbers →
-                  </button>
+                {previewComposition.length > 0 && previewConsoleScenarios.length > 0 && (
+                  <div className="space-y-4" data-testid="section-locked-console">
+                    <ReportChapterHeader
+                      number="Scenario comparison"
+                      title="Which option leaves you strongest — and for how long?"
+                      subtitle="Capital, monthly surplus and reserve outlook across all four paths — from your figures."
+                      locked
+                    />
+
+                    <div className="space-y-5" data-testid="preview-settlement-comparison">
+                      <div
+                        className="flex gap-2.5 rounded-lg border border-amber-200/70 bg-amber-50/60 px-3 py-2.5 sm:px-3.5"
+                        data-testid="preview-scenario-interaction-hint"
+                      >
+                        <MousePointerClick className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
+                        <p className="text-xs leading-relaxed text-slate-700">
+                          <span className="font-semibold text-slate-900">Tap each scenario button below</span>{" "}
+                          to compare all four settlement paths — the dashboard updates as you switch.
+                        </p>
+                      </div>
+                      <SettlementConsole
+                        scenarios={previewConsoleScenarios}
+                        composition={previewComposition}
+                        partyAName={nameA}
+                        partyBName={nameB}
+                        defaultScenarioId="S3"
+                        chipPrompt="Tap a button to compare — figures update below"
+                        locked
+                        onUnlock={handleCheckout}
+                        chromeCaption="Settlement comparison"
+                        footerText="Unlock to reveal exact figures, surplus and resilience scoring"
+                        hideStress
+                        testId="preview-settlement-console"
+                      />
+                      <div className="pt-2 border-t border-slate-100">
+                        <p className="text-xs text-slate-600 mb-3 leading-relaxed">
+                          All four options side by side — scroll to compare capital, surplus and resilience bands.
+                        </p>
+                        <ScenarioLeaderboard
+                          scenarios={previewConsoleScenarios}
+                          partyAName={nameA}
+                          partyBName={nameB}
+                          locked
+                          onUnlock={handleCheckout}
+                          caption="locked preview · all 4 side-by-side"
+                          footerText="Unlock to reveal exact capital, surplus, and resilience figures"
+                          testId="preview-comparison"
+                        />
+                      </div>
+                    </div>
+
+                    <SectionCtaBlock reassurance>
+                      <UnlockButton
+                        className="w-full text-sm whitespace-normal h-auto min-h-10 py-2.5 leading-snug"
+                        testId="button-unlock-scenarios"
+                      />
+                    </SectionCtaBlock>
+                  </div>
+                )}
+
+                <PreviewUnlockRevealsDashboard />
+
+                <div ref={snapshotAnchorRef}>
+                  <SectionCtaBlock reassurance>
+                    <UnlockButton
+                      className="w-full text-sm whitespace-normal h-auto min-h-10 py-2.5 leading-snug"
+                      testId="button-unlock-full-report"
+                    />
+                  </SectionCtaBlock>
                 </div>
               </div>
-            </ReportPage>
-          )}
+
+              <PreviewQuestionsCard intent={unlockIntent} onUnlock={handleCheckout} checkoutLoading={checkoutLoading} />
+            </div>
+          </ReportPage>
 
           <div className="hidden md:flex items-start gap-3 p-4 bg-white rounded-sm border border-emerald-200/70" data-testid="card-privacy-preview">
             <Shield className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
@@ -770,7 +617,7 @@ export default function PreviewPage() {
             <CompactReportList />
             <Button
               className="w-full mt-3 bg-gold hover:bg-gold/90 text-white border-0 font-semibold"
-              onClick={handleCheckout}
+              onClick={() => handleCheckout()}
               disabled={checkoutLoading}
               data-testid="button-unlock-portfolio-mobile"
             >

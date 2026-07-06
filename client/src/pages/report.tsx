@@ -25,6 +25,8 @@ import { FsiGauge } from "@/components/fsi-gauge";
 import { ExecutiveBriefing } from "@/components/report/executive-briefing";
 import { ScenarioLeaderboard } from "@/components/scenario-leaderboard";
 import { buildConsoleScenarios } from "@/components/settlement-console";
+import { useSessionToken } from "@/hooks/use-access";
+import { ExpertPositionReviewUpsell } from "@/components/expert-position-review";
 import {
   getRelevantSettlementFactors,
   getSettlementFactorGroups,
@@ -165,6 +167,7 @@ function computeAllScenarios(engine: ReturnType<typeof useEngine>): ScenarioResu
 export default function ReportPage() {
   useDocumentTitle("Settlement Reality Check PDF | DivorceCalculatorUK");
   useNoIndex();
+  const sessionToken = useSessionToken();
   const store = useAppStore();
   const engine = useEngine();
   const allScenarios = computeAllScenarios(engine);
@@ -841,6 +844,12 @@ export default function ReportPage() {
             <div><span className="font-semibold">Income Multiple:</span> <span className="text-gray-600">The ratio of mortgage required to gross annual income, used as a generalised lending capacity benchmark.</span></div>
           </div>
         </section>
+
+        {sessionToken && (
+          <div className="print:hidden max-w-xl mx-auto mb-8">
+            <ExpertPositionReviewUpsell sessionToken={sessionToken} source="report" />
+          </div>
+        )}
 
         <footer className="mt-12 pt-6 border-t border-gray-300 text-center space-y-2 pb-10">
           <div className="flex items-center justify-center gap-2 mb-2">

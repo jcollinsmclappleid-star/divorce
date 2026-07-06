@@ -3,45 +3,69 @@ import { useLocation } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Loader2 } from "lucide-react";
-import { useAccess } from "@/hooks/use-access";
+import { useAccess, useSessionToken } from "@/hooks/use-access";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { Logo } from "@/components/logo";
+import { ExpertPositionReviewUpsell } from "@/components/expert-position-review";
+import { PRODUCT_NAMES } from "@/lib/product-copy";
 
 export default function PaymentSuccessPage() {
   const params = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
-  const isSupport = params.get("support") === "1";
+  const isExpertReviewOnly = params.get("expert_review") === "1";
+  const isBundle = params.get("bundle") === "1";
 
-  useDocumentTitle(isSupport ? "Support Payment Confirmed | DivorceCalculatorUK" : "Payment Confirmed | DivorceCalculatorUK");
+  useDocumentTitle(
+    isExpertReviewOnly || isBundle
+      ? `${PRODUCT_NAMES.positionReview} Confirmed | DivorceCalculatorUK`
+      : "Payment Confirmed | DivorceCalculatorUK",
+  );
   useNoIndex();
   const [, navigate] = useLocation();
   const [verifying, setVerifying] = useState(true);
   const [verified, setVerified] = useState(false);
+  const [needsIntake, setNeedsIntake] = useState(false);
   const { refresh } = useAccess();
+  const sessionToken = useSessionToken();
 
   useEffect(() => {
     const sessionId = params.get("session_id");
 
     if (!sessionId) {
-      navigate(isSupport ? "/results" : "/unlock");
+      navigate(isExpertReviewOnly ? "/results" : "/unlock");
       return;
     }
 
     async function verify() {
       try {
-        const endpoint = isSupport ? "/api/checkout/verify-support" : "/api/checkout/verify";
-        const res = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ checkoutSessionId: sessionId }),
-        });
-        const data = await res.json();
-        if (data.status === "paid") {
-          if (!isSupport && data.sessionToken) {
-            localStorage.setItem("dfm-session-token", data.sessionToken);
+        if (isExpertReviewOnly) {
+          const res = await fetch("/api/checkout/verify-expert-review", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ checkoutSessionId: sessionId }),
+          });
+          const data = await res.json();
+          if (data.status === "paid") {
+            setVerified(true);
+            setNeedsIntake(!data.intakeCompleted);
           }
-          setVerified(true);
-          refresh();
+        } else {
+          const res = await fetch("/api/checkout/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ checkoutSessionId: sessionId }),
+          });
+          const data = await res.json();
+          if (data.status === "paid") {
+            if (data.sessionToken) {
+              localStorage.setItem("dfm-session-token", data.sessionToken);
+            }
+            setVerified(true);
+            if (isBundle || data.expertReviewPurchased) {
+              setNeedsIntake(true);
+            }
+            refresh();
+          }
         }
       } catch (err) {
         console.error("Verification error:", err);
@@ -51,7 +75,7 @@ export default function PaymentSuccessPage() {
     }
 
     verify();
-  }, [navigate, refresh, isSupport]);
+  }, [navigate, refresh, isExpertReviewOnly, isBundle]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-6">
@@ -70,14 +94,20 @@ export default function PaymentSuccessPage() {
             <>
               <CheckCircle className="w-14 h-14 text-green-600 mx-auto" />
               <h2 className="text-xl font-semibold" data-testid="text-payment-confirmed">
-                {isSupport ? "Support payment confirmed" : "Payment Confirmed"}
+                {isExpertReviewOnly || isBundle ? `${PRODUCT_NAMES.positionReview} confirmed` : "Payment Confirmed"}
               </h2>
               <p className="text-muted-foreground text-sm leading-relaxed">
-                {isSupport
-                  ? "Thank you. We will email you from support@divorcecalculatoruk.co.uk within 2–3 working days. Reply with the report section you want help with."
-                  : "Your full structured analysis is now unlocked. You have 12 months of access to model and adjust your financial scenarios."}
+                {isExpertReviewOnly ? (
+                  needsIntake
+                    ? "Complete the short intake form so we can begin your human-reviewed briefing — delivered within 5 working days."
+                    : "Your intake is on file. Your human-reviewed briefing will arrive by email within 5 working days."
+                ) : isBundle ? (
+                  "Your full analysis is unlocked and your Position Review is confirmed. Complete the intake form next so we can begin your briefing."
+                ) : (
+                  "Your full structured analysis is now unlocked. You have 12 months of access to model and adjust your financial scenarios."
+                )}
               </p>
-              {!isSupport && (
+              {!isExpertReviewOnly && !isBundle && (
                 <div className="text-left bg-muted/50 rounded-lg p-3 space-y-1.5">
                   <p className="text-xs font-medium text-foreground">Accessing from another device later?</p>
                   <p className="text-xs text-muted-foreground leading-relaxed">
@@ -85,13 +115,28 @@ export default function PaymentSuccessPage() {
                   </p>
                 </div>
               )}
-              <Button
-                className="w-full"
-                onClick={() => navigate("/results")}
-                data-testid="button-go-to-results"
-              >
-                {isSupport ? "Back to results" : "View Full Analysis"}
-              </Button>
+              {needsIntake ? (
+                <Button
+                  className="w-full"
+                  onClick={() => navigate("/expert-review/intake")}
+                  data-testid="button-go-to-intake"
+                >
+                  Complete intake form
+                </Button>
+              ) : (
+                <Button
+                  className="w-full"
+                  onClick={() => navigate("/results")}
+                  data-testid="button-go-to-results"
+                >
+                  {isExpertReviewOnly ? "Back to results" : "View Full Analysis"}
+                </Button>
+              )}
+              {!isExpertReviewOnly && !isBundle && verified && sessionToken && (
+                <div className="text-left pt-2">
+                  <ExpertPositionReviewUpsell sessionToken={sessionToken} source="payment_success" compact />
+                </div>
+              )}
             </>
           ) : (
             <>
@@ -101,10 +146,10 @@ export default function PaymentSuccessPage() {
               </p>
               <Button
                 className="w-full"
-                onClick={() => navigate(isSupport ? "/results" : "/recover")}
+                onClick={() => navigate(isExpertReviewOnly ? "/results" : "/recover")}
                 data-testid="button-recover-access"
               >
-                {isSupport ? "Return to results" : "Recover Access by Email"}
+                {isExpertReviewOnly ? "Return to results" : "Recover Access by Email"}
               </Button>
             </>
           )}

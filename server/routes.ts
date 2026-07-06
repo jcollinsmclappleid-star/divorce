@@ -8,7 +8,8 @@ import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClie
 import { ensureStripeProductPresentation, ensureStripeProductPresentationForPrice } from "./stripeProductPresentation";
 import { getAppBaseUrl } from "./appUrl";
 import { seedDatabase } from "./seed";
-import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail, sendMagicLinkEmail, sendAdminNotification, sendPromoEmail, sendReportSupportConfirmationEmail } from "./email";
+import { sendPurchaseConfirmationEmail, sendAccessRecoveryEmail, sendEmailVerificationEmail, sendProgressSummaryEmail, sendMagicLinkEmail, sendAdminNotification, sendPromoEmail, sendExpertReviewConfirmationEmail } from "./email";
+import { ExpertReviewIntakeSchema } from "@shared/expert-review-intake";
 import { db, pool } from "./db";
 import { emailLeads as emailLeadsTable, purchases as purchasesTable } from "@shared/schema";
 import { and, eq, isNull, isNotNull } from "drizzle-orm";
@@ -18,6 +19,44 @@ import { GUIDED_SUMMARY_SYSTEM_PROMPT } from "./guided-summary/prompt";
 import { hasForbiddenGuidedSummaryPhrase } from "./guided-summary/compliance";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function getExpertReviewPriceId(): string | undefined {
+  return process.env.STRIPE_EXPERT_REVIEW_PRICE_ID?.trim()
+    || process.env.STRIPE_SUPPORT_PRICE_ID?.trim()
+    || undefined;
+}
+
+async function fulfillExpertReviewCheckout(stripeSession: {
+  id: string;
+  payment_intent?: string | { id?: string } | null;
+  customer_details?: { email?: string | null } | null;
+}) {
+  const review = await storage.getExpertReviewByCheckoutSessionId(stripeSession.id);
+  if (!review || review.status === 'paid') return review;
+
+  const email = stripeSession.customer_details?.email ?? null;
+  const paymentIntentId = typeof stripeSession.payment_intent === 'string'
+    ? stripeSession.payment_intent
+    : stripeSession.payment_intent?.id ?? '';
+  const updated = await storage.markExpertReviewPaid(
+    review.id,
+    paymentIntentId,
+    email,
+  );
+
+  if (email) {
+    sendExpertReviewConfirmationEmail(email).catch(() => {});
+    sendAdminNotification('Position Review purchased', [
+      { label: 'Customer email', value: email },
+      { label: 'Review purchase ID', value: review.id },
+      { label: 'Analyser session', value: review.sessionToken },
+      { label: 'Amount', value: '£249' },
+      { label: 'Intake', value: 'Pending — customer must complete /expert-review/intake' },
+      { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
+    ], 'expert_review').catch(() => {});
+  }
+  return updated;
+}
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -546,7 +585,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.post('/api/checkout/create', async (req, res) => {
     try {
-      const { sessionToken } = req.body;
+      const { sessionToken, includeExpertReview } = req.body;
       if (!sessionToken) {
         return res.status(400).json({ message: 'sessionToken is required' });
       }
@@ -574,18 +613,38 @@ export async function registerRoutes(app: Express): Promise<void> {
 
       await ensureStripeProductPresentation(stripe, productId, 'main');
 
+      const lineItems: { price: string; quantity: number }[] = [{ price: priceId, quantity: 1 }];
+      let bundleExpertReview = false;
+
+      if (includeExpertReview) {
+        const expertPriceId = getExpertReviewPriceId();
+        if (!expertPriceId) {
+          return res.status(500).json({ message: 'Expert review product not configured. Please contact support.' });
+        }
+        await ensureStripeProductPresentationForPrice(stripe, expertPriceId, 'expert_review');
+        lineItems.push({ price: expertPriceId, quantity: 1 });
+        bundleExpertReview = true;
+      }
+
       const checkoutSession = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
-        line_items: [{ price: priceId, quantity: 1 }],
+        line_items: lineItems,
         mode: 'payment',
-        allow_promotion_codes: true,
-        success_url: `${baseUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+        allow_promotion_codes: !bundleExpertReview,
+        success_url: bundleExpertReview
+          ? `${baseUrl}/payment-success?bundle=1&session_id={CHECKOUT_SESSION_ID}`
+          : `${baseUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${baseUrl}/unlock`,
         custom_text: {
-          submit: { message: 'You\'ll get instant access for 12 months. All calculations remain private in your browser.' },
+          submit: {
+            message: bundleExpertReview
+              ? 'You\'ll get instant access for 12 months plus Position Review — complete intake after payment.'
+              : 'You\'ll get instant access for 12 months. All calculations remain private in your browser.',
+          },
         },
         metadata: {
           sessionToken,
+          ...(bundleExpertReview ? { includeExpertReview: '1' } : {}),
         },
       });
 
@@ -594,6 +653,13 @@ export async function registerRoutes(app: Express): Promise<void> {
         stripeCheckoutSessionId: checkoutSession.id,
         status: 'pending',
       });
+
+      if (bundleExpertReview) {
+        await storage.createExpertReviewPurchase({
+          sessionToken,
+          stripeCheckoutSessionId: checkoutSession.id,
+        });
+      }
 
       res.json({ url: checkoutSession.url });
     } catch (err: any) {
@@ -633,10 +699,12 @@ export async function registerRoutes(app: Express): Promise<void> {
           }
         }
         const updatedPurchase = await storage.getPurchaseByCheckoutSessionId(checkoutSessionId);
+        await fulfillExpertReviewCheckout(session);
         res.json({ 
           status: 'paid', 
           sessionToken: updatedPurchase?.sessionToken,
-          expiresAt: updatedPurchase?.expiresAt 
+          expiresAt: updatedPurchase?.expiresAt,
+          expertReviewPurchased: Boolean(await storage.getExpertReviewByCheckoutSessionId(checkoutSessionId)),
         });
       } else {
         res.json({ status: session.payment_status });
@@ -647,48 +715,22 @@ export async function registerRoutes(app: Express): Promise<void> {
     }
   });
 
-  async function fulfillReportSupportCheckout(stripeSession: {
-    id: string;
-    payment_intent?: string | { id?: string } | null;
-    customer_details?: { email?: string | null } | null;
-  }) {
-    const support = await storage.getReportSupportByCheckoutSessionId(stripeSession.id);
-    if (!support || support.status === 'paid') return support;
-
-    const email = stripeSession.customer_details?.email ?? null;
-    const paymentIntentId = typeof stripeSession.payment_intent === 'string'
-      ? stripeSession.payment_intent
-      : stripeSession.payment_intent?.id ?? '';
-    const updated = await storage.markReportSupportPaid(
-      support.id,
-      paymentIntentId,
-      email,
-    );
-
-    if (email) {
-      sendReportSupportConfirmationEmail(email).catch(() => {});
-      sendAdminNotification('Report walkthrough support purchased', [
-        { label: 'Customer email', value: email },
-        { label: 'Support purchase ID', value: support.id },
-        { label: 'Analyser session', value: support.sessionToken },
-        { label: 'Amount', value: '£129' },
-        { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
-      ], 'report_support').catch(() => {});
-    }
-    return updated;
-  }
-
-  app.get('/api/support/status/:sessionToken', async (req, res) => {
+  app.get('/api/expert-review/status/:sessionToken', async (req, res) => {
     try {
       const { sessionToken } = req.params;
-      const paid = await storage.getPaidReportSupportBySessionToken(sessionToken);
-      res.json({ purchased: Boolean(paid), purchasedAt: paid?.purchasedAt ?? null });
+      const paid = await storage.getPaidExpertReviewBySessionToken(sessionToken);
+      res.json({
+        purchased: Boolean(paid),
+        purchasedAt: paid?.purchasedAt ?? null,
+        intakeCompleted: Boolean(paid?.intakeCompletedAt),
+        intakeCompletedAt: paid?.intakeCompletedAt ?? null,
+      });
     } catch {
-      res.status(500).json({ message: 'Failed to fetch support status' });
+      res.status(500).json({ message: 'Failed to fetch expert review status' });
     }
   });
 
-  app.post('/api/checkout/create-support', async (req, res) => {
+  app.post('/api/checkout/create-expert-review', async (req, res) => {
     try {
       const { sessionToken } = req.body;
       if (!sessionToken) {
@@ -696,58 +738,58 @@ export async function registerRoutes(app: Express): Promise<void> {
       }
 
       if (devBypassPaywall()) {
-        return res.status(400).json({ message: 'Support checkout is disabled in dev bypass mode.' });
+        return res.status(400).json({ message: 'Expert review checkout is disabled in dev bypass mode.' });
       }
 
       const mainPurchase = await storage.getPurchaseBySessionToken(sessionToken);
       if (!mainPurchase) {
-        return res.status(403).json({ message: 'Active analyser access required before purchasing support.' });
+        return res.status(403).json({ message: 'Active analyser access required before purchasing expert review.' });
       }
 
-      const existing = await storage.getPaidReportSupportBySessionToken(sessionToken);
+      const existing = await storage.getPaidExpertReviewBySessionToken(sessionToken);
       if (existing) {
-        return res.status(400).json({ message: 'Report walkthrough support already purchased for this session.' });
+        return res.status(400).json({ message: 'Position Review already purchased for this session.' });
       }
 
-      const priceId = process.env.STRIPE_SUPPORT_PRICE_ID;
+      const priceId = getExpertReviewPriceId();
       if (!priceId) {
-        return res.status(500).json({ message: 'Support product not configured. Please contact support.' });
+        return res.status(500).json({ message: 'Expert review product not configured. Please contact support.' });
       }
 
       const stripe = await getUncachableStripeClient();
       const baseUrl = getAppBaseUrl(req);
 
-      await ensureStripeProductPresentationForPrice(stripe, priceId, 'support');
+      await ensureStripeProductPresentationForPrice(stripe, priceId, 'expert_review');
 
       const checkoutSession = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [{ price: priceId, quantity: 1 }],
         mode: 'payment',
         allow_promotion_codes: false,
-        success_url: `${baseUrl}/payment-success?support=1&session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${baseUrl}/payment-success?expert_review=1&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${baseUrl}/results`,
         custom_text: {
-          submit: { message: 'Written email support only — we help you read your report outputs, not legal advice.' },
+          submit: { message: 'Human-reviewed briefing on your modelled position — modelling support only, not legal advice.' },
         },
         metadata: {
           sessionToken,
-          productKind: 'report_support',
+          productKind: 'expert_review',
         },
       });
 
-      await storage.createReportSupportPurchase({
+      await storage.createExpertReviewPurchase({
         sessionToken,
         stripeCheckoutSessionId: checkoutSession.id,
       });
 
       res.json({ url: checkoutSession.url });
     } catch (err: any) {
-      console.error('Support checkout error:', err?.message || err);
-      res.status(500).json({ message: err?.message || 'Failed to create support checkout session' });
+      console.error('Expert review checkout error:', err?.message || err);
+      res.status(500).json({ message: err?.message || 'Failed to create expert review checkout session' });
     }
   });
 
-  app.post('/api/checkout/verify-support', async (req, res) => {
+  app.post('/api/checkout/verify-expert-review', async (req, res) => {
     try {
       const { checkoutSessionId } = req.body;
       if (!checkoutSessionId) {
@@ -758,15 +800,58 @@ export async function registerRoutes(app: Express): Promise<void> {
       const session = await stripe.checkout.sessions.retrieve(checkoutSessionId);
 
       if (session.payment_status === 'paid') {
-        await fulfillReportSupportCheckout(session);
-        const support = await storage.getReportSupportByCheckoutSessionId(checkoutSessionId);
-        return res.json({ status: 'paid', sessionToken: support?.sessionToken ?? null });
+        await fulfillExpertReviewCheckout(session);
+        const review = await storage.getExpertReviewByCheckoutSessionId(checkoutSessionId);
+        return res.json({
+          status: 'paid',
+          sessionToken: review?.sessionToken ?? null,
+          intakeCompleted: Boolean(review?.intakeCompletedAt),
+        });
       }
 
       res.json({ status: session.payment_status });
     } catch (err: any) {
-      console.error('Support verify error:', err);
-      res.status(500).json({ message: 'Failed to verify support payment' });
+      console.error('Expert review verify error:', err);
+      res.status(500).json({ message: 'Failed to verify expert review payment' });
+    }
+  });
+
+  app.post('/api/expert-review/intake', async (req, res) => {
+    try {
+      const { sessionToken, intake } = req.body;
+      if (!sessionToken || !intake) {
+        return res.status(400).json({ message: 'sessionToken and intake are required' });
+      }
+
+      const paid = await storage.getPaidExpertReviewBySessionToken(sessionToken);
+      if (!paid) {
+        return res.status(403).json({ message: 'Position Review purchase required.' });
+      }
+
+      if (paid.intakeCompletedAt) {
+        return res.json({ status: 'already_submitted', intakeCompletedAt: paid.intakeCompletedAt });
+      }
+
+      const parsed = ExpertReviewIntakeSchema.safeParse(intake);
+      if (!parsed.success) {
+        return res.status(400).json({ message: 'Invalid intake data', errors: parsed.error.flatten() });
+      }
+
+      const updated = await storage.saveExpertReviewIntake(sessionToken, parsed.data);
+
+      sendAdminNotification('Expert review intake submitted', [
+        { label: 'Customer email', value: paid.email ?? 'unknown' },
+        { label: 'Review purchase ID', value: paid.id },
+        { label: 'Analyser session', value: sessionToken },
+        { label: 'Situation', value: parsed.data.situationStage },
+        { label: 'Top priority', value: parsed.data.topPriority },
+        { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
+      ], 'expert_review_intake').catch(() => {});
+
+      res.json({ status: 'submitted', intakeCompletedAt: updated.intakeCompletedAt });
+    } catch (err: any) {
+      console.error('Expert review intake error:', err);
+      res.status(500).json({ message: 'Failed to save intake' });
     }
   });
 
@@ -1414,26 +1499,12 @@ export async function registerRoutes(app: Express): Promise<void> {
               { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
             ], 'purchase').catch(() => {});
             console.log('[webhook] Purchase marked paid for', webhookEmail || session.id);
-          } else {
-            const support = await storage.getReportSupportByCheckoutSessionId(session.id);
-            if (support && support.status !== 'paid') {
-              const webhookEmail = session.customer_details?.email ?? null;
-              await storage.markReportSupportPaid(
-                support.id,
-                session.payment_intent as string || '',
-                webhookEmail,
-              );
-              if (webhookEmail) {
-                sendReportSupportConfirmationEmail(webhookEmail).catch(() => {});
-                sendAdminNotification('Report walkthrough support (Stripe webhook)', [
-                  { label: 'Customer email', value: webhookEmail },
-                  { label: 'Support purchase ID', value: support.id },
-                  { label: 'Amount', value: '£129' },
-                  { label: 'Time', value: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }) },
-                ], 'report_support').catch(() => {});
-              }
-              console.log('[webhook] Report support marked paid for', webhookEmail || session.id);
-            }
+          }
+
+          const review = await storage.getExpertReviewByCheckoutSessionId(session.id);
+          if (review && review.status !== 'paid') {
+            await fulfillExpertReviewCheckout(session);
+            console.log('[webhook] Expert review marked paid for', session.customer_details?.email || session.id);
           }
         }
       }

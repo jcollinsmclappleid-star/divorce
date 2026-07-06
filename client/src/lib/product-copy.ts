@@ -2,6 +2,11 @@
 
 export const PRODUCT_PRICE = "£79";
 
+export const POSITION_REVIEW_PRICE = "£249";
+
+/** @deprecated Use POSITION_REVIEW_PRICE */
+export const EXPERT_REVIEW_PRICE = POSITION_REVIEW_PRICE;
+
 export const PRODUCT_NAMES = {
   /** Master paid bundle */
   fullPosition: "Your Full Divorce Position",
@@ -15,14 +20,25 @@ export const PRODUCT_NAMES = {
   layerStandsOut: "What Stands Out In Your Case",
   /** Layer 3 — was Position Check / preparation guide */
   layerBeforeAgree: "What To Check Before You Agree",
+  /** Premium written briefing add-on (£249) */
+  positionReview: "Position Review",
 } as const;
+
+/** @deprecated Use PRODUCT_NAMES.positionReview */
+export const PRODUCT_NAMES_EXPERT_ALIAS = { expertReview: PRODUCT_NAMES.positionReview } as const;
 
 export const PRODUCT_TAGLINE =
   "Three dedicated reports from your figures — before you agree or accept less than you should.";
 
-export const ANSWER_READY_HEADLINE = "Your answer is ready — built from your figures";
+export const ANSWER_READY_HEADLINE = "Your results are ready — built from your figures";
 
-export const DEFAULT_UNLOCK_CTA = `Show my full answer — ${PRODUCT_PRICE}`;
+export const DEFAULT_UNLOCK_CTA = `Unlock Your Report — ${PRODUCT_PRICE}`;
+
+/** Compact header CTA on preview — fits mobile without truncating. */
+export const PREVIEW_HEADER_UNLOCK_CTA_MOBILE = `Unlock ${PRODUCT_PRICE}`;
+
+/** Primary CTA on preview page — consistent, professional (not intent-variant). */
+export const PREVIEW_PRIMARY_UNLOCK_CTA = DEFAULT_UNLOCK_CTA;
 
 /** Shown under primary unlock buttons on preview. */
 export const PREVIEW_CTA_REASSURANCE =
@@ -30,30 +46,44 @@ export const PREVIEW_CTA_REASSURANCE =
 
 export const PREVIEW_CTA_REASSURANCE_SHORT = "12 months · Re-run anytime · No subscription";
 
+export const POSITION_REVIEW_TAGLINE =
+  "A written briefing on your modelled position — before you reply to an offer or go to mediation.";
+
+export const POSITION_REVIEW_DELIVERABLES = [
+  "Input and assumption check against your figures",
+  "Scenario commentary tied to your model outputs",
+  "Pressure points and left-short risks prioritised for your case",
+  "Focused questions for your solicitor, mediator, broker or pension adviser",
+  "Written PDF memo within 5 working days",
+] as const;
+
+export const POSITION_REVIEW_BOUNDARY =
+  "Modelling support only — we help you understand calculator outputs and prepare questions. We cannot provide legal, financial, mortgage or tax advice, tell you what to accept, or predict court outcomes.";
+
+export const POSITION_REVIEW_CTA = `Position Review — ${POSITION_REVIEW_PRICE}`;
+
+export const POSITION_REVIEW_CHECKOUT_CTA = `Add Position Review — ${POSITION_REVIEW_PRICE}`;
+
+/** @deprecated Use POSITION_REVIEW_* constants */
+export const EXPERT_REVIEW_TAGLINE = POSITION_REVIEW_TAGLINE;
+export const EXPERT_REVIEW_DELIVERABLES = POSITION_REVIEW_DELIVERABLES;
+export const EXPERT_REVIEW_BOUNDARY = POSITION_REVIEW_BOUNDARY;
+
+/** Intents where optional Position Review add-on is shown at checkout. */
+export const POSITION_REVIEW_CHECKOUT_INTENTS = new Set([
+  "offer_check",
+  "protect_position",
+  "debt_pressure",
+]);
+
+/** @deprecated Use POSITION_REVIEW_CHECKOUT_INTENTS */
+export const EXPERT_REVIEW_CHECKOUT_INTENTS = POSITION_REVIEW_CHECKOUT_INTENTS;
+
 export type ConversionArchetype = "protector" | "optimiser" | "clarity";
 
-const CTA_BY_ARCHETYPE: Record<ConversionArchetype, string> = {
-  protector: `Show what their offer hides — ${PRODUCT_PRICE}`,
-  optimiser: `See my full share — ${PRODUCT_PRICE}`,
-  clarity: `See what I could keep — ${PRODUCT_PRICE}`,
-};
-
-const CTA_BY_INTENT: Record<string, string> = {
-  offer_check: CTA_BY_ARCHETYPE.protector,
-  protect_position: CTA_BY_ARCHETYPE.protector,
-  debt_pressure: CTA_BY_ARCHETYPE.protector,
-  fair_split: CTA_BY_ARCHETYPE.optimiser,
-  pension_impact: CTA_BY_ARCHETYPE.optimiser,
-  house_split: CTA_BY_ARCHETYPE.optimiser,
-  income_gap: CTA_BY_ARCHETYPE.clarity,
-  children_housing: CTA_BY_ARCHETYPE.clarity,
-  first_private_view: CTA_BY_ARCHETYPE.clarity,
-};
-
-/** Map wizard / homepage intent to unlock CTA label. */
-export function getUnlockCta(intent?: string | null): string {
-  if (!intent) return DEFAULT_UNLOCK_CTA;
-  return CTA_BY_INTENT[intent] ?? DEFAULT_UNLOCK_CTA;
+/** Map wizard / homepage intent to unlock CTA label — single professional CTA everywhere. */
+export function getUnlockCta(_intent?: string | null): string {
+  return DEFAULT_UNLOCK_CTA;
 }
 
 const INTENT_TO_ARCHETYPE: Record<string, ConversionArchetype> = {

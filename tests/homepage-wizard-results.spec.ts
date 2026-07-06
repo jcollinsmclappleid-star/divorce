@@ -201,9 +201,7 @@ test("homepage house intent chip opens the wizard and persists the selected inte
   await page.getByTestId("hero-chip-house_split").click();
 
   await expect(page).toHaveURL(/\/wizard$/);
-  const selectedIntent = page.getByTestId("button-intent-house_split");
-  await expect(selectedIntent).toBeVisible();
-  await expect(selectedIntent).toHaveClass(/bg-primary/);
+  await expect(page.getByTestId("select-wizard-intent")).toContainText("I am worried about the house");
 
   await expect
     .poll(async () => {
@@ -223,7 +221,8 @@ test("homepage house intent chip opens the wizard and persists the selected inte
 test("wizard offer-check intent shows the assumptions offer-check panel", async ({ page }) => {
   await page.goto("/wizard");
 
-  await page.getByTestId("button-intent-offer_check").click();
+  await page.getByTestId("select-wizard-intent").click();
+  await page.getByTestId("select-intent-option-offer_check").click();
   await page.getByTestId("stepper-step-8").click();
 
   await expect(page.getByTestId("text-step-title")).toContainText("Your model is ready");
@@ -262,14 +261,16 @@ test("wizard savings step supports owner tabs, inline chips and benchmark select
   await expect(page.getByTestId("chip-asset-joint_savings-joint")).toContainText("£15,000");
 });
 
-test("wizard income step supports owner tabs, inline chips and salary benchmarks", async ({ page }) => {
+test("wizard income step supports owner tabs and inline chips", async ({ page }) => {
   await page.goto("/wizard");
   await page.getByTestId("stepper-step-5").click();
 
   await expect(page.getByTestId("text-step-title")).toContainText("Income");
-  await expect(page.getByTestId("card-salary-benchmarks")).toBeVisible();
+  await expect(page.getByTestId("income-party-selector")).toBeVisible();
 
-  await page.getByTestId("button-apply-salary-benchmark-median-a").click();
+  await page.getByTestId("chip-income-salary-A").click();
+  await page.getByTestId("input-chip-income-salary-A").fill("35000");
+  await page.getByTestId("button-chip-save-income-salary-A").click();
   await expect(page.getByTestId("chip-income-salary-A")).toContainText("£35k");
 
   await page.getByTestId("chip-income-self_employment-A").click();
@@ -424,7 +425,7 @@ test("preview page shows snapshot and unlock CTA from seeded wizard state", asyn
   await page.goto("/preview");
 
   await expect(page.getByTestId("text-preview-title")).toContainText(
-    "Your answer is ready",
+    "Your results are ready",
   );
   await expect(page.getByTestId("section-preview-snapshot")).toBeVisible();
   await expect(page.getByTestId("value-asset-pool")).toBeVisible();
@@ -434,8 +435,10 @@ test("preview page shows snapshot and unlock CTA from seeded wizard state", asyn
   await expect(page.getByTestId("card-preview-questions")).toContainText("paused my career to look after the children");
   await expect(page.getByTestId("preview-settlement-comparison")).toBeVisible();
   await expect(page.getByTestId("preview-comparison")).toBeVisible();
-  await expect(page.getByTestId("button-unlock-preview-primary").first()).toContainText("£79");
-  await expect(page.getByTestId("button-unlock-preview-primary").first()).toContainText("Show");
+  await expect(page.getByTestId("button-unlock-scenarios")).toContainText("Unlock Your Report");
+  await expect(page.getByTestId("button-unlock-scenarios")).toContainText("£79");
+  await expect(page.getByTestId("preview-what-unlock-reveals")).toBeVisible();
+  await expect(page.getByTestId("card-preview-questions")).toContainText("Personalised checks");
   await expect(page.getByTestId("text-preview-cta-reassurance").first()).toContainText("12 months access");
   await expect(page.getByTestId("text-intent-bridge")).toBeVisible();
 });

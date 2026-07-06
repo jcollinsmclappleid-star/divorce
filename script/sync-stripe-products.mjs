@@ -20,11 +20,11 @@ const MAIN_PRODUCT = {
   metadata: { type: "one_time_access", duration_months: "12" },
 };
 
-const SUPPORT_PRODUCT = {
-  name: "Report Walkthrough Support",
+const EXPERT_REVIEW_PRODUCT = {
+  name: "Expert Position Review",
   description:
-    "Optional written email support after your full report — sense-check your inputs and help you read the modelling outputs. Modelling support only; not legal, financial, mortgage or tax advice. One-off £129.",
-  metadata: { type: "report_support" },
+    "Human-reviewed written briefing on your modelled divorce position — input checks, scenario commentary, pressure points, and focused questions before you agree or reply. Requires Your Full Divorce Position (£79). Modelling support only; not legal, financial, mortgage or tax advice. One-off £249.",
+  metadata: { type: "expert_review" },
 };
 
 function loadEnvFile(filePath) {
@@ -70,9 +70,11 @@ async function syncProduct(productId, copy, label) {
 }
 
 const mainId = process.env.STRIPE_PRODUCT_ID;
-const supportId = process.env.STRIPE_SUPPORT_PRODUCT_ID;
+const expertId =
+  process.env.STRIPE_EXPERT_REVIEW_PRODUCT_ID?.trim()
+  || process.env.STRIPE_SUPPORT_PRODUCT_ID?.trim();
 
 await syncProduct(mainId, MAIN_PRODUCT, "£79 main product");
-await syncProduct(supportId, SUPPORT_PRODUCT, "£129 support product");
+await syncProduct(expertId, EXPERT_REVIEW_PRODUCT, "£249 expert review product");
 
 console.log("\nDone. Checkout will show updated copy and logo on next session.");

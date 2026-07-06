@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn, formatCurrency } from "@/lib/utils";
 import { useInlineConfirm, InlineConfirm } from "@/components/wizard/inline-confirm";
+import { WizardPartySelector } from "@/components/wizard/wizard-party-selector";
 import { chartTheme } from "@/lib/chart-theme";
 import { loadConfig } from "@/lib/engine/config/loadConfig";
 import { calcIncomeTax } from "@/lib/engine/calc/incomeTax";
@@ -18,9 +19,6 @@ import { calcNationalInsurance } from "@/lib/engine/calc/nationalInsurance";
 import {
   incomeTemplatesForOwner,
   findIncomeForTemplate,
-  findSalaryIncome,
-  activeSalaryBenchmark,
-  SALARY_BENCHMARKS,
   MAINTENANCE_PRESETS,
   type IncomeTemplate,
   type IncomeOwner,
@@ -72,41 +70,6 @@ function OptionalRefinements({
         <div className="px-4 pb-4 pt-3 space-y-4 border-t border-border/40">{children}</div>
       )}
     </div>
-  );
-}
-
-function BenchmarkButton({
-  label,
-  active,
-  summary,
-  onClick,
-  testId,
-}: {
-  label: string;
-  active: boolean;
-  summary?: string;
-  onClick: () => void;
-  testId: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      data-testid={testId}
-      className={cn(
-        "flex flex-col items-start gap-1 rounded-lg border px-4 py-3 text-left transition-all w-full sm:w-auto sm:min-w-[10rem]",
-        active
-          ? "border-gold/50 bg-white shadow-[0_4px_12px_-4px_rgba(201,168,76,0.25)]"
-          : "border-slate-200 bg-white hover:border-slate-300",
-      )}
-    >
-      <span className="flex items-center gap-2 text-sm font-semibold text-[#1a3357]">
-        {active && <Check className="h-4 w-4 text-gold shrink-0" />}
-        {label}
-      </span>
-      {active && summary && <span className="text-[11px] text-muted-foreground">{summary}</span>}
-      {!active && <span className="text-[10px] text-gold font-semibold">+ Apply</span>}
-    </button>
   );
 }
 
@@ -447,23 +410,6 @@ export function StepIncomeEmployment() {
     return MAINTENANCE_PRESETS.find((p) => p.included && p.monthlyAmount === maintenance.monthlyAmount)?.id ?? null;
   }, [maintenance]);
 
-  const applySalaryBenchmark = (owner: IncomeOwner, grossAnnual: number, label: string) => {
-    const existing = findSalaryIncome(incomes, owner);
-    const incomeName = `Salary (${owner === "A" ? nameA : nameB})`;
-
-    if (existing) {
-      updateIncome(existing.id, { amountAnnualGross: grossAnnual, name: incomeName });
-    } else {
-      addIncome({
-        name: incomeName,
-        owner,
-        amountAnnualGross: grossAnnual,
-        taxTreatment: "use_tax_model",
-      });
-    }
-    chipConfirm.flash(`Saved — ${owner === "A" ? nameA : nameB} salary set to ${formatCurrency(grossAnnual)}/yr gross (${label})`);
-  };
-
   const handleAddIncome = (template: IncomeTemplate, value: number) => {
     addIncome({
       name: template.id === "salary" ? `Salary (${ownerName})` : template.label,
@@ -473,6 +419,11 @@ export function StepIncomeEmployment() {
     });
     chipConfirm.flash(`Saved — ${template.label} at ${formatCurrency(value)}/yr gross for ${ownerName}`);
   };
+
+  const incomeTabMeta = useMemo(() => ({
+    A: { totalLabel: grossA > 0 ? `£${grossA}k/yr` : undefined },
+    B: { totalLabel: grossB > 0 ? `£${grossB}k/yr` : undefined },
+  }), [grossA, grossB]);
 
   const openCustom = () => {
     setCustomForm({ name: "", amountAnnualGross: 0, owner: activeOwner });
@@ -489,65 +440,15 @@ export function StepIncomeEmployment() {
         </p>
       </div>
 
-      <div className="rounded-lg border border-cyan-200/80 bg-cyan-50/50 p-4 space-y-4" data-testid="card-salary-benchmarks">
-        <div className="space-y-1">
-          <p className="text-sm font-semibold text-foreground">Quick salary starting point</p>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Typical UK salary bands if you do not have an exact figure yet — fills the Salary tile for each person.
-          </p>
-        </div>
-        <div className="space-y-3">
-          {(["A", "B"] as const).map((owner) => {
-            const activeBench = activeSalaryBenchmark(incomes, owner);
-            const salary = findSalaryIncome(incomes, owner);
-            return (
-              <div key={owner} className="space-y-2">
-                <p className="text-xs font-semibold text-[#1a3357]">{owner === "A" ? nameA : nameB}</p>
-                <div className="flex flex-col sm:flex-row flex-wrap gap-2">
-                  {SALARY_BENCHMARKS.map((bench) => {
-                    const active = activeBench?.id === bench.id || salary?.amountAnnualGross === bench.grossAnnual;
-                    return (
-                      <BenchmarkButton
-                        key={`${owner}-${bench.id}`}
-                        label={bench.label}
-                        active={active}
-                        summary={active && salary ? `${formatCurrency(salary.amountAnnualGross)}/yr gross` : undefined}
-                        onClick={() => applySalaryBenchmark(owner, bench.grossAnnual, bench.label)}
-                        testId={`button-apply-salary-benchmark-${bench.id}-${owner.toLowerCase()}`}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2 border-b border-border/40 overflow-x-auto">
-        {(["A", "B"] as const).map((owner) => {
-          const isActive = activeOwner === owner;
-          const name = owner === "A" ? nameA : nameB;
-          const gross = owner === "A" ? grossA : grossB;
-          return (
-            <button
-              key={owner}
-              type="button"
-              onClick={() => setActiveOwner(owner)}
-              data-testid={`income-owner-tab-${owner}`}
-              className={cn(
-                "relative px-4 py-2.5 text-sm font-semibold transition-colors -mb-px border-b-2 whitespace-nowrap",
-                isActive ? "border-gold text-[#1a3357]" : "border-transparent text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {name}
-              {gross > 0 && (
-                <span className="ml-2 text-[10px] font-mono text-muted-foreground">£{gross}k/yr gross</span>
-              )}
-            </button>
-          );
-        })}
-      </div>
+      <WizardPartySelector
+        owners={["A", "B"]}
+        activeOwner={activeOwner}
+        onChange={setActiveOwner}
+        nameA={nameA}
+        nameB={nameB}
+        tabMeta={incomeTabMeta}
+        testIdPrefix="income"
+      />
 
       <InlineConfirm message={chipConfirm.message} />
 

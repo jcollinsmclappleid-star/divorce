@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Verify £79 and £129 product/price IDs in .env.cutover against Stripe account. */
+/** Verify £79 and £249 product/price IDs in .env.cutover against Stripe account. */
 import Stripe from "stripe";
 import fs from "fs";
 import path from "path";
@@ -40,11 +40,17 @@ async function verifyProduct(label, productId, priceId, expectedAmount) {
 
 try {
   await verifyProduct("£79 product", process.env.STRIPE_PRODUCT_ID, process.env.STRIPE_PRICE_ID, 7900);
+  const expertProductId =
+    process.env.STRIPE_EXPERT_REVIEW_PRODUCT_ID?.trim()
+    || process.env.STRIPE_SUPPORT_PRODUCT_ID?.trim();
+  const expertPriceId =
+    process.env.STRIPE_EXPERT_REVIEW_PRICE_ID?.trim()
+    || process.env.STRIPE_SUPPORT_PRICE_ID?.trim();
   await verifyProduct(
-    "£129 support product",
-    process.env.STRIPE_SUPPORT_PRODUCT_ID,
-    process.env.STRIPE_SUPPORT_PRICE_ID,
-    12900,
+    "£249 expert review product",
+    expertProductId,
+    expertPriceId,
+    24900,
   );
 } catch (err) {
   console.error("Product/price check failed:", err.message);

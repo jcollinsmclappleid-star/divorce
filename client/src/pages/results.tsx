@@ -6,7 +6,7 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNoIndex } from "@/hooks/use-noindex";
 import { useAccess, useSessionToken } from "@/hooks/use-access";
 import { GuidedSummaryPanel } from "@/components/guided-summary-panel";
-import { OptionalReportSupport } from "@/components/optional-report-support";
+import { ExpertPositionReviewUpsell } from "@/components/expert-position-review";
 import { Logo } from "@/components/logo";
 import { FsiGauge } from "@/components/fsi-gauge";
 import { SettlementConsole, buildConsoleScenarios } from "@/components/settlement-console";
@@ -992,7 +992,7 @@ export default function ResultsPage() {
             </ResultsLayerAccordion>
           )}
 
-          {hasAccess && <OptionalReportSupport sessionToken={sessionToken} />}
+          {hasAccess && <ExpertPositionReviewUpsell sessionToken={sessionToken} source="results" />}
         </div>
       </main>
 

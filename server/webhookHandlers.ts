@@ -1,6 +1,6 @@
 import { getStripeSync, getUncachableStripeClient, usesReplitStripeConnector } from './stripeClient';
 import { storage } from './storage';
-import { sendReportSupportConfirmationEmail, sendAdminNotification } from './email';
+import { sendExpertReviewConfirmationEmail, sendAdminNotification } from './email';
 
 export class WebhookHandlers {
   static async processWebhook(payload: Buffer, signature: string): Promise<void> {
@@ -45,25 +45,25 @@ export class WebhookHandlers {
               session.customer_details?.email ?? null
             );
             console.log('[webhook] Purchase marked paid via webhook');
-          } else {
-            const support = await storage.getReportSupportByCheckoutSessionId(session.id);
-            if (support && support.status !== 'paid') {
-              const email = session.customer_details?.email ?? null;
-              await storage.markReportSupportPaid(
-                support.id,
-                session.payment_intent as string || '',
-                email,
-              );
-              if (email) {
-                sendReportSupportConfirmationEmail(email).catch(() => {});
-                sendAdminNotification('Report walkthrough support (webhook)', [
-                  { label: 'Customer email', value: email },
-                  { label: 'Support purchase ID', value: support.id },
-                  { label: 'Amount', value: '£129' },
-                ], 'report_support').catch(() => {});
-              }
-              console.log('[webhook] Report support marked paid via webhook');
+          }
+
+          const review = await storage.getExpertReviewByCheckoutSessionId(session.id);
+          if (review && review.status !== 'paid') {
+            const email = session.customer_details?.email ?? null;
+            await storage.markExpertReviewPaid(
+              review.id,
+              session.payment_intent as string || '',
+              email,
+            );
+            if (email) {
+              sendExpertReviewConfirmationEmail(email).catch(() => {});
+              sendAdminNotification('Position Review (webhook)', [
+                { label: 'Customer email', value: email },
+                { label: 'Review purchase ID', value: review.id },
+                { label: 'Amount', value: '£249' },
+              ], 'expert_review').catch(() => {});
             }
+            console.log('[webhook] Expert review marked paid via webhook');
           }
         }
       }
