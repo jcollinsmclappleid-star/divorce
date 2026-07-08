@@ -11,11 +11,12 @@ const PILLAR_ICONS = {
 type ChartSlice = { name: string; value: number; color?: string };
 
 type SnapshotProps = {
-  combinedPool: number;
-  halfPool: number;
+  totalEstate: number;
+  settlementPool: number;
+  pensionTotal: number;
+  halfSettlementPool: number;
   netHomeEquity: number;
-  chartData: ChartSlice[];
-  chartTotal: number;
+  estateChartData: ChartSlice[];
   intentBridge: string;
 };
 
@@ -122,17 +123,18 @@ function CompositionBars({ slices, total }: { slices: ChartSlice[]; total: numbe
 
 /** Live snapshot metrics — shown first on preview. */
 export function PreviewSnapshotDashboard({
-  combinedPool,
-  halfPool,
+  totalEstate,
+  settlementPool,
+  pensionTotal,
+  halfSettlementPool,
   netHomeEquity,
-  chartData,
-  chartTotal,
+  estateChartData,
   intentBridge,
 }: SnapshotProps) {
-  const slices: ChartSlice[] = chartData.map((d, i) => ({
+  const slices: ChartSlice[] = estateChartData.map((d, i) => ({
     name: d.name,
     value: d.value,
-    color: d.color ?? ["#0d9488", "hsl(220,52%,32%)", "#64748b"][i % 3],
+    color: d.color ?? ["#7c3aed", "#0891b2", "#C9A84C"][i % 3],
   }));
 
   return (
@@ -148,39 +150,63 @@ export function PreviewSnapshotDashboard({
       }
       testId="preview-snapshot-dashboard"
     >
-      <div className="grid grid-cols-2 gap-2" data-testid="preview-snapshot-hero">
+      <div className="space-y-2" data-testid="preview-snapshot-hero">
         <MetricTile
-          label="Combined pool"
-          value={formatCurrency(combinedPool)}
-          hint="Property equity plus liquid assets"
+          label="Total estate"
+          value={formatCurrency(totalEstate)}
+          hint="Property, pensions and savings from your figures"
           accent="#0891b2"
-          testId="value-asset-pool"
+          testId="value-total-estate"
         />
-        <MetricTile
-          label="~50/50 start"
-          value={formatCurrency(halfPool)}
-          hint="Before housing & pension splits"
-          accent="#C9A84C"
-          testId="value-half-pool"
-        />
-        <div className="col-span-2">
+
+        <div className="grid grid-cols-2 gap-2">
           <MetricTile
-            label="Net property equity"
-            value={formatCurrency(netHomeEquity)}
-            hint="Value less mortgage and estimated sale costs"
-            accent="#7c3aed"
-            testId="card-net-equity"
+            label="Settlement pool"
+            value={formatCurrency(settlementPool)}
+            hint="House + cash — split in sale/keep scenarios"
+            accent="#0d9488"
+            testId="value-asset-pool"
+          />
+          <MetricTile
+            label="~50/50 capital start"
+            value={formatCurrency(halfSettlementPool)}
+            hint="Before pension sharing is applied"
+            accent="#C9A84C"
+            testId="value-half-pool"
           />
         </div>
+
+        {pensionTotal > 0 ? (
+          <MetricTile
+            label="Pensions (CETV)"
+            value={formatCurrency(pensionTotal)}
+            hint="Shared or offset separately — not in the capital pool above"
+            accent="#6366f1"
+            testId="preview-pension-separate"
+          />
+        ) : null}
+
+        <MetricTile
+          label="Net property equity"
+          value={formatCurrency(netHomeEquity)}
+          hint="Value less mortgage and estimated sale costs"
+          accent="#7c3aed"
+          testId="card-net-equity"
+        />
       </div>
 
       {slices.length > 0 ? (
         <div className="mt-3 rounded-lg border border-slate-200/80 bg-white p-2.5 sm:p-3" data-testid="preview-snapshot-breakdown">
           <div className="mb-2 flex items-center gap-1.5">
             <PieChart className="h-3.5 w-3.5 text-slate-500" />
-            <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Pool composition</p>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Total estate composition</p>
           </div>
-          <CompositionBars slices={slices} total={chartTotal} />
+          <CompositionBars slices={slices} total={totalEstate} />
+          <p className="mt-2 text-[10px] text-slate-500 leading-snug">
+            House and cash scenarios model the{" "}
+            <span className="font-semibold text-slate-700">{formatCurrency(settlementPool)}</span> settlement pool.
+            Pensions are included in your total estate but split on a separate track in your report.
+          </p>
         </div>
       ) : null}
 

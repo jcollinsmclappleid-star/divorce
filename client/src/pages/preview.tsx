@@ -5,7 +5,6 @@ import { useAccess, useSessionToken } from "@/hooks/use-access";
 import { formatCurrency, scrollTop } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Lock, Check, Shield, ArrowRight, Loader2,
@@ -34,6 +33,7 @@ import {
   PREVIEW_CTA_REASSURANCE,
   PREVIEW_CTA_REASSURANCE_SHORT,
 } from "@/lib/product-copy";
+import { getPreviewPoolStats } from "@/lib/preview-pool-stats";
 
 const ReportPreviewModal = lazy(() =>
   import("@/components/report-preview-modal").then((m) => ({ default: m.ReportPreviewModal })),
@@ -240,9 +240,6 @@ export default function PreviewPage() {
   const engine = useEngine();
   const { hasAccess, isLoading } = useAccess();
   const sessionToken = useSessionToken();
-  const [email, setEmail] = useState("");
-  const [emailSubmitted, setEmailSubmitted] = useState(() => !!store.profile?.capturedEmail);
-  const [emailLoading, setEmailLoading] = useState(false);
   const { checkoutLoading, handleCheckout } = useCheckout(sessionToken);
   const [sampleReportOpen, setSampleReportOpen] = useState(false);
   const [showStickyCta, setShowStickyCta] = useState(false);
@@ -306,86 +303,67 @@ export default function PreviewPage() {
   if (!hasData) return null;
 
   const { intermediate } = engine;
-  const combinedPool = intermediate.totalLiquid + intermediate.netHomeEquity;
-  const pensionTotal = store.assets
-    .filter((a) => a.category === "pension")
-    .reduce((s, p) => s + (p.cetv ?? p.currentValue ?? 0), 0);
+  const poolStats = getPreviewPoolStats(intermediate, store.assets);
+  const { settlementPool, pensionTotal, totalEstate, halfSettlementPool } = poolStats;
 
-  const chartTotal = intermediate.netHomeEquity + intermediate.totalLiquid + pensionTotal;
-  const chartData = [
-    { name: "Property Equity", value: intermediate.netHomeEquity },
-    { name: "Pensions", value: pensionTotal },
-    { name: "Savings & Investments", value: intermediate.totalLiquid },
+  const estateChartData = [
+    { name: "Property equity", value: intermediate.netHomeEquity, color: "#7c3aed" },
+    { name: "Pensions (CETV)", value: pensionTotal, color: "#0891b2" },
+    { name: "Savings & investments", value: intermediate.totalLiquid, color: "#C9A84C" },
   ].filter((d) => d.value > 0);
 
-  const halfPool = Math.round(combinedPool / 2);
+  const halfPool = halfSettlementPool;
   const nameA = store.profile?.partyAName || "Party A";
   const nameB = store.profile?.partyBName || "Party B";
   const intentBridge = getPreviewIntentBridge(
     unlockIntent,
-    { combinedPool, halfPool, netHomeEquity: intermediate.netHomeEquity },
+    { combinedPool: settlementPool, halfPool, netHomeEquity: intermediate.netHomeEquity },
     formatCurrency,
   );
 
   const previewConsoleScenarios = buildConsoleScenarios([
     {
       id: "S1", name: "Sell & Split", shortName: "Sell & Split",
-      totalA: Math.round(combinedPool * 0.50), totalB: Math.round(combinedPool * 0.50),
+      totalA: Math.round(settlementPool * 0.50), totalB: Math.round(settlementPool * 0.50),
       surplusA: 680, surplusB: 420, resilienceA: 74, resilienceB: 62,
       projection: Array.from({ length: 6 }, (_, y) => ({
-        capitalA: Math.round(combinedPool * (0.50 + y * 0.022)),
-        capitalB: Math.round(combinedPool * (0.50 + y * 0.018)),
+        capitalA: Math.round(settlementPool * (0.50 + y * 0.022)),
+        capitalB: Math.round(settlementPool * (0.50 + y * 0.018)),
       })),
     },
     {
       id: "S2", name: `${nameA} Keeps Home`, shortName: `${nameA} Keeps`,
-      totalA: Math.round(combinedPool * 0.58), totalB: Math.round(combinedPool * 0.42),
+      totalA: Math.round(settlementPool * 0.58), totalB: Math.round(settlementPool * 0.42),
       surplusA: 340, surplusB: 610, resilienceA: 64, resilienceB: 71,
       projection: Array.from({ length: 6 }, (_, y) => ({
-        capitalA: Math.round(combinedPool * (0.58 + y * 0.018)),
-        capitalB: Math.round(combinedPool * (0.42 + y * 0.020)),
+        capitalA: Math.round(settlementPool * (0.58 + y * 0.018)),
+        capitalB: Math.round(settlementPool * (0.42 + y * 0.020)),
       })),
     },
     {
       id: "S3", name: `${nameB} Keeps Home`, shortName: `${nameB} Keeps`,
-      totalA: Math.round(combinedPool * 0.46), totalB: Math.round(combinedPool * 0.54),
+      totalA: Math.round(settlementPool * 0.46), totalB: Math.round(settlementPool * 0.54),
       surplusA: 520, surplusB: -120, resilienceA: 68, resilienceB: 39,
       projection: Array.from({ length: 6 }, (_, y) => ({
-        capitalA: Math.round(combinedPool * (0.46 + y * 0.022)),
-        capitalB: Math.round(combinedPool * (0.54 - y * 0.012)),
+        capitalA: Math.round(settlementPool * (0.46 + y * 0.022)),
+        capitalB: Math.round(settlementPool * (0.54 - y * 0.012)),
       })),
     },
     {
       id: "S4", name: "Deferred Sale", shortName: "Deferred",
-      totalA: Math.round(combinedPool * 0.49), totalB: Math.round(combinedPool * 0.49),
+      totalA: Math.round(settlementPool * 0.49), totalB: Math.round(settlementPool * 0.49),
       surplusA: 410, surplusB: 380, resilienceA: 70, resilienceB: 66,
       projection: Array.from({ length: 6 }, (_, y) => ({
-        capitalA: Math.round(combinedPool * (0.49 + y * 0.024)),
-        capitalB: Math.round(combinedPool * (0.49 + y * 0.022)),
+        capitalA: Math.round(settlementPool * (0.49 + y * 0.024)),
+        capitalB: Math.round(settlementPool * (0.49 + y * 0.022)),
       })),
     },
   ]);
 
   const previewComposition = [
     { label: "Property equity", value: Math.max(0, intermediate.netHomeEquity), color: "#A78BFA" },
-    { label: "Pension (CETV)", value: Math.max(0, pensionTotal), color: "#22D3EE" },
-    { label: "Cash & savings", value: Math.max(0, intermediate.totalLiquid - pensionTotal), color: "#C9A84C" },
+    { label: "Cash & savings", value: Math.max(0, intermediate.totalLiquid), color: "#C9A84C" },
   ].filter((c) => c.value > 0);
-
-  async function handleEmailSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!email) return;
-    setEmailLoading(true);
-    try {
-      await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: "preview_page", assetPoolSnapshot: String(combinedPool) }),
-      });
-    } catch {}
-    setEmailLoading(false);
-    setEmailSubmitted(true);
-  }
 
   const scrollToPricing = () => {
     document.getElementById("preview-pricing")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -472,9 +450,9 @@ export default function PreviewPage() {
                 <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-sm">
                   <Check className="w-3 h-3" /> Model complete
                 </span>
-                {combinedPool > 0 && (
+                {totalEstate > 0 && (
                   <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-600 bg-white border border-slate-200 px-2.5 py-1 rounded-sm tabular-nums">
-                    Pool {formatCurrency(combinedPool)}
+                    Estate {formatCurrency(totalEstate)}
                   </span>
                 )}
               </div>
@@ -499,11 +477,12 @@ export default function PreviewPage() {
             <div className="px-3 md:px-6 py-4 md:py-7 space-y-4 md:space-y-5">
               <div className="space-y-3" data-testid="preview-position-dashboard">
                 <PreviewSnapshotDashboard
-                  combinedPool={combinedPool}
-                  halfPool={halfPool}
+                  totalEstate={totalEstate}
+                  settlementPool={settlementPool}
+                  pensionTotal={pensionTotal}
+                  halfSettlementPool={halfPool}
                   netHomeEquity={intermediate.netHomeEquity}
-                  chartData={chartData}
-                  chartTotal={chartTotal}
+                  estateChartData={estateChartData}
                   intentBridge={intentBridge}
                 />
 
@@ -695,43 +674,6 @@ export default function PreviewPage() {
               </div>
             </div>
           </section>
-
-          {/* ── Email capture (bottom) ── */}
-          <ReportPage className="hidden md:block">
-            <CardContent className="py-6 px-6" data-testid="card-email-capture">
-              {emailSubmitted ? (
-                <div className="text-center space-y-2">
-                  <div className="flex justify-center mb-2">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
-                      <Check className="w-5 h-5 text-emerald-600" />
-                    </div>
-                  </div>
-                  <p className="font-medium text-slate-800">Got it — check your inbox.</p>
-                  <p className="text-sm text-slate-500">Your full report is ready whenever you are.</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-medium text-sm text-slate-800">Email me my snapshot summary</p>
-                    <p className="text-xs text-slate-500 mt-0.5">We&apos;ll send your combined pool total — no spam.</p>
-                  </div>
-                  <form onSubmit={handleEmailSubmit} className="flex gap-2 flex-col sm:flex-row">
-                    <Input
-                      type="email"
-                      placeholder="your@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="flex-1"
-                      data-testid="input-preview-email"
-                    />
-                    <Button type="submit" variant="outline" disabled={emailLoading} data-testid="button-save-progress">
-                      {emailLoading ? "Sending..." : "Send summary"}
-                    </Button>
-                  </form>
-                </div>
-              )}
-            </CardContent>
-          </ReportPage>
 
           <p className="text-xs text-slate-500 text-center max-w-lg mx-auto leading-relaxed pb-4" data-testid="text-disclaimer-preview">
             Illustrative modelling only — not legal, tax or financial advice. Based on your inputs and standard assumptions.

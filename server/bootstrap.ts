@@ -198,6 +198,11 @@ export async function createApp(): Promise<Express> {
     startRetentionCleanup();
   }
 
+  if (!process.env.VERCEL && process.env.NURTURE_SCHEDULER_ENABLED === "true") {
+    const { startEmailScheduler } = await import("./email-scheduler");
+    startEmailScheduler();
+  }
+
   app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";

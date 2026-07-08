@@ -36,6 +36,10 @@ export function logDeploymentEnvHints(): void {
     startupLog("WARNING: RESEND_API_KEY not set — magic link and purchase emails disabled");
   }
 
+  if (isProd && process.env.VERCEL && !process.env.CRON_SECRET?.trim()) {
+    startupLog("WARNING: CRON_SECRET not set — nurture cron will reject requests");
+  }
+
   if (usesReplitStripeConnector()) {
     startupLog("Stripe: Replit connector (current Replit production path)");
   } else if (usesDirectStripeEnv()) {

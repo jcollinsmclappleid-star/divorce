@@ -6,6 +6,9 @@
  *   - Received at least one legacy nurture email (followup1–4 or promo)
  *   - Not unsubscribed, not a paid customer, not already on nurture v2
  *
+ * Existing sent timestamps are preserved so the scheduler does not re-send
+ * stages they already received. Only nurture_enrolled_at / nurture_version are set.
+ *
  * Net-new leads from NURTURE_V2_START are enrolled automatically at capture time.
  *
  * Usage:
@@ -69,12 +72,7 @@ if (!APPLY) {
 const result = await client.query(`
   UPDATE email_leads el
   SET nurture_enrolled_at = $1::timestamptz,
-      nurture_version = 2,
-      followup1_sent_at = NULL,
-      followup2_sent_at = NULL,
-      promo_sent_at = NULL,
-      followup3_sent_at = NULL,
-      followup4_sent_at = NULL
+      nurture_version = 2
   WHERE el.unsubscribed_at IS NULL
     AND (el.nurture_version IS NULL OR el.nurture_version = 0)
     AND (
@@ -93,6 +91,7 @@ const result = await client.query(`
 `, [V2_START]);
 
 console.log(`\nEnrolled ${result.rowCount} leads into nurture v2 (schedule anchor: ${V2_START}).`);
-console.log("Nurture emails will not send until that timestamp. Progress summary emails are unchanged.");
+console.log("Existing follow-up sent timestamps were kept — no duplicate nurture on deploy.");
+console.log("Nurture emails send only on their scheduled calendar day (08:00 London), not as catch-up.");
 
 await client.end();

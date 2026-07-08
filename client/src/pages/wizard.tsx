@@ -19,6 +19,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Progress } from "@/components/ui/progress";
 import { AssetCategory, LiabilityCategory, Owner, ExpenseCategory } from "@shared/schema";
 import { formatCurrency, scrollTop, cn } from "@/lib/utils";
+import { runEngine, useEngine } from "@/hooks/use-engine";
+import { getPreviewPoolStats } from "@/lib/preview-pool-stats";
 import {
   ChevronLeft, ChevronRight, ChevronDown, Heart, Home, Wallet, Landmark,
   Briefcase, Calculator, Plus, Trash2, Edit2, Check, Settings2,
@@ -313,16 +315,21 @@ export default function WizardPage() {
   const goNext = useCallback(() => {
     scrollTop();
     if (currentStep === STEPS.length - 1) {
-      const { assets, profile } = useAppStore.getState();
-      const capturedEmail = profile?.capturedEmail;
-      if (capturedEmail && !hasAccess) {
-        const assetPool = String(
-          (assets || []).reduce((s, a) => s + (a.currentValue ?? 0), 0)
-        );
+      const state = useAppStore.getState();
+      const capturedEmail = state.profile?.capturedEmail;
+      const snapshotAlreadySent = (() => {
+        try {
+          return sessionStorage.getItem("dfm-wizard-snapshot-sent") === "1";
+        } catch {
+          return false;
+        }
+      })();
+      if (capturedEmail && !hasAccess && !snapshotAlreadySent) {
+        const { totalEstate } = getPreviewPoolStats(runEngine(state).intermediate, state.assets);
         fetch("/api/leads", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: capturedEmail, source: "wizard_preview", assetPoolSnapshot: assetPool }),
+          body: JSON.stringify({ email: capturedEmail, source: "wizard_preview", assetPoolSnapshot: String(totalEstate) }),
         }).catch(() => {});
       }
       setLocation(hasAccess ? "/results" : "/preview");
@@ -887,20 +894,94 @@ function StepWelcome() {
           </Select>
         </div>
       </div>
+    </div>
+  );
+}
 
-      <div className="space-y-2 border-t pt-4">
-        <Label className="text-sm font-medium">
-          Save progress by email <span className="text-muted-foreground text-xs font-normal">(optional)</span>
-        </Label>
-        <Input
-          type="email"
-          placeholder="your@email.com"
-          value={profile.capturedEmail || ""}
-          onChange={(e) => updateProfile({ capturedEmail: e.target.value })}
-          data-testid="input-wizard-email"
-          className="max-w-sm h-10"
-        />
-      </div>
+function WizardFinalEmailCapture() {
+  const { profile, updateProfile, assets } = useAppStore();
+  const engine = useEngine();
+  const { totalEstate } = getPreviewPoolStats(engine.intermediate, assets);
+  const [email, setEmail] = useState(profile.capturedEmail || "");
+  const [submitted, setSubmitted] = useState(!!profile.capturedEmail);
+  const [loading, setLoading] = useState(false);
+
+  const handleSave = async () => {
+    if (!email.includes("@")) return;
+    updateProfile({ capturedEmail: email });
+    setLoading(true);
+    try {
+      await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          source: "wizard_final",
+          assetPoolSnapshot: String(totalEstate),
+        }),
+      });
+      setSubmitted(true);
+      try {
+        sessionStorage.setItem("dfm-wizard-snapshot-sent", "1");
+      } catch {
+        // Ignore storage failures in private browsing modes.
+      }
+    } catch {
+      // Profile still saved — user can continue to preview.
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="rounded-lg border border-cyan-200/80 bg-cyan-50/40 p-4 space-y-3"
+      data-testid="card-wizard-final-email"
+    >
+      {submitted ? (
+        <div className="flex items-start gap-2.5">
+          <Check className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
+          <div>
+            <p className="text-sm font-semibold text-foreground">Saved — we&apos;ll email your snapshot.</p>
+            <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+              Tap &quot;Show me my results&quot; below to see your settlement snapshot. Use the recover link in your inbox to return anytime.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div>
+            <p className="text-sm font-semibold text-foreground">Save your results before you continue</p>
+            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+              Optional — we&apos;ll email your snapshot (total estate {formatCurrency(totalEstate)}) so you can pick up where you left off. No spam.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Input
+              type="email"
+              placeholder="your@email.com"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                updateProfile({ capturedEmail: e.target.value });
+              }}
+              className="flex-1 h-10"
+              autoComplete="email"
+              data-testid="input-wizard-final-email"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              disabled={loading || !email.includes("@")}
+              onClick={handleSave}
+              className="h-10 font-semibold shrink-0"
+              data-testid="button-wizard-save-results"
+            >
+              {loading ? "Sending…" : "Email my snapshot"}
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -1951,6 +2032,7 @@ function StepAssumptions() {
         </div>
       </div>
 
+      <WizardFinalEmailCapture />
     </div>
   );
 }

@@ -28,7 +28,7 @@ export const NURTURE_V2_STAGES = {
 
 export type NurtureV2Stage = keyof typeof NURTURE_V2_STAGES;
 
-export const SUMMARY_LEAD_SOURCES = ["wizard_preview", "preview_page"] as const;
+export const SUMMARY_LEAD_SOURCES = ["wizard_final", "wizard_preview", "preview_page"] as const;
 
 function getConfiguredSendHour(): number {
   const raw = process.env.NURTURE_SEND_HOUR?.trim();
@@ -173,16 +173,48 @@ export function receivedLegacyNurtureEmail(lead: {
   );
 }
 
+export type NurtureStageStatus = "wait" | "due" | "missed";
+
+/**
+ * Whether a nurture stage should send now.
+ * - wait: scheduled day is in the future, or same day but before send hour
+ * - due: scheduled calendar day is today (London) and send hour has passed
+ * - missed: scheduled calendar day has passed — skip without sending (no deploy catch-up)
+ */
+export function nurtureStageStatus(
+  anchor: Date,
+  stageDelayMs: number,
+  now = new Date(),
+): NurtureStageStatus {
+  const stageSendAt = nurtureStageSendAt(anchor, stageDelayMs);
+  const timeZone = getConfiguredTimezone();
+  const sendHour = getConfiguredSendHour();
+  const scheduledYmd = formatLocalYmd(stageSendAt, timeZone);
+  const todayYmd = formatLocalYmd(now, timeZone);
+
+  if (todayYmd < scheduledYmd) return "wait";
+  if (todayYmd > scheduledYmd) return "missed";
+
+  const { hour } = readLocalParts(now, timeZone);
+  return hour >= sendHour ? "due" : "wait";
+}
+
+/** @deprecated Prefer nurtureStageStatus — true only when status is "due". */
 export function nurtureStageDue(
   anchor: Date,
   stageDelayMs: number,
   now = new Date(),
 ): boolean {
-  const stageSendAt = nurtureStageSendAt(anchor, stageDelayMs);
-  if (now.getTime() < stageSendAt.getTime()) return false;
+  return nurtureStageStatus(anchor, stageDelayMs, now) === "due";
+}
 
-  const timeZone = getConfiguredTimezone();
-  const sendHour = getConfiguredSendHour();
-  const { hour } = readLocalParts(now, timeZone);
-  return hour >= sendHour;
+/** Hard cap per scheduler run to avoid mass sends after deploy or downtime. */
+export function getNurtureMaxSendsPerRun(): number {
+  const raw = process.env.NURTURE_MAX_SENDS_PER_RUN?.trim();
+  if (!raw) return 25;
+  const n = Number(raw);
+  if (!Number.isInteger(n) || n < 1 || n > 500) {
+    throw new Error(`Invalid NURTURE_MAX_SENDS_PER_RUN: ${raw}`);
+  }
+  return n;
 }

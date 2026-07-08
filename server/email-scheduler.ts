@@ -15,7 +15,8 @@ import {
   NURTURE_SEND_HOUR,
   NURTURE_SEND_TIMEZONE,
   isNurtureV2Live,
-  nurtureStageDue,
+  getNurtureMaxSendsPerRun,
+  nurtureStageStatus,
   parseNurtureV2Start,
 } from "@shared/nurture-schedule";
 
@@ -99,18 +100,36 @@ export async function runEmailScheduler(): Promise<void> {
       questions: 0,
       final: 0,
     };
+    let skippedMissed = 0;
+    const maxSends = getNurtureMaxSendsPerRun();
+    let totalSent = 0;
 
     for (const lead of eligibleLeads) {
+      if (totalSent >= maxSends) break;
       if (paidEmails.has(lead.email.toLowerCase())) continue;
 
       const anchor = lead.nurtureEnrolledAt!;
       if (anchor.getTime() > now.getTime()) continue;
 
-      let sent = false;
+      const leadState = { ...lead };
 
       for (const stage of STAGE_ORDER) {
-        if (lead[stage.sentField]) continue;
-        if (!nurtureStageDue(anchor, stage.delayMs, now)) continue;
+        if (leadState[stage.sentField]) continue;
+
+        const status = nurtureStageStatus(anchor, stage.delayMs, now);
+        if (status === "wait") break;
+
+        if (status === "missed") {
+          await db
+            .update(emailLeads)
+            .set({ [stage.sentField]: now })
+            .where(eq(emailLeads.id, lead.id));
+          leadState[stage.sentField] = now;
+          skippedMissed++;
+          continue;
+        }
+
+        if (totalSent >= maxSends) break;
 
         await stage.send(lead.email, lead.id, lead.assetPoolSnapshot ?? null);
         await db
@@ -118,17 +137,15 @@ export async function runEmailScheduler(): Promise<void> {
           .set({ [stage.sentField]: now })
           .where(eq(emailLeads.id, lead.id));
         counts[stage.key]++;
-        sent = true;
+        totalSent++;
         break;
       }
-
-      if (sent) continue;
     }
 
     const total = Object.values(counts).reduce((a, b) => a + b, 0);
-    if (total > 0) {
+    if (total > 0 || skippedMissed > 0) {
       log(
-        `[scheduler] nurture-v2 reengage:${counts.reengage} share:${counts.share} headroom:${counts.headroom} questions:${counts.questions} final:${counts.final}`,
+        `[scheduler] nurture-v2 sent:${total} skipped_missed:${skippedMissed} cap:${maxSends} reengage:${counts.reengage} share:${counts.share} headroom:${counts.headroom} questions:${counts.questions} final:${counts.final}`,
         "email-scheduler",
       );
     }

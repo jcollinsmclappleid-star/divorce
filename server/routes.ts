@@ -20,6 +20,24 @@ import { hasForbiddenGuidedSummaryPhrase } from "./guided-summary/compliance";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
+function requireCronSecret(req: any, res: any, next: any) {
+  const secret = process.env.CRON_SECRET?.trim();
+  if (!secret) {
+    return res.status(503).json({ message: "Cron not configured" });
+  }
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const token = authHeader.slice(7);
+  const tokenBuf = Buffer.from(token);
+  const secretBuf = Buffer.from(secret);
+  if (tokenBuf.length !== secretBuf.length || !crypto.timingSafeEqual(tokenBuf, secretBuf)) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  next();
+}
+
 function getExpertReviewPriceId(): string | undefined {
   return process.env.STRIPE_EXPERT_REVIEW_PRICE_ID?.trim()
     || process.env.STRIPE_SUPPORT_PRICE_ID?.trim()
@@ -1263,7 +1281,8 @@ export async function registerRoutes(app: Express): Promise<void> {
       });
       const { email, firstName, source, assetPoolSnapshot } = schema.parse(req.body);
       const existing = await storage.getEmailLeadByEmail(email);
-      const isSummarySource = source === 'preview_page' || source === 'wizard_preview';
+      const isSummarySource =
+        source === 'preview_page' || source === 'wizard_preview' || source === 'wizard_final';
       const now = new Date();
       const enrollNurture = isSummarySource && isNetNewNurtureLead(now, now);
 
@@ -1974,6 +1993,17 @@ Please generate the Guided Report Summary JSON now.`;
         return res.status(429).json({ message: 'The summary service is busy. Please try again in a moment.' });
       }
       return res.status(502).json({ message: 'Something went wrong generating your summary. Please try again.' });
+    }
+  });
+
+  app.get("/api/cron/nurture-emails", requireCronSecret, async (_req, res) => {
+    try {
+      const { runEmailScheduler } = await import("./email-scheduler");
+      await runEmailScheduler();
+      return res.json({ ok: true });
+    } catch (err) {
+      console.error("[cron] nurture-emails error:", err);
+      return res.status(500).json({ message: "Scheduler failed" });
     }
   });
 }
