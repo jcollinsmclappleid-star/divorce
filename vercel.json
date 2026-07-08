@@ -4,7 +4,7 @@
   "crons": [
     {
       "path": "/api/cron/nurture-emails",
-      "schedule": "*/30 * * * *"
+      "schedule": "0 7 * * *"
     }
   ],
   "functions": {
